@@ -1,0 +1,26 @@
+#settings {
+	position: absolute;
+	top: calc(50% - 125px);
+	right: 10px;
+	width: 200px;
+	max-height: 300px;
+  padding: 16px;
+	background-color: rgba(66, 66, 66, 0.85);
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  cursor: pointer;
+}
+
+.close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  cursor: pointer;
+	color: #fff;
+}

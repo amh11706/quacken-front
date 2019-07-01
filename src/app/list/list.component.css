@@ -1,0 +1,122 @@
+:host {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 40px 2% 0 2%;
+  background: center/cover url('/assets/background.jpg');
+}
+
+div {
+	text-align: center;
+}
+
+app-chat-box {
+  display: block;
+  width: 100%;
+  max-width: 750px;
+  margin: auto;
+}
+
+#selection {
+  height: 70vh;
+  padding-top: 16px;
+  overflow: auto;
+}
+
+#frame {
+  position: relative;
+  max-width: 900px;
+  margin: auto;
+  padding: 16px;
+  padding-top: 50px;
+  background-color: rgba(112, 123, 124, .8);
+  color: #eee;
+  border: 2px solid grey;
+  border-radius: 8px;
+  user-select: none;
+}
+
+#lobbylist {
+  position: relative;
+  height: calc(100vh - 380px);
+  max-height: 500px;
+  max-width: 750px;
+  min-height: 150px;
+  overflow-y: auto;
+  margin: auto;
+  margin-bottom: 16px;
+}
+
+#nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: left;
+  background-color: grey;
+  border-bottom: 2px solid grey;
+}
+
+button {
+  background: darkgreen;
+}
+
+table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+tr {
+  background-color: #FCF3CF;
+  transition: .2s;
+  cursor: pointer;
+}
+
+tr:hover {
+  background-color: #F9E79F;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  padding: 4px;
+  background-color: #1F618D;
+  cursor: default;
+  border: 1px solid grey;
+}
+
+td {
+  padding: 12px;
+  color: black;
+  border: 1px solid lightgrey;
+}
+
+.error {
+  max-width: 750px;
+  margin: 8px auto;
+  padding: 4px 8px;
+  color: #F7DC6F;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.link {
+  display: inline-block;
+  width: auto;
+  padding: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: .3s;
+  user-select: none;
+}
+
+.link:hover, .link.active {
+  background-color: #666;
+}
+
+.link.active {
+  color: #F7DC6F;
+  cursor: default;
+}

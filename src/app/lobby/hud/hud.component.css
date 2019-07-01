@@ -1,0 +1,135 @@
+#boatcontrol {
+	float: left;
+	width: 262px;
+	height: 148px;
+}
+app-chat {
+	position: absolute;
+	right: 1%;
+	top: 17px;
+	width: calc(99% - 270px);
+}
+#hud {
+	position: absolute;
+	bottom: 1%;
+	left: 50%;
+	transform: translate(-50%, 0);
+	width: 95%;
+	max-width: 800px;
+	min-width: 320px;
+	padding: 5px;
+	text-align: center;
+}
+
+#movesource, #buttons {
+	float: left;
+	width: 150px;
+	min-height: 10px;
+	margin: 5px 10px;
+}
+#buttons {
+	position: absolute;
+	bottom: 0px;
+}
+#damage {
+	float: left;
+	margin: 5px 37px;
+	width: 96px;
+	height: 15px;
+	background-color: #aaaaaa;
+	overflow: hidden;
+}
+#damagebar {
+	position: relative;
+	background: red;
+	height: 15px;
+	left: -100%;
+	transition: .3s linear;
+}
+#time {
+	position: relative;
+	margin: 30px 10px;
+	float: right;
+	height: 76px;
+	width: 15px;
+	background-color: #aaaaaa;
+	overflow: hidden;
+}
+#timebar {
+	position: relative;
+	height: 76px;
+	top: 100%;
+	background-color: khaki;
+	transition: .9s linear;
+}
+#moves {
+	float: right;
+	margin-right: 20px;
+}
+.moverow {
+	position: relative;
+}
+.move {
+	background-color: lightgrey;
+	width: 35px;
+	height: 35px;
+	border: 1px solid black;
+	border-radius: 10px;
+}
+.move img {
+	height: 100%;
+	width: 100%;
+}
+.bombslot {
+	position: absolute;
+	top: 10px;
+	left: -16px;
+	background-color: lightgrey;
+	width: 16px;
+	height: 16px;
+	border: 1px solid black;
+	border-radius: 8px;
+}
+.bombslot.rightbomb {
+	left: 37px;
+}
+#treasurebox, #token {
+	float: left;
+	margin-left: 45px;
+	height: 35px;
+	width: 35px;
+	border: 2px solid grey;
+	border-radius: 5px;
+	background-color: rgba(100, 100, 100, 0.3);
+}
+#treasurebox img {
+	height: 35px;
+	width: 35px;
+}
+#ready {
+	background: darkgreen;
+}
+#ready:disabled {
+	background: grey;
+}
+#settings {
+	margin-left: 6px;
+	color: #bbb;
+}
+#token {
+	padding: 4px;
+	color: darkgrey;
+}
+#token.ready {
+	color: khaki;
+}
+.blocked {
+	background-color: #999;
+}
+.bomb {
+	background: #CB4335;
+}
+
+.selected {
+	border: 2px solid orange;
+}

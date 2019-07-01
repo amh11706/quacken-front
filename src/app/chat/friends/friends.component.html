@@ -1,0 +1,47 @@
+<div id="friends" class="container" [qdrag]="handle" bindToWindow>
+  <div #handle class="handle"></div>
+  <mat-icon class="close">close</mat-icon>
+  <div id="nav">
+    <div *ngFor="let link of links" class="link"
+    (click)="selected = link.path" [class.active]="selected === link.path">
+      {{link.title}}
+    </div>
+  </div>
+
+  <div id="selection">
+    <ng-container [ngSwitch]="selected">
+      <ng-container *ngSwitchCase="'friend'">
+        <mat-expansion-panel expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Online
+            </mat-panel-title>
+            <mat-panel-description>
+              ({{friends.length}})
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <div *ngFor="let friend of friends" class="online">
+              {{friend.name}}
+            </div>
+          </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Offline
+            </mat-panel-title>
+            <mat-panel-description>
+              ({{offline.length}})
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <ng-template matExpansionPanelContent>
+            <div *ngFor="let friend of offline" class="offline">
+              {{friend.name}}
+            </div>
+          </ng-template>
+        </mat-expansion-panel>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

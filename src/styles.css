@@ -1,0 +1,29 @@
+@import '@angular/material/prebuilt-themes/purple-green.css';
+
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+button {
+	padding: 3px 8px;
+}
+.noselect {
+	user-select: none;
+}
+.hidden {
+	display: none;
+}
+.container {
+  border: 1px solid gray;
+	border-radius: 20px;
+  background-color: rgba(112, 123, 124, 0.85);
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

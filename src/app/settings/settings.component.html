@@ -1,0 +1,5 @@
+<div [qdrag]="handle" bindToWindow class="container noselect" id="settings">
+  <div #handle class="handle"></div>
+  <mat-icon class="close" (click)="close.emit()">close</mat-icon>
+	<ng-container *ngTemplateOutlet="settingTemplate"></ng-container>
+</div>

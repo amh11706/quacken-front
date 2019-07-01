@@ -1,0 +1,52 @@
+<div id="chatbox">
+  <div id="output">
+    <div #output id="textbox">
+      <p *ngFor="let m of chat.messages" [style.backgroundColor]="colors[m.type]">
+        <ng-container [ngSwitch]="m.type">
+          <span *ngSwitchCase="0">{{m.message}}</span>
+          <span *ngSwitchCase="1" [innerHTML]="m.message"></span>
+
+          <span *ngSwitchCase="2">
+            <app-name [name]="m.from" [copy]="m.copy" [input]="input"></app-name>
+            says "{{m.message}}"
+          </span>
+
+          <span *ngSwitchCase="3">
+            <ng-container *ngIf="m.names.length === 1">You are alone here.</ng-container>
+            <ng-container *ngIf="m.names.length > 1">
+              There are {{m.names.length}} players in this lobby:
+              <span *ngFor="let name of m.names; let i = index">
+                <app-name [name]="name" [input]="input"></app-name>
+                <span *ngIf="i < m.names.length - 1">, </span>
+              </span>
+            </ng-container>
+          </span>
+
+          <span *ngSwitchCase="4">
+            You told
+            <app-name [name]="m.from" [copy]="m.copy" [input]="input"></app-name>
+            "{{m.message}}"
+          </span>
+
+          <span *ngSwitchCase="5">
+            <app-name [name]="m.from" [copy]="m.copy" [input]="input"></app-name>
+            tells you
+            "{{m.message}}"
+          </span>
+
+          <span *ngSwitchCase="6">
+            The following commands are available in this lobby:<br>
+            <span *ngFor="let c of m.message" class="command" (click)="clickCommand(c)" title="Send Command">
+              {{c.base}}<ng-container *ngIf="c.params"> {{c.params}}</ng-container> - {{c.help}}<br>
+            </span>
+          </span>
+        </ng-container>
+      </p>
+    </div>
+  </div>
+
+  <form (submit)="sendInput($event)">
+    <input #inputEl id="textinput" autocomplete="off" maxlength="200"
+    name="value" (keyup)="handleKey($event)" [(ngModel)]="chat.value">
+  </form>
+</div>

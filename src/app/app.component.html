@@ -1,0 +1,11 @@
+<div *ngIf="ws.connected" id="banner">
+  <span *ngIf="router.url !== '/list'" title="Back to lobby list"
+  [routerLink]="['list']">
+    &lt;
+  </span>
+  <span id="logout" title="Logout" (click)="logout()">x</span>
+</div>
+
+<router-outlet></router-outlet>
+
+<app-friends></app-friends>

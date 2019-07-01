@@ -1,0 +1,32 @@
+#banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 8px;
+  color: rgba(255, 255, 0, 0.7);
+  font-size: 2em;
+  transition: background-color .5s;
+  line-height: normal;
+}
+
+#banner:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#logout {
+  float: right;
+}
+
+span {
+  float: left;
+  margin: 4px 0;
+  cursor: pointer;
+  user-select: none;
+  transition: .2s linear;
+}
+
+span:hover {
+  color: yellow;
+}

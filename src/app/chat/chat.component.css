@@ -1,0 +1,41 @@
+#chatbox {
+	font-size: 14px;
+}
+#output {
+	position: relative;
+	margin-bottom: 2px;
+	height: 100px;
+	background-color: #999;
+	color: black;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+#textbox {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	max-height: 97px;
+	padding-top: 3px;
+	overflow: auto;
+}
+#textinput {
+	width: 100%	;
+	padding: 3px 5px;
+	background-color: #eee;
+	border: 1px solid black;
+}
+#textbox p {
+	user-select: text;
+	word-wrap: break-word;
+	float: left;
+	clear: both;
+	text-align: left;
+	max-width: 96%;
+	padding: 0 7px;
+	border-radius: 5px;
+	margin: 0 3px 3px 3px;
+}
+
+.command {
+	cursor: pointer;
+}
