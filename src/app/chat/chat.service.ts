@@ -7,6 +7,8 @@ export interface Message {
   message: any,
   from: string,
   copy: number,
+  friend?: boolean,
+  blocked?: boolean,
   names?: string[],
 }
 
@@ -37,6 +39,30 @@ export class ChatService {
     this.socket.connected$.subscribe(value => {
       if (!value) this.messages = [];
     });
+
+    this.socket.subscribe('friendAdd', (u: string) => {
+      for (const m of this.messages) if (m.from === u) m.friend = true;
+    });
+    this.socket.subscribe('friendRemove', (u: string) => {
+      for (const m of this.messages) if (m.from === u) m.friend = false;
+    });
+
+    this.socket.subscribe('block', (u: string) => {
+      for (const m of this.messages) if (m.from === u) m.blocked = true;
+    });
+    this.socket.subscribe('unblock', (u: string) => {
+      for (const m of this.messages) if (m.from === u) m.blocked = false;
+    });
+  }
+
+  setTell(name: string) {
+    if (this.value) this.commandHistory.push(this.value);
+    this.value = '/tell ' + name + ' ';
+  }
+
+  sendTell(friend: string) {
+    this.setTell(friend);
+    document.getElementById('textinput').focus();
   }
 
 }

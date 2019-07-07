@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
 import { ChatService } from './chat.service';
+import { FriendsService } from './friends/friends.service';
 
 @Component({
   selector: 'app-chat',
@@ -13,16 +14,16 @@ export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('inputEl') input: ElementRef;
   @ViewChild('output') output: ElementRef;
   colors = [
-    'tan', // info message
-    'tan', // HTML info message
-    'white', // lobby chat
-    'tan', // user list
-    '#7FDBFF', // sent tell
-    'cornflowerblue', // recieved tell
-    'tan', // command list
+    '#873600', // info message
+    '#873600', // HTML info message
+    '#666', // lobby chat
+    ,
+    '#2874A6', // sent tell
+    '#1A5276', // recieved tell
+    '#873600', // command list
     ,
     ,
-    'salmon', // alert/broadcast
+    'maroon', // alert/broadcast
   ];
 
   private subs: Subscription;
@@ -37,7 +38,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructor(public socket: WsService, public chat: ChatService) { }
+  constructor(
+    public socket: WsService,
+    public chat: ChatService,
+    public fs: FriendsService,
+  ) { }
 
   ngOnInit() {
     this.subs = this.socket.subscribe('m', () => this.addMessage());
@@ -102,7 +107,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   addMessage(): void {
     const output = this.output.nativeElement;
-  	if (output.scrollTop + 115 > output.scrollHeight) {
+    if (output.scrollTop + 115 > output.scrollHeight) {
       setTimeout(() => output.scrollTop = output.scrollHeight);
     }
   }

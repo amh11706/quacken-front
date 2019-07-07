@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 
-import { ChatService } from '../chat.service';
+import { ChatService, Message } from '../chat.service';
+import { WsService } from 'src/app/ws.service';
 
 @Component({
   selector: 'app-name',
@@ -8,21 +9,23 @@ import { ChatService } from '../chat.service';
   styleUrls: ['./name.component.css']
 })
 export class NameComponent implements OnInit {
-  @Input() name: string;
-  @Input() copy: number;
-  @Input() input: ElementRef;
+  @Input() message: Message;
 
-  constructor(private chat: ChatService) { }
+  constructor(public chat: ChatService, public ws: WsService) { }
 
   ngOnInit() {
   }
 
-  clickName() {
-    if (this.chat.value) this.chat.commandHistory.push(this.chat.value);
-    this.chat.value = '/tell ' + this.name;
-    if (this.name === 'Guest') this.chat.value += `(${this.copy})`;
-    this.chat.value += ' ';
-    this.input.nativeElement.focus();
+  add(name: string) {
+    this.ws.send("c/friend", name);
+  }
+
+  block(name: string) {
+    this.ws.send("c/block", name);
+  }
+
+  unblock(name: string) {
+    this.ws.send("c/unblock", name);
   }
 
 }

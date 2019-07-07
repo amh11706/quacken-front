@@ -1,3 +1,15 @@
 span {
   cursor: pointer;
 }
+
+.friend {
+  color: limegreen;
+}
+
+.blocked {
+  color: #aaa;
+}
+
+.you {
+  color: aquamarine;
+}

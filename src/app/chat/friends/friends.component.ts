@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-export interface Friend {
-  name: string,
-  status?: number,
-  message?: string,
-  inLobby?: number,
-  lastSeen?: number,
-}
+import { FriendsService, Invite } from './friends.service';
+import { WsService } from '../../ws.service';
+import { ChatService } from '../chat.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-friends',
@@ -14,33 +11,43 @@ export interface Friend {
   styleUrls: ['./friends.component.css']
 })
 export class FriendsComponent implements OnInit {
-  selected = 'friend';
   links = [
-    { title: 'Friends', path: 'friend' },
-    { title: 'Blocked', path: 'block' },
-    { title: 'Invites', path: 'invite' },
+    { title: 'Players in lobby', icon: 'group', path: 'lobby' },
+    { title: 'Friends', icon: 'mood', path: 'friend' },
+    { title: 'Blocked players', icon: 'block', path: 'block' },
   ];
 
-  friends: Friend[] = [
-    { name: 'first', status: 1, message: 'test', inLobby: 1 },
-    { name: 'second' },
-    { name: 'third' },
-    { name: 'fourth' },
-    { name: 'first' },
-    { name: 'second' },
-    { name: 'third' },
-    { name: 'fourth' },
-    { name: 'first' },
-    { name: 'second' },
-    { name: 'third' },
-  ];
-  offline: Friend[] = [
-    { name: 'fourth' },
-  ];
-
-  constructor() { }
+  constructor(
+    public fs: FriendsService,
+    public ws: WsService,
+    private chat: ChatService,
+    private router: Router,
+  ) { }
 
   ngOnInit() {
+  }
+
+  sendTell(friend: string) {
+    this.chat.setTell(friend);
+    document.getElementById('textinput').focus();
+  }
+
+  remove(friend: string) {
+    this.ws.send("friendRemove", friend);
+  }
+
+  unblock(blocked: string) {
+    this.ws.send("c/unblock", blocked);
+  }
+
+  accept(inv: Invite) {
+    if (inv.ty === 0) this.ws.send('friendAdd', inv.f);
+    else this.router.navigate(['lobby', inv.tg]);
+  }
+
+  decline(inv: Invite) {
+    this.fs.invites = this.fs.invites.filter(i => i != inv)
+    this.ws.send("inviteRemove", inv);
   }
 
 }
