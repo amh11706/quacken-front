@@ -8,8 +8,19 @@
   background: center/cover url('/assets/background.jpg');
 }
 
+#lsettings {
+  display: block;
+  margin-bottom: 16px;
+  padding-top: 4px;
+  max-width: 450px;
+  margin: 16px auto;
+  background: rgba(66, 66, 66, 0.4);
+  border: 1px solid grey;
+  border-radius: 8px;
+}
+
 div {
-	text-align: center;
+  text-align: center;
 }
 
 app-chat-box {

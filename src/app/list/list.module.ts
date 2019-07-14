@@ -7,6 +7,8 @@ import {
 import { ChatModule } from '../chat/chat.module';
 
 import { ListComponent } from './list.component';
+import { LobbyModule } from '../lobby/lobby.module';
+import { SettingsModule } from '../settings/settings.module';
 
 @NgModule({
   declarations: [ListComponent],
@@ -15,6 +17,8 @@ import { ListComponent } from './list.component';
     FormsModule,
     MatButtonModule,
     ChatModule,
+    LobbyModule,
+    SettingsModule,
   ],
   exports: [ListComponent],
 })

@@ -1,11 +1,17 @@
 #settings {
-	position: absolute;
-	top: calc(50% - 125px);
-	right: 10px;
-	width: 200px;
-	max-height: 300px;
-  padding: 16px;
-	background-color: rgba(66, 66, 66, 0.85);
+  position: absolute;
+  top: calc(50% - 150px);
+  padding: 0;
+  right: 25%;
+  width: 200px;
+  background-color: rgba(66, 66, 66, 0.85);
+}
+
+.content {
+  padding: 0 16px;
+  height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .handle {
@@ -13,7 +19,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 16px;
+  height: 24px;
   cursor: pointer;
 }
 
@@ -22,5 +28,37 @@
   top: 4px;
   right: 8px;
   cursor: pointer;
-	color: #fff;
+  color: #fff;
+}
+
+.empty {
+  text-align: center;
+  color: #bbb;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+}
+
+.nav {
+  text-align: left;
+  padding-top: 24px;
+  border-bottom: 2px solid grey;
+}
+
+.link {
+  display: inline-block;
+  width: auto;
+  padding: 4px 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: .3s;
+  user-select: none;
+}
+
+.link:hover, .link.active {
+  background-color: rgba(86, 86, 86, 0.7);
+}
+
+.link.active * {
+  color: #F7DC6F;
+  cursor: default;
 }

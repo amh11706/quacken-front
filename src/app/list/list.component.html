@@ -1,7 +1,7 @@
 <div id="frame">
   <div id="nav">
-    <div *ngFor="let link of links" class="link"
-    (click)="selected = link.path" [class.active]="selected === link.path">
+    <div *ngFor="let link of links" class="link" (click)="selected = link.path"
+      [class.active]="selected === link.path">
       {{link.title}}
     </div>
   </div>
@@ -13,32 +13,56 @@
         Select a lobby from the list or create your own to play.
       </p>
 
-      <div id="lobbylist"><table>
-        <tr><th *ngFor="let column of columns">{{column.title}}</th></tr>
+      <div id="lobbylist">
+        <table>
+          <tr>
+            <th>Type</th>
+            <th>Name</th>
+            <th>Owner</th>
+            <th>Players</th>
+          </tr>
 
-        <tr *ngFor="let lobby of lobbies" (click)="router.navigate(['lobby', lobby.id])">
-          <td *ngFor ="let column of columns">{{lobby[column.property]}}</td>
-        </tr>
-      </table></div>
+          <tr *ngFor="let lobby of lobbies"
+            (click)="router.navigate(['lobby', lobby.id])">
+            <td>{{lobby.type}}</td>
+            <td>{{lobby.name}}</td>
+            <td>{{lobby.owner}}</td>
+            <td>{{lobby.players}}</td>
+          </tr>
+        </table>
+      </div>
     </ng-container>
 
     <ng-container *ngIf="selected === 'create'">
       <h2>Create Lobby</h2>
-      <p>Lobby settings n stuff.</p>
-      <button mat-raised-button (click)="createLobby()" [disabled]="!ws.user.id || created">Create</button>
+      <div id="lsettings">
+        <app-setting name="publicMode"></app-setting>
+        <app-setting name="hotEntry"></app-setting>
+        <app-setting name="maxPlayers"></app-setting>
+        <app-setting name="duckLvl"></app-setting>
+        <app-setting name="tileSet"></app-setting>
+        <app-setting name="structureSet"></app-setting>
+      </div>
+
+      <button mat-raised-button (click)="createLobby()"
+        [disabled]="!ws.user.id || created">Create</button>
       <p *ngIf="!ws.user.id" class="error">
-        Guests cannot make lobbies. Join an existing lobby or create an account to make your own.
+        Guests cannot make lobbies. Join an existing lobby or create an account
+        to make your own.
       </p>
     </ng-container>
 
     <ng-container *ngIf="selected === 'map'">
       <h2>Map Editor</h2>
       <p>
-        This tool allows you to create and edit maps and tile sets. Work in progress.
+        This tool allows you to create and edit maps and tile sets. Work in
+        progress.
         <br><br>
-        You must create a tile set before you can create any tiles. Tile placement on maps coming soon.
+        You must create a tile set before you can create any tiles. Tile
+        placement on maps coming soon.
       </p>
-      <button mat-raised-button (click)="socket.path$.next('editor')" [disabled]="!ws.user.id">Get Started</button>
+      <button mat-raised-button (click)="socket.path$.next('editor')"
+        [disabled]="!ws.user.id">Get Started</button>
       <p *ngIf="!ws.user.id" class="error">
         Guests cannot create maps. Create an account to unlock this feature.
       </p>

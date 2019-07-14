@@ -1,4 +1,5 @@
-<span *ngIf="message.from !== ws.user.name; else you"
+<span
+  *ngIf="message.from !== ws.user.name || message.from === 'Guest' && message.copy !== ws.copy; else you"
   [matMenuTriggerFor]="nameMenu">
   <span [class.friend]="message.friend"
     [class.blocked]="message.blocked">{{message.from}}</span>
@@ -12,18 +13,20 @@
 
 <mat-menu #nameMenu="matMenu">
   <ng-template matMenuContent>
-    <button mat-menu-item (click)="chat.sendTell(message.from)">
+    <button mat-menu-item (click)="sendTell()">
       Send Tell
     </button>
-    <button *ngIf="!message.friend" mat-menu-item (click)="add(message.from)">
-      Add friend
-    </button>
-    <button *ngIf="!message.blocked; else unblockButton" mat-menu-item
-      (click)="block(message.from)">
-      Block
-    </button>
+    <ng-container *ngIf="ws.user.name !== 'Guest'">
+      <button *ngIf="!message.friend" mat-menu-item (click)="add()">
+        Add friend
+      </button>
+      <button *ngIf="!message.blocked; else unblockButton" mat-menu-item
+        (click)="block(message.from)">
+        Block
+      </button>
+    </ng-container>
     <ng-template #unblockButton>
-      <button mat-menu-item (click)="unblock(message.from)">
+      <button mat-menu-item (click)="unblock()">
         Unblock
       </button>
     </ng-template>

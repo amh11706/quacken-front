@@ -3,8 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
-import { SettingsService } from '../settings/settings.service';
+import { SettingsService, SettingMap } from '../settings/settings.service';
 import { Boat } from './boats/boat';
+
+const baseSettings = ['mapScale', 'speed'];
+const ownerSettings = ['publicMode', 'hotEntry', 'maxPlayers', 'duckLvl'];
 
 @Component({
   selector: 'app-lobby',
@@ -23,10 +26,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   id: number;
   map: Uint8Array[] = [];
-  tileSize = 50;
-  speed = 1;
-  settings: Map<string, string>;
-  showSettings = false;
+  settings: SettingMap = { mapScale: 50, speed: 1 };
   wheelDebounce: number;
   myBoat = new Boat('');
   private sub: Subscription;
@@ -34,7 +34,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private ws: WsService,
-    private setServ: SettingsService,
+    private ss: SettingsService,
   ) {
     this.getSettings();
   }
@@ -51,29 +51,32 @@ export class LobbyComponent implements OnInit, OnDestroy {
       if (value) this.ws.send('joinLobby', this.id);
     }));
     this.sub.add(this.ws.subscribe('map', map => this.setMapB64(map)));
-    this.sub.add(this.ws.subscribe('joinLobby', m => this.setMapB64(m.map)));
+    this.sub.add(this.ws.subscribe('joinLobby', m => {
+      this.setMapB64(m.map);
+      if (m.owner !== this.ws.user.name) this.ss.setLobbySettings(baseSettings);
+      else this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
+    }));
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+    this.ss.setLobbySettings([]);
   }
 
   async getSettings() {
-    this.settings = await this.setServ.getGroup('lobby');
-    this.tileSize = +this.settings.get('mapScale');
-    this.speed = +this.settings.get('speed');
+    this.settings = await this.ss.getGroup('lobby');
   }
 
   scroll(e: WheelEvent) {
     if (!e.ctrlKey) return;
     if (e.deltaY < 0) {
-      this.tileSize *= 11/10;
-      if (this.tileSize > 100) this.tileSize = 100;
+      this.settings.mapScale *= 11 / 10;
+      if (this.settings.mapScale > 100) this.settings.mapScale = 100;
     } else {
-      this.tileSize *= 10/11;
-      if (this.tileSize < 15) this.tileSize = 15;
+      this.settings.mapScale *= 10 / 11;
+      if (this.settings.mapScale < 15) this.settings.mapScale = 15;
     }
-    this.tileSize = Math.round(this.tileSize);
+    this.settings.mapScale = Math.round(this.settings.mapScale);
     e.preventDefault();
     this.saveScale()
   }
@@ -81,36 +84,21 @@ export class LobbyComponent implements OnInit, OnDestroy {
   saveScale() {
     clearTimeout(this.wheelDebounce);
     this.wheelDebounce = window.setTimeout(() => {
-      this.ws.send('setSetting', { id: 2, value: this.tileSize });
-      this.settings.set('mapScale', String(this.tileSize));
+      this.ss.save({ id: 2, value: this.settings.mapScale, name: 'mapScale' }, 'lobby');
     }, 1000);
-  }
-
-  saveSpeed() {
-    clearTimeout(this.wheelDebounce);
-    this.wheelDebounce = window.setTimeout(() => {
-      this.ws.send('setSetting', { id: 3, value: this.speed });
-      this.settings.set('speed', String(this.speed));
-    }, 1000);
-  }
-
-  nextBoat(v: string) {
-    this.ws.send('setSetting', { id: 1, value: +v });
-    this.ws.send('nextBoat', +v);
-    this.settings.set('nextBoat', v);
   }
 
   private setMapB64(map: string) {
     if (!this.map.length) this.initMap();
     const bString = atob(map);
     const temp = new Uint8Array(this.map[0].buffer);
-    for (let i = 0; i < 25*52; i++) {
+    for (let i = 0; i < 25 * 52; i++) {
       temp[i] = bString.charCodeAt(i);
     }
   }
 
   private initMap() {
-    const buffer = new ArrayBuffer(25*52);
+    const buffer = new ArrayBuffer(25 * 52);
     let offset = 0;
     for (let y = 0; y < 52; y++) {
       this.map.push(new Uint8Array(buffer, offset, 25));

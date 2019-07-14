@@ -1,0 +1,50 @@
+<ng-container [ngSwitch]="setting.type">
+  <div *ngSwitchCase="'boat'" class="setting boat">
+    <mat-select [(ngModel)]="group[this.setting.name]"
+      (selectionChange)="save()">
+      <mat-select-trigger>
+        <img *ngIf="group[this.setting.name] !== undefined"
+          [src]="'/assets/boats/boat'+group[this.setting.name]+'.png'"
+          [title]="setting.titles[group[this.setting.name]]">
+      </mat-select-trigger>
+      <mat-optgroup *ngFor="let g of setting.groups" [label]="g.name">
+        <mat-option *ngFor="let o of g.options" [value]="o">
+          <img src="/assets/boats/boat{{o}}.png" height="25px"
+            width="25px">{{setting.titles[o]}}
+        </mat-option>
+      </mat-optgroup>
+    </mat-select>
+  </div>
+
+  <mat-form-field *ngSwitchCase="'option'" class="setting">
+    <mat-label>{{setting.label}}</mat-label>
+    <mat-select [(value)]="group[this.setting.name]" (selectionChange)="save()">
+      <mat-option *ngFor="let option of setting.options; let i = index"
+        [value]="i">{{option}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngSwitchCase="'slider'" class="setting">
+    <span class="label">{{setting.label}} ({{group[this.setting.name]}})</span>
+    <mat-slider [min]="setting.min" [max]="setting.max" [step]="setting.step"
+      [value]="group[this.setting.name]"
+      (input)="group[this.setting.name]=$event.value; save()">
+    </mat-slider>
+  </div>
+
+  <div *ngSwitchCase="'checkbox'" class="setting">
+    <mat-checkbox [(ngModel)]="group[this.setting.name]" (change)="save()">
+      <span [innerHTML]="setting.label"></span>
+    </mat-checkbox>
+  </div>
+
+  <mat-form-field *ngSwitchCase="'number'" class="setting">
+    <input matInput [(ngModel)]="group[this.setting.name]" (change)="save()"
+      placeholder="Max Players" type="number" [min]="setting.min"
+      [max]="setting.max">
+  </mat-form-field>
+
+  <!-- <app-tile-set *ngSwitchCase="'tileSet'"></app-tile-set> -->
+
+  <!-- <app-structure-set *ngSwitchCase="'structureSet'"></app-structure-set> -->
+</ng-container>

@@ -59,14 +59,14 @@ export class BoatsComponent implements OnInit, OnDestroy {
   ];
   clutter: Clutter[] = [];
   moveTransitions = [
-    '',
+    '0s linear',
     's linear',
     's ease-in',
     's ease-out',
     '.1s linear'  // crunch
   ];
   rotateTransitions = [
-    '',
+    '0s linear',
     '.4s ease .1s', // normal rotate
     '3s linear' // sink rotate
   ];
@@ -135,7 +135,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
           boat.bomb = 0;
           boat.ready = false;
         }
-        if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd:'unlockMoves' });
+        if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: 'unlockMoves' });
       }
       this.step = -1;
     } else this.syncBoats();
@@ -146,7 +146,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (!turn.sync) {
       setTimeout(() => {
         for (const boat of this.boats) boat.ready = false;
-        this.ws.dispatchMessage({ cmd:'unlockMoves' });
+        this.ws.dispatchMessage({ cmd: 'unlockMoves' });
       }, 1000);
       return;
     }

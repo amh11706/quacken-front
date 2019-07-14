@@ -1,54 +1,29 @@
-<div #frame class="noselect" id="background" (wheel)="scroll($event)" oncontextmenu="event.preventDefault();">
+<div #frame class="noselect" id="background" (wheel)="scroll($event)"
+	oncontextmenu="event.preventDefault();">
 	<!-- mapframe receives the offset transform, map receives the rotate transform.
  	This allows them to be altered independent of each other -->
 	<div id="mapframe" [qdrag]="frame">
 		<div id="map">
-			<div [style.transform]="'translateX(' + (-0.5-myBoat.pos[0])*tileSize + 'px)'"
-			[style.transition]="1/speed + moveTransitions[myBoat.moveTransition[0]]">
-				<div id="maprows" [style.width]="25*tileSize+2 + 'px'"
-				[style.transform]="'translateY(' + (-0.5-myBoat.pos[1])*tileSize + 'px)'"
-				[style.transition]="1/speed + moveTransitions[myBoat.moveTransition[1]]">
-				 	<div *ngFor="let row of map; let i = index">
+			<div
+				[style.transform]="'translateX(' + (-0.5-myBoat.pos[0])*settings.mapScale + 'px)'"
+				[style.transition]="1/settings.speed + moveTransitions[myBoat.moveTransition[0]]">
+				<div id="maprows" [style.width]="25*settings.mapScale+2 + 'px'"
+					[style.transform]="'translateY(' + (-0.5-myBoat.pos[1])*settings.mapScale + 'px)'"
+					[style.transition]="1/settings.speed + moveTransitions[myBoat.moveTransition[1]]">
+					<div *ngFor="let row of map; let i = index">
 						<div *ngFor="let tile of row" class="tile" [class.sztile]="i > 48">
 							<img *ngIf="tile" src="./assets/images/obstacle{{tile}}.png"
-							[class]="'img' + tile" [title]="titles[tile] || ''">
+								[class]="'img' + tile" [title]="titles[tile] || ''">
 						</div>
 					</div>
 
-					<app-boats [size]="tileSize" [speed]="speed"></app-boats>
+					<app-boats [size]="settings.mapScale" [speed]="settings.speed">
+					</app-boats>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<app-hud (openSettings)="showSettings = !showSettings"></app-hud>
+<app-hud></app-hud>
 <app-entry-status></app-entry-status>
-<app-settings *ngIf="showSettings" (close)="showSettings = false" [settingTemplate]="lobbySettings"></app-settings>
-
-<ng-template #lobbySettings>
-	<mat-form-field>
-		<mat-label>Next Boat</mat-label>
-		<mat-select [value]="settings?.get('nextBoat')" (selectionChange)="nextBoat($event.value)">
-			<mat-optgroup label="Standard">
-				<mat-option value="0">Rocket</mat-option>
-				<mat-option value="1">Armored</mat-option>
-				<mat-option value="2">Bomb</mat-option>
-				<mat-option value="3">Bread</mat-option>
-			</mat-optgroup>
-
-			<mat-optgroup label="Ducks">
-				<mat-option value="10">Small Duck</mat-option>
-				<mat-option value="11">Medium Duck</mat-option>
-				<mat-option value="12">Large Duck</mat-option>
-				<mat-option value="13">Defenduck</mat-option>
-			</mat-optgroup>
-		</mat-select>
-	</mat-form-field>
-	<p class="label">Map Scale</p>
-	<mat-slider min="15" max="100" step="5" [value]="tileSize" thumbLabel displayWidth="200"
-	(input)="tileSize = $event.value; saveScale()"></mat-slider>
-	<p class="label">Animation Speed</p>
-	<mat-slider min="1" max="5" step="0.5" [value]="speed" thumbLabel displayWidth="200"
-	(input)="speed = $event.value; saveSpeed()"></mat-slider>
-</ng-template>

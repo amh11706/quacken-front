@@ -8,11 +8,11 @@ import { FriendsModule } from './chat/friends/friends.module';
 import { ListModule } from './list/list.module';
 import { LobbyModule } from './lobby/lobby.module';
 import { LoginModule } from './login/login.module';
+import { SettingsModule } from './settings/settings.module';
 
 import { AppComponent } from './app.component';
 
 import { WsService } from './ws.service';
-import { SettingsService } from './settings/settings.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,8 +26,9 @@ import { SettingsService } from './settings/settings.service';
     ListModule,
     LobbyModule,
     LoginModule,
+    SettingsModule,
   ],
-  providers: [WsService, SettingsService],
+  providers: [WsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

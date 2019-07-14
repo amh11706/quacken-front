@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { WsService } from '../ws.service';
 import { ChatService } from './chat.service';
 import { FriendsService } from './friends/friends.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-chat',
@@ -42,6 +43,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     public socket: WsService,
     public chat: ChatService,
     public fs: FriendsService,
+    public ss: SettingsService,
   ) { }
 
   ngOnInit() {

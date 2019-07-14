@@ -12,18 +12,6 @@
             says "{{m.message}}"
           </span>
 
-          <span *ngSwitchCase="3">
-            <!-- <ng-container *ngIf="m.names.length === 1">You are alone here.
-            </ng-container>
-            <ng-container *ngIf="m.names.length > 1">
-              There are {{m.names.length}} players in this lobby:
-              <span *ngFor="let name of m.names; let i = index">
-                <app-name [message]="{from: name}"></app-name>
-                <span *ngIf="i < m.names.length - 1">, </span>
-              </span>
-            </ng-container> -->
-          </span>
-
           <span *ngSwitchCase="4">
             You told
             <app-name [message]="m"></app-name>
@@ -57,7 +45,7 @@
         [class.highlight]="fs.invites.length">
         <mat-icon>notifications</mat-icon>
       </button>
-      <button mat-icon-button>
+      <button mat-icon-button (click)="ss.open = !ss.open">
         <mat-icon>settings</mat-icon>
       </button>
     </div>

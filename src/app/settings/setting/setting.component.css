@@ -1,0 +1,25 @@
+mat-slider, mat-form-field {
+  width: 100%;
+}
+
+mat-checkbox {
+  text-align: left;
+}
+
+.setting {
+  display: inline-block;
+  width: calc(100%-16px);
+  max-width: 190px;
+  margin: 8px 16px 8px 0;
+  color: #eee;
+}
+
+.boat {
+  width: 40px;
+  margin: 0 0 0 16px;
+}
+
+.boat img {
+  width: 25px;
+  height: 25px;
+}

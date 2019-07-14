@@ -1,5 +1,27 @@
-<div [qdrag]="handle" bindToWindow class="container noselect" id="settings">
+<div *ngIf="ss.open && ws.connected" [qdrag]="handle" bindToWindow
+  class="container noselect" id="settings">
   <div #handle class="handle"></div>
-  <mat-icon class="close" (click)="close.emit()">close</mat-icon>
-	<ng-container *ngTemplateOutlet="settingTemplate"></ng-container>
+  <mat-icon class="close" (click)="ss.open = false">close</mat-icon>
+  <div class="nav">
+    <div *ngFor="let link of links" class="link" [title]="link.title"
+      (click)="ss.selected = link.path"
+      [class.active]="ss.selected === link.path">
+      <mat-icon>{{link.icon}}</mat-icon>
+    </div>
+  </div>
+
+  <div [ngSwitch]="ss.selected" class="content">
+    <ng-container *ngSwitchCase="'lobby'">
+      <p *ngIf="ss.lSettings.length === 0; else lobby" class="empty">
+        This lobby does not have any settings for you.
+      </p>
+      <ng-template #lobby>
+        <app-setting *ngFor="let s of ss.lSettings" [name]="s"></app-setting>
+      </ng-template>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'global'">
+      <p class="empty">No global settings yet...</p>
+    </ng-container>
+  </div>
 </div>

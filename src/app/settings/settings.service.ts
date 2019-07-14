@@ -10,27 +10,40 @@ interface SettingsMessage {
 
 export interface Setting {
   id: number,
-  name: string,
-  value: string,
+  name?: string,
+  group?: string,
+  value: number,
+}
+
+export interface SettingMap {
+  [key: string]: number,
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingsService {
-  private settings = new Map<string, Map<string, string>>();
-  private ready = new Map<string, Subject<Map<string, string>>>();
+  private settings = new Map<string, SettingMap>();
+  private ready = new Map<string, Subject<SettingMap>>();
+
+  open = false;
+  selected = 'lobby';
+  lSettings: string[] = [];
 
   constructor(private ws: WsService) {
     ws.send('getSettings', 'global');
+    ws.subscribe('setSetting', async (s: Setting) => {
+      const group = await this.getGroup(s.group);
+      group[s.name] = s.value;
+    });
     ws.subscribe('getSettings', (m: SettingsMessage) => {
       let group = this.settings.get(m.group);
       if (!group) {
-        group = new Map<string, string>();
+        group = {};
         this.settings.set(m.group, group);
       }
 
-      for (const setting of m.settings) group.set(setting.name, setting.value);
+      for (const setting of m.settings) group[setting.name] = setting.value;
       const ready = this.ready.get(m.group);
       if (ready) {
         ready.next(group);
@@ -42,14 +55,20 @@ export class SettingsService {
     });
   }
 
-  async getGroup(group: string): Promise<Map<string, string>> {
+  setLobbySettings(names: string[]) {
+    this.lSettings = names;
+    if (names.length === 0) this.selected = 'global';
+    else this.selected = 'lobby';
+  }
+
+  async getGroup(group: string): Promise<SettingMap> {
     const settings = this.settings.get(group);
     if (settings) return Promise.resolve(settings);
 
     let ready = this.ready.get(group);
-    const prom = new Promise<Map<string, string>>(resolve => {
+    const prom = new Promise<SettingMap>(resolve => {
       if (!ready) {
-        ready = new Subject<Map<string, string>>();
+        ready = new Subject<SettingMap>();
         this.ready.set(group, ready);
         this.ws.send('getSettings', group);
       }
@@ -59,12 +78,14 @@ export class SettingsService {
     return prom
   }
 
-  async get(group: string, name: string): Promise<string> {
+  async get(group: string, name: string): Promise<number> {
     const settings = await this.getGroup(group);
-    return Promise.resolve(settings.get(name));
+    return Promise.resolve(settings[name]);
   }
 
-  async save(setting: Setting) {
+  async save(setting: Setting, group: string) {
     this.ws.send('setSetting', setting);
+    const settings = await this.getGroup(group);
+    settings[setting.name] = setting.value;
   }
 }

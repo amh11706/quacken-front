@@ -16,16 +16,22 @@ export class NameComponent implements OnInit {
   ngOnInit() {
   }
 
-  add(name: string) {
-    this.ws.send("c/friend", name);
+  sendTell() {
+    let name = this.message.from;
+    if (name === 'Guest') name += `(${this.message.copy})`;
+    this.chat.sendTell(name);
   }
 
-  block(name: string) {
-    this.ws.send("c/block", name);
+  add() {
+    this.ws.send("friend", this.message.from);
   }
 
-  unblock(name: string) {
-    this.ws.send("c/unblock", name);
+  block() {
+    this.ws.send("block", this.message.from);
+  }
+
+  unblock() {
+    this.ws.send("unblock", this.message.from);
   }
 
 }

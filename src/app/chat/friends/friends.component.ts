@@ -37,7 +37,7 @@ export class FriendsComponent implements OnInit {
   }
 
   unblock(blocked: string) {
-    this.ws.send("c/unblock", blocked);
+    this.ws.send("unblock", blocked);
   }
 
   accept(inv: Invite) {

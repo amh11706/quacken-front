@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'app-lobby-list',
@@ -10,7 +11,7 @@ import { WsService } from '../ws.service';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, OnDestroy {
-  selected = 'list';
+  selected = 'create';
   links = [
     { title: 'Lobby List', path: 'list' },
     { title: 'Create Lobby', path: 'create' },
@@ -18,12 +19,6 @@ export class ListComponent implements OnInit, OnDestroy {
   ];
 
   lobbies = [];
-  columns = [
-    { title: 'Type', property: 'type' },
-    { title: 'Name', property: 'name' },
-    { title: 'Owner', property: 'owner' },
-    { title: 'Players', property: 'players' },
-  ];
 
   created = false;
 
@@ -31,6 +26,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   constructor(
     public ws: WsService,
+    public ss: SettingsService,
     public router: Router,
   ) { }
 
@@ -60,8 +56,9 @@ export class ListComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  createLobby() {
-    this.ws.send('createLobby');
+  async createLobby() {
+    const settings = await this.ss.getGroup('l/quacken');
+    this.ws.send('createLobby', settings);
     this.created = true;
   }
 

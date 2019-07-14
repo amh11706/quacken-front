@@ -3,9 +3,8 @@
 }
 
 #icons {
-  position: fixed;
-  top: 16px;
-  right: 20px;
+  position: absolute;
+  right: 10px;
   display: flex;
   flex-direction: column;
   color: #444;
@@ -56,7 +55,7 @@
   float: left;
   clear: both;
   text-align: left;
-  max-width: 96%;
+  max-width: 95%;
   padding: 0 7px;
   border-radius: 5px;
   margin: 0 3px 3px 3px;

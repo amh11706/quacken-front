@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { SettingsService } from './settings.service';
+import { WsService } from '../ws.service';
 
 @Component({
   selector: 'app-settings',
@@ -6,10 +9,12 @@ import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@an
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  @Input() settingTemplate: TemplateRef<any>;
-  @Output() close = new EventEmitter<any>();
+  links = [
+    { title: 'Lobby Settings', icon: 'settings', path: 'lobby' },
+    { title: 'Global Settings', icon: 'languages', path: 'global' },
+  ];
 
-  constructor() { }
+  constructor(public ss: SettingsService, public ws: WsService) { }
 
   ngOnInit() {
   }

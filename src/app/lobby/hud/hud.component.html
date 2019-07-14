@@ -1,57 +1,65 @@
 <div class="container noselect" id="hud">
   <div id="boatcontrol" oncontextmenu="event.preventDefault();">
     <div id="time">
-      <div id="timebar" [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
+      <div id="timebar"
+        [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
     </div>
 
     <div id="moves">
       <div *ngFor="let move of myBoat.moves; let i=index" class="moverow">
         <ng-container *ngIf="myBoat.type === 2">
-          <div class="bombslot" [class.blocked]="locked" (click)="setBomb(i+1)" [class.bomb]="myBoat.bomb === i+1"></div>
-          <div class="bombslot rightbomb" [class.blocked]="locked" (click)="setBomb(i+5)" [class.bomb]="myBoat.bomb === i+5"></div>
+          <div class="bombslot" [class.blocked]="locked" (click)="setBomb(i+1)"
+            [class.bomb]="myBoat.bomb === i+1"></div>
+          <div class="bombslot rightbomb" [class.blocked]="locked"
+            (click)="setBomb(i+5)" [class.bomb]="myBoat.bomb === i+5"></div>
         </ng-container>
 
         <div class="move" [class.blocked]="maxMoves || locked"
-        [class.selected]="selected == i && !locked && document.activeElement.id !== 'textinput'"
-        (drop)="drop($event, i)"
-        (mouseup)="clickTile($event, i)"
-        (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
-        (dragover)="$event.preventDefault()">
+          [class.selected]="selected == i && !locked && document.activeElement.id !== 'textinput'"
+          (drop)="drop($event, i)" (mouseup)="clickTile($event, i)"
+          (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
+          (dragover)="$event.preventDefault()">
           <img *ngIf="move" src="./assets/images/arrow{{move}}.png"
-          (dragstart)="drag(move, i)" (dragend)="dragEnd()">
+            (dragstart)="drag(move, i)" (dragend)="dragEnd()">
         </div>
       </div>
     </div>
 
     <div id="damage">
-      <div id="damagebar" [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
+      <div id="damagebar"
+        [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
     </div>
 
     <div id="movesource" name="movesource">
-      <img class="movetile" name="left" id="tile1" src="./assets/images/arrow1.png" (dragstart)="drag(1)">
-      <img class="movetile" name="forward" id="tile2" src="./assets/images/arrow2.png" (dragstart)="drag(2)">
-      <img class="movetile" name="right" id="tile3" src="./assets/images/arrow3.png" (dragstart)="drag(3)">
+      <img class="movetile" name="left" id="tile1"
+        src="./assets/images/arrow1.png" (dragstart)="drag(1)">
+      <img class="movetile" name="forward" id="tile2"
+        src="./assets/images/arrow2.png" (dragstart)="drag(2)">
+      <img class="movetile" name="right" id="tile3"
+        src="./assets/images/arrow3.png" (dragstart)="drag(3)">
     </div>
 
     <ng-container *ngIf="myBoat.type < 10">
       <div id="treasurebox" *ngIf="myBoat.type !== 2 else token">
-        <img *ngIf="myBoat.getTreasure()" src="./assets/images/obstacle{{myBoat.getTreasure()}}.png">
+        <img *ngIf="myBoat.getTreasure()"
+          src="./assets/images/obstacle{{myBoat.getTreasure()}}.png">
       </div>
     </ng-container>
 
     <ng-template #token>
-      <div id="token" [class.ready]="myBoat.tokenPoints > 1 && myBoat.bomb === 0" title="Token {{myBoat.tokenPoints > 1 ? '' : 'not '}}ready.">
+      <div id="token"
+        [class.ready]="myBoat.tokenPoints > 1 && myBoat.bomb === 0"
+        title="Token {{myBoat.tokenPoints > 1 ? '' : 'not '}}ready.">
         B
       </div>
     </ng-template>
 
     <div id="buttons">
-      <button mat-raised-button id="ready" (click)="imReady()" [disabled]="myBoat.ready">Ready</button>
-      <button mat-icon-button id="settings" color="secondary" (click)="openSettings.emit()">
-        <mat-icon>settings</mat-icon>
-      </button>
+      <button mat-raised-button id="ready" (click)="imReady()"
+        [disabled]="myBoat.ready">Ready</button>
+      <app-setting name="nextBoat"></app-setting>
     </div>
   </div>
 
-	<app-chat></app-chat>
+  <app-chat></app-chat>
 </div>

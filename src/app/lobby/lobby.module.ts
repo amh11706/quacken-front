@@ -8,6 +8,7 @@ import {
   MatSliderModule,
   MatSelectModule,
   MatButtonModule,
+  MatCheckboxModule,
 } from '@angular/material';
 
 import { QdragModule } from '../qdrag/qdrag.module';
@@ -19,7 +20,7 @@ import { EntryStatusComponent } from './entry-status/entry-status.component';
 import { BoatsComponent } from './boats/boats.component';
 
 // TODO: move settings to its own module
-import { SettingsComponent } from '../settings/settings.component';
+import { SettingsModule } from '../settings/settings.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,6 @@ import { SettingsComponent } from '../settings/settings.component';
     HudComponent,
     EntryStatusComponent,
     BoatsComponent,
-    SettingsComponent,
   ],
   imports: [
     CommonModule,
@@ -38,8 +38,10 @@ import { SettingsComponent } from '../settings/settings.component';
     MatSliderModule,
     MatButtonModule,
     MatSelectModule,
+    MatCheckboxModule,
     QdragModule,
     ChatModule,
+    SettingsModule,
   ],
   exports: [LobbyComponent]
 })

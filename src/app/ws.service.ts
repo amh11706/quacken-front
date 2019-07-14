@@ -28,6 +28,7 @@ export class WsService {
 
   reason: string;
   sId: number;
+  copy: number;
 
   constructor(private router: Router) {
     this.subscribe('kick', (reason: string) => {
@@ -42,6 +43,9 @@ export class WsService {
     this.subscribe('sId', (id: number) => {
       this.sId = id;
     });
+    this.subscribe('copy', (copy: number) => {
+      this.copy = copy;
+    });
   }
 
   connect(token = this.token) {
@@ -53,7 +57,7 @@ export class WsService {
     if (token === 'guest') this.user = { id: 0, name: 'Guest' };
     else this.user = this.tokenParser.decodeToken(token);
 
-    this.socket = new WebSocket(location.port === '4200' ? 'wss://localhost/ws' : 'wss://'+location.hostname+'/ws');
+    this.socket = new WebSocket(location.port === '4200' ? 'wss://localhost/ws' : 'wss://' + location.hostname + '/ws');
 
     this.socket.onopen = () => {
       this.socket.send(token);
