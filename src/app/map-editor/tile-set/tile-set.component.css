@@ -1,0 +1,90 @@
+#tileset {
+  position: absolute;
+  left: 8px;
+  width: 150px;
+  top: calc(50% - 300px);
+  padding: 8px;
+  padding-top: 24px;
+  color: #eee;
+  text-align: center;
+}
+
+#handle2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  cursor: grab;
+}
+
+#tilebox {
+  height: 400px;
+  overflow: hidden;
+  overflow-y: auto;
+  border: 1px solid lightgrey;
+  border-radius: 8px;
+}
+
+#tileset button {
+  margin-top: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+h4 {
+  color: black;
+}
+
+input {
+  width: 48px;
+}
+
+.weight {
+  padding-top: 2px;
+}
+
+.tiletype {
+  margin-bottom: 8px;
+  padding: 4px 0;
+  border: 1px solid grey;
+  user-select: none;
+}
+
+.tile {
+  position: relative;
+  padding: 4px 8px;
+  border: 1px solid grey;
+  transition: .2s;
+  user-select: none;
+}
+
+.tile:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.tile.selected {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.unsaved {
+  color: yellow;
+}
+
+.delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px;
+  font-size: 10px;
+  background-color: lightgrey;
+  transition: .2s;
+  color: black;
+}
+
+.delete:hover {
+  color: lightgrey;
+  background-color: red;
+}

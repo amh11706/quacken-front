@@ -18,16 +18,33 @@
           <tr>
             <th>Type</th>
             <th>Name</th>
-            <th>Owner</th>
             <th>Players</th>
+            <th>Settings</th>
+            <th>Tile</th>
+            <th>Structure</th>
           </tr>
 
-          <tr *ngFor="let lobby of lobbies"
-            (click)="router.navigate(['lobby', lobby.id])">
+          <tr *ngFor="let lobby of lobbies" (click)="join(lobby)">
             <td>{{lobby.type}}</td>
             <td>{{lobby.name}}</td>
-            <td>{{lobby.owner}}</td>
-            <td>{{lobby.players}}</td>
+            <td>{{lobby.players}} / {{lobby.group.maxPlayers}}</td>
+            <td>
+              <mat-icon title="Duck Level ({{lobby.group.duckLvl}})"
+                [style.color]="'rgb('+lobby.group.duckLvl*20+','+(11-lobby.group.duckLvl)*20+',0)'">
+                show_chart
+              </mat-icon>
+              <mat-icon
+                title="Hot Entry ({{lobby.group.hotEntry ? 'allowed' : 'blocked'}})"
+                [style.color]="lobby.group.hotEntry ? 'green' : 'maroon'">
+                whatshot
+              </mat-icon>
+              <mat-icon title="{{publicModes[lobby.group.publicMode]}}"
+                [style.color]="lobby.group.publicMode ? 'orange' : 'green'">
+                public
+              </mat-icon>
+            </td>
+            <td>{{lobby.group.tileSet}}</td>
+            <td>{{lobby.group.structureSet}}</td>
           </tr>
         </table>
       </div>
@@ -42,6 +59,7 @@
         <app-setting name="duckLvl"></app-setting>
         <app-setting name="tileSet"></app-setting>
         <app-setting name="structureSet"></app-setting>
+        <app-setting name="autoGen"></app-setting>
       </div>
 
       <button mat-raised-button (click)="createLobby()"
@@ -55,13 +73,11 @@
     <ng-container *ngIf="selected === 'map'">
       <h2>Map Editor</h2>
       <p>
-        This tool allows you to create and edit maps and tile sets. Work in
-        progress.
-        <br><br>
-        You must create a tile set before you can create any tiles. Tile
-        placement on maps coming soon.
+        This tool allows you to create and edit maps and tile sets that can be
+        used in player created lobbies. More details can be found inside the
+        editor.
       </p>
-      <button mat-raised-button (click)="socket.path$.next('editor')"
+      <button mat-raised-button (click)="router.navigate(['editor'])"
         [disabled]="!ws.user.id">Get Started</button>
       <p *ngIf="!ws.user.id" class="error">
         Guests cannot create maps. Create an account to unlock this feature.

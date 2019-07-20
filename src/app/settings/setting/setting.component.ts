@@ -42,10 +42,11 @@ export class SettingComponent {
       this.ss.save({
         id: this.setting.id,
         name: this.setting.name,
-        value: +this.group[this.setting.name]
-      }, this.setting.group);
+        value: +this.group[this.setting.name],
+        group: this.setting.group,
+      });
       if (this.setting.trigger) this.ws.send(this.setting.trigger, +this.group[this.setting.name]);
-    }, 500);
+    }, 750);
   }
 
 }

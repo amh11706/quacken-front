@@ -7,6 +7,7 @@
   padding: 0;
   overflow: hidden;
   background: rgba(66, 66, 66, 0.85);
+  z-index: 1;
 }
 
 .highlight {
@@ -60,7 +61,7 @@
   left: 0;
   right: 0;
   height: 24px;
-  cursor: pointer;
+  cursor: grab;
 }
 
 .close {

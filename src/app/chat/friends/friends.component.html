@@ -3,7 +3,7 @@
     <button mat-menu-item (click)="sendTell(friend)">
       Send Tell
     </button>
-    <button mat-menu-item (click)="invite(friend)">
+    <button *ngIf="fs.allowInvite" mat-menu-item (click)="invite(friend)">
       Invite to Lobby
     </button>
     <button mat-menu-item (click)="remove(friend)">
@@ -102,7 +102,7 @@
             {{invite.f}} has requested to add you as a friend.
           </p>
           <ng-template #lobby>
-            {{invite.f}} has invited you to their lobby.
+            <p>{{invite.f}} has invited you to join their lobby.</p>
           </ng-template>
           <button mat-raised-button class="accept"
             (click)="accept(invite)">Accept</button>

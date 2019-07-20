@@ -9,6 +9,7 @@ import { ListModule } from './list/list.module';
 import { LobbyModule } from './lobby/lobby.module';
 import { LoginModule } from './login/login.module';
 import { SettingsModule } from './settings/settings.module';
+import { MapEditorModule } from './map-editor/map-editor.module';
 
 import { AppComponent } from './app.component';
 
@@ -27,6 +28,7 @@ import { WsService } from './ws.service';
     LobbyModule,
     LoginModule,
     SettingsModule,
+    MapEditorModule,
   ],
   providers: [WsService],
   bootstrap: [AppComponent]

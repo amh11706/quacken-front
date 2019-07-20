@@ -18,7 +18,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     '#873600', // info message
     '#873600', // HTML info message
     '#666', // lobby chat
-    ,
+    '#873600', // lobby join request
     '#2874A6', // sent tell
     '#1A5276', // recieved tell
     '#873600', // command list

@@ -1,15 +1,16 @@
-<div *ngFor="let obj of clutter; trackBy: trackBy" class="clutter" [class.front]="obj.p && obj.t === 0"
-[style.transform]="'translate('+obj.x*size+'px,'+obj.y*size+'px)'">
+<div *ngFor="let obj of clutter; trackBy: trackBy" class="clutter"
+  [class.front]="obj.p && obj.t === 0"
+  [style.transform]="'translate('+obj.x*size+'px,'+obj.y*size+'px)'">
 
   <div class="scale" [style.transform]="'scale('+size/50+')'">
     <img *ngIf="myBoat.type < 10 || obj.t > 0" [title]="clutterTypes[obj.t]"
-    class="clutterimage clutter{{obj.t}}{{obj.p ? ' sunk' : ''}}"
-    src="./assets/images/{{clutterTypes[obj.t]}}.png">
-    <div *ngIf="obj.d === 1 && obj.t === 4" class="wave"
-    [style.top]="size+'px'" [style.left]="size+'px'">
+      class="clutterimage clutter{{obj.t}}{{obj.p ? ' sunk' : ''}}"
+      src="./assets/images/{{clutterTypes[obj.t]}}.png">
+    <div *ngIf="obj.d === 1 && obj.t === 4" class="wave" [style.top]="size+'px'"
+      [style.left]="size+'px'">
     </div>
-    <div *ngIf="obj.p && obj.t === 0" class="deadBomb"
-    [style.top]="size/2+'px'" [style.left]="size/2+'px'">
+    <div *ngIf="obj.p && obj.t === 0" class="deadBomb" [style.top]="size/2+'px'"
+      [style.left]="size/2+'px'">
     </div>
   </div>
 </div>
@@ -19,27 +20,34 @@
   [style.transition]="(boat.moveTransition[0] < 4 && boat.moveTransition[0] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[0]] + (boat.enteringSZ ? szFade : '')">
 
   <!-- split boat div to allow different transitions on each axis -->
-  <div class="boat" [style.transform]="'translateY(' + (boat.pos[1]+boat.offsetY)*size + 'px)'"
-  [style.transition]="(boat.moveTransition[1] < 4 && boat.moveTransition[1] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[1]]">
+  <div class="boat"
+    [style.transform]="'translateY(' + (boat.pos[1]+boat.offsetY)*size + 'px)'"
+    [style.transition]="(boat.moveTransition[1] < 4 && boat.moveTransition[1] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[1]]">
     <div class="scale" [style.transform]="'scale('+size/50+')'">
       <div class="boatheader" *ngIf="boat.type < 10 || boat.isMe">
-        <span class="boattitle" [title]="boat.name + titles[boat.treasure]" [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
-          {{boat.name}}<img *ngIf="boat.treasure" src="/assets/images/obstacle{{boat.treasure}}.png">
+        <span class="boattitle" [title]="boat.name + titles[boat.treasure]"
+          [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
+          {{boat.name}}<img *ngIf="boat.treasure"
+            src="/assets/images/obstacle{{boat.treasure}}.png">
         </span>
 
         <div class="movebar" [class.ready]="boat.ready">
-          <div *ngFor="let move of boat.moves; let i=index" class="movebarslice {{moveNames[move]}}">
+          <div *ngFor="let move of boat.moves; let i=index"
+            class="movebarslice {{moveNames[move]}}">
             <ng-container *ngIf="boat.type == 2">
-              <mat-icon *ngIf="boat.bomb === i+5" class="bomb">arrow_right</mat-icon>
-              <mat-icon *ngIf="boat.bomb === i+1" class="bomb leftbomb">arrow_left</mat-icon>
+              <mat-icon *ngIf="boat.bomb === i+5" class="bomb">arrow_right
+              </mat-icon>
+              <mat-icon *ngIf="boat.bomb === i+1" class="bomb leftbomb">
+                arrow_left</mat-icon>
             </ng-container>
           </div>
         </div>
       </div>
 
-      <img class="boatimage" src="./assets/boats/boat{{boat.type}}.png" [style.opacity]="boat.imageOpacity"
-      [style.transform]="'rotate(' + boat.face + 'deg)'"
-      [style.transition]="boat.rotateTransition === 1 ? 0.9/speed + 's ease ' + 0.1/speed + 's': rotateTransitions[boat.rotateTransition]">
+      <img class="boatimage" src="./assets/boats/boat{{boat.type}}.png"
+        [style.opacity]="boat.imageOpacity"
+        [style.transform]="'rotate(' + boat.face + 'deg)'"
+        [style.transition]="boat.rotateTransition === 1 ? 0.9/speed + 's ease ' + 0.1/speed + 's': rotateTransitions[boat.rotateTransition]">
     </div>
   </div>
 </div>

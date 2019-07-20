@@ -1,0 +1,105 @@
+#structureset {
+  position: absolute;
+  left: 8px;
+  width: 150px;
+  top: calc(50% - 250px);
+  padding: 8px;
+  padding-top: 24px;
+  text-align: center;
+  color: #eee;
+}
+
+#structure {
+  position: absolute;
+  right: 8px;
+  width: 150px;
+  top: calc(50% - 250px);
+  padding: 8px;
+  padding-top: 24px;
+  text-align: center;
+  color: #eee;
+}
+
+#handle2, #handle3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  cursor: grab;
+}
+
+#structurebox, #structuredetail {
+  height: 400px;
+  overflow-y: auto;
+  padding: 8px;
+  border: 1px solid lightgrey;
+  border-radius: 8px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button {
+  margin-top: 8px;
+}
+
+p {
+  margin-bottom: 4px;
+}
+
+p input {
+  width: 40px;
+}
+
+#deletebutton {
+  margin-top: 48px;
+}
+
+.weight {
+  padding-top: 2px;
+}
+
+.structuretype {
+  margin-bottom: 8px;
+  padding: 4px 0;
+  border: 1px solid grey;
+  user-select: none;
+}
+
+.structure {
+  position: relative;
+  padding: 4px 8px;
+  border: 1px solid grey;
+  transition: .2s;
+  user-select: none;
+}
+
+.structure:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.structure.selected {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.unsaved {
+  color: yellow;
+}
+
+.delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 4px;
+  font-size: 10px;
+  background-color: lightgrey;
+  transition: .2s;
+  color: black;
+}
+
+.delete:hover {
+  color: lightgrey;
+  background-color: red;
+}

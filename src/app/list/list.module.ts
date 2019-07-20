@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
-  MatButtonModule,
+  MatButtonModule, MatIconModule,
 } from '@angular/material';
 import { ChatModule } from '../chat/chat.module';
 
@@ -16,6 +16,7 @@ import { SettingsModule } from '../settings/settings.module';
     CommonModule,
     FormsModule,
     MatButtonModule,
+    MatIconModule,
     ChatModule,
     LobbyModule,
     SettingsModule,

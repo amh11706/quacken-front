@@ -11,12 +11,13 @@ import { SettingsService } from '../settings/settings.service';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, OnDestroy {
-  selected = 'create';
+  selected = 'list';
   links = [
     { title: 'Lobby List', path: 'list' },
     { title: 'Create Lobby', path: 'create' },
     { title: 'Map Editor', path: 'map' },
   ];
+  publicModes = ['Public', 'Public Invitation'];
 
   lobbies = [];
 
@@ -31,7 +32,7 @@ export class ListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.sub = this.ws.subscribe('lobbyList', lobbies => this.lobbies = Object.values(lobbies));
+    this.sub = this.ws.subscribe('lobbyList', lobbies => this.lobbies = lobbies);
 
     this.sub = this.ws.subscribe('lu', update => {
       for (let i = 0; i < this.lobbies.length; i++) {
@@ -54,6 +55,11 @@ export class ListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+
+  join(l: any) {
+    if (l.group.publicMode === 0) this.router.navigate(['lobby', l.id]);
+    else this.ws.send("lobbyRequest", l.id);
   }
 
   async createLobby() {

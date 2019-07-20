@@ -15,6 +15,8 @@ export interface Invite {
 export class FriendsService {
   open = true;
   selected = 'lobby';
+  allowInvite = false;
+
   lobby: Message[] = [];
   friends: String[] = [];
   offline: String[] = [];

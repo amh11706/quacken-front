@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ElementRef } from '@angular/core';
 
 import { ChatService, Message } from '../chat.service';
 import { WsService } from 'src/app/ws.service';
+import { FriendsService } from '../friends/friends.service';
 
 @Component({
   selector: 'app-name',
@@ -11,15 +12,23 @@ import { WsService } from 'src/app/ws.service';
 export class NameComponent implements OnInit {
   @Input() message: Message;
 
-  constructor(public chat: ChatService, public ws: WsService) { }
+  constructor(
+    public chat: ChatService,
+    public ws: WsService,
+    public fs: FriendsService,
+  ) { }
 
   ngOnInit() {
   }
 
-  sendTell() {
+  private getName(): string {
     let name = this.message.from;
     if (name === 'Guest') name += `(${this.message.copy})`;
-    this.chat.sendTell(name);
+    return name;
+  }
+
+  sendTell() {
+    this.chat.sendTell(this.getName());
   }
 
   add() {
@@ -32,6 +41,10 @@ export class NameComponent implements OnInit {
 
   unblock() {
     this.ws.send("unblock", this.message.from);
+  }
+
+  invite() {
+    this.ws.send("c/invite", this.getName());
   }
 
 }

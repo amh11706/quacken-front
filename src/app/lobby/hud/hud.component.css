@@ -126,6 +126,10 @@ app-chat {
   background: darkgreen;
 }
 
+#start {
+  background: #154360;
+}
+
 #ready:disabled {
   background: grey;
 }

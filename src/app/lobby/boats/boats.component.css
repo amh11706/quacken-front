@@ -1,116 +1,133 @@
 .front {
-	z-index: 100;
+  z-index: 100;
 }
+
 .boat {
-	position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
-	overflow: visible;
-	z-index: 1;
+  overflow: visible;
+  z-index: 1;
 }
+
 .scale {
-	transform-origin: top left;
+  transform-origin: top left;
 }
+
 .boatheader {
-	position: absolute;
-	text-align: center;
-	line-height: 1;
-	top: -20px;
-	left: 2px;
-	width: 100px;
-	height: auto;
-	transform: rotate(45deg) scaleY(1.2);
+  position: absolute;
+  text-align: center;
+  line-height: 1;
+  top: -20px;
+  left: -23px;
+  width: 150px;
+  height: auto;
+  transform: rotate(45deg) scaleY(1.2);
 }
+
 .boatheader img {
-	width: 15px;
-	height: 15px;
-	margin-left: 4px;
+  width: 15px;
+  height: 15px;
+  margin-left: 4px;
 }
+
 .boattitle {
-	position: relative;
-	padding-bottom: 5px;
-	z-index: 10000;
+  position: relative;
+  padding-bottom: 5px;
+  z-index: 10000;
 }
+
 .movebar {
-	box-sizing: content-box;
-	width: 48px;
-	height: 8px;
-	margin: auto;
-	margin-top: 5px;
-	border: 1px solid black;
-	transition: .5s;
+  box-sizing: content-box;
+  width: 48px;
+  height: 8px;
+  margin: auto;
+  margin-top: 5px;
+  border: 1px solid black;
+  transition: .5s;
 }
+
 .movebarslice {
-	float: left;
-	width: 25%;
-	height: 8px;
-	background-color: grey;
+  float: left;
+  width: 25%;
+  height: 8px;
+  background-color: grey;
 }
+
 .left {
   background-color: #b9cef1;
 }
+
 .forward {
   background-color: #97c469;
 }
+
 .right {
   background-color: #ff9d55;
 }
+
 .bomb {
-	position: relative;
-	top: -8px;
-	left: -3px;
-	color: red;
+  position: relative;
+  top: -8px;
+  left: -3px;
+  color: red;
 }
+
 .leftbomb {
-	left: -8px;
+  left: -8px;
 }
+
 .ready {
-	border: 1px solid lime;
+  border: 1px solid lime;
 }
+
 .boatimage {
-	height: 50px;
+  height: 50px;
 }
 
 .clutter {
-	position: absolute;
+  position: absolute;
   top: 0;
   left: 0;
 }
+
 .scale {
-	transform-origin: top left;
+  transform-origin: top left;
 }
+
 .clutterimage {
-	position: absolute;
+  position: absolute;
   padding: 12px;
   width: 50px;
   height: 50px;
-	opacity: 1;
-	transition: 1s linear;
-	z-index: -1;
+  opacity: 1;
+  transition: 1s linear;
+  z-index: -1;
 }
+
 .clutter4 {
-	height: 200px;
-	width: 200px;
+  height: 200px;
+  width: 200px;
 }
 
 .deadBomb {
-	position: relative;
-	height: 10px;
-	width: 10px;
-	border: 1px dotted yellow;
-	background: red;
-	border-radius: 5px;
-	opacity: 1;
-	animation: explode 1s ease-out both;
+  position: relative;
+  height: 10px;
+  width: 10px;
+  border: 1px dotted yellow;
+  background: red;
+  border-radius: 5px;
+  opacity: 1;
+  animation: explode 1s ease-out both;
 }
 
 .sunk {
-	opacity: 0;
-	transform: scale(0.5);
+  opacity: 0;
+  transform: scale(0.5);
 }
 
 .wave {
-	position: relative;
+  position: relative;
   border: 5px solid deepskyblue;
   width: 100px;
   height: 100px;
@@ -120,10 +137,10 @@
 }
 
 @keyframes explode {
-	to {
-		opacity: 0;
-		transform: translate(-50%, -50%) scale(4);
-	}
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(4);
+  }
 }
 
 @keyframes wave {
@@ -131,10 +148,12 @@
     opacity: 1;
     transform: scale(2);
   }
+
   60% {
     opacity: 0.75;
     transform: scale(3);
   }
+
   100% {
     opacity: 0;
     transform: scale(3.75);

@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { WsService } from '../../ws.service';
+import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { Boat } from '../boats/boat';
 
 @Component({
@@ -10,6 +11,7 @@ import { Boat } from '../boats/boat';
   styleUrls: ['./hud.component.css']
 })
 export class HudComponent implements OnInit, OnDestroy {
+  @Input() kbControls = 1;
   keys = {
     "ArrowLeft": 1, "KeyA": 1,
     "ArrowUp": 2, "KeyW": 2,
@@ -18,12 +20,12 @@ export class HudComponent implements OnInit, OnDestroy {
   };
 
   document = document;
-  @Output() openSettings = new EventEmitter<any>();
   myBoat = new Boat('');
 
   locked = true;
   maxMoves = false;
   selected = 0;
+  turn = 0;
 
   private source = 4;
   private move = 0;
@@ -36,7 +38,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   seconds$ = new BehaviorSubject<number>(76);
 
-  constructor(private ws: WsService) { }
+  constructor(private ws: WsService, public fs: FriendsService) { }
 
   ngOnInit() {
     document.addEventListener('keydown', this.kbEvent);
@@ -47,12 +49,14 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.selected < 5) this.selected = 0;
     }));
     this.subs.add(this.ws.subscribe('joinLobby', m => {
+      this.turn = m.turn;
       if (m.turn > 0) this.locked = false;
       if (!this.timeInterval && m.turn < 90) this.startTimer();
       this.setTurn(90 - m.turn);
     }));
     this.subs.add(this.ws.subscribe('turn', turn => {
       if (!this.timeInterval && turn.turn < 90) this.startTimer();
+      this.turn = turn.turn;
       this.setTurn(90 - turn.turn);
       this.checkMaxMoves();
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
@@ -67,7 +71,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   private kbEvent = (e: KeyboardEvent) => {
-    if (document.activeElement.id === 'textinput') return;
+    if (document.activeElement.id === 'textinput' || this.kbControls === 0) return;
     if (e.code === 'Enter' || e.code === 'Space') {
       this.imReady();
       return;
@@ -77,8 +81,12 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.selected === -1) return this.selected = 0;
 
     if (e.code === 'Backspace' || e.code === 'KeyZ' && e.ctrlKey) {
-      if (this.selected > 0) this.selected -= 1;
-      else this.setBomb(0);
+      if (this.selected > 0 && (this.selected < 3 || this.myBoat.moves[this.selected] === 0)) {
+        this.selected -= 1;
+      } else if (this.selected === 0) {
+        this.setBomb(0);
+        this.myBoat.moves = [0, 0, 0, 0];
+      }
       this.myBoat.moves[this.selected] = 0;
       this.checkMaxMoves();
       this.ws.send('s', this.myBoat.moves);
@@ -102,10 +110,8 @@ export class HudComponent implements OnInit, OnDestroy {
     if (e.shiftKey) {
       if (move === 2) {
         if (this.selected > 0) this.selected -= 1;
-        // this.selected = (this.selected + 3) % 4;
       } else if (move === 0) {
         if (this.selected < 3) this.selected += 1;
-        // this.selected = (this.selected + 1) % 4;
       } else if (move === 1) {
         this.setBomb(this.selected + 1);
       } else if (move === 3) {
@@ -113,22 +119,13 @@ export class HudComponent implements OnInit, OnDestroy {
       }
     } else {
       if (this.maxMoves && move !== 0 && this.myBoat.moves[this.selected] === 0) {
-        // while (this.myBoat.moves[this.selected] === 0) {
-        //   this.selected = (this.selected + 1) % 4;
-        // }
         if (this.selected < 3) this.selected += 1;
         return;
       }
       this.myBoat.moves[this.selected] = move;
       if (this.selected < 3) this.selected += 1;
-      // this.selected = (this.selected + 1) % 4;
       this.checkMaxMoves();
       this.ws.send('s', this.myBoat.moves);
-      // if (this.maxMoves && move !== 0) {
-      //   while (this.myBoat.moves[this.selected] === 0) {
-      //     this.selected = (this.selected + 1) % 4;
-      //   }
-      // }
     }
   };
 
@@ -139,7 +136,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   setBomb(i: number) {
-    if (this.locked || this.myBoat.tokenPoints < 2) return;
+    if (this.locked || this.myBoat.type !== 2 || this.myBoat.tokenPoints < 2) return;
     if (this.myBoat.bomb === i) this.myBoat.bomb = 0;
     else this.myBoat.bomb = i;
     this.ws.send("b", this.myBoat.bomb);
@@ -152,12 +149,16 @@ export class HudComponent implements OnInit, OnDestroy {
     this.ws.send('r');
   }
 
+  start() {
+    this.ws.send("c/start", "");
+  }
+
   clickTile(ev: MouseEvent, slot: number) {
     this.selected = -1;
     if (this.locked) return;
     const boat = this.myBoat;
     if (boat.type !== 0 && this.maxMoves && boat.moves[slot] === 0) return;
-  	boat.moves[slot] = (ev.which + boat.moves[slot]) % 4;
+    boat.moves[slot] = (ev.which + boat.moves[slot]) % 4;
     this.checkMaxMoves();
     this.ws.send('s', boat.moves);
   }
@@ -165,18 +166,18 @@ export class HudComponent implements OnInit, OnDestroy {
   drag(move: number, slot: number = 4) {
     this.selected = -1;
     this.move = move;
-  	this.source = slot;
+    this.source = slot;
   }
 
   drop(ev: DragEvent, slot: number) {
     this.selected = -1;
     ev.preventDefault();
-  	if (this.locked) return;
+    if (this.locked) return;
     const boat = this.myBoat;
     if (boat.type !== 0 && this.maxMoves && this.source > 3 && boat.moves[slot] === 0) return;
 
     if (this.source < 4) boat.moves[this.source] = boat.moves[slot];
-  	boat.moves[slot] = this.move;
+    boat.moves[slot] = this.move;
     this.checkMaxMoves();
     this.ws.send('s', boat.moves);
 
@@ -184,9 +185,9 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   dragEnd() {
-  	if (this.locked || this.source > 3) return;
+    if (this.locked || this.source > 3) return;
 
-		this.myBoat.moves[this.source] = 0;
+    this.myBoat.moves[this.source] = 0;
     this.checkMaxMoves();
     this.ws.send('s', this.myBoat.moves);
   }

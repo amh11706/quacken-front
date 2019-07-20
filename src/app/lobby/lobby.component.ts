@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { WsService } from '../ws.service';
 import { SettingsService, SettingMap } from '../settings/settings.service';
 import { Boat } from './boats/boat';
+import { FriendsService } from '../chat/friends/friends.service';
 
-const baseSettings = ['mapScale', 'speed'];
-const ownerSettings = ['publicMode', 'hotEntry', 'maxPlayers', 'duckLvl'];
+const baseSettings = ['mapScale', 'speed', 'kbControls'];
+const ownerSettings = ['publicMode', 'hotEntry', 'maxPlayers', 'duckLvl', 'autoGen'];
 
 @Component({
   selector: 'app-lobby',
@@ -26,7 +27,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   id: number;
   map: Uint8Array[] = [];
-  settings: SettingMap = { mapScale: 50, speed: 1 };
+  settings: SettingMap = { mapScale: 50, speed: 1, kbControls: 1 };
   wheelDebounce: number;
   myBoat = new Boat('');
   private sub: Subscription;
@@ -35,6 +36,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ws: WsService,
     private ss: SettingsService,
+    private fs: FriendsService,
   ) {
     this.getSettings();
   }
@@ -53,6 +55,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe('map', map => this.setMapB64(map)));
     this.sub.add(this.ws.subscribe('joinLobby', m => {
       this.setMapB64(m.map);
+      this.fs.allowInvite = m.owner === this.ws.user.name;
       if (m.owner !== this.ws.user.name) this.ss.setLobbySettings(baseSettings);
       else this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
     }));
@@ -61,6 +64,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.sub.unsubscribe();
     this.ss.setLobbySettings([]);
+    this.fs.allowInvite = false;
   }
 
   async getSettings() {
@@ -84,7 +88,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   saveScale() {
     clearTimeout(this.wheelDebounce);
     this.wheelDebounce = window.setTimeout(() => {
-      this.ss.save({ id: 2, value: this.settings.mapScale, name: 'mapScale' }, 'lobby');
+      this.ss.save({ id: 2, value: this.settings.mapScale, name: 'mapScale', group: 'lobby' });
     }, 1000);
   }
 

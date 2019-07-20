@@ -32,9 +32,12 @@ export class SettingsService {
 
   constructor(private ws: WsService) {
     ws.send('getSettings', 'global');
-    ws.subscribe('setSetting', async (s: Setting) => {
-      const group = await this.getGroup(s.group);
-      group[s.name] = s.value;
+    ws.subscribe('setSetting', (s: Setting) => {
+      const group = this.settings.get(s.group);
+      if (group) group[s.name] = s.value;
+    });
+    ws.subscribe('joinLobby', (s: Setting) => {
+      this.settings.delete('l/quacken');
     });
     ws.subscribe('getSettings', (m: SettingsMessage) => {
       let group = this.settings.get(m.group);
@@ -83,9 +86,9 @@ export class SettingsService {
     return Promise.resolve(settings[name]);
   }
 
-  async save(setting: Setting, group: string) {
+  async save(setting: Setting) {
     this.ws.send('setSetting', setting);
-    const settings = await this.getGroup(group);
+    const settings = await this.getGroup(setting.group);
     settings[setting.name] = setting.value;
   }
 }

@@ -1,5 +1,5 @@
 <div class="container noselect" id="hud">
-  <div id="boatcontrol" oncontextmenu="event.preventDefault();">
+  <div id="boatcontrol" oncontextmenu="event.preventDefault()">
     <div id="time">
       <div id="timebar"
         [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
@@ -15,7 +15,7 @@
         </ng-container>
 
         <div class="move" [class.blocked]="maxMoves || locked"
-          [class.selected]="selected == i && !locked && document.activeElement.id !== 'textinput'"
+          [class.selected]="kbControls && selected == i && !locked && document.activeElement.id !== 'textinput'"
           (drop)="drop($event, i)" (mouseup)="clickTile($event, i)"
           (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
           (dragover)="$event.preventDefault()">
@@ -55,8 +55,13 @@
     </ng-template>
 
     <div id="buttons">
-      <button mat-raised-button id="ready" (click)="imReady()"
+      <button
+        *ngIf="!fs.allowInvite || !(myBoat.ready && turn === 0); else fstart"
+        mat-raised-button id="ready" (click)="imReady()"
         [disabled]="myBoat.ready">Ready</button>
+      <ng-template #fstart>
+        <button mat-raised-button id="start" (click)="start()">Start</button>
+      </ng-template>
       <app-setting name="nextBoat"></app-setting>
     </div>
   </div>

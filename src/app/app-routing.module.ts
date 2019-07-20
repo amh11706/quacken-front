@@ -6,6 +6,7 @@ import { CreateComponent } from './login/create/create.component';
 import { ListComponent } from './list/list.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { AuthGuard } from './auth.guard';
+import { MapEditorComponent } from './map-editor/map-editor.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
       {
         path: 'lobby/:id',
         component: LobbyComponent,
+      },
+      {
+        path: 'editor',
+        component: MapEditorComponent,
       },
       {
         path: '**',

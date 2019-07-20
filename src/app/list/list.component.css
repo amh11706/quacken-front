@@ -131,3 +131,7 @@ td {
   color: #F7DC6F;
   cursor: default;
 }
+
+app-setting {
+  margin-right: 16px;
+}

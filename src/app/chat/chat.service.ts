@@ -25,9 +25,7 @@ export class ChatService {
   constructor(private socket: WsService) {
     this.socket.subscribe('m', (message: Message) => {
       this.messages.push(message);
-      if (message.type === 3) {
-        message.names = message.message.split(',').sort();
-      } else if (message.type === 5) {
+      if (message.type === 5) {
         let command = '/tell ' + message.from;
         if (message.from === 'Guest') command += `(${message.copy})`;
         command += ' ';

@@ -15,10 +15,13 @@ export interface Clutter {
 interface Turn {
   turn: number,
   steps: BoatStatus[][],
-  sync: BoatSync[],
   cSteps: Clutter[][],
-  cSync: Clutter[],
   treasure: number[],
+}
+
+interface Sync {
+  sync: BoatSync[],
+  cSync: Clutter[],
 }
 
 interface BoatStatus {
@@ -50,6 +53,7 @@ interface BoatSync extends BoatStatus {
 export class BoatsComponent implements OnInit, OnDestroy {
   @Input() size: number;
   @Input() speed: number;
+  @Input() map: HTMLElement;
   clutterTypes = [
     'powderkeg',
     'mine',
@@ -113,6 +117,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (boat) boat.bomb = b.m;
     }));
     this.subs.add(this.ws.subscribe('turn', turn => this.handleTurn(turn)));
+    this.subs.add(this.ws.subscribe('sync', sync => this.syncBoats(sync)));
   }
 
   ngOnDestroy() {
@@ -137,13 +142,17 @@ export class BoatsComponent implements OnInit, OnDestroy {
         }
         if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: 'unlockMoves' });
       }
+      this.ws.send('sync');
       this.step = -1;
-    } else this.syncBoats();
+    } else if (this.turn) {
+      this.ws.send('sync');
+      clearTimeout(this.animateTimeout);
+    }
   }
 
   private handleTurn(turn: Turn) {
     // first turn is only for starting the entry
-    if (!turn.sync) {
+    if (turn.turn === 1) {
       setTimeout(() => {
         for (const boat of this.boats) boat.ready = false;
         this.ws.dispatchMessage({ cmd: 'unlockMoves' });
@@ -160,7 +169,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     if (!moveFound || this.blurred) {
       this.resetBoats();
-      setTimeout(() => this.syncBoats(), 1000);
+      setTimeout(() => this.ws.send('sync'), 1000);
       return;
     }
 
@@ -196,15 +205,19 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.step++;
     const delay = (this.turn.steps[this.step] ? 750 : 250) * 2 / this.speed;
     if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, delay);
-    else this.animateTimeout = window.setTimeout(this.syncBoats, 1500);
+    else this.animateTimeout = window.setTimeout(() => this.ws.send('sync'), 1500);
   }
 
-  private syncBoats = () => {
-    if (!this.turn) return;
-    this.clutter = this.turn.cSync;
-    for (let s of this.turn.sync) {
+  private syncBoats = (sync: Sync) => {
+    if (!sync || !this.turn) return;
+    this.turn = undefined;
+    this.clutter = sync.cSync;
+    for (let s of sync.sync) {
       const boat = this._boats[s.id];
       if (!boat) continue;
+      if (boat.isMe && boat.damage > s.d) {
+        this.map.dispatchEvent(new Event('dblclick'));
+      }
 
       boat.rotateTransition = 0;
       boat.moveTransition = [0, 0];

@@ -41,13 +41,18 @@ export class FriendsComponent implements OnInit {
   }
 
   accept(inv: Invite) {
+    this.fs.invites = this.fs.invites.filter(i => i !== inv);
     if (inv.ty === 0) this.ws.send('friendAdd', inv.f);
     else this.router.navigate(['lobby', inv.tg]);
   }
 
   decline(inv: Invite) {
-    this.fs.invites = this.fs.invites.filter(i => i != inv)
+    this.fs.invites = this.fs.invites.filter(i => i !== inv)
     this.ws.send("inviteRemove", inv);
+  }
+
+  invite(friend: string) {
+    this.ws.send("c/invite", friend);
   }
 
 }

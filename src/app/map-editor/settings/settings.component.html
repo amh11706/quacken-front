@@ -1,0 +1,74 @@
+<div id="shade">
+  <div id="settings" class="container noselect">
+    <h2>Editor Settings</h2>
+    <ng-container
+      *ngIf="!['tiles', 'structures'].includes(map.selectedTile.group)">
+      <mat-form-field class="setting">
+        <mat-label>Type</mat-label>
+        <mat-select [(ngModel)]="map.selectedTile.group"
+          (selectionChange)="updateOptions()">
+          <mat-option value="cgmaps">Cade Goose Map</mat-option>
+          <mat-option value="maps">Quacken Map</mat-option>
+          <mat-option value="tile_sets">Quacken Tile Set</mat-option>
+          <mat-option value="structure_sets">Quacken Structure Set
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="setting">
+        <mat-label>Editing</mat-label>
+        <mat-select [disabled]="pending" [(ngModel)]="selected"
+          (selectionChange)="select()">
+          <mat-option value="new">(Create New)</mat-option>
+          <mat-option *ngFor="let option of options" [value]="option.id">
+            {{option.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+    <mat-form-field class="setting">
+      <input matInput [disabled]="pending" [(ngModel)]="map.selectedTile.name"
+        maxlength="15" placeholder="name">
+    </mat-form-field>
+
+    <div class="setting"
+      *ngIf="!['tiles', 'structures'].includes(map.selectedTile.group)">
+      <mat-checkbox [(ngModel)]="map.selectedTile.released"
+        [disabled]="pending">
+        Publicly Usable
+      </mat-checkbox>
+    </div>
+
+    <mat-form-field *ngIf="map.selectedTile.group === 'tiles'" class="setting">
+      <mat-label>Type</mat-label>
+      <mat-select [disabled]="pending" [(ngModel)]="map.selectedTile.type">
+        <mat-option *ngFor="let type of types; let i = index" [value]="i">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="setting full">
+      <textarea matInput [disabled]="pending"
+        [(ngModel)]="map.selectedTile.description" height="4" maxlength="255"
+        placeholder="description"></textarea>
+    </mat-form-field>
+
+    <div class="setting center"><button mat-raised-button [disabled]="pending"
+        (click)="save()">
+        {{selected === 'new' ? 'Create' : 'Save'}}
+      </button></div>
+
+    <div class="setting center">
+      <button mat-raised-button
+        [disabled]="pending || selected === 'new' && !['tiles', 'structures'].includes(map.selectedTile.group)"
+        (click)="edit()">
+        {{['tiles', 'structures'].includes(map.selectedTile.group) ? 'Close' : 'Enter Editor'}}
+      </button>
+    </div>
+
+    <p *ngIf="error" id="error">{{error}}</p>
+    <p *ngIf="success" id="success">{{success}}</p>
+  </div>
+</div>

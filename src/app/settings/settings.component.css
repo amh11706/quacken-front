@@ -5,6 +5,7 @@
   right: 25%;
   width: 200px;
   background-color: rgba(66, 66, 66, 0.85);
+  z-index: 1;
 }
 
 .content {
@@ -20,7 +21,7 @@
   left: 0;
   right: 0;
   height: 24px;
-  cursor: pointer;
+  cursor: grab;
 }
 
 .close {

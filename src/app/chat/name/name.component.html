@@ -30,5 +30,8 @@
         Unblock
       </button>
     </ng-template>
+    <button *ngIf="fs.allowInvite" mat-menu-item (click)="invite()">
+      Invite to Lobby
+    </button>
   </ng-template>
 </mat-menu>

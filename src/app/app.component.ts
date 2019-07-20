@@ -17,4 +17,10 @@ export class AppComponent {
     localStorage.removeItem('token');
     this.router.navigate(['login']);
   }
+
+  focus() {
+    if (document.activeElement.id === 'textinput') return;
+    const el = document.getElementById('textinput');
+    if (el) el.focus();
+  }
 }

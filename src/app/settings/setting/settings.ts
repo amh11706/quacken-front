@@ -33,4 +33,10 @@ export const Settings = {
   hotEntry: {
     id: 9, group: 'l/quacken', type: 'checkbox', label: 'Allow join while an<br>entry is in progress'
   },
+  autoGen: {
+    id: 10, group: 'l/quacken', type: 'checkbox', label: 'Generate new map<br>when a round starts'
+  },
+  kbControls: {
+    id: 11, group: 'lobby', type: 'checkbox', label: 'Enable keyboard<br>move entry'
+  },
 };

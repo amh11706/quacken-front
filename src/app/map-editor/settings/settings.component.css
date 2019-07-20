@@ -1,0 +1,61 @@
+#shade {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, .3);
+  z-index: 1;
+}
+
+#settings {
+  position: absolute;
+  top: calc(50vh - 100px);
+  left: 50vw;
+  width: 50%;
+  min-width: 320px;
+  max-width: 640px;
+  padding: 12px;
+  color: #ddd;
+  transform: translate(-50%, -50%);
+}
+
+#error, #success {
+  float: left;
+  width: 100%;
+  color: orange;
+  text-align: center;
+}
+
+#success {
+  color: limegreen;
+}
+
+.setting {
+  float: left;
+  width: calc(50% - 16px);
+  padding: 4px 0;
+  margin-right: 16px;
+  text-align: left;
+}
+
+.setting input {
+  width: 100%;
+}
+
+.full {
+  width: calc(100% - 16px);
+}
+
+.center {
+  padding-top: 12px;
+  text-align: center;
+}
+
+.setting p {
+  margin: 4px 0;
+}
+
+textarea {
+  resize: none !important;
+}

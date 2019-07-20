@@ -12,6 +12,11 @@
             says "{{m.message}}"
           </span>
 
+          <span *ngSwitchCase="3">
+            <app-name [message]="m"></app-name>
+            has requested to join your lobby.
+          </span>
+
           <span *ngSwitchCase="4">
             You told
             <app-name [message]="m"></app-name>

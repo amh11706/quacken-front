@@ -1,0 +1,64 @@
+<h1 mat-dialog-title>Map Editor Guide</h1>
+<mat-dialog-content>
+  <p>The map editor allows you to create maps, tile sets, and structure sets
+    which are used for automatic map generation. Anything you create here can be
+    used in your own lobbies, but other people can only use them if you check
+    the "Publicly Usable" option. There is currently no auto-save feature and no
+    way to recover previous versions, so you must use the save button (or
+    ctrl + s) wisely.
+  </p>
+
+  <h4>Map Types</h4>
+  <ol>
+    <li>Cade Goose Map: Maps for the planned cade goose lobby type.</li>
+    <li>Quacken Map: Custom maps for the quacken lobby type. This map type does
+      not currently support duck spawns.
+    </li>
+    <li>Quacken Tile Set: A set of 8x8 patterns that are used to generate maps.
+    </li>
+    <li>Quacken Structure Set: A set of patterns that tell the map generator
+      which tile types to use and where to place them.
+    </li>
+  </ol>
+
+  <h4>Controls</h4>
+  <ul>
+    <li>Obstacle Placement: Left click on the map to place an obstacle. Ctrl +
+      click to auto-complete a whirl or ctrl + click and drag for paint mode.
+    </li>
+    <li>Obstacle Removal: Right click or ctrl + right click for delete paint
+      mode
+    </li>
+    <li>Obstacle Selection: Click on an obstacle in the palette (right side by
+      default) to select it. The selected obstacle will follow the mouse. Shift
+      click a placed obstacle to select it from the map itself. Use the mouse
+      scroll wheel to scroll through the available obstacles.
+    </li>
+    <li>Undo: Ctrl + z or the button next to the chat box.</li>
+    <li>Redo: Ctrl + y or the button next to the chat box.</li>
+    <li>Save: Ctrl + s or the button next to the chat box.</li>
+  </ul>
+
+  <h4>Tile Sets</h4>
+  <p>A tile set should have 2 to 8 options for each type to provide good
+    variety, depending on the prominence of that particular type. You can use
+    the weight option for each tile to control how common it will be relative to
+    the rest of the same type. Tiles are saved individually, if it has a yellow
+    color in the list, it has not been saved. Double click an existing tile name
+    in the list to edit its properties. To delete a tile, set its weight to 0
+    then click the X that appears next to its name. Deleting a tile cannot
+    be undone and takes effect immediately when you click confirm.
+  </p>
+
+  <h4>Structure Sets</h4>
+  <p>Structure sets define tile placement, obstacle placement, obstacle density,
+    and duck spawn zones. Currently, obstacle zones are used to spawn the ducks
+    as well, so wing zones are not used. This may change in the future if the
+    need to separate them arises. Structures are saved and deleted in the same
+    way as tiles. An exception to this is the individual features on a Structure
+    as deleting them does not take effect until you save the structure.
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

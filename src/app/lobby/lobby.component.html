@@ -17,7 +17,8 @@
 						</div>
 					</div>
 
-					<app-boats [size]="settings.mapScale" [speed]="settings.speed">
+					<app-boats [map]="frame" [size]="settings.mapScale"
+						[speed]="settings.speed">
 					</app-boats>
 				</div>
 			</div>
@@ -25,5 +26,5 @@
 	</div>
 </div>
 
-<app-hud></app-hud>
+<app-hud [kbControls]="settings.kbControls"></app-hud>
 <app-entry-status></app-entry-status>
