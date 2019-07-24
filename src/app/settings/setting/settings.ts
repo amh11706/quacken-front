@@ -25,10 +25,10 @@ export const Settings = {
     ]
   },
   tileSet: {
-    id: 7, group: 'l/quacken', type: 'tileSet'
+    id: 7, group: 'l/quacken', type: 'tileSet', label: 'Tile Set', cmd: 'g/tilesets'
   },
   structureSet: {
-    id: 8, group: 'l/quacken', type: 'structureSet'
+    id: 8, group: 'l/quacken', type: 'structureSet', label: 'Structure Set', cmd: 'g/structuresets'
   },
   hotEntry: {
     id: 9, group: 'l/quacken', type: 'checkbox', label: 'Allow join while an<br>entry is in progress'
@@ -38,5 +38,8 @@ export const Settings = {
   },
   kbControls: {
     id: 11, group: 'lobby', type: 'checkbox', label: 'Enable keyboard<br>move entry'
+  },
+  customMap: {
+    id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: 'g/maps'
   },
 };

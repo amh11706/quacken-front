@@ -18,11 +18,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     '#873600', // info message
     '#873600', // HTML info message
     '#666', // lobby chat
-    '#873600', // lobby join request
+    '#873600', // name with info message
     '#2874A6', // sent tell
     '#1A5276', // recieved tell
     '#873600', // command list
-    ,
+    '#873600', // last seen message
     ,
     'maroon', // alert/broadcast
   ];
@@ -100,7 +100,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     const firstSpace = text.indexOf(' ');
     const secondSpace = text.indexOf(' ', firstSpace + 1);
     const command = secondSpace > 0 ? text.substr(0, secondSpace + 1) : text;
-    this.socket.send('c' + (text.substr(0, firstSpace) || text), text.substr(firstSpace + 1));
+    this.socket.send('c' + (text.substr(0, firstSpace) || text), firstSpace > 0 ? text.substr(firstSpace + 1) : '');
 
     this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== command);
     this.chat.commandHistory.push(command);

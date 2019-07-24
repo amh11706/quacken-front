@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
-import { SettingsService } from '../settings/settings.service';
+import { SettingsService, SettingMap } from '../settings/settings.service';
 
 @Component({
   selector: 'app-lobby-list',
@@ -22,6 +22,7 @@ export class ListComponent implements OnInit, OnDestroy {
   lobbies = [];
 
   created = false;
+  settings: SettingMap = {};
 
   private sub: Subscription;
 
@@ -31,7 +32,8 @@ export class ListComponent implements OnInit, OnDestroy {
     public router: Router,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.settings = await this.ss.getGroup('l/quacken');
     this.sub = this.ws.subscribe('lobbyList', lobbies => this.lobbies = lobbies);
 
     this.sub = this.ws.subscribe('lu', update => {
@@ -63,8 +65,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   async createLobby() {
-    const settings = await this.ss.getGroup('l/quacken');
-    this.ws.send('createLobby', settings);
+    this.ws.send('createLobby', this.settings);
     this.created = true;
   }
 

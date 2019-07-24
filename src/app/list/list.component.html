@@ -53,15 +53,20 @@
     <ng-container *ngIf="selected === 'create'">
       <h2>Create Lobby</h2>
       <div id="lsettings">
-        <app-setting name="publicMode"></app-setting>
-        <app-setting name="hotEntry"></app-setting>
         <app-setting name="maxPlayers"></app-setting>
         <app-setting name="duckLvl"></app-setting>
+        <app-setting name="publicMode"></app-setting>
+        <app-setting name="customMap"></app-setting>
         <app-setting name="tileSet"></app-setting>
         <app-setting name="structureSet"></app-setting>
+        <app-setting name="hotEntry"></app-setting>
         <app-setting name="autoGen"></app-setting>
       </div>
 
+      <p *ngIf="settings.customMap" class="error">
+        Note: Selecting a custom map will override map generation settings.
+        Clear the custom map selection to re enable map generation.
+      </p>
       <button mat-raised-button (click)="createLobby()"
         [disabled]="!ws.user.id || created">Create</button>
       <p *ngIf="!ws.user.id" class="error">

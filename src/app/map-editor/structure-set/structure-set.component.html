@@ -32,7 +32,7 @@
 
 <div [qdrag]="handle3" bindToWindow id="structure" class="container"
   [hidden]="!map.selectedTile.name">
-  <div id="handle3"></div>
+  <div #handle3 id="handle3"></div>
   <div id="structuredetail">
     <p *ngIf="!map.selectedTile.activeFeature">
       Select a feature on the map or add one with the button below.

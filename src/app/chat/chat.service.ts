@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
+moment.locale("en-GB");
 
 import { WsService } from '../ws.service';
 
@@ -9,7 +11,8 @@ export interface Message {
   copy: number,
   friend?: boolean,
   blocked?: boolean,
-  names?: string[],
+  time?: number | string,
+  ago?: string,
 }
 
 @Injectable({
@@ -32,6 +35,10 @@ export class ChatService {
 
         this.commandHistory = this.commandHistory.filter(entry => entry !== command);
         this.commandHistory.push(command);
+      } else if (message.type === 7) {
+        const time = moment.unix(+message.time);
+        message.time = time.format('lll');
+        message.ago = time.fromNow();
       }
     });
     this.socket.connected$.subscribe(value => {

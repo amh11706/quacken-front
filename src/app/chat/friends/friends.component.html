@@ -1,6 +1,9 @@
 <mat-menu #onlineMenu="matMenu">
   <ng-template matMenuContent let-friend="friend">
     <button mat-menu-item (click)="sendTell(friend)">
+      Profile
+    </button>
+    <button mat-menu-item (click)="sendTell(friend)">
       Send Tell
     </button>
     <button *ngIf="fs.allowInvite" mat-menu-item (click)="invite(friend)">
@@ -14,6 +17,9 @@
 
 <mat-menu #offlineMenu="matMenu">
   <ng-template matMenuContent let-friend="friend">
+    <button mat-menu-item (click)="sendTell(friend)">
+      Profile
+    </button>
     <button mat-menu-item (click)="remove(friend)">
       Remove
     </button>
@@ -22,6 +28,9 @@
 
 <mat-menu #blockedMenu="matMenu">
   <ng-template matMenuContent let-blocked="blocked">
+    <button mat-menu-item (click)="sendTell(blocked)">
+      Profile
+    </button>
     <button mat-menu-item (click)="unblock(blocked)">
       Unblock
     </button>

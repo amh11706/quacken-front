@@ -14,7 +14,7 @@
 
           <span *ngSwitchCase="3">
             <app-name [message]="m"></app-name>
-            has requested to join your lobby.
+            {{m.message}}
           </span>
 
           <span *ngSwitchCase="4">
@@ -37,6 +37,11 @@
               <ng-container *ngIf="c.params"> {{c.params}}</ng-container> -
               {{c.help}}<br>
             </span>
+          </span>
+
+          <span *ngSwitchCase="7">
+            <app-name [message]="m" offline="true"></app-name> was last seen
+            {{m.ago}} ({{m.time}}).
           </span>
         </ng-container>
       </p>

@@ -7,31 +7,45 @@
 </span>
 
 <ng-template #you>
-  <span class="you" title="you">{{message.from}}</span>
+  <span class="you" title="you"
+    [matMenuTriggerFor]="youMenu">{{message.from}}</span>
   <span *ngIf="message.copy">({{message.copy}})</span>
 </ng-template>
 
-<mat-menu #nameMenu="matMenu">
+<mat-menu #youMenu="matMenu">
   <ng-template matMenuContent>
     <button mat-menu-item (click)="sendTell()">
-      Send Tell
+      Profile
     </button>
-    <ng-container *ngIf="ws.user.name !== 'Guest'">
-      <button *ngIf="!message.friend" mat-menu-item (click)="add()">
-        Add friend
+  </ng-template>
+</mat-menu>
+
+<mat-menu #nameMenu="matMenu">
+  <ng-template matMenuContent>
+    <button *ngIf="message.from !== 'Guest'" mat-menu-item (click)="sendTell()">
+      Profile
+    </button>
+    <ng-container *ngIf="!offline">
+      <button mat-menu-item (click)="sendTell()">
+        Send Tell
       </button>
-      <button *ngIf="!message.blocked; else unblockButton" mat-menu-item
-        (click)="block(message.from)">
-        Block
+      <ng-container *ngIf="ws.user.name !== 'Guest'">
+        <button *ngIf="!message.friend" mat-menu-item (click)="add()">
+          Add friend
+        </button>
+        <button *ngIf="!message.blocked; else unblockButton" mat-menu-item
+          (click)="block(message.from)">
+          Block
+        </button>
+      </ng-container>
+      <ng-template #unblockButton>
+        <button mat-menu-item (click)="unblock()">
+          Unblock
+        </button>
+      </ng-template>
+      <button *ngIf="fs.allowInvite" mat-menu-item (click)="invite()">
+        Invite to Lobby
       </button>
     </ng-container>
-    <ng-template #unblockButton>
-      <button mat-menu-item (click)="unblock()">
-        Unblock
-      </button>
-    </ng-template>
-    <button *ngIf="fs.allowInvite" mat-menu-item (click)="invite()">
-      Invite to Lobby
-    </button>
   </ng-template>
 </mat-menu>

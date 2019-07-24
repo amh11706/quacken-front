@@ -1,3 +1,8 @@
+:host {
+  width: 100%;
+  max-width: 190px;
+}
+
 mat-slider, mat-form-field {
   width: 100%;
 }
@@ -6,17 +11,23 @@ mat-checkbox {
   text-align: left;
 }
 
+mat-form-field {
+  margin: 0;
+}
+
 .setting {
-  display: inline-block;
-  width: calc(100%-16px);
-  max-width: 190px;
-  margin: 8px 16px 8px 0;
+  flex: 1 1 0;
+  position: relative;
+  margin-bottom: 8px;
+  width: 100%;
+  max-width: 170px;
   color: #eee;
 }
 
 .boat {
+  display: inline-block;
   width: 40px;
-  margin: 0 0 0 16px;
+  margin: 0 8px;
 }
 
 .boat img {

@@ -44,7 +44,8 @@
       [max]="setting.max">
   </mat-form-field>
 
-  <!-- <app-tile-set *ngSwitchCase="'tileSet'"></app-tile-set> -->
-
-  <!-- <app-structure-set *ngSwitchCase="'structureSet'"></app-structure-set> -->
+  <div *ngSwitchDefault class="setting">
+    <app-custom-map [group]="group" (save)="save()" [setting]="setting">
+    </app-custom-map>
+  </div>
 </ng-container>

@@ -11,6 +11,7 @@ import { FriendsService } from '../friends/friends.service';
 })
 export class NameComponent implements OnInit {
   @Input() message: Message;
+  @Input() offline: boolean;
 
   constructor(
     public chat: ChatService,

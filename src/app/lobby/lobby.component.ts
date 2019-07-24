@@ -8,7 +8,7 @@ import { Boat } from './boats/boat';
 import { FriendsService } from '../chat/friends/friends.service';
 
 const baseSettings = ['mapScale', 'speed', 'kbControls'];
-const ownerSettings = ['publicMode', 'hotEntry', 'maxPlayers', 'duckLvl', 'autoGen'];
+const ownerSettings = ['publicMode', 'hotEntry', 'duckLvl', 'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'];
 
 @Component({
   selector: 'app-lobby',

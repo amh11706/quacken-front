@@ -9,14 +9,21 @@
 }
 
 #lsettings {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
   margin-bottom: 16px;
-  padding-top: 4px;
+  padding: 8px 24px;
   max-width: 450px;
   margin: 16px auto;
   background: rgba(66, 66, 66, 0.4);
   border: 1px solid grey;
   border-radius: 8px;
+}
+
+app-setting {
+  padding: 0 8px;
 }
 
 div {
@@ -105,7 +112,7 @@ td {
 }
 
 .error {
-  max-width: 750px;
+  max-width: 500px;
   margin: 8px auto;
   padding: 4px 8px;
   color: #F7DC6F;
@@ -130,8 +137,4 @@ td {
 .link.active {
   color: #F7DC6F;
   cursor: default;
-}
-
-app-setting {
-  margin-right: 16px;
 }
