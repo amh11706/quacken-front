@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { ChatService, Message } from '../chat.service';
 import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
+import { StatService } from '../stat/stat.service';
 
 @Component({
   selector: 'app-name',
@@ -15,6 +16,7 @@ export class NameComponent implements OnInit {
 
   constructor(
     public chat: ChatService,
+    public stat: StatService,
     public ws: WsService,
     public fs: FriendsService,
   ) { }
@@ -46,6 +48,10 @@ export class NameComponent implements OnInit {
 
   invite() {
     this.ws.send("c/invite", this.getName());
+  }
+
+  kick() {
+    this.ws.send("c/kick", this.getName());
   }
 
 }

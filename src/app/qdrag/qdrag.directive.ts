@@ -21,19 +21,17 @@ export class QdragDirective implements OnInit, OnDestroy {
     this.updateTransform();
 
     if (!this.qdrag) this.qdrag = this.el.nativeElement;
-    else this.qdrag.addEventListener('dblclick', () => {
+    this.qdrag.addEventListener('dblclick', () => {
       this.offsetX = 0;
       this.offsetY = 0;
       this.updateTransform();
     });
-		this.qdrag.addEventListener('mousedown', this.onDown);
-		this.qdrag.addEventListener('touchstart', this.touchStart);
+    this.qdrag.addEventListener('mousedown', this.onDown);
+    this.qdrag.addEventListener('touchstart', this.touchStart);
     if (this.bindToWindow !== undefined) window.addEventListener('resize', this.offsetToRightGap);
   }
 
   ngOnDestroy() {
-    this.qdrag.removeEventListener('mousedown', this.onDown);
-		this.qdrag.removeEventListener('touchstart', this.touchStart);
     window.removeEventListener('resize', this.offsetToRightGap);
   }
 
@@ -69,47 +67,50 @@ export class QdragDirective implements OnInit, OnDestroy {
     this.updateTransform();
   }
 
-	private onDown = (event: MouseEvent) => {
+  private onDown = (event: MouseEvent) => {
     if (event.ctrlKey) return;
-		document.addEventListener('mousemove', this.onMove);
-		// document.addEventListener('mouseleave', this.onUp);
-		document.addEventListener('mouseup', this.onUp);
-		event.preventDefault();
-	}
+    document.addEventListener('mousemove', this.onMove);
+    // document.addEventListener('mouseleave', this.onUp);
+    document.addEventListener('mouseup', this.onUp);
+    event.preventDefault();
+    const active = document.activeElement;
+    if (active.id !== 'textinput' && active instanceof HTMLElement) active.blur();
+  }
 
-	private touchStart = (event: TouchEvent) => {
+  private touchStart = (event: TouchEvent) => {
     this.startX = event.touches[0].clientX;
     this.startY = event.touches[0].clientY;
-		document.addEventListener('touchmove', this.touchMove);
-		document.addEventListener('touchcancel', this.touchEnd);
-		document.addEventListener('touchend', this.touchEnd);
-	}
+    document.addEventListener('touchmove', this.touchMove);
+    document.addEventListener('touchcancel', this.touchEnd);
+    document.addEventListener('touchend', this.touchEnd);
+  }
 
-	private onMove = (event: MouseEvent) => {
-		this.offsetX += event.movementX;
-		this.offsetY += event.movementY;
+  private onMove = (event: MouseEvent) => {
+    this.offsetX += event.movementX;
+    this.offsetY += event.movementY;
     this.updateTransform();
-	}
+  }
 
-	private touchMove = (event: TouchEvent) => {
+  private touchMove = (event: TouchEvent) => {
     const touch = event.touches[0];
-		this.offsetX += touch.clientX - this.startX;
-		this.offsetY += touch.clientY - this.startY;
+    this.offsetX += touch.clientX - this.startX;
+    this.offsetY += touch.clientY - this.startY;
     this.startX = touch.clientX;
     this.startY = touch.clientY;
     this.updateTransform();
-	}
+  }
 
-	private onUp = () => {
-		document.removeEventListener('mousemove', this.onMove);
-		// document.removeEventListener('mouseleave', this.onUp);
-		document.removeEventListener('mouseup', this.onUp);
+  private onUp = () => {
+    document.removeEventListener('mousemove', this.onMove);
+    // document.removeEventListener('mouseleave', this.onUp);
+    document.removeEventListener('mouseup', this.onUp);
     if (this.bindToWindow !== undefined) this.bindWindow();
-	}
+  }
 
-	private touchEnd = () => {
-		document.removeEventListener('touchmove', this.touchMove);
-		document.removeEventListener('touchcancel', this.touchEnd);
-		document.removeEventListener('touchend', this.touchEnd);
-	}
+  private touchEnd = () => {
+    document.removeEventListener('touchmove', this.touchMove);
+    document.removeEventListener('touchcancel', this.touchEnd);
+    document.removeEventListener('touchend', this.touchEnd);
+    if (this.bindToWindow !== undefined) this.bindWindow();
+  }
 }

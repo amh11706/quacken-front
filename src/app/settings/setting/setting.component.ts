@@ -14,7 +14,7 @@ export class SettingComponent {
   @Input() set name(value: string) {
     this.setting = Settings[value] || {};
     this.setting.name = value;
-    if (this.setting) this.fetch(value);
+    if (this.setting && this.setting.id) this.fetch(value);
   }
 
   setting: any = {};
@@ -29,6 +29,10 @@ export class SettingComponent {
   private async fetch(name: string) {
     this.setting.name = name;
     this.group = await this.ss.getGroup(this.setting.group);
+  }
+
+  send() {
+    this.ws.send(this.setting.trigger, this.setting.data);
   }
 
   save() {

@@ -24,6 +24,10 @@
     </mat-select>
   </mat-form-field>
 
+  <div *ngSwitchCase="'button'" class="setting">
+    <button mat-raised-button (click)="send()">{{setting.label}}</button>
+  </div>
+
   <div *ngSwitchCase="'slider'" class="setting">
     <span class="label">{{setting.label}} ({{group[this.setting.name]}})</span>
     <mat-slider [min]="setting.min" [max]="setting.max" [step]="setting.step"

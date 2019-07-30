@@ -6,8 +6,8 @@
 
 app-chat {
   position: absolute;
-  right: 1%;
-  top: 17px;
+  right: 8px;
+  top: 4px;
   width: calc(99% - 270px);
 }
 
@@ -17,7 +17,7 @@ app-chat {
   left: 50%;
   transform: translate(-50%, 0);
   width: 95%;
-  max-width: 800px;
+  max-width: 900px;
   min-width: 320px;
   padding: 5px;
   text-align: center;

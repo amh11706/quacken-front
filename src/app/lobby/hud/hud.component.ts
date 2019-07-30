@@ -66,12 +66,15 @@ export class HudComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     document.removeEventListener('keydown', this.kbEvent);
-    this.subs.unsubscribe();
+    if (this.subs) this.subs.unsubscribe();
     this.stopTimer();
   }
 
   private kbEvent = (e: KeyboardEvent) => {
-    if (document.activeElement.id === 'textinput' || this.kbControls === 0) return;
+    const active = document.activeElement;
+    if (active.id === 'textinput' || this.kbControls === 0) return;
+    if (active instanceof HTMLElement) active.blur();
+    if (!e.ctrlKey) e.preventDefault();
     if (e.code === 'Enter' || e.code === 'Space') {
       this.imReady();
       return;

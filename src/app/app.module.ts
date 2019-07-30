@@ -10,6 +10,7 @@ import { LobbyModule } from './lobby/lobby.module';
 import { LoginModule } from './login/login.module';
 import { SettingsModule } from './settings/settings.module';
 import { MapEditorModule } from './map-editor/map-editor.module';
+import { ChatModule } from './chat/chat.module';
 
 import { AppComponent } from './app.component';
 
@@ -29,6 +30,7 @@ import { WsService } from './ws.service';
     LoginModule,
     SettingsModule,
     MapEditorModule,
+    ChatModule,
   ],
   providers: [WsService],
   bootstrap: [AppComponent]

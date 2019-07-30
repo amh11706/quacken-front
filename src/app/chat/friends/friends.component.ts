@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FriendsService, Invite } from './friends.service';
 import { WsService } from '../../ws.service';
 import { ChatService } from '../chat.service';
+import { StatService } from '../stat/stat.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,6 +21,7 @@ export class FriendsComponent implements OnInit {
   constructor(
     public fs: FriendsService,
     public ws: WsService,
+    public stat: StatService,
     private chat: ChatService,
     private router: Router,
   ) { }

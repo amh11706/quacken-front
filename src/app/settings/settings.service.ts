@@ -36,7 +36,7 @@ export class SettingsService {
       const group = this.settings.get(s.group);
       if (group) group[s.name] = s.value;
     });
-    ws.subscribe('joinLobby', (s: Setting) => {
+    ws.subscribe('joinLobby', () => {
       this.settings.delete('l/quacken');
     });
     ws.subscribe('getSettings', (m: SettingsMessage) => {
@@ -55,6 +55,7 @@ export class SettingsService {
     });
     this.ws.connected$.subscribe(() => {
       this.settings.clear();
+      this.open = false;
     });
   }
 

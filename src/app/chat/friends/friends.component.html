@@ -1,6 +1,6 @@
 <mat-menu #onlineMenu="matMenu">
   <ng-template matMenuContent let-friend="friend">
-    <button mat-menu-item (click)="sendTell(friend)">
+    <button mat-menu-item (click)="stat.openUser(friend)">
       Profile
     </button>
     <button mat-menu-item (click)="sendTell(friend)">
@@ -17,7 +17,7 @@
 
 <mat-menu #offlineMenu="matMenu">
   <ng-template matMenuContent let-friend="friend">
-    <button mat-menu-item (click)="sendTell(friend)">
+    <button mat-menu-item (click)="stat.openUser(friend)">
       Profile
     </button>
     <button mat-menu-item (click)="remove(friend)">
@@ -28,7 +28,7 @@
 
 <mat-menu #blockedMenu="matMenu">
   <ng-template matMenuContent let-blocked="blocked">
-    <button mat-menu-item (click)="sendTell(blocked)">
+    <button mat-menu-item (click)="stat.openUser(blocked)">
       Profile
     </button>
     <button mat-menu-item (click)="unblock(blocked)">

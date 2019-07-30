@@ -13,6 +13,7 @@ import {
   MatSliderModule,
   MatSelectModule,
   MatCheckboxModule,
+  MatButtonModule,
 } from '@angular/material';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { CustomMapComponent } from './custom-map/custom-map.component';
@@ -28,6 +29,7 @@ import { CustomMapComponent } from './custom-map/custom-map.component';
     MatSliderModule,
     MatSelectModule,
     MatCheckboxModule,
+    MatButtonModule,
     QdragModule,
     NgSelectModule,
   ],

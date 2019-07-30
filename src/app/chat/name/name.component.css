@@ -13,3 +13,9 @@ span {
 .you {
   color: aquamarine;
 }
+
+p {
+  color: #ddd;
+  padding: 0 8px;
+  margin: 0;
+}

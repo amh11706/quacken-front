@@ -56,7 +56,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
+    if (this.subs) this.subs.unsubscribe();
     document.removeEventListener('keydown', this.focus);
   }
 
@@ -109,7 +109,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   addMessage(): void {
     const output = this.output.nativeElement;
-    if (output.scrollTop + 115 > output.scrollHeight) {
+    if (output.scrollTop + 135 > output.scrollHeight) {
       setTimeout(() => output.scrollTop = output.scrollHeight);
     }
   }

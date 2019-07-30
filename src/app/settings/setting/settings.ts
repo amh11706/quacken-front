@@ -1,4 +1,5 @@
 export const Settings = {
+  startNew: { type: 'button', label: 'New Round', trigger: 'c/start', data: 'new' },
   nextBoat: {
     id: 1, group: 'lobby', type: 'boat', trigger: 'nextBoat',
     titles: ['Rocket', 'Armored', 'Bomb', 'Bread', , , , , , , 'Small Duck', 'Medium Duck', 'Large Duck', 'Defenduck'],
@@ -8,7 +9,7 @@ export const Settings = {
     ]
   },
   mapScale: {
-    id: 2, group: 'lobby', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 5
+    id: 2, group: 'lobby', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1
   },
   speed: {
     id: 3, group: 'lobby', type: 'slider', label: 'Animate Speed', min: 1, max: 5, step: 0.5

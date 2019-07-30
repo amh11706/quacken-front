@@ -51,7 +51,6 @@ interface BoatSync extends BoatStatus {
   styleUrls: ['./boats.component.css']
 })
 export class BoatsComponent implements OnInit, OnDestroy {
-  @Input() size: number;
   @Input() speed: number;
   @Input() map: HTMLElement;
   clutterTypes = [
@@ -121,8 +120,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearTimeout(this.animateTimeout);
     document.removeEventListener('visibilitychange', this.visibilityChange);
-    this.subs.unsubscribe();
+    if (this.subs) this.subs.unsubscribe();
   }
 
   trackBy(_i: number, c: Clutter): string {

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { WsService } from './ws.service';
+import { StatService } from './chat/stat/stat.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import { WsService } from './ws.service';
 })
 export class AppComponent {
 
-  constructor(public ws: WsService, public router: Router) { }
+  constructor(public ws: WsService, public router: Router, public stat: StatService) { }
 
   logout() {
     this.ws.close();

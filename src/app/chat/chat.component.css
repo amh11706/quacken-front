@@ -4,7 +4,7 @@
 
 #icons {
   position: absolute;
-  right: 2px;
+  right: 12px;
   display: flex;
   flex-direction: column;
   color: #444;
@@ -25,7 +25,7 @@
 #output {
   position: relative;
   margin-bottom: 2px;
-  height: 100px;
+  height: 120px;
   background-color: #888;
   color: black;
   border: 1px solid black;
@@ -37,7 +37,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  max-height: 97px;
+  max-height: 117px;
   padding-top: 3px;
   overflow: auto;
 }

@@ -1,5 +1,5 @@
 <span
-  *ngIf="message.from !== ws.user.name || message.from === 'Guest' && message.copy !== ws.copy; else you"
+  *ngIf="message.from !== ws.user.name || (message.from === 'Guest' && message.copy !== ws.copy); else you"
   [matMenuTriggerFor]="nameMenu">
   <span [class.friend]="message.friend"
     [class.blocked]="message.blocked">{{message.from}}</span>
@@ -12,9 +12,14 @@
   <span *ngIf="message.copy">({{message.copy}})</span>
 </ng-template>
 
+<ng-template #guest>
+  <p>Create an account to get a profile page.</p>
+</ng-template>
+
 <mat-menu #youMenu="matMenu">
   <ng-template matMenuContent>
-    <button mat-menu-item (click)="sendTell()">
+    <button *ngIf="message.from !== 'Guest'; else guest" mat-menu-item
+      (click)="stat.openUser(message.from)">
       Profile
     </button>
   </ng-template>
@@ -22,7 +27,8 @@
 
 <mat-menu #nameMenu="matMenu">
   <ng-template matMenuContent>
-    <button *ngIf="message.from !== 'Guest'" mat-menu-item (click)="sendTell()">
+    <button *ngIf="message.from !== 'Guest'" mat-menu-item
+      (click)="stat.openUser(message.from)">
       Profile
     </button>
     <ng-container *ngIf="!offline">
@@ -43,9 +49,14 @@
           Unblock
         </button>
       </ng-template>
-      <button *ngIf="fs.allowInvite" mat-menu-item (click)="invite()">
-        Invite to Lobby
-      </button>
+      <ng-container *ngIf="fs.allowInvite">
+        <button mat-menu-item (click)="invite()">
+          Invite to Lobby
+        </button>
+        <button mat-menu-item (click)="kick()">
+          Kick
+        </button>
+      </ng-container>
     </ng-container>
   </ng-template>
 </mat-menu>

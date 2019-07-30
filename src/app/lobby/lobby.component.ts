@@ -8,7 +8,7 @@ import { Boat } from './boats/boat';
 import { FriendsService } from '../chat/friends/friends.service';
 
 const baseSettings = ['mapScale', 'speed', 'kbControls'];
-const ownerSettings = ['publicMode', 'hotEntry', 'duckLvl', 'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'];
+const ownerSettings = ['startNew', 'publicMode', 'hotEntry', 'duckLvl', 'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'];
 
 @Component({
   selector: 'app-lobby',
@@ -62,7 +62,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
     this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
   }
@@ -74,10 +74,10 @@ export class LobbyComponent implements OnInit, OnDestroy {
   scroll(e: WheelEvent) {
     if (!e.ctrlKey) return;
     if (e.deltaY < 0) {
-      this.settings.mapScale *= 11 / 10;
+      this.settings.mapScale *= 21 / 20;
       if (this.settings.mapScale > 100) this.settings.mapScale = 100;
     } else {
-      this.settings.mapScale *= 10 / 11;
+      this.settings.mapScale *= 20 / 21;
       if (this.settings.mapScale < 15) this.settings.mapScale = 15;
     }
     this.settings.mapScale = Math.round(this.settings.mapScale);

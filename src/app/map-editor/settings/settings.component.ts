@@ -43,7 +43,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    if (this.sub) this.sub.unsubscribe();
   }
 
   private handleSubs() {
@@ -53,12 +53,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.sub.add(this.socket.subscribe('saveMap', m => this.handleMap(m)));
     this.sub.add(this.socket.subscribe('getMap', m => this.gotMap(m)));
     this.sub.add(this.socket.subscribe('mapList', l => this.gotList(l)));
-
-    // if (tile.id || tile.group === 'structures') return;
-    //
-    // this.map.selectedTile = msg.structure_sets[0];
-    // this.map.selectedTile.group = 'structure_sets';
-    // this.edit();
   }
 
   private gotList(list: any) {
@@ -76,6 +70,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     for (let tile of tileSet) {
       tile.data = JSON.parse(tile.data);
+      if (!tile.type) tile.type = 0;
       if (!tiles[tile.type]) tiles[tile.type] = [tile];
       else tiles[tile.type].push(tile);
     }
