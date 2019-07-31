@@ -15,7 +15,7 @@ app-boats {
 
 #mapcenter {
   position: absolute;
-  transform: translate(calc(50vw - 50%), calc(50vh - 50%));
+  transform: translate(50vw, 50vh) translate(-50%, -50%);
 }
 
 #map {

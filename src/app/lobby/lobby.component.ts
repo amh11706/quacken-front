@@ -26,7 +26,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   id: number;
-  map: Uint8Array[] = [];
+  map: number[][] = [];
   settings: SettingMap = { mapScale: 50, speed: 1, kbControls: 1 };
   wheelDebounce: number;
   myBoat = new Boat('');
@@ -95,18 +95,22 @@ export class LobbyComponent implements OnInit, OnDestroy {
   private setMapB64(map: string) {
     if (!this.map.length) this.initMap();
     const bString = atob(map);
-    const temp = new Uint8Array(this.map[0].buffer);
-    for (let i = 0; i < 25 * 52; i++) {
-      temp[i] = bString.charCodeAt(i);
+    let i = 0;
+    for (let y = 0; y < 52; y++) {
+      for (let x = 0; x < 25; x++) {
+        this.map[y][x] = bString.charCodeAt(i);
+        i++;
+      }
     }
   }
 
   private initMap() {
-    const buffer = new ArrayBuffer(25 * 52);
-    let offset = 0;
     for (let y = 0; y < 52; y++) {
-      this.map.push(new Uint8Array(buffer, offset, 25));
-      offset += 25;
+      const row = [];
+      for (let x = 0; x < 25; x++) {
+        row.push(0);
+      }
+      this.map.push(row);
     }
   }
 

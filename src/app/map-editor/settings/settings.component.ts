@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(private socket: WsService) { }
 
   ngOnInit() {
-    if (!['tiles', 'structures'].includes(this.map.selectedTile.group)) this.socket.send('getMaps');
+    if (['tiles', 'structures'].indexOf(this.map.selectedTile.group) === -1) this.socket.send('getMaps');
     this.handleSubs();
     this.selected = this.map.selectedTile.id || 'new';
     if (this.map.selectedTile.unsaved) this.error = 'Unsaved changes! They will be discarded if you select a different map without saving.';
@@ -91,7 +91,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   private gotMap(map: any) {
     const tile = this.map.selectedTile;
-    if (!['tiles', 'structures'].includes(tile.group)) {
+    if (['tiles', 'structures'].indexOf(tile.group) === -1) {
       this.map.tiles = null;
       this.map.tileSet = null;
     }
@@ -105,10 +105,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (this.error) return;
 
     const tile = this.map.selectedTile;
-    if (['tiles', 'structures'].includes(tile.group)) {
+    if (['tiles', 'structures'].indexOf(tile.group) !== -1) {
       if (msg.id) {
         if (tile.group === 'tiles') {
           const tiles = this.map.tiles;
+          if (!msg.type) msg.type = 0;
           if (!tiles[msg.type]) tiles[msg.type] = [tile];
           else tiles[msg.type].push(tile);
         } else {

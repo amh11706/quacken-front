@@ -2,7 +2,7 @@
   <div id="settings" class="container noselect">
     <h2>Editor Settings</h2>
     <ng-container
-      *ngIf="!['tiles', 'structures'].includes(map.selectedTile.group)">
+      *ngIf="['tiles', 'structures'].indexOf(map.selectedTile.group) === -1">
       <mat-form-field class="setting">
         <mat-label>Type</mat-label>
         <mat-select [(ngModel)]="map.selectedTile.group"
@@ -33,7 +33,7 @@
     </mat-form-field>
 
     <div class="setting"
-      *ngIf="!['tiles', 'structures'].includes(map.selectedTile.group)">
+      *ngIf="['tiles', 'structures'].indexOf(map.selectedTile.group) === -1">
       <mat-checkbox [(ngModel)]="map.selectedTile.released"
         [disabled]="pending">
         Publicly Usable
@@ -62,9 +62,9 @@
 
     <div class="setting center">
       <button mat-raised-button
-        [disabled]="pending || selected === 'new' && !['tiles', 'structures'].includes(map.selectedTile.group)"
+        [disabled]="pending || selected === 'new' && ['tiles', 'structures'].indexOf(map.selectedTile.group) === -1"
         (click)="edit()">
-        {{['tiles', 'structures'].includes(map.selectedTile.group) ? 'Close' : 'Enter Editor'}}
+        {{['tiles', 'structures'].indexOf(map.selectedTile.group) !== -1 ? 'Close' : 'Enter Editor'}}
       </button>
     </div>
 

@@ -36,7 +36,7 @@ export class QdragDirective implements OnInit, OnDestroy {
   }
 
   private updateTransform() {
-    this.el.nativeElement.style.transform = `translate(${this.offsetX}px,${this.offsetY}px)`;
+    this.el.nativeElement.style.transform = `translate(${this.offsetX}px, ${this.offsetY}px)`;
   }
 
   private offsetToRightGap = () => {
@@ -69,8 +69,10 @@ export class QdragDirective implements OnInit, OnDestroy {
 
   private onDown = (event: MouseEvent) => {
     if (event.ctrlKey) return;
+
+    this.startX = event.clientX;
+    this.startY = event.clientY;
     document.addEventListener('mousemove', this.onMove);
-    // document.addEventListener('mouseleave', this.onUp);
     document.addEventListener('mouseup', this.onUp);
     event.preventDefault();
     const active = document.activeElement;
@@ -86,8 +88,10 @@ export class QdragDirective implements OnInit, OnDestroy {
   }
 
   private onMove = (event: MouseEvent) => {
-    this.offsetX += event.movementX;
-    this.offsetY += event.movementY;
+    this.offsetX += event.clientX - this.startX;
+    this.offsetY += event.clientY - this.startY;
+    this.startX = event.clientX;
+    this.startY = event.clientY;
     this.updateTransform();
   }
 
@@ -102,7 +106,6 @@ export class QdragDirective implements OnInit, OnDestroy {
 
   private onUp = () => {
     document.removeEventListener('mousemove', this.onMove);
-    // document.removeEventListener('mouseleave', this.onUp);
     document.removeEventListener('mouseup', this.onUp);
     if (this.bindToWindow !== undefined) this.bindWindow();
   }
