@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
     password: ''
   }
   pending = false;
+  errMessage = '';
 
   private path = location.port === '4200' ? 'https://localhost/' : '/';
 
@@ -39,16 +40,16 @@ export class LoginComponent implements OnInit {
   login() {
     this.pending = true;
     this.http.post<any>(this.path + 'login', JSON.stringify(this.user))
-    .subscribe(
-      resp => {
-        this.pending = false;
-        localStorage.setItem('token', resp);
-        this.router.navigate(['list']);
-      },
-      () => {
-        this.pending = false;
-        this.dialog.open(this.errComponent);
-      },
+      .subscribe(
+        resp => {
+          this.pending = false;
+          localStorage.setItem('token', resp);
+          this.router.navigate(['list']);
+        },
+        () => {
+          this.pending = false;
+          this.dialog.open(this.errComponent);
+        },
     );
   }
 
@@ -67,6 +68,22 @@ export class LoginComponent implements OnInit {
 
   showPrivacy() {
     this.dialog.open(PrivacyComponent);
+  }
+
+  sendReset() {
+    this.pending = true;
+    this.errMessage = 'Sending reset link...';
+    this.http.post<any>(this.path + 'forgot', JSON.stringify(this.user.email))
+      .subscribe(
+        () => {
+          this.pending = false;
+          this.errMessage = 'Reset link sent! Check your email.';
+        },
+        err => {
+          this.pending = false;
+          this.errMessage = err.message;
+        },
+    );
   }
 
 }

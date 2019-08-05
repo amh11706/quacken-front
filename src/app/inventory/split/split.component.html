@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{data.n}}</h1>
+<div mat-dialog-content>
+  <p>New stack size: {{quantity}}</p>
+  <mat-slider cdkFocusInitial [value]="quantity" (input)="quantity=$event.value"
+    [max]="data.q-1">
+  </mat-slider>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]>Cancel</button>
+  <button [disabled]="!quantity" mat-button
+    [mat-dialog-close]="quantity">Ok</button>
+</div>

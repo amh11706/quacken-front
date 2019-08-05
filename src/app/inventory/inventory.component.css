@@ -1,0 +1,99 @@
+#inventory {
+  position: absolute;
+  top: calc(50% - 150px);
+  right: calc(50% - 200px);
+  width: 402px;
+  padding: 0;
+  overflow: hidden;
+  background: rgba(66, 66, 66, 0.85);
+  z-index: 1;
+  color: #eee;
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+  margin: 0;
+  padding: 8px 24px;
+}
+
+.content {
+  text-align: left;
+  height: 250px;
+  padding-bottom: 12px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-top: 2px solid grey;
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  cursor: grab;
+}
+
+.close {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.coin {
+  display: inline-block;
+  cursor: grab;
+  min-width: 100px;
+  padding: 4px 16px;
+}
+
+.coin img {
+  height: 15px;
+  width: 15px;
+}
+
+mat-form-field {
+  margin-right: 12px;
+}
+
+.empty {
+  text-align: center;
+  color: #bbb;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+}
+
+.item {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  padding: 4px;
+  border: 1px solid grey;
+  transition: border .2s ease-in .5s;
+  background: rgb(66, 66, 66);
+  cursor: grab;
+}
+
+.item img {
+  height: 40px;
+  width: 40px;
+}
+
+.quantity {
+  position: absolute;
+  bottom: 0;
+  right: 2px;
+}
+
+.new {
+  border-color: orange;
+}
+
+.dropable {
+  border-color: white;
+  transition: none;
+}

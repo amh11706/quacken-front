@@ -27,6 +27,7 @@ export class SettingsService {
   private ready = new Map<string, Subject<SettingMap>>();
 
   open = false;
+  admin = true;
   selected = 'lobby';
   lSettings: string[] = [];
 
@@ -37,6 +38,9 @@ export class SettingsService {
       if (group) group[s.name] = s.value;
     });
     ws.subscribe('joinLobby', () => {
+      this.settings.delete('l/quacken');
+    });
+    ws.subscribe('lobbyList', () => {
       this.settings.delete('l/quacken');
     });
     ws.subscribe('getSettings', (m: SettingsMessage) => {

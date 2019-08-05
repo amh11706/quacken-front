@@ -3,11 +3,12 @@
   max-width: 190px;
 }
 
-mat-slider, mat-form-field {
+mat-slider, mat-form-field, mat-checkbox {
   width: 100%;
 }
 
 mat-checkbox {
+  display: inline-block;
   text-align: left;
 }
 

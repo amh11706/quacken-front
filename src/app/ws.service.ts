@@ -11,6 +11,7 @@ interface Message {
 export interface TokenUser {
   id: number,
   name: string,
+  inventory?: number,
 }
 
 @Injectable({
@@ -42,6 +43,8 @@ export class WsService {
     });
     this.subscribe('sId', (id: number) => {
       this.sId = id;
+      this.connected = true;
+      this.connected$.next(true);
     });
     this.subscribe('copy', (copy: number) => {
       this.copy = copy;
@@ -61,8 +64,6 @@ export class WsService {
 
     this.socket.onopen = () => {
       this.socket.send(token);
-      this.connected = true;
-      this.connected$.next(true);
     }
 
     this.socket.onmessage = message => this.dispatchMessage(JSON.parse(message.data));

@@ -12,6 +12,7 @@ import { WsService } from 'src/app/ws.service';
 export class CustomMapComponent implements OnInit, OnDestroy {
   @Input() group: SettingMap;
   @Input() setting: any = {};
+  @Input() disabled: boolean;
   @Output() save = new EventEmitter();
 
   data = [];

@@ -1,5 +1,5 @@
-<div *ngIf="ss.open && ws.connected" [qdrag]="handle" bindToWindow
-  class="container noselect" id="settings">
+<div *ngIf="ss.open" [qdrag]="handle" bindToWindow class="container noselect"
+  id="settings">
   <div #handle class="handle"></div>
   <mat-icon class="close" (click)="ss.open = false">close</mat-icon>
   <div class="nav">

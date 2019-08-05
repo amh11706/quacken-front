@@ -138,3 +138,8 @@ td {
   color: #F7DC6F;
   cursor: default;
 }
+
+.note {
+  text-align: left;
+  margin: 0px 16px;
+}

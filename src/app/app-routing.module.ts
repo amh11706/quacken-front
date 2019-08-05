@@ -7,6 +7,9 @@ import { ListComponent } from './list/list.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { AuthGuard } from './auth.guard';
 import { MapEditorComponent } from './map-editor/map-editor.component';
+import { TermsComponent } from './login/terms/terms.component';
+import { PrivacyComponent } from './login/privacy/privacy.component';
+import { ResetComponent } from './login/reset/reset.component';
 
 const routes: Routes = [
   {
@@ -14,8 +17,20 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
+    path: 'terms',
+    component: TermsComponent,
+  },
+  {
+    path: 'privacy',
+    component: PrivacyComponent,
+  },
+  {
     path: 'create',
     component: CreateComponent,
+  },
+  {
+    path: 'reset/:token',
+    component: ResetComponent,
   },
   {
     path: '',

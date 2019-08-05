@@ -11,6 +11,7 @@ import { LoginModule } from './login/login.module';
 import { SettingsModule } from './settings/settings.module';
 import { MapEditorModule } from './map-editor/map-editor.module';
 import { ChatModule } from './chat/chat.module';
+import { InventoryModule } from './inventory/inventory.module';
 
 import { AppComponent } from './app.component';
 
@@ -31,6 +32,7 @@ import { WsService } from './ws.service';
     SettingsModule,
     MapEditorModule,
     ChatModule,
+    InventoryModule,
   ],
   providers: [WsService],
   bootstrap: [AppComponent]

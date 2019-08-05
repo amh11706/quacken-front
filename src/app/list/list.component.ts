@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
 import { SettingsService, SettingMap } from '../settings/settings.service';
+import { Notes } from './notes';
 
 @Component({
   selector: 'app-lobby-list',
@@ -16,8 +17,10 @@ export class ListComponent implements OnInit, OnDestroy {
     { title: 'Lobby List', path: 'list' },
     { title: 'Create Lobby', path: 'create' },
     { title: 'Map Editor', path: 'map' },
+    { title: 'Release Notes', path: 'notes' },
   ];
   publicModes = ['Public', 'Public Invitation'];
+  notes = Notes;
 
   lobbies = [];
 

@@ -12,6 +12,8 @@ import { LoginComponent } from './login.component';
 import { CreateComponent } from './create/create.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { TermsComponent } from './terms/terms.component';
+import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
+import { ResetComponent } from './reset/reset.component';
 
 @NgModule({
   declarations: [
@@ -19,10 +21,13 @@ import { TermsComponent } from './terms/terms.component';
     CreateComponent,
     PrivacyComponent,
     TermsComponent,
+    LogoutConfirmComponent,
+    ResetComponent,
   ],
   entryComponents: [
     TermsComponent,
-    PrivacyComponent
+    PrivacyComponent,
+    LogoutConfirmComponent,
   ],
   imports: [
     CommonModule,

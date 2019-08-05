@@ -62,6 +62,14 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const session = localStorage.getItem(this.socket.user.id + "-editor");
+    if (session) {
+      const s = JSON.parse(session);
+      this.map = s.map;
+      this.undos = s.undos;
+      this.redos = s.redos;
+    }
+    window.addEventListener('beforeunload', this.saveSession);
     this.socket.send('joinEditor');
 
     this.sub = this.socket.subscribe('saveMap', () => this.handleSave());
@@ -77,8 +85,16 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.saveSession();
+    window.removeEventListener('beforeunload', this.saveSession);
     if (this.sub) this.sub.unsubscribe();
     window.removeEventListener('keydown', this.key);
+  }
+
+  private saveSession = () => {
+    localStorage.setItem(this.socket.user.id + '-editor', JSON.stringify(
+      { map: this.map, undos: this.undos, redos: this.redos }
+    ));
   }
 
   openGuide() {

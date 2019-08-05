@@ -66,6 +66,10 @@
   background-color: #ff9d55;
 }
 
+.obscured {
+  background-color: #eee;
+}
+
 .bomb {
   position: relative;
   top: -8px;

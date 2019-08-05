@@ -74,7 +74,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     '3s linear' // sink rotate
   ];
   szFade = ', opacity .8s linear .7s';
-  moveNames = ['', 'left', 'forward', 'right'];
+  moveNames = ['', 'left', 'forward', 'right', 'obscured'];
   titles = ['', ', Cuttle Cake', ', Taco Locker', ', Pea Pod', ', Fried Egg'];
 
   myBoat = new Boat('');

@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
 
 import { WsService } from './ws.service';
 import { StatService } from './chat/stat/stat.service';
+import { LogoutConfirmComponent } from './login/logout-confirm/logout-confirm.component';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +13,15 @@ import { StatService } from './chat/stat/stat.service';
 })
 export class AppComponent {
 
-  constructor(public ws: WsService, public router: Router, public stat: StatService) { }
+  constructor(
+    public ws: WsService,
+    public router: Router,
+    public stat: StatService,
+    private dialog: MatDialog,
+  ) { }
 
   logout() {
-    this.ws.close();
-    localStorage.removeItem('token');
-    this.router.navigate(['login']);
+    this.dialog.open(LogoutConfirmComponent);
   }
 
   focus() {

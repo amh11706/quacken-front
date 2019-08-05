@@ -2,18 +2,20 @@
   <h1>Disturb the Quacken</h1>
   <form id="loginform" (ngSubmit)="login()" #loginForm="ngForm">
     <mat-form-field>
-      <input [(ngModel)]="user.email" name="email" matInput placeholder="Email" required>
+      <input [(ngModel)]="user.email" name="email" matInput placeholder="Email"
+        required>
     </mat-form-field>
     <mat-form-field>
-      <input [(ngModel)]="user.password" name="password" matInput type="password"
-      minlength="6" placeholder="Password" required>
+      <input [(ngModel)]="user.password" name="password" matInput
+        type="password" minlength="6" placeholder="Password" required>
     </mat-form-field>
     <p id="terms">By logging in, you agree to our
       <span class="link" (click)="showTerms()">terms of use</span>
       and
       <span class="link" (click)="showPrivacy()">privacy policy</span>.</p>
     <br>
-    <button [disabled]="pending || !loginForm.form.valid" type="submit" mat-raised-button>Log in</button>
+    <button [disabled]="pending || !loginForm.form.valid" type="submit"
+      mat-raised-button>Log in</button>
     <br>
     <p>
       No account?
@@ -26,10 +28,16 @@
 
 <ng-template #error>
   <mat-dialog-content>
-    <p>Wrong email or password.</p>
+    <p *ngIf="!errMessage; else message">Wrong email or password.</p>
+    <ng-template #message>
+      <p>{{errMessage}}</p>
+    </ng-template>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Forgot Password</button>
-    <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
+    <button mat-button [disabled]="pending" (click)="sendReset()">
+      Forgot Password
+    </button>
+    <button mat-button mat-dialog-close [disabled]="pending"
+      cdkFocusInitial>Close</button>
   </mat-dialog-actions>
 </ng-template>

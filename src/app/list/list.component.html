@@ -61,6 +61,7 @@
         <app-setting name="structureSet"></app-setting>
         <app-setting name="hotEntry"></app-setting>
         <app-setting name="autoGen"></app-setting>
+        <app-setting name="hideMoves"></app-setting>
       </div>
 
       <p *ngIf="settings.customMap" class="error">
@@ -87,6 +88,13 @@
       <p *ngIf="!ws.user.id" class="error">
         Guests cannot create maps. Create an account to unlock this feature.
       </p>
+    </ng-container>
+
+    <ng-container *ngIf="selected === 'notes'">
+      <div *ngFor="let note of notes" class="note">
+        <h2>{{note.title}}</h2>
+        <p [innerHTML]="note.content"></p>
+      </div>
     </ng-container>
   </div>
 

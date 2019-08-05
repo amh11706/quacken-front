@@ -8,7 +8,10 @@ import { Boat } from './boats/boat';
 import { FriendsService } from '../chat/friends/friends.service';
 
 const baseSettings = ['mapScale', 'speed', 'kbControls'];
-const ownerSettings = ['startNew', 'publicMode', 'hotEntry', 'duckLvl', 'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'];
+const ownerSettings = [
+  'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
+  'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'
+];
 
 @Component({
   selector: 'app-lobby',
@@ -42,6 +45,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.ss.admin = false;
     this.sub = this.route.paramMap.subscribe(params => {
       const id = +params.get('id');
       if (this.id === id) return;
@@ -55,9 +59,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe('map', map => this.setMapB64(map)));
     this.sub.add(this.ws.subscribe('joinLobby', m => {
       this.setMapB64(m.map);
-      this.fs.allowInvite = m.owner === this.ws.user.name;
-      if (m.owner !== this.ws.user.name) this.ss.setLobbySettings(baseSettings);
-      else this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
+      if (m.owner) {
+        this.fs.allowInvite = true;
+        this.ss.admin = true;
+      }
+      this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
     }));
   }
 
@@ -65,6 +71,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     if (this.sub) this.sub.unsubscribe();
     this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
+    this.ss.admin = true;
   }
 
   async getSettings() {

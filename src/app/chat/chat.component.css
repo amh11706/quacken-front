@@ -11,11 +11,12 @@
 }
 
 #icons button {
-  height: 30px;
+  height: 28px;
 }
 
 #icons mat-icon {
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 16px;
 }
 
 .highlight {

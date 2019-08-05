@@ -73,8 +73,7 @@ export class HudComponent implements OnInit, OnDestroy {
   private kbEvent = (e: KeyboardEvent) => {
     const active = document.activeElement;
     if (active.id === 'textinput' || this.kbControls === 0) return;
-    if (active instanceof HTMLElement) active.blur();
-    if (!e.ctrlKey) e.preventDefault();
+    if (active instanceof HTMLElement && active.nodeName !== 'INPUT') active.blur();
     if (e.code === 'Enter' || e.code === 'Space') {
       this.imReady();
       return;
