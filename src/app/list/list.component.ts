@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
 import { SettingsService, SettingMap } from '../settings/settings.service';
 import { Notes } from './notes';
+
+const groups = ['quacken', 'spades'];
 
 @Component({
   selector: 'app-lobby-list',
@@ -26,6 +28,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   created = false;
   settings: SettingMap = {};
+  createGroup: SettingMap = {};
 
   private sub: Subscription;
 
@@ -36,9 +39,9 @@ export class ListComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
-    this.settings = await this.ss.getGroup('l/quacken');
-    this.sub = this.ws.subscribe('lobbyList', lobbies => this.lobbies = lobbies);
-
+    this.sub = this.ws.subscribe('lobbyList', lobbies => {
+      this.lobbies = lobbies;
+    });
     this.sub = this.ws.subscribe('lu', update => {
       for (let i = 0; i < this.lobbies.length; i++) {
         const lobby = this.lobbies[i];
@@ -46,29 +49,34 @@ export class ListComponent implements OnInit, OnDestroy {
       }
       this.lobbies.push(update);
     });
-
     this.sub = this.ws.subscribe('lr', id => {
       this.lobbies = this.lobbies.filter(l => l.id !== id);
     });
-
     this.sub.add(this.ws.connected$.subscribe(value => {
       if (value) this.ws.send('lobbyList');
     }));
 
     this.ws.send('lobbyList');
+    this.settings = await this.ss.getGroup('l/create');
+    this.changeType();
   }
 
   ngOnDestroy() {
     if (this.sub) this.sub.unsubscribe();
   }
 
+  async changeType() {
+    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType], true);
+  }
+
   join(l: any) {
-    if (l.group.publicMode === 0) this.router.navigate(['lobby', l.id]);
+    if (!l.group.publicMode) this.router.navigate(['lobby', l.id]);
     else this.ws.send("lobbyRequest", l.id);
   }
 
-  async createLobby() {
-    this.ws.send('createLobby', this.settings);
+  createLobby() {
+    this.createGroup.createType = this.settings.createType;
+    this.ws.send('createLobby', this.createGroup);
     this.created = true;
   }
 

@@ -1,0 +1,30 @@
+.played {
+  position: absolute;
+  left: 18px;
+  width: 28px;
+  background: white;
+  border: 1px solid grey;
+  color: black;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.won {
+  border: 2px solid yellow;
+}
+
+.suit2, .suit0 {
+  color: red;
+}
+
+#playedwest {
+  transform: translate(-20px, 21px);
+}
+
+#playedeast {
+  transform: translate(20px, 21px);
+}
+
+#playedsouth {
+  transform: translate(0, 38px);
+}

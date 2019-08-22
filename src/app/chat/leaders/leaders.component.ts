@@ -9,7 +9,10 @@ import { WsService } from 'src/app/ws.service';
   styleUrls: ['./leaders.component.css']
 })
 export class LeadersComponent implements OnInit {
-  constructor(public stat: StatService, public ws: WsService) { }
+  constructor(
+    public stat: StatService,
+    public ws: WsService,
+  ) { }
 
   ngOnInit() {
   }

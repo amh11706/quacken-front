@@ -10,6 +10,7 @@
   z-index: 1;
   color: #eee;
   text-align: center;
+  pointer-events: auto;
 }
 
 .handle {
@@ -59,7 +60,7 @@ table {
 
 th {
   position: sticky;
-  top: -8px;
+  top: -12px;
 }
 
 td, th {

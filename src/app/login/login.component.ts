@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
         },
         err => {
           this.pending = false;
-          this.errMessage = err.message;
+          this.errMessage = err.error;
         },
     );
   }

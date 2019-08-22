@@ -44,6 +44,20 @@ export const Settings = {
     admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: 'g/maps'
   },
   hideMoves: {
-    id: 13, group: 'l/quacken', type: 'checkbox', label: 'Hide Moves'
+    admin: true, id: 13, group: 'l/quacken', type: 'checkbox', label: 'Hide Moves'
+  },
+  createType: {
+    id: 14, group: 'l/create', type: 'option', options: [
+      'Quacken', 'Spades'
+    ]
+  },
+  turnTime: {
+    admin: true, id: 15, group: 'l/spades', type: 'slider', label: 'Turn Time', min: 5, max: 30
+  },
+  playTo: {
+    admin: true, id: 16, group: 'l/spades', type: 'slider', label: 'Play To', min: 250, max: 1000, step: 50
+  },
+  watchers: {
+    admin: true, id: 17, group: 'l/spades', type: 'checkbox', label: 'Allow Watchers'
   },
 };

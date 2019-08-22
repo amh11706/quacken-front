@@ -8,9 +8,15 @@
   </div>
   <router-outlet></router-outlet>
 
-  <app-friends></app-friends>
-  <app-settings></app-settings>
-  <app-stat></app-stat>
-  <app-leaders></app-leaders>
-  <app-inventory [id]="ws.user?.inventory"></app-inventory>
+  <app-friends [class.top]="wd.active==='friends'"
+    (mousedown)=" wd.active='friends'"></app-friends>
+  <app-settings [class.top]="wd.active === 'settings'"
+    (mousedown)="wd.active = 'settings'"></app-settings>
+  <app-stat [class.top]="wd.active === 'stat'" (mousedown)="wd.active = 'stat'">
+  </app-stat>
+  <app-leaders [class.top]="wd.active === 'leaders'"
+    (mousedown)="wd.active = 'leaders'"></app-leaders>
+  <app-inventory [class.top]="wd.active === 'inventory'"
+    (mousedown)="wd.active = 'inventory'" [id]=" ws.user?.inventory">
+  </app-inventory>
 </div>

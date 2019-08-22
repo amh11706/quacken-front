@@ -14,7 +14,10 @@ export class SettingsComponent implements OnInit {
     { title: 'Global Settings', icon: 'languages', path: 'global' },
   ];
 
-  constructor(public ss: SettingsService, public ws: WsService) { }
+  constructor(
+    public ss: SettingsService,
+    public ws: WsService,
+  ) { }
 
   ngOnInit() {
   }

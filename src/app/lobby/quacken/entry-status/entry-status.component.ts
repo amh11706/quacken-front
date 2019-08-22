@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { WsService } from '../../ws.service';
+import { WsService } from '../../../ws.service';
+import { Lobby } from '../../lobby.component';
+import { Turn } from '../boats/boats.component';
 
 @Component({
   selector: 'app-entry-status',
@@ -18,9 +20,9 @@ export class EntryStatusComponent implements OnInit, OnDestroy {
   constructor(private ws: WsService) { }
 
   ngOnInit() {
-    this.subs = this.ws.subscribe('time', time => this.time = time);
-    this.subs.add(this.ws.subscribe('turn', turn => this.treasure = turn.treasure));
-    this.subs.add(this.ws.subscribe('joinLobby', lobby => this.treasure = lobby.treasure));
+    this.subs = this.ws.subscribe('time', (time: string) => this.time = time);
+    this.subs.add(this.ws.subscribe('turn', (t: Turn) => this.treasure = t.treasure));
+    this.subs.add(this.ws.subscribe('_boats', (l: Lobby) => this.treasure = l.treasure));
   }
 
   ngOnDestroy() {

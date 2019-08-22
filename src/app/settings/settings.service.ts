@@ -37,12 +37,6 @@ export class SettingsService {
       const group = this.settings.get(s.group);
       if (group) group[s.name] = s.value;
     });
-    ws.subscribe('joinLobby', () => {
-      this.settings.delete('l/quacken');
-    });
-    ws.subscribe('lobbyList', () => {
-      this.settings.delete('l/quacken');
-    });
     ws.subscribe('getSettings', (m: SettingsMessage) => {
       let group = this.settings.get(m.group);
       if (!group) {
@@ -69,9 +63,11 @@ export class SettingsService {
     else this.selected = 'lobby';
   }
 
-  async getGroup(group: string): Promise<SettingMap> {
-    const settings = this.settings.get(group);
-    if (settings) return Promise.resolve(settings);
+  async getGroup(group: string, update = false): Promise<SettingMap> {
+    if (!update) {
+      const settings = this.settings.get(group);
+      if (settings) return Promise.resolve(settings);
+    }
 
     let ready = this.ready.get(group);
     const prom = new Promise<SettingMap>(resolve => {

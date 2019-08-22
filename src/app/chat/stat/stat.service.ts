@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
+import { WindowService } from 'src/app/window.service';
 
 export interface Stat {
   id: number,
@@ -45,7 +46,11 @@ export class StatService {
   leaders: Leader[] = [];
   columns: Column[] = [];
 
-  constructor(private ws: WsService, private fs: FriendsService) {
+  constructor(
+    private ws: WsService,
+    private fs: FriendsService,
+    private wd: WindowService,
+  ) {
     this.ws.subscribe('stat/user', stats => this.stats = stats);
     this.ws.subscribe('stat/leaders', (leaders: Leader[]) => {
       this.leaders = leaders;
@@ -70,6 +75,7 @@ export class StatService {
     this.target = name;
     this.open = true;
     this.refresh();
+    this.wd.active = 'stat';
   }
 
   openLeaders(id: number, name: string) {
@@ -77,6 +83,7 @@ export class StatService {
     this.groupName = name;
     this.leadersOpen = true;
     this.refreshLeaders();
+    this.wd.active = 'leaders';
   }
 
   refresh() {

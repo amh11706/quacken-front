@@ -15,7 +15,8 @@
   </div>
 </div>
 
-<div *ngFor="let boat of boats" [style.opacity]="boat.opacity"
+<div *ngFor="let boat of boats; trackBy: trackBoatBy"
+  [style.opacity]="boat.opacity"
   [style.transform]="'translateX(' + (boat.pos[0]+boat.offsetX)*50+ 'px)'"
   [style.transition]="(boat.moveTransition[0] < 4 && boat.moveTransition[0] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[0]] + (boat.enteringSZ ? szFade : '')">
 
@@ -23,7 +24,7 @@
   <div class="boat"
     [style.transform]="'translateY(' + (boat.pos[1]+boat.offsetY)*50 + 'px)'"
     [style.transition]="(boat.moveTransition[1] < 4 && boat.moveTransition[1] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[1]]">
-    <div class="boatheader" *ngIf="boat.type < 10 || boat.isMe">
+    <div class="boatheader" *ngIf="boat.name || boat.isMe">
       <span class="boattitle" [title]="boat.name + titles[boat.treasure]"
         [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
         {{boat.name}}<img *ngIf="boat.treasure"
@@ -33,7 +34,7 @@
       <div class="movebar" [class.ready]="boat.ready">
         <div *ngFor="let move of boat.moves; let i=index"
           class="movebarslice {{moveNames[move]}}">
-          <ng-container *ngIf="boat.type == 2">
+          <ng-container *ngIf="weapons[boat.type]">
             <mat-icon *ngIf="boat.bomb === i+5" class="bomb">arrow_right
             </mat-icon>
             <mat-icon *ngIf="boat.bomb === i+1" class="bomb leftbomb">

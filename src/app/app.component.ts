@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material';
 import { WsService } from './ws.service';
 import { StatService } from './chat/stat/stat.service';
 import { LogoutConfirmComponent } from './login/logout-confirm/logout-confirm.component';
+import { WindowService } from './window.service';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ export class AppComponent {
     public router: Router,
     public stat: StatService,
     private dialog: MatDialog,
+    public wd: WindowService,
   ) { }
 
   logout() {

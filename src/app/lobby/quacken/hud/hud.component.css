@@ -107,14 +107,24 @@ app-chat {
   left: 37px;
 }
 
-#treasurebox, #token {
+#treasurebox, .token {
   float: left;
-  margin-left: 45px;
+  margin-left: 8px;
   height: 35px;
   width: 35px;
   border: 2px solid grey;
   border-radius: 5px;
   background-color: rgba(100, 100, 100, 0.3);
+}
+
+#tokens {
+  margin-left: 37px;
+}
+
+.token img {
+  margin-top: 4px;
+  height: 23px;
+  width: 23px;
 }
 
 #treasurebox img {
@@ -137,15 +147,6 @@ app-chat {
 #settings {
   margin-left: 6px;
   color: #bbb;
-}
-
-#token {
-  padding: 4px;
-  color: darkgrey;
-}
-
-#token.ready {
-  color: khaki;
 }
 
 .blocked {

@@ -1,3 +1,47 @@
+<ng-template #quackenView let-settings="settings">
+  <mat-icon title="Duck Level ({{settings.duckLvl}})"
+    [style.color]="'rgb('+settings.duckLvl*20+','+(11-settings.duckLvl)*20+',0)'">
+    show_chart
+  </mat-icon>
+  <mat-icon title="Hot Entry ({{settings.hotEntry ? 'allowed' : 'blocked'}})"
+    [style.color]="settings.hotEntry ? 'green' : 'maroon'">
+    whatshot
+  </mat-icon>
+  <mat-icon title="{{publicModes[settings.publicMode]}}"
+    [style.color]="settings.publicMode ? 'orange' : 'green'">
+    public
+  </mat-icon>
+  <span title="Tile Set">{{settings.tileSet}}</span>
+  <span title="Structure Set">{{settings.structureSet}}</span>
+</ng-template>
+
+<ng-template #spadesView let-settings="settings">
+  <mat-icon title="Watchers ({{settings.watchers ? 'allowed' : 'blocked'}})"
+    [style.color]="settings.watchers ? 'green' : 'maroon'">
+    {{settings.watchers ? 'visibility' : 'visibility_off'}}
+  </mat-icon>
+  <span title="Timer (seconds)">{{settings.turnTime}}</span>
+  <span title="Play to">{{settings.playTo}}</span>
+</ng-template>
+
+<ng-template #quackenEdit>
+  <app-setting name="maxPlayers"></app-setting>
+  <app-setting name="duckLvl"></app-setting>
+  <app-setting name="publicMode"></app-setting>
+  <app-setting name="customMap"></app-setting>
+  <app-setting name="tileSet"></app-setting>
+  <app-setting name="structureSet"></app-setting>
+  <app-setting name="hotEntry"></app-setting>
+  <app-setting name="autoGen"></app-setting>
+  <app-setting name="hideMoves"></app-setting>
+</ng-template>
+
+<ng-template #spadesEdit>
+  <app-setting name="turnTime"></app-setting>
+  <app-setting name="playTo"></app-setting>
+  <app-setting name="watchers"></app-setting>
+</ng-template>
+
 <div id="frame">
   <div id="nav">
     <div *ngFor="let link of links" class="link" (click)="selected = link.path"
@@ -20,51 +64,33 @@
             <th>Name</th>
             <th>Players</th>
             <th>Settings</th>
-            <th>Tile</th>
-            <th>Structure</th>
           </tr>
 
           <tr *ngFor="let lobby of lobbies" (click)="join(lobby)">
             <td>{{lobby.type}}</td>
             <td>{{lobby.name}}</td>
             <td>{{lobby.players}} / {{lobby.group.maxPlayers}}</td>
-            <td>
-              <mat-icon title="Duck Level ({{lobby.group.duckLvl}})"
-                [style.color]="'rgb('+lobby.group.duckLvl*20+','+(11-lobby.group.duckLvl)*20+',0)'">
-                show_chart
-              </mat-icon>
-              <mat-icon
-                title="Hot Entry ({{lobby.group.hotEntry ? 'allowed' : 'blocked'}})"
-                [style.color]="lobby.group.hotEntry ? 'green' : 'maroon'">
-                whatshot
-              </mat-icon>
-              <mat-icon title="{{publicModes[lobby.group.publicMode]}}"
-                [style.color]="lobby.group.publicMode ? 'orange' : 'green'">
-                public
-              </mat-icon>
+            <td class="settingsView">
+              <ng-container
+                *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView}[lobby.type]; context: {settings: lobby.group}">
+              </ng-container>
             </td>
-            <td>{{lobby.group.tileSet}}</td>
-            <td>{{lobby.group.structureSet}}</td>
           </tr>
         </table>
       </div>
     </ng-container>
 
     <ng-container *ngIf="selected === 'create'">
-      <h2>Create Lobby</h2>
+      <h2 id="create">Lobby Type: <app-setting name="createType"
+          (change)="changeType()"></app-setting>
+      </h2>
       <div id="lsettings">
-        <app-setting name="maxPlayers"></app-setting>
-        <app-setting name="duckLvl"></app-setting>
-        <app-setting name="publicMode"></app-setting>
-        <app-setting name="customMap"></app-setting>
-        <app-setting name="tileSet"></app-setting>
-        <app-setting name="structureSet"></app-setting>
-        <app-setting name="hotEntry"></app-setting>
-        <app-setting name="autoGen"></app-setting>
-        <app-setting name="hideMoves"></app-setting>
+        <ng-container
+          *ngTemplateOutlet="[quackenEdit, spadesEdit][settings.createType]">
+        </ng-container>
       </div>
 
-      <p *ngIf="settings.customMap" class="error">
+      <p *ngIf="createGroup.customMap" class="error">
         Note: Selecting a custom map will override map generation settings.
         Clear the custom map selection to re enable map generation.
       </p>

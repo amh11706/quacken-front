@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { WsService } from '../../ws.service';
+import { WsService } from '../../../ws.service';
 import { Boat } from './boat';
+import { Lobby } from '../../lobby.component';
+import { weapons } from '../hud/hud.component';
 
 export interface Clutter {
   t: number,
@@ -12,7 +14,7 @@ export interface Clutter {
   p?: boolean,
 }
 
-interface Turn {
+export interface Turn {
   turn: number,
   steps: BoatStatus[][],
   cSteps: Clutter[][],
@@ -31,18 +33,21 @@ interface BoatStatus {
   t: number,
   tf: number,
   tm: number,
+  s?: number,
   c?: number,
   cd?: number,
 }
 
-interface BoatSync extends BoatStatus {
+export interface BoatSync extends BoatStatus {
+  oId?: number,
   n: string,
   f: number,
-  m: number[],
+  // m: number[],
   d: number,
   b: number,
   tp: number,
   ty: number,
+  ml: number,
 }
 
 @Component({
@@ -53,9 +58,10 @@ interface BoatSync extends BoatStatus {
 export class BoatsComponent implements OnInit, OnDestroy {
   @Input() speed: number;
   @Input() map: HTMLElement;
+  weapons = weapons;
   clutterTypes = [
     'powderkeg',
-    'mine',
+    'duckpoo',
     'feathers',
     'bread',
     'head',
@@ -71,7 +77,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
   rotateTransitions = [
     '0s linear',
     '.4s ease .1s', // normal rotate
-    '3s linear' // sink rotate
+    '3s linear', // sink rotate
+    '1s ease', // duck poo
+    '.2s ease' // defenduck spin
   ];
   szFade = ', opacity .8s linear .7s';
   moveNames = ['', 'left', 'forward', 'right', 'obscured'];
@@ -79,7 +87,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   myBoat = new Boat('');
   boats: Boat[] = [];
-  private _boats: any = {};
+  private _boats: { [k: number]: Boat } = {};
   private subs: Subscription;
   private animateTimeout: number;
   private blurred = false;
@@ -91,7 +99,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
-    this.subs = this.ws.subscribe('joinLobby', m => {
+    this.subs = this.ws.subscribe('_boats', (m: Lobby) => {
       clearTimeout(this.animateTimeout);
       this.boats = [];
       this._boats = {};
@@ -115,8 +123,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
       const boat = this._boats[b.t];
       if (boat) boat.bomb = b.m;
     }));
-    this.subs.add(this.ws.subscribe('turn', turn => this.handleTurn(turn)));
-    this.subs.add(this.ws.subscribe('sync', sync => this.syncBoats(sync)));
+    this.subs.add(this.ws.subscribe('turn', (t: Turn) => this.handleTurn(t)));
+    this.subs.add(this.ws.subscribe('sync', (s: Sync) => this.syncBoats(s)));
   }
 
   ngOnDestroy() {
@@ -140,7 +148,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
           boat.bomb = 0;
           boat.ready = false;
         }
-        if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: 'unlockMoves' });
+        if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: '_unlockMoves' });
       }
       this.ws.send('sync');
       this.step = -1;
@@ -155,7 +163,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (turn.turn === 1) {
       setTimeout(() => {
         for (const boat of this.boats) boat.ready = false;
-        this.ws.dispatchMessage({ cmd: 'unlockMoves' });
+        this.ws.dispatchMessage({ cmd: '_unlockMoves' });
       }, 1000);
       return;
     }
@@ -182,7 +190,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.moves = [0, 0, 0, 0];
       boat.bomb = 0;
     }
-    if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: 'unlockMoves' });
+    if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: '_unlockMoves' });
   }
 
   private playTurn = () => {
@@ -194,10 +202,25 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (!boat) continue;
 
       if (u.c > 0) boat.addDamage(u.c - 1, u.cd || 0);
-      if (u.tm) boat.face += u.tm * 90 - 180;
-      boat.treasure = u.t;
       boat.rotateTransition = 1;
-      boat.setPos(u.x, u.y).setTransition(u.tf, u.tm).draw();
+      boat.setTreasure(u.t)
+        .setPos(u.x, u.y)
+        .setTransition(u.tf, u.tm)
+        .draw();
+
+      if (u.s) {
+        boat.face += 90 * u.s;
+        if (u.s > -2) {
+          boat.rotateTransition = 4
+          setTimeout(() => {
+            boat.rotateTransition = 1;
+            if (u.tm) boat.face += u.tm * 90 - 180;
+          }, 300);
+        } else {
+          boat.rotateTransition = 3;
+          if (u.tm) boat.face += u.tm * 90 - 180;
+        }
+      } else if (u.tm) boat.face += u.tm * 90 - 180;
     }
 
     if (this.step === 5) this.resetBoats()
@@ -208,49 +231,50 @@ export class BoatsComponent implements OnInit, OnDestroy {
     else this.animateTimeout = window.setTimeout(() => this.ws.send('sync'), 1500);
   }
 
+  trackBoatBy(_i: number, b: Boat): string {
+    return b.name;
+  }
+
   private syncBoats = (sync: Sync) => {
     if (!sync || !this.turn) return;
-    this.turn = undefined;
-    this.clutter = sync.cSync;
-    for (let s of sync.sync) {
-      const boat = this._boats[s.id];
-      if (!boat) continue;
-      if (boat.isMe && boat.damage > s.d) {
-        this.map.dispatchEvent(new Event('dblclick'));
-      }
-
-      boat.rotateTransition = 0;
-      boat.moveTransition = [0, 0];
-      boat.enteringSZ = false;
-      boat.opacity = 1;
-      boat.imageOpacity = 1;
-
-      boat.face = s.f * 90;
-      boat.tokenPoints = s.tp;
-      boat.treasure = s.t;
-      boat.damage = s.d;
-      boat.type = s.ty;
-      boat.setPos(s.x, s.y, false).draw();
-    }
-
-    this.step = -1;
     delete this.turn;
-    for (let boat of this.boats) boat.ready = false;
+    this.step = -1;
+
+    this.clutter = sync.cSync;
+    if (sync.sync) this.setBoats(sync.sync);
   }
 
   private setBoats(boats: BoatSync[]) {
+    if (this.turn) return;
     for (const sBoat of boats) {
-      const boat = new Boat(sBoat.n, sBoat.id === this.ws.sId, sBoat.m, sBoat.ty)
+      if (sBoat.oId) delete this._boats[sBoat.oId];
+      const oldBoat = this._boats[sBoat.id];
+      const boat = new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId)
         .setPos(sBoat.x, sBoat.y)
         .setTreasure(sBoat.t)
         .setDamage(sBoat.d)
         .draw();
       boat.face = sBoat.f * 90;
+      boat.moveLock = sBoat.ml;
+      boat.tokenPoints = sBoat.tp;
       boat.bomb = sBoat.b;
       this._boats[sBoat.id] = boat;
+
       if (boat.isMe) {
-        this.ws.dispatchMessage({ cmd: 'myBoat', data: boat });
-        this.myBoat = boat;
+        if (oldBoat) {
+          if (sBoat.ty !== oldBoat.type || oldBoat.damage > sBoat.d) {
+            this.map.dispatchEvent(new Event('dblclick'));
+            oldBoat.type = sBoat.ty;
+            this.ws.dispatchMessage({ cmd: '_unlockMoves' });
+          }
+          boat.moves = oldBoat.moves;
+          Object.assign(oldBoat, boat);
+          this._boats[sBoat.id] = oldBoat;
+        } else {
+          this.ws.dispatchMessage({ cmd: '_myBoat', data: boat });
+          this.myBoat = boat;
+          this.map.dispatchEvent(new Event('dblclick'));
+        }
       }
     }
     this.boats = Object.values(this._boats);

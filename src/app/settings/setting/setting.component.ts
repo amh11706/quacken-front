@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { SettingsService, SettingMap } from '../settings.service';
 import { WsService } from 'src/app/ws.service';
@@ -16,6 +16,7 @@ export class SettingComponent {
     this.setting.name = value;
     if (this.setting && this.setting.id) this.fetch(value);
   }
+  @Output() change = new EventEmitter<number>()
 
   setting: any = {};
   group: SettingMap = {};
@@ -43,10 +44,12 @@ export class SettingComponent {
 
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
+      const v = +this.group[this.setting.name]
+      this.change.emit(v);
       this.ss.save({
         id: this.setting.id,
         name: this.setting.name,
-        value: +this.group[this.setting.name],
+        value: v,
         group: this.setting.group,
       });
       if (this.setting.trigger) this.ws.send(this.setting.trigger, +this.group[this.setting.name]);

@@ -48,18 +48,20 @@
     </div>
 
     <div id="icons">
-      <button mat-icon-button (click)="fs.open = true; fs.selected = 'lobby'">
-        <mat-icon>group</mat-icon>
+      <button mat-icon-button
+        (click)="fs.open = true; fs.selected = 'lobby'; wd.active = 'friends'">
+        <mat-icon title="Player List">group</mat-icon>
       </button>
-      <button mat-icon-button (click)="fs.open = true; fs.selected = 'invite'"
+      <button mat-icon-button
+        (click)="fs.open = true; fs.selected = 'invite'; wd.active = 'friends'"
         [class.highlight]="fs.invites.length">
-        <mat-icon>notifications</mat-icon>
+        <mat-icon title="Alerts">notifications</mat-icon>
       </button>
-      <button mat-icon-button (click)="ss.open = !ss.open">
-        <mat-icon>settings</mat-icon>
+      <button mat-icon-button (click)="ss.open = true; wd.active = 'settings'">
+        <mat-icon title="Settings">settings</mat-icon>
       </button>
-      <button mat-icon-button (click)="is.open = !is.open">
-        <mat-icon>apps</mat-icon>
+      <button mat-icon-button (click)="is.open = true; wd.active = 'inventory'">
+        <mat-icon title="Inventory">apps</mat-icon>
       </button>
     </div>
   </div>

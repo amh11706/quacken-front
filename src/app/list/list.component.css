@@ -23,6 +23,22 @@
   border-radius: 8px;
 }
 
+.settingsView span {
+  position: relative;
+  top: -6px;
+  margin-left: 8px;
+}
+
+#create {
+  margin: 0;
+  height: 60px;
+}
+
+#create app-setting {
+  width: 150px;
+  font-size: 18px;
+}
+
 app-setting {
   padding: 0 8px;
 }

@@ -6,6 +6,7 @@ import { ChatService } from './chat.service';
 import { FriendsService } from './friends/friends.service';
 import { SettingsService } from '../settings/settings.service';
 import { InventoryService } from '../inventory/inventory.service';
+import { WindowService } from '../window.service';
 
 @Component({
   selector: 'app-chat',
@@ -46,6 +47,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     public fs: FriendsService,
     public ss: SettingsService,
     public is: InventoryService,
+    public wd: WindowService,
   ) { }
 
   ngOnInit() {

@@ -1,0 +1,13 @@
+:host {
+  display: inline-block;
+  background: transparent;
+  width: 25px;
+  overflow: visible;
+  transition: .1s;
+}
+
+.card {
+  width: 73px;
+  height: 115px;
+  background: url('/assets/cards.png') -149px -462px;
+}
