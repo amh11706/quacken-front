@@ -8,6 +8,7 @@ export class QdragDirective implements OnInit, OnDestroy {
   @Input() bindToWindow: boolean;
   @Input() offsetX = 0;
   @Input() offsetY = 0;
+  @Input() transform = '';
 
   private rightGap: number;
   private startX = 0;
@@ -36,7 +37,7 @@ export class QdragDirective implements OnInit, OnDestroy {
   }
 
   private updateTransform() {
-    this.el.nativeElement.style.transform = `translate(${this.offsetX}px, ${this.offsetY}px)`;
+    this.el.nativeElement.style.transform = `translate(${this.offsetX}px, ${this.offsetY}px) ${this.transform}`;
   }
 
   private offsetToRightGap = () => {

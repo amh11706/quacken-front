@@ -107,10 +107,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.clutter = m.clutter;
     });
     this.subs.add(this.ws.subscribe('newBoat', (boat: BoatSync) => this.setBoats([boat])));
-    this.subs.add(this.ws.subscribe('delBoat', (id: number) => {
-      delete this._boats[id];
-      this.boats = Object.values(this._boats);
-    }));
+    this.subs.add(this.ws.subscribe('delBoat', this.deleteBoat));
     this.subs.add(this.ws.subscribe('s', s => {
       const boat = this._boats[s.t];
       if (boat) boat.moves = s.m;
@@ -123,14 +120,24 @@ export class BoatsComponent implements OnInit, OnDestroy {
       const boat = this._boats[b.t];
       if (boat) boat.bomb = b.m;
     }));
-    this.subs.add(this.ws.subscribe('turn', (t: Turn) => this.handleTurn(t)));
-    this.subs.add(this.ws.subscribe('sync', (s: Sync) => this.syncBoats(s)));
+    this.subs.add(this.ws.subscribe('turn', this.handleTurn));
+    this.subs.add(this.ws.subscribe('sync', this.syncBoats));
   }
 
   ngOnDestroy() {
     clearTimeout(this.animateTimeout);
     document.removeEventListener('visibilitychange', this.visibilityChange);
     if (this.subs) this.subs.unsubscribe();
+  }
+
+  private deleteBoat = (id: number) => {
+    if (this.turn) {
+      setTimeout(() => this.deleteBoat(id), 1000);
+      return;
+    }
+
+    delete this._boats[id];
+    this.boats = Object.values(this._boats);
   }
 
   trackBy(_i: number, c: Clutter): string {
@@ -158,7 +165,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleTurn(turn: Turn) {
+  private handleTurn = (turn: Turn) => {
     // first turn is only for starting the entry
     if (turn.turn === 1) {
       setTimeout(() => {
@@ -242,6 +249,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     this.clutter = sync.cSync;
     if (sync.sync) this.setBoats(sync.sync);
+
+
   }
 
   private setBoats(boats: BoatSync[]) {
@@ -258,10 +267,12 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.moveLock = sBoat.ml;
       boat.tokenPoints = sBoat.tp;
       boat.bomb = sBoat.b;
+      boat.oId = sBoat.oId;
       this._boats[sBoat.id] = boat;
 
       if (boat.isMe) {
         if (oldBoat) {
+          if (boat.oId !== oldBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
           if (sBoat.ty !== oldBoat.type || oldBoat.damage > sBoat.d) {
             this.map.dispatchEvent(new Event('dblclick'));
             oldBoat.type = sBoat.ty;

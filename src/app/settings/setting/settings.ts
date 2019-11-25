@@ -12,7 +12,7 @@ export const Settings = {
     id: 2, group: 'lobby', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1
   },
   speed: {
-    id: 3, group: 'lobby', type: 'slider', label: 'Animate Speed', min: 1, max: 5, step: 0.5
+    id: 3, group: 'lobby', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
   },
   duckLvl: {
     admin: true, id: 4, group: 'l/quacken', type: 'slider', label: 'Duck Level', min: 0, max: 11, step: 1

@@ -34,7 +34,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   map: number[][] = [];
-  settings: SettingMap = { mapScale: 50, speed: 1, kbControls: 1 };
+  settings: SettingMap = { mapScale: 50, speed: 10, kbControls: 1 };
   wheelDebounce: number;
   myBoat = new Boat('');
   private sub: Subscription;

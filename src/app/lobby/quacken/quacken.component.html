@@ -4,23 +4,23 @@
  	This allows them to be altered independent of each other -->
 	<div id="mapcenter">
 		<div id="mapscale" [style.transform]="'scale('+settings.mapScale/50+')'">
-			<div id="mapframe" [qdrag]="frame">
-				<div id="map">
-					<div [style.transform]="'translateX('+(12-myBoat.pos[0])*50+'px)'"
-						[style.transition]="1/settings.speed + moveTransitions[myBoat.moveTransition[0]]">
-						<div id="maprows"
-							[style.transform]="'translateY('+(25.5-myBoat.pos[1])*50+'px)'"
-							[style.transition]="1/settings.speed + moveTransitions[myBoat.moveTransition[1]]">
-							<div *ngFor="let row of map; let i = index">
-								<div *ngFor="let tile of row" class="tile"
-									[class.sztile]="i > 48">
-									<img *ngIf="tile" src="./assets/images/obstacle{{tile}}.png"
-										[class]="'img' + tile" [title]="titles[tile] || ''">
-								</div>
+			<div id="mapframe" [qdrag]="frame"
+				transform="rotateX(45deg) rotateZ(-45deg)">
+				<div [style.transform]="'translateX('+(12-myBoat.pos[0])*50+'px)'"
+					[style.transition]="10/settings.speed + moveTransitions[myBoat.moveTransition[0]]">
+					<div id="maprows"
+						[style.transform]="'translateY('+(25.5-myBoat.pos[1])*50+'px)'"
+						[style.transition]="10/settings.speed + moveTransitions[myBoat.moveTransition[1]]">
+						<div *ngFor="let row of map; let i = index">
+							<div *ngFor="let tile of row" class="tile"
+								[class.sztile]="i > 48">
+								<img *ngIf="tile" src="./assets/images/obstacle{{tile}}.png"
+									[class]="'img' + tile" [title]="titles[tile] || ''">
 							</div>
-
-							<app-boats [map]="frame" [speed]="settings.speed"></app-boats>
 						</div>
+
+						<app-boats [map]="frame" [speed]="settings.speed / 10">
+						</app-boats>
 					</div>
 				</div>
 			</div>
