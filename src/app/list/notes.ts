@@ -5,6 +5,15 @@ interface note {
 
 export const Notes: note[] = [
   {
+    title: 'Release 01 January 2020',
+    content: `
+    <ul>
+      <li>Fix lobby crash when a guest bombs the head.</li>
+      <li>Treasure division is now triggered before server reboots.</li>
+      <li>Chat input now greys out when it loses focus.</li>
+    </ul>`
+  },
+  {
     title: 'Release 22 August 2019',
     content: `
     <ul>

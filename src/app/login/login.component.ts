@@ -12,7 +12,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  @ViewChild('error') errComponent;
+  @ViewChild('error', { static: false }) errComponent;
 
   user = {
     email: '',
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   pending = false;
   errMessage = '';
 
-  private path = location.port === '4200' ? 'https://localhost/' : '/';
+  private path = location.port === '4200' ? 'https://dev.superquacken.com/' : '/';
 
   constructor(
     private dialog: MatDialog,

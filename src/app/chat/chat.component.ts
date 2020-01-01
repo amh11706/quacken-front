@@ -14,8 +14,8 @@ import { WindowService } from '../window.service';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  @ViewChild('inputEl') input: ElementRef;
-  @ViewChild('output') output: ElementRef;
+  @ViewChild('inputEl', { static: true }) input: ElementRef;
+  @ViewChild('output', { static: true }) output: ElementRef;
   colors = [
     '#873600', // info message
     '#873600', // HTML info message

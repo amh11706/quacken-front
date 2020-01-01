@@ -20,7 +20,7 @@ const ownerSettings = [
   styleUrls: ['./spades.component.css']
 })
 export class SpadesComponent implements OnInit, OnDestroy {
-  @ViewChild(TimerComponent) timer;
+  @ViewChild(TimerComponent, { static: false }) timer;
   private _lobby: Lobby;
   @Input() set lobby(l: Lobby) {
     if (!l) return;

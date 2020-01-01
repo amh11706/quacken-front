@@ -12,7 +12,7 @@ import { PrivacyComponent } from '../privacy/privacy.component';
   styleUrls: ['./create.component.css']
 })
 export class CreateComponent implements OnInit {
-  @ViewChild('error') errComponent;
+  @ViewChild('error', { static: false }) errComponent;
   err: string;
 
   user = {
@@ -22,7 +22,7 @@ export class CreateComponent implements OnInit {
   }
   pending = false;
 
-  private path = location.port === '4200' ? 'https://localhost/' : '/';
+  private path = location.port === '4200' ? 'https://dev.superquacken.com/' : '/';
 
   constructor(
     private dialog: MatDialog,
@@ -41,17 +41,17 @@ export class CreateComponent implements OnInit {
   create() {
     this.pending = true;
     this.http.post<any>(this.path + 'create', JSON.stringify(this.user))
-    .subscribe(
-      resp => {
-        this.pending = false;
-        localStorage.setItem('token', resp);
-        this.router.navigate(['list']);
-      },
-      err => {
-        this.pending = false;
-        this.err = err.error;
-        this.dialog.open(this.errComponent);
-      },
+      .subscribe(
+        resp => {
+          this.pending = false;
+          localStorage.setItem('token', resp);
+          this.router.navigate(['list']);
+        },
+        err => {
+          this.pending = false;
+          this.err = err.error;
+          this.dialog.open(this.errComponent);
+        },
     );
   }
 

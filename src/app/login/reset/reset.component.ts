@@ -10,8 +10,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./reset.component.css']
 })
 export class ResetComponent implements OnInit, OnDestroy {
-  @ViewChild('error') errComponent;
-  private path = location.port === '4200' ? 'https://localhost/' : '/';
+  @ViewChild('error', { static: false }) errComponent;
+  private path = location.port === '4200' ? 'https://dev.superquacken.com/' : '/';
   private token = '';
   private sub: Subscription;
 

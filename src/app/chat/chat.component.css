@@ -46,8 +46,13 @@
 #textinput {
   width: 100%;
   padding: 3px 5px;
-  background-color: #eee;
+  background-color: #aaa;
   border: 1px solid black;
+  transition: .3s;
+}
+
+#textinput:focus {
+  background-color: #eee;
 }
 
 #textbox p {
