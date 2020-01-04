@@ -48,6 +48,7 @@ export interface BoatSync extends BoatStatus {
   tp: number,
   ty: number,
   ml: number,
+  ms: number,
 }
 
 @Component({
@@ -58,6 +59,9 @@ export interface BoatSync extends BoatStatus {
 export class BoatsComponent implements OnInit, OnDestroy {
   @Input() speed: number;
   @Input() map: HTMLElement;
+  @Input() getX = (p: { x: number, y: number }): number => (p.x) * 50;
+  @Input() getY = (p: { x: number, y: number }): number => (p.y) * 50;
+  getObj = (o: Clutter): string => `translate(${this.getX(o)}px,${this.getY(o)}px)`
   weapons = weapons;
   clutterTypes = [
     'powderkeg',
@@ -67,14 +71,14 @@ export class BoatsComponent implements OnInit, OnDestroy {
     'head',
   ];
   clutter: Clutter[] = [];
-  moveTransitions = [
+  @Input() moveTransitions = [
     '0s linear',
     's linear',
     's ease-in',
     's ease-out',
     '.1s linear'  // crunch
   ];
-  rotateTransitions = [
+  @Input() rotateTransitions = [
     '0s linear',
     '.4s ease .1s', // normal rotate
     '3s linear', // sink rotate
@@ -216,18 +220,18 @@ export class BoatsComponent implements OnInit, OnDestroy {
         .draw();
 
       if (u.s) {
-        boat.face += 90 * u.s;
+        boat.face += boat.spinDeg * u.s;
         if (u.s > -2) {
           boat.rotateTransition = 4
           setTimeout(() => {
             boat.rotateTransition = 1;
-            if (u.tm) boat.face += u.tm * 90 - 180;
+            if (u.tm) boat.face += u.tm * boat.spinDeg - boat.spinDeg * 2;
           }, 300);
         } else {
           boat.rotateTransition = 3;
-          if (u.tm) boat.face += u.tm * 90 - 180;
+          if (u.tm) boat.face += u.tm * boat.spinDeg - boat.spinDeg * 2;
         }
-      } else if (u.tm) boat.face += u.tm * 90 - 180;
+      } else if (u.tm) boat.face += u.tm * boat.spinDeg - boat.spinDeg * 2;
     }
 
     if (this.step === 5) this.resetBoats()
@@ -263,7 +267,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
         .setTreasure(sBoat.t)
         .setDamage(sBoat.d)
         .draw();
-      boat.face = sBoat.f * 90;
+      boat.spinDeg = 360 / sBoat.ms;
+      boat.face = sBoat.f * boat.spinDeg;
       boat.moveLock = sBoat.ml;
       boat.tokenPoints = sBoat.tp;
       boat.bomb = sBoat.b;

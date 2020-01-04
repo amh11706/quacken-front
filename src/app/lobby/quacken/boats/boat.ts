@@ -3,7 +3,7 @@ export const BoatTypes = [3, 12, 6, 6, 6, 3, 12, 6, 6, 6, 24, 36, 48, 48];
 export class Boat {
   treasure = 0;
   damage = 0;
-  pos = [12, 49];
+  pos = { x: 12, y: 49 };
   moves = [0, 0, 0, 0];
   oId = 0;
 
@@ -19,6 +19,7 @@ export class Boat {
   offsetX = 0;
   offsetY = 0;
   moveLock = 0;
+  spinDeg = 90;
 
   constructor(
     public name: string,
@@ -33,8 +34,8 @@ export class Boat {
   }
 
   setPos(x: number, y: number, checkSZ: boolean = true) {
-    if (checkSZ && this.checkSZ([x, y]) && !this.checkSZ(this.pos)) this.enterSZ();
-    this.pos = [x, y];
+    if (checkSZ && this.checkSZ({ x, y }) && !this.checkSZ(this.pos)) this.enterSZ();
+    this.pos = { x, y };
     return this;
   }
 
@@ -76,8 +77,8 @@ export class Boat {
 
   private crunch(direction: number) {
     if (direction > 3) return;
-    const decodeX = [0, 0.1, 0, -0.1];
-    const decodeY = [-0.1, 0, 0.1, 0];
+    const decodeX = [0, 5, 0, -5];
+    const decodeY = [-5, 0, 5, 0];
     this.moveTransition = [4, 4];
     this.draw(decodeX[direction], decodeY[direction]);
     setTimeout(() => this.draw(), 110);
@@ -89,8 +90,8 @@ export class Boat {
     this.imageOpacity = 0;
   }
 
-  private checkSZ(pos: number[]) {
-    return pos[1] > 48 && pos[1] < 52 && pos[0] >= 0 && pos[0] < 25;
+  private checkSZ(pos: { x: number, y: number }) {
+    return pos.y > 48 && pos.y < 52 && pos.x >= 0 && pos.x < 25;
   }
 
   private enterSZ() {

@@ -1,5 +1,6 @@
 <ng-container [ngSwitch]="lobby?.type">
   <app-quacken *ngSwitchCase="'Quacken'" [lobby]="lobby"></app-quacken>
+  <app-hexaquack *ngSwitchCase="'HexaQuack'" [lobby]="lobby"></app-hexaquack>
   <app-spades *ngSwitchCase="'Spades'" [lobby]="lobby"></app-spades>
 
   <div *ngSwitchDefault id="background">

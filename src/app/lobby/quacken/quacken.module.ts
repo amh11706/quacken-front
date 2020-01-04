@@ -41,6 +41,11 @@ import { QuackenComponent } from './quacken.component';
     ChatModule,
     SettingsModule,
   ],
-  exports: [QuackenComponent]
+  exports: [
+    QuackenComponent,
+    BoatsComponent,
+    EntryStatusComponent,
+    HudComponent,
+  ]
 })
 export class QuackenModule { }

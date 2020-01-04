@@ -1,0 +1,71 @@
+#background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1F618D;
+  overflow: hidden;
+}
+
+app-boats {
+  position: absolute;
+  top: 0;
+}
+
+#mapcenter {
+  position: absolute;
+  transform: translate(50vw, 50vh) translate(-50%, -50%);
+}
+
+#maprows {
+  position: relative;
+  white-space: nowrap;
+}
+
+.maprow.even {
+  position: absolute;
+  left: 45px;
+}
+
+.tile {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  margin: 0 -7.5px;
+  height: 52px;
+}
+
+.tile.even {
+  top: -26px;
+}
+
+.tile svg {
+  overflow: visible;
+  height: 100%;
+  width: 100%;
+}
+
+polygon {
+  fill: transparent;
+}
+
+.sztile polygon {
+  fill: #064886;
+}
+
+.tile img {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+}
+
+.img1, .img2, .img3, .img50 {
+  transform: rotate(60deg);
+}
+
+.label {
+  color: #fff;
+}

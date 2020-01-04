@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { LobbyComponent } from './lobby.component';
 import { QuackenModule } from './quacken/quacken.module';
 import { SpadesModule } from './spades/spades.module';
+import { HexaquackModule } from './hexaquack/hexaquack.module';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { SpadesModule } from './spades/spades.module';
     CommonModule,
     QuackenModule,
     SpadesModule,
+    HexaquackModule,
   ],
   exports: []
 })

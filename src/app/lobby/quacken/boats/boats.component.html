@@ -1,6 +1,5 @@
 <div *ngFor="let obj of clutter; trackBy: trackBy" class="clutter"
-  [class.front]="obj.p && obj.t === 0"
-  [style.transform]="'translate('+obj.x*50+'px,'+obj.y*50+'px)'">
+  [class.front]="obj.p && obj.t === 0" [style.transform]="getObj(obj)">
 
   <div class="scale" [style.transform]="'scale('+50/50+')'">
     <img *ngIf="myBoat.type < 10 || obj.t > 0" [title]="clutterTypes[obj.t]"
@@ -17,12 +16,11 @@
 
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"
   [style.opacity]="boat.opacity"
-  [style.transform]="'translateX(' + (boat.pos[0]+boat.offsetX)*50+ 'px)'"
+  [style.transform]="'translateX(' + getX(boat.pos) + 'px)'"
   [style.transition]="(boat.moveTransition[0] < 4 && boat.moveTransition[0] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[0]] + (boat.enteringSZ ? szFade : '')">
 
   <!-- split boat div to allow different transitions on each axis -->
-  <div class="boat"
-    [style.transform]="'translateY(' + (boat.pos[1]+boat.offsetY)*50 + 'px)'"
+  <div class="boat" [style.transform]="'translateY(' + getY(boat.pos) + 'px)'"
     [style.transition]="(boat.moveTransition[1] < 4 && boat.moveTransition[1] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[1]]">
     <div class="boatheader" *ngIf="boat.name || boat.isMe">
       <span class="boattitle" [title]="boat.name + titles[boat.treasure]"
