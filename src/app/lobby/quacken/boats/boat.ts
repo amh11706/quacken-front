@@ -39,6 +39,11 @@ export class Boat {
     return this;
   }
 
+  rotateByMove(m: number) {
+    if (m) this.face += (m - 2) * this.spinDeg;
+    return this;
+  }
+
   setTransition(transition: number, move: number) {
     if (move === 2) this.moveTransition = [1, 1];
     else if (transition % 2) this.moveTransition = [2, 3];
@@ -77,8 +82,8 @@ export class Boat {
 
   private crunch(direction: number) {
     if (direction > 3) return;
-    const decodeX = [0, 5, 0, -5];
-    const decodeY = [-5, 0, 5, 0];
+    const decodeX = this.spinDeg === 90 ? [0, 5, 0, -5] : [0, 4, 4, 0, -4, -4];
+    const decodeY = this.spinDeg === 90 ? [-5, 0, 5, 0] : [-5, -2, 2, 5, 2, -2];
     this.moveTransition = [4, 4];
     this.draw(decodeX[direction], decodeY[direction]);
     setTimeout(() => this.draw(), 110);

@@ -227,16 +227,12 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (u.s) {
         boat.face += boat.spinDeg * u.s;
         if (u.s > -2) {
-          boat.rotateTransition = 4
-          setTimeout(() => {
-            boat.rotateTransition = 1;
-            if (u.tm) boat.face += u.tm * boat.spinDeg - boat.spinDeg * 2;
-          }, 300);
+          boat.rotateTransition = 4;
+          setTimeout(() => boat.rotateByMove(u.tm).rotateTransition = 1, 300);
         } else {
-          boat.rotateTransition = 3;
-          if (u.tm) boat.face += u.tm * boat.spinDeg - boat.spinDeg * 2;
+          boat.rotateByMove(u.tm).rotateTransition = 3;
         }
-      } else if (u.tm) boat.face += u.tm * boat.spinDeg - boat.spinDeg * 2;
+      } boat.rotateByMove(u.tm);
     }
 
     if (this.step === 5) this.resetBoats()
