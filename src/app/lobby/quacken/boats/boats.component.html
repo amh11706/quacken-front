@@ -16,11 +16,12 @@
 
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"
   [style.opacity]="boat.opacity"
-  [style.transform]="'translateX(' + getX(boat.pos) + 'px)'"
+  [style.transform]="'translateX(' + (getX(boat.pos)+boat.offsetX) + 'px)'"
   [style.transition]="(boat.moveTransition[0] < 4 && boat.moveTransition[0] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[0]] + (boat.enteringSZ ? szFade : '')">
 
   <!-- split boat div to allow different transitions on each axis -->
-  <div class="boat" [style.transform]="'translateY(' + getY(boat.pos) + 'px)'"
+  <div class="boat"
+    [style.transform]="'translateY(' + (getY(boat.pos)+boat.offsetY) + 'px)'"
     [style.transition]="(boat.moveTransition[1] < 4 && boat.moveTransition[1] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[1]]">
     <div class="boatheader" *ngIf="boat.name || boat.isMe">
       <span class="boattitle" [title]="boat.name + titles[boat.treasure]"
@@ -45,6 +46,6 @@
     <img class="boatimage" src="./assets/boats/boat{{boat.type}}.png"
       [style.opacity]="boat.imageOpacity"
       [style.transform]="'rotate(' + boat.face + 'deg)'"
-      [style.transition]="boat.rotateTransition === 1 ? 0.9/speed + 's ease ' + 0.1/speed + 's': rotateTransitions[boat.rotateTransition]">
+      [style.transition]="rotateTransition(boat)">
   </div>
 </div>

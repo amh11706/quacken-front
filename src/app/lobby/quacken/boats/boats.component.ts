@@ -78,13 +78,18 @@ export class BoatsComponent implements OnInit, OnDestroy {
     's ease-out',
     '.1s linear'  // crunch
   ];
-  @Input() rotateTransitions = [
-    '0s linear',
-    '.4s ease .1s', // normal rotate
-    '3s linear', // sink rotate
-    '1s ease', // duck poo
-    '.2s ease' // defenduck spin
-  ];
+  @Input() rotateTransition = (b: Boat): string => {
+    if (b.rotateTransition === 1) {
+      return 0.9 / this.speed + 's ease ' + 0.1 / this.speed + 's'
+    }
+    return [
+      '0s linear',
+      '', // normal rotate handled above
+      '3s linear', // sink rotate
+      '1s ease', // duck poo
+      '.2s ease' // defenduck spin
+    ][b.rotateTransition];
+  }
   szFade = ', opacity .8s linear .7s';
   moveNames = ['', 'left', 'forward', 'right', 'obscured'];
   titles = ['', ', Cuttle Cake', ', Taco Locker', ', Pea Pod', ', Fried Egg'];
