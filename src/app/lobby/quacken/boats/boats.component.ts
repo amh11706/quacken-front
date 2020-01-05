@@ -232,7 +232,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         } else {
           boat.rotateByMove(u.tm).rotateTransition = 3;
         }
-      } boat.rotateByMove(u.tm);
+      } else boat.rotateByMove(u.tm);
     }
 
     if (this.step === 5) this.resetBoats()
