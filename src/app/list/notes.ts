@@ -5,6 +5,14 @@ interface note {
 
 export const Notes: note[] = [
   {
+    title: 'Release 05 January 2020',
+    content: `
+    <ul>
+      <li>Added HexaQuack lobby type. Map editor updates for this new map type coming soon!</li>
+      <li>Fixed rare lobby crash when a player is kicked.</li>
+    </ul>`
+  },
+  {
     title: 'Release 01 January 2020',
     content: `
     <ul>

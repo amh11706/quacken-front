@@ -17,12 +17,12 @@
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"
   [style.opacity]="boat.opacity"
   [style.transform]="'translateX(' + (getX(boat.pos)+boat.offsetX) + 'px)'"
-  [style.transition]="(boat.moveTransition[0] < 4 && boat.moveTransition[0] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[0]] + (boat.enteringSZ ? szFade : '')">
+  [style.transition]="moveTransition(boat.moveTransition[0]) + (boat.enteringSZ ? szFade : '')">
 
   <!-- split boat div to allow different transitions on each axis -->
   <div class="boat"
     [style.transform]="'translateY(' + (getY(boat.pos)+boat.offsetY) + 'px)'"
-    [style.transition]="(boat.moveTransition[1] < 4 && boat.moveTransition[1] > 0 ? 1/speed : '') + moveTransitions[boat.moveTransition[1]]">
+    [style.transition]="moveTransition(boat.moveTransition[1])">
     <div class="boatheader" *ngIf="boat.name || boat.isMe">
       <span class="boattitle" [title]="boat.name + titles[boat.treasure]"
         [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">

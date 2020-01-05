@@ -24,13 +24,17 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.setMapB64(l.map);
     setTimeout(() => this.ws.dispatchMessage({ cmd: '_boats', data: l }));
   }
-  moveTransitions = [
-    '',
-    's linear',
-    's ease-in',
-    's ease-out',
-    's linear'
-  ];
+  moveTransition = (transition: number): string => {
+    switch (transition) {
+      case 0: return '0s linear';
+      case 1: return 10 / this.settings.speed + 's linear';
+      case 1: return 10 / this.settings.speed + 's ease-in';
+      case 1: return 10 / this.settings.speed + 's ease-out';
+      case 1: return 10 / this.settings.speed + 's linear';
+      case 4: return '.1s linear';
+      default: return '';
+    }
+  }
 
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   map: number[][] = [];

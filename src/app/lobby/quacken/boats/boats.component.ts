@@ -71,13 +71,17 @@ export class BoatsComponent implements OnInit, OnDestroy {
     'head',
   ];
   clutter: Clutter[] = [];
-  @Input() moveTransitions = [
-    '0s linear',
-    's linear',
-    's ease-in',
-    's ease-out',
-    '.1s linear'  // crunch
-  ];
+  @Input() moveTransition = (transition: number): string => {
+    switch (transition) {
+      case 0: return '0s linear';
+      case 1: return 10 / this.speed + 's linear';
+      case 1: return 10 / this.speed + 's ease-in';
+      case 1: return 10 / this.speed + 's ease-out';
+      case 1: return 10 / this.speed + 's linear';
+      case 4: return '.1s linear';
+      default: return '';
+    }
+  }
   @Input() rotateTransition = (b: Boat): string => {
     if (b.rotateTransition === 1) {
       return 0.9 / this.speed + 's ease ' + 0.1 / this.speed + 's'

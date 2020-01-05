@@ -8,16 +8,18 @@ import { Boat } from '../quacken/boats/boat';
   styleUrls: ['./hexaquack.component.css']
 })
 export class HexaquackComponent extends QuackenComponent {
-  moveTransitions = [
-    '0s linear',
-    's linear',
-    's linear',
-    's linear',
-    '.1s linear'  // crunch
-  ];
+  moveTransition = (transition: number): string => {
+    switch (transition) {
+      case 0: return '0s linear';
+      case 4: return '.1s linear';
+      default:
+        const time = 1 / this.settings.speed;
+        return `${time * 10}s linear ${time * 3}s`
+    }
+  }
   rotateTransition = (b: Boat): string => {
     if (b.rotateTransition === 1) {
-      return 10 / this.settings.speed + 's ease-in';
+      return 6 / this.settings.speed + 's linear';
     }
     return [
       '0s linear',

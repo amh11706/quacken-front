@@ -72,7 +72,7 @@
             <td>{{lobby.players}} / {{lobby.group.maxPlayers}}</td>
             <td class="settingsView">
               <ng-container
-                *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView}[lobby.type]; context: {settings: lobby.group}">
+                *ngTemplateOutlet="{HexaQuack: quackenView, Quacken: quackenView, Spades: spadesView}[lobby.type]; context: {settings: lobby.group}">
               </ng-container>
             </td>
           </tr>
@@ -86,7 +86,7 @@
       </h2>
       <div id="lsettings">
         <ng-container
-          *ngTemplateOutlet="[quackenEdit, spadesEdit][settings.createType]">
+          *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit][settings.createType]">
         </ng-container>
       </div>
 

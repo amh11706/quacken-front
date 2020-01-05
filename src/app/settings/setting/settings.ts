@@ -48,7 +48,7 @@ export const Settings = {
   },
   createType: {
     id: 14, group: 'l/create', type: 'option', options: [
-      'Quacken', 'Spades'
+      'Quacken', 'HexaQuack', 'Spades'
     ]
   },
   turnTime: {

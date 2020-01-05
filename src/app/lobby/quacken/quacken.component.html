@@ -7,10 +7,10 @@
 			<div id="mapframe" [qdrag]="frame"
 				transform="rotateX(45deg) rotateZ(-45deg)">
 				<div [style.transform]="'translateX('+(12-myBoat.pos.x)*50+'px)'"
-					[style.transition]="10/settings.speed + moveTransitions[myBoat.moveTransition[0]]">
+					[style.transition]="moveTransition(myBoat.moveTransition[0])">
 					<div id="maprows"
 						[style.transform]="'translateY('+(25.5-myBoat.pos.y)*50+'px)'"
-						[style.transition]="10/settings.speed + moveTransitions[myBoat.moveTransition[1]]">
+						[style.transition]="moveTransition(myBoat.moveTransition[1])">
 						<div *ngFor="let row of map; let i = index">
 							<div *ngFor="let tile of row" class="tile"
 								[class.sztile]="i > 48">
