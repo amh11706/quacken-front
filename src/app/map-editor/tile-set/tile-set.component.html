@@ -14,7 +14,8 @@
       <div *ngFor="let tile of map.tiles[activeType]" class="tile"
         [class.unsaved]="tile.unsaved"
         [class.selected]="tile === map.selectedTile" (click)="select(tile)">
-        <div (dblclick)="editTile()" [title]="tile.description">{{tile.name}}
+        <div (dblclick)="editTile()" [title]="tile.description || ''">
+          {{tile.name}}
         </div>
         <span *ngIf="tile.weight === 0" class="delete"
           (click)="deleteTile(tile)">

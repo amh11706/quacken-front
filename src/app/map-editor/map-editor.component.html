@@ -1,79 +1,49 @@
-<div (mousemove)="mouseMove($event)" (mousewheel)="scroll($event)"
-  (mouseleave)="painting = false">
   <div #background class="noselect" id="background"
     oncontextmenu="event.preventDefault()">
-    <!-- mapframe receives the offset transform, map receives the rotate transform.
-   	This allows them to be altered independent of each other -->
     <div [qdrag]="background" id="mapframe">
-      <div
-        *ngIf="map.selectedTile.data && map.selectedTile.data[0] && map.selectedTile.data[0].length"
-        id="map" [style.width]="map.selectedTile.data[0].length * 50 + 2 + 'px'"
-        (mouseup)="painting = false">
-        <div *ngFor="let row of map.selectedTile.data; let y = index">
-          <div *ngFor="let tile of row; let x = index" class="tile"
-            [class.sztile]="map.selectedTile.group === 'cgmaps' ? y < 3 || y > 32 : y > 48"
-            (mousedown)="clickTile($event, x, y)"
-            (mouseup)="mouseUp($event, x, y)"
-            (mouseover)="painting ? clickTile($event, x, y) : null">
-            <img *ngIf="tile" src="./assets/images/obstacle{{tile}}.png"
-              draggable="false" [class]="'img' + tile"
-              [title]="tile < 5 ? titles[tile + 1] : ''">
-          </div>
-        </div>
-      </div>
-
+      <app-map *ngIf="!map.structures" [map]="map" [undo]="undo"
+        [setTile]="setTile">
+      </app-map>
       <app-structure-map *ngIf="map.structures" [map]="map"></app-structure-map>
     </div>
+  </div>
 
-    <div id="selected" [hidden]="map.settingsOpen || map.structureSet">
-      <div>
-        <img src="./assets/images/obstacle{{selected}}.png"
-          [class]="'img' + selected">
-      </div>
+  <app-obstacles *ngIf="!map.structures" [map]="map" [background]="background">
+  </app-obstacles>
+  <app-tile-set *ngIf="map.tiles" [map]="map">
+  </app-tile-set>
+  <app-structure-set *ngIf="map.structures" [map]="map"></app-structure-set>
+  <app-settings *ngIf="map.settingsOpen" [map]="map"></app-settings>
+
+  <div class="container noselect" id="hud">
+    <div id="chat">
+      <app-chat></app-chat>
+    </div>
+    <div id="buttons">
+      <ng-container *ngIf="map.selectedTile.data">
+        <button mat-icon-button
+          [disabled]="map.settingsOpen || !map.selectedTile.undos.length"
+          (click)="undo(map.selectedTile.undos, map.selectedTile.redos)"
+          title="Undo - ctrl + z">
+          <mat-icon>undo</mat-icon>
+        </button>
+        <button mat-icon-button
+          [disabled]="map.settingsOpen || !map.selectedTile.redos.length"
+          (click)="undo(map.selectedTile.redos, map.selectedTile.undos)"
+          title="Redo - ctrl + y">
+          <mat-icon>redo</mat-icon>
+        </button>
+      </ng-container>
+      <button mat-icon-button [disabled]="map.settingsOpen" (click)="save()"
+        title="Save - ctrl + s">
+        <mat-icon>save</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openGuide()" title="Open Guide">
+        <mat-icon>help_outline</mat-icon>
+      </button>
+      <button mat-raised-button [disabled]="map.settingsOpen"
+        id="editorSettings" (click)="openSettings()"
+        title="Settings - ctrl + e">Editor
+        Settings</button>
     </div>
   </div>
-
-  <div [hidden]="map.structureSet" [qdrag]="handle" bindToWindow
-    class="container noselect" id="tiles">
-    <div #handle id="handle"></div>
-    <img *ngFor="let obstacle of obstacles; let i = index" [title]="titles[i]"
-      draggable="false" src="./assets/images/obstacle{{obstacle}}.png"
-      (click)="selected = obstacle">
-    <ng-container *ngIf="map.selectedTile.group === 'cgmaps'">
-      <img *ngFor="let flag of [21, 22, 23]" title="Flag" draggable="false"
-        src="./assets/images/obstacle{{flag}}.png" (click)="selected = flag">
-    </ng-container>
-  </div>
-
-</div>
-
-<app-tile-set *ngIf="map.tiles" [map]="map" [changeTile]="changeTile">
-</app-tile-set>
-<app-structure-set *ngIf="map.structures" [map]="map"></app-structure-set>
-<app-settings *ngIf="map.settingsOpen" [map]="map"></app-settings>
-
-<div class="container noselect" id="hud">
-  <div id="chat">
-    <app-chat></app-chat>
-  </div>
-  <div id="buttons">
-    <button mat-icon-button [disabled]="map.settingsOpen || !undos.length"
-      (click)="undo(undos, redos)" title="Undo - ctrl + z">
-      <mat-icon>undo</mat-icon>
-    </button>
-    <button mat-icon-button [disabled]="map.settingsOpen || !redos.length"
-      (click)="undo(redos, undos)" title="Redo - ctrl + y">
-      <mat-icon>redo</mat-icon>
-    </button>
-    <button mat-icon-button [disabled]="map.settingsOpen" (click)="save()"
-      title="Save - ctrl + s">
-      <mat-icon>save</mat-icon>
-    </button>
-    <button mat-icon-button (click)="openGuide()" title="Open Guide">
-      <mat-icon>help_outline</mat-icon>
-    </button>
-    <button mat-raised-button [disabled]="map.settingsOpen" id="editorSettings"
-      (click)="openSettings()" title="Settings - ctrl + e">Editor
-      Settings</button>
-  </div>
-</div>

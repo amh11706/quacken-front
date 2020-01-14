@@ -7,10 +7,10 @@
         [class.unsaved]="structure.unsaved"
         [class.selected]="structure === map.selectedTile"
         (click)="select(structure)">
-        <div (dblclick)="editStructure()" [title]="structure.description">
+        <div (dblclick)="editTile()" [title]="structure.description">
           {{structure.name}}</div>
         <span *ngIf="structure.weight === 0" class="delete"
-          (click)="deleteStructure(structure)">
+          (click)="deleteTile(structure)">
           X
         </span>
 
@@ -27,7 +27,7 @@
     <p *ngIf="!map.structures.length">This structure set is empty. Create a
       structure to get started!</p>
   </div>
-  <button mat-raised-button (click)="newStructure()">New Structure</button>
+  <button mat-raised-button (click)="newTile()">New Structure</button>
 </div>
 
 <div [qdrag]="handle3" bindToWindow id="structure" class="container"

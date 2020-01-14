@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from 'src/app/ws.service';
+import { MapEditor, DBTile } from '../map-editor.component';
 
 @Component({
   selector: 'app-settings',
@@ -9,7 +10,18 @@ import { WsService } from 'src/app/ws.service';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  @Input() map: any;
+  @Input() map: MapEditor = {
+    selected: 50,
+    selectedTile: {
+      undos: [],
+      redos: [],
+      id: null,
+      name: '',
+      group: 'tile_sets',
+      data: [],
+    },
+    settingsOpen: true,
+  };
   groups = {
     maps: 'Map',
     tile_sets: 'Tile Set',
@@ -24,22 +36,27 @@ export class SettingsComponent implements OnInit, OnDestroy {
     'Left Cuttle', 'Right Cuttle',
     'Middle Obstacle', 'Right Obstacle'
   ];
-  selected = 'new';
-  options = [];
+  selected: string | number = 'new';
+  options: DBTile[] = [];
   private sub: Subscription;
-  private mapData: any = {};
+  private mapData: { [key: string]: DBTile[] } = {};
 
   error = '';
   success = '';
   pending = false;
+  shown: DBTile;
 
   constructor(private socket: WsService) { }
 
   ngOnInit() {
-    if (['tiles', 'structures'].indexOf(this.map.selectedTile.group) === -1) this.socket.send('getMaps');
     this.handleSubs();
-    this.selected = this.map.selectedTile.id || 'new';
-    if (this.map.selectedTile.unsaved) this.error = 'Unsaved changes! They will be discarded if you select a different map without saving.';
+    this.shown = { ...this.map.selectedTile };
+    if (!this.map.tileSettings) {
+      this.shown = this.map.tileSet || this.map.structureSet || this.shown;
+      this.socket.send('getMaps');
+    }
+    this.selected = typeof this.shown.id === 'number' ? this.shown.id : 'new';
+    if (this.shown.unsaved) this.error = 'Unsaved changes! They will be discarded if you select a different map without saving.';
   }
 
   ngOnDestroy() {
@@ -57,74 +74,94 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   private gotList(list: any) {
     this.mapData = list;
-    const tile = this.map.selectedTile;
+    const tile = this.shown;
     this.options = list[tile.group];
   }
 
   private handleTileSet(tileSet: any) {
+    delete this.map.structures;
+    delete this.map.structureSet;
     const tiles = [];
     this.map.tiles = tiles;
-    this.map.tileSet = this.map.selectedTile;
+    this.map.tileSet = this.shown;
     this.map.tileSet.data = [[]];
     this.map.settingsOpen = false;
 
-    for (let tile of tileSet) {
-      tile.data = JSON.parse(tile.data);
+    for (const tile of tileSet) {
       if (!tile.type) tile.type = 0;
       if (!tiles[tile.type]) tiles[tile.type] = [tile];
       else tiles[tile.type].push(tile);
     }
-    this.map.selectedTile = tileSet[0] || {};
-  }
-
-  private handleStructureSet(structureSet: any) {
-    this.map.structures = structureSet;
-    this.map.structureSet = this.map.selectedTile;
-    this.map.structureSet.data = [[]];
-    this.map.selectedTile = structureSet[0] || {};
-    this.map.settingsOpen = false;
-
-    for (let structure of structureSet) {
-      structure.data = JSON.parse(structure.data);
-    }
-  }
-
-  private gotMap(map: any) {
+    this.map.selectedTile = tileSet[0] || {
+      id: null, name: '', undos: [], redos: [],
+    };
     const tile = this.map.selectedTile;
-    if (['tiles', 'structures'].indexOf(tile.group) === -1) {
-      this.map.tiles = null;
-      this.map.tileSet = null;
-    }
-    if (map.data) tile.data = JSON.parse(map.data);
+    tile.undos = tile.undos || [];
+    tile.redos = tile.redos || [];
+  }
+
+  private handleStructureSet(structureSet: DBTile[]) {
+    delete this.map.tiles;
+    delete this.map.tileSet;
+    this.map.structures = structureSet;
+    this.map.structureSet = this.shown;
+    this.map.structureSet.data = [[]];
+    this.map.selectedTile = structureSet[0] || {
+      id: null, name: '', undos: [], redos: [],
+    };
     this.map.settingsOpen = false;
   }
 
+  // Fetched data
+  private gotMap(map: any) {
+    delete this.map.tiles;
+    delete this.map.tileSet;
+    delete this.map.structures;
+    delete this.map.structureSet;
+    const tile = this.shown;
+    tile.data = map.data || tile.data;
+    tile.undos = map.undos || [];
+    tile.redos = map.redos || [];
+    this.map.selectedTile = tile;
+    this.map.settingsOpen = false;
+  }
+
+  // Create or save
   private handleMap(msg: any) {
     this.pending = false;
-    this.error = msg.error;
+    this.error = msg && msg.error;
     if (this.error) return;
+    this.map.tileSettings = false;
 
-    const tile = this.map.selectedTile;
-    if (['tiles', 'structures'].indexOf(tile.group) !== -1) {
-      if (msg.id) {
-        if (tile.group === 'tiles') {
-          const tiles = this.map.tiles;
-          if (!msg.type) msg.type = 0;
-          if (!tiles[msg.type]) tiles[msg.type] = [tile];
-          else tiles[msg.type].push(tile);
-        } else {
-          if (!this.map.structures) this.map.structures = [tile];
-          else this.map.structures.push(tile);
-        }
-        tile.id = msg.id;
-      }
+    const tile = this.shown;
+    if (msg) Object.assign(tile, msg);
+    switch (tile.group) {
+      case 'tiles':
+        const groups = this.map.tiles;
+        const type = (tile.type) || 0;
+        const tiles = groups[type] || [];
+        groups[type] = tiles;
 
-      this.map.settingsOpen = false;
-      return;
+        const oldTile = tiles.find(el => el.id === tile.id);
+        if (oldTile) Object.assign(oldTile, tile);
+        else tiles.push(tile);
+        this.map.selectedTile = oldTile || tile;
+        this.map.settingsOpen = false;
+        return;
+      case 'structures':
+        const structures = this.map.structures || [];
+        this.map.structures = structures;
+
+        const oldStructure = structures.find(el => el.id === tile.id);
+        if (oldStructure) Object.assign(oldStructure, tile);
+        else this.map.structures.push(tile as any);
+        this.map.selectedTile = oldStructure || tile;
+        this.map.settingsOpen = false;
+        return;
+      default:
     }
 
     if (msg) {
-      console.log(msg)
       this.mapData[msg.group].push(msg);
       tile.id = msg.id;
       this.selected = tile.id;
@@ -132,28 +169,26 @@ export class SettingsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const selected = this.options.find(option => option.id === +this.selected) || {};
-    selected.name = tile.name;
-    selected.description = tile.description;
-    selected.id = tile.id;
-    selected.released = tile.released;
+    const selected = this.options.find(option => option.id === +this.selected) || {
+      id: null, name: '', undos: [], redos: [],
+    };
+    Object.assign(selected, tile);
   }
 
   select() {
     this.error = '';
     this.success = '';
-    const tile = this.map.selectedTile;
+    const tile = this.shown;
     tile.unsaved = false;
 
-    const selected = this.options.find(option => option.id === +this.selected) || {};
-    tile.name = selected.name;
-    tile.description = selected.description;
-    tile.id = selected.id;
-    tile.released = selected.released;
+    const selected = this.options.find(option => option.id === +this.selected) || {
+      id: null, name: '', undos: [], redos: [],
+    };
+    Object.assign(tile, selected);
   }
 
   updateOptions() {
-    this.options = this.mapData[this.map.selectedTile.group];
+    this.options = this.mapData[this.shown.group];
     this.selected = 'new';
     this.select();
   }
@@ -180,7 +215,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   save() {
     this.success = '';
-    const tile = this.map.selectedTile;
+    const tile = this.shown;
     this.error = tile.name ? '' : 'Name is required.';
     if (this.error) return;
 
@@ -191,19 +226,30 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.pending = true;
     const cmd = this.selected === 'new' ? 'createMap' : 'saveMap';
-    const newTile: any = {};
-    Object.assign(newTile, tile);
+    const newTile: DBTile = { ...tile };
     if (this.selected !== 'new' && !tile.unsaved) delete newTile.data;
-    else newTile.data = JSON.stringify(tile.data);
+    else newTile.data = tile.data;
     this.socket.send(cmd, newTile);
   }
 
   edit() {
+    if (this.map.tileSettings) {
+      this.map.tileSettings = false;
+      this.map.settingsOpen = false;
+      return;
+    }
+
     this.pending = true;
-    const tile = this.map.selectedTile;
+    const tile = this.shown;
     switch (tile.group) {
-      case 'tile_sets': return this.socket.send('getTileSet', tile.id);
-      case 'structure_sets': return this.socket.send('getStructureSet', tile.id);
+      case 'tile_sets':
+        if (!this.map.tileSet || this.map.tileSet.id !== tile.id) this.socket.send('getTileSet', tile.id);
+        else this.map.settingsOpen = false;
+        return;
+      case 'structure_sets':
+        if (!this.map.structureSet || this.map.structureSet.id !== tile.id) this.socket.send('getStructureSet', tile.id);
+        else this.map.settingsOpen = false;
+        return;
       default: this.socket.send('getMap', { group: tile.group, tile: tile.id });
     }
   }

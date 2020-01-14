@@ -1,0 +1,32 @@
+#map {
+  position: absolute;
+  transform: translate(50vw, 50vh) translate(-50%, -50%) rotateX(45deg) rotateZ(-45deg);
+  border: 1px solid grey;
+  line-height: 0;
+  white-space: nowrap;
+}
+
+.tile {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #4080bf;
+  background: center/cover url('/assets/images/water.png');
+}
+
+.tile img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.img1, .img2, .img3, .img50 {
+  transform: rotate(45deg);
+}
+
+.sztile {
+  background: #064886;
+}

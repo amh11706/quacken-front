@@ -1,11 +1,10 @@
 <div id="shade">
   <div id="settings" class="container noselect">
     <h2>Editor Settings</h2>
-    <ng-container
-      *ngIf="['tiles', 'structures'].indexOf(map.selectedTile.group) === -1">
+    <ng-container *ngIf="!map.tileSettings">
       <mat-form-field class="setting">
         <mat-label>Type</mat-label>
-        <mat-select [(ngModel)]="map.selectedTile.group"
+        <mat-select [(ngModel)]="shown.group"
           (selectionChange)="updateOptions()">
           <mat-option value="cgmaps">Cade Goose Map</mat-option>
           <mat-option value="maps">Quacken Map</mat-option>
@@ -28,21 +27,19 @@
     </ng-container>
 
     <mat-form-field class="setting">
-      <input matInput [disabled]="pending" [(ngModel)]="map.selectedTile.name"
+      <input matInput [disabled]="pending" [(ngModel)]="shown.name"
         maxlength="15" placeholder="name">
     </mat-form-field>
 
-    <div class="setting"
-      *ngIf="['tiles', 'structures'].indexOf(map.selectedTile.group) === -1">
-      <mat-checkbox [(ngModel)]="map.selectedTile.released"
-        [disabled]="pending">
+    <div class="setting" *ngIf="!map.tileSettings">
+      <mat-checkbox [(ngModel)]="shown.released" [disabled]="pending">
         Publicly Usable
       </mat-checkbox>
     </div>
 
-    <mat-form-field *ngIf="map.selectedTile.group === 'tiles'" class="setting">
+    <mat-form-field *ngIf="shown.group === 'tiles'" class="setting">
       <mat-label>Type</mat-label>
-      <mat-select [disabled]="pending" [(ngModel)]="map.selectedTile.type">
+      <mat-select [disabled]="pending" [(ngModel)]="shown.type">
         <mat-option *ngFor="let type of types; let i = index" [value]="i">
           {{type}}
         </mat-option>
@@ -50,9 +47,8 @@
     </mat-form-field>
 
     <mat-form-field class="setting full">
-      <textarea matInput [disabled]="pending"
-        [(ngModel)]="map.selectedTile.description" height="4" maxlength="255"
-        placeholder="description"></textarea>
+      <textarea matInput [disabled]="pending" [(ngModel)]="shown.description"
+        height="4" maxlength="255" placeholder="description"></textarea>
     </mat-form-field>
 
     <div class="setting center"><button mat-raised-button [disabled]="pending"
@@ -62,9 +58,9 @@
 
     <div class="setting center">
       <button mat-raised-button
-        [disabled]="pending || selected === 'new' && ['tiles', 'structures'].indexOf(map.selectedTile.group) === -1"
+        [disabled]="pending || selected === 'new' && !map.tileSettings"
         (click)="edit()">
-        {{['tiles', 'structures'].indexOf(map.selectedTile.group) !== -1 ? 'Close' : 'Enter Editor'}}
+        {{map.tileSettings ? 'Close' : 'Enter Editor'}}
       </button>
     </div>
 

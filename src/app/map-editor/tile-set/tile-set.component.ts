@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from 'src/app/ws.service';
+import { DBTile, MapEditor } from '../map-editor.component';
 
 export const TileTypes = [
   'Head',
@@ -18,10 +19,9 @@ export const TileTypes = [
   styleUrls: ['./tile-set.component.css']
 })
 export class TileSetComponent implements OnInit, OnDestroy {
-  @Input() map: any;
-  @Input() changeTile: () => void;
-
-  private sub: Subscription;
+  @Input() map: MapEditor;
+  protected sub = new Subscription();
+  protected group = 'tile';
 
   types = TileTypes;
   error = '';
@@ -29,59 +29,69 @@ export class TileSetComponent implements OnInit, OnDestroy {
   pending = false;
   activeType = 0;
 
-  constructor(private ws: WsService) { }
+  constructor(protected ws: WsService) { }
 
   ngOnInit() {
-    this.sub = this.ws.subscribe('savedWeight', () => this.pending = false);
-    this.sub = this.ws.subscribe('deletedMap', m => this.handleDelete(m));
+    this.sub.add(this.ws.subscribe('savedWeight', () => this.pending = false));
+    this.sub.add(this.ws.subscribe('deletedMap', this.handleDelete));
+    this.initTile(this.map.selectedTile);
+  }
+
+  protected initTile(tile: DBTile) {
+    tile = this.map.tiles[tile.type].find(el => el.id === tile.id);
+    this.select(tile);
   }
 
   ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe();
+    this.sub.unsubscribe();
   }
 
-  private handleDelete(msg: any) {
+  protected handleDelete = (msg: any) => {
     this.pending = false;
-    this.map.tiles[msg.type] = this.map.tiles[msg.type].filter(tile => {
+    this.map.tiles[msg.type] = this.map.tiles[msg.type].filter((tile: DBTile) => {
       return tile.id !== msg.id;
     });
-    this.map.selectedTile = {};
+    this.map.selectedTile = { id: null, name: '', undos: [], redos: [] };
   }
 
-  select(tile) {
+  select(tile: DBTile) {
+    this.activeType = tile.type;
+    tile.undos = tile.undos || [];
+    tile.redos = tile.redos || [];
     this.map.selectedTile = tile;
-    this.changeTile();
   }
 
   newTile() {
     this.map.selectedTile = {
-      group: 'tiles',
+      id: null, name: '',
+      undos: [], redos: [],
+      group: this.group + 's',
       type: this.map.selectedTile.type || 0,
-      tile_set: this.map.tileSet.id
+      [this.group + '_set']: this.map[this.group + 'Set'].id
     };
-    this.map.settingsOpen = true;
+    this.editTile();
   }
 
   editTile() {
-    this.map.selectedTile.group = 'tiles';
     this.map.settingsOpen = true;
+    this.map.tileSettings = true;
   }
 
-  saveWeight(tile: any) {
+  saveWeight(tile: DBTile) {
     this.pending = true;
     const map = {
-      group: 'tiles',
+      group: this.group + 's',
       weight: tile.weight,
       id: tile.id
     };
     this.ws.send('saveWeight', map);
   }
 
-  deleteTile(tile: any) {
-    if (!confirm(`Delete tile '${tile.name}'? this cannot be undone.`)) return;
+  deleteTile(tile: DBTile) {
+    if (!confirm(`Delete ${this.group} '${tile.name}'? this cannot be undone.`)) return;
     this.pending = true;
     const map = {
-      group: 'tiles',
+      group: this.group + 's',
       type: tile.type,
       id: tile.id
     };

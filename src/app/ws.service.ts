@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, ReplaySubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 interface Message {
@@ -25,7 +25,7 @@ export class WsService {
   private tokenParser = new JwtHelperService();
   user: TokenUser;
   connected = false;
-  connected$ = new Subject<boolean>();
+  connected$ = new ReplaySubject<boolean>(1);
 
   reason: string;
   sId: number;
@@ -107,12 +107,20 @@ export class WsService {
     this.sendRaw(JSON.stringify({ cmd, data }));
   }
 
+  softSend(cmd: string, data?: any) {
+    if (this.connected) this.sendRaw(JSON.stringify({ cmd, data }));
+  }
+
   sendObj(data: any) {
     this.sendRaw(JSON.stringify(data));
   }
 
   sendRaw(data: string) {
-    if (this.socket && this.socket.readyState === 1) this.socket.send(data);
-    else setTimeout(() => this.sendRaw(data), 100)
+    if (this.connected) return this.socket.send(data);
+    const sub = this.connected$.subscribe((connected: boolean) => {
+      if (!connected) return;
+      this.socket.send(data);
+      sub.unsubscribe();
+    });
   }
 }

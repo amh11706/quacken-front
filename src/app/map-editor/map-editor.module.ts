@@ -12,6 +12,8 @@ import { StructureSetComponent } from './structure-set/structure-set.component';
 import { StructureMapComponent } from './structure-map/structure-map.component';
 import { SettingsComponent } from './settings/settings.component';
 import { GuideComponent } from './guide/guide.component';
+import { ObstaclesComponent } from './obstacles/obstacles.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { GuideComponent } from './guide/guide.component';
     StructureMapComponent,
     SettingsComponent,
     GuideComponent,
+    ObstaclesComponent,
+    MapComponent,
   ],
   entryComponents: [GuideComponent],
   imports: [

@@ -1,0 +1,17 @@
+<div #selectedTile id="selected" [hidden]="map.settingsOpen">
+  <div>
+    <img src="./assets/images/obstacle{{map.selected}}.png"
+      [class]="'img' + map.selected">
+  </div>
+</div>
+
+<div [qdrag]="handle" bindToWindow class="container noselect" id="tiles">
+  <div #handle id="handle"></div>
+  <img *ngFor="let obstacle of obstacles; let i = index" [title]="titles[i]"
+    draggable="false" src="./assets/images/obstacle{{obstacle}}.png"
+    (click)="map.selected = obstacle">
+  <ng-container *ngIf="map.selectedTile.group === 'cgmaps'">
+    <img *ngFor="let flag of [21, 22, 23]" title="Flag" draggable="false"
+      src="./assets/images/obstacle{{flag}}.png" (click)="map.selected = flag">
+  </ng-container>
+</div>

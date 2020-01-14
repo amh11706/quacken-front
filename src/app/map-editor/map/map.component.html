@@ -1,0 +1,12 @@
+<div id="map" (mouseup)="painting = false">
+  <div *ngFor="let row of map.selectedTile.data; let y = index">
+    <div *ngFor="let tile of row; let x = index" class="tile"
+      [class.sztile]="map.selectedTile.group === 'cgmaps' ? y < 3 || y > 32 : y > 48"
+      (mousedown)="clickTile($event, x, y)" (mouseup)="mouseUp($event, x, y)"
+      (mouseover)="painting ? clickTile($event, x, y) : null">
+      <img *ngIf="tile" src="./assets/images/obstacle{{tile}}.png"
+        draggable="false" [class]="'img' + tile"
+        [title]="tile < 5 ? titles[tile + 1] : ''">
+    </div>
+  </div>
+</div>

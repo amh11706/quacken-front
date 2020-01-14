@@ -1,76 +1,34 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { WsService } from 'src/app/ws.service';
-import { TileTypes } from '../tile-set/tile-set.component';
+import { TileSetComponent } from '../tile-set/tile-set.component';
+import { DBTile } from '../map-editor.component';
 
 @Component({
   selector: 'app-structure-set',
   templateUrl: './structure-set.component.html',
   styleUrls: ['./structure-set.component.css']
 })
-export class StructureSetComponent implements OnInit, OnDestroy {
-  @Input() map: any;
-  types = TileTypes;
+export class StructureSetComponent extends TileSetComponent implements OnInit, OnDestroy {
+  protected group = 'structure';
   groups = ['Tiles', 'Obstacle Zones', 'Wing Zones'];
 
-  private sub: Subscription;
-
-  error = '';
-  success = '';
-  pending = false;
-
-  constructor(private ws: WsService) { }
-
-  ngOnInit() {
-    this.sub = this.ws.subscribe('savedWeight', () => this.pending = false);
-    this.sub.add(this.ws.subscribe('deletedMap', m => this.handleDelete(m)));
+  protected initTile(tile: DBTile) {
+    tile = this.map.structures.find(el => el.id === tile.id);
+    this.select(tile);
   }
 
-  ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe();
-  }
-
-  private handleDelete(msg: any) {
+  protected handleDelete = (msg: any) => {
     this.pending = false;
     this.map.structures = this.map.structures.filter(structure => {
       return structure.id !== msg.id;
     });
-    this.map.selectedTile = {};
-  }
-
-  select(structure: any) {
-    this.map.selectedTile = structure;
+    this.map.selectedTile = this.map.structures[0] || { id: null, name: '', undos: [], redos: [] };
   }
 
   newFeature() {
     const feature = { group: 0, x1: 0, y1: 0, x2: 7, y2: 7, type: 0, density: 1 };
     this.map.selectedTile.data.push(feature);
     this.map.selectedTile.activeFeature = feature;
-  }
-
-  newStructure() {
-    this.map.selectedTile = {
-      group: 'structures',
-      type: this.map.selectedTile.type || 0,
-      structure_set: this.map.structureSet.id
-    };
-    this.map.settingsOpen = true;
-  }
-
-  editStructure() {
-    this.map.selectedTile.group = 'structures';
-    this.map.settingsOpen = true;
-  }
-
-  saveWeight(structure: any) {
-    this.pending = true;
-    const map = {
-      group: 'structures',
-      weight: structure.weight,
-      id: structure.id
-    };
-    this.ws.send('saveWeight', map);
   }
 
   deleteFeature() {
@@ -82,17 +40,6 @@ export class StructureSetComponent implements OnInit, OnDestroy {
       return f !== feature;
     });
     this.map.selectedTile.unsaved = true;
-  }
-
-  deleteStructure(structure: any) {
-    if (!confirm(`Delete structure '${structure.name}'? this cannot be undone.`)) return;
-    this.pending = true;
-    const map = {
-      group: 'structures',
-      type: structure.type,
-      id: structure.id
-    };
-    this.ws.send('deleteMap', map);
   }
 
   updatePosition(e: any, which: string) {
