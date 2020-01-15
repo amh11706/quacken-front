@@ -5,6 +5,15 @@ interface note {
 
 export const Notes: note[] = [
   {
+    title: 'Release 15 January 2020',
+    content: `
+    <ul>
+      <li>Map editor updated to support hex tiles.</li>
+      <li>New "Save All" option to save all unsaved tiles in a set.</li>
+      <li>Undos and redos are now saved with the map.</li>
+    </ul>`
+  },
+  {
     title: 'Release 05 January 2020',
     content: `
     <ul>

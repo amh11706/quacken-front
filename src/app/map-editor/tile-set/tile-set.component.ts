@@ -27,7 +27,6 @@ export class TileSetComponent implements OnInit, OnDestroy {
   error = '';
   success = '';
   pending = false;
-  activeType = 0;
 
   constructor(protected ws: WsService) { }
 
@@ -57,7 +56,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
   }
 
   select(tile: DBTile) {
-    this.activeType = tile.type;
+    this.map.tileSet.activeGroup = tile.type;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
     this.map.selectedTile = tile;
@@ -67,7 +66,6 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.map.selectedTile = {
       id: null, name: '',
       undos: [], redos: [],
-      group: this.group + 's',
       type: this.map.selectedTile.type || 0,
       [this.group + '_set']: this.map[this.group + 'Set'].id
     };
@@ -75,6 +73,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
   }
 
   editTile() {
+    this.map.selectedTile.group = this.group + 's';
     this.map.settingsOpen = true;
     this.map.tileSettings = true;
   }

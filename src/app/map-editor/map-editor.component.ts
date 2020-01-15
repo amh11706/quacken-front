@@ -24,6 +24,8 @@ export interface DBTile {
   undos: MapTile[][],
   redos: MapTile[][],
   activeFeature?: StructureData,
+  activeGroup?: number,
+  hex?: boolean;
 }
 
 export interface StructureData {
@@ -44,6 +46,7 @@ export interface MapEditor {
   structures?: DBTile[],
   settingsOpen: boolean,
   tileSettings?: boolean,
+  hex?: boolean;
 }
 
 @Component({

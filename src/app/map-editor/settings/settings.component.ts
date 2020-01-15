@@ -54,12 +54,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (!this.map.tileSettings) {
       this.shown = this.map.tileSet || this.map.structureSet || this.shown;
       this.socket.send('getMaps');
+      this.map.hex = this.shown.hex;
     }
     this.shown = { ...this.shown };
     this.selected = typeof this.shown.id === 'number' ? this.shown.id : 'new';
 
     let unsaved = this.shown.unsaved;
-    switch (this.shown.group) {
+    if (!this.map.tileSettings) switch (this.shown.group) {
       case 'tile_sets':
         tiles:
         if (this.map.tiles) for (const group of this.map.tiles) {
@@ -148,6 +149,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     tile.undos = map.undos || [];
     tile.redos = map.redos || [];
     this.map.selectedTile = tile;
+    this.map.hex = tile.hex;
     this.map.settingsOpen = false;
   }
 
@@ -159,6 +161,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.tileSettings = false;
 
     const tile = this.shown;
+    tile.unsaved = false;
     if (msg) Object.assign(tile, msg);
     switch (tile.group) {
       case 'tiles':
@@ -171,6 +174,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         if (oldTile) Object.assign(oldTile, tile);
         else tiles.push(tile);
         this.map.selectedTile = oldTile || tile;
+        this.map.tileSet.activeGroup = this.map.selectedTile.type;
         this.map.settingsOpen = false;
         return;
       case 'structures':
@@ -200,10 +204,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    tile.unsaved = false;
-    const selected = this.options.find(option => option.id === +this.selected) || {
-      id: null, name: '', undos: [], redos: [],
-    };
+    const selected = this.options.find(option => option.id === +this.selected);
     if (selected) Object.assign(selected, tile);
   }
 
@@ -214,11 +215,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     delete this.map.structures;
     const tile = this.shown;
     tile.unsaved = false;
+    tile.hex = false;
 
     const selected = this.options.find(option => option.id === +this.selected) || {
       id: null, name: '', undos: [], redos: [],
     };
     Object.assign(tile, selected);
+    this.map.hex = tile.hex;
   }
 
   updateOptions() {
@@ -260,16 +263,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (tile.unsaved) {
       this.pending = true;
       const cmd = this.selected === 'new' ? 'createMap' : 'saveMap';
-      const newTile: DBTile = { ...tile };
-      if (this.selected !== 'new' && !tile.unsaved) delete newTile.data;
-      else newTile.data = tile.data;
-      this.socket.send(cmd, newTile);
+      this.socket.send(cmd, tile);
     }
 
     switch (tile.group) {
       case 'tile_sets':
         if (this.map.tiles) for (const group of this.map.tiles) {
           if (group) for (const t of group) {
+            t.group = 'tiles';
             if (t.unsaved) this.save(t);
             t.unsaved = false;
           }
@@ -277,6 +278,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         break;
       case 'structure_sets':
         if (this.map.structures) for (const structure of this.map.structures) {
+          structure.group = 'structures';
           if (structure.unsaved) this.save(structure);
           structure.unsaved = false;
         }
@@ -293,9 +295,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     this.pending = true;
+    this.map.hex = false;
     const tile = this.shown;
     switch (tile.group) {
       case 'tile_sets':
+        this.map.hex = tile.hex;
         if (!this.map.tiles || this.map.tileSet.id !== tile.id) this.socket.send('getTileSet', tile.id);
         else this.map.settingsOpen = false;
         return;
@@ -303,7 +307,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
         if (!this.map.structures || this.map.structureSet.id !== tile.id) this.socket.send('getStructureSet', tile.id);
         else this.map.settingsOpen = false;
         return;
-      default: this.socket.send('getMap', { group: tile.group, tile: tile.id });
+      default:
+        this.map.hex = tile.hex;
+        this.socket.send('getMap', { group: tile.group, tile: tile.id });
     }
   }
 

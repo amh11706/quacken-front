@@ -3,7 +3,7 @@
   <span>{{map.tileSet.name}}</span>
   <mat-form-field>
     <mat-label>Type</mat-label>
-    <mat-select [(ngModel)]="activeType">
+    <mat-select [(ngModel)]="map.tileSet.activeGroup">
       <mat-option *ngFor="let type of types; let i = index" [value]="i">
         {{type}} <span *ngIf="map.tiles[i]">({{map.tiles[i].length}})</span>
       </mat-option>
@@ -11,8 +11,9 @@
   </mat-form-field>
 
   <div id="tilebox">
-    <div class="tiletype" *ngIf="map.tiles[activeType]; else empty">
-      <div *ngFor="let tile of map.tiles[activeType]" class="tile"
+    <div class="tiletype"
+      *ngIf="map.tiles[map.tileSet.activeGroup]; else empty">
+      <div *ngFor="let tile of map.tiles[map.tileSet.activeGroup]" class="tile"
         [class.unsaved]="tile.unsaved"
         [class.selected]="tile === map.selectedTile" (click)="select(tile)">
         <div (dblclick)="editTile()" [title]="tile.description || ''">

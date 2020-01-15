@@ -38,6 +38,13 @@
       </mat-checkbox>
     </div>
 
+    <div class="setting" *ngIf="['tile_sets', 'maps'].includes(shown.group)">
+      <mat-checkbox [(ngModel)]="shown.hex" [disabled]="pending"
+        (change)="shown.unsaved = true">
+        Hex Tiles
+      </mat-checkbox>
+    </div>
+
     <mat-form-field *ngIf="shown.group === 'tiles'" class="setting">
       <mat-label>Type</mat-label>
       <mat-select [disabled]="pending" [(ngModel)]="shown.type"

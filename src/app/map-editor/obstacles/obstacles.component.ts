@@ -20,8 +20,14 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
   @Input() background: HTMLElement;
   @ViewChild('selectedTile', { static: true }) selectedTile: HTMLElement;
 
-  obstacles = [1, 2, 3, 4, 6, 7, 5, 8, 10, 11, 9, 12, 15, 16, 14, 13, 50, 51];
-  scrollOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 13, 50, 51];
+  obstacles = [1, 2, 3, 4, 6, 7, 5, 8, 10, 11, 9, 12, 15, 16, 14, 13, 50];
+  hexObstacles = [
+    1, 2, 3, 4,
+    5, 6, 7, 8, 9, 10,
+    11, 12, 13, 14, 15, 16,
+    35,
+    50];
+  scrollOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 13, 50];
   titles = Titles;
 
   constructor() { }
@@ -47,11 +53,12 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
 
   private handleScroll = (e: WheelEvent) => {
     e.preventDefault();
-    const current = this.scrollOrder.indexOf(this.map.selected);
+    const scroll = this.map.hex ? this.hexObstacles : this.scrollOrder;
+    const current = scroll.indexOf(this.map.selected);
     if (e.deltaY < 0) {
-      this.map.selected = this.scrollOrder[current + 1] || this.scrollOrder[0];
+      this.map.selected = scroll[current + 1] || scroll[0];
     } else {
-      this.map.selected = this.scrollOrder[current - 1] || this.scrollOrder[this.scrollOrder.length - 1];
+      this.map.selected = scroll[current - 1] || scroll[scroll.length - 1];
     }
   }
 

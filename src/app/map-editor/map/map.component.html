@@ -1,4 +1,4 @@
-<div *ngIf="!hexMap" id="map" (mouseup)="painting = false">
+<div *ngIf="!map.hex" id="map" (mouseup)="painting = false">
   <div *ngFor="let row of map.selectedTile.data; let y = index">
     <div *ngFor="let tile of row; let x = index" class="tile"
       [class.sztile]="map.selectedTile.group === 'cgmaps' ? y < 3 || y > 32 : y > 48"
@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div *ngIf="hexMap" id="hexMap" (mouseup)="painting = false">
+<div *ngIf="map.hex" id="hexMap" (mouseup)="painting = false">
   <div *ngFor="let row of map.selectedTile.data; let y = index">
     <div *ngFor="let tile of row; let x = index" class="tile"
       [class.sztile]="map.selectedTile.group === 'cgmaps' ? y < 3 || y > 32 : y > 48"
