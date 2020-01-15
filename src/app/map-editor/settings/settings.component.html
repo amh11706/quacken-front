@@ -28,18 +28,20 @@
 
     <mat-form-field class="setting">
       <input matInput [disabled]="pending" [(ngModel)]="shown.name"
-        maxlength="15" placeholder="name">
+        maxlength="15" placeholder="name" (change)="shown.unsaved = true">
     </mat-form-field>
 
     <div class="setting" *ngIf="!map.tileSettings">
-      <mat-checkbox [(ngModel)]="shown.released" [disabled]="pending">
+      <mat-checkbox [(ngModel)]="shown.released" [disabled]="pending"
+        (change)="shown.unsaved = true">
         Publicly Usable
       </mat-checkbox>
     </div>
 
     <mat-form-field *ngIf="shown.group === 'tiles'" class="setting">
       <mat-label>Type</mat-label>
-      <mat-select [disabled]="pending" [(ngModel)]="shown.type">
+      <mat-select [disabled]="pending" [(ngModel)]="shown.type"
+        (change)="shown.unsaved = true">
         <mat-option *ngFor="let type of types; let i = index" [value]="i">
           {{type}}
         </mat-option>
@@ -48,12 +50,14 @@
 
     <mat-form-field class="setting full">
       <textarea matInput [disabled]="pending" [(ngModel)]="shown.description"
-        height="4" maxlength="255" placeholder="description"></textarea>
+        height="4" maxlength="255" placeholder="description"
+        (change)="shown.unsaved = true"></textarea>
     </mat-form-field>
 
-    <div class="setting center"><button mat-raised-button [disabled]="pending"
+    <div class="setting center"><button mat-raised-button
+        [disabled]="pending || (!error && !shown.unsaved) || !shown.name"
         (click)="save()">
-        {{selected === 'new' ? 'Create' : 'Save'}}
+        {{selected === 'new' ? 'Create' : 'Save' + (['tile_sets', 'structure_sets'].includes(shown.group) ? ' All' : '')}}
       </button></div>
 
     <div class="setting center">

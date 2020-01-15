@@ -23,11 +23,6 @@ app-boats {
   white-space: nowrap;
 }
 
-.maprow.even {
-  position: absolute;
-  left: 45px;
-}
-
 .tile {
   position: relative;
   display: inline-block;

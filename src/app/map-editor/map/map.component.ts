@@ -3,6 +3,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Titles } from '../obstacles/obstacles.component';
 import { MapEditor, MapTile } from '../map-editor.component';
 
+const MAX_UNDOS = 100;
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -14,6 +16,7 @@ export class MapComponent implements OnInit {
   @Input() setTile: (x: number, y: number, v: number) => MapTile;
   titles = Titles;
 
+  hexMap = true;
   painting = false;
   private clickX: number;
   private clickY: number;
@@ -45,9 +48,10 @@ export class MapComponent implements OnInit {
     }
 
     tile.redos = [];
-    if (newValue < 17 && newValue > 8) this.finishWhirl(x, y, [change]);
+    const sides = this.hexMap ? 6 : 4;
+    if (newValue < 5 + sides * 3 && newValue > 4 + sides) this.finishWhirl(x, y, [change]);
     else tile.undos.push([change]);
-    if (tile.undos.length > 20) tile.undos = tile.undos.slice(-20);
+    if (tile.undos.length > MAX_UNDOS) tile.undos = tile.undos.slice(-MAX_UNDOS);
   }
 
   mouseUp(e: MouseEvent, x: number, y: number) {
@@ -62,25 +66,26 @@ export class MapComponent implements OnInit {
     const tile = this.map.selectedTile;
     tile.undos.push([change]);
     tile.redos = [];
-    if (tile.undos.length > 20) tile.undos = tile.undos.slice(-20);
+    if (tile.undos.length > MAX_UNDOS) tile.undos = tile.undos.slice(-MAX_UNDOS);
   }
 
   private finishWhirl(x: number, y: number, changes: any[]) {
     this.painting = false;
-    const dx = [0, 1, 0, -1];
-    const dy = [-1, 0, 1, 0];
-    let tile = (this.map.selected - 1) % 4;
-    const inverted = this.map.selected > 12 ? 4 : 0;
+    const sides = this.hexMap ? 6 : 4;
+    const dx = this.hexMap ? [0, 1, 1, 0, -1, -1] : [0, 1, 0, -1];
+    const dy = this.hexMap ? [-1, -1, 0, 1, 0, -1] : [-1, 0, 1, 0];
+    let tile = (this.map.selected - 5) % sides;
+    const inverted = this.map.selected > 4 + 2 * sides ? sides : 0;
 
     const sTile = this.map.selectedTile;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 1; i < sides; i++) {
       x += dx[tile];
       y += dy[tile];
-      if (inverted) tile = (tile + 3) % 4;
-      else tile = (tile + 1) % 4;
+      if (inverted) tile = (tile + sides - 1) % sides;
+      else tile = (tile + 1) % sides;
 
       if (sTile.data[y] && sTile.data[y][x] === 0) {
-        const change = this.setTile(x, y, tile + 9 + inverted);
+        const change = this.setTile(x, y, tile + 5 + sides + inverted);
         if (change) changes.push(change);
       }
     }

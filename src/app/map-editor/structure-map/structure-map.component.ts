@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { TileTypes } from '../tile-set/tile-set.component';
+import { MapEditor } from '../map-editor.component';
 
 @Component({
   selector: 'app-structure-map',
@@ -8,9 +9,7 @@ import { TileTypes } from '../tile-set/tile-set.component';
   styleUrls: ['./structure-map.component.css']
 })
 export class StructureMapComponent implements OnInit {
-  @Input() map: any;
-  @Input() left: number;
-  @Input() right: number;
+  @Input() map: MapEditor;
   types = TileTypes;
   groups = ['', 'Obstacle Zone: ', 'Wing Zone: '];
 

@@ -1,5 +1,6 @@
 <div [qdrag]="handle2" bindToWindow id="tileset" class="container">
   <div #handle2 id="handle2"></div>
+  <span>{{map.tileSet.name}}</span>
   <mat-form-field>
     <mat-label>Type</mat-label>
     <mat-select [(ngModel)]="activeType">

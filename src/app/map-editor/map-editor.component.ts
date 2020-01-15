@@ -140,6 +140,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
 
   save() {
     const tile = this.map.selectedTile;
+    if (!tile.unsaved) return;
     if (this.map.tileSet) {
       tile.group = 'tiles';
       tile.tile_set = this.map.tileSet.id;

@@ -1,8 +1,9 @@
   <div #background class="noselect" id="background"
     oncontextmenu="event.preventDefault()">
     <div [qdrag]="background" id="mapframe">
-      <app-map *ngIf="!map.structures" [map]="map" [undo]="undo"
-        [setTile]="setTile">
+      <app-map
+        *ngIf="map.selectedTile.data && map.selectedTile.data[0] && map.selectedTile.data[0].length"
+        [map]="map" [undo]="undo" [setTile]="setTile">
       </app-map>
       <app-structure-map *ngIf="map.structures" [map]="map"></app-structure-map>
     </div>

@@ -38,7 +38,9 @@ export class TileSetComponent implements OnInit, OnDestroy {
   }
 
   protected initTile(tile: DBTile) {
-    tile = this.map.tiles[tile.type].find(el => el.id === tile.id);
+    const group = this.map.tiles[tile.type];
+    if (!group) return;
+    tile = group.find(el => el.id === tile.id);
     this.select(tile);
   }
 

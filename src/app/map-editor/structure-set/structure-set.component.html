@@ -1,6 +1,6 @@
 <div [qdrag]="handle2" bindToWindow id="structureset" class="container">
   <div #handle2 id="handle2"></div>
-  <h4>Structures</h4>
+  <span>{{map.structureSet.name}}</span>
   <div id="structurebox">
     <div class="structuretype" *ngIf="map.structures">
       <div *ngFor="let structure of map.structures" class="structure"
