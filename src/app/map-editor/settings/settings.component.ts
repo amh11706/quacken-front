@@ -111,7 +111,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.tiles = tiles;
     this.map.tileSet = this.shown;
     this.map.tileSet.data = [[]];
-    this.map.settingsOpen = false;
 
     for (const tile of tileSet) {
       if (!tile.type) tile.type = 0;
@@ -124,6 +123,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
+    this.map.settingsOpen = false;
   }
 
   private handleStructureSet(structureSet: DBTile[]) {
@@ -135,6 +135,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.selectedTile = structureSet[0] || {
       id: null, name: '', undos: [], redos: [],
     };
+    const tile = this.map.selectedTile;
+    tile.undos = tile.undos || [];
+    tile.redos = tile.redos || [];
     this.map.settingsOpen = false;
   }
 

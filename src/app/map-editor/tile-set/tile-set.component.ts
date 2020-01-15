@@ -56,7 +56,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
   }
 
   select(tile: DBTile) {
-    this.map.tileSet.activeGroup = tile.type;
+    if (this.map.tileSet) this.map.tileSet.activeGroup = tile.type;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
     this.map.selectedTile = tile;

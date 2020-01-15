@@ -11,8 +11,7 @@
 
   <app-obstacles *ngIf="!map.structures" [map]="map" [background]="background">
   </app-obstacles>
-  <app-tile-set *ngIf="map.tiles" [map]="map">
-  </app-tile-set>
+  <app-tile-set *ngIf="map.tiles" [map]="map"></app-tile-set>
   <app-structure-set *ngIf="map.structures" [map]="map"></app-structure-set>
   <app-settings *ngIf="map.settingsOpen" [map]="map"></app-settings>
 
