@@ -42,7 +42,6 @@ export class MapComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.map.hex = true;
   }
 
   clickTile(e: MouseEvent, x: number, y: number) {

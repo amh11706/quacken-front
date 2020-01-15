@@ -21,6 +21,10 @@
   background: center/cover url('/assets/images/water.png');
 }
 
+#map .sztile {
+  background: #064886;
+}
+
 #hexMap .tile {
   position: relative;
   display: inline-block;
@@ -57,8 +61,4 @@ polygon {
 
 .img1, .img2, .img3, .img50 {
   transform: rotate(45deg);
-}
-
-.sztile {
-  background: #064886;
 }
