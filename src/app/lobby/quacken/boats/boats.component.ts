@@ -239,7 +239,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       } else boat.rotateByMove(u.tm);
     }
 
-    if (this.step === 5) this.resetBoats()
+    if (this.step === 4) this.resetBoats()
 
     this.step++;
     const delay = (this.turn.steps[this.step] ? 750 : 250) * 2 / this.speed;

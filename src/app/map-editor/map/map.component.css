@@ -60,5 +60,9 @@ polygon {
 }
 
 .img1, .img2, .img3, .img50 {
+  transform: rotate(60deg) scale(0.7);
+}
+
+#map .img1, #map .img2, #map .img3, #map .img50 {
   transform: rotate(45deg);
 }

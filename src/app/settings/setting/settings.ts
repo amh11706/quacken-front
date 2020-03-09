@@ -2,9 +2,9 @@ export const Settings = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: 'c/start', data: 'new' },
   nextBoat: {
     id: 1, group: 'lobby', type: 'boat', trigger: 'nextBoat',
-    titles: ['Rocket', 'Armored', 'Bomb', 'Bread', , , , , , , 'Small Duck', 'Medium Duck', 'Large Duck', 'Defenduck'],
+    titles: ['Rocket', 'Armored', 'Bomb', 'Bread', 'Maiden', , , , , , 'Small Duck', 'Medium Duck', 'Large Duck', 'Defenduck'],
     groups: [
-      { name: 'Standard', options: [0, 1, 2, 3] },
+      { name: 'Standard', options: [0, 1, 2, 3, 4] },
       { name: 'Ducks', options: [10, 11, 12, 13] }
     ]
   },

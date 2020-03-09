@@ -6,7 +6,7 @@ import { WsService } from '../ws.service';
 import { SettingsService, SettingMap } from '../settings/settings.service';
 import { Notes } from './notes';
 
-const groups = ['quacken', 'spades'];
+const groups = ['quacken', 'quacken', 'spades'];
 
 @Component({
   selector: 'app-lobby-list',

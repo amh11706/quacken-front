@@ -1,5 +1,5 @@
 <div #selectedTile id="selected" [hidden]="map.settingsOpen">
-  <div>
+  <div [class.hex]="map.hex">
     <img
       src="./assets/{{map.hex ? 'hex' : ''}}images/obstacle{{map.selected}}.png"
       [class]="'img' + map.selected">
