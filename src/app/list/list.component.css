@@ -34,12 +34,12 @@
   height: 60px;
 }
 
-#create app-setting {
+#create q-setting {
   width: 150px;
   font-size: 18px;
 }
 
-app-setting {
+q-setting {
   padding: 0 8px;
 }
 
@@ -47,7 +47,7 @@ div {
   text-align: center;
 }
 
-app-chat-box {
+q-chat-box {
   display: block;
   width: 100%;
   max-width: 750px;

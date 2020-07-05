@@ -4,14 +4,14 @@ import { Subject, Subscription, ReplaySubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 interface Message {
-  cmd: string,
-  data?: any,
+  cmd: string;
+  data?: any;
 }
 
 export interface TokenUser {
-  id: number,
-  name: string,
-  inventory?: number,
+  id: number;
+  name: string;
+  inventory?: number;
 }
 
 @Injectable({
@@ -64,14 +64,14 @@ export class WsService {
 
     this.socket.onopen = () => {
       this.socket.send(token);
-    }
+    };
 
     this.socket.onmessage = message => this.dispatchMessage(JSON.parse(message.data));
 
     this.socket.onclose = () => {
       this.dispatchMessage({
-        cmd: "m",
-        data: { type: 1, message: "Connection closed, attempting to reconnect..." },
+        cmd: 'm',
+        data: { type: 1, message: 'Connection closed, attempting to reconnect...' },
       });
       this.timeOut = window.setTimeout(() => this.connect(), 5000);
     };
@@ -99,7 +99,7 @@ export class WsService {
     if (!this.socket) return;
 
     this.socket.onclose = null;
-    this.socket.close(1000, "Logged out");
+    this.socket.close(1000, 'Logged out');
     this.socket = null;
   }
 

@@ -25,7 +25,7 @@ export class Pos {
 }
 
 @Component({
-  selector: 'app-map',
+  selector: 'q-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
@@ -46,7 +46,7 @@ export class MapComponent implements OnInit {
 
   clickTile(e: MouseEvent, x: number, y: number) {
     const tile = this.map.selectedTile;
-    if (this.painting && e.which === 1 && tile.data[y][x]) return;
+    if (this.painting && e.button === 0 && tile.data[y][x]) return;
     if (e.shiftKey) {
       this.map.selected = tile.data[y][x] || this.map.selected;
       return;
@@ -58,7 +58,7 @@ export class MapComponent implements OnInit {
       return;
     }
 
-    const newValue = e.which === 1 ? this.map.selected : 0;
+    const newValue = e.button === 0 ? this.map.selected : 0;
     const change = this.setTile(x, y, newValue);
     if (!change) {
       if (newValue < 17 && newValue > 8) this.finishWhirl(x, y, []);
@@ -77,7 +77,7 @@ export class MapComponent implements OnInit {
     this.clickX = 0;
     this.clickY = 0;
 
-    const newValue = e.which === 1 ? this.map.selected : 0;
+    const newValue = e.button === 0 ? this.map.selected : 0;
     const change = this.setTile(x, y, newValue);
     if (!change) return;
 
@@ -107,7 +107,7 @@ export class MapComponent implements OnInit {
     }
 
     if (this.map.hex) {
-      p.move((tile + 1) % 6)
+      p.move((tile + 1) % 6);
       if (sTile.data[p.y] && sTile.data[p.y][p.x] === 0) {
         const change = this.setTile(p.x, p.y, 35);
         if (change) changes.push(change);

@@ -4,7 +4,7 @@ import { TileTypes } from '../tile-set/tile-set.component';
 import { MapEditor } from '../map-editor.component';
 
 @Component({
-  selector: 'app-structure-map',
+  selector: 'q-structure-map',
   templateUrl: './structure-map.component.html',
   styleUrls: ['./structure-map.component.css']
 })

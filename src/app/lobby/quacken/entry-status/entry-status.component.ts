@@ -6,7 +6,7 @@ import { Lobby } from '../../lobby.component';
 import { Turn } from '../boats/boats.component';
 
 @Component({
-  selector: 'app-entry-status',
+  selector: 'q-entry-status',
   templateUrl: './entry-status.component.html',
   styleUrls: ['./entry-status.component.css']
 })

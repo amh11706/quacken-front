@@ -1,41 +1,44 @@
 <div id="spadeTable">
   <div id="ourscore">
-    <p><span
-        [class.me]="lobby.players[0].sId === ws.sId">{{lobby.players[0].name}}</span>
+    <p><span [class.me]="lobby.players[0].sId === ws.sId">{{lobby.players[0].name}}</span>
       /
-      <span
-        [class.me]="lobby.players[2].sId === ws.sId">{{lobby.players[2].name}}</span>
+      <span [class.me]="lobby.players[2].sId === ws.sId">{{lobby.players[2].name}}</span>
     </p>
     {{lobby.scores[0]}} / {{lobby.playTo}}
   </div>
   <div id="theirscore">
-    <p><span
-        [class.me]="lobby.players[1].sId === ws.sId">{{lobby.players[1].name}}</span>
+    <p><span [class.me]="lobby.players[1].sId === ws.sId">{{lobby.players[1].name}}</span>
       /
-      <span
-        [class.me]="lobby.players[3].sId === ws.sId">{{lobby.players[3].name}}</span>
+      <span [class.me]="lobby.players[3].sId === ws.sId">{{lobby.players[3].name}}</span>
     </p>
     {{lobby.scores[1]}} / {{lobby.playTo}}
   </div>
 
-  <app-card *ngFor="let card of lobby.played" [id]="'played'+card.position"
-    class="played" [card]="card"></app-card>
+  <q-card *ngFor="let card of lobby.played"
+          [id]="'played'+card.position"
+          class="played"
+          [card]="card"></q-card>
 
-  <app-last-trick *ngIf="lobby.lastTrick.length" [cards]="lobby.lastTrick">
-  </app-last-trick>
-  <app-spot [lobby]="lobby"></app-spot>
-  <app-timer *ngIf="lobby.playing" (expire)="timeUp()"></app-timer>
+  <q-last-trick *ngIf="lobby.lastTrick.length"
+                [cards]="lobby.lastTrick">
+  </q-last-trick>
+  <q-spot [lobby]="lobby"></q-spot>
+  <q-timer *ngIf="lobby.playing"
+           (expire)="timeUp()"></q-timer>
 
   <div id="myHand">
-    <app-card *ngFor="let card of cards; let i = index" [card]="card"
-      (click)="click(card)" [class.valid]="card.valid"
-      [class.selected]="card.selected">
-    </app-card>
+    <q-card *ngFor="let card of cards; let i = index"
+            [card]="card"
+            (click)="click(card)"
+            [class.valid]="card.valid"
+            [class.selected]="card.selected">
+    </q-card>
   </div>
 </div>
 
-<div class="container noselect" id="hud">
+<div class="container noselect"
+     id="hud">
   <div id="chat">
-    <app-chat></app-chat>
+    <q-chat></q-chat>
   </div>
 </div>

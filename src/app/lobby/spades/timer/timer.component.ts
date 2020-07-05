@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-timer',
+  selector: 'q-timer',
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.css']
 })

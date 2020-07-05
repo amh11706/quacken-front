@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-reset',
+  selector: 'q-reset',
   templateUrl: './reset.component.html',
   styleUrls: ['./reset.component.css']
 })

@@ -1,10 +1,10 @@
 import { Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 
 @Directive({
-  selector: '[qdrag]'
+  selector: '[qDrag]'
 })
 export class QdragDirective implements OnInit, OnDestroy {
-  @Input() qdrag: HTMLElement;
+  @Input() qDrag: HTMLElement;
   @Input() bindToWindow: boolean;
   @Input() offsetX = 0;
   @Input() offsetY = 0;
@@ -21,14 +21,14 @@ export class QdragDirective implements OnInit, OnDestroy {
     this.offsetY = +this.offsetY;
     this.updateTransform();
 
-    if (!this.qdrag) this.qdrag = this.el.nativeElement;
-    this.qdrag.addEventListener('dblclick', () => {
+    if (!this.qDrag) this.qDrag = this.el.nativeElement;
+    this.qDrag.addEventListener('dblclick', () => {
       this.offsetX = 0;
       this.offsetY = 0;
       this.updateTransform();
     });
-    this.qdrag.addEventListener('mousedown', this.onDown);
-    this.qdrag.addEventListener('touchstart', this.touchStart);
+    this.qDrag.addEventListener('mousedown', this.onDown);
+    this.qDrag.addEventListener('touchstart', this.touchStart);
     if (this.bindToWindow !== undefined) window.addEventListener('resize', this.offsetToRightGap);
   }
 
@@ -42,14 +42,14 @@ export class QdragDirective implements OnInit, OnDestroy {
 
   private offsetToRightGap = () => {
     if (this.rightGap !== undefined) {
-      const box = this.qdrag.getBoundingClientRect();
+      const box = this.qDrag.getBoundingClientRect();
       this.offsetX += window.innerWidth - box.right - this.rightGap;
       this.bindWindow(true);
     } else this.bindWindow();
   }
 
   private bindWindow(skipRight = false) {
-    const box = this.qdrag.getBoundingClientRect();
+    const box = this.qDrag.getBoundingClientRect();
     if (box.right < 30) {
       this.offsetX += 30 - box.right;
     } else if (!skipRight && box.left > window.innerWidth - 30) {

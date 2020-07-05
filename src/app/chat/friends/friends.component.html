@@ -1,54 +1,75 @@
 <mat-menu #onlineMenu="matMenu">
-  <ng-template matMenuContent let-friend="friend">
-    <button mat-menu-item (click)="stat.openUser(friend)">
+  <ng-template matMenuContent
+               let-friend="friend">
+    <button mat-menu-item
+            (click)="stat.openUser(friend)">
       Profile
     </button>
-    <button mat-menu-item (click)="sendTell(friend)">
+    <button mat-menu-item
+            (click)="sendTell(friend)">
       Send Tell
     </button>
-    <button *ngIf="fs.allowInvite" mat-menu-item (click)="invite(friend)">
+    <button *ngIf="fs.allowInvite"
+            mat-menu-item
+            (click)="invite(friend)">
       Invite to Lobby
     </button>
-    <button mat-menu-item (click)="remove(friend)">
+    <button mat-menu-item
+            (click)="remove(friend)">
       Remove
     </button>
   </ng-template>
 </mat-menu>
 
 <mat-menu #offlineMenu="matMenu">
-  <ng-template matMenuContent let-friend="friend">
-    <button mat-menu-item (click)="stat.openUser(friend)">
+  <ng-template matMenuContent
+               let-friend="friend">
+    <button mat-menu-item
+            (click)="stat.openUser(friend)">
       Profile
     </button>
-    <button mat-menu-item (click)="remove(friend)">
+    <button mat-menu-item
+            (click)="remove(friend)">
       Remove
     </button>
   </ng-template>
 </mat-menu>
 
 <mat-menu #blockedMenu="matMenu">
-  <ng-template matMenuContent let-blocked="blocked">
-    <button mat-menu-item (click)="stat.openUser(blocked)">
+  <ng-template matMenuContent
+               let-blocked="blocked">
+    <button mat-menu-item
+            (click)="stat.openUser(blocked)">
       Profile
     </button>
-    <button mat-menu-item (click)="unblock(blocked)">
+    <button mat-menu-item
+            (click)="unblock(blocked)">
       Unblock
     </button>
   </ng-template>
 </mat-menu>
 
-<div *ngIf="fs.open && ws.connected" id="friends" class="container"
-  [qdrag]="handle" bindToWindow>
-  <div #handle class="handle"></div>
-  <mat-icon class="close" (click)="fs.open=false">close</mat-icon>
+<div *ngIf="fs.open && ws.connected"
+     id="friends"
+     class="container"
+     [qDrag]="handle"
+     bindToWindow>
+  <div #handle
+       class="handle"></div>
+  <mat-icon class="close"
+            (click)="fs.open=false">close</mat-icon>
   <div id="nav">
-    <div *ngFor="let link of links" class="link" [title]="link.title"
-      (click)="fs.selected = link.path"
-      [class.active]="fs.selected === link.path">
+    <div *ngFor="let link of links"
+         class="link"
+         [title]="link.title"
+         (click)="fs.selected = link.path"
+         [class.active]="fs.selected === link.path">
       <mat-icon>{{link.icon}}</mat-icon>
     </div>
-    <div class="link" (click)="fs.selected = 'invite'" title="Invitations"
-      [class.active]="fs.selected === 'invite'">
+    <div class="link"
+         (click)="fs.selected = 'invite'"
+         title="Invitations"
+         [class.active]="fs.selected === 'invite'">
       <mat-icon [class.highlight]="fs.invites.length">notifications</mat-icon>
     </div>
   </div>
@@ -56,14 +77,16 @@
   <div id="selection">
     <ng-container [ngSwitch]="fs.selected">
       <ng-container *ngSwitchCase="'lobby'">
-        <p *ngIf="fs.lobby.length > 1; else alone" class="empty">
+        <p *ngIf="fs.lobby.length > 1; else alone"
+           class="empty">
           There are {{fs.lobby.length}} players in this lobby:
         </p>
         <ng-template #alone>
           <p class="empty">You are alone here.</p>
         </ng-template>
-        <div *ngFor="let m of fs.lobby" class="lobbyPlayer">
-          <app-name [message]="m"></app-name>
+        <div *ngFor="let m of fs.lobby"
+             class="lobbyPlayer">
+          <q-name [message]="m"></q-name>
         </div>
       </ng-container>
 
@@ -78,9 +101,10 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>
-            <div *ngFor="let friend of fs.friends" class="online"
-              [matMenuTriggerFor]="onlineMenu"
-              [matMenuTriggerData]="{friend: friend}">
+            <div *ngFor="let friend of fs.friends"
+                 class="online"
+                 [matMenuTriggerFor]="onlineMenu"
+                 [matMenuTriggerData]="{friend: friend}">
               {{friend}}
             </div>
           </ng-template>
@@ -95,9 +119,10 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <ng-template matExpansionPanelContent>
-            <div *ngFor="let friend of fs.offline" class="offline"
-              [matMenuTriggerFor]="offlineMenu"
-              [matMenuTriggerData]="{friend: friend}">
+            <div *ngFor="let friend of fs.offline"
+                 class="offline"
+                 [matMenuTriggerFor]="offlineMenu"
+                 [matMenuTriggerData]="{friend: friend}">
               {{friend}}
             </div>
           </ng-template>
@@ -105,33 +130,38 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="'invite'">
-        <p *ngIf="!fs.invites.length" class="empty">No invites.</p>
-        <div *ngFor="let invite of fs.invites" class="invite">
+        <p *ngIf="!fs.invites.length"
+           class="empty">No invites.</p>
+        <div *ngFor="let invite of fs.invites"
+             class="invite">
           <p *ngIf="invite.ty === 0; else lobby">
             {{invite.f}} has requested to add you as a friend.
           </p>
           <ng-template #lobby>
             <p>{{invite.f}} has invited you to join their lobby.</p>
           </ng-template>
-          <button mat-raised-button class="accept"
-            (click)="accept(invite)">Accept</button>
-          <button mat-raised-button (click)="decline(invite)">Decline</button>
+          <button mat-raised-button
+                  class="accept"
+                  (click)="accept(invite)">Accept</button>
+          <button mat-raised-button
+                  (click)="decline(invite)">Decline</button>
         </div>
       </ng-container>
 
       <ng-container *ngSwitchCase="'block'">
-        <p *ngIf="!fs.blocked.length; else blockCount" class="empty">
+        <p *ngIf="!fs.blocked.length; else blockCount"
+           class="empty">
           No blocked players. Hooray!
         </p>
         <ng-template #blockCount>
           <p class="empty">
-            {{fs.blocked.length}} blocked player<span
-              *ngIf="fs.blocked.length > 1">s</span>.
+            {{fs.blocked.length}} blocked player<span *ngIf="fs.blocked.length > 1">s</span>.
           </p>
         </ng-template>
-        <div *ngFor="let blocked of fs.blocked" class="lobbyPlayer offline"
-          [matMenuTriggerFor]="blockedMenu"
-          [matMenuTriggerData]="{blocked: blocked}">
+        <div *ngFor="let blocked of fs.blocked"
+             class="lobbyPlayer offline"
+             [matMenuTriggerFor]="blockedMenu"
+             [matMenuTriggerData]="{blocked: blocked}">
           {{blocked}}
         </div>
       </ng-container>

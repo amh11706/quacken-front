@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
   canActivate(): boolean {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.router.navigate(['login'])
+      this.router.navigate(['login']);
       return false;
     }
     if (!this.socket.connected) this.socket.connect(token);

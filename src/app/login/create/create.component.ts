@@ -7,7 +7,7 @@ import { TermsComponent } from '../terms/terms.component';
 import { PrivacyComponent } from '../privacy/privacy.component';
 
 @Component({
-  selector: 'app-create',
+  selector: 'q-create',
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.css']
 })
@@ -19,7 +19,7 @@ export class CreateComponent implements OnInit {
     email: '',
     password: '',
     name: ''
-  }
+  };
   pending = false;
 
   private path = location.port === '4200' ? 'https://dev.superquacken.com/' : '/';
@@ -52,7 +52,7 @@ export class CreateComponent implements OnInit {
           this.err = err.error;
           this.dialog.open(this.errComponent);
         },
-    );
+      );
   }
 
   back() {

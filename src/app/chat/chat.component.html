@@ -1,38 +1,43 @@
 <div id="chatbox">
   <div id="output">
-    <div #output id="textbox">
+    <div #output
+         id="textbox">
       <p *ngFor="let m of chat.messages"
-        [style.backgroundColor]="colors[m.type]">
-        <ng-container *ngIf="!m.blocked" [ngSwitch]="m.type">
+         [style.backgroundColor]="colors[m.type]">
+        <ng-container *ngIf="!m.blocked"
+                      [ngSwitch]="m.type">
           <span *ngSwitchCase="0">{{m.message}}</span>
-          <span *ngSwitchCase="1" [innerHTML]="m.message"></span>
+          <span *ngSwitchCase="1"
+                [innerHTML]="m.message"></span>
 
           <span *ngSwitchCase="2">
-            <app-name [message]="m"></app-name>
+            <q-name [message]="m"></q-name>
             says "{{m.message}}"
           </span>
 
           <span *ngSwitchCase="3">
-            <app-name [message]="m"></app-name>
+            <q-name [message]="m"></q-name>
             {{m.message}}
           </span>
 
           <span *ngSwitchCase="4">
             You told
-            <app-name [message]="m"></app-name>
+            <q-name [message]="m"></q-name>
             "{{m.message}}"
           </span>
 
           <span *ngSwitchCase="5">
-            <app-name [message]="m"></app-name>
+            <q-name [message]="m"></q-name>
             tells you
             "{{m.message}}"
           </span>
 
           <span *ngSwitchCase="6">
             The following commands are available in this lobby:<br>
-            <span *ngFor="let c of m.message" class="command"
-              (click)="clickCommand(c)" title="Send Command">
+            <span *ngFor="let c of m.message"
+                  class="command"
+                  (click)="clickCommand(c)"
+                  title="Send Command">
               {{c.base}}
               <ng-container *ngIf="c.params"> {{c.params}}</ng-container> -
               {{c.help}}<br>
@@ -40,7 +45,8 @@
           </span>
 
           <span *ngSwitchCase="7">
-            <app-name [message]="m" offline="true"></app-name> was last seen
+            <q-name [message]="m"
+                    offline="true"></q-name> was last seen
             {{m.ago}} ({{m.time}}).
           </span>
         </ng-container>
@@ -49,25 +55,32 @@
 
     <div id="icons">
       <button mat-icon-button
-        (click)="fs.open = true; fs.selected = 'lobby'; wd.active = 'friends'">
+              (click)="fs.open = true; fs.selected = 'lobby'; wd.active = 'friends'">
         <mat-icon title="Player List">group</mat-icon>
       </button>
       <button mat-icon-button
-        (click)="fs.open = true; fs.selected = 'invite'; wd.active = 'friends'"
-        [class.highlight]="fs.invites.length">
+              (click)="fs.open = true; fs.selected = 'invite'; wd.active = 'friends'"
+              [class.highlight]="fs.invites.length">
         <mat-icon title="Alerts">notifications</mat-icon>
       </button>
-      <button mat-icon-button (click)="ss.open = true; wd.active = 'settings'">
+      <button mat-icon-button
+              (click)="ss.open = true; wd.active = 'settings'">
         <mat-icon title="Settings">settings</mat-icon>
       </button>
-      <button mat-icon-button (click)="is.open = true; wd.active = 'inventory'">
+      <button mat-icon-button
+              (click)="is.open = true; wd.active = 'inventory'">
         <mat-icon title="Inventory">apps</mat-icon>
       </button>
     </div>
   </div>
 
   <form (submit)="sendInput($event)">
-    <input #inputEl id="textinput" autocomplete="off" maxlength="200"
-      name="value" (keyup)="handleKey($event)" [(ngModel)]="chat.value">
+    <input #inputEl
+           id="textinput"
+           autocomplete="off"
+           maxlength="200"
+           name="value"
+           (keyup)="handleKey($event)"
+           [(ngModel)]="chat.value">
   </form>
 </div>

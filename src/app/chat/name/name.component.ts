@@ -6,7 +6,7 @@ import { FriendsService } from '../friends/friends.service';
 import { StatService } from '../stat/stat.service';
 
 @Component({
-  selector: 'app-name',
+  selector: 'q-name',
   templateUrl: './name.component.html',
   styleUrls: ['./name.component.css']
 })
@@ -35,23 +35,23 @@ export class NameComponent implements OnInit {
   }
 
   add() {
-    this.ws.send("friend", this.message.from);
+    this.ws.send('friend', this.message.from);
   }
 
   block() {
-    this.ws.send("block", this.message.from);
+    this.ws.send('block', this.message.from);
   }
 
   unblock() {
-    this.ws.send("unblock", this.message.from);
+    this.ws.send('unblock', this.message.from);
   }
 
   invite() {
-    this.ws.send("c/invite", this.getName());
+    this.ws.send('c/invite', this.getName());
   }
 
   kick() {
-    this.ws.send("c/kick", this.getName());
+    this.ws.send('c/kick', this.getName());
   }
 
 }

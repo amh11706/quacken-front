@@ -1,9 +1,13 @@
-<div qdrag bindToWindow class="container noselect" id="timer">
+<div qDrag
+	 bindToWindow
+	 class="container noselect"
+	 id="timer">
 	<p id="turncount">{{time}}</p>
 	<ng-container *ngFor="let type of treasure; let i = index">
 		<p>
 			{{type}}
-			<img [title]="titles[i]" src="./assets/images/obstacle{{i + 1}}.png">
+			<img [title]="titles[i]"
+				 src="./assets/images/obstacle{{i + 1}}.png">
 		</p>
 	</ng-container>
 </div>

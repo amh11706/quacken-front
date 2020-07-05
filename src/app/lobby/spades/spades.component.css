@@ -37,25 +37,25 @@
   color: aquamarine;
 }
 
-app-card.played {
+q-card.played {
   transition: .5s;
 }
 
-app-card.valid:hover {
+q-card.valid:hover {
   transform: translateY(-6px);
 }
 
-app-card.selected {
+q-card.selected {
   transform: translateY(-12px) !important;
 }
 
-app-last-trick {
+q-last-trick {
   position: absolute;
   bottom: 250px;
   left: 10%;
 }
 
-app-timer {
+q-timer {
   position: absolute;
   bottom: 184px;
   right: 140px;

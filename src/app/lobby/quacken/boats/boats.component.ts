@@ -7,61 +7,60 @@ import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
 
 export interface Clutter {
-  t: number,
-  x: number,
-  y: number,
-  d?: number,
-  p?: boolean,
+  t: number;
+  x: number;
+  y: number;
+  d?: number;
+  p?: boolean;
 }
 
 export interface Turn {
-  turn: number,
-  steps: BoatStatus[][],
-  cSteps: Clutter[][],
-  treasure: number[],
+  turn: number;
+  steps: BoatStatus[][];
+  cSteps: Clutter[][];
+  treasure: number[];
 }
 
 interface Sync {
-  sync: BoatSync[],
-  cSync: Clutter[],
+  sync: BoatSync[];
+  cSync: Clutter[];
 }
 
 interface BoatStatus {
-  id: number,
-  x: number,
-  y: number,
-  t: number,
-  tf: number,
-  tm: number,
-  s?: number,
-  c?: number,
-  cd?: number,
+  id: number;
+  x: number;
+  y: number;
+  t: number;
+  tf: number;
+  tm: number;
+  s?: number;
+  c?: number;
+  cd?: number;
 }
 
 export interface BoatSync extends BoatStatus {
-  oId?: number,
-  n: string,
-  f: number,
+  oId?: number;
+  n: string;
+  f: number;
   // m: number[],
-  d: number,
-  b: number,
-  tp: number,
-  ty: number,
-  ml: number,
-  ms: number,
+  d: number;
+  b: number;
+  tp: number;
+  ty: number;
+  ml: number;
+  ms: number;
 }
 
 @Component({
-  selector: 'app-boats',
+  selector: 'q-boats',
   templateUrl: './boats.component.html',
   styleUrls: ['./boats.component.css']
 })
 export class BoatsComponent implements OnInit, OnDestroy {
+
+  constructor(private ws: WsService) { }
   @Input() speed: number;
   @Input() map: HTMLElement;
-  @Input() getX = (p: { x: number, y: number }): number => (p.x) * 50;
-  @Input() getY = (p: { x: number, y: number }): number => (p.y) * 50;
-  getObj = (o: Clutter): string => `translate(${this.getX(o)}px,${this.getY(o)}px)`
   weapons = weapons;
   clutterTypes = [
     'powderkeg',
@@ -71,29 +70,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
     'head',
   ];
   clutter: Clutter[] = [];
-  @Input() moveTransition = (transition: number): string => {
-    switch (transition) {
-      case 0: return '0s linear';
-      case 1: return 10 / this.speed + 's linear';
-      case 1: return 10 / this.speed + 's ease-in';
-      case 1: return 10 / this.speed + 's ease-out';
-      case 1: return 10 / this.speed + 's linear';
-      case 4: return '.1s linear';
-      default: return '';
-    }
-  }
-  @Input() rotateTransition = (b: Boat): string => {
-    if (b.rotateTransition === 1) {
-      return 0.9 / this.speed + 's ease ' + 0.1 / this.speed + 's'
-    }
-    return [
-      '0s linear',
-      '', // normal rotate handled above
-      '3s linear', // sink rotate
-      '1s ease', // duck poo
-      '.2s ease' // defenduck spin
-    ][b.rotateTransition];
-  }
   szFade = ', opacity .8s linear .7s';
   moveNames = ['', 'left', 'forward', 'right', 'obscured'];
   titles = ['', ', Cuttle Cake', ', Taco Locker', ', Pea Pod', ', Fried Egg'];
@@ -106,8 +82,31 @@ export class BoatsComponent implements OnInit, OnDestroy {
   private blurred = false;
   private step = -1;
   private turn: Turn;
-
-  constructor(private ws: WsService) { }
+  @Input() getX = (p: { x: number, y: number }): number => (p.x) * 50;
+  @Input() getY = (p: { x: number, y: number }): number => (p.y) * 50;
+  getObj = (o: Clutter): string => `translate(${this.getX(o)}px,${this.getY(o)}px)`;
+  @Input() moveTransition = (transition: number): string => {
+    switch (transition) {
+      case 0: return '0s linear';
+      case 1: return 10 / this.speed + 's linear';
+      case 2: return 10 / this.speed + 's ease-in';
+      case 3: return 10 / this.speed + 's ease-out';
+      case 4: return '.1s linear';
+      default: return '';
+    }
+  }
+  @Input() rotateTransition = (b: Boat): string => {
+    if (b.rotateTransition === 1) {
+      return 9 / this.speed + 's ease ' + 1 / this.speed + 's';
+    }
+    return [
+      '0s linear',
+      '', // normal rotate handled above
+      '3s linear', // sink rotate
+      '1s ease', // duck poo
+      '.2s ease' // defenduck spin
+    ][b.rotateTransition];
+  }
 
   ngOnInit() {
     document.addEventListener('visibilitychange', this.visibilityChange);
@@ -163,7 +162,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (this.blurred) {
       clearTimeout(this.animateTimeout);
       if (this.step >= 0) {
-        for (let boat of this.boats) {
+        for (const boat of this.boats) {
           boat.moves = [0, 0, 0, 0];
           boat.bomb = 0;
           boat.ready = false;
@@ -201,7 +200,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    for (let boat of this.boats) boat.ready = true;
+    for (const boat of this.boats) boat.ready = true;
     this.playTurn();
   }
 
@@ -215,7 +214,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   private playTurn = () => {
     const clutterPart = this.turn.cSteps[this.step] || [];
-    setTimeout(() => this.handleUpdate(clutterPart), 1000 / this.speed);
+    setTimeout(() => this.handleUpdate(clutterPart), 10000 / this.speed);
     const turnPart = this.turn.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
@@ -239,10 +238,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
       } else boat.rotateByMove(u.tm);
     }
 
-    if (this.step === 4) this.resetBoats()
+    if (this.step === 4) this.resetBoats();
 
     this.step++;
-    const delay = (this.turn.steps[this.step] ? 750 : 250) * 2 / this.speed;
+    const delay = (this.turn.steps[this.step] ? 750 : 250) * 20 / this.speed;
     if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, delay);
     else this.animateTimeout = window.setTimeout(() => this.ws.send('sync'), 1500);
   }
@@ -303,8 +302,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   private handleUpdate(updates: Clutter[]) {
     for (const u of updates) {
-      let c = this.clutter.find(c => {
-        return c.x === u.x && c.y === u.y;
+      const c = this.clutter.find(elem => {
+        return elem.x === u.x && elem.y === u.y;
       });
 
       if (!c) {

@@ -4,10 +4,10 @@ import { WsService } from '../../ws.service';
 import { Message } from '../chat.service';
 
 export interface Invite {
-  f: string,
-  ty: number,
-  tg: number,
-};
+  f: string;
+  ty: number;
+  tg: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -42,12 +42,12 @@ export class FriendsService {
     this.ws.subscribe('block', (m: string) => {
       this.blocked.push(m);
       for (const n of this.lobby) if (n.from === m) n.blocked = true;
-      this.ws.dispatchMessage({ cmd: 'm', data: { type: 1, message: m + " has been blocked." } });
+      this.ws.dispatchMessage({ cmd: 'm', data: { type: 1, message: m + ' has been blocked.' } });
     });
     this.ws.subscribe('unblock', (m: string) => {
       this.blocked = this.blocked.filter(n => m !== n);
       for (const n of this.lobby) if (n.from === m) n.blocked = false;
-      this.ws.dispatchMessage({ cmd: 'm', data: { type: 1, message: m + " has been unblocked." } });
+      this.ws.dispatchMessage({ cmd: 'm', data: { type: 1, message: m + ' has been unblocked.' } });
     });
   }
 

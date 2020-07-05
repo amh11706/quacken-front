@@ -1,15 +1,24 @@
-<div *ngIf="is.open" [qdrag]="handle" bindToWindow class="container noselect"
-  id="inventory">
-  <div #handle class="handle"></div>
-  <mat-icon class="close" (click)="is.open = false">close</mat-icon>
+<div *ngIf="is.open"
+     [qDrag]="handle"
+     bindToWindow
+     class="container noselect"
+     id="inventory">
+  <div #handle
+       class="handle"></div>
+  <mat-icon class="close"
+            (click)="is.open = false">close</mat-icon>
   <h2>{{ws.user.name}}'s Inventory</h2>
-  <div class="coin" title="Coins" draggable="true">
-    <img src="/assets/items/0.png" draggable="false"> {{inv.currency}}
+  <div class="coin"
+       title="Coins"
+       draggable="true">
+    <img src="/assets/items/0.png"
+         draggable="false"> {{inv.currency}}
   </div>
   <br>
   <mat-form-field>
-    <mat-select [(value)]="inv.sort" placeholder="Sort By"
-      (selectionChange)="sort($event.value)">
+    <mat-select [(value)]="inv.sort"
+                placeholder="Sort By"
+                (selectionChange)="sort($event.value)">
       <mat-option value="id">Item Id</mat-option>
       <mat-option value="t">Item Type</mat-option>
       <mat-option value="q">Quantity</mat-option>
@@ -18,19 +27,27 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <input matInput placeholder="Search"
-      (keyup)="searchBounce($event.target.value)">
+    <input matInput
+           placeholder="Search"
+           (keyup)="searchBounce($event.target.value)">
   </mat-form-field>
 
-  <p *ngIf="!inv.filtered; else items" class="empty">Loading...</p>
+  <p *ngIf="!inv.filtered; else items"
+     class="empty">Loading...</p>
   <ng-template #items>
     <div class="content">
-      <div class="item" *ngFor="let i of inv.filtered" [title]="i.n"
-        [class.dropable]="i.q < 250 && i.s !== dragging.s && dragging.id === i.id"
-        [class.new]="i.f" (mouseenter)="i.f = false" (dblclick)="clickStack(i)"
-        (dragstart)="dragging = i" (dragend)="dragging = {}"
-        (drop)="drop($event, i)" draggable="true"
-        (dragover)="i.q < 250 && dragging.s !== i.s ? $event.preventDefault() : null">
+      <div class="item"
+           *ngFor="let i of inv.filtered"
+           [title]="i.n"
+           [class.dropable]="i.q < 250 && i.s !== dragging.s && dragging.id === i.id"
+           [class.new]="i.f"
+           (mouseenter)="i.f = false"
+           (dblclick)="clickStack(i)"
+           (dragstart)="dragging = i"
+           (dragend)="dragging = {}"
+           (drop)="drop($event, i)"
+           draggable="true"
+           (dragover)="i.q < 250 && dragging.s !== i.s ? $event.preventDefault() : null">
         <img [src]="'/assets/items/'+i.id+'.png'">
         <span class="quantity">{{i.q}}</span>
       </div>

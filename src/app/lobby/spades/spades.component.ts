@@ -15,7 +15,7 @@ const ownerSettings = [
 ];
 
 @Component({
-  selector: 'app-spades',
+  selector: 'q-spades',
   templateUrl: './spades.component.html',
   styleUrls: ['./spades.component.css']
 })
@@ -120,9 +120,9 @@ export class SpadesComponent implements OnInit, OnDestroy {
       if (this.lobby.playingP === this.ws.sId) {
         this.played = true;
         this.selected = [];
-        this.cards = this.cards.filter(c => {
-          c.valid = false;
-          return c.id !== p.id;
+        this.cards = this.cards.filter(card => {
+          card.valid = false;
+          return card.id !== p.id;
         });
       }
     }));
@@ -132,7 +132,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         const sitting = this.lobby.sitting > -1 ? this.lobby.sitting : 0;
         this.lobby.lastTrick = [];
-        const wonSpot = spots[(4 + p - sitting) % 4]
+        const wonSpot = spots[(4 + p - sitting) % 4];
         for (const c of this.lobby.played) {
           if (this.lobby.lastTrick.length === 4) break;
           if (c.position === wonSpot) c.won = true;
@@ -149,9 +149,9 @@ export class SpadesComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe('score', (p: number[]) => {
       this.lobby.scores = p;
       this.lobby.spadeBroke = false;
-      for (const p of this.lobby.players) {
-        p.tricks = -1;
-        p.bid = 0;
+      for (const player of this.lobby.players) {
+        player.tricks = -1;
+        player.bid = 0;
       }
     }));
 

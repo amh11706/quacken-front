@@ -7,31 +7,31 @@ import { InventoryService } from './inventory.service';
 import { SplitComponent } from './split/split.component';
 
 export interface Item {
-  s?: number,
-  id?: number,
-  t?: number,
-  q?: number,
-  n?: string,
-  f?: boolean,
+  s?: number;
+  id?: number;
+  t?: number;
+  q?: number;
+  n?: string;
+  f?: boolean;
 }
 
 interface Inventory {
-  id?: number,
-  userId?: number,
-  items?: Item[],
+  id?: number;
+  userId?: number;
+  items?: Item[];
   filtered?: Item[];
-  sort?: string,
-  currency?: number,
+  sort?: string;
+  currency?: number;
 }
 
 interface InvUpdate {
-  del?: number[],
-  new?: Item[],
-  update?: { id: number, quantity: number }[],
+  del?: number[];
+  new?: Item[];
+  update?: { id: number, quantity: number }[];
 }
 
 @Component({
-  selector: 'app-inventory',
+  selector: 'q-inventory',
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.css']
 })
@@ -124,7 +124,7 @@ export class InventoryComponent implements OnDestroy {
       const c = a[by];
       const d = b[by];
       if (typeof c === 'boolean') {
-        if (c === d) return 0
+        if (c === d) return 0;
         return c ? -1 : 1;
       }
       if (c > d) return 1;

@@ -4,7 +4,7 @@ import { SettingsService } from './settings.service';
 import { WsService } from '../ws.service';
 
 @Component({
-  selector: 'app-settings',
+  selector: 'q-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })

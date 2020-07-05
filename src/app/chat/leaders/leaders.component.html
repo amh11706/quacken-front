@@ -1,8 +1,14 @@
-<div *ngIf="ws.connected && stat.leadersOpen" id="leaders" class="container"
-  [qdrag]="handle" bindToWindow>
-  <div #handle class="handle"></div>
-  <mat-icon class="close" (click)="stat.leadersOpen=false">close</mat-icon>
-  <mat-icon class="refresh" (click)="stat.refreshLeaders()">refresh</mat-icon>
+<div *ngIf="ws.connected && stat.leadersOpen"
+     id="leaders"
+     class="container"
+     [qDrag]="handle"
+     bindToWindow>
+  <div #handle
+       class="handle"></div>
+  <mat-icon class="close"
+            (click)="stat.leadersOpen=false">close</mat-icon>
+  <mat-icon class="refresh"
+            (click)="stat.refreshLeaders()">refresh</mat-icon>
   <h2>{{stat.groupName}}</h2>
   <div id="selection">
     <table>
@@ -15,7 +21,7 @@
       <tr *ngFor="let row of stat.leaders; let i = index">
         <td>{{i+1}}</td>
         <td>
-          <app-name [message]="row"></app-name>
+          <q-name [message]="row"></q-name>
         </td>
         <td>{{row.value}}</td>
         <td *ngFor="let c of stat.columns">{{row[c.property]}}</td>

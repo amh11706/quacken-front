@@ -4,14 +4,16 @@
         "directive-selector": [
             true,
             "attribute",
-            "app",
+            "q",
             "camelCase"
         ],
         "component-selector": [
             true,
             "element",
-            "app",
+            "q",
             "kebab-case"
-        ]
+        ],
+        "curly": false,
+        "no-bitwise": false
     }
 }

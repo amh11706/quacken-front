@@ -1,23 +1,25 @@
-<ng-template #quackenView let-settings="settings">
+<ng-template #quackenView
+             let-settings="settings">
   <mat-icon title="Duck Level ({{settings.duckLvl}})"
-    [style.color]="'rgb('+settings.duckLvl*20+','+(11-settings.duckLvl)*20+',0)'">
+            [style.color]="'rgb('+settings.duckLvl*20+','+(11-settings.duckLvl)*20+',0)'">
     show_chart
   </mat-icon>
   <mat-icon title="Hot Entry ({{settings.hotEntry ? 'allowed' : 'blocked'}})"
-    [style.color]="settings.hotEntry ? 'green' : 'maroon'">
+            [style.color]="settings.hotEntry ? 'green' : 'maroon'">
     whatshot
   </mat-icon>
   <mat-icon title="{{publicModes[settings.publicMode]}}"
-    [style.color]="settings.publicMode ? 'orange' : 'green'">
+            [style.color]="settings.publicMode ? 'orange' : 'green'">
     public
   </mat-icon>
   <span title="Tile Set">{{settings.tileSet}}</span>
   <span title="Structure Set">{{settings.structureSet}}</span>
 </ng-template>
 
-<ng-template #spadesView let-settings="settings">
+<ng-template #spadesView
+             let-settings="settings">
   <mat-icon title="Watchers ({{settings.watchers ? 'allowed' : 'blocked'}})"
-    [style.color]="settings.watchers ? 'green' : 'maroon'">
+            [style.color]="settings.watchers ? 'green' : 'maroon'">
     {{settings.watchers ? 'visibility' : 'visibility_off'}}
   </mat-icon>
   <span title="Timer (seconds)">{{settings.turnTime}}</span>
@@ -25,27 +27,29 @@
 </ng-template>
 
 <ng-template #quackenEdit>
-  <app-setting name="maxPlayers"></app-setting>
-  <app-setting name="duckLvl"></app-setting>
-  <app-setting name="publicMode"></app-setting>
-  <app-setting name="customMap"></app-setting>
-  <app-setting name="tileSet"></app-setting>
-  <app-setting name="structureSet"></app-setting>
-  <app-setting name="hotEntry"></app-setting>
-  <app-setting name="autoGen"></app-setting>
-  <app-setting name="hideMoves"></app-setting>
+  <q-setting name="maxPlayers"></q-setting>
+  <q-setting name="duckLvl"></q-setting>
+  <q-setting name="publicMode"></q-setting>
+  <q-setting name="customMap"></q-setting>
+  <q-setting name="tileSet"></q-setting>
+  <q-setting name="structureSet"></q-setting>
+  <q-setting name="hotEntry"></q-setting>
+  <q-setting name="autoGen"></q-setting>
+  <q-setting name="hideMoves"></q-setting>
 </ng-template>
 
 <ng-template #spadesEdit>
-  <app-setting name="turnTime"></app-setting>
-  <app-setting name="playTo"></app-setting>
-  <app-setting name="watchers"></app-setting>
+  <q-setting name="turnTime"></q-setting>
+  <q-setting name="playTo"></q-setting>
+  <q-setting name="watchers"></q-setting>
 </ng-template>
 
 <div id="frame">
   <div id="nav">
-    <div *ngFor="let link of links" class="link" (click)="selected = link.path"
-      [class.active]="selected === link.path">
+    <div *ngFor="let link of links"
+         class="link"
+         (click)="selected = link.path"
+         [class.active]="selected === link.path">
       {{link.title}}
     </div>
   </div>
@@ -66,13 +70,14 @@
             <th>Settings</th>
           </tr>
 
-          <tr *ngFor="let lobby of lobbies" (click)="join(lobby)">
+          <tr *ngFor="let lobby of lobbies"
+              (click)="join(lobby)">
             <td>{{lobby.type}}</td>
             <td>{{lobby.name}}</td>
             <td>{{lobby.players}} / {{lobby.group.maxPlayers}}</td>
             <td class="settingsView">
               <ng-container
-                *ngTemplateOutlet="{HexaQuack: quackenView, Quacken: quackenView, Spades: spadesView}[lobby.type]; context: {settings: lobby.group}">
+                            *ngTemplateOutlet="{HexaQuack: quackenView, Quacken: quackenView, Spades: spadesView}[lobby.type]; context: {settings: lobby.group}">
               </ng-container>
             </td>
           </tr>
@@ -81,22 +86,24 @@
     </ng-container>
 
     <ng-container *ngIf="selected === 'create'">
-      <h2 id="create">Lobby Type: <app-setting name="createType"
-          (change)="changeType()"></app-setting>
+      <h2 id="create">Lobby Type: <q-setting name="createType"
+                   (change)="changeType()"></q-setting>
       </h2>
       <div id="lsettings">
-        <ng-container
-          *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit][settings.createType]">
+        <ng-container *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit][settings.createType]">
         </ng-container>
       </div>
 
-      <p *ngIf="createGroup.customMap" class="error">
+      <p *ngIf="createGroup.customMap"
+         class="error">
         Note: Selecting a custom map will override map generation settings.
         Clear the custom map selection to re enable map generation.
       </p>
-      <button mat-raised-button (click)="createLobby()"
-        [disabled]="!ws.user.id || created">Create</button>
-      <p *ngIf="!ws.user.id" class="error">
+      <button mat-raised-button
+              (click)="createLobby()"
+              [disabled]="!ws.user.id || created">Create</button>
+      <p *ngIf="!ws.user.id"
+         class="error">
         Guests cannot make lobbies. Join an existing lobby or create an account
         to make your own.
       </p>
@@ -109,20 +116,23 @@
         used in player created lobbies. More details can be found inside the
         editor.
       </p>
-      <button mat-raised-button (click)="router.navigate(['editor'])"
-        [disabled]="!ws.user.id">Get Started</button>
-      <p *ngIf="!ws.user.id" class="error">
+      <button mat-raised-button
+              (click)="router.navigate(['editor'])"
+              [disabled]="!ws.user.id">Get Started</button>
+      <p *ngIf="!ws.user.id"
+         class="error">
         Guests cannot create maps. Create an account to unlock this feature.
       </p>
     </ng-container>
 
     <ng-container *ngIf="selected === 'notes'">
-      <div *ngFor="let note of notes" class="note">
+      <div *ngFor="let note of notes"
+           class="note">
         <h2>{{note.title}}</h2>
         <p [innerHTML]="note.content"></p>
       </div>
     </ng-container>
   </div>
 
-  <app-chat></app-chat>
+  <q-chat></q-chat>
 </div>

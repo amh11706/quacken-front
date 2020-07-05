@@ -4,7 +4,7 @@ import { TileSetComponent } from '../tile-set/tile-set.component';
 import { DBTile } from '../map-editor.component';
 
 @Component({
-  selector: 'app-structure-set',
+  selector: 'q-structure-set',
   templateUrl: './structure-set.component.html',
   styleUrls: ['./structure-set.component.css']
 })
@@ -47,7 +47,7 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
     const feature = this.map.selectedTile.activeFeature;
     feature[which] = +e.target.value;
 
-    if (feature.group != 0) {
+    if (feature.group !== 0) {
       switch (which) {
         case 'x1':
           if (feature.x2 < feature.x1) feature.x2 = feature.x1;

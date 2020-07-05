@@ -7,7 +7,7 @@ import { StatService } from '../stat/stat.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-friends',
+  selector: 'q-friends',
   templateUrl: './friends.component.html',
   styleUrls: ['./friends.component.css']
 })
@@ -35,11 +35,11 @@ export class FriendsComponent implements OnInit {
   }
 
   remove(friend: string) {
-    this.ws.send("friendRemove", friend);
+    this.ws.send('friendRemove', friend);
   }
 
   unblock(blocked: string) {
-    this.ws.send("unblock", blocked);
+    this.ws.send('unblock', blocked);
   }
 
   accept(inv: Invite) {
@@ -49,12 +49,12 @@ export class FriendsComponent implements OnInit {
   }
 
   decline(inv: Invite) {
-    this.fs.invites = this.fs.invites.filter(i => i !== inv)
-    this.ws.send("inviteRemove", inv);
+    this.fs.invites = this.fs.invites.filter(i => i !== inv);
+    this.ws.send('inviteRemove', inv);
   }
 
   invite(friend: string) {
-    this.ws.send("c/invite", friend);
+    this.ws.send('c/invite', friend);
   }
 
 }

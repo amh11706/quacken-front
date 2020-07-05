@@ -4,7 +4,7 @@ import { StatService } from './stat.service';
 import { WsService } from 'src/app/ws.service';
 
 @Component({
-  selector: 'app-stat',
+  selector: 'q-stat',
   templateUrl: './stat.component.html',
   styleUrls: ['./stat.component.css']
 })

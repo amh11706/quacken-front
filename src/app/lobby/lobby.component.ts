@@ -8,21 +8,21 @@ import { FriendsService } from '../chat/friends/friends.service';
 import { Clutter, BoatSync } from './quacken/boats/boats.component';
 
 export interface Lobby {
-  owner: boolean,
-  players?: any[],
-  playing?: boolean,
+  owner: boolean;
+  players?: any[];
+  playing?: boolean;
   scores?: number[];
-  map?: string,
-  boats?: { [key: string]: BoatSync },
-  treasure?: number[],
-  clutter?: Clutter[],
-  turn?: number,
-  type: string,
-  [key: string]: any,
+  map?: string;
+  boats?: { [key: string]: BoatSync };
+  treasure?: number[];
+  clutter?: Clutter[];
+  turn?: number;
+  type: string;
+  [key: string]: any;
 }
 
 @Component({
-  selector: 'app-lobby',
+  selector: 'q-lobby',
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css']
 })

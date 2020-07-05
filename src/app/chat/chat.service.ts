@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-moment.locale("en-GB");
+moment.locale('en-GB');
 
 import { WsService } from '../ws.service';
 
 export interface Message {
-  type: number,
-  message: any,
-  from: string,
-  copy: number,
-  friend?: boolean,
-  blocked?: boolean,
-  time?: number | string,
-  ago?: string,
+  type: number;
+  message: any;
+  from: string;
+  copy: number;
+  friend?: boolean;
+  blocked?: boolean;
+  time?: number | string;
+  ago?: string;
 }
 
 @Injectable({

@@ -5,7 +5,7 @@ import { WsService } from 'src/app/ws.service';
 import { MapEditor, DBTile } from '../map-editor.component';
 
 @Component({
-  selector: 'app-settings',
+  selector: 'q-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
@@ -62,8 +62,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     let unsaved = this.shown.unsaved;
     if (!this.map.tileSettings) switch (this.shown.group) {
       case 'tile_sets':
-        tiles:
-        if (this.map.tiles) for (const group of this.map.tiles) {
+        if (this.map.tiles) tiles: for (const group of this.map.tiles) {
           if (group) for (const tile of group) {
             if (tile.unsaved) {
               unsaved = true;
@@ -112,10 +111,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.tileSet = this.shown;
     this.map.tileSet.data = [[]];
 
-    for (const tile of tileSet) {
-      if (!tile.type) tile.type = 0;
-      if (!tiles[tile.type]) tiles[tile.type] = [tile];
-      else tiles[tile.type].push(tile);
+    for (const t of tileSet) {
+      if (!t.type) t.type = 0;
+      if (!tiles[t.type]) tiles[t.type] = [t];
+      else tiles[t.type].push(t);
     }
     this.map.selectedTile = tileSet[0] || {
       id: null, name: '', undos: [], redos: [],

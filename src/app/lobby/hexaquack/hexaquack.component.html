@@ -1,34 +1,48 @@
-<div #frame class="noselect" id="background" (wheel)="scroll($event)"
-  oncontextmenu="event.preventDefault();">
+<div #frame
+     class="noselect"
+     id="background"
+     (wheel)="scroll($event)"
+     oncontextmenu="event.preventDefault();">
   <!-- mapframe receives the offset transform, map receives the rotate transform.
  	This allows them to be altered independent of each other -->
   <div id="mapcenter">
-    <div id="mapscale" [style.transform]="'scale('+settings.mapScale/50+')'">
-      <div id="mapframe" [qdrag]="frame"
-        transform="rotateX(45deg) rotateZ(-60deg)">
+    <div id="mapscale"
+         [style.transform]="'scale('+settings.mapScale/50+')'">
+      <div id="mapframe"
+           [qDrag]="frame"
+           transform="rotateX(45deg) rotateZ(-60deg)">
         <div [style.transform]="'translateX('+(540-getX(myBoat.pos))+'px)'"
-          [style.transition]="moveTransition(myBoat.moveTransition[0])">
+             [style.transition]="moveTransition(myBoat.moveTransition[0])">
           <div id="maprows"
-            [style.transform]="'translateY('+(1326-getY(myBoat.pos))+'px)'"
-            [style.transition]="moveTransition(myBoat.moveTransition[1])">
-            <div *ngFor="let row of map; let i = index" class="maprow"
-              [style.top]="e ? (i-1)*26+'px' : 0+'px'">
-              <div *ngFor="let tile of row; let e = even" class="tile"
-                [class.sztile]="i > 48" [class.even]="e">
+               [style.transform]="'translateY('+(1326-getY(myBoat.pos))+'px)'"
+               [style.transition]="moveTransition(myBoat.moveTransition[1])">
+            <div *ngFor="let row of map; let i = index"
+                 class="maprow"
+                 [style.top]="e ? (i-1)*26+'px' : 0+'px'">
+              <div *ngFor="let tile of row; let e = even"
+                   class="tile"
+                   [class.sztile]="i > 48"
+                   [class.even]="e">
 
                 <svg viewBox="-10 -9 20.4 17.4">
-                  <polygon stroke="#000000" stroke-width="0.3"
-                    points="5,-9 -5,-9 -10,0 -5,9 5,9 10,0" />
+                  <polygon stroke="#000000"
+                           stroke-width="0.3"
+                           points="5,-9 -5,-9 -10,0 -5,9 5,9 10,0" />
                 </svg>
-                <img *ngIf="tile" src="./assets/heximages/obstacle{{tile}}.png"
-                  [class]="'img' + tile" [title]="titles[tile] || ''">
+                <img *ngIf="tile"
+                     src="./assets/heximages/obstacle{{tile}}.png"
+                     [class]="'img' + tile"
+                     [title]="titles[tile] || ''">
               </div>
             </div>
 
-            <app-boats [map]="frame" [speed]="settings.speed / 10" [getX]="getX"
-              [getY]="getY" [moveTransition]="moveTransition"
-              [rotateTransition]="rotateTransition">
-            </app-boats>
+            <q-boats [map]="frame"
+                     [speed]="settings.speed"
+                     [getX]="getX"
+                     [getY]="getY"
+                     [moveTransition]="moveTransition"
+                     [rotateTransition]="rotateTransition">
+            </q-boats>
           </div>
         </div>
       </div>
@@ -36,5 +50,5 @@
   </div>
 </div>
 
-<app-hud [kbControls]="settings.kbControls"></app-hud>
-<app-entry-status></app-entry-status>
+<q-hud [kbControls]="settings.kbControls"></q-hud>
+<q-entry-status></q-entry-status>

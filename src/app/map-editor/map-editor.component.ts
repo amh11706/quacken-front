@@ -6,51 +6,51 @@ import { MatDialog } from '@angular/material';
 import { GuideComponent } from './guide/guide.component';
 
 export interface MapTile {
-  x: number, y: number, v: number,
+  x: number; y: number; v: number;
 }
 
 export interface DBTile {
-  id: number,
-  name: string,
-  data?: any[],
-  unsaved?: boolean,
-  description?: string,
-  type?: number,
-  group?: string,
-  tile_set?: number,
-  structure_set?: number,
-  released?: boolean,
-  weight?: number,
-  undos: MapTile[][],
-  redos: MapTile[][],
-  activeFeature?: StructureData,
-  activeGroup?: number,
+  id: number;
+  name: string;
+  data?: any[];
+  unsaved?: boolean;
+  description?: string;
+  type?: number;
+  group?: string;
+  tile_set?: number;
+  structure_set?: number;
+  released?: boolean;
+  weight?: number;
+  undos: MapTile[][];
+  redos: MapTile[][];
+  activeFeature?: StructureData;
+  activeGroup?: number;
   hex?: boolean;
 }
 
 export interface StructureData {
-  group: number,
-  type: number,
-  x1: number,
-  x2: number,
-  y1: number,
-  y2: number,
+  group: number;
+  type: number;
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
 }
 
 export interface MapEditor {
-  selected: number,
-  selectedTile: DBTile,
-  tileSet?: DBTile,
-  tiles?: DBTile[][],
-  structureSet?: DBTile,
-  structures?: DBTile[],
-  settingsOpen: boolean,
-  tileSettings?: boolean,
+  selected: number;
+  selectedTile: DBTile;
+  tileSet?: DBTile;
+  tiles?: DBTile[][];
+  structureSet?: DBTile;
+  structures?: DBTile[];
+  settingsOpen: boolean;
+  tileSettings?: boolean;
   hex?: boolean;
 }
 
 @Component({
-  selector: 'app-map-editor',
+  selector: 'q-map-editor',
   templateUrl: './map-editor.component.html',
   styleUrls: ['./map-editor.component.css']
 })
@@ -79,7 +79,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const session = localStorage.getItem(this.socket.user.id + "-editor");
+    const session = localStorage.getItem(this.socket.user.id + '-editor');
     if (session) {
       const s = JSON.parse(session);
       if (s.selectedTile) {
@@ -161,7 +161,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     const changes = source.pop();
     const buffer = [];
 
-    for (let oldTile of changes) {
+    for (const oldTile of changes) {
       const change = this.setTile(oldTile.x, oldTile.y, oldTile.v);
       if (change) buffer.push(change);
     }

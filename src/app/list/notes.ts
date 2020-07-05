@@ -1,9 +1,9 @@
-interface note {
-  title: string,
-  content: string,
+interface Note {
+  title: string;
+  content: string;
 }
 
-export const Notes: note[] = [
+export const Notes: Note[] = [
   {
     title: 'Release 15 January 2020',
     content: `
@@ -75,4 +75,4 @@ export const Notes: note[] = [
       <li>Bugfixes and bugbreaks.</li>
     </ul>`
   },
-]
+];

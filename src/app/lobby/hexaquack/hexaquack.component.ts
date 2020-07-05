@@ -3,7 +3,7 @@ import { QuackenComponent } from '../quacken/quacken.component';
 import { Boat } from '../quacken/boats/boat';
 
 @Component({
-  selector: 'app-hexaquack',
+  selector: 'q-hexaquack',
   templateUrl: './hexaquack.component.html',
   styleUrls: ['./hexaquack.component.css']
 })
@@ -14,7 +14,7 @@ export class HexaquackComponent extends QuackenComponent {
       case 4: return '.1s linear';
       default:
         const time = 1 / this.settings.speed;
-        return `${time * 10}s linear ${time * 3}s`
+        return `${time * 10}s linear ${time * 3}s`;
     }
   }
   rotateTransition = (b: Boat): string => {

@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material';
 import { WsService } from 'src/app/ws.service';
 
 @Component({
-  selector: 'app-logout-confirm',
+  selector: 'q-logout-confirm',
   templateUrl: './logout-confirm.component.html',
   styleUrls: ['./logout-confirm.component.css']
 })

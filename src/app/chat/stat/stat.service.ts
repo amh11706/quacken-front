@@ -5,25 +5,25 @@ import { FriendsService } from '../friends/friends.service';
 import { WindowService } from 'src/app/window.service';
 
 export interface Stat {
-  id: number,
-  name: string,
-  value: number,
-  suffix?: number,
+  id: number;
+  name: string;
+  value: number;
+  suffix?: number;
 }
 
 export interface Leader {
-  name: string,
-  value: number,
-  details?: string,
-  clean?: boolean,
-  seed?: string,
-  from?: string,
-  friend?: boolean,
+  name: string;
+  value: number;
+  details?: string;
+  clean?: boolean;
+  seed?: string;
+  from?: string;
+  friend?: boolean;
 }
 
 export interface Column {
-  title: string,
-  property: string,
+  title: string;
+  property: string;
 }
 
 const mapColumns: Column[] = [

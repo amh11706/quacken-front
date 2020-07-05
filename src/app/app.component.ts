@@ -8,7 +8,7 @@ import { LogoutConfirmComponent } from './login/logout-confirm/logout-confirm.co
 import { WindowService } from './window.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'q-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

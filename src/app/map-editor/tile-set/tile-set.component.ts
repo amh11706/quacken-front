@@ -14,7 +14,7 @@ export const TileTypes = [
 ];
 
 @Component({
-  selector: 'app-tile-set',
+  selector: 'q-tile-set',
   templateUrl: './tile-set.component.html',
   styleUrls: ['./tile-set.component.css']
 })

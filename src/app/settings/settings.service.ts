@@ -4,19 +4,19 @@ import { Subject } from 'rxjs';
 import { WsService } from '../ws.service';
 
 interface SettingsMessage {
-  group: string,
-  settings: Setting[],
+  group: string;
+  settings: Setting[];
 }
 
 export interface Setting {
-  id: number,
-  name?: string,
-  group?: string,
-  value: number,
+  id: number;
+  name?: string;
+  group?: string;
+  value: number;
 }
 
 export interface SettingMap {
-  [key: string]: number,
+  [key: string]: number;
 }
 
 @Injectable({
@@ -79,7 +79,7 @@ export class SettingsService {
       ready.subscribe(v => resolve(v));
     });
 
-    return prom
+    return prom;
   }
 
   async get(group: string, name: string): Promise<number> {

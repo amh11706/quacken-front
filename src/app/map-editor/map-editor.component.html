@@ -1,49 +1,66 @@
-  <div #background class="noselect" id="background"
-    oncontextmenu="event.preventDefault()">
-    <div [qdrag]="background" id="mapframe">
-      <app-map
-        *ngIf="map.selectedTile.data && map.selectedTile.data[0] && map.selectedTile.data[0].length"
-        [map]="map" [undo]="undo" [setTile]="setTile">
-      </app-map>
-      <app-structure-map *ngIf="map.structures" [map]="map"></app-structure-map>
-    </div>
+<div #background
+     class="noselect"
+     id="background"
+     oncontextmenu="event.preventDefault()">
+  <div [qDrag]="background"
+       id="mapframe">
+    <q-map *ngIf="map.selectedTile.data && map.selectedTile.data[0] && map.selectedTile.data[0].length"
+           [map]="map"
+           [undo]="undo"
+           [setTile]="setTile">
+    </q-map>
+    <q-structure-map *ngIf="map.structures"
+                     [map]="map"></q-structure-map>
   </div>
+</div>
 
-  <app-obstacles *ngIf="!map.structures" [map]="map" [background]="background">
-  </app-obstacles>
-  <app-tile-set *ngIf="map.tiles" [map]="map"></app-tile-set>
-  <app-structure-set *ngIf="map.structures" [map]="map"></app-structure-set>
-  <app-settings *ngIf="map.settingsOpen" [map]="map"></app-settings>
+<q-obstacles *ngIf="!map.structures"
+             [map]="map"
+             [background]="background">
+</q-obstacles>
+<q-tile-set *ngIf="map.tiles"
+            [map]="map"></q-tile-set>
+<q-structure-set *ngIf="map.structures"
+                 [map]="map"></q-structure-set>
+<q-settings *ngIf="map.settingsOpen"
+            [map]="map"></q-settings>
 
-  <div class="container noselect" id="hud">
-    <div id="chat">
-      <app-chat></app-chat>
-    </div>
-    <div id="buttons">
-      <ng-container *ngIf="map.selectedTile.data">
-        <button mat-icon-button
-          [disabled]="map.settingsOpen || !map.selectedTile.undos.length"
-          (click)="undo(map.selectedTile.undos, map.selectedTile.redos)"
-          title="Undo - ctrl + z">
-          <mat-icon>undo</mat-icon>
-        </button>
-        <button mat-icon-button
-          [disabled]="map.settingsOpen || !map.selectedTile.redos.length"
-          (click)="undo(map.selectedTile.redos, map.selectedTile.undos)"
-          title="Redo - ctrl + y">
-          <mat-icon>redo</mat-icon>
-        </button>
-      </ng-container>
-      <button mat-icon-button [disabled]="map.settingsOpen" (click)="save()"
-        title="Save - ctrl + s">
-        <mat-icon>save</mat-icon>
-      </button>
-      <button mat-icon-button (click)="openGuide()" title="Open Guide">
-        <mat-icon>help_outline</mat-icon>
-      </button>
-      <button mat-raised-button [disabled]="map.settingsOpen"
-        id="editorSettings" (click)="openSettings()"
-        title="Settings - ctrl + e">Editor
-        Settings</button>
-    </div>
+<div class="container noselect"
+     id="hud">
+  <div id="chat">
+    <q-chat></q-chat>
   </div>
+  <div id="buttons">
+    <ng-container *ngIf="map.selectedTile.data">
+      <button mat-icon-button
+              [disabled]="map.settingsOpen || !map.selectedTile.undos.length"
+              (click)="undo(map.selectedTile.undos, map.selectedTile.redos)"
+              title="Undo - ctrl + z">
+        <mat-icon>undo</mat-icon>
+      </button>
+      <button mat-icon-button
+              [disabled]="map.settingsOpen || !map.selectedTile.redos.length"
+              (click)="undo(map.selectedTile.redos, map.selectedTile.undos)"
+              title="Redo - ctrl + y">
+        <mat-icon>redo</mat-icon>
+      </button>
+    </ng-container>
+    <button mat-icon-button
+            [disabled]="map.settingsOpen"
+            (click)="save()"
+            title="Save - ctrl + s">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button mat-icon-button
+            (click)="openGuide()"
+            title="Open Guide">
+      <mat-icon>help_outline</mat-icon>
+    </button>
+    <button mat-raised-button
+            [disabled]="map.settingsOpen"
+            id="editorSettings"
+            (click)="openSettings()"
+            title="Settings - ctrl + e">Editor
+      Settings</button>
+  </div>
+</div>

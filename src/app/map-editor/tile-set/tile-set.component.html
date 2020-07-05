@@ -1,10 +1,15 @@
-<div [qdrag]="handle2" bindToWindow id="tileset" class="container">
-  <div #handle2 id="handle2"></div>
+<div [qDrag]="handle2"
+     bindToWindow
+     id="tileset"
+     class="container">
+  <div #handle2
+       id="handle2"></div>
   <span>{{map.tileSet.name}}</span>
   <mat-form-field>
     <mat-label>Type</mat-label>
     <mat-select [(ngModel)]="map.tileSet.activeGroup">
-      <mat-option *ngFor="let type of types; let i = index" [value]="i">
+      <mat-option *ngFor="let type of types; let i = index"
+                  [value]="i">
         {{type}} <span *ngIf="map.tiles[i]">({{map.tiles[i].length}})</span>
       </mat-option>
     </mat-select>
@@ -12,24 +17,33 @@
 
   <div id="tilebox">
     <div class="tiletype"
-      *ngIf="map.tiles[map.tileSet.activeGroup]; else empty">
-      <div *ngFor="let tile of map.tiles[map.tileSet.activeGroup]" class="tile"
-        [class.unsaved]="tile.unsaved"
-        [class.selected]="tile === map.selectedTile" (click)="select(tile)">
-        <div (dblclick)="editTile()" [title]="tile.description || ''">
+         *ngIf="map.tiles[map.tileSet.activeGroup]; else empty">
+      <div *ngFor="let tile of map.tiles[map.tileSet.activeGroup]"
+           class="tile"
+           [class.unsaved]="tile.unsaved"
+           [class.selected]="tile === map.selectedTile"
+           (click)="select(tile)">
+        <div (dblclick)="editTile()"
+             [title]="tile.description || ''">
           {{tile.name}}
         </div>
-        <span *ngIf="tile.weight === 0" class="delete"
-          (click)="deleteTile(tile)">
+        <span *ngIf="tile.weight === 0"
+              class="delete"
+              (click)="deleteTile(tile)">
           X
         </span>
 
         <div class="weight"
-          title="How common this tile should be relative to the rest of the same type.">
+             title="How common this tile should be relative to the rest of the same type.">
           <mat-form-field>
-            <input matInput placeholder="Weight" type="number" max="100" min="0"
-              [disabled]="pending" [(ngModel)]="tile.weight"
-              (change)="saveWeight(tile)">
+            <input matInput
+                   placeholder="Weight"
+                   type="number"
+                   max="100"
+                   min="0"
+                   [disabled]="pending"
+                   [(ngModel)]="tile.weight"
+                   (change)="saveWeight(tile)">
           </mat-form-field>
         </div>
       </div>
@@ -41,5 +55,6 @@
       </p>
     </ng-template>
   </div>
-  <button mat-raised-button (click)="newTile()">New Tile</button>
+  <button mat-raised-button
+          (click)="newTile()">New Tile</button>
 </div>

@@ -11,7 +11,7 @@ export const Titles = [
 ];
 
 @Component({
-  selector: 'app-obstacles',
+  selector: 'q-obstacles',
   templateUrl: './obstacles.component.html',
   styleUrls: ['./obstacles.component.css']
 })

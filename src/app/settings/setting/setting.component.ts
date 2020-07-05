@@ -6,7 +6,7 @@ import { WsService } from 'src/app/ws.service';
 import { Settings } from './settings';
 
 @Component({
-  selector: 'app-setting',
+  selector: 'q-setting',
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.css']
 })
@@ -16,7 +16,7 @@ export class SettingComponent {
     this.setting.name = value;
     if (this.setting && this.setting.id) this.fetch(value);
   }
-  @Output() change = new EventEmitter<number>()
+  @Output() change = new EventEmitter<number>();
 
   setting: any = {};
   group: SettingMap = {};
@@ -44,7 +44,7 @@ export class SettingComponent {
 
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
-      const v = +this.group[this.setting.name]
+      const v = +this.group[this.setting.name];
       this.change.emit(v);
       this.ss.save({
         id: this.setting.id,

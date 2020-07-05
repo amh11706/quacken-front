@@ -9,7 +9,7 @@ import { InventoryService } from '../inventory/inventory.service';
 import { WindowService } from '../window.service';
 
 @Component({
-  selector: 'app-chat',
+  selector: 'q-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
@@ -31,11 +31,11 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private subs: Subscription;
   private focus = (e: KeyboardEvent) => {
-    if (document.activeElement.id !== 'textinput' && (e.code === 'Tab' || e.char === '/')) {
+    if (document.activeElement.id !== 'textinput' && (e.key === 'Tab' || e.code === 'Slash')) {
       this.input.nativeElement.focus();
-      if (e.char === '/') this.chat.value += '/';
+      if (e.code === 'Slash') this.chat.value += '/';
       e.preventDefault();
-    } else if (e.code === 'Tab') {
+    } else if (e.key === 'Tab') {
       this.input.nativeElement.blur();
       e.preventDefault();
     }
@@ -65,7 +65,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   handleKey(e) {
-    if (e.code === 'ArrowUp') {
+    if (e.key === 'ArrowUp') {
       const history = this.chat.commandHistory;
       if (this.chat.historyIndex === 0 || history.length === 0) return;
 
@@ -76,7 +76,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       }
       this.chat.value = history[this.chat.historyIndex];
 
-    } else if (e.code === 'ArrowDown') {
+    } else if (e.key === 'ArrowDown') {
       if (this.chat.historyIndex === -1) return;
       const history = this.chat.commandHistory;
       if (this.chat.historyIndex === history.length - 1) {
@@ -87,7 +87,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
       this.chat.historyIndex++;
       this.chat.value = history[this.chat.historyIndex];
-    } else if (e.code === 'Tab') {
+    } else if (e.key === 'Tab') {
       document.getElementById('textinput').focus();
     }
   }

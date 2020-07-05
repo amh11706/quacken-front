@@ -9,7 +9,7 @@ import { Notes } from './notes';
 const groups = ['quacken', 'quacken', 'spades'];
 
 @Component({
-  selector: 'app-lobby-list',
+  selector: 'q-lobby-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
@@ -71,7 +71,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   join(l: any) {
     if (!l.group.publicMode) this.router.navigate(['lobby', l.id]);
-    else this.ws.send("lobbyRequest", l.id);
+    else this.ws.send('lobbyRequest', l.id);
   }
 
   createLobby() {

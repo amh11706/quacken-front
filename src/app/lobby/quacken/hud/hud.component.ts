@@ -13,24 +13,24 @@ export const weapons = [
 ];
 
 @Component({
-  selector: 'app-hud',
+  selector: 'q-hud',
   templateUrl: './hud.component.html',
   styleUrls: ['./hud.component.css']
 })
 export class HudComponent implements OnInit, OnDestroy {
   @Input() kbControls = 1;
   keys = {
-    "ArrowLeft": 1, "KeyA": 1,
-    "ArrowUp": 2, "KeyW": 2,
-    "ArrowRight": 3, "KeyD": 3,
-    "ArrowDown": 0, "KeyS": 0,
-    "KeyX": 4,
+    'ArrowLeft': 1, 'KeyA': 1,
+    'ArrowUp': 2, 'KeyW': 2,
+    'ArrowRight': 3, 'KeyD': 3,
+    'ArrowDown': 0, 'KeyS': 0,
+    'KeyX': 4,
   };
   tokens = [
     '', '', '', '', '', '', '', '', '', '',
     'duckpoo', 'duckpoo', 'duckpoo', 'duckpoo',
   ];
-  weapons = weapons
+  weapons = weapons;
 
   document = document;
   myBoat = new Boat('');
@@ -148,7 +148,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.checkMaxMoves();
       this.ws.send('s', this.myBoat.moves);
     }
-  };
+  }
 
   checkMaxMoves() {
     if (this.myBoat.type === 0) return this.maxMoves = false;
@@ -161,7 +161,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.locked || !this.weapons[this.myBoat.type] || this.myBoat.tokenPoints < 2) return;
     if (this.myBoat.bomb === i) this.myBoat.bomb = 0;
     else this.myBoat.bomb = i;
-    this.ws.send("b", this.myBoat.bomb);
+    this.ws.send('b', this.myBoat.bomb);
   }
 
   imReady() {
@@ -172,7 +172,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   start() {
-    this.ws.send("c/start", "");
+    this.ws.send('c/start', '');
   }
 
   clickTile(ev: MouseEvent, slot: number) {
@@ -186,8 +186,8 @@ export class HudComponent implements OnInit, OnDestroy {
       return;
     }
     const move = boat.moves[slot];
-    if (boat.type !== 0 && this.maxMoves && (move === 0 || move == 4)) return;
-    boat.moves[slot] = (ev.which + move) % 4;
+    if (boat.type !== 0 && this.maxMoves && (move === 0 || move === 4)) return;
+    boat.moves[slot] = (ev.button + 1 + move) % 4;
     this.checkMaxMoves();
     this.ws.send('s', boat.moves);
   }
@@ -203,7 +203,7 @@ export class HudComponent implements OnInit, OnDestroy {
     ev.preventDefault();
     if (this.locked) return;
     const boat = this.myBoat;
-    const move = boat.moves[slot]
+    const move = boat.moves[slot];
     if (boat.type !== 0 && this.maxMoves && this.source > 3 &&
       (move === 0 || move === 4) && this.move < 4) return;
 

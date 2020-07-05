@@ -5,7 +5,7 @@ import { SettingMap } from '../settings.service';
 import { WsService } from 'src/app/ws.service';
 
 @Component({
-  selector: 'app-custom-map',
+  selector: 'q-custom-map',
   templateUrl: './custom-map.component.html',
   styleUrls: ['./custom-map.component.css']
 })

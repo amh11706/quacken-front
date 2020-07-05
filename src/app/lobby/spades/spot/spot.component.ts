@@ -5,18 +5,18 @@ import { Lobby } from '../../lobby.component';
 import { Subscription } from 'rxjs';
 
 interface Player {
-  sId?: number,
-  name?: string,
-  slot?: number,
-  bid?: number,
-  tricks?: number,
-  ready?: boolean,
+  sId?: number;
+  name?: string;
+  slot?: number;
+  bid?: number;
+  tricks?: number;
+  ready?: boolean;
 }
 
 export const spots = ['south', 'west', 'north', 'east'];
 
 @Component({
-  selector: 'app-spot',
+  selector: 'q-spot',
   templateUrl: './spot.component.html',
   styleUrls: ['./spot.component.css']
 })
@@ -74,7 +74,7 @@ export class SpotComponent implements OnInit, OnDestroy {
         this.lobby.sitting = -1;
         this.rotatedSpots = [...this.lobby.players];
       }
-      for (const p of this.lobby.players) p.ready = false;
+      for (const player of this.lobby.players) player.ready = false;
     }));
 
     this.sub.add(this.ws.subscribe('offerBlind', () => this.offerBlind = true));
@@ -85,7 +85,7 @@ export class SpotComponent implements OnInit, OnDestroy {
       const delay = this.lobby.played.length === 4 ? 1500 : 0;
       setTimeout(() => {
         this.lobby.playingP = 0;
-        if (this.lobby.bidding === -1) for (const p of this.lobby.players) p.tricks = -1;
+        if (this.lobby.bidding === -1) for (const player of this.lobby.players) player.tricks = -1;
         this.lobby.bidding = p;
       }, delay);
     }));

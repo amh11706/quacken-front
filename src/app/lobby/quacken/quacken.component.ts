@@ -14,7 +14,7 @@ const ownerSettings = [
 ];
 
 @Component({
-  selector: 'app-quacken',
+  selector: 'q-quacken',
   templateUrl: './quacken.component.html',
   styleUrls: ['./quacken.component.css']
 })
@@ -24,17 +24,6 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.setMapB64(l.map);
     setTimeout(() => this.ws.dispatchMessage({ cmd: '_boats', data: l }));
   }
-  moveTransition = (transition: number): string => {
-    switch (transition) {
-      case 0: return '0s linear';
-      case 1: return 10 / this.settings.speed + 's linear';
-      case 1: return 10 / this.settings.speed + 's ease-in';
-      case 1: return 10 / this.settings.speed + 's ease-out';
-      case 1: return 10 / this.settings.speed + 's linear';
-      case 4: return '.1s linear';
-      default: return '';
-    }
-  }
 
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   map: number[][] = [];
@@ -42,6 +31,17 @@ export class QuackenComponent implements OnInit, OnDestroy {
   wheelDebounce: number;
   myBoat = new Boat('');
   private sub: Subscription;
+
+  moveTransition = (transition: number): string => {
+    switch (transition) {
+      case 0: return '0s linear';
+      case 1: return 10 / this.settings.speed + 's linear';
+      case 2: return 10 / this.settings.speed + 's ease-in';
+      case 3: return 10 / this.settings.speed + 's ease-out';
+      case 4: return '.1s linear';
+      default: return '';
+    }
+  }
 
   constructor(
     private ws: WsService,
@@ -80,7 +80,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     }
     this.settings.mapScale = Math.round(this.settings.mapScale);
     e.preventDefault();
-    this.saveScale()
+    this.saveScale();
   }
 
   saveScale() {

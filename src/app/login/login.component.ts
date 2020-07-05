@@ -7,7 +7,7 @@ import { TermsComponent } from './terms/terms.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 
 @Component({
-  selector: 'app-login',
+  selector: 'q-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   user = {
     email: '',
     password: ''
-  }
+  };
   pending = false;
   errMessage = '';
 
@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
           this.pending = false;
           this.dialog.open(this.errComponent);
         },
-    );
+      );
   }
 
   createAccount() {
@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit {
           this.pending = false;
           this.errMessage = err.error;
         },
-    );
+      );
   }
 
 }
