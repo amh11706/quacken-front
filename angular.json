@@ -135,5 +135,8 @@
       }
     }
   },
-  "defaultProject": "quacken2"
+  "defaultProject": "quacken2",
+  "cli": {
+    "analytics": "6fc2264c-7903-4c05-9cf3-01f7567309a5"
+  }
 }
