@@ -12,13 +12,14 @@ mat-checkbox {
   text-align: left;
 }
 
-mat-form-field {
-  margin: 0;
-}
-
 button {
   width: 100%;
   background: maroon;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: #ccc;
 }
 
 .setting {
@@ -27,7 +28,12 @@ button {
   margin-bottom: 8px;
   width: 100%;
   max-width: 170px;
+  max-height: 70px;
   color: #eee;
+}
+
+mat-form-field.setting {
+  margin: 0;
 }
 
 .boat {

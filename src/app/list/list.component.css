@@ -39,12 +39,13 @@
   font-size: 18px;
 }
 
-q-setting {
-  padding: 0 8px;
-}
-
 div {
   text-align: center;
+}
+
+q-setting {
+  padding: 0 8px;
+  text-align: left;
 }
 
 q-chat-box {

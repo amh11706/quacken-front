@@ -1,5 +1,5 @@
 <label>{{setting.label}}</label>
-<ng-select *ngIf="group && group[setting.name]"
+<ng-select *ngIf="group"
            [(ngModel)]="group[setting.name]"
            class="setting"
            [items]="data"
