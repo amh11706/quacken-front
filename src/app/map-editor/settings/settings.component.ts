@@ -63,11 +63,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
     let unsaved = this.shown.unsaved;
     if (!this.map.tileSettings) switch (this.shown.group) {
       case 'tile_sets':
-        if (this.map.tiles) tiles: for (const group of this.map.tiles) {
-          if (group) for (const tile of group) {
-            if (tile.unsaved) {
-              unsaved = true;
-              break tiles;
+        if (this.map.tiles) {
+          // prevent babel error with loop label
+          unsaved = unsaved;
+          tiles:
+          for (const group of this.map.tiles) {
+            if (group) for (const tile of group) {
+              if (tile.unsaved) {
+                unsaved = true;
+                break tiles;
+              }
             }
           }
         }
