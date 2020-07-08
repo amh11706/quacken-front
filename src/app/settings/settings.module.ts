@@ -5,7 +5,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 import { SettingComponent } from './setting/setting.component';
 import { SettingsComponent } from './settings.component';
-import { SettingsService } from './settings.service';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -33,7 +32,6 @@ import { CustomMapComponent } from './custom-map/custom-map.component';
     QdragModule,
     NgSelectModule,
   ],
-  providers: [SettingsService],
   exports: [SettingComponent, SettingsComponent]
 })
 export class SettingsModule { }

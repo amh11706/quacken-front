@@ -6,9 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { NameModule } from './name/name.module';
 import { ChatComponent } from './chat.component';
-import { ChatService } from './chat.service';
 import { StatComponent } from './stat/stat.component';
-import { StatService } from './stat/stat.service';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { LeadersComponent } from './leaders/leaders.component';
 
@@ -22,7 +20,6 @@ import { LeadersComponent } from './leaders/leaders.component';
     NameModule,
     QdragModule,
   ],
-  providers: [ChatService, StatService],
   exports: [ChatComponent, StatComponent, LeadersComponent]
 })
 export class ChatModule { }

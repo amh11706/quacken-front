@@ -20,6 +20,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { GuideComponent } from './guide/guide.component';
 import { ObstaclesComponent } from './obstacles/obstacles.component';
 import { MapComponent } from './map/map.component';
+import { MapEditorRoutingModule } from './map-editor-routing.module';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MapComponent } from './map/map.component';
   entryComponents: [GuideComponent],
   imports: [
     CommonModule,
+    MapEditorRoutingModule,
     FormsModule,
     QdragModule,
     ChatModule,

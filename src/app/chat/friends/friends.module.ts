@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { QdragModule } from '../../qdrag/qdrag.module';
 
 import { FriendsComponent } from './friends.component';
-import { FriendsService } from './friends.service';
 import { NameModule } from '../name/name.module';
 
 @NgModule({
@@ -23,7 +22,6 @@ import { NameModule } from '../name/name.module';
     QdragModule,
     NameModule,
   ],
-  providers: [FriendsService],
   exports: [FriendsComponent]
 })
 export class FriendsModule { }

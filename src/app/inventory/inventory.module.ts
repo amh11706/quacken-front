@@ -12,7 +12,6 @@ import { MatSliderModule } from '@angular/material/slider';
 
 import { QdragModule } from '../qdrag/qdrag.module';
 import { InventoryComponent } from './inventory.component';
-import { InventoryService } from './inventory.service';
 import { SplitComponent } from './split/split.component';
 
 @NgModule({
@@ -30,7 +29,6 @@ import { SplitComponent } from './split/split.component';
     MatSliderModule,
     QdragModule,
   ],
-  providers: [InventoryService],
   exports: [InventoryComponent]
 })
 export class InventoryModule { }

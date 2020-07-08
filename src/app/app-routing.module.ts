@@ -3,13 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { CreateComponent } from './login/create/create.component';
-import { ListComponent } from './list/list.component';
 import { AuthGuard } from './auth.guard';
-import { MapEditorComponent } from './map-editor/map-editor.component';
 import { TermsComponent } from './login/terms/terms.component';
 import { PrivacyComponent } from './login/privacy/privacy.component';
 import { ResetComponent } from './login/reset/reset.component';
-import { LobbyComponent } from './lobby/lobby.component';
 
 const routes: Routes = [
   {
@@ -38,15 +35,15 @@ const routes: Routes = [
     children: [
       {
         path: 'list',
-        component: ListComponent,
+        loadChildren: () => import('./list/list.module').then(m => m.ListModule),
       },
       {
         path: 'lobby/:id',
-        component: LobbyComponent,
+        loadChildren: () => import('./lobby/lobby.module').then(m => m.LobbyModule),
       },
       {
         path: 'editor',
-        component: MapEditorComponent,
+        loadChildren: () => import('./map-editor/map-editor.module').then(m => m.MapEditorModule),
       },
       {
         path: '**',

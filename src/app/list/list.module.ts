@@ -8,19 +8,19 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { ChatModule } from '../chat/chat.module';
 import { ListComponent } from './list.component';
-import { LobbyModule } from '../lobby/lobby.module';
 import { SettingsModule } from '../settings/settings.module';
+import { ListRoutingModule } from './list-routing.module';
 
 @NgModule({
   declarations: [ListComponent],
   imports: [
     CommonModule,
+    ListRoutingModule,
     FormsModule,
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
     ChatModule,
-    LobbyModule,
     SettingsModule,
   ],
   exports: [ListComponent],
