@@ -30,14 +30,14 @@ export class Pos {
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit {
-  @Input() map: MapEditor;
-  @Input() undo: (source: MapTile[][], target: MapTile[][]) => void;
-  @Input() setTile: (x: number, y: number, v: number) => MapTile;
+  @Input() map?: MapEditor;
+  @Input() undo?: (source: MapTile[][], target: MapTile[][]) => void;
+  @Input() setTile?: (x: number, y: number, v: number) => MapTile | undefined;
   titles = Titles;
 
   painting = false;
-  private clickX: number;
-  private clickY: number;
+  private clickX?: number;
+  private clickY?: number;
 
   constructor() { }
 
@@ -45,7 +45,9 @@ export class MapComponent implements OnInit {
   }
 
   clickTile(e: MouseEvent, x: number, y: number) {
+    if (!this.map || !this.setTile) return;
     const tile = this.map.selectedTile;
+    if (!tile.data) return;
     if (this.painting && e.button === 0 && tile.data[y][x]) return;
     if (e.shiftKey) {
       this.map.selected = tile.data[y][x] || this.map.selected;
@@ -73,6 +75,7 @@ export class MapComponent implements OnInit {
   }
 
   mouseUp(e: MouseEvent, x: number, y: number) {
+    if (!this.clickX || !this.clickY || !this.setTile || !this.map) return;
     if (Math.abs(e.clientX - this.clickX) + Math.abs(e.clientY - this.clickY) > 20) return;
     this.clickX = 0;
     this.clickY = 0;
@@ -88,6 +91,7 @@ export class MapComponent implements OnInit {
   }
 
   private finishWhirl(x: number, y: number, changes: any[]) {
+    if (!this.setTile || !this.map) return;
     this.painting = false;
     const sides = this.map.hex ? 6 : 4;
     let tile = (this.map.selected - 5) % sides;
@@ -95,6 +99,7 @@ export class MapComponent implements OnInit {
     const p = new Pos(x, y, this.map.hex);
 
     const sTile = this.map.selectedTile;
+    if (!sTile.data) return;
     for (let i = 1; i < sides; i++) {
       p.move(tile);
       if (inverted) tile = (tile + sides - 1) % sides;

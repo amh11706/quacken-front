@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from 'src/app/ws.service';
-import { MapEditor, DBTile } from '../map-editor.component';
+import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
 
 @Component({
   selector: 'q-settings',
@@ -15,7 +15,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     selectedTile: {
       undos: [],
       redos: [],
-      id: null,
+      id: 0,
+      type: 0,
       name: '',
       group: 'tile_sets',
       data: [],
@@ -38,13 +39,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ];
   selected: string | number = 'new';
   options: DBTile[] = [];
-  private sub: Subscription;
+  private sub = new Subscription();
   private mapData: { [key: string]: DBTile[] } = {};
 
   error = '';
   success = '';
   pending = false;
-  shown: DBTile;
+  shown?: DBTile;
 
   constructor(private socket: WsService) { }
 
@@ -100,15 +101,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private gotList(list: any) {
     this.mapData = list;
     const tile = this.shown;
-    this.options = list[tile.group];
+    this.options = list[tile?.group ?? 'maps'];
   }
 
   private handleTileSet(tileSet: any) {
     delete this.map.structures;
     delete this.map.structureSet;
-    const tiles = [];
+    const tiles: DBTile[][] = [];
     this.map.tiles = tiles;
-    this.map.tileSet = this.shown;
+    this.map.tileSet = this.shown || this.map.selectedTile;
     this.map.tileSet.data = [[]];
 
     for (const t of tileSet) {
@@ -129,7 +130,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     delete this.map.tiles;
     delete this.map.tileSet;
     this.map.structures = structureSet;
-    this.map.structureSet = this.shown;
+    this.map.structureSet = this.shown || this.map.selectedTile;
     this.map.structureSet.data = [[]];
     this.map.selectedTile = structureSet[0] || {
       id: null, name: '', undos: [], redos: [],
@@ -146,7 +147,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     delete this.map.tileSet;
     delete this.map.structures;
     delete this.map.structureSet;
-    const tile = this.shown;
+    const tile = this.shown || this.map.selectedTile;
     tile.data = map.data || tile.data;
     tile.undos = map.undos || [];
     tile.redos = map.redos || [];
@@ -162,11 +163,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (this.error) return;
     this.map.tileSettings = false;
 
-    const tile = this.shown;
+    const tile = this.shown || this.map.selectedTile;
     tile.unsaved = false;
     if (msg) Object.assign(tile, msg);
     switch (tile.group) {
       case 'tiles':
+        if (!this.map.tiles || !this.map.tileSet) return;
         const groups = this.map.tiles;
         const type = (tile.type) || 0;
         const tiles = groups[type] || [];
@@ -215,7 +217,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.success = '';
     delete this.map.tiles;
     delete this.map.structures;
-    const tile = this.shown;
+    const tile = this.shown || this.map.selectedTile;
     tile.unsaved = false;
     tile.hex = false;
 
@@ -227,16 +229,20 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   updateOptions() {
-    this.options = this.mapData[this.shown.group];
+    const tile = this.shown || this.map.selectedTile;
+    this.options = this.mapData[tile.group];
     this.selected = 'new';
     this.select();
   }
 
-  private buildMap(type: string): number[][] {
+  private buildMap(type: MapGroups): number[][] {
     const types = {
       cgmaps: { x: 20, y: 36 },
       maps: { x: 25, y: 52 },
-      tiles: { x: 8, y: 8 }
+      tiles: { x: 8, y: 8 },
+      structure_sets: null,
+      tile_sets: null,
+      structures: null,
     };
 
     const size = types[type];
@@ -252,7 +258,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     return map;
   }
 
-  save(tile = this.shown) {
+  save(tile = this.shown || this.map.selectedTile) {
     this.success = '';
     this.error = tile.name ? '' : 'Name is required.';
     if (this.error) return;
@@ -298,14 +304,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.pending = true;
     this.map.hex = false;
-    const tile = this.shown;
+    const tile = this.shown || this.map.selectedTile;
     switch (tile.group) {
       case 'tile_sets':
+        if (!this.map.tileSet) return;
         this.map.hex = tile.hex;
         if (!this.map.tiles || this.map.tileSet.id !== tile.id) this.socket.send('getTileSet', tile.id);
         else this.map.settingsOpen = false;
         return;
       case 'structure_sets':
+        if (!this.map.structureSet) return;
         if (!this.map.structures || this.map.structureSet.id !== tile.id) this.socket.send('getStructureSet', tile.id);
         else this.map.settingsOpen = false;
         return;

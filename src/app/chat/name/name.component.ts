@@ -11,8 +11,8 @@ import { StatService } from '../stat/stat.service';
   styleUrls: ['./name.component.css']
 })
 export class NameComponent implements OnInit {
-  @Input() message: Message;
-  @Input() offline: boolean;
+  @Input() message: Message = {} as Message;
+  @Input() offline = false;
 
   constructor(
     public chat: ChatService,

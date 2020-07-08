@@ -6,9 +6,10 @@ import { SettingsService, SettingMap } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
+import { Settings } from 'src/app/settings/setting/settings';
 
-const baseSettings = ['mapScale', 'speed', 'kbControls'];
-const ownerSettings = [
+const baseSettings: (keyof typeof Settings)[] = ['mapScale', 'speed', 'kbControls'];
+const ownerSettings: (keyof typeof Settings)[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
   'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'
 ];
@@ -21,16 +22,16 @@ const ownerSettings = [
 export class QuackenComponent implements OnInit, OnDestroy {
   @Input() set lobby(l: Lobby) {
     if (!l) return;
-    this.setMapB64(l.map);
+    if (l.map) this.setMapB64(l.map);
     setTimeout(() => this.ws.dispatchMessage({ cmd: '_boats', data: l }));
   }
 
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   map: number[][] = [];
   settings: SettingMap = { mapScale: 50, speed: 10, kbControls: 1 };
-  wheelDebounce: number;
+  wheelDebounce?: number;
   myBoat = new Boat('');
-  private sub: Subscription;
+  private sub = new Subscription();
 
   moveTransition = (transition: number): string => {
     switch (transition) {

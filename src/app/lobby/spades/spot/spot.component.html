@@ -1,44 +1,51 @@
-<div *ngFor="let spot of rotatedSpots; let i = index" class="spot"
-  [id]="spotNames[i]">
+<div *ngFor="let spot of rotatedSpots; let i = index"
+     class="spot"
+     [id]="spotNames[i]">
   <button mat-raised-button
-    *ngIf="lobby.sitting === -1 && !spot.name; else name" (click)="sit(i)">Sit
+          *ngIf="lobby.sitting === -1 && !spot?.name; else name"
+          (click)="sit(i)">Sit
   </button>
   <button mat-raised-button
-    *ngIf="!lobby.playing && lobby.owner && spot.sId && spot.sId !== ws.sId"
-    (click)="kick(spot.sId)">
+          *ngIf="!lobby.playing && lobby.owner && spot?.sId && spot?.sId !== ws.sId"
+          (click)="kick(spot.sId)">
     Kick
   </button>
   <ng-template #name>
     <p class="name"
-      [class.ready]="spot.ready || lobby.bidding === spot.sId || lobby.playingP === spot.sId">
+       [class.ready]="spot.ready || lobby.bidding === spot.sId || lobby.playingP === spot.sId">
       {{spot.name}}</p>
     <ng-container *ngIf="spot.sId === ws.sId && !lobby.playing">
-      <button mat-raised-button (click)="jump()">
+      <button mat-raised-button
+              (click)="jump()">
         Stand Up
       </button>
-      <button
-        *ngIf="!spot.ready && rotatedSpots[0].sId && rotatedSpots[1].sId && rotatedSpots[2].sId && rotatedSpots[3].sId"
-        mat-raised-button (click)="ready()">
+      <button *ngIf="!spot.ready && rotatedSpots[0].sId && rotatedSpots[1].sId && rotatedSpots[2].sId && rotatedSpots[3].sId"
+              mat-raised-button
+              (click)="ready()">
         Ready
       </button>
     </ng-container>
 
     <span *ngIf="lobby.playing && spot.tricks !== -1"
-      [class.busted]="spot.bid <= 0 && spot.tricks">
+          [class.busted]="spot.bid <= 0 && spot.tricks">
       {{spot.tricks}} / {{spot.bid === -2 ? 'nil (blind)' : spot.bid  || 'nil'}}
     </span>
 
     <ng-container *ngIf="spot.sId === ws.sId && lobby.bidding === ws.sId">
       <ng-container *ngIf="offerBlind; else chooseBid">
-        <button mat-raised-button (click)="bid(-2)">Bid Blind Nil</button>
-        <button mat-raised-button (click)="showCards()">Show Cards</button>
+        <button mat-raised-button
+                (click)="bid(-2)">Bid Blind Nil</button>
+        <button mat-raised-button
+                (click)="showCards()">Show Cards</button>
       </ng-container>
 
       <ng-template #chooseBid>
-        <button mat-raised-button (click)="bid(spot.bid)">Bid
+        <button mat-raised-button
+                (click)="bid(spot.bid)">Bid
           {{spot.bid || 'nil'}}</button><br>
-        <mat-slider max="13" [value]="spot.bid"
-          (input)="spot.bid = $event.value; spot.tricks = -1">
+        <mat-slider max="13"
+                    [value]="spot.bid"
+                    (input)="spot.bid = $event.value || 0; spot.tricks = -1">
         </mat-slider>
       </ng-template>
     </ng-container>

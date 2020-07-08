@@ -11,7 +11,7 @@ import { WsService } from 'src/app/ws.service';
 })
 export class LogoutConfirmComponent implements OnInit, OnDestroy {
   seconds = 10;
-  private ticker: number;
+  private ticker?: number;
 
   constructor(
     private ws: WsService,

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { WsService } from '../ws.service';
 import { SettingsService, SettingMap } from '../settings/settings.service';
 import { Notes } from './notes';
+import { Lobby } from '../lobby/lobby.component';
 
 const groups = ['quacken', 'quacken', 'spades'];
 
@@ -24,13 +25,13 @@ export class ListComponent implements OnInit, OnDestroy {
   publicModes = ['Public', 'Public Invitation'];
   notes = Notes;
 
-  lobbies = [];
+  lobbies: Lobby[] = [];
 
   created = false;
   settings: SettingMap = {};
   createGroup: SettingMap = {};
 
-  private sub: Subscription;
+  private sub = new Subscription();
 
   constructor(
     public ws: WsService,
@@ -45,7 +46,10 @@ export class ListComponent implements OnInit, OnDestroy {
     this.sub = this.ws.subscribe('lu', update => {
       for (let i = 0; i < this.lobbies.length; i++) {
         const lobby = this.lobbies[i];
-        if (update.id === lobby.id) return Object.assign(lobby, update);
+        if (update.id === lobby.id) {
+          Object.assign(lobby, update);
+          return;
+        }
       }
       this.lobbies.push(update);
     });

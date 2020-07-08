@@ -1,5 +1,10 @@
 <label>{{setting.label}}</label>
-<ng-select [(ngModel)]="group[setting.name]" class="setting" [items]="data"
-  [loading]="loading" bindValue="id" (change)="save.emit()"
-  [disabled]="disabled">
+<ng-select *ngIf="group && group[setting.name]"
+           [(ngModel)]="group[setting.name]"
+           class="setting"
+           [items]="data"
+           [loading]="loading"
+           bindValue="id"
+           (change)="save.emit()"
+           [disabled]="disabled">
 </ng-select>

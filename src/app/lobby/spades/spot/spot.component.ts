@@ -5,12 +5,12 @@ import { Lobby } from '../../lobby.component';
 import { Subscription } from 'rxjs';
 
 interface Player {
-  sId?: number;
-  name?: string;
-  slot?: number;
-  bid?: number;
-  tricks?: number;
-  ready?: boolean;
+  sId: number;
+  name: string;
+  slot: number;
+  bid: number;
+  tricks: number;
+  ready: boolean;
 }
 
 export const spots = ['south', 'west', 'north', 'east'];
@@ -26,19 +26,18 @@ export class SpotComponent implements OnInit, OnDestroy {
     this._lobby = l;
     l.sitting = -1;
 
-    const newSpots = [{}, {}, {}, {}];
-    this.rotatedSpots = [...newSpots];
     let mySpot = 0;
-    for (const p of l.players) {
-      if (!p) continue;
-      Object.assign(newSpots[p.slot], p);
+    this.rotatedSpots = [];
+    for (let p of l.players) {
+      if (!p) p = {};
       if (p.sId === this.ws.sId) {
         l.sitting = p.slot;
         this.offerBlind = p.offerBlind;
         mySpot = p.slot;
       }
+      this.rotatedSpots.push(p);
     }
-    l.players = newSpots;
+    l.players = [...this.rotatedSpots];
     this.rotateSpots(mySpot);
   }
   get lobby() {
@@ -49,7 +48,7 @@ export class SpotComponent implements OnInit, OnDestroy {
   spotNames = spots;
   offerBlind = false;
 
-  private sub: Subscription;
+  private sub = new Subscription();
 
   constructor(public ws: WsService) { }
 

@@ -34,7 +34,7 @@ interface BoatStatus {
   tf: number;
   tm: number;
   s?: number;
-  c?: number;
+  c: number;
   cd?: number;
 }
 
@@ -59,8 +59,9 @@ export interface BoatSync extends BoatStatus {
 export class BoatsComponent implements OnInit, OnDestroy {
 
   constructor(private ws: WsService) { }
-  @Input() speed: number;
-  @Input() map: HTMLElement;
+  @Input() speed = 10;
+  @Input() map?: HTMLElement;
+  @Input() hex = false;
   weapons = weapons;
   clutterTypes = [
     'powderkeg',
@@ -77,11 +78,11 @@ export class BoatsComponent implements OnInit, OnDestroy {
   myBoat = new Boat('');
   boats: Boat[] = [];
   private _boats: { [k: number]: Boat } = {};
-  private subs: Subscription;
-  private animateTimeout: number;
+  private subs = new Subscription();
+  private animateTimeout?: number;
   private blurred = false;
   private step = -1;
-  private turn: Turn;
+  private turn?: Turn;
   @Input() getX = (p: { x: number, y: number }): number => (p.x) * 50;
   @Input() getY = (p: { x: number, y: number }): number => (p.y) * 50;
   getObj = (o: Clutter): string => `translate(${this.getX(o)}px,${this.getY(o)}px)`;
@@ -112,11 +113,12 @@ export class BoatsComponent implements OnInit, OnDestroy {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
     this.subs = this.ws.subscribe('_boats', (m: Lobby) => {
+      if (!m.boats) return;
       clearTimeout(this.animateTimeout);
       this.boats = [];
       this._boats = {};
       this.setBoats(Object.values(m.boats));
-      this.clutter = m.clutter;
+      this.clutter = m.clutter || this.clutter;
     });
     this.subs.add(this.ws.subscribe('newBoat', (boat: BoatSync) => this.setBoats([boat])));
     this.subs.add(this.ws.subscribe('delBoat', this.deleteBoat));
@@ -167,7 +169,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
           boat.bomb = 0;
           boat.ready = false;
         }
-        if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: '_unlockMoves' });
+        if (this.turn && this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: '_unlockMoves' });
       }
       this.ws.send('sync');
       this.step = -1;
@@ -209,13 +211,13 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.moves = [0, 0, 0, 0];
       boat.bomb = 0;
     }
-    if (this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: '_unlockMoves' });
+    if (this.turn && this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: '_unlockMoves' });
   }
 
   private playTurn = () => {
-    const clutterPart = this.turn.cSteps[this.step] || [];
+    const clutterPart = this.turn?.cSteps[this.step] || [];
     setTimeout(() => this.handleUpdate(clutterPart), 10000 / this.speed);
-    const turnPart = this.turn.steps[this.step] || [];
+    const turnPart = this.turn?.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
       if (!boat) continue;
@@ -241,7 +243,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (this.step === 4) this.resetBoats();
 
     this.step++;
-    const delay = (this.turn.steps[this.step] ? 750 : 250) * 20 / this.speed;
+    const delay = (this.turn?.steps[this.step] ? 750 : 250) * 20 / this.speed;
     if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, delay);
     else this.animateTimeout = window.setTimeout(() => this.ws.send('sync'), 1500);
   }
@@ -283,7 +285,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         if (oldBoat) {
           if (boat.oId !== oldBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
           if (sBoat.ty !== oldBoat.type || oldBoat.damage > sBoat.d) {
-            this.map.dispatchEvent(new Event('dblclick'));
+            this.map?.dispatchEvent(new Event('dblclick'));
             oldBoat.type = sBoat.ty;
             this.ws.dispatchMessage({ cmd: '_unlockMoves' });
           }
@@ -293,7 +295,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         } else {
           this.ws.dispatchMessage({ cmd: '_myBoat', data: boat });
           this.myBoat = boat;
-          this.map.dispatchEvent(new Event('dblclick'));
+          this.map?.dispatchEvent(new Event('dblclick'));
         }
       }
     }

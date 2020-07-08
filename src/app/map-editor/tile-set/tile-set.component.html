@@ -1,5 +1,6 @@
-<div [qDrag]="handle2"
-     bindToWindow
+<div *ngIf="map && map.selectedTile && map.tiles && map.tileSet"
+     [qDrag]="handle2"
+     [bindToWindow]="true"
      id="tileset"
      class="container">
   <div #handle2
@@ -17,7 +18,7 @@
 
   <div id="tilebox">
     <div class="tiletype"
-         *ngIf="map.tiles[map.tileSet.activeGroup]; else empty">
+         *ngIf="map.tileSet.activeGroup && map.tiles[map.tileSet.activeGroup]; else empty">
       <div *ngFor="let tile of map.tiles[map.tileSet.activeGroup]"
            class="tile"
            [class.unsaved]="tile.unsaved"

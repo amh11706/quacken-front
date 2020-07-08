@@ -18,18 +18,18 @@ export interface TokenUser {
   providedIn: 'root'
 })
 export class WsService {
-  private socket: WebSocket;
-  private token: string;
-  private timeOut: number;
+  private socket?: WebSocket;
+  private token = '';
+  private timeOut?: number;
   private messages = new Map<string, Subject<any>>();
   private tokenParser = new JwtHelperService();
-  user: TokenUser;
+  user?: TokenUser;
   connected = false;
   connected$ = new ReplaySubject<boolean>(1);
 
-  reason: string;
-  sId: number;
-  copy: number;
+  reason?: string;
+  sId?: number;
+  copy?: number;
 
   constructor(private router: Router) {
     this.subscribe('kick', (reason: string) => {
@@ -63,7 +63,7 @@ export class WsService {
     this.socket = new WebSocket(location.port === '4200' ? 'wss://dev.superquacken.com/ws' : 'wss://' + location.hostname + '/ws');
 
     this.socket.onopen = () => {
-      this.socket.send(token);
+      this.socket?.send(token);
     };
 
     this.socket.onmessage = message => this.dispatchMessage(JSON.parse(message.data));
@@ -100,7 +100,7 @@ export class WsService {
 
     this.socket.onclose = null;
     this.socket.close(1000, 'Logged out');
-    this.socket = null;
+    delete this.socket;
   }
 
   send(cmd: string, data?: any) {
@@ -116,10 +116,10 @@ export class WsService {
   }
 
   sendRaw(data: string) {
-    if (this.connected) return this.socket.send(data);
+    if (this.connected && this.socket) return this.socket.send(data);
     const sub = this.connected$.subscribe((connected: boolean) => {
       if (!connected) return;
-      this.socket.send(data);
+      this.socket?.send(data);
       sub.unsubscribe();
     });
   }

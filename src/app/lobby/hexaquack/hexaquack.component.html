@@ -17,8 +17,7 @@
                [style.transform]="'translateY('+(1326-getY(myBoat.pos))+'px)'"
                [style.transition]="moveTransition(myBoat.moveTransition[1])">
             <div *ngFor="let row of map; let i = index"
-                 class="maprow"
-                 [style.top]="e ? (i-1)*26+'px' : 0+'px'">
+                 class="maprow">
               <div *ngFor="let tile of row; let e = even"
                    class="tile"
                    [class.sztile]="i > 48"
@@ -37,6 +36,7 @@
             </div>
 
             <q-boats [map]="frame"
+                     [hex]="true"
                      [speed]="settings.speed"
                      [getX]="getX"
                      [getY]="getY"

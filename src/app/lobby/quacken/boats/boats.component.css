@@ -25,6 +25,10 @@
   transform: rotate(45deg) scaleY(1.2);
 }
 
+.boatheader.hex {
+  transform: rotate(60deg) translateX(13px) scaleY(1.2);
+}
+
 .boatheader img {
   width: 15px;
   height: 15px;

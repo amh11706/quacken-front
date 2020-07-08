@@ -15,14 +15,14 @@ export class EntryStatusComponent implements OnInit, OnDestroy {
   titles = ['Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
 
   time = '30:00';
-  private subs: Subscription;
+  private subs = new Subscription();
 
   constructor(private ws: WsService) { }
 
   ngOnInit() {
     this.subs = this.ws.subscribe('time', (time: string) => this.time = time);
     this.subs.add(this.ws.subscribe('turn', (t: Turn) => this.treasure = t.treasure));
-    this.subs.add(this.ws.subscribe('_boats', (l: Lobby) => this.treasure = l.treasure));
+    this.subs.add(this.ws.subscribe('_boats', (l: Lobby) => this.treasure = l.treasure || this.treasure));
   }
 
   ngOnDestroy() {

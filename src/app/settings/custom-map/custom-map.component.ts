@@ -10,15 +10,15 @@ import { WsService } from 'src/app/ws.service';
   styleUrls: ['./custom-map.component.css']
 })
 export class CustomMapComponent implements OnInit, OnDestroy {
-  @Input() group: SettingMap;
+  @Input() group?: SettingMap;
   @Input() setting: any = {};
-  @Input() disabled: boolean;
+  @Input() disabled?: boolean;
   @Output() save = new EventEmitter();
 
   data = [];
   loading = true;
 
-  private sub: Subscription;
+  private sub = new Subscription();
 
   constructor(private ws: WsService) { }
 

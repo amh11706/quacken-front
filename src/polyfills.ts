@@ -18,30 +18,8 @@
  * BROWSER POLYFILLS
  */
 
-/** IE9, IE10, IE11, and Chrome <55 requires all of the following polyfills.
- *  This also includes Android Emulators with older versions of Chrome and Google Search/Googlebot
- */
-
-import 'core-js/es/symbol';
-import 'core-js/es/object';
-import 'core-js/es/function';
-import 'core-js/es/parse-int';
-import 'core-js/es/parse-float';
-import 'core-js/es/number';
-import 'core-js/es/math';
-import 'core-js/es/string';
-import 'core-js/es/date';
-import 'core-js/es/array';
-import 'core-js/es/regexp';
-import 'core-js/es/map';
-import 'core-js/es/weak-map';
-import 'core-js/es/set';
-
 /** IE10 and IE11 requires the following for NgClass support on SVG elements */
-import 'classlist.js';  // Run `npm install --save classlist.js`.
-
-/** IE10 and IE11 requires the following for the Reflect API. */
-import 'core-js/es/reflect';
+// import 'classlist.js';  // Run `npm install --save classlist.js`.
 
 /**
  * Web Animations `@angular/platform-browser/animations`
@@ -57,7 +35,7 @@ import 'core-js/es/reflect';
  * will put import in the top of bundle, so user need to create a separate file
  * in this directory (for example: zone-flags.ts), and put the following flags
  * into that file, and then add the following code before importing zone.js.
- * import './zone-flags.ts';
+ * import './zone-flags';
  *
  * The flags allowed in zone-flags.ts are listed here.
  *
@@ -65,7 +43,7 @@ import 'core-js/es/reflect';
  *
  * (window as any).__Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
  * (window as any).__Zone_disable_on_property = true; // disable patch onProperty such as onclick
- * (window as any).__zone_symbol__BLACK_LISTED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
+ * (window as any).__zone_symbol__UNPATCHED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
  *
  *  in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
  *  with the following flag, it will bypass `zone.js` patch for IE/Edge
@@ -83,15 +61,5 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
 (window as any).global = window;
-
-if (!Object.values) {
-  const reduce = Function.bind.call(Function.call, Array.prototype.reduce);
-  const isEnumerable = Function.bind.call(Function.call, Object.prototype.propertyIsEnumerable);
-  const concat = Function.bind.call(Function.call, Array.prototype.concat);
-  const keys = Reflect.ownKeys;
-
-  Object.values = function values(O) {
-    return reduce(keys(O), (v, k) => concat(v, typeof k === 'string' && isEnumerable(O, k) ? [O[k]] : []), []);
-  };
-}

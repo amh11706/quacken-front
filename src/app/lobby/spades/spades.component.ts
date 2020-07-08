@@ -1,16 +1,17 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Lobby } from '../lobby.component';
+import { Lobby, LobbyComponent } from '../lobby.component';
 import { Card } from './card/card.component';
 import { spots } from './spot/spot.component';
 import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { WsService } from 'src/app/ws.service';
 import { TimerComponent } from './timer/timer.component';
+import { Settings } from 'src/app/settings/setting/settings';
 
-const baseSettings = [];
-const ownerSettings = [
+const baseSettings: (keyof typeof Settings)[] = [];
+const ownerSettings: (keyof typeof Settings)[] = [
   'watchers', 'turnTime', 'playTo'
 ];
 
@@ -20,8 +21,8 @@ const ownerSettings = [
   styleUrls: ['./spades.component.css']
 })
 export class SpadesComponent implements OnInit, OnDestroy {
-  @ViewChild(TimerComponent, { static: false }) timer;
-  private _lobby: Lobby;
+  @ViewChild(TimerComponent, { static: false }) timer?: TimerComponent;
+  private _lobby: Lobby = { owner: false, type: 'Spades', players: [{}, {}, {}, {}] };
   @Input() set lobby(l: Lobby) {
     if (!l) return;
     if (!l.played) l.played = [];
@@ -60,7 +61,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
   private select = 1;
   selected: Card[] = [];
 
-  private sub: Subscription;
+  private sub = new Subscription();
   private played = false;
 
   constructor(
@@ -85,12 +86,12 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }));
 
     this.sub.add(this.ws.subscribe('bidding', () => {
-      this.timer.go(this.settings.turnTime * 2);
+      this.timer?.go(this.settings.turnTime * 2);
       this.lobby.playing = true;
     }));
 
     this.sub.add(this.ws.subscribe('playing', (p: { id: number, quantity: number }) => {
-      this.timer.go(this.settings.turnTime);
+      this.timer?.go(this.settings.turnTime);
       this.lobby.bidding = 0;
       this.lobby.playingP = p.id;
       this.select = p.quantity;
@@ -156,7 +157,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }));
 
     this.settings = await this.ss.getGroup('l/spades', true);
-    if (this.lobby.playing) this.timer.go(this.settings.turnTime);
+    if (this.lobby.playing) this.timer?.go(this.settings.turnTime);
     const me = this.lobby.players[this.lobby.sitting];
     if (me && me.offerBlind) this.select = 2;
   }
@@ -176,7 +177,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
 
       const play = [];
       for (let i = 0; i < this.select; i++) {
-        const card = valid[Math.round(Math.random() * (valid.length - 1))];
+        const card: Card = valid[Math.round(Math.random() * (valid.length - 1))];
         play.push(card);
         valid = valid.filter(c => c !== card);
       }
@@ -193,7 +194,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
   }
 
   private highlightPass(s: Card[]) {
-    const pass = [];
+    const pass: Card[] = [];
     search:
     for (const c of s) {
       for (const card of this.cards) if (card.id === c.id) continue search;
@@ -267,7 +268,10 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }
     if (!c.valid) return;
 
-    if (this.selected.length >= this.select) this.selected.shift().selected = false;
+    if (this.selected.length >= this.select) {
+      const shifted = this.selected.shift();
+      if (shifted) shifted.selected = false;
+    }
     c.selected = true;
     this.selected.push(c);
     if (this.selected.length === this.select &&

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from 'src/app/ws.service';
-import { DBTile, MapEditor } from '../map-editor.component';
+import { DBTile, MapEditor, MapGroups } from '../map-editor.component';
 
 export const TileTypes = [
   'Head',
@@ -19,9 +19,9 @@ export const TileTypes = [
   styleUrls: ['./tile-set.component.css']
 })
 export class TileSetComponent implements OnInit, OnDestroy {
-  @Input() map: MapEditor;
+  @Input() map?: MapEditor;
   protected sub = new Subscription();
-  protected group = 'tile';
+  protected group: 'tile' | 'structure' = 'tile';
 
   types = TileTypes;
   error = '';
@@ -33,13 +33,14 @@ export class TileSetComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub.add(this.ws.subscribe('savedWeight', () => this.pending = false));
     this.sub.add(this.ws.subscribe('deletedMap', this.handleDelete));
-    this.initTile(this.map.selectedTile);
+    if (this.map) this.initTile(this.map.selectedTile);
   }
 
   protected initTile(tile: DBTile) {
+    if (!this.map?.tiles) return;
     const group = this.map.tiles[tile.type];
     if (!group) return;
-    tile = group.find(el => el.id === tile.id);
+    tile = group.find(el => el.id === tile.id) || tile;
     this.select(tile);
   }
 
@@ -48,14 +49,16 @@ export class TileSetComponent implements OnInit, OnDestroy {
   }
 
   protected handleDelete = (msg: any) => {
+    if (!this.map?.tiles) return;
     this.pending = false;
     this.map.tiles[msg.type] = this.map.tiles[msg.type].filter((tile: DBTile) => {
       return tile.id !== msg.id;
     });
-    this.map.selectedTile = { id: null, name: '', undos: [], redos: [] };
+    this.map.selectedTile = { id: 0, group: 'maps', type: 0, name: '', undos: [], redos: [] };
   }
 
   select(tile: DBTile) {
+    if (!this.map) return;
     if (this.map.tileSet) this.map.tileSet.activeGroup = tile.type;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
@@ -63,17 +66,21 @@ export class TileSetComponent implements OnInit, OnDestroy {
   }
 
   newTile() {
+    if (!this.map) return;
     this.map.selectedTile = {
-      id: null, name: '',
+      id: 0, name: '', group: 'maps',
       undos: [], redos: [],
       type: this.map.selectedTile.type || 0,
-      [this.group + '_set']: this.map[this.group + 'Set'].id
+      structure_set: this.map.structureSet?.id,
+      tile_set: this.map.tileSet?.id,
     };
     this.editTile();
   }
 
   editTile() {
-    this.map.selectedTile.group = this.group + 's';
+    const groups: { [key: string]: MapGroups } = { tile: 'tiles', structure: 'structures' };
+    if (!this.map?.selectedTile) return;
+    this.map.selectedTile.group = groups[this.group];
     this.map.settingsOpen = true;
     this.map.tileSettings = true;
   }

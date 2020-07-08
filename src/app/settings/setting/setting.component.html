@@ -46,7 +46,7 @@
                 [step]="setting.step"
                 [value]="group[this.setting.name]"
                 [disabled]="this.setting.admin && !ss.admin"
-                (input)="group[this.setting.name]=$event.value; save()">
+                (input)="group[this.setting.name]=$event.value || 0; save()">
     </mat-slider>
   </div>
 

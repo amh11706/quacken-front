@@ -1,5 +1,6 @@
-<div [qDrag]="handle2"
-     bindToWindow
+<div *ngIf="map && map.selectedTile && map.structures && map.structureSet"
+     [qDrag]="handle2"
+     [bindToWindow]="true"
      id="structureset"
      class="container">
   <div #handle2
@@ -44,8 +45,9 @@
           (click)="newTile()">New Structure</button>
 </div>
 
-<div [qDrag]="handle3"
-     bindToWindow
+<div *ngIf="map && map.selectedTile && map.structures"
+     [qDrag]="handle3"
+     [bindToWindow]="true"
      id="structure"
      class="container"
      [hidden]="!map.selectedTile.name">

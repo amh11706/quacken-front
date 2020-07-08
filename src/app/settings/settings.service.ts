@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { WsService } from '../ws.service';
+import { Settings } from './setting/settings';
 
 interface SettingsMessage {
   group: string;
@@ -10,8 +11,8 @@ interface SettingsMessage {
 
 export interface Setting {
   id: number;
-  name?: string;
-  group?: string;
+  name: string;
+  group: string;
   value: number;
 }
 
@@ -29,7 +30,7 @@ export class SettingsService {
   open = false;
   admin = true;
   selected = 'lobby';
-  lSettings: string[] = [];
+  lSettings: (keyof typeof Settings)[] = [];
 
   constructor(private ws: WsService) {
     ws.send('getSettings', 'global');
@@ -57,7 +58,7 @@ export class SettingsService {
     });
   }
 
-  setLobbySettings(names: string[]) {
+  setLobbySettings(names: (keyof typeof Settings)[]) {
     this.lSettings = names;
     if (names.length === 0) this.selected = 'global';
     else this.selected = 'lobby';

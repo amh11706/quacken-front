@@ -11,7 +11,7 @@ import { Settings } from './settings';
   styleUrls: ['./setting.component.css']
 })
 export class SettingComponent {
-  @Input() set name(value: string) {
+  @Input() set name(value: keyof typeof Settings) {
     this.setting = Settings[value] || {};
     this.setting.name = value;
     if (this.setting && this.setting.id) this.fetch(value);
@@ -20,9 +20,9 @@ export class SettingComponent {
 
   setting: any = {};
   group: SettingMap = {};
-  private debounce: number;
+  private debounce?: number;
 
-  constructor(private ss: SettingsService, private ws: WsService) { }
+  constructor(public ss: SettingsService, private ws: WsService) { }
 
   ngOnDestroy() {
   }

@@ -1,51 +1,66 @@
-<div *ngFor="let obj of clutter; trackBy: trackBy" class="clutter"
-  [class.front]="obj.p && obj.t === 0" [style.transform]="getObj(obj)">
+<div *ngFor="let obj of clutter; trackBy: trackBy"
+     class="clutter"
+     [class.front]="obj.p && obj.t === 0"
+     [style.transform]="getObj(obj)">
 
-  <div class="scale" [style.transform]="'scale('+50/50+')'">
-    <img *ngIf="myBoat.type < 10 || obj.t > 0" [title]="clutterTypes[obj.t]"
-      class="clutterimage clutter{{obj.t}}{{obj.p ? ' sunk' : ''}}"
-      src="./assets/images/{{clutterTypes[obj.t]}}.png">
-    <div *ngIf="obj.d === 1 && obj.t === 4" class="wave" [style.top]="'50px'"
-      [style.left]="'50px'">
+  <div class="scale"
+       [style.transform]="'scale('+50/50+')'">
+    <img *ngIf="myBoat.type < 10 || obj.t > 0"
+         [title]="clutterTypes[obj.t]"
+         class="clutterimage clutter{{obj.t}}{{obj.p ? ' sunk' : ''}}"
+         src="./assets/images/{{clutterTypes[obj.t]}}.png">
+    <div *ngIf="obj.d === 1 && obj.t === 4"
+         class="wave"
+         [style.top]="'50px'"
+         [style.left]="'50px'">
     </div>
-    <div *ngIf="obj.p && obj.t === 0" class="deadBomb" [style.top]="'25px'"
-      [style.left]="'25px'">
+    <div *ngIf="obj.p && obj.t === 0"
+         class="deadBomb"
+         [style.top]="'25px'"
+         [style.left]="'25px'">
     </div>
   </div>
 </div>
 
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"
-  [style.opacity]="boat.opacity"
-  [style.transform]="'translateX(' + (getX(boat.pos)+boat.offsetX) + 'px)'"
-  [style.transition]="moveTransition(boat.moveTransition[0]) + (boat.enteringSZ ? szFade : '')">
+     [style.opacity]="boat.opacity"
+     [style.transform]="'translateX(' + (getX(boat.pos)+boat.offsetX) + 'px)'"
+     [style.transition]="moveTransition(boat.moveTransition[0]) + (boat.enteringSZ ? szFade : '')">
 
   <!-- split boat div to allow different transitions on each axis -->
   <div class="boat"
-    [style.transform]="'translateY(' + (getY(boat.pos)+boat.offsetY) + 'px)'"
-    [style.transition]="moveTransition(boat.moveTransition[1])">
-    <div class="boatheader" *ngIf="boat.name || boat.isMe">
-      <span class="boattitle" [title]="boat.name + titles[boat.treasure]"
-        [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
+       [style.transform]="'translateY(' + (getY(boat.pos)+boat.offsetY) + 'px)'"
+       [style.transition]="moveTransition(boat.moveTransition[1])">
+    <div class="boatheader"
+         [class.hex]="hex"
+         *ngIf="boat.name || boat.isMe">
+      <span class="boattitle"
+            [title]="boat.name + titles[boat.treasure]"
+            [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
         {{boat.name}}<img *ngIf="boat.treasure"
-          src="/assets/images/obstacle{{boat.treasure}}.png">
+             src="/assets/images/obstacle{{boat.treasure}}.png">
       </span>
 
-      <div class="movebar" [class.ready]="boat.ready">
+      <div class="movebar"
+           [class.ready]="boat.ready">
         <div *ngFor="let move of boat.moves; let i=index"
-          class="movebarslice {{moveNames[move]}}">
+             class="movebarslice {{moveNames[move]}}">
           <ng-container *ngIf="weapons[boat.type]">
-            <mat-icon *ngIf="boat.bomb === i+5" class="bomb">arrow_right
+            <mat-icon *ngIf="boat.bomb === i+5"
+                      class="bomb">arrow_right
             </mat-icon>
-            <mat-icon *ngIf="boat.bomb === i+1" class="bomb leftbomb">
+            <mat-icon *ngIf="boat.bomb === i+1"
+                      class="bomb leftbomb">
               arrow_left</mat-icon>
           </ng-container>
         </div>
       </div>
     </div>
 
-    <img class="boatimage" src="./assets/boats/boat{{boat.type}}.png"
-      [style.opacity]="boat.imageOpacity"
-      [style.transform]="'rotate(' + boat.face + 'deg)'"
-      [style.transition]="rotateTransition(boat)">
+    <img class="boatimage"
+         src="./assets/boats/boat{{boat.type}}.png"
+         [style.opacity]="boat.imageOpacity"
+         [style.transform]="'rotate(' + boat.face + 'deg)'"
+         [style.transition]="rotateTransition(boat)">
   </div>
 </div>

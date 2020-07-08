@@ -9,14 +9,16 @@ export interface MapTile {
   x: number; y: number; v: number;
 }
 
+export type MapGroups = 'maps' | 'cgmaps' | 'tile_sets' | 'tiles' | 'structure_sets' | 'structures';
+
 export interface DBTile {
   id: number;
   name: string;
   data?: any[];
   unsaved?: boolean;
   description?: string;
-  type?: number;
-  group?: string;
+  type: number;
+  group: MapGroups;
   tile_set?: number;
   structure_set?: number;
   released?: boolean;
@@ -31,6 +33,7 @@ export interface DBTile {
 export interface StructureData {
   group: number;
   type: number;
+  density: number;
   x1: number;
   x2: number;
   y1: number;
@@ -55,14 +58,15 @@ export interface MapEditor {
   styleUrls: ['./map-editor.component.css']
 })
 export class MapEditorComponent implements OnInit, OnDestroy {
-  private sub: Subscription;
+  private sub = new Subscription();
 
   map: MapEditor = {
     selected: 50,
     selectedTile: {
       undos: [],
       redos: [],
-      id: null,
+      id: 0,
+      type: 0,
       name: '',
       group: 'tile_sets',
       data: [],
@@ -74,12 +78,12 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   constructor(private socket: WsService, private dialog: MatDialog) {
     const tile = this.map.selectedTile;
     for (let i = 0; i < 8; i++) {
-      tile.data.push([0, 0, 0, 0, 0, 0, 0, 0]);
+      tile.data?.push([0, 0, 0, 0, 0, 0, 0, 0]);
     }
   }
 
   ngOnInit() {
-    const session = localStorage.getItem(this.socket.user.id + '-editor');
+    const session = localStorage.getItem(this.socket.user?.id + '-editor');
     if (session) {
       const s = JSON.parse(session);
       if (s.selectedTile) {
@@ -107,7 +111,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   private saveSession = () => {
-    localStorage.setItem(this.socket.user.id + '-editor', JSON.stringify(
+    localStorage.setItem(this.socket.user?.id + '-editor', JSON.stringify(
       this.map
     ));
   }
@@ -161,7 +165,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     const changes = source.pop();
     const buffer = [];
 
-    for (const oldTile of changes) {
+    if (changes) for (const oldTile of changes) {
       const change = this.setTile(oldTile.x, oldTile.y, oldTile.v);
       if (change) buffer.push(change);
     }
@@ -171,7 +175,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
 
   setTile = (x: number, y: number, v: number) => {
     const tile = this.map.selectedTile;
-    if (v === tile.data[y][x]) return;
+    if (!tile.data || v === tile.data[y][x]) return;
     tile.unsaved = true;
 
     const oldTile = { x, y, v: tile.data[y][x] };

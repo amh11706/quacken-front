@@ -4,13 +4,13 @@ import { Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
   selector: '[qDrag]'
 })
 export class QdragDirective implements OnInit, OnDestroy {
-  @Input() qDrag: HTMLElement;
-  @Input() bindToWindow: boolean;
+  @Input() qDrag?: HTMLElement;
+  @Input() bindToWindow?: boolean;
   @Input() offsetX = 0;
   @Input() offsetY = 0;
   @Input() transform = '';
 
-  private rightGap: number;
+  private rightGap?: number;
   private startX = 0;
   private startY = 0;
 
@@ -22,6 +22,7 @@ export class QdragDirective implements OnInit, OnDestroy {
     this.updateTransform();
 
     if (!this.qDrag) this.qDrag = this.el.nativeElement;
+    if (!this.qDrag) return;
     this.qDrag.addEventListener('dblclick', () => {
       this.offsetX = 0;
       this.offsetY = 0;
@@ -41,6 +42,7 @@ export class QdragDirective implements OnInit, OnDestroy {
   }
 
   private offsetToRightGap = () => {
+    if (!this.qDrag) return;
     if (this.rightGap !== undefined) {
       const box = this.qDrag.getBoundingClientRect();
       this.offsetX += window.innerWidth - box.right - this.rightGap;
@@ -49,6 +51,7 @@ export class QdragDirective implements OnInit, OnDestroy {
   }
 
   private bindWindow(skipRight = false) {
+    if (!this.qDrag) return;
     const box = this.qDrag.getBoundingClientRect();
     if (box.right < 30) {
       this.offsetX += 30 - box.right;
@@ -77,7 +80,7 @@ export class QdragDirective implements OnInit, OnDestroy {
     document.addEventListener('mouseup', this.onUp);
     event.preventDefault();
     const active = document.activeElement;
-    if (active.id !== 'textinput' && active instanceof HTMLElement) active.blur();
+    if (active instanceof HTMLElement && active.id !== 'textinput') active.blur();
   }
 
   private touchStart = (event: TouchEvent) => {

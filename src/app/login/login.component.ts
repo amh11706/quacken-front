@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +12,7 @@ import { PrivacyComponent } from './privacy/privacy.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  @ViewChild('error', { static: false }) errComponent;
+  @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
 
   user = {
     email: '',
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
         },
         () => {
           this.pending = false;
-          this.dialog.open(this.errComponent);
+          if (this.errComponent) this.dialog.open(this.errComponent);
         },
       );
   }

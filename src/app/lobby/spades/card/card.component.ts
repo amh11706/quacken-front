@@ -16,7 +16,7 @@ export interface Card {
   styleUrls: ['./card.component.css']
 })
 export class CardComponent implements OnInit {
-  @Input() card: Card;
+  @Input() card: Card = {} as Card;
 
   constructor() { }
 

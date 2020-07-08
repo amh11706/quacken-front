@@ -1,4 +1,10 @@
-<ng-container [ngSwitch]="lobby?.type">
+<div *ngIf="!lobby"
+     id="background">
+  <p>Loading...</p>
+</div>
+
+<ng-container *ngIf="lobby"
+              [ngSwitch]="lobby.type">
   <q-quacken *ngSwitchCase="'Quacken'"
              [lobby]="lobby"></q-quacken>
   <q-hexaquack *ngSwitchCase="'HexaQuack'"
@@ -6,8 +12,4 @@
   <q-spades *ngSwitchCase="'Spades'"
             [lobby]="lobby"></q-spades>
 
-  <div *ngSwitchDefault
-       id="background">
-    <p>Loading...</p>
-  </div>
 </ng-container>

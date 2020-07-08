@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ElementRef, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,10 +10,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./reset.component.css']
 })
 export class ResetComponent implements OnInit, OnDestroy {
-  @ViewChild('error', { static: false }) errComponent;
+  @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
   private path = location.port === '4200' ? 'https://dev.superquacken.com/' : '/';
   private token = '';
-  private sub: Subscription;
+  private sub = new Subscription();
 
   password = '';
   cPassword = '';
@@ -34,7 +34,7 @@ export class ResetComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.paramMap.subscribe(params => {
-      this.token = params.get('token');
+      this.token = params.get('token') || '';
     });
   }
 
@@ -45,7 +45,7 @@ export class ResetComponent implements OnInit, OnDestroy {
   reset() {
     if (this.password !== this.cPassword) {
       this.err = 'Passwords do not match!';
-      this.dialog.open(this.errComponent);
+      if (this.errComponent) this.dialog.open(this.errComponent);
       return;
     }
 
@@ -60,7 +60,7 @@ export class ResetComponent implements OnInit, OnDestroy {
       err => {
         this.pending = false;
         this.err = err.error;
-        this.dialog.open(this.errComponent);
+        if (this.errComponent) this.dialog.open(this.errComponent);
       },
     );
   }

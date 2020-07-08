@@ -9,7 +9,7 @@ import { MapEditor } from '../map-editor.component';
   styleUrls: ['./structure-map.component.css']
 })
 export class StructureMapComponent implements OnInit {
-  @Input() map: MapEditor;
+  @Input() map?: MapEditor;
   types = TileTypes;
   groups = ['', 'Obstacle Zone: ', 'Wing Zone: '];
 

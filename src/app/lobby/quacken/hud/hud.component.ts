@@ -19,7 +19,7 @@ export const weapons = [
 })
 export class HudComponent implements OnInit, OnDestroy {
   @Input() kbControls = 1;
-  keys = {
+  keys: { [key: string]: number } = {
     'ArrowLeft': 1, 'KeyA': 1,
     'ArrowUp': 2, 'KeyW': 2,
     'ArrowRight': 3, 'KeyD': 3,
@@ -42,12 +42,12 @@ export class HudComponent implements OnInit, OnDestroy {
 
   private source = 4;
   private move = 0;
-  private subs: Subscription;
+  private subs = new Subscription();
 
-  private timeInterval: number;
-  private minutes: number;
-  private seconds: number;
-  private turnSeconds: number;
+  private timeInterval?: number;
+  private minutes = 0;
+  private seconds = 0;
+  private turnSeconds = 0;
 
   seconds$ = new BehaviorSubject<number>(76);
 
@@ -65,10 +65,10 @@ export class HudComponent implements OnInit, OnDestroy {
       }
     }));
     this.subs.add(this.ws.subscribe('_boats', (m: Lobby) => {
-      this.turn = m.turn;
-      if (m.turn > 0) this.locked = false;
-      if (!this.timeInterval && m.turn < 90) this.startTimer();
-      this.setTurn(90 - m.turn);
+      this.turn = m.turn || this.turn;
+      if (this.turn > 0) this.locked = false;
+      if (!this.timeInterval && this.turn < 90) this.startTimer();
+      this.setTurn(90 - this.turn);
     }));
     this.subs.add(this.ws.subscribe('turn', (turn: Turn) => {
       if (!this.timeInterval && turn.turn < 90) this.startTimer();
@@ -90,7 +90,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   private kbEvent = (e: KeyboardEvent) => {
     const active = document.activeElement;
-    if (active.id === 'textinput' || this.kbControls === 0) return;
+    if (active?.id === 'textinput' || this.kbControls === 0) return;
     if (active instanceof HTMLElement && active.nodeName !== 'INPUT') active.blur();
     if (e.code === 'Enter' || e.code === 'Space') {
       this.imReady();
@@ -151,7 +151,10 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   checkMaxMoves() {
-    if (this.myBoat.type === 0) return this.maxMoves = false;
+    if (this.myBoat.type === 0) {
+      this.maxMoves = false;
+      return;
+    }
     const moveCount = this.myBoat.moves.reduce((a, c) => a + +(c > 0 && c < 4), 0);
     this.maxMoves = moveCount >= 3;
     if (moveCount === 4) this.myBoat.moves[3] = 0;
@@ -249,7 +252,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   stopTimer() {
     clearInterval(this.timeInterval);
-    this.timeInterval = null;
+    delete this.timeInterval;
   }
 
   private tickTimer() {

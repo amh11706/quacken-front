@@ -7,21 +7,21 @@ import { InventoryService } from './inventory.service';
 import { SplitComponent } from './split/split.component';
 
 export interface Item {
-  s?: number;
-  id?: number;
-  t?: number;
-  q?: number;
-  n?: string;
-  f?: boolean;
+  s: number;
+  id: number;
+  t: number;
+  q: number;
+  n: string;
+  f: boolean;
 }
 
 interface Inventory {
-  id?: number;
-  userId?: number;
-  items?: Item[];
-  filtered?: Item[];
-  sort?: string;
-  currency?: number;
+  id: number;
+  userId: number;
+  items: Item[];
+  filtered: Item[];
+  sort: keyof Item;
+  currency: number;
 }
 
 interface InvUpdate {
@@ -36,21 +36,21 @@ interface InvUpdate {
   styleUrls: ['./inventory.component.css']
 })
 export class InventoryComponent implements OnDestroy {
-  private _id;
-  @Input() set id(value: number) {
+  private _id?: number;
+  @Input() set id(value: number | undefined) {
     if (this._id) this.ws.send('i/' + this._id + '/c');
     this._id = value;
     this.doSubs();
   }
-  get id(): number {
+  get id(): number | undefined {
     return this._id;
   }
 
-  inv: Inventory = {};
-  dragging: Item = {};
+  inv?: Inventory;
+  dragging?: Item;
 
-  private subs: Subscription;
-  private searchDebounce: number;
+  private subs = new Subscription();
+  private searchDebounce?: number;
 
   constructor(
     public ws: WsService,
@@ -64,22 +64,23 @@ export class InventoryComponent implements OnDestroy {
   }
 
   private doSubs() {
-    if (this.subs) this.subs.unsubscribe();
+    this.subs.unsubscribe();
     if (!this.id) return;
     this.ws.send('i/open', this.id);
-    this.subs = this.ws.subscribe('i/' + this.id + '/l', i => {
+    this.subs = this.ws.subscribe('i/' + this.id + '/l', (i: Inventory) => {
       this.inv = i;
       this.inv.filtered = i.items;
       this.sort(i.sort);
     });
-    this.subs = this.ws.subscribe('i/' + this.id + '/coin', q => {
-      this.inv.currency = q;
-    });
+    this.subs.add(this.ws.subscribe('i/' + this.id + '/coin', (q: number) => {
+      if (this.inv) this.inv.currency = q;
+    }));
     this.subs.add(this.ws.connected$.subscribe(value => {
       if (value) this.ws.send('i/open', this.id);
     }));
 
     this.subs.add(this.ws.subscribe('i/' + this.id + '/u', (u: InvUpdate) => {
+      if (!this.inv) return;
       if (u.update) for (const update of u.update) {
         for (const i of this.inv.items) if (i.s === update.id) {
           i.q = update.quantity;
@@ -89,14 +90,14 @@ export class InventoryComponent implements OnDestroy {
       }
       if (u.new) for (const update of u.new) {
         update.f = true;
-        this.inv.filtered.push(update);
+        this.inv.filtered?.push(update);
         if (this.inv.filtered !== this.inv.items) this.inv.items.push(update);
         this.sort(this.inv.sort, false);
       }
       if (u.del) {
-        this.inv.filtered = this.inv.filtered.filter(i => u.del.indexOf(i.s) === -1);
+        this.inv.filtered = this.inv.filtered.filter(i => u.del?.indexOf(i.s) === -1);
         if (this.inv.filtered !== this.inv.items) {
-          this.inv.items = this.inv.items.filter(i => u.del.indexOf(i.s) === -1);
+          this.inv.items = this.inv.items.filter(i => u.del?.indexOf(i.s) === -1);
         }
       }
     }));
@@ -112,17 +113,19 @@ export class InventoryComponent implements OnDestroy {
   }
 
   drop(e: DragEvent, i: Item) {
+    if (!this.dragging) return;
     e.preventDefault();
     if (i.id !== this.dragging.id || i.q >= 250) return;
     this.ws.send('i/' + this.id + '/cb', { from: this.dragging.s, to: i.s });
-    this.dragging = {};
+    delete this.dragging;
   }
 
-  sort(by: string, send = true) {
+  sort(by: 's' | 'id' | 't' | 'q' | 'n' | 'f', send = true) {
     if (send) this.ws.send('i/' + this.id + '/sort', by);
+    if (!this.inv) return;
     this.inv.filtered.sort((a, b) => {
-      const c = a[by];
-      const d = b[by];
+      const c: any = a[by];
+      const d: any = b[by];
       if (typeof c === 'boolean') {
         if (c === d) return 0;
         return c ? -1 : 1;
@@ -139,7 +142,12 @@ export class InventoryComponent implements OnDestroy {
   }
 
   search(key: string) {
-    if (!key) return this.inv.filtered = this.inv.items;
+    if (!this.inv) return;
+    if (!key) {
+      this.inv.filtered = this.inv.items;
+      return;
+    }
+
     this.inv.filtered = [];
     const search = key.toLowerCase();
     itemLoop:

@@ -31,7 +31,7 @@ export class FriendsComponent implements OnInit {
 
   sendTell(friend: string) {
     this.chat.setTell(friend);
-    document.getElementById('textinput').focus();
+    document.getElementById('textinput')?.focus();
   }
 
   remove(friend: string) {

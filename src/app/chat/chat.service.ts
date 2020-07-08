@@ -6,9 +6,9 @@ import { WsService } from '../ws.service';
 
 export interface Message {
   type: number;
-  message: any;
+  message?: any;
   from: string;
-  copy: number;
+  copy?: number;
   friend?: boolean;
   blocked?: boolean;
   time?: number | string;
@@ -35,7 +35,7 @@ export class ChatService {
 
         this.commandHistory = this.commandHistory.filter(entry => entry !== command);
         this.commandHistory.push(command);
-      } else if (message.type === 7) {
+      } else if (message.type === 7 && message.time) {
         const time = moment.unix(+message.time);
         message.time = time.format('lll');
         message.ago = time.fromNow();
@@ -67,7 +67,7 @@ export class ChatService {
 
   sendTell(friend: string) {
     this.setTell(friend);
-    document.getElementById('textinput').focus();
+    document.getElementById('textinput')?.focus();
   }
 
 }

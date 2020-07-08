@@ -46,7 +46,7 @@
 
           <span *ngSwitchCase="7">
             <q-name [message]="m"
-                    offline="true"></q-name> was last seen
+                    [offline]="true"></q-name> was last seen
             {{m.ago}} ({{m.time}}).
           </span>
         </ng-container>

@@ -1,15 +1,21 @@
 <div id="spadeTable">
-  <div id="ourscore">
-    <p><span [class.me]="lobby.players[0].sId === ws.sId">{{lobby.players[0].name}}</span>
+  <div id="ourscore"
+       *ngIf="lobby.scores">
+    <p><span *ngIf="lobby.players[0]"
+            [class.me]="lobby.players[0].sId === ws.sId">{{lobby.players[0].name}}</span>
       /
-      <span [class.me]="lobby.players[2].sId === ws.sId">{{lobby.players[2].name}}</span>
+      <span *ngIf="lobby.players[2]"
+            [class.me]="lobby.players[2].sId === ws.sId">{{lobby.players[2].name}}</span>
     </p>
     {{lobby.scores[0]}} / {{lobby.playTo}}
   </div>
-  <div id="theirscore">
-    <p><span [class.me]="lobby.players[1].sId === ws.sId">{{lobby.players[1].name}}</span>
+  <div id="theirscore"
+       *ngIf="lobby.scores">
+    <p><span *ngIf="lobby.players[1]"
+            [class.me]="lobby.players[1].sId === ws.sId">{{lobby.players[1].name}}</span>
       /
-      <span [class.me]="lobby.players[3].sId === ws.sId">{{lobby.players[3].name}}</span>
+      <span *ngIf="lobby.players[3]"
+            [class.me]="lobby.players[3].sId === ws.sId">{{lobby.players[3].name}}</span>
     </p>
     {{lobby.scores[1]}} / {{lobby.playTo}}
   </div>

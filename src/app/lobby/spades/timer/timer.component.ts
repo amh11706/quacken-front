@@ -10,7 +10,7 @@ export class TimerComponent implements OnInit {
 
   percent = 0;
   seconds = 0.5;
-  private timer: number;
+  private timer?: number;
 
   constructor() { }
 

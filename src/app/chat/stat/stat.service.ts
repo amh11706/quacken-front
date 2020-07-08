@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
 import { WindowService } from 'src/app/window.service';
+import { Message } from '../chat.service';
 
 export interface Stat {
   id: number;
@@ -11,19 +12,17 @@ export interface Stat {
   suffix?: number;
 }
 
-export interface Leader {
+export interface Leader extends Message {
   name: string;
   value: number;
   details?: string;
   clean?: boolean;
   seed?: string;
-  from?: string;
-  friend?: boolean;
 }
 
 export interface Column {
   title: string;
-  property: string;
+  property: keyof Leader;
 }
 
 const mapColumns: Column[] = [

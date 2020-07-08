@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef } from '@angular/core';
 
 import { MapEditor } from '../map-editor.component';
 
@@ -16,9 +16,9 @@ export const Titles = [
   styleUrls: ['./obstacles.component.css']
 })
 export class ObstaclesComponent implements OnInit, OnDestroy {
-  @Input() map: MapEditor;
-  @Input() background: HTMLElement;
-  @ViewChild('selectedTile', { static: true }) selectedTile: HTMLElement;
+  @Input() map?: MapEditor;
+  @Input() background?: HTMLElement;
+  @ViewChild('selectedTile', { static: true }) selectedTile?: ElementRef<HTMLElement>;
 
   obstacles = [1, 2, 3, 4, 6, 7, 5, 8, 10, 11, 9, 12, 15, 16, 14, 13, 50];
   hexObstacles = [
@@ -33,7 +33,6 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
   constructor() { }
 
   ngOnInit() {
-    this.selectedTile = document.getElementById('selected');
     if (this.background) {
       this.background.addEventListener('mousemove', this.mouseMove);
       this.background.addEventListener('wheel', this.handleScroll);
@@ -48,10 +47,13 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
   }
 
   private mouseMove = (e: MouseEvent) => {
-    this.selectedTile.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+    if (this.selectedTile instanceof HTMLElement) {
+      this.selectedTile.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+    }
   }
 
   private handleScroll = (e: WheelEvent) => {
+    if (!this.map) return;
     e.preventDefault();
     const scroll = this.map.hex ? this.hexObstacles : this.scrollOrder;
     const current = scroll.indexOf(this.map.selected);

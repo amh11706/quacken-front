@@ -14,8 +14,8 @@ import { WindowService } from '../window.service';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  @ViewChild('inputEl', { static: true }) input: ElementRef;
-  @ViewChild('output', { static: true }) output: ElementRef;
+  @ViewChild('inputEl', { static: true }) input?: ElementRef<HTMLElement>;
+  @ViewChild('output', { static: true }) output?: ElementRef<HTMLElement>;
   colors = [
     '#873600', // info message
     '#873600', // HTML info message
@@ -29,14 +29,14 @@ export class ChatComponent implements OnInit, OnDestroy {
     'maroon', // alert/broadcast
   ];
 
-  private subs: Subscription;
+  private subs = new Subscription();
   private focus = (e: KeyboardEvent) => {
-    if (document.activeElement.id !== 'textinput' && (e.key === 'Tab' || e.code === 'Slash')) {
-      this.input.nativeElement.focus();
+    if (document.activeElement?.id !== 'textinput' && (e.key === 'Tab' || e.code === 'Slash')) {
+      this.input?.nativeElement.focus();
       if (e.code === 'Slash') this.chat.value += '/';
       e.preventDefault();
     } else if (e.key === 'Tab') {
-      this.input.nativeElement.blur();
+      this.input?.nativeElement.blur();
       e.preventDefault();
     }
   }
@@ -51,12 +51,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    if (!this.output) return;
     this.subs = this.socket.subscribe('m', () => this.addMessage());
     const output = this.output.nativeElement;
     setTimeout(() => output.scrollTop = output.scrollHeight);
 
     document.addEventListener('keydown', this.focus);
-    this.input.nativeElement.focus();
+    this.input?.nativeElement.focus();
   }
 
   ngOnDestroy() {
@@ -64,7 +65,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     document.removeEventListener('keydown', this.focus);
   }
 
-  handleKey(e) {
+  handleKey(e: KeyboardEvent) {
     if (e.key === 'ArrowUp') {
       const history = this.chat.commandHistory;
       if (this.chat.historyIndex === 0 || history.length === 0) return;
@@ -88,11 +89,11 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.chat.historyIndex++;
       this.chat.value = history[this.chat.historyIndex];
     } else if (e.key === 'Tab') {
-      document.getElementById('textinput').focus();
+      document.getElementById('textinput')?.focus();
     }
   }
 
-  sendInput(e) {
+  sendInput(e: Event) {
     e.preventDefault();
     const text = this.chat.value;
     if (!text) return;
@@ -112,6 +113,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   addMessage(): void {
+    if (!this.output) return;
     const output = this.output.nativeElement;
     if (output.scrollTop + 135 > output.scrollHeight) {
       setTimeout(() => output.scrollTop = output.scrollHeight);
@@ -122,7 +124,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (c.params) {
       if (this.chat.value) this.chat.commandHistory.push(this.chat.value);
       this.chat.value = c.base + ' ';
-      this.input.nativeElement.focus();
+      this.input?.nativeElement.focus();
       return;
     }
 

@@ -9,7 +9,7 @@ import { Clutter, BoatSync } from './quacken/boats/boats.component';
 
 export interface Lobby {
   owner: boolean;
-  players?: any[];
+  players: any[];
   playing?: boolean;
   scores?: number[];
   map?: string;
@@ -17,7 +17,7 @@ export interface Lobby {
   treasure?: number[];
   clutter?: Clutter[];
   turn?: number;
-  type: string;
+  type: 'HexaQuack' | 'Quacken' | 'Spades';
   [key: string]: any;
 }
 
@@ -27,9 +27,9 @@ export interface Lobby {
   styleUrls: ['./lobby.component.css']
 })
 export class LobbyComponent implements OnInit, OnDestroy {
-  lobby: Lobby;
-  id: number;
-  private sub: Subscription;
+  lobby?: Lobby;
+  id?: number;
+  private sub = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -41,7 +41,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.ss.admin = false;
     this.sub = this.route.paramMap.subscribe(params => {
-      const id = +params.get('id');
+      const id = +(params.get('id') || 0);
       if (this.id === id) return;
       this.id = id;
       this.ws.send('joinLobby', id);
