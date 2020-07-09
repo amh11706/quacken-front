@@ -62,7 +62,8 @@ export class LoginComponent implements OnInit {
 
   guestLogin() {
     localStorage.setItem('token', 'guest');
-    this.router.navigate(['list']);
+    this.router.navigate([this.guard.triedPath || 'list']);
+    this.guard.triedPath = '';
   }
 
   showTerms() {
