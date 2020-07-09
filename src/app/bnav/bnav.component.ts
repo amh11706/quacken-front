@@ -65,6 +65,8 @@ export class BnavComponent implements OnInit, OnDestroy {
   submitMoves() {
     this.ws.send('addPosition', this.newMove);
     this.newMove.moves = '';
+    this.newMove.shots = '';
+    this.newMove.notes = '';
   }
 
 }

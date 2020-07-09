@@ -18,12 +18,33 @@
         <input #moveInput="ngModel"
                matInput
                pattern="[LRFX]{4}"
+               title="LFRX style"
                [(ngModel)]="newMove.moves">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <mat-label>Shots</mat-label>
+        <input #shots="ngModel"
+               matInput
+               pattern="[rRlL]{4}"
+               title="LR style lowercase for grapples"
+               [(ngModel)]="newMove.shots">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <mat-label>Ship Type</mat-label>
+        <input #shipType="ngModel"
+               matInput
+               [(ngModel)]="newMove.shipType">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+        <mat-label>Notes</mat-label>
+        <input #notes="ngModel"
+               matInput
+               [(ngModel)]="newMove.notes">
     </mat-form-field>
 
     <button mat-raised-button
             (click)="submitMoves()"
-            [disabled]="!moveInput.value || !moveInput.valid">Submit</button>
+            [disabled]="!moveInput.value || !moveInput.valid || !shots.valid">Submit</button>
 </div>
 
 

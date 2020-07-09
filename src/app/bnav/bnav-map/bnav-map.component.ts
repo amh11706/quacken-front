@@ -34,7 +34,7 @@ export class BnavMapComponent implements OnInit, OnDestroy {
 
     this.sub.add(this.ws.connected$.subscribe(() => {
       this.ourBoat.id = this.ws.sId || 1;
-      this.updateBoats();
+      setTimeout(this.updateBoats);
     }));
     this.sub.add(this.ws.subscribe('_myBoat', () => null));
   }
