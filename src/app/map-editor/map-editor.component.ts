@@ -106,7 +106,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.saveSession();
     window.removeEventListener('beforeunload', this.saveSession);
-    if (this.sub) this.sub.unsubscribe();
+    this.sub.unsubscribe();
     window.removeEventListener('keydown', this.handleKey);
   }
 

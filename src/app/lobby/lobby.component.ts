@@ -30,6 +30,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   lobby?: Lobby;
   id?: number;
   private sub = new Subscription();
+  private sent = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,12 +42,15 @@ export class LobbyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.ss.admin = false;
     this.sub = this.route.paramMap.subscribe(params => {
+      if (this.sent) return;
       const id = +(params.get('id') || 0);
       if (this.id === id) return;
       this.id = id;
       this.ws.send('joinLobby', id);
+      this.sent = true;
     });
     this.sub.add(this.ws.subscribe('joinLobby', l => {
+      this.sent = false;
       this.lobby = l;
       if (l.owner) {
         this.fs.allowInvite = true;
@@ -54,12 +58,13 @@ export class LobbyComponent implements OnInit, OnDestroy {
       }
     }));
     this.sub.add(this.ws.connected$.subscribe(value => {
-      if (value) this.ws.send('joinLobby', this.id);
+      if (value && !this.sent) this.ws.send('joinLobby', this.id);
+      this.sent = true;
     }));
   }
 
   ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe();
+    this.sub.unsubscribe();
     this.ss.admin = true;
   }
 

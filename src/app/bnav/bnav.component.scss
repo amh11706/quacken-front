@@ -1,0 +1,87 @@
+#background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  background-color: #0b5394;
+  text-align: center;
+}
+
+#submitNew {
+  position: absolute;
+	top: calc(50% - 125px);
+	left: 10px;
+  width: 200px;
+  padding: 8px 16px;
+  color: #fff;
+  
+  mat-form-field {
+    width: 100%;
+  }
+
+  button {
+    background: darkgreen;
+    color: white;
+  }
+
+  button:disabled {
+    color: grey;
+  }
+}
+
+#hud {
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 95%;
+  max-width: 750px;
+  min-width: 320px;
+  padding: 12px;
+  z-index: 10;
+}
+
+#chat {
+  float: left;
+  width: 50%;
+}
+
+#tableWrapper {
+  position: absolute;
+  right: 2%;
+  width: 46%;
+  height: 145px;
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr {
+  background-color: #FCF3CF;
+  transition: .2s;
+  cursor: pointer;
+}
+
+tr:hover {
+  background-color: #F9E79F;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  padding: 4px;
+  background-color: #1F618D;
+  cursor: default;
+  border: 1px solid grey;
+}
+
+td {
+  color: black;
+  border: 1px solid lightgrey;
+}
+  

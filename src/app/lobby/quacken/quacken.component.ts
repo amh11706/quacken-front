@@ -60,7 +60,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe();
+    this.sub.unsubscribe();
     this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
     this.ss.admin = true;

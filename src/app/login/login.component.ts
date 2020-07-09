@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { TermsComponent } from './terms/terms.component';
 import { PrivacyComponent } from './privacy/privacy.component';
+import { AuthGuard } from '../auth.guard';
 
 @Component({
   selector: 'q-login',
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit {
     private dialog: MatDialog,
     private http: HttpClient,
     private router: Router,
+    private guard: AuthGuard,
   ) {
     const token = localStorage.getItem('token');
     if (token) {
@@ -44,7 +46,8 @@ export class LoginComponent implements OnInit {
         resp => {
           this.pending = false;
           localStorage.setItem('token', resp);
-          this.router.navigate(['list']);
+          this.router.navigate([this.guard.triedPath || 'list']);
+          this.guard.triedPath = '';
         },
         () => {
           this.pending = false;

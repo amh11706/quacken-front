@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router, CanActivate, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 
 import { WsService } from './ws.service';
 
@@ -7,12 +7,14 @@ import { WsService } from './ws.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+  triedPath = '';
 
   constructor(private router: Router, private socket: WsService) { }
 
-  canActivate(): boolean {
+  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const token = localStorage.getItem('token');
     if (!token) {
+      this.triedPath = state.url;
       this.router.navigate(['login']);
       return false;
     }

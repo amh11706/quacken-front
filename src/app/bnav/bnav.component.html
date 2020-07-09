@@ -1,0 +1,52 @@
+<div #background
+     class="noselect"
+     id="background"
+     oncontextmenu="event.preventDefault()">
+    <div [qDrag]="background"
+         id="mapframe">
+        <q-bnav-map (positionChange)="positionChange($event)"></q-bnav-map>
+    </div>
+</div>
+
+<div [qDrag]
+     [bindToWindow]="true"
+     class="container noselect"
+     id="submitNew">
+    <p>Submit New Moves</p>
+    <mat-form-field class="example-full-width">
+        <mat-label>Moves</mat-label>
+        <input #moveInput="ngModel"
+               matInput
+               pattern="[LRFX]{4}"
+               [(ngModel)]="newMove.moves">
+    </mat-form-field>
+
+    <button mat-raised-button
+            (click)="submitMoves()"
+            [disabled]="!moveInput.value || !moveInput.valid">Submit</button>
+</div>
+
+
+<div class="container noselect"
+     id="hud">
+    <div id="chat">
+        <q-chat></q-chat>
+    </div>
+
+    <div id="tableWrapper">
+        <table>
+            <tr>
+                <th>Moves</th>
+                <th>Count</th>
+                <th>Percent</th>
+            </tr>
+
+            <tr *ngFor="let m of moves">
+                <td>{{m.moves}}</td>
+                <td>{{m.count}}</td>
+                <td>{{m.percent}}</td>
+            </tr>
+        </table>
+    </div>
+
+</div>

@@ -33,6 +33,7 @@ const routes: Routes = [
     path: '',
     canActivate: [AuthGuard],
     children: [
+      { path: 'bnav', loadChildren: () => import('./bnav/bnav.module').then(m => m.BnavModule) },
       {
         path: 'list',
         loadChildren: () => import('./list/list.module').then(m => m.ListModule),

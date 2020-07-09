@@ -76,7 +76,7 @@ export class MapComponent implements OnInit {
 
   mouseUp(e: MouseEvent, x: number, y: number) {
     if (!this.clickX || !this.clickY || !this.setTile || !this.map) return;
-    if (Math.abs(e.clientX - this.clickX) + Math.abs(e.clientY - this.clickY) > 20) return;
+    if (Math.abs(e.clientX - this.clickX) + Math.abs(e.clientY - this.clickY) > 5) return;
     this.clickX = 0;
     this.clickY = 0;
 

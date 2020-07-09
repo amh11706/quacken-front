@@ -31,10 +31,10 @@ interface BoatStatus {
   x: number;
   y: number;
   t: number;
-  tf: number;
-  tm: number;
+  tf?: number;
+  tm?: number;
   s?: number;
-  c: number;
+  c?: number;
   cd?: number;
 }
 
@@ -220,9 +220,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
     const turnPart = this.turn?.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
-      if (!boat) continue;
+      if (!boat || !u.tm || !u.tf) continue;
 
-      if (u.c > 0) boat.addDamage(u.c - 1, u.cd || 0);
+      if (u.c && u.c > 0) boat.addDamage(u.c - 1, u.cd || 0);
       boat.rotateTransition = 1;
       boat.setTreasure(u.t)
         .setPos(u.x, u.y)
@@ -233,7 +233,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         boat.face += boat.spinDeg * u.s;
         if (u.s > -2) {
           boat.rotateTransition = 4;
-          setTimeout(() => boat.rotateByMove(u.tm).rotateTransition = 1, 300);
+          setTimeout(() => { if (u.tm) boat.rotateByMove(u.tm).rotateTransition = 1; }, 300);
         } else {
           boat.rotateByMove(u.tm).rotateTransition = 3;
         }

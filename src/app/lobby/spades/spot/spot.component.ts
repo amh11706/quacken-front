@@ -97,7 +97,7 @@ export class SpotComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe();
+    this.sub.unsubscribe();
   }
 
   private rotateSpots(start: number) {

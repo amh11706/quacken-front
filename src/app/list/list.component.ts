@@ -60,13 +60,12 @@ export class ListComponent implements OnInit, OnDestroy {
       if (value) this.ws.send('lobbyList');
     }));
 
-    this.ws.send('lobbyList');
     this.settings = await this.ss.getGroup('l/create');
     this.changeType();
   }
 
   ngOnDestroy() {
-    if (this.sub) this.sub.unsubscribe();
+    this.sub.unsubscribe();
   }
 
   async changeType() {
