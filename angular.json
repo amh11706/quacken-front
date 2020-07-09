@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "/home/andrew/go/src/github.com/amh11706/dist/",
+            "outputPath": "/home/andrew/go/src/github.com/amh11706/quackgo/dist/",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
