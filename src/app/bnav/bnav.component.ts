@@ -38,12 +38,13 @@ export class BnavComponent implements OnInit, OnDestroy {
       for (const move of this.moves) {
         if (move.moves === m.moves) {
           move.count++;
+          this.setPercents();
           return;
         }
-        m.count = 1;
-        this.moves.push(m);
-        this.setPercents();
       }
+      m.count = 1;
+      this.moves.push(m);
+      this.setPercents();
     }));
   }
 

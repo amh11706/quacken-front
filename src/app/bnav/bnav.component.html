@@ -14,7 +14,7 @@
      id="submitNew">
     <p>Submit New Moves</p>
     <mat-form-field class="example-full-width">
-        <mat-label>Moves</mat-label>
+        <mat-label>Their Moves</mat-label>
         <input #moveInput="ngModel"
                matInput
                pattern="[LRFX]{4}"
@@ -25,15 +25,18 @@
         <mat-label>Shots</mat-label>
         <input #shots="ngModel"
                matInput
-               pattern="[rRlL]{4}"
-               title="LR style lowercase for grapples"
+               pattern="[rRlLBX]{4}"
+               title="LBRX style lowercase for grapples, B for both"
                [(ngModel)]="newMove.shots">
     </mat-form-field>
     <mat-form-field class="example-full-width">
-        <mat-label>Ship Type</mat-label>
-        <input #shipType="ngModel"
-               matInput
-               [(ngModel)]="newMove.shipType">
+        <mat-label>AI Pathing</mat-label>
+        <mat-select [(value)]="newMove.shipType">
+            <mat-option value=""></mat-option>
+            <mat-option value="at">At us</mat-option>
+            <mat-option value="at">Us at them</mat-option>
+            <mat-option value="at">Ahead of us</mat-option>
+        </mat-select>
     </mat-form-field>
     <mat-form-field class="example-full-width">
         <mat-label>Notes</mat-label>
