@@ -19,6 +19,7 @@ interface DBMove {
 })
 export class BnavComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
+  private debounce?: number;
   moves: DBMove[] = [];
   newMove = {} as DBMove;
 
@@ -60,7 +61,9 @@ export class BnavComponent implements OnInit, OnDestroy {
 
   positionChange(position: string) {
     this.newMove.position = position;
-    this.ws.send('positions', { position });
+    this.moves = [];
+    clearTimeout(this.debounce);
+    this.debounce = setTimeout(() => this.ws.send('positions', { position }), 500);
   }
 
   submitMoves() {
