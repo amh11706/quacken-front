@@ -18,7 +18,7 @@ export const Titles = [
 export class ObstaclesComponent implements OnInit, OnDestroy {
   @Input() map?: MapEditor;
   @Input() background?: HTMLElement;
-  @ViewChild('selectedTile', { static: true }) selectedTile?: ElementRef<HTMLElement>;
+  @ViewChild('selectedTile', { static: false }) selectedTile?: ElementRef<HTMLDivElement>;
 
   obstacles = [1, 2, 3, 4, 6, 7, 5, 8, 10, 11, 9, 12, 15, 16, 14, 13, 50];
   hexObstacles = [
@@ -47,8 +47,10 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
   }
 
   private mouseMove = (e: MouseEvent) => {
-    if (this.selectedTile instanceof HTMLElement) {
-      this.selectedTile.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+    if (!this.selectedTile) return;
+    const el = this.selectedTile.nativeElement;
+    if (el instanceof HTMLDivElement) {
+      el.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
     }
   }
 

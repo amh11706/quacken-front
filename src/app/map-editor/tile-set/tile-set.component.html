@@ -18,7 +18,7 @@
 
   <div id="tilebox">
     <div class="tiletype"
-         *ngIf="map.tileSet.activeGroup && map.tiles[map.tileSet.activeGroup]; else empty">
+         *ngIf="map.tileSet.activeGroup !== undefined && map.tiles[map.tileSet.activeGroup]; else empty">
       <div *ngFor="let tile of map.tiles[map.tileSet.activeGroup]"
            class="tile"
            [class.unsaved]="tile.unsaved"

@@ -312,14 +312,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const tile = this.shown || this.map.selectedTile;
     switch (tile.group) {
       case 'tile_sets':
-        if (!this.map.tileSet) return;
         this.map.hex = tile.hex;
-        if (!this.map.tiles || this.map.tileSet.id !== tile.id) this.socket.send('getTileSet', tile.id);
+        if (!this.map.tiles || this.map.tileSet?.id !== tile.id) this.socket.send('getTileSet', tile.id);
         else this.map.settingsOpen = false;
         return;
       case 'structure_sets':
-        if (!this.map.structureSet) return;
-        if (!this.map.structures || this.map.structureSet.id !== tile.id) this.socket.send('getStructureSet', tile.id);
+        if (!this.map.structures || this.map.structureSet?.id !== tile.id) this.socket.send('getStructureSet', tile.id);
         else this.map.settingsOpen = false;
         return;
       default:
