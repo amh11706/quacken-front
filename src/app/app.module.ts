@@ -11,14 +11,17 @@ import { ChatModule } from './chat/chat.module';
 import { InventoryModule } from './inventory/inventory.module';
 
 import { AppComponent } from './app.component';
+import { RecordComponent } from './record/record.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, RecordComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    MatButtonModule,
 
     LoginModule,
     FriendsModule,

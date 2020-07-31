@@ -7,8 +7,13 @@ import { AuthGuard } from './auth.guard';
 import { TermsComponent } from './login/terms/terms.component';
 import { PrivacyComponent } from './login/privacy/privacy.component';
 import { ResetComponent } from './login/reset/reset.component';
+import { RecordComponent } from './record/record.component';
 
 const routes: Routes = [
+  {
+    path: 'record',
+    component: RecordComponent,
+  },
   {
     path: 'login',
     component: LoginComponent,
