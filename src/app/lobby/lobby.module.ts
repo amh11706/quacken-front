@@ -5,14 +5,14 @@ import { LobbyComponent } from './lobby.component';
 import { QuackenModule } from './quacken/quacken.module';
 import { SpadesModule } from './spades/spades.module';
 import { HexaquackModule } from './hexaquack/hexaquack.module';
-import { BnavComponent } from './bnav/bnav.component';
 import { LobbyRoutingModule } from './lobby-routing.module';
+import { CadegooseComponent } from './cadegoose/cadegoose.component';
 
 @NgModule({
   declarations: [
     LobbyComponent,
     LobbyComponent,
-    BnavComponent,
+    CadegooseComponent,
   ],
   imports: [
     CommonModule,

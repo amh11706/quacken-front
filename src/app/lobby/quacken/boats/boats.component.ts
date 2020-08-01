@@ -220,7 +220,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     const turnPart = this.turn?.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
-      if (!boat || !u.tm || !u.tf) continue;
+      if (!boat || u.tm === undefined || u.tf === undefined) continue;
 
       if (u.c && u.c > 0) boat.addDamage(u.c - 1, u.cd || 0);
       boat.rotateTransition = 1;

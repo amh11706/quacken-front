@@ -107,6 +107,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.mapData = list;
     const tile = this.shown;
     this.options = list[tile?.group ?? 'maps'];
+    if (tile) for (const o of this.options) {
+      if (o.id === tile.id) {
+        this.shown = { ...tile, ...o };
+        break;
+      }
+    }
   }
 
   private handleTileSet(tileSet: any) {

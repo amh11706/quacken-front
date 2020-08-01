@@ -71,14 +71,14 @@
     </mat-form-field>
 
     <mat-form-field class="setting full">
-      <textarea *ngIf="shown"
-                matInput
-                [disabled]="pending"
-                [(ngModel)]="shown.description"
-                height="4"
-                maxlength="255"
-                placeholder="description"
-                (change)="shown.unsaved = true"></textarea>
+      <input *ngIf="shown"
+             matInput
+             [disabled]="pending"
+             [(ngModel)]="shown.description"
+             height="4"
+             maxlength="255"
+             placeholder="description"
+             (change)="shown.unsaved = true">
     </mat-form-field>
 
     <div class="setting center"><button mat-raised-button

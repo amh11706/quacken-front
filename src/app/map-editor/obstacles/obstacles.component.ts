@@ -7,7 +7,7 @@ export const Titles = [
   'Right Wind', 'Down Wind', 'Up Wind', 'Left Wind',
   'Whirl 1', 'Whirl 2', 'Whirl 3', 'Whirl 4',
   'Reverse Whirl 1', 'Reverse Whirl 2', 'Reverse Whirl 3', 'Reverse Whirl 4',
-  'Rock', 'Fragile Rock'
+  'Rock', 'Small Rock'
 ];
 
 @Component({
@@ -20,14 +20,16 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
   @Input() background?: HTMLElement;
   @ViewChild('selectedTile', { static: false }) selectedTile?: ElementRef<HTMLDivElement>;
 
-  obstacles = [1, 2, 3, 4, 6, 7, 5, 8, 10, 11, 9, 12, 15, 16, 14, 13, 50];
+  obstacles = [1, 2, 3, 4, 6, 7, 5, 8, 10, 11, 9, 12, 15, 16, 14, 13, 50, 51];
   hexObstacles = [
     1, 2, 3, 4,
     5, 6, 7, 8, 9, 10,
     11, 12, 13, 14, 15, 16,
     35,
     50];
-  scrollOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 13, 50];
+  scrollOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 13, 50, 51];
+  cadeScrollOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 13, 50, 51, 21, 22, 23];
+
   titles = Titles;
 
   constructor() { }
@@ -57,7 +59,7 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
   private handleScroll = (e: WheelEvent) => {
     if (!this.map) return;
     e.preventDefault();
-    const scroll = this.map.hex ? this.hexObstacles : this.scrollOrder;
+    const scroll = this.map.hex ? this.hexObstacles : (this.map.selectedTile.group === 'cgmaps' ? this.cadeScrollOrder : this.scrollOrder);
     const current = scroll.indexOf(this.map.selected);
     if (e.deltaY < 0) {
       this.map.selected = scroll[current + 1] || scroll[0];

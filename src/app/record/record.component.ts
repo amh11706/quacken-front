@@ -29,7 +29,7 @@ export class RecordComponent implements OnInit {
   private async startRecording() {
     this.isRecording = true;
     this.stream = await (navigator.mediaDevices as any).getDisplayMedia({
-      video: { frameRate: 5, displaySurface: 'window', cursor: 'never' }
+      video: { frameRate: 2, displaySurface: 'window', cursor: 'never' }
     }).catch(() => this.isRecording = false);
     if (!this.stream) return;
 
@@ -43,12 +43,12 @@ export class RecordComponent implements OnInit {
     this.video.srcObject = this.stream;
     this.video.play();
 
-    setTimeout(() => {
+    this.video.addEventListener('timeupdate', () => {
       if (!this.canvas || !this.context) return;
       this.canvas.height = this.video.videoHeight;
       this.canvas.width = this.video.videoWidth;
       this.context.drawImage(this.video, 0, 0);
-    }, 1000);
+    });
   }
 
   private stopRecording() {

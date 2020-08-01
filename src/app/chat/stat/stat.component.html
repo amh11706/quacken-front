@@ -13,7 +13,7 @@
      <div id="selection">
           <div *ngFor="let s of stat.stats"
                class="stat"
-               (click)="stat.openLeaders(s.id, s.name)">
+               (click)="stat.openLeaders(s.statId, s.name)">
                <h4 class="statName">{{s.name}}</h4>
                <p class="statValue">{{s.value}}<span *ngIf="s.suffix">
                          {{s.suffix}}</span></p>

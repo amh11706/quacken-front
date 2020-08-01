@@ -6,7 +6,7 @@ import { WindowService } from 'src/app/window.service';
 import { Message } from '../chat.service';
 
 export interface Stat {
-  id: number;
+  statId: number;
   name: string;
   value: number;
   suffix?: number;
