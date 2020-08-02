@@ -1,0 +1,93 @@
+<div class="container noselect"
+     id="hud">
+     <div id="boatcontrol"
+          oncontextmenu="event.preventDefault()">
+          <div id="time">
+               <div id="timebar"
+                    [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
+          </div>
+
+          <div id="moves">
+               <div *ngFor="let move of moves; let i=index"
+                    class="moverow">
+                    <ng-container>
+                         <div class="bombslot"
+                              [class.blocked]="locked"
+                              (click)="addShot(i*2)"
+                              [class.bomb]="shots[i*2] > 0"></div>
+                         <div class="bombslot left2"
+                              [class.blocked]="locked"
+                              (click)="addShot(i*2)"
+                              [class.bomb]="shots[i*2] > 1"></div>
+                         <div class="bombslot right"
+                              [class.blocked]="locked"
+                              (click)="addShot(i*2+1)"
+                              [class.bomb]="shots[i*2+1] > 0"></div>
+                         <div class="bombslot right2"
+                              [class.blocked]="locked"
+                              (click)="addShot(i*2+1)"
+                              [class.bomb]="shots[i*2+1] > 1"></div>
+                    </ng-container>
+
+                    <div class="move"
+                         [class.blocked]="maxMoves || locked"
+                         (drop)="drop($event, i)"
+                         (mouseup)="clickTile($event, i)"
+                         (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
+                         (dragover)="$event.preventDefault()">
+                         <img *ngIf="move"
+                              src="./assets/images/arrow{{move}}.png"
+                              (dragstart)="drag(move, i)"
+                              (dragend)="dragEnd()">
+                    </div>
+               </div>
+          </div>
+
+          <div id="damage">
+               <div id="damagebar"
+                    [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
+          </div>
+          <div id="bilge">
+               <div id="bilgebar"
+                    [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
+          </div>
+
+          <div id="movesource"
+               name="movesource">
+               <img class="movetile"
+                    name="left"
+                    id="tile1"
+                    src="./assets/images/arrow1.png"
+                    (dragstart)="drag(1)">
+               <img class="movetile"
+                    name="forward"
+                    id="tile2"
+                    src="./assets/images/arrow2.png"
+                    (dragstart)="drag(2)">
+               <img class="movetile"
+                    name="right"
+                    id="tile3"
+                    src="./assets/images/arrow3.png"
+                    (dragstart)="drag(3)">
+          </div>
+
+          <p *ngIf="myBoat.moveLock">
+               Respawning in {{myBoat.moveLock}} turn<span *ngIf="myBoat.moveLock > 1">s</span>
+          </p>
+          <div id="buttons">
+               <button *ngIf="!fs.allowInvite || !(myBoat.ready && turn === 0); else fstart"
+                       mat-raised-button
+                       id="ready"
+                       (click)="imReady()"
+                       [disabled]="myBoat.ready">Ready</button>
+               <ng-template #fstart>
+                    <button mat-raised-button
+                            id="start"
+                            (click)="start()">Start</button>
+               </ng-template>
+               <q-setting name="nextCadeBoat"></q-setting>
+          </div>
+     </div>
+
+     <q-chat></q-chat>
+</div>

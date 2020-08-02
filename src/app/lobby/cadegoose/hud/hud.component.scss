@@ -1,0 +1,174 @@
+#boatcontrol {
+    float: left;
+    width: 277px;
+    height: 148px;
+  }
+  
+  q-chat {
+    position: absolute;
+    right: 8px;
+    top: 4px;
+    width: calc(99% - 285px);
+  }
+  
+  #hud {
+    position: absolute;
+    bottom: 1%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 95%;
+    max-width: 900px;
+    min-width: 320px;
+    padding: 5px;
+    text-align: center;
+  }
+  
+  #movesource, #buttons {
+    float: left;
+    width: 150px;
+    min-height: 10px;
+    margin: 5px 10px;
+  }
+  
+  #buttons {
+    position: absolute;
+    bottom: 0px;
+  }
+  
+  #damage, #bilge {
+    float: left;
+    margin: 2px 37px;
+    width: 96px;
+    height: 15px;
+    background-color: #aaaaaa;
+    overflow: hidden;
+  }
+
+  #bilge {
+    margin-top: 0;
+  }
+  
+  #damagebar, #bilgebar {
+    position: relative;
+    background: red;
+    height: 15px;
+    left: -100%;
+    transition: .3s linear;
+  }
+  
+  #bilgebar {
+    background: blue;
+  }
+  
+  #time {
+    position: relative;
+    margin: 30px 10px;
+    float: right;
+    height: 76px;
+    width: 15px;
+    background-color: #aaaaaa;
+    overflow: hidden;
+  }
+  
+  #timebar {
+    position: relative;
+    height: 76px;
+    top: 100%;
+    background-color: khaki;
+    transition: .9s linear;
+  }
+  
+  #moves {
+    float: right;
+    margin-right: 27px;
+  }
+  
+  .moverow {
+    position: relative;
+  }
+  
+  .move {
+    background-color: lightgrey;
+    width: 35px;
+    height: 35px;
+    border: 1px solid black;
+    border-radius: 10px;
+  }
+  
+  .move img {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .bombslot {
+    position: absolute;
+    top: 10px;
+    left: -14px;
+    background-color: lightgrey;
+    width: 16px;
+    height: 16px;
+    border: 1px solid black;
+    border-radius: 8px;
+  }
+  
+  .bombslot.right {
+    left: 33px;
+  }
+  
+  .bombslot.left2 {
+    left: -28px;
+  }
+  
+  .bombslot.right2 {
+    left: 47px;
+  }
+  
+  #treasurebox, .token {
+    float: left;
+    margin-left: 8px;
+    height: 35px;
+    width: 35px;
+    border: 2px solid grey;
+    border-radius: 5px;
+    background-color: rgba(100, 100, 100, 0.3);
+  }
+  
+  #tokens {
+    margin-left: 37px;
+  }
+  
+  .token img {
+    margin-top: 4px;
+    height: 23px;
+    width: 23px;
+  }
+  
+  #ready {
+    background: darkgreen;
+  }
+  
+  #start {
+    background: #154360;
+  }
+  
+  #ready:disabled {
+    background: grey;
+  }
+  
+  #settings {
+    margin-left: 6px;
+    color: #bbb;
+  }
+  
+  .blocked {
+    background-color: #999;
+  }
+  
+  .bomb {
+    background: #9c382d;
+  }
+  
+  .selected {
+    border: 2px solid orange;
+  }
+  

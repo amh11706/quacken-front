@@ -1,0 +1,26 @@
+#timer {
+	position: absolute;
+	top: calc(50% - 125px);
+	left: 10px;
+	width: 100px;
+	color: #fff;
+}
+p {
+	text-align: center;
+	margin: 4px 0;
+	line-height: 45px;
+}
+#turncount {
+	line-height: 2;
+	color: khaki;
+	font-size: 19px;
+}
+
+.team {
+    color: red;
+    line-height: 25px;
+}
+
+.team0 {
+    color: lime;
+}

@@ -21,7 +21,7 @@
   transform: rotate(45deg);
 }
 
-.hex .img1, .hex .img2, .hex .img3, .hex .img50 {
+.hex .img1, .hex .img2, .hex .img3, .hex .img50, .img21, .img22, .img23 {
   transform: rotate(60deg) scale(0.7);
 }
 

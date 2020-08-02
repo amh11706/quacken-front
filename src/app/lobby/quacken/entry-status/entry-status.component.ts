@@ -15,9 +15,9 @@ export class EntryStatusComponent implements OnInit, OnDestroy {
   titles = ['Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
 
   time = '30:00';
-  private subs = new Subscription();
+  protected subs = new Subscription();
 
-  constructor(private ws: WsService) { }
+  constructor(protected ws: WsService) { }
 
   ngOnInit() {
     this.subs = this.ws.subscribe('time', (time: string) => this.time = time);
@@ -26,7 +26,7 @@ export class EntryStatusComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subs) this.subs.unsubscribe();
+    this.subs.unsubscribe();
   }
 
 }

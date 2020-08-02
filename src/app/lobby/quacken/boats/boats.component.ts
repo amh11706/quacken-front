@@ -19,6 +19,7 @@ export interface Turn {
   steps: BoatStatus[][];
   cSteps: Clutter[][];
   treasure: number[];
+  points: number[];
 }
 
 interface Sync {
@@ -72,7 +73,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   ];
   clutter: Clutter[] = [];
   szFade = ', opacity .8s linear .7s';
-  moveNames = ['', 'left', 'forward', 'right', 'obscured'];
+  moveNames = ['', 'left', 'forward', 'right', 'obscured', 'overmove'];
   titles = ['', ', Cuttle Cake', ', Taco Locker', ', Pea Pod', ', Fried Egg'];
 
   myBoat = new Boat('');
@@ -263,7 +264,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   }
 
-  private setBoats(boats: BoatSync[]) {
+  protected setBoats(boats: BoatSync[]) {
     if (this.turn) return;
     for (const sBoat of boats) {
       if (sBoat.oId) delete this._boats[sBoat.oId];

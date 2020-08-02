@@ -1,4 +1,4 @@
-export const BoatTypes = [3, 12, 6, 6, 6, 3, 12, 6, 6, 6, 24, 36, 48, 48];
+export const BoatDamages = [3, 12, 6, 6, 6, 3, 12, 6, 6, 6, 24, 36, 48, 48, 50, 100];
 
 export class Boat {
   treasure = 0;
@@ -62,13 +62,13 @@ export class Boat {
   }
 
   getDamage(): number {
-    return this.damage * 96 / BoatTypes[this.type];
+    return this.damage * 96 / BoatDamages[this.type];
   }
 
   setDamage(damage: number) {
     this.damage = damage;
-    if (this.damage >= BoatTypes[this.type]) {
-      this.damage = BoatTypes[this.type];
+    if (this.damage >= BoatDamages[this.type]) {
+      this.damage = BoatDamages[this.type];
       setTimeout(() => this.sink(), 500);
     }
     return this;
@@ -95,7 +95,7 @@ export class Boat {
     this.imageOpacity = 0;
   }
 
-  private checkSZ(pos: { x: number, y: number }) {
+  checkSZ = (pos: { x: number, y: number }) => {
     return pos.y > 48 && pos.y < 52 && pos.x >= 0 && pos.x < 25;
   }
 

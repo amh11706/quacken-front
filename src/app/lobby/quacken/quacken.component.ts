@@ -31,7 +31,10 @@ export class QuackenComponent implements OnInit, OnDestroy {
   settings: SettingMap = { mapScale: 50, speed: 10, kbControls: 1 };
   wheelDebounce?: number;
   myBoat = new Boat('');
-  private sub = new Subscription();
+  protected sub = new Subscription();
+
+  protected mapHeight = 52;
+  protected mapWidth = 25;
 
   moveTransition = (transition: number): string => {
     switch (transition) {
@@ -45,9 +48,9 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private ws: WsService,
-    private ss: SettingsService,
-    private fs: FriendsService,
+    protected ws: WsService,
+    protected ss: SettingsService,
+    protected fs: FriendsService,
   ) {
     this.getSettings();
   }
@@ -91,22 +94,22 @@ export class QuackenComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  private setMapB64(map: string) {
+  protected setMapB64(map: string) {
     if (!this.map.length) this.initMap();
     const bString = atob(map);
     let i = 0;
-    for (let y = 0; y < 52; y++) {
-      for (let x = 0; x < 25; x++) {
+    for (let y = 0; y < this.mapHeight; y++) {
+      for (let x = 0; x < this.mapWidth; x++) {
         this.map[y][x] = bString.charCodeAt(i);
         i++;
       }
     }
   }
 
-  private initMap() {
-    for (let y = 0; y < 52; y++) {
+  protected initMap() {
+    for (let y = 0; y < this.mapHeight; y++) {
       const row = [];
-      for (let x = 0; x < 25; x++) {
+      for (let x = 0; x < this.mapWidth; x++) {
         row.push(0);
       }
       this.map.push(row);

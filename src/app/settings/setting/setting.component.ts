@@ -13,8 +13,8 @@ import { Settings } from './settings';
 export class SettingComponent {
   @Input() set name(value: keyof typeof Settings) {
     this.setting = Settings[value] || {};
-    this.setting.name = value;
-    if (this.setting && this.setting.id) this.fetch(value);
+    this.setting.name = this.setting.name || value;
+    this.fetch();
   }
   @Output() change = new EventEmitter<number>();
 
@@ -24,12 +24,8 @@ export class SettingComponent {
 
   constructor(public ss: SettingsService, private ws: WsService) { }
 
-  ngOnDestroy() {
-  }
-
-  private async fetch(name: string) {
-    this.setting.name = name;
-    this.group = await this.ss.getGroup(this.setting.group);
+  private async fetch() {
+    if (this.setting.group) this.group = await this.ss.getGroup(this.setting.group);
   }
 
   send() {

@@ -1,0 +1,11 @@
+<div [qDrag]
+     [bindToWindow]="true"
+     class="container noselect"
+     id="timer">
+    <p id="turncount">{{time}}</p>
+    <ng-container *ngFor="let team of points; let i = index">
+        <p class="team team{{i}}">
+            {{teams[i]}}: <br>{{team}}
+        </p>
+    </ng-container>
+</div>

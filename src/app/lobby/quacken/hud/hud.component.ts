@@ -48,21 +48,19 @@ export class HudComponent implements OnInit, OnDestroy {
   private minutes = 0;
   private seconds = 0;
   private turnSeconds = 0;
+  secondsPerTurn = 20;
 
   seconds$ = new BehaviorSubject<number>(76);
 
-  constructor(private ws: WsService, public fs: FriendsService) { }
+  constructor(protected ws: WsService, public fs: FriendsService) { }
 
   ngOnInit() {
     document.addEventListener('keydown', this.kbEvent);
     this.subs = this.ws.subscribe('_myBoat', (b: Boat) => this.myBoat = b);
     this.subs.add(this.ws.subscribe('_unlockMoves', () => {
+      this.resetMoves();
       this.locked = false;
-      this.checkMaxMoves();
-      if (this.selected !== -1) {
-        this.selected = 3;
-        while (this.myBoat.moves[this.selected] === 0 && this.selected > 0) this.selected--;
-      }
+      if (this.selected !== -1) this.selected = 0;
     }));
     this.subs.add(this.ws.subscribe('_boats', (m: Lobby) => {
       this.turn = m.turn || this.turn;
@@ -101,25 +99,25 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.selected === -1) return this.selected = 0;
 
     if (e.code === 'Backspace' || e.code === 'KeyZ' && e.ctrlKey) {
-      if (this.selected > 0 && (this.selected < 3 || this.myBoat.moves[this.selected] === 0)) {
+      if (this.selected > 0 && (this.selected < 3 || this.getMoves()[this.selected] === 0)) {
         this.selected -= 1;
       } else if (this.selected === 0) {
         this.setBomb(0);
-        this.myBoat.moves = [0, 0, 0, 0];
+        this.resetMoves();
       }
-      this.myBoat.moves[this.selected] = 0;
+      this.getMoves()[this.selected] = 0;
       this.checkMaxMoves();
-      this.ws.send('s', this.myBoat.moves);
+      this.sendMoves();
       return;
     }
     if (e.code === 'KeyQ') {
-      if (this.selected > 0 && this.myBoat.moves[this.selected] === 0) {
+      if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
         return this.setBomb(this.selected);
       }
       return this.setBomb(this.selected + 1);
     }
     if (e.code === 'KeyE') {
-      if (this.selected > 0 && this.myBoat.moves[this.selected] === 0) {
+      if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
         return this.setBomb(this.selected + 4);
       }
       return this.setBomb(this.selected + 5);
@@ -138,16 +136,22 @@ export class HudComponent implements OnInit, OnDestroy {
         this.setBomb(this.selected + 5);
       }
     } else {
-      const oldMove = this.myBoat.moves[this.selected];
+      const oldMove = this.getMoves()[this.selected];
       if (this.maxMoves && !(move === 0 || move === 4) && (oldMove === 0 || oldMove === 4)) {
         if (this.selected < 3) this.selected += 1;
         return;
       }
-      this.myBoat.moves[this.selected] = move;
+      this.getMoves()[this.selected] = move;
       if (this.selected < 3) this.selected += 1;
       this.checkMaxMoves();
-      this.ws.send('s', this.myBoat.moves);
+      this.sendMoves();
     }
+  }
+
+  protected resetMoves() {
+    const moves = this.getMoves();
+    for (const i in moves) moves[i] = 0;
+    this.maxMoves = false;
   }
 
   checkMaxMoves() {
@@ -155,9 +159,9 @@ export class HudComponent implements OnInit, OnDestroy {
       this.maxMoves = false;
       return;
     }
-    const moveCount = this.myBoat.moves.reduce((a, c) => a + +(c > 0 && c < 4), 0);
+    const moveCount = this.getMoves().reduce((a, c) => a + +(c > 0 && c < 4), 0);
     this.maxMoves = moveCount >= 3;
-    if (moveCount === 4) this.myBoat.moves[3] = 0;
+    if (moveCount === 4) this.getMoves()[3] = 0;
   }
 
   setBomb(i: number) {
@@ -178,21 +182,30 @@ export class HudComponent implements OnInit, OnDestroy {
     this.ws.send('c/start', '');
   }
 
+  private sendMoves() {
+    this.ws.send('s', this.getMoves());
+  }
+
+  protected getMoves(): number[] {
+    return this.myBoat.moves;
+  }
+
   clickTile(ev: MouseEvent, slot: number) {
     this.selected = -1;
     if (this.locked) return;
     const boat = this.myBoat;
+    const moves = this.getMoves();
     if (ev.shiftKey && boat.tokenPoints > 1) {
-      if (this.myBoat.moves.indexOf(4) >= 0) return;
-      boat.moves[slot] = 4;
-      this.ws.send('s', boat.moves);
+      if (this.getMoves().indexOf(4) >= 0) return;
+      moves[slot] = 4;
+      this.sendMoves();
       return;
     }
-    const move = boat.moves[slot];
+    const move = moves[slot];
     if (boat.type !== 0 && this.maxMoves && (move === 0 || move === 4)) return;
-    boat.moves[slot] = (ev.button + 1 + move) % 4;
+    moves[slot] = (ev.button + 1 + move) % 4;
     this.checkMaxMoves();
-    this.ws.send('s', boat.moves);
+    this.sendMoves();
   }
 
   drag(move: number, slot: number = 4) {
@@ -206,35 +219,35 @@ export class HudComponent implements OnInit, OnDestroy {
     ev.preventDefault();
     if (this.locked) return;
     const boat = this.myBoat;
-    const move = boat.moves[slot];
+    const moves = this.getMoves();
+    const move = moves[slot];
     if (boat.type !== 0 && this.maxMoves && this.source > 3 &&
       (move === 0 || move === 4) && this.move < 4) return;
 
-    if (this.source < 4) boat.moves[this.source] = boat.moves[slot];
-    boat.moves[slot] = this.move;
+    if (this.source < 4) moves[this.source] = moves[slot];
+    moves[slot] = this.move;
     this.checkMaxMoves();
-    this.ws.send('s', boat.moves);
-
+    this.sendMoves();
     this.source = 4;
   }
 
   dragEnd() {
     if (this.locked || this.source > 3) return;
 
-    this.myBoat.moves[this.source] = 0;
+    this.getMoves()[this.source] = 0;
     this.checkMaxMoves();
-    this.ws.send('s', this.myBoat.moves);
+    this.sendMoves();
   }
 
-  setTurn(turn: number, sec: number = 19) {
+  setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
     if (turn === 90) sec = 0;
     else if (turn < 0) {
       this.endRound();
       return;
     }
 
-    this.minutes = Math.floor(turn / 3);
-    this.seconds = (turn - this.minutes * 3) * 20 + sec;
+    this.minutes = Math.floor(turn / 60 * this.secondsPerTurn);
+    this.seconds = (turn - this.minutes * 60 / this.secondsPerTurn) * this.secondsPerTurn + sec;
     this.turnSeconds = sec;
     this.updatetime();
   }
@@ -256,7 +269,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   private tickTimer() {
-    if (this.minutes === 30) return;
+    if (this.minutes === 45) return;
     if (this.turnSeconds < 1 || this.minutes + this.seconds === 0) {
       this.imReady();
       return;
@@ -266,7 +279,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.updatetime();
 
     this.turnSeconds--;
-    this.seconds$.next(this.turnSeconds * 4 - 4);
+    this.seconds$.next(Math.round(this.turnSeconds * 80 / this.secondsPerTurn - 4));
   }
 
   private updatetime(): void {
