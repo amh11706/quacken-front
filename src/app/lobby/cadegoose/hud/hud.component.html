@@ -45,30 +45,65 @@
 
           <div id="damage">
                <div id="damagebar"
-                    [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
+                    [style.transform]="'translateX(' + lastTick?.damage + 'px)'"></div>
           </div>
           <div id="bilge">
                <div id="bilgebar"
-                    [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
+                    [style.transform]="'translateX(' + lastTick?.bilge + 'px)'"></div>
           </div>
 
           <div id="movesource"
                name="movesource">
-               <img class="movetile"
-                    name="left"
-                    id="tile1"
-                    src="./assets/images/arrow1.png"
-                    (dragstart)="drag(1)">
-               <img class="movetile"
-                    name="forward"
-                    id="tile2"
-                    src="./assets/images/arrow2.png"
-                    (dragstart)="drag(2)">
-               <img class="movetile"
-                    name="right"
-                    id="tile3"
-                    src="./assets/images/arrow3.png"
-                    (dragstart)="drag(3)">
+               <mat-checkbox [(ngModel)]="auto"
+                             (change)="changeWantMove()"></mat-checkbox>
+               <mat-radio-group [(ngModel)]="wantMove"
+                                (change)="changeWantMove()">
+                    <div>
+                         <mat-radio-button [value]="1"
+                                           [disabled]="auto"></mat-radio-button>
+                         <br>
+                         <div class="move blocked"
+                              [title]="tokenStrings[0]">
+                              <img *ngIf="haveMoves[0] > usingMoves[0]"
+                                   name="left"
+                                   id="tile1"
+                                   src="./assets/images/arrow1.png"
+                                   (dragstart)="drag(1)">
+                         </div>
+                         <br>
+                         {{haveMoves[0] - usingMoves[0]}}X
+                    </div>
+                    <div>
+                         <mat-radio-button [value]="2"
+                                           [disabled]="auto"></mat-radio-button>
+                         <br>
+                         <div class="move blocked"
+                              [title]="tokenStrings[1]">
+                              <img *ngIf="haveMoves[1] > usingMoves[1]"
+                                   name="forward"
+                                   id="tile2"
+                                   src="./assets/images/arrow2.png"
+                                   (dragstart)="drag(2)">
+                         </div>
+                         <br>
+                         {{haveMoves[1] - usingMoves[1]}}X
+                    </div>
+                    <div>
+                         <mat-radio-button [value]="3"
+                                           [disabled]="auto"></mat-radio-button>
+                         <br>
+                         <div class="move blocked"
+                              [title]="tokenStrings[2]">
+                              <img *ngIf="haveMoves[2] > usingMoves[2]"
+                                   name="right"
+                                   id="tile3"
+                                   src="./assets/images/arrow3.png"
+                                   (dragstart)="drag(3)">
+                         </div>
+                         <br>
+                         {{haveMoves[2] - usingMoves[2]}}X
+                    </div>
+               </mat-radio-group>
           </div>
 
           <p *ngIf="myBoat.moveLock">

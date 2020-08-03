@@ -5,7 +5,9 @@ export class Boat {
   damage = 0;
   pos = { x: 12, y: 49 };
   moves = [0, 0, 0, 0];
+  id?: number;
   oId?: number;
+  team?: number;
 
   bomb = 0;
   tokenPoints = 0;

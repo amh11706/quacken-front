@@ -29,6 +29,7 @@
 
                         <q-cade-boats [map]="frame"
                                       [moveTransition]="moveTransition"
+                                      [teamInfluence]="hoveredTeam"
                                       [speed]="settings.speed">
                         </q-cade-boats>
                     </div>
@@ -39,4 +40,4 @@
 </div>
 
 <q-cade-hud></q-cade-hud>
-<q-cade-entry-status></q-cade-entry-status>
+<q-cade-entry-status (hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>

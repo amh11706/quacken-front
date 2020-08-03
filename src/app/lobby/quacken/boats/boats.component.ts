@@ -41,6 +41,7 @@ interface BoatStatus {
 
 export interface BoatSync extends BoatStatus {
   oId?: number;
+  team?: number;
   n: string;
   f: number;
   // m: number[],
@@ -279,7 +280,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.moveLock = sBoat.ml;
       boat.tokenPoints = sBoat.tp;
       boat.bomb = sBoat.b;
+      boat.id = sBoat.id;
       boat.oId = sBoat.oId;
+      boat.team = sBoat.team;
       this._boats[sBoat.id] = boat;
 
       if (boat.isMe) {

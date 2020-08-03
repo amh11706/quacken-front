@@ -12,7 +12,7 @@ export const Settings = {
     id: 19, group: 'cade', name: 'nextBoat', type: 'boat', trigger: 'nextBoat',
     titles: [, , , , , , , , , , , , , , 'War Brig', 'War Frig'],
     groups: [
-      { name: 'Ships', options: [14, 15] },
+      { name: 'Next Ship', options: [14, 15] },
     ]
   },
   mapScale: {
@@ -28,14 +28,17 @@ export const Settings = {
     id: 23, group: 'cade', name: 'speed', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
   },
   spawnSide: {
-    admin: true, id: 21, group: 'cade', type: 'option', label: 'Spawn Side', trigger: 'spawnSide', options: [
+    id: 21, group: 'cade', type: 'option', label: 'Spawn Side', trigger: 'spawnSide', options: [
       'Island', 'Ocean'
     ]
   },
   team: {
-    admin: true, id: 20, group: 'cade', type: 'option', label: 'Team', trigger: 'team', options: [
+    id: 20, group: 'cade', type: 'option', label: 'Team', trigger: 'team', options: [
       'Defenders', 'Attackers'
     ]
+  },
+  jobberQuality: {
+    admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 100, step: 5
   },
   cadePublicMode: {
     admin: true, id: 25, group: 'l/cade', name: 'publicMode', type: 'option', label: 'Lobby Privacy', options: [

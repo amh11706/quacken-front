@@ -7,7 +7,7 @@ import { SettingMap } from 'src/app/settings/settings.service';
 
 const baseSettings: (keyof typeof Settings)[] = ['spawnSide', 'team', 'cadeMapScale', 'cadeSpeed'];
 const ownerSettings: (keyof typeof Settings)[] = [
-  'startNew', 'cadePublicMode', 'cadeHotEntry',
+  'startNew', 'jobberQuality', 'cadePublicMode', 'cadeHotEntry',
   'cadeMaxPlayers', 'cadeMap',
 ];
 
@@ -18,6 +18,7 @@ const ownerSettings: (keyof typeof Settings)[] = [
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit {
   settings: SettingMap = { mapScale: 50, speed: 10 };
+  hoveredTeam = -1;
   protected mapHeight = 36;
   protected mapWidth = 20;
 

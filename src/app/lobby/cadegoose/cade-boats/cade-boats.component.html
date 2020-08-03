@@ -14,14 +14,14 @@
      [style.transition]="moveTransition(boat.moveTransition[0]) + (boat.enteringSZ ? szFade : '')">
 
      <!-- split boat div to allow different transitions on each axis -->
-     <div class="boat"
+     <div class="boat team{{boat.team}}"
+          [class.me]="boat.isMe"
           [style.transform]="'translateY(' + (getY(boat.pos)+boat.offsetY) + 'px)'"
           [style.transition]="moveTransition(boat.moveTransition[1])">
           <div class="boatheader"
                *ngIf="boat.name || boat.isMe">
                <span class="boattitle"
-                     [title]="boat.name"
-                     [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
+                     [title]="boat.name">
                     {{boat.name}}
                </span>
 
@@ -34,9 +34,15 @@
           </div>
 
           <img class="boatimage"
+               (mouseover)="boatInfluence = boat.id || -1"
+               (mouseleave)="boatInfluence = -1"
                src="./assets/boats/boat{{boat.type}}.png"
                [style.opacity]="boat.imageOpacity"
                [style.transform]="'rotate(' + boat.face + 'deg)'"
                [style.transition]="rotateTransition(boat)">
+
+          <div class="influence"
+               [hidden]="boat.id !== boatInfluence && boat.team != teamInfluence"
+               [style.width]="diameters[boat.type]"></div>
      </div>
 </div>

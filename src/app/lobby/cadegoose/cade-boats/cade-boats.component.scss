@@ -2,13 +2,27 @@
   z-index: 100;
 }
 
+.influence {
+  position: relative;
+  top: -25px;
+  left: 25px;
+  border: 2px solid lime;
+  padding-bottom: 100%;
+  border-radius: 50%;
+  z-index: -10;
+  transform: translate(-50%, -50%);
+}
+
+.team1 .influence {
+  border-color: red;
+}
+
 .boat {
   position: absolute;
   top: 0;
   left: 0;
   overflow: visible;
   z-index: 1;
-  pointer-events: none;
 }
 
 .boatheader {
@@ -26,6 +40,21 @@
   position: relative;
   padding-bottom: 5px;
   z-index: 10000;
+  color: rgb(1, 153, 1);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.me .boattitle {
+  color: lime;
+}
+
+.team1 .boattitle {
+  color: red;
+}
+
+.team1.me .boattitle {
+  color: rgb(255, 102, 0);
 }
 
 .movebar {

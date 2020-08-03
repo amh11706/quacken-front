@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { CadegooseComponent } from './cadegoose.component';
 import { QdragModule } from 'src/app/qdrag/qdrag.module';
@@ -11,6 +12,7 @@ import { QuackenModule } from '../quacken/quacken.module';
 import { CadeHudComponent } from './hud/hud.component';
 import { CadeEntryStatusComponent } from './cade-entry-status/cade-entry-status.component';
 import { CadeBoatsComponent } from './cade-boats/cade-boats.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent, CadeBoatsComponent],
@@ -18,6 +20,8 @@ import { CadeBoatsComponent } from './cade-boats/cade-boats.component';
     CommonModule,
     FormsModule,
     MatButtonModule,
+    MatRadioModule,
+    MatCheckboxModule,
     QdragModule,
     ChatModule,
     SettingsModule,

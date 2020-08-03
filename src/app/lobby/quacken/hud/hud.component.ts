@@ -42,7 +42,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   private source = 4;
   private move = 0;
-  private subs = new Subscription();
+  protected subs = new Subscription();
 
   private timeInterval?: number;
   private minutes = 0;
