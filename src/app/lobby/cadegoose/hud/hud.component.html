@@ -45,11 +45,11 @@
 
           <div id="damage">
                <div id="damagebar"
-                    [style.transform]="'translateX(' + lastTick?.damage + 'px)'"></div>
+                    [style.transform]="'translateX(' + this.myBoat.getDamage() + 'px)'"></div>
           </div>
           <div id="bilge">
                <div id="bilgebar"
-                    [style.transform]="'translateX(' + lastTick?.bilge + 'px)'"></div>
+                    [style.transform]="'translateX(' + (lastTick.bilge - 4) + 'px)'"></div>
           </div>
 
           <div id="movesource"
@@ -114,7 +114,7 @@
                        mat-raised-button
                        id="ready"
                        (click)="imReady()"
-                       [disabled]="myBoat.ready">Ready</button>
+                       [disabled]="myBoat.ready || turn > 0 && turn < 89">Ready</button>
                <ng-template #fstart>
                     <button mat-raised-button
                             id="start"

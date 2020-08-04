@@ -1,11 +1,5 @@
 import { Component } from '@angular/core';
-import { HudComponent } from '../../quacken/hud/hud.component';
-
-export interface BoatTick {
-  tokens: [number[], number[], number[]];
-  damage: number;
-  bilge: number;
-}
+import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
 @Component({
   selector: 'q-cade-hud',
@@ -20,7 +14,7 @@ export class CadeHudComponent extends HudComponent {
   haveMoves = [2, 4, 2];
   usingMoves = [0, 0, 0];
   tokenStrings = ['', '', ''];
-  lastTick?: BoatTick;
+  lastTick: BoatTick = {} as BoatTick;
 
   wantMove = 2;
   auto = true;
@@ -30,22 +24,39 @@ export class CadeHudComponent extends HudComponent {
     this.ws.send('boatTick');
     this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
       this.lastTick = t;
+      const hadMoves = this.haveMoves;
       this.haveMoves = [0, 0, 0];
       for (let i = 0; i < t.tokens.length; i++) {
         this.tokenStrings[i] = t.tokens[i].join(', ');
         for (const count of t.tokens[i]) this.haveMoves[i] += count;
       }
+
+
+      if (this.auto && (this.haveMoves[0] !== hadMoves[0] || this.haveMoves[1] !== hadMoves[1] || this.haveMoves[2] !== hadMoves[2])) {
+        this.setAutoWant();
+      }
     }));
   }
 
   changeWantMove() {
-    if (this.auto) this.ws.send('wantMove', 0);
+    if (this.auto) this.setAutoWant();
     else this.ws.send('wantMove', this.wantMove);
+  }
+
+  private setAutoWant() {
+    let min = 255;
+    for (const move of [1, 0, 2]) {
+      if (this.haveMoves[move] < min) {
+        min = this.haveMoves[move];
+        this.wantMove = move + 1;
+      }
+    }
+    this.ws.send('wantMove', this.wantMove);
   }
 
   checkMaxMoves() {
     this.usingMoves = [0, 0, 0];
-    for (let i = 0; i < this.moves.length; i++) {
+    if (!this.locked) for (let i = 0; i < this.moves.length; i++) {
       const move = this.moves[i];
       if (move === 0) continue;
       if (this.haveMoves[move - 1] > this.usingMoves[move - 1]) this.usingMoves[move - 1]++;

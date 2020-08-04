@@ -50,7 +50,12 @@
   
   #buttons {
     position: absolute;
-    bottom: 0px;
+    bottom: 4px;
+
+    q-setting {
+      position: relative;
+      top: 4px;
+    }
   }
   
   #damage, #bilge {

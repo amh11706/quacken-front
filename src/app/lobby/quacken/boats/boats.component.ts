@@ -12,6 +12,9 @@ export interface Clutter {
   y: number;
   d?: number;
   p?: boolean;
+  dir?: number;
+  dis?: number;
+  dbl?: number;
 }
 
 export interface Turn {
@@ -45,7 +48,6 @@ export interface BoatSync extends BoatStatus {
   n: string;
   f: number;
   // m: number[],
-  d: number;
   b: number;
   tp: number;
   ty: number;
@@ -197,6 +199,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     let moveFound = false;
     for (const step of turn.steps) if (step) moveFound = true;
+    if (!moveFound) for (const step of turn.cSteps) if (step && step.length) moveFound = true;
 
     if (!moveFound || this.blurred) {
       this.resetBoats();
@@ -245,7 +248,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (this.step === 4) this.resetBoats();
 
     this.step++;
-    const delay = (this.turn?.steps[this.step] ? 750 : 250) * 20 / this.speed;
+    const delay = (this.turn?.steps[this.step] || this.turn?.cSteps[this.step] ? 750 : 250) * 20 / this.speed;
     if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, delay);
     else this.animateTimeout = window.setTimeout(() => this.ws.send('sync'), 1500);
   }
@@ -259,7 +262,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     delete this.turn;
     this.step = -1;
 
-    this.clutter = sync.cSync;
+    setTimeout(() => this.clutter = sync.cSync || [], 1000);
     if (sync.sync) this.setBoats(sync.sync);
 
 
@@ -273,7 +276,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
       const boat = new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId)
         .setPos(sBoat.x, sBoat.y)
         .setTreasure(sBoat.t)
-        .setDamage(sBoat.d)
         .draw();
       boat.spinDeg = 360 / sBoat.ms;
       boat.face = sBoat.f * boat.spinDeg;
@@ -288,12 +290,13 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (boat.isMe) {
         if (oldBoat) {
           if (boat.oId !== oldBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
-          if (sBoat.ty !== oldBoat.type || oldBoat.damage > sBoat.d) {
+          if (sBoat.ty !== oldBoat.type || oldBoat.damage > 100) {
             this.map?.dispatchEvent(new Event('dblclick'));
             oldBoat.type = sBoat.ty;
             this.ws.dispatchMessage({ cmd: '_unlockMoves' });
           }
           boat.moves = oldBoat.moves;
+          boat.damage = oldBoat.damage;
           Object.assign(oldBoat, boat);
           this._boats[sBoat.id] = oldBoat;
         } else {
@@ -308,6 +311,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   private handleUpdate(updates: Clutter[]) {
     for (const u of updates) {
+      if (u.dis) {
+        this.clutter.push(u);
+        continue;
+      }
       const c = this.clutter.find(elem => {
         return elem.x === u.x && elem.y === u.y;
       });

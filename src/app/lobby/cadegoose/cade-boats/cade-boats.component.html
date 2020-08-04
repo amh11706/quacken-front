@@ -1,10 +1,13 @@
-<div *ngFor="let obj of clutter; trackBy: trackBy"
+<div *ngFor="let obj of clutter"
      class="clutter"
-     [class.front]="obj.p && obj.t === 0"
+     [class.front]="obj.t === 0"
      [style.transform]="getObj(obj)">
 
-     <div>
-
+     <div *ngIf="obj.t === 0"
+          class="shot shot{{obj.dir}}{{obj.dis}}"
+          [class.double]="obj.dbl"
+          [style.top]="'25px'"
+          [style.left]="'25px'">
      </div>
 </div>
 

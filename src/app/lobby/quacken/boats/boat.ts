@@ -67,17 +67,8 @@ export class Boat {
     return this.damage * 96 / BoatDamages[this.type];
   }
 
-  setDamage(damage: number) {
-    this.damage = damage;
-    if (this.damage >= BoatDamages[this.type]) {
-      this.damage = BoatDamages[this.type];
-      setTimeout(() => this.sink(), 500);
-    }
-    return this;
-  }
-
   addDamage(crunchDir: number, damage: number = 1) {
-    this.setDamage(this.damage + damage);
+    if (damage >= 100) setTimeout(() => this.sink(), 500);
     setTimeout(() => this.crunch(crunchDir), 100);
     return this;
   }

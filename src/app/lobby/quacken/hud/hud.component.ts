@@ -12,6 +12,12 @@ export const weapons = [
   '', '', '', 'spin',
 ];
 
+export interface BoatTick {
+  tokens: [number[], number[], number[]];
+  damage: number;
+  bilge: number;
+}
+
 @Component({
   selector: 'q-hud',
   templateUrl: './hud.component.html',
@@ -61,6 +67,9 @@ export class HudComponent implements OnInit, OnDestroy {
       this.resetMoves();
       this.locked = false;
       if (this.selected !== -1) this.selected = 0;
+    }));
+    this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
+      this.myBoat.damage = t.damage;
     }));
     this.subs.add(this.ws.subscribe('_boats', (m: Lobby) => {
       this.turn = m.turn || this.turn;
