@@ -5,6 +5,13 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 05 August 2020',
+    content: `
+    <ul>
+      <li>CadeGoose 1.0 released!</li>
+    </ul>`
+  },
+  {
     title: 'Release 15 January 2020',
     content: `
     <ul>

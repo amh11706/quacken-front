@@ -8,7 +8,8 @@ import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 })
 export class CadeHudComponent extends HudComponent {
   kbControls = 0;
-  secondsPerTurn = 30;
+  protected secondsPerTurn = 30;
+  protected maxTurn = 75;
   shots = [0, 0, 0, 0, 0, 0, 0, 0];
   moves = [0, 0, 0, 0];
   haveMoves = [2, 4, 2];
@@ -21,7 +22,6 @@ export class CadeHudComponent extends HudComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.ws.send('boatTick');
     this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
       this.lastTick = t;
       const hadMoves = this.haveMoves;

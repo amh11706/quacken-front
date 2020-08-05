@@ -241,3 +241,7 @@
   85% { opacity: 1; border-color: deepskyblue; background: transparent; transform: translate(-50%, -50%) translateX(-150px); }
   100% { opacity: 0; transform: translate(-50%, -50%) translateX(-150px) scale(3); }
 }
+
+.shot.double {
+  animation-delay: 0.1s;
+}

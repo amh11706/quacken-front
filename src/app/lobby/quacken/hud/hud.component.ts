@@ -54,7 +54,8 @@ export class HudComponent implements OnInit, OnDestroy {
   private minutes = 0;
   private seconds = 0;
   private turnSeconds = 0;
-  secondsPerTurn = 20;
+  protected secondsPerTurn = 20;
+  protected maxTurn = 90;
 
   seconds$ = new BehaviorSubject<number>(76);
 
@@ -74,19 +75,20 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe('_boats', (m: Lobby) => {
       this.turn = m.turn || this.turn;
       if (this.turn > 0) this.locked = false;
-      if (!this.timeInterval && this.turn < 90) this.startTimer();
-      this.setTurn(90 - this.turn);
+      if (!this.timeInterval && this.turn > 0 && this.turn < this.maxTurn) this.startTimer();
+      this.setTurn(this.maxTurn - this.turn);
     }));
     this.subs.add(this.ws.subscribe('turn', (turn: Turn) => {
-      if (!this.timeInterval && turn.turn < 90) this.startTimer();
+      if (!this.timeInterval && turn.turn < this.maxTurn) this.startTimer();
       this.turn = turn.turn;
-      this.setTurn(90 - turn.turn);
+      this.setTurn(this.maxTurn - turn.turn);
       this.checkMaxMoves();
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
     }));
     this.subs.add(this.ws.subscribe('newBoat', () => {
       setTimeout(() => this.checkMaxMoves());
     }));
+    this.ws.send('boatTick');
   }
 
   ngOnDestroy() {
@@ -249,7 +251,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
-    if (turn === 90) sec = 0;
+    if (turn === this.maxTurn) sec = 0;
     else if (turn < 0) {
       this.endRound();
       return;

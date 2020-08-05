@@ -5,7 +5,11 @@
 
      <div *ngIf="obj.t === 0"
           class="shot shot{{obj.dir}}{{obj.dis}}"
-          [class.double]="obj.dbl"
+          [style.top]="'25px'"
+          [style.left]="'25px'">
+     </div>
+     <div *ngIf="obj.t === 0 && obj.dbl"
+          class="shot double shot{{obj.dir}}{{obj.dis}}"
           [style.top]="'25px'"
           [style.left]="'25px'">
      </div>
