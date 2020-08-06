@@ -3,7 +3,8 @@
      [class.front]="obj.t === 0"
      [style.transform]="getObj(obj)">
 
-     <div *ngIf="obj.t === 0">
+     <div *ngIf="obj.t === 0"
+          style="--speed: {{10/speed}};">
           <div class="shot"
                class="dir{{obj.dir}} dis{{obj.dis}}"> </div>
           <div *ngIf="obj.dbl"

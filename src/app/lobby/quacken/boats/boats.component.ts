@@ -58,7 +58,7 @@ export interface BoatSync extends BoatStatus {
 @Component({
   selector: 'q-boats',
   templateUrl: './boats.component.html',
-  styleUrls: ['./boats.component.css']
+  styleUrls: ['./boats.component.scss']
 })
 export class BoatsComponent implements OnInit, OnDestroy {
 

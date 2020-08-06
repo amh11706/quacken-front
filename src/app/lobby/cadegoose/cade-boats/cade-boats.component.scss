@@ -1,6 +1,4 @@
-.front {
-  z-index: 100;
-}
+@import '../../quacken/boats/boat-base.scss';
 
 .influence {
   position: relative;
@@ -17,34 +15,6 @@
   border-color: red;
 }
 
-.boat, .clutter {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow: visible;
-  z-index: 1;
-}
-
-.boatheader {
-  position: absolute;
-  text-align: center;
-  line-height: 1;
-  top: -20px;
-  left: -23px;
-  width: 150px;
-  height: auto;
-  transform: rotate(45deg) scaleY(1.2);
-}
-
-.boattitle {
-  position: relative;
-  padding-bottom: 5px;
-  z-index: 10000;
-  color: rgb(1, 153, 1);
-  font-size: 16px;
-  font-weight: bold;
-}
-
 .me .boattitle {
   color: lime;
 }
@@ -57,66 +27,26 @@
   color: red;
 }
 
-.movebar {
-  box-sizing: content-box;
-  width: 48px;
-  height: 8px;
-  margin: auto;
-  margin-top: 5px;
-  border: 1px solid black;
-  transition: .5s;
+@keyframes explode {
+  1% { border: 1px dotted yellow; background: red; }
+  to { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
 }
 
-.movebarslice {
-  float: left;
-  width: 25%;
-  height: 8px;
-  background-color: grey;
+@keyframes splash {
+  1% { border-color: deepskyblue; background: transparent; }
+  to { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
 }
 
-.left {
-  background-color: #b9cef1;
+@keyframes move { 
+  to { transform: translate(var(--tranX,0), var(--tranY,0)); }
 }
 
-.forward {
-  background-color: #97c469;
-}
+.shot.dis1 { --movetime: .5s; --distance: 50px; }
+.shot.dis2 { --movetime: .8s; --distance: 100px; }
+.shot.dis3, .shot.dis4 { --movetime: 1s; --distance: 150px; }
 
-.right {
-  background-color: #ff9d55;
-}
-
-.obscured {
-  background-color: #eee;
-}
-
-.overmove {
-  background-color: red;
-}
-
-.ready {
-  border: 1px solid lime;
-}
-
-.boatimage {
-  height: 50px;
-}
-
-.clutterimage {
-  position: absolute;
-  padding: 12px;
-  width: 50px;
-  height: 50px;
-  opacity: 1;
-  transition: 1s linear;
-  z-index: -1;
-}
-
-.sunk {
-  opacity: 0;
-  transform: scale(0.5);
-}
-
+// speed set from html
+.shot.double { top: 10px; --delay: calc(var(--speed) * .2s) }
 .shot {
   position: relative;
   top: 20px;
@@ -127,43 +57,15 @@
   background: grey;
   border-radius: 50%;
   opacity: 1;
+  animation-name: move, explode;
+  animation-duration: calc(var(--speed) * var(--movetime)), calc(var(--speed) * .5s);
+  animation-delay: var(--delay, 0s), calc((var(--movetime) - .3s) * var(--speed) + var(--delay, 0s));
+  animation-fill-mode: both;
+  animation-timing-function: ease-out;
 }
+.shot.dis4 { animation-name: move, splash; }
 
-.dis1 { --distance: 50px;  animation: explode1 1s ease-out both; }
-.dis2 { --distance: 100px;  animation: explode2 1.25s ease-out both; }
-.dis3 { --distance: 150px;  animation: explode3 1.5s ease-out both; }
-.dis4 { --distance: 150px;  animation: splash 1.5s ease-out both; }
-
-.dir0 { --tranY: calc(0px - var(--distance)) }
-.dir1 { --tranX: var(--distance) }
-.dir2 { --tranY: var(--distance) }
-.dir3 { --tranX: calc(0px - var(--distance)) }
-
-@keyframes explode1 {
-  45% { border: 1px solid black; background: grey; }
-  50% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(var(--tranX,0), var(--tranY,0)); }
-  100% { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
-}
-
-@keyframes explode2 {
-  70% { border: 1px solid black; background: grey; }
-  75% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(var(--tranX,0), var(--tranY,0)); }
-  100% { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
-}
-
-@keyframes explode3 {
-  80% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(var(--tranX,0), var(--tranY,0)); }
-  100% { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
-}
-
-@keyframes splash {
-  45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border-color: deepskyblue; background: transparent; transform: translate(var(--tranX,0), var(--tranY,0)); }
-  100% { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
-}
-
-.shot.double {
-  animation-delay: 0.2s;
-  top: 10px;
-}
+.shot.dir0 { --tranY: calc(0px - var(--distance)) }
+.shot.dir1 { --tranX: var(--distance) }
+.shot.dir2 { --tranY: var(--distance) }
+.shot.dir3 { --tranX: calc(0px - var(--distance)) }
