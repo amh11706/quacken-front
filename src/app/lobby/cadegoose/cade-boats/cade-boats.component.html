@@ -3,15 +3,13 @@
      [class.front]="obj.t === 0"
      [style.transform]="getObj(obj)">
 
-     <div *ngIf="obj.t === 0"
-          class="shot shot{{obj.dir}}{{obj.dis}}"
-          [style.top]="'25px'"
-          [style.left]="'25px'">
-     </div>
-     <div *ngIf="obj.t === 0 && obj.dbl"
-          class="shot double shot{{obj.dir}}{{obj.dis}}"
-          [style.top]="'25px'"
-          [style.left]="'25px'">
+     <div *ngIf="obj.t === 0">
+          <div class="shot"
+               class="dir{{obj.dir}} dis{{obj.dis}}"> </div>
+          <div *ngIf="obj.dbl"
+               class="dir{{obj.dir}} dis{{obj.dis}}"
+               class="shot double">
+          </div>
      </div>
 </div>
 

@@ -119,6 +119,8 @@
 
 .shot {
   position: relative;
+  top: 20px;
+  left: 20px;
   width: 10px;
   padding-bottom: 100%;
   border: 1px solid black;
@@ -127,121 +129,41 @@
   opacity: 1;
 }
 
-.shot01 { animation: explode01 1s ease-out both; }
-@keyframes explode01 {
+.dis1 { --distance: 50px;  animation: explode1 1s ease-out both; }
+.dis2 { --distance: 100px;  animation: explode2 1.25s ease-out both; }
+.dis3 { --distance: 150px;  animation: explode3 1.5s ease-out both; }
+.dis4 { --distance: 150px;  animation: splash 1.5s ease-out both; }
+
+.dir0 { --tranY: calc(0px - var(--distance)) }
+.dir1 { --tranX: var(--distance) }
+.dir2 { --tranY: var(--distance) }
+.dir3 { --tranX: calc(0px - var(--distance)) }
+
+@keyframes explode1 {
   45% { border: 1px solid black; background: grey; }
-  50% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateY(-50px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateY(-50px) scale(3); }
+  50% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(var(--tranX,0), var(--tranY,0)); }
+  100% { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
 }
 
-.shot02 { animation: explode02 1.25s ease-out both; }
-@keyframes explode02 {
-  45% { border: 1px solid black; background: grey; }
-  75% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateY(-100px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateY(-100px) scale(3); }
+@keyframes explode2 {
+  70% { border: 1px solid black; background: grey; }
+  75% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(var(--tranX,0), var(--tranY,0)); }
+  100% { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
 }
 
-.shot03 { animation: explode03 1.5s ease-out both; }
-@keyframes explode03 {
-  45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateY(-150px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateY(-150px) scale(3); }
+@keyframes explode3 {
+  80% { border: 1px solid black; background: grey; }
+  85% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(var(--tranX,0), var(--tranY,0)); }
+  100% { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
 }
 
-.shot04 { animation: explode04 1.5s ease-out both; }
-@keyframes explode04 {
+@keyframes splash {
   45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border-color: deepskyblue; background: transparent; transform: translate(-50%, -50%) translateY(-150px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateY(-150px) scale(3); }
-}
-
-
-.shot11 { animation: explode11 1s ease-out both; }
-@keyframes explode11 {
-  45% { border: 1px solid black; background: grey; }
-  50% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateX(50px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateX(50px) scale(3); }
-}
-
-.shot12 { animation: explode12 1.25s ease-out both; }
-@keyframes explode12 {
-  45% { border: 1px solid black; background: grey; }
-  75% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateX(100px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateX(100px) scale(3); }
-}
-
-.shot13 { animation: explode13 1.5s ease-out both; }
-@keyframes explode13 {
-  45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateX(150px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateX(150px) scale(3); }
-}
-
-.shot14 { animation: explode14 1.5s ease-out both; }
-@keyframes explode14 {
-  45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border-color: deepskyblue; background: transparent; transform: translate(-50%, -50%) translateX(150px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateX(150px) scale(3); }
-}
-
-
-.shot21 { animation: explode21 1s ease-out both; }
-@keyframes explode21 {
-  45% { border: 1px solid black; background: grey; }
-  50% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateY(50px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateY(50px) scale(3); }
-}
-
-.shot22 { animation: explode22 1.25s ease-out both; }
-@keyframes explode22 {
-  45% { border: 1px solid black; background: grey; }
-  75% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateY(100px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateY(100px) scale(3); }
-}
-
-.shot23 { animation: explode23 1.5s ease-out both; }
-@keyframes explode23 {
-  45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateY(150px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateY(150px) scale(3); }
-}
-
-.shot24 { animation: explode24 1.5s ease-out both; }
-@keyframes explode24 {
-  45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border-color: deepskyblue; background: transparent; transform: translate(-50%, -50%) translateY(150px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateY(150px) scale(3); }
-}
-
-
-.shot31 { animation: explode31 1s ease-out both; }
-@keyframes explode31 {
-  45% { border: 1px solid black; background: grey; }
-  50% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateX(-50px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateX(-50px) scale(3); }
-}
-
-.shot32 { animation: explode32 1.25s ease-out both; }
-@keyframes explode32 {
-  45% { border: 1px solid black; background: grey; }
-  75% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateX(-100px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateX(-100px) scale(3); }
-}
-
-.shot33 { animation: explode33 1.5s ease-out both; }
-@keyframes explode33 {
-  45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border: 1px dotted yellow; background: red; transform: translate(-50%, -50%) translateX(-150px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateX(-150px) scale(3); }
-}
-
-.shot34 { animation: explode34 1.5s ease-out both; }
-@keyframes explode34 {
-  45% { border: 1px solid black; background: grey; }
-  85% { opacity: 1; border-color: deepskyblue; background: transparent; transform: translate(-50%, -50%) translateX(-150px); }
-  100% { opacity: 0; transform: translate(-50%, -50%) translateX(-150px) scale(3); }
+  85% { opacity: 1; border-color: deepskyblue; background: transparent; transform: translate(var(--tranX,0), var(--tranY,0)); }
+  100% { opacity: 0; transform: translate(var(--tranX,0), var(--tranY,0)) scale(3); }
 }
 
 .shot.double {
-  animation-delay: 0.1s;
+  animation-delay: 0.2s;
+  top: 10px;
 }
