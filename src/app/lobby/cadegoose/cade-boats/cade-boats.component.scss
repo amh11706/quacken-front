@@ -5,6 +5,7 @@
   top: -25px;
   left: 25px;
   border: 2px solid lime;
+  min-width: 50px;
   padding-bottom: 100%;
   border-radius: 50%;
   z-index: -10;
@@ -13,6 +14,10 @@
 
 .team1 .influence {
   border-color: red;
+}
+
+.boattitle {
+  color: rgb(1, 153, 1);
 }
 
 .me .boattitle {

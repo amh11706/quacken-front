@@ -1,5 +1,3 @@
-export const BoatDamages = [3, 12, 6, 6, 6, 3, 12, 6, 6, 6, 24, 36, 48, 48, 50, 100];
-
 export class Boat {
   treasure = 0;
   damage = 0;
@@ -8,6 +6,10 @@ export class Boat {
   id?: number;
   oId?: number;
   team?: number;
+  maxDamage = 3;
+  maxMoves = 4;
+  influence = '50px';
+  doubleShot?: boolean;
 
   bomb = 0;
   tokenPoints = 0;
@@ -64,7 +66,7 @@ export class Boat {
   }
 
   getDamage(): number {
-    return this.damage * 96 / BoatDamages[this.type];
+    return this.damage * 96 / this.maxDamage;
   }
 
   addDamage(crunchDir: number, damage: number = 1) {

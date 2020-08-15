@@ -75,7 +75,6 @@ export class CadeHudComponent extends HudComponent {
   }
 
   protected resetMoves() {
-    for (const i in this.shots) this.shots[i] = 0;
     super.resetMoves();
     for (let i = 0; i < this.usingMoves.length; i++) this.haveMoves[i] -= this.usingMoves[i];
     this.usingMoves = [0, 0, 0];

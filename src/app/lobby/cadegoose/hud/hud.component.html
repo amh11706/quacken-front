@@ -10,19 +10,19 @@
           <div id="moves">
                <div *ngFor="let move of moves; let i=index"
                     class="moverow">
-                    <ng-container>
-                         <div class="bombslot"
-                              [class.blocked]="locked"
-                              (click)="addShot(i*2)"
-                              [class.bomb]="shots[i*2] > 0"></div>
+                    <div class="bombslot"
+                         [class.blocked]="locked"
+                         (click)="addShot(i*2)"
+                         [class.bomb]="shots[i*2] > 0"></div>
+                    <div class="bombslot right"
+                         [class.blocked]="locked"
+                         (click)="addShot(i*2+1)"
+                         [class.bomb]="shots[i*2+1] > 0"></div>
+                    <ng-container *ngIf="myBoat.doubleShot">
                          <div class="bombslot left2"
                               [class.blocked]="locked"
                               (click)="addShot(i*2)"
                               [class.bomb]="shots[i*2] > 1"></div>
-                         <div class="bombslot right"
-                              [class.blocked]="locked"
-                              (click)="addShot(i*2+1)"
-                              [class.bomb]="shots[i*2+1] > 0"></div>
                          <div class="bombslot right2"
                               [class.blocked]="locked"
                               (click)="addShot(i*2+1)"

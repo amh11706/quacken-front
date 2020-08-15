@@ -47,12 +47,15 @@ export interface BoatSync extends BoatStatus {
   team?: number;
   n: string;
   f: number;
-  // m: number[],
   b: number;
   tp: number;
   ty: number;
   ml: number;
   ms: number;
+  mDamage: number;
+  mMoves: number;
+  inSq: number;
+  dShot?: boolean;
 }
 
 @Component({
@@ -285,6 +288,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.id = sBoat.id;
       boat.oId = sBoat.oId;
       boat.team = sBoat.team;
+      boat.maxDamage = sBoat.mDamage;
+      boat.maxMoves = sBoat.mMoves;
+      boat.influence = Math.sqrt(sBoat.inSq) * 100 + 'px';
+      boat.doubleShot = sBoat.dShot;
       this._boats[sBoat.id] = boat;
 
       if (boat.isMe) {

@@ -10,9 +10,12 @@ export const Settings = {
   },
   nextCadeBoat: {
     id: 19, group: 'cade', name: 'nextBoat', type: 'boat', trigger: 'nextBoat',
-    titles: [, , , , , , , , , , , , , , 'War Brig', 'War Frig'],
+    titles: [
+      , , , , , , , , , , , , , , 'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
+      'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate'
+    ],
     groups: [
-      { name: 'Next Ship', options: [14, 15] },
+      { name: 'Next Ship', options: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
     ]
   },
   mapScale: {
