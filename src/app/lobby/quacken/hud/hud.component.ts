@@ -13,9 +13,9 @@ export const weapons = [
 ];
 
 export interface BoatTick {
-  tokens: [number[], number[], number[]];
-  damage: number;
-  bilge: number;
+  t: [number[], number[], number[]];
+  d: number;
+  b: number;
 }
 
 @Component({
@@ -65,8 +65,8 @@ export class HudComponent implements OnInit, OnDestroy {
     document.addEventListener('keydown', this.kbEvent);
     this.subs = this.ws.subscribe('_myBoat', (b: Boat) => {
       this.myBoat = b;
-
       this.checkMaxMoves();
+      this.ws.send('boatTick');
     });
     this.subs.add(this.ws.subscribe('_unlockMoves', () => {
       if (!this.turn || this.turn === this.maxTurn) return;
@@ -75,7 +75,7 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.selected !== -1) this.selected = 0;
     }));
     this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
-      this.myBoat.damage = t.damage;
+      this.myBoat.damage = t.d;
     }));
     this.subs.add(this.ws.subscribe('_boats', (m: Lobby) => {
       this.turn = m.turn || this.turn;
@@ -89,8 +89,8 @@ export class HudComponent implements OnInit, OnDestroy {
       this.setTurn(this.maxTurn - turn.turn);
       this.checkMaxMoves();
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
+      this.ws.send('boatTick');
     }));
-    this.ws.send('boatTick');
   }
 
   ngOnDestroy() {
@@ -200,7 +200,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   protected getMoves(): number[] {
-    return this.myBoat.moves;
+    return this.myBoat.moves || [];
   }
 
   clickTile(ev: MouseEvent, slot: number) {

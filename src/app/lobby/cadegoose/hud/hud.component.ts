@@ -26,11 +26,10 @@ export class CadeHudComponent extends HudComponent {
       this.lastTick = t;
       const hadMoves = this.haveMoves;
       this.haveMoves = [0, 0, 0];
-      for (let i = 0; i < t.tokens.length; i++) {
-        this.tokenStrings[i] = t.tokens[i].join(', ');
-        for (const count of t.tokens[i]) this.haveMoves[i] += count;
+      if (t.t) for (let i = 0; i < t.t.length; i++) {
+        this.tokenStrings[i] = t.t[i].join(', ');
+        for (const count of t.t[i]) this.haveMoves[i] += count;
       }
-
 
       if (this.auto && (this.haveMoves[0] !== hadMoves[0] || this.haveMoves[1] !== hadMoves[1] || this.haveMoves[2] !== hadMoves[2])) {
         this.setAutoWant();
@@ -78,5 +77,6 @@ export class CadeHudComponent extends HudComponent {
     super.resetMoves();
     for (let i = 0; i < this.usingMoves.length; i++) this.haveMoves[i] -= this.usingMoves[i];
     this.usingMoves = [0, 0, 0];
+    this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
   }
 }
