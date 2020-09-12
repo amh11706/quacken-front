@@ -16,13 +16,25 @@ export class CadeHudComponent extends HudComponent {
   usingMoves = [0, 0, 0];
   tokenStrings = ['', '', ''];
   lastTick: BoatTick = {} as BoatTick;
+  usingCannons = 0;
+  newTurn = false;
 
   wantMove = 2;
   auto = true;
 
   ngOnInit() {
     super.ngOnInit();
+    this.subs.add(this.ws.subscribe('_myBoat', () => {
+      this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
+    }));
+    this.subs.add(this.ws.subscribe('turn', () => {
+      this.newTurn = true;
+    }));
     this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
+      if (this.newTurn) {
+        this.usingCannons = 0;
+        this.newTurn = false;
+      }
       this.lastTick = t;
       const hadMoves = this.haveMoves;
       this.haveMoves = [0, 0, 0];
@@ -40,6 +52,17 @@ export class CadeHudComponent extends HudComponent {
   changeWantMove() {
     if (this.auto) this.setAutoWant();
     else this.ws.send('wantMove', this.wantMove);
+  }
+
+  sendReady() {
+    this.ws.send('r');
+  }
+
+  imReady() {
+    if (this.myBoat.ready) return;
+    this.stopTimer();
+    this.myBoat.ready = true;
+    this.locked = true;
   }
 
   private setAutoWant() {
@@ -65,7 +88,13 @@ export class CadeHudComponent extends HudComponent {
   }
 
   addShot(i: number) {
-    this.shots[i] = (this.shots[i] + 1) % 3;
+    const oldShots = this.shots[i];
+    this.shots[i] = (oldShots + 1) % (this.myBoat.doubleShot ? 3 : 2);
+    this.usingCannons += this.shots[i] - oldShots;
+    if (this.usingCannons > this.lastTick.tp) {
+      this.usingCannons -= this.shots[i];
+      this.shots[i] = 0;
+    }
     this.ws.send('b', this.shots);
   }
 
@@ -78,5 +107,6 @@ export class CadeHudComponent extends HudComponent {
     for (let i = 0; i < this.usingMoves.length; i++) this.haveMoves[i] -= this.usingMoves[i];
     this.usingMoves = [0, 0, 0];
     this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
+    this.usingCannons = 0;
   }
 }

@@ -55,7 +55,13 @@
           <div id="movesource"
                name="movesource">
                <mat-checkbox [(ngModel)]="auto"
+                             title="Auto"
                              (change)="changeWantMove()"></mat-checkbox>
+               <div id="cannons">
+                    <div class="bombslot"
+                         [class.bomb]="lastTick.tp - usingCannons > 0"></div><br>
+                    {{lastTick.tp - usingCannons}}X
+               </div>
                <mat-radio-group [(ngModel)]="wantMove"
                                 (change)="changeWantMove()">
                     <div>
@@ -113,8 +119,8 @@
                <button *ngIf="!fs.allowInvite || !(myBoat.ready && turn === 0); else fstart"
                        mat-raised-button
                        id="ready"
-                       (click)="imReady()"
-                       [disabled]="myBoat.ready">Ready</button>
+                       (click)="sendReady()"
+                       [disabled]="myBoat.ready || turn > 0">Ready</button>
                <ng-template #fstart>
                     <button mat-raised-button
                             id="start"

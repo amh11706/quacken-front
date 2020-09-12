@@ -17,6 +17,7 @@ export interface Lobby {
   treasure?: number[];
   clutter?: Clutter[];
   turn?: number;
+  seconds?: number;
   type: 'HexaQuack' | 'Quacken' | 'Spades';
   [key: string]: any;
 }

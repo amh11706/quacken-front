@@ -16,6 +16,7 @@ export interface BoatTick {
   t: [number[], number[], number[]];
   d: number;
   b: number;
+  tp: number;
 }
 
 @Component({
@@ -53,7 +54,7 @@ export class HudComponent implements OnInit, OnDestroy {
   private timeInterval?: number;
   private minutes = 0;
   private seconds = 0;
-  private turnSeconds = 0;
+  protected turnSeconds = 0;
   protected secondsPerTurn = 20;
   protected maxTurn = 90;
 
@@ -69,7 +70,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.ws.send('boatTick');
     });
     this.subs.add(this.ws.subscribe('_unlockMoves', () => {
-      if (!this.turn || this.turn === this.maxTurn) return;
+      if (!this.turn || this.turn > this.maxTurn) return;
       this.resetMoves();
       this.locked = false;
       if (this.selected !== -1) this.selected = 0;
@@ -77,16 +78,31 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
       this.myBoat.damage = t.d;
     }));
+
     this.subs.add(this.ws.subscribe('_boats', (m: Lobby) => {
-      this.turn = m.turn || this.turn;
+      this.turn = m.turn ?? this.turn;
       if (this.turn > 0) this.locked = false;
+      else {
+        this.myBoat.ready = false;
+        this.locked = true;
+        this.resetMoves();
+      }
+
       if (!this.timeInterval && this.turn > 0 && this.turn < this.maxTurn) this.startTimer();
-      this.setTurn(this.maxTurn - this.turn);
+      else this.stopTimer();
+      this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);
     }));
+
     this.subs.add(this.ws.subscribe('turn', (turn: Turn) => {
-      if (!this.timeInterval && turn.turn < this.maxTurn) this.startTimer();
-      this.turn = turn.turn;
-      this.setTurn(this.maxTurn - turn.turn);
+      this.stopTimer();
+      if (turn.turn <= this.maxTurn) {
+        this.turn = turn.turn;
+        this.startTimer();
+        this.setTurn(this.maxTurn - turn.turn);
+      } else {
+        this.turn = 0;
+      }
+      if (turn.turn !== 1) this.locked = true;
       this.checkMaxMoves();
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
       this.ws.send('boatTick');
@@ -186,6 +202,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   imReady() {
     if (this.myBoat.ready) return;
+    this.stopTimer();
     this.myBoat.ready = true;
     this.locked = true;
     this.ws.send('r');
@@ -260,7 +277,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }
 
     this.minutes = Math.floor(turn / 60 * this.secondsPerTurn);
-    this.seconds = (turn - this.minutes * 60 / this.secondsPerTurn) * this.secondsPerTurn + sec;
+    this.seconds = (turn * this.secondsPerTurn % 60) + sec;
     this.turnSeconds = sec;
     this.updatetime();
   }
@@ -282,7 +299,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   private tickTimer() {
-    if (this.minutes === 45) return;
+    if (this.turn === 0) return this.stopTimer();
     if (this.turnSeconds < 1 || this.minutes + this.seconds === 0) {
       this.imReady();
       return;
@@ -295,7 +312,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.seconds$.next(Math.round(this.turnSeconds * 80 / this.secondsPerTurn - 4));
   }
 
-  private updatetime(): void {
+  protected updatetime(): void {
     const seconds = this.seconds < 10 ? '0' + this.seconds : this.seconds;
     this.ws.dispatchMessage({ cmd: 'time', data: this.minutes + ':' + seconds });
   }

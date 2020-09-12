@@ -145,6 +145,18 @@
   .bombslot.right2 {
     left: 47px;
   }
+
+  #cannons {
+    position: relative;
+    right: 12px;
+
+    .bombslot {
+      position: relative;
+      top: -6px;
+      left: 0;
+    }
+  }
+
   
   #treasurebox, .token {
     float: left;

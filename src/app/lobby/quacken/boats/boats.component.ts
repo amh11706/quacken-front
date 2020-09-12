@@ -64,11 +64,6 @@ export interface BoatSync extends BoatStatus {
   styleUrls: ['./boats.component.scss']
 })
 export class BoatsComponent implements OnInit, OnDestroy {
-
-  constructor(private ws: WsService) { }
-  @Input() speed = 10;
-  @Input() map?: HTMLElement;
-  @Input() hex = false;
   weapons = weapons;
   clutterTypes = [
     'powderkeg',
@@ -84,12 +79,17 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   myBoat = new Boat('');
   boats: Boat[] = [];
+
   private _boats: { [k: number]: Boat } = {};
   private subs = new Subscription();
   private animateTimeout?: number;
   private blurred = false;
   private step = -1;
   private turn?: Turn;
+
+  @Input() speed = 10;
+  @Input() map?: HTMLElement;
+  @Input() hex = false;
   @Input() getX = (p: { x: number, y: number }): number => (p.x) * 50;
   @Input() getY = (p: { x: number, y: number }): number => (p.y) * 50;
   getObj = (o: Clutter): string => `translate(${this.getX(o)}px,${this.getY(o)}px)`;
@@ -116,12 +116,15 @@ export class BoatsComponent implements OnInit, OnDestroy {
     ][b.rotateTransition];
   }
 
+  constructor(private ws: WsService) { }
+
   ngOnInit() {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
     this.subs = this.ws.subscribe('_boats', (m: Lobby) => {
       if (!m.boats) return;
       clearTimeout(this.animateTimeout);
+      delete this.turn;
       this.boats = [];
       this._boats = {};
       this.setBoats(Object.values(m.boats));
@@ -267,8 +270,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     setTimeout(() => this.clutter = sync.cSync || [], 1000);
     if (sync.sync) this.setBoats(sync.sync);
-
-
   }
 
   protected setBoats(boats: BoatSync[]) {
@@ -300,7 +301,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
           if (sBoat.ty !== oldBoat.type || oldBoat.damage > 100) {
             this.map?.dispatchEvent(new Event('dblclick'));
             oldBoat.type = sBoat.ty;
-            this.ws.dispatchMessage({ cmd: '_unlockMoves' });
+            this.ws.dispatchMessage({ cmd: '_myBoat', data: oldBoat });
           }
           boat.moves = oldBoat.moves;
           boat.damage = oldBoat.damage;
