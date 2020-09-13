@@ -5,6 +5,18 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 14 Septemner 2020',
+    content: `
+    <ul>
+      <li>Major CadeGoose updates based on feedback and testing.</li>
+      <li>New entry menu for choosing team, boat, and spawn side.</li>
+      <li>Timer is now server side. No more odd behavior when someone disconnects.</li>
+      <li>More consistent handling of boat sinks and respawns.</li>
+      <li>All boat types are now playable with placeholder images.</li>
+      <li>The next update will focus on further improving the CadeGoose UI. Thank you to everyone who has tested and given feedback so far!</li>
+    </ul>`
+  },
+  {
     title: 'Release 05 August 2020',
     content: `
     <ul>

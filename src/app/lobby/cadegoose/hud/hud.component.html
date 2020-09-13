@@ -43,13 +43,15 @@
                </div>
           </div>
 
-          <div id="damage">
+          <div id="damage"
+               title="{{myBoat.getDamage()}}%">
                <div id="damagebar"
                     [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
           </div>
-          <div id="bilge">
+          <div id="bilge"
+               title="{{lastTick.b || 0}}%">
                <div id="bilgebar"
-                    [style.transform]="'translateX(' + (lastTick.b - 4) + 'px)'"></div>
+                    [style.transform]="'translateX(' + lastTick.b + 'px)'"></div>
           </div>
 
           <div id="movesource"

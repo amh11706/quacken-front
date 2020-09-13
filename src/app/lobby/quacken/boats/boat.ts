@@ -66,7 +66,7 @@ export class Boat {
   }
 
   getDamage(): number {
-    return this.damage * 96 / this.maxDamage;
+    return Math.round(this.damage * 100 / this.maxDamage);
   }
 
   addDamage(crunchDir: number, damage: number = 1) {

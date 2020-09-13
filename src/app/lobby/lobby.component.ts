@@ -9,12 +9,11 @@ import { Clutter, BoatSync } from './quacken/boats/boats.component';
 
 export interface Lobby {
   owner: boolean;
-  players: any[];
+  players: any;
   playing?: boolean;
   scores?: number[];
   map?: string;
   boats?: { [key: string]: BoatSync };
-  teams?: { [key: number]: { r: boolean, t: number } };
   treasure?: number[];
   clutter?: Clutter[];
   turn?: number;

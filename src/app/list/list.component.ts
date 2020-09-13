@@ -7,7 +7,7 @@ import { SettingsService, SettingMap } from '../settings/settings.service';
 import { Notes } from './notes';
 import { Lobby } from '../lobby/lobby.component';
 
-const groups = ['quacken', 'quacken', 'spades'];
+const groups = ['quacken', 'quacken', 'spades', 'cade'];
 
 @Component({
   selector: 'q-lobby-list',

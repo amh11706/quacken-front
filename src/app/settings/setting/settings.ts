@@ -91,7 +91,7 @@ export const Settings = {
   },
   createType: {
     id: 14, group: 'l/create', type: 'option', options: [
-      'Quacken', 'HexaQuack', 'Spades'
+      'Quacken', 'HexaQuack', 'Spades', 'CadeGoose'
     ]
   },
   turnTime: {

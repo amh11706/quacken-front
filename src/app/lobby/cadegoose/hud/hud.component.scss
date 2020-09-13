@@ -50,8 +50,8 @@
   
   #damage, #bilge {
     float: left;
-    margin: 2px 37px;
-    width: 96px;
+    margin: 2px 35px;
+    width: 100px;
     height: 15px;
     background-color: #aaaaaa;
     overflow: hidden;
@@ -67,6 +67,7 @@
     height: 15px;
     left: -100%;
     transition: .3s linear;
+    pointer-events: none;
   }
   
   #bilgebar {

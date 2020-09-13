@@ -5,9 +5,9 @@ import { Settings } from 'src/app/settings/setting/settings';
 import { QuackenComponent } from '../quacken/quacken.component';
 import { SettingMap } from 'src/app/settings/settings.service';
 
-const baseSettings: (keyof typeof Settings)[] = ['spawnSide', 'team', 'cadeMapScale', 'cadeSpeed'];
+const baseSettings: (keyof typeof Settings)[] = ['cadeMapScale', 'cadeSpeed'];
 const ownerSettings: (keyof typeof Settings)[] = [
-  'startNew', 'jobberQuality', 'cadePublicMode', 'cadeHotEntry',
+  'jobberQuality', 'cadePublicMode', 'cadeHotEntry',
   'cadeMaxPlayers', 'cadeMap',
 ];
 

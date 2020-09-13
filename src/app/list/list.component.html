@@ -26,6 +26,23 @@
   <span title="Play to">{{settings.playTo}}</span>
 </ng-template>
 
+<ng-template #cadeView
+             let-settings="settings">
+  <mat-icon title="Jobber Quality ({{settings.jobberQuality}})"
+            [style.color]="'rgb('+(255-settings.jobberQuality*2)+','+(settings.jobberQuality)*2+',0)'">
+    show_chart
+  </mat-icon>
+  <mat-icon title="Hot Entry ({{settings.hotEntry ? 'allowed' : 'blocked'}})"
+            [style.color]="settings.hotEntry ? 'green' : 'maroon'">
+    whatshot
+  </mat-icon>
+  <mat-icon title="{{publicModes[settings.publicMode]}}"
+            [style.color]="settings.publicMode ? 'orange' : 'green'">
+    public
+  </mat-icon>
+  <span title="Map Id">{{settings.map}}</span>
+</ng-template>
+
 <ng-template #quackenEdit>
   <q-setting name="maxPlayers"></q-setting>
   <q-setting name="duckLvl"></q-setting>
@@ -42,6 +59,14 @@
   <q-setting name="turnTime"></q-setting>
   <q-setting name="playTo"></q-setting>
   <q-setting name="watchers"></q-setting>
+</ng-template>
+
+<ng-template #cadeEdit>
+  <q-setting name="cadeMaxPlayers"></q-setting>
+  <q-setting name="jobberQuality"></q-setting>
+  <q-setting name="cadePublicMode"></q-setting>
+  <q-setting name="cadeMap"></q-setting>
+  <q-setting name="cadeHotEntry"></q-setting>
 </ng-template>
 
 <div id="frame">
@@ -77,7 +102,7 @@
             <td>{{lobby.players}} / {{lobby.group.maxPlayers}}</td>
             <td class="settingsView">
               <ng-container
-                            *ngTemplateOutlet="{HexaQuack: quackenView, Quacken: quackenView, Spades: spadesView}[lobby.type]; context: {settings: lobby.group}">
+                            *ngTemplateOutlet="{HexaQuack: quackenView, Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView}[lobby.type]; context: {settings: lobby.group}">
               </ng-container>
             </td>
           </tr>
@@ -90,7 +115,7 @@
                    (change)="changeType()"></q-setting>
       </h2>
       <div id="lsettings">
-        <ng-container *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit][settings.createType]">
+        <ng-container *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit, cadeEdit][settings.createType]">
         </ng-container>
       </div>
 

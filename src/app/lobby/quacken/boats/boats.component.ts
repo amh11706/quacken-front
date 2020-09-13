@@ -158,11 +158,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (id === this.myBoat.id) {
       const pos = this.myBoat.pos;
       this.ws.dispatchMessage({ cmd: '_myBoat', data: new Boat('').setPos(pos.x, pos.y) });
+      this.myBoat.isMe = false;
     }
-    if (this.turn) {
-      setTimeout(() => this.deleteBoat(id), 1000);
-      return;
-    }
+    if (this.turn) return;
     delete this._boats[id];
     this.boats = Object.values(this._boats);
   }
@@ -272,14 +270,17 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.step = -1;
 
     setTimeout(() => this.clutter = sync.cSync || [], 1000);
-    if (sync.sync) this.setBoats(sync.sync);
+    if (sync.sync) {
+      this._boats = {};
+      this.setBoats(sync.sync);
+    }
   }
 
   protected setBoats(boats: BoatSync[]) {
     if (this.turn) return;
     for (const sBoat of boats) {
       if (sBoat.oId) delete this._boats[sBoat.oId];
-      const oldBoat = this._boats[sBoat.id];
+      const oldBoat = this.myBoat;
       const boat = new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId)
         .setPos(sBoat.x, sBoat.y)
         .setTreasure(sBoat.t)
@@ -299,7 +300,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this._boats[sBoat.id] = boat;
 
       if (boat.isMe) {
-        if (oldBoat) {
+        if (oldBoat.isMe) {
           if (boat.oId !== oldBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
           if (sBoat.ty !== oldBoat.type || oldBoat.damage > 100) {
             this.map?.dispatchEvent(new Event('dblclick'));

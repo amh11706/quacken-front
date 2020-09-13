@@ -41,11 +41,18 @@
 }
 
 .lobbyPlayer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     font-size: 18px;
     padding: 4px;
     margin: 4px 8px;
     border: 1px solid black;
+
+    img {
+        height: 30px;
+    }
 }
 
 .lobbyPlayer.ready {
