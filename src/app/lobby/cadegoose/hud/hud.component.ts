@@ -15,7 +15,7 @@ export class CadeHudComponent extends HudComponent {
   haveMoves = [2, 4, 2];
   usingMoves = [0, 0, 0];
   tokenStrings = ['', '', ''];
-  lastTick: BoatTick = {} as BoatTick;
+  lastTick: BoatTick = { tp: 0 } as BoatTick;
   usingCannons = 0;
   newTurn = false;
 
@@ -33,14 +33,17 @@ export class CadeHudComponent extends HudComponent {
     this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
       if (this.newTurn) {
         this.usingCannons = 0;
+        this.usingMoves = [0, 0, 0];
         this.newTurn = false;
       }
       this.lastTick = t;
       const hadMoves = this.haveMoves;
-      this.haveMoves = [0, 0, 0];
-      if (t.t) for (let i = 0; i < t.t.length; i++) {
-        this.tokenStrings[i] = t.t[i].join(', ');
-        for (const count of t.t[i]) this.haveMoves[i] += count;
+      if (t.t) {
+        this.haveMoves = [0, 0, 0];
+        for (let i = 0; i < t.t.length; i++) {
+          this.tokenStrings[i] = t.t[i].join(', ');
+          for (const count of t.t[i]) this.haveMoves[i] += count;
+        }
       }
 
       if (this.auto && (this.haveMoves[0] !== hadMoves[0] || this.haveMoves[1] !== hadMoves[1] || this.haveMoves[2] !== hadMoves[2])) {

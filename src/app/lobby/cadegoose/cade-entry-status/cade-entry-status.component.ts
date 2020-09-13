@@ -17,4 +17,8 @@ export class CadeEntryStatusComponent extends EntryStatusComponent {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe('turn', (t: Turn) => this.points = t.points));
   }
+
+  openMenu() {
+    this.ws.dispatchMessage({ cmd: '_openMenu' });
+  }
 }

@@ -1,0 +1,42 @@
+<div id="shade"
+     [hidden]="!open">
+    <div id="menu"
+         class="container noselect">
+        <h2>Team Selection</h2>
+        <div class="teamwrap">
+            <button mat-raised-button
+                    (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
+            <br>
+            <div id="defenders">
+                <div *ngFor="let m of defenders"
+                     class="lobbyPlayer"
+                     [class.ready]="teams[m.sId || 0].r">
+                    <q-name [message]="m"></q-name>
+                </div>
+            </div>
+        </div>
+        <div class="teamwrap">
+            <button mat-raised-button
+                    (click)="joinTeam(1)">{{myTeam === 1 ? 'Leave' : 'Join'}}</button>
+            <br>
+            <div id="attackers">
+                <div *ngFor="let m of attackers"
+                     class="lobbyPlayer"
+                     [class.ready]="teams[m.sId || 0].r">
+                    <q-name [message]="m"></q-name>
+                </div>
+            </div>
+        </div>
+
+        <div id="buttons">
+            <button mat-raised-button
+                    id="ready"
+                    [class.cancel]="ready"
+                    (click)="toggleReady()">{{haveBoat ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' : 'Ready'}}</button>
+            <q-setting *ngIf="admin"
+                       name="startNew"
+                       id="start"></q-setting>
+            <q-setting name="nextCadeBoat"></q-setting>
+        </div>
+    </div>
+</div>

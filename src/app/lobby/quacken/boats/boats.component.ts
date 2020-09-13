@@ -155,11 +155,14 @@ export class BoatsComponent implements OnInit, OnDestroy {
   }
 
   private deleteBoat = (id: number) => {
+    if (id === this.myBoat.id) {
+      const pos = this.myBoat.pos;
+      this.ws.dispatchMessage({ cmd: '_myBoat', data: new Boat('').setPos(pos.x, pos.y) });
+    }
     if (this.turn) {
       setTimeout(() => this.deleteBoat(id), 1000);
       return;
     }
-
     delete this._boats[id];
     this.boats = Object.values(this._boats);
   }
@@ -179,7 +182,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
           boat.bomb = 0;
           boat.ready = false;
         }
-        if (this.turn && this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: '_unlockMoves' });
       }
       this.ws.send('sync');
       this.step = -1;
@@ -187,6 +189,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.ws.send('sync');
       clearTimeout(this.animateTimeout);
     }
+    this.ws.dispatchMessage({ cmd: '_unlockMoves' });
   }
 
   private handleTurn = (turn: Turn) => {

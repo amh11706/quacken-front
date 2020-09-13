@@ -65,12 +65,16 @@ export class HudComponent implements OnInit, OnDestroy {
   ngOnInit() {
     document.addEventListener('keydown', this.kbEvent);
     this.subs = this.ws.subscribe('_myBoat', (b: Boat) => {
+      if (this.turn > 0) this.locked = false;
       this.myBoat = b;
       this.checkMaxMoves();
-      this.ws.send('boatTick');
+      if (!b.isMe) {
+        this.resetMoves();
+        this.locked = true;
+      }
     });
     this.subs.add(this.ws.subscribe('_unlockMoves', () => {
-      if (!this.turn || this.turn > this.maxTurn) return;
+      if (!this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
       this.resetMoves();
       this.locked = false;
       if (this.selected !== -1) this.selected = 0;
@@ -103,9 +107,7 @@ export class HudComponent implements OnInit, OnDestroy {
         this.turn = 0;
       }
       if (turn.turn !== 1) this.locked = true;
-      this.checkMaxMoves();
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
-      this.ws.send('boatTick');
     }));
   }
 

@@ -14,6 +14,7 @@ export interface Lobby {
   scores?: number[];
   map?: string;
   boats?: { [key: string]: BoatSync };
+  teams?: { [key: number]: { r: boolean, t: number } };
   treasure?: number[];
   clutter?: Clutter[];
   turn?: number;

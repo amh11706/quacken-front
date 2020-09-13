@@ -1,0 +1,83 @@
+#shade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .3);
+}
+
+#menu {
+	position: absolute;
+    top: calc(50% - 50px);
+    left: 50%;
+    height: 60%;
+    width: 75%;
+    max-width: 800px;
+    color: #efefef;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.teamwrap {
+    display: inline-block;
+}
+
+#defenders, #attackers {
+    display: inline-block;
+    margin-top: 8px;
+    padding-top: 4px;
+    min-width: 200px;
+    height: 250px;
+    border: 1px solid green;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, .3);
+    overflow: hidden;
+}
+
+#attackers {
+    margin-left: 12px;
+    border-color: red;
+}
+
+.lobbyPlayer {
+    text-align: center;
+    font-size: 18px;
+    padding: 4px;
+    margin: 4px 8px;
+    border: 1px solid black;
+}
+
+.lobbyPlayer.ready {
+    border-color: lime;
+}
+
+#buttons {
+    position: absolute;
+    bottom: 4px;
+    width: 100%;
+
+    q-setting {
+        position: relative;
+        top: 4px;
+        margin-left: 12px;
+    }
+}
+
+#ready {
+    background: darkgreen;
+}
+
+#ready.cancel {
+    background: maroon;
+}
+
+#start {
+    display: inline-block;
+    margin-left: 8px;
+    top: 0 !important;
+}
+
+#ready:disabled {
+    background: grey;
+}

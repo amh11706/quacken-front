@@ -9,6 +9,7 @@ export interface Message {
   message?: any;
   from: string;
   copy?: number;
+  sId?: number;
   friend?: boolean;
   blocked?: boolean;
   time?: number | string;

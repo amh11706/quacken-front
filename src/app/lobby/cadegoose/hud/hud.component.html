@@ -70,7 +70,7 @@
                          <br>
                          <div class="move blocked"
                               [title]="tokenStrings[0]">
-                              <img *ngIf="haveMoves[0] > usingMoves[0]"
+                              <img [style.opacity]="haveMoves[0] > usingMoves[0] ? 1 : 0"
                                    name="left"
                                    id="tile1"
                                    src="./assets/images/arrow1.png"
@@ -85,7 +85,7 @@
                          <br>
                          <div class="move blocked"
                               [title]="tokenStrings[1]">
-                              <img *ngIf="haveMoves[1] > usingMoves[1]"
+                              <img [style.opacity]="haveMoves[1] > usingMoves[1] ? 1 : 0"
                                    name="forward"
                                    id="tile2"
                                    src="./assets/images/arrow2.png"
@@ -100,7 +100,7 @@
                          <br>
                          <div class="move blocked"
                               [title]="tokenStrings[2]">
-                              <img *ngIf="haveMoves[2] > usingMoves[2]"
+                              <img [style.opacity]="haveMoves[2] > usingMoves[2] ? 1 : 0"
                                    name="right"
                                    id="tile3"
                                    src="./assets/images/arrow3.png"
@@ -115,19 +115,6 @@
           <p *ngIf="myBoat.moveLock">
                Respawning in {{myBoat.moveLock}} turn<span *ngIf="myBoat.moveLock > 1">s</span>
           </p>
-          <div id="buttons">
-               <button *ngIf="!fs.allowInvite || !(myBoat.ready && turn === 0); else fstart"
-                       mat-raised-button
-                       id="ready"
-                       (click)="sendReady()"
-                       [disabled]="myBoat.ready || turn > 0">Ready</button>
-               <ng-template #fstart>
-                    <button mat-raised-button
-                            id="start"
-                            (click)="start()">Start</button>
-               </ng-template>
-               <q-setting name="nextCadeBoat"></q-setting>
-          </div>
      </div>
 
      <q-chat></q-chat>

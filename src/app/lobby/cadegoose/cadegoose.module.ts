@@ -13,9 +13,11 @@ import { CadeHudComponent } from './hud/hud.component';
 import { CadeEntryStatusComponent } from './cade-entry-status/cade-entry-status.component';
 import { CadeBoatsComponent } from './cade-boats/cade-boats.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MainMenuComponent } from './main-menu/main-menu.component';
+import { NameModule } from 'src/app/chat/name/name.module';
 
 @NgModule({
-  declarations: [CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent, CadeBoatsComponent],
+  declarations: [CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent, CadeBoatsComponent, MainMenuComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -26,6 +28,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     ChatModule,
     SettingsModule,
     QuackenModule,
+    NameModule,
   ],
   exports: [CadegooseComponent],
 })
