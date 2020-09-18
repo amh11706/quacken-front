@@ -3,6 +3,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { WsService } from 'src/app/ws.service';
 import { Lobby } from '../../lobby.component';
 import { Subscription } from 'rxjs';
+import { InCmd, OutCmd } from 'src/app/ws-messages';
 
 interface Player {
   sId: number;
@@ -53,12 +54,12 @@ export class SpotComponent implements OnInit, OnDestroy {
   constructor(public ws: WsService) { }
 
   ngOnInit() {
-    this.sub = this.ws.subscribe('cards', (c: number[]) => {
+    this.sub = this.ws.subscribe(InCmd.Cards, (c: number[]) => {
       for (const p of this.lobby.players) p.ready = false;
       if (c[0] >= 0) this.offerBlind = false;
     });
 
-    this.sub.add(this.ws.subscribe('sit', (p: Player) => {
+    this.sub.add(this.ws.subscribe(InCmd.Sit, (p: Player) => {
       Object.assign(this.lobby.players[p.slot], p);
       if (p.sId === this.ws.sId) {
         this.lobby.sitting = p.slot;
@@ -76,11 +77,11 @@ export class SpotComponent implements OnInit, OnDestroy {
       for (const player of this.lobby.players) player.ready = false;
     }));
 
-    this.sub.add(this.ws.subscribe('offerBlind', () => this.offerBlind = true));
-    this.sub.add(this.ws.subscribe('ready', (p: number) => this.lobby.players[p].ready = true));
-    this.sub.add(this.ws.subscribe('take', (p: number) => this.lobby.players[p].tricks++));
+    this.sub.add(this.ws.subscribe(InCmd.OfferBlind, () => this.offerBlind = true));
+    this.sub.add(this.ws.subscribe(InCmd.Ready, (p: number) => this.lobby.players[p].ready = true));
+    this.sub.add(this.ws.subscribe(InCmd.Take, (p: number) => this.lobby.players[p].tricks++));
 
-    this.sub.add(this.ws.subscribe('bidding', (p: number) => {
+    this.sub.add(this.ws.subscribe(InCmd.Bidding, (p: number) => {
       const delay = this.lobby.played.length === 4 ? 1500 : 0;
       setTimeout(() => {
         this.lobby.playingP = 0;
@@ -89,7 +90,7 @@ export class SpotComponent implements OnInit, OnDestroy {
       }, delay);
     }));
 
-    this.sub.add(this.ws.subscribe('over', () => {
+    this.sub.add(this.ws.subscribe(InCmd.Over, () => {
       this.lobby.playingP = 0;
       this.lobby.playing = false;
       for (const p of this.lobby.players) p.tricks = -1;
@@ -113,22 +114,22 @@ export class SpotComponent implements OnInit, OnDestroy {
     }
   }
 
-  sit(spot: number) { this.ws.send('sit', spot); }
+  sit(spot: number) { this.ws.send(OutCmd.Sit, spot); }
 
-  jump() { this.ws.send('jump'); }
+  jump() { this.ws.send(OutCmd.Jump); }
 
-  kick(spot: number) { this.ws.send('kick', spot); }
+  kick(spot: number) { this.ws.send(OutCmd.Kick, spot); }
 
-  ready() { this.ws.send('ready'); }
+  ready() { this.ws.send(OutCmd.Ready); }
 
   showCards() {
     this.offerBlind = false;
-    this.ws.send('declineBlind');
+    this.ws.send(OutCmd.DeclineBlind);
   }
 
   bid(bid: number) {
     this.offerBlind = false;
-    this.ws.send('bid', bid);
+    this.ws.send(OutCmd.Bid, bid);
   }
 
 }

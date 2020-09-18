@@ -5,6 +5,7 @@ import { WsService } from '../../ws.service';
 import { ChatService } from '../chat.service';
 import { StatService } from '../stat/stat.service';
 import { Router } from '@angular/router';
+import { OutCmd } from 'src/app/ws-messages';
 
 @Component({
   selector: 'q-friends',
@@ -35,26 +36,26 @@ export class FriendsComponent implements OnInit {
   }
 
   remove(friend: string) {
-    this.ws.send('friendRemove', friend);
+    this.ws.send(OutCmd.FriendRemove, friend);
   }
 
   unblock(blocked: string) {
-    this.ws.send('unblock', blocked);
+    this.ws.send(OutCmd.Unblock, blocked);
   }
 
   accept(inv: Invite) {
     this.fs.invites = this.fs.invites.filter(i => i !== inv);
-    if (inv.ty === 0) this.ws.send('friendAdd', inv.f);
+    if (inv.ty === 0) this.ws.send(OutCmd.FriendAdd, inv.f);
     else this.router.navigate(['lobby', inv.tg]);
   }
 
   decline(inv: Invite) {
     this.fs.invites = this.fs.invites.filter(i => i !== inv);
-    this.ws.send('inviteRemove', inv);
+    this.ws.send(OutCmd.FriendDecline, inv);
   }
 
   invite(friend: string) {
-    this.ws.send('c/invite', friend);
+    this.ws.send(OutCmd.FriendInvite, friend);
   }
 
 }

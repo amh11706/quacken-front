@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WsService } from '../ws.service';
 import { InventoryService } from './inventory.service';
 import { SplitComponent } from './split/split.component';
+import { InCmd, OutCmd } from '../ws-messages';
 
 export interface Item {
   s: number;
@@ -38,7 +39,7 @@ interface InvUpdate {
 export class InventoryComponent implements OnDestroy {
   private _id?: number;
   @Input() set id(value: number | undefined) {
-    if (this._id) this.ws.send('i/' + this._id + '/c');
+    if (this._id) this.ngOnDestroy();
     this._id = value;
     this.doSubs();
   }
@@ -60,26 +61,25 @@ export class InventoryComponent implements OnDestroy {
 
   ngOnDestroy() {
     if (this.subs) this.subs.unsubscribe();
-    this.ws.send('i/' + this.id + '/c');
+    this.ws.send(OutCmd.InventoryCmd, { cmd: 'c', id: this.id });
   }
 
   private doSubs() {
-    this.subs.unsubscribe();
     if (!this.id) return;
-    this.ws.send('i/open', this.id);
-    this.subs = this.ws.subscribe('i/' + this.id + '/l', (i: Inventory) => {
+    this.ws.send(OutCmd.InventoryCmd, { cmd: 'o', id: this.id });
+    this.subs = this.ws.subscribe(InCmd.IntentoryOpen, (i: Inventory) => {
       this.inv = i;
       this.inv.filtered = i.items;
       this.sort(i.sort);
     });
-    this.subs.add(this.ws.subscribe('i/' + this.id + '/coin', (q: number) => {
+    this.subs.add(this.ws.subscribe(InCmd.InventoryCoin, (q: number) => {
       if (this.inv) this.inv.currency = q;
     }));
     this.subs.add(this.ws.connected$.subscribe(value => {
-      if (value) this.ws.send('i/open', this.id);
+      this.ws.send(OutCmd.InventoryCmd, { cmd: 'o', id: this.id });
     }));
 
-    this.subs.add(this.ws.subscribe('i/' + this.id + '/u', (u: InvUpdate) => {
+    this.subs.add(this.ws.subscribe(InCmd.InventoryUpdate, (u: InvUpdate) => {
       if (!this.inv) return;
       if (u.update) for (const update of u.update) {
         for (const i of this.inv.items) if (i.s === update.id) {
@@ -108,7 +108,7 @@ export class InventoryComponent implements OnDestroy {
     const dialog = this.dialog.open(SplitComponent, { data: i });
     dialog.afterClosed().subscribe(value => {
       if (!value) return;
-      this.ws.send('i/' + this.id + '/s', { id: i.s, quantity: value });
+      this.ws.send(OutCmd.InventoryCmd, { cmd: 's', id: this.id, data: { id: i.s, quantity: value } });
     });
   }
 
@@ -116,12 +116,12 @@ export class InventoryComponent implements OnDestroy {
     if (!this.dragging) return;
     e.preventDefault();
     if (i.id !== this.dragging.id || i.q >= 250) return;
-    this.ws.send('i/' + this.id + '/cb', { from: this.dragging.s, to: i.s });
+    this.ws.send(OutCmd.InventoryCmd, { cmd: 'cb', id: this.id, data: { from: this.dragging.s, to: i.s } });
     delete this.dragging;
   }
 
   sort(by: 's' | 'id' | 't' | 'q' | 'n' | 'f', send = true) {
-    if (send) this.ws.send('i/' + this.id + '/sort', by);
+    if (send) this.ws.send(OutCmd.InventoryCmd, { cmd: 'sort', id: this.id, data: by });
     if (!this.inv) return;
     this.inv.filtered.sort((a, b) => {
       const c: any = a[by];

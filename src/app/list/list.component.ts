@@ -6,6 +6,7 @@ import { WsService } from '../ws.service';
 import { SettingsService, SettingMap } from '../settings/settings.service';
 import { Notes } from './notes';
 import { Lobby } from '../lobby/lobby.component';
+import { InCmd, OutCmd } from '../ws-messages';
 
 const groups = ['quacken', 'quacken', 'spades', 'cade'];
 
@@ -40,10 +41,10 @@ export class ListComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
-    this.sub = this.ws.subscribe('lobbyList', lobbies => {
+    this.sub = this.ws.subscribe(InCmd.LobbyList, lobbies => {
       this.lobbies = lobbies;
     });
-    this.sub = this.ws.subscribe('lu', update => {
+    this.sub = this.ws.subscribe(InCmd.LobbyUpdate, update => {
       for (let i = 0; i < this.lobbies.length; i++) {
         const lobby = this.lobbies[i];
         if (update.id === lobby.id) {
@@ -53,11 +54,11 @@ export class ListComponent implements OnInit, OnDestroy {
       }
       this.lobbies.push(update);
     });
-    this.sub = this.ws.subscribe('lr', id => {
+    this.sub = this.ws.subscribe(InCmd.LobbyRemove, id => {
       this.lobbies = this.lobbies.filter(l => l.id !== id);
     });
     this.sub.add(this.ws.connected$.subscribe(value => {
-      if (value) this.ws.send('lobbyList');
+      if (value) this.ws.send(OutCmd.LobbyListJoin);
     }));
 
     this.settings = await this.ss.getGroup('l/create');
@@ -74,12 +75,12 @@ export class ListComponent implements OnInit, OnDestroy {
 
   join(l: any) {
     if (!l.group.publicMode) this.router.navigate(['lobby', l.id]);
-    else this.ws.send('lobbyRequest', l.id);
+    else this.ws.send(OutCmd.LobbyJoin, l.id);
   }
 
   createLobby() {
     this.createGroup.createType = this.settings.createType;
-    this.ws.send('createLobby', this.createGroup);
+    this.ws.send(OutCmd.LobbyCreate, this.createGroup);
     this.created = true;
   }
 

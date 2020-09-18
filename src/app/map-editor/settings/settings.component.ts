@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { InCmd, OutCmd } from 'src/app/ws-messages';
 
 import { WsService } from 'src/app/ws.service';
 import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
@@ -54,7 +55,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.shown = this.map.selectedTile;
     if (!this.map.tileSettings) {
       this.shown = this.map.tileSet || this.map.structureSet || this.shown;
-      this.socket.send('getMaps');
+      this.socket.send(OutCmd.MapListAll);
       this.map.hex = this.shown.hex;
     }
     this.shown = { ...this.shown };
@@ -95,12 +96,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   private handleSubs() {
-    this.sub = this.socket.subscribe('getTileSet', ts => this.handleTileSet(ts));
-    this.sub.add(this.socket.subscribe('getStructureSet', ss => this.handleStructureSet(ss)));
-    this.sub.add(this.socket.subscribe('createMap', m => this.handleMap(m)));
-    this.sub.add(this.socket.subscribe('saveMap', m => this.handleMap(m)));
-    this.sub.add(this.socket.subscribe('getMap', m => this.gotMap(m)));
-    this.sub.add(this.socket.subscribe('mapList', l => this.gotList(l)));
+    this.sub = this.socket.subscribe(InCmd.TileSetList, ts => this.handleTileSet(ts));
+    this.sub.add(this.socket.subscribe(InCmd.StructureSetList, ss => this.handleStructureSet(ss)));
+    this.sub.add(this.socket.subscribe(InCmd.MapCreated, m => this.handleMap(m)));
+    this.sub.add(this.socket.subscribe(InCmd.MapSaved, m => this.handleMap(m)));
+    this.sub.add(this.socket.subscribe(InCmd.Map, m => this.gotMap(m)));
+    this.sub.add(this.socket.subscribe(InCmd.MapList, l => this.gotList(l)));
   }
 
   private gotList(list: any) {
@@ -281,7 +282,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     if (tile.unsaved) {
       this.pending = true;
-      const cmd = this.selected === 'new' ? 'createMap' : 'saveMap';
+      const cmd = this.selected === 'new' ? OutCmd.MapCreate : OutCmd.MapSave;
       this.socket.send(cmd, tile);
     }
 
@@ -319,16 +320,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
     switch (tile.group) {
       case 'tile_sets':
         this.map.hex = tile.hex;
-        if (!this.map.tiles || this.map.tileSet?.id !== tile.id) this.socket.send('getTileSet', tile.id);
+        if (!this.map.tiles || this.map.tileSet?.id !== tile.id) this.socket.send(OutCmd.TileSetGet, tile.id);
         else this.map.settingsOpen = false;
         return;
       case 'structure_sets':
-        if (!this.map.structures || this.map.structureSet?.id !== tile.id) this.socket.send('getStructureSet', tile.id);
+        if (!this.map.structures || this.map.structureSet?.id !== tile.id) this.socket.send(OutCmd.StructureSetGet, tile.id);
         else this.map.settingsOpen = false;
         return;
       default:
         this.map.hex = tile.hex;
-        this.socket.send('getMap', { group: tile.group, tile: tile.id });
+        this.socket.send(OutCmd.MapGet, { group: tile.group, tile: tile.id });
     }
   }
 

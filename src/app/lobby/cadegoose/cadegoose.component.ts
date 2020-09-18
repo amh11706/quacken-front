@@ -4,6 +4,7 @@ import { Boat } from '../quacken/boats/boat';
 import { Settings } from 'src/app/settings/setting/settings';
 import { QuackenComponent } from '../quacken/quacken.component';
 import { SettingMap } from 'src/app/settings/settings.service';
+import { Internal } from 'src/app/ws-messages';
 
 const baseSettings: (keyof typeof Settings)[] = ['cadeMapScale', 'cadeSpeed'];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -26,7 +27,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit {
     this.ss.getGroup('l/cade', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
-    this.sub = this.ws.subscribe('_myBoat', (b: Boat) => this.myBoat = b);
+    this.sub = this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b);
   }
 
   async getSettings() {

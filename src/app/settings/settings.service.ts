@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { InCmd, OutCmd } from '../ws-messages';
 
 import { WsService } from '../ws.service';
 import { Settings } from './setting/settings';
@@ -33,12 +34,12 @@ export class SettingsService {
   lSettings: (keyof typeof Settings)[] = [];
 
   constructor(private ws: WsService) {
-    ws.send('getSettings', 'global');
-    ws.subscribe('setSetting', (s: Setting) => {
+    ws.send(OutCmd.SettingGetGroup, 'global');
+    ws.subscribe(InCmd.SettingSet, (s: Setting) => {
       const group = this.settings.get(s.group);
       if (group) group[s.name] = s.value;
     });
-    ws.subscribe('getSettings', (m: SettingsMessage) => {
+    ws.subscribe(InCmd.SettingsGet, (m: SettingsMessage) => {
       let group = this.settings.get(m.group);
       if (!group) {
         group = {};
@@ -75,7 +76,7 @@ export class SettingsService {
       if (!ready) {
         ready = new Subject<SettingMap>();
         this.ready.set(group, ready);
-        this.ws.send('getSettings', group);
+        this.ws.send(OutCmd.SettingGetGroup, group);
       }
       ready.subscribe(v => resolve(v));
     });
@@ -89,7 +90,7 @@ export class SettingsService {
   }
 
   async save(setting: Setting) {
-    this.ws.send('setSetting', setting);
+    this.ws.send(OutCmd.SettingSet, setting);
     const settings = await this.getGroup(setting.group);
     settings[setting.name] = setting.value;
   }

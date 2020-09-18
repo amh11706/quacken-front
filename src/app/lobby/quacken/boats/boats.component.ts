@@ -5,6 +5,7 @@ import { WsService } from '../../../ws.service';
 import { Boat } from './boat';
 import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
+import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 
 export interface Clutter {
   t: number;
@@ -121,7 +122,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
-    this.subs = this.ws.subscribe('_boats', (m: Lobby) => {
+    this.subs = this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       if (!m.boats) return;
       clearTimeout(this.animateTimeout);
       delete this.turn;
@@ -130,22 +131,22 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.setBoats(Object.values(m.boats));
       this.clutter = m.clutter || this.clutter;
     });
-    this.subs.add(this.ws.subscribe('newBoat', (boat: BoatSync) => this.setBoats([boat])));
-    this.subs.add(this.ws.subscribe('delBoat', this.deleteBoat));
-    this.subs.add(this.ws.subscribe('s', s => {
+    this.subs.add(this.ws.subscribe(InCmd.NewBoat, (boat: BoatSync) => this.setBoats([boat])));
+    this.subs.add(this.ws.subscribe(InCmd.DelBoat, this.deleteBoat));
+    this.subs.add(this.ws.subscribe(InCmd.Moves, s => {
       const boat = this._boats[s.t];
       if (boat) boat.moves = s.m;
     }));
-    this.subs.add(this.ws.subscribe('r', id => {
+    this.subs.add(this.ws.subscribe(InCmd.Ready, id => {
       const boat = this._boats[id];
       if (boat) boat.ready = true;
     }));
-    this.subs.add(this.ws.subscribe('b', b => {
+    this.subs.add(this.ws.subscribe(InCmd.Bomb, b => {
       const boat = this._boats[b.t];
       if (boat) boat.bomb = b.m;
     }));
-    this.subs.add(this.ws.subscribe('turn', this.handleTurn));
-    this.subs.add(this.ws.subscribe('sync', this.syncBoats));
+    this.subs.add(this.ws.subscribe(InCmd.Turn, this.handleTurn));
+    this.subs.add(this.ws.subscribe(InCmd.Sync, this.syncBoats));
   }
 
   ngOnDestroy() {
@@ -157,7 +158,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   private deleteBoat = (id: number) => {
     if (id === this.myBoat.id) {
       const pos = this.myBoat.pos;
-      this.ws.dispatchMessage({ cmd: '_myBoat', data: new Boat('').setPos(pos.x, pos.y) });
+      this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: new Boat('').setPos(pos.x, pos.y) });
       this.myBoat.isMe = false;
     }
     if (this.turn) return;
@@ -181,13 +182,13 @@ export class BoatsComponent implements OnInit, OnDestroy {
           boat.ready = false;
         }
       }
-      this.ws.send('sync');
+      this.ws.send(OutCmd.Sync);
       this.step = -1;
     } else if (this.turn) {
-      this.ws.send('sync');
+      this.ws.send(OutCmd.Sync);
       clearTimeout(this.animateTimeout);
     }
-    this.ws.dispatchMessage({ cmd: '_unlockMoves' });
+    this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
   }
 
   private handleTurn = (turn: Turn) => {
@@ -195,7 +196,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (turn.turn === 1) {
       setTimeout(() => {
         for (const boat of this.boats) boat.ready = false;
-        this.ws.dispatchMessage({ cmd: '_unlockMoves' });
+        this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
       }, 1000);
       return;
     }
@@ -210,7 +211,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     if (!moveFound || this.blurred) {
       this.resetBoats();
-      setTimeout(() => this.ws.send('sync'), 1000);
+      setTimeout(() => this.ws.send(OutCmd.Sync), 1000);
       return;
     }
 
@@ -223,7 +224,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.moves = [0, 0, 0, 0];
       boat.bomb = 0;
     }
-    if (this.turn && this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: '_unlockMoves' });
+    if (this.turn && this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
   }
 
   private playTurn = () => {
@@ -257,7 +258,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.step++;
     const delay = (this.turn?.steps[this.step] || this.turn?.cSteps[this.step] ? 750 : 250) * 20 / this.speed;
     if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, delay);
-    else this.animateTimeout = window.setTimeout(() => this.ws.send('sync'), 1500);
+    else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 1500);
   }
 
   trackBoatBy(_i: number, b: Boat): string {
@@ -305,14 +306,14 @@ export class BoatsComponent implements OnInit, OnDestroy {
           if (sBoat.ty !== oldBoat.type || oldBoat.damage > 100) {
             this.map?.dispatchEvent(new Event('dblclick'));
             oldBoat.type = sBoat.ty;
-            this.ws.dispatchMessage({ cmd: '_myBoat', data: oldBoat });
+            this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: oldBoat });
           }
           boat.moves = oldBoat.moves;
           boat.damage = oldBoat.damage;
           Object.assign(oldBoat, boat);
           this._boats[sBoat.id] = oldBoat;
         } else {
-          this.ws.dispatchMessage({ cmd: '_myBoat', data: boat });
+          this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
           this.myBoat = boat;
           this.map?.dispatchEvent(new Event('dblclick'));
         }

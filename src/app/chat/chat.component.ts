@@ -7,6 +7,7 @@ import { FriendsService } from './friends/friends.service';
 import { SettingsService } from '../settings/settings.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { WindowService } from '../window.service';
+import { InCmd, OutCmd } from '../ws-messages';
 
 @Component({
   selector: 'q-chat',
@@ -52,7 +53,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (!this.output) return;
-    this.subs = this.socket.subscribe('m', () => this.addMessage());
+    this.subs = this.socket.subscribe(InCmd.ChatMessage, () => this.addMessage());
     const output = this.output.nativeElement;
     setTimeout(() => output.scrollTop = output.scrollHeight);
 
@@ -100,12 +101,13 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chat.value = '';
     this.chat.historyIndex = -1;
 
-    if (text[0] !== '/') return this.socket.send('m', text);
+    if (text[0] !== '/') return this.socket.send(OutCmd.ChatMessage, text);
 
     const firstSpace = text.indexOf(' ');
     const secondSpace = text.indexOf(' ', firstSpace + 1);
     const command = secondSpace > 0 ? text.substr(0, secondSpace + 1) : text;
-    this.socket.send('c' + (text.substr(0, firstSpace) || text), firstSpace > 0 ? text.substr(firstSpace + 1) : '');
+    // TODO readd commands
+    // this.socket.send('c' + (text.substr(0, firstSpace) || text), firstSpace > 0 ? text.substr(firstSpace + 1) : '');
 
     this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== command);
     this.chat.commandHistory.push(command);
@@ -128,7 +130,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.socket.send('c' + c.base);
+    // TODO readd commands
+    // this.socket.send('c' + c.base);
     this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== c.base);
     this.chat.commandHistory.push(c.base);
   }

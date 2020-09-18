@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { InCmd, OutCmd } from 'src/app/ws-messages';
 
 import { WsService } from 'src/app/ws.service';
 import { DBTile, MapEditor, MapGroups } from '../map-editor.component';
@@ -31,8 +32,8 @@ export class TileSetComponent implements OnInit, OnDestroy {
   constructor(protected ws: WsService) { }
 
   ngOnInit() {
-    this.sub.add(this.ws.subscribe('savedWeight', () => this.pending = false));
-    this.sub.add(this.ws.subscribe('deletedMap', this.handleDelete));
+    this.sub.add(this.ws.subscribe(InCmd.WeightSaved, () => this.pending = false));
+    this.sub.add(this.ws.subscribe(InCmd.MapDeleted, this.handleDelete));
     if (this.map) this.initTile(this.map.selectedTile);
   }
 
@@ -92,7 +93,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
       weight: tile.weight,
       id: tile.id
     };
-    this.ws.send('saveWeight', map);
+    this.ws.send(OutCmd.WeightSave, map);
   }
 
   deleteTile(tile: DBTile) {
@@ -103,7 +104,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
       type: tile.type,
       id: tile.id
     };
-    this.ws.send('deleteMap', map);
+    this.ws.send(OutCmd.MapDelete, map);
   }
 
 }

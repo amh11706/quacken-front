@@ -9,6 +9,7 @@ import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { WsService } from 'src/app/ws.service';
 import { TimerComponent } from './timer/timer.component';
 import { Settings } from 'src/app/settings/setting/settings';
+import { InCmd, OutCmd } from 'src/app/ws-messages';
 
 const baseSettings: (keyof typeof Settings)[] = [];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -73,7 +74,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
-    this.sub = this.ws.subscribe('cards', (c: number[]) => {
+    this.sub = this.ws.subscribe(InCmd.Cards, (c: number[]) => {
       if (!(this.lobby.played.length === 4)) this.setCards(c);
       else setTimeout(() => this.setCards(c), 2000);
       this.lobby.playing = true;
@@ -81,16 +82,16 @@ export class SpadesComponent implements OnInit, OnDestroy {
       this.selected = [];
     });
 
-    this.sub.add(this.ws.subscribe('playTo', (p: number) => {
+    this.sub.add(this.ws.subscribe(InCmd.PlayTo, (p: number) => {
       this.lobby.playTo = p;
     }));
 
-    this.sub.add(this.ws.subscribe('bidding', () => {
+    this.sub.add(this.ws.subscribe(InCmd.Bidding, () => {
       this.timer?.go(this.settings.turnTime * 2);
       this.lobby.playing = true;
     }));
 
-    this.sub.add(this.ws.subscribe('playing', (p: { id: number, quantity: number }) => {
+    this.sub.add(this.ws.subscribe(InCmd.Playing, (p: { id: number, quantity: number }) => {
       this.timer?.go(this.settings.turnTime);
       this.lobby.bidding = 0;
       this.lobby.playingP = p.id;
@@ -111,7 +112,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.sub.add(this.ws.subscribe('card', (p: { id: number, position: number }) => {
+    this.sub.add(this.ws.subscribe(InCmd.Card, (p: { id: number, position: number }) => {
       const c = this.getCard(p.id);
       const sitting = this.lobby.sitting > -1 ? this.lobby.sitting : 0;
       c.position = spots[(4 + p.position - sitting) % 4];
@@ -128,7 +129,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.sub.add(this.ws.subscribe('take', (p: number) => {
+    this.sub.add(this.ws.subscribe(InCmd.Take, (p: number) => {
       this.played = false;
       setTimeout(() => {
         const sitting = this.lobby.sitting > -1 ? this.lobby.sitting : 0;
@@ -147,7 +148,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
       }, 1000);
     }));
 
-    this.sub.add(this.ws.subscribe('score', (p: number[]) => {
+    this.sub.add(this.ws.subscribe(InCmd.Score, (p: number[]) => {
       this.lobby.scores = p;
       this.lobby.spadeBroke = false;
       for (const player of this.lobby.players) {
@@ -183,13 +184,13 @@ export class SpadesComponent implements OnInit, OnDestroy {
       }
       this.play(play);
     } else if (this.lobby.bidding === this.ws.sId) {
-      this.ws.send('bid', 3);
+      this.ws.send(OutCmd.Bid, 3);
     }
   }
 
   play(cards: Card[]) {
     const m = cards.map(c => c.id);
-    this.ws.send('card', m);
+    this.ws.send(OutCmd.Card, m);
     this.select = 1;
   }
 

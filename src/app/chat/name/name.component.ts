@@ -4,6 +4,7 @@ import { ChatService, Message } from '../chat.service';
 import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
 import { StatService } from '../stat/stat.service';
+import { OutCmd } from 'src/app/ws-messages';
 
 @Component({
   selector: 'q-name',
@@ -35,23 +36,25 @@ export class NameComponent implements OnInit {
   }
 
   add() {
-    this.ws.send('friend', this.message.from);
+    this.ws.send(OutCmd.FriendInvite, this.message.from);
   }
 
   block() {
-    this.ws.send('block', this.message.from);
+    this.ws.send(OutCmd.Block, this.message.from);
   }
 
   unblock() {
-    this.ws.send('unblock', this.message.from);
+    this.ws.send(OutCmd.Unblock, this.message.from);
   }
 
   invite() {
-    this.ws.send('c/invite', this.getName());
+    // TODO readd commands
+    // this.ws.send('c/invite', this.getName());
   }
 
   kick() {
-    this.ws.send('c/kick', this.getName());
+    // TODO readd commands
+    // this.ws.send('c/kick', this.getName());
   }
 
 }

@@ -6,6 +6,7 @@ import { Lobby } from '../../lobby.component';
 import { Subscription } from 'rxjs';
 import { Turn } from '../../quacken/boats/boats.component';
 import { Boat } from '../../quacken/boats/boat';
+import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 
 interface TeamMessage {
   id: number;
@@ -24,7 +25,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   boatTitles = [
     , , , , , , , , , , , , , , 'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
     'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate'
-  ]
+  ];
   defenders: Message[] = [];
   attackers: Message[] = [];
   teams: { [key: number]: TeamMessage } = {};
@@ -44,7 +45,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.subs.add(this.ws.subscribe('_boats', (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       if (!m.players) return;
       this.open = true;
       this.teams = m.players;
@@ -61,7 +62,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         }
       }
     }));
-    this.subs.add(this.ws.subscribe('team', (m: TeamMessage) => {
+    this.subs.add(this.ws.subscribe(InCmd.Team, (m: TeamMessage) => {
       this.teams[m.id] = m;
       if (m.id === this.ws.sId) {
         this.myTeam = m.t;
@@ -69,23 +70,23 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       this.setTeam(m.id, m.t);
     }));
-    this.subs.add(this.ws.subscribe('playerRemove', (m: Message) => {
+    this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, (m: Message) => {
       if (m.sId) this.removeUser(m.sId);
     }));
-    this.subs.add(this.ws.subscribe('_myBoat', (b: Boat) => {
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (b.isMe) this.gotBoat();
       else {
         this.open = true;
         this.haveBoat = false;
       }
     }));
-    this.subs.add(this.ws.subscribe('turn', (t: Turn) => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
+      for (const p of Object.values(this.teams)) p.r = false;
       if (t.turn <= 75) return;
       this.open = true;
       this.haveBoat = false;
-      for (const p of Object.values(this.teams)) p.r = false;
     }));
-    this.subs.add(this.ws.subscribe('_openMenu', () => {
+    this.subs.add(this.ws.subscribe(Internal.OpenMenu, () => {
       this.open = true;
     }));
   }
@@ -108,7 +109,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       return;
     }
     this.ready = !this.ready;
-    this.ws.send('ready', this.ready);
+    this.ws.send(OutCmd.Ready, this.ready);
   }
 
   ngOnDestroy() {
@@ -117,7 +118,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   joinTeam(team: number) {
     if (team === this.myTeam) team = 99;
-    this.ws.send('team', team);
+    this.ws.send(OutCmd.Team, team);
     this.ready = false;
   }
 

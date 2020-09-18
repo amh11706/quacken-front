@@ -3,8 +3,10 @@ import { Router } from '@angular/router';
 import { Subject, Subscription, ReplaySubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+import { InCmd, Internal, OutCmd } from './ws-messages';
+
 interface Message {
-  cmd: string;
+  cmd: InCmd | Internal;
   data?: any;
 }
 
@@ -21,7 +23,7 @@ export class WsService {
   private socket?: WebSocket;
   private token = '';
   private timeOut?: number;
-  private messages = new Map<string, Subject<any>>();
+  private messages = new Map<InCmd | Internal, Subject<any>>();
   private tokenParser = new JwtHelperService();
   user?: TokenUser;
   connected = false;
@@ -32,21 +34,21 @@ export class WsService {
   copy?: number;
 
   constructor(private router: Router) {
-    this.subscribe('kick', (reason: string) => {
+    this.subscribe(InCmd.Kick, (reason: string) => {
       this.close();
       this.reason = reason;
       localStorage.removeItem('token');
       this.router.navigate(['login']);
     });
-    this.subscribe('n', (path: string) => {
+    this.subscribe(InCmd.NavigateTo, (path: string) => {
       this.router.navigate([path]);
     });
-    this.subscribe('sId', (id: number) => {
+    this.subscribe(InCmd.SessionId, (id: number) => {
       this.sId = id;
       this.connected = true;
       this.connected$.next(true);
     });
-    this.subscribe('copy', (copy: number) => {
+    this.subscribe(InCmd.Copy, (copy: number) => {
       this.copy = copy;
     });
   }
@@ -70,14 +72,14 @@ export class WsService {
 
     this.socket.onclose = () => {
       this.dispatchMessage({
-        cmd: 'm',
+        cmd: InCmd.ChatMessage,
         data: { type: 1, message: 'Connection closed, attempting to reconnect...' },
       });
       this.timeOut = window.setTimeout(() => this.connect(), 5000);
     };
   }
 
-  subscribe(cmd: string, next?: (value: any) => void, error?: (error: any) => void, complete?: () => void): Subscription {
+  subscribe(cmd: InCmd | Internal, next?: (value: any) => void, error?: (error: any) => void, complete?: () => void): Subscription {
     const sub = this.messages.get(cmd);
     if (sub && sub.observers.length) return sub.subscribe(next, error, complete);
 
@@ -103,11 +105,11 @@ export class WsService {
     delete this.socket;
   }
 
-  send(cmd: string, data?: any) {
+  send(cmd: OutCmd, data?: any) {
     this.sendRaw(JSON.stringify({ cmd, data }));
   }
 
-  softSend(cmd: string, data?: any) {
+  softSend(cmd: OutCmd, data?: any) {
     if (this.connected) this.sendRaw(JSON.stringify({ cmd, data }));
   }
 

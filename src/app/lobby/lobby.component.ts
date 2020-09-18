@@ -6,6 +6,7 @@ import { WsService } from '../ws.service';
 import { SettingsService } from '../settings/settings.service';
 import { FriendsService } from '../chat/friends/friends.service';
 import { Clutter, BoatSync } from './quacken/boats/boats.component';
+import { InCmd, OutCmd } from '../ws-messages';
 
 export interface Lobby {
   owner: boolean;
@@ -47,10 +48,10 @@ export class LobbyComponent implements OnInit, OnDestroy {
       const id = +(params.get('id') || 0);
       if (this.id === id) return;
       this.id = id;
-      this.ws.send('joinLobby', id);
+      this.ws.send(OutCmd.LobbyJoin, id);
       this.sent = true;
     });
-    this.sub.add(this.ws.subscribe('joinLobby', l => {
+    this.sub.add(this.ws.subscribe(InCmd.LobbyJoin, l => {
       this.sent = false;
       this.lobby = l;
       if (l.owner) {
@@ -59,7 +60,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
       }
     }));
     this.sub.add(this.ws.connected$.subscribe(value => {
-      if (value && !this.sent) this.ws.send('joinLobby', this.id);
+      if (value && !this.sent) this.ws.send(OutCmd.LobbyJoin, this.id);
       this.sent = true;
     }));
   }

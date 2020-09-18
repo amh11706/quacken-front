@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { WsService } from '../ws.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GuideComponent } from './guide/guide.component';
+import { InCmd, OutCmd } from '../ws-messages';
 
 export interface MapTile {
   x: number; y: number; v: number;
@@ -93,11 +94,11 @@ export class MapEditorComponent implements OnInit, OnDestroy {
       }
     }
     window.addEventListener('beforeunload', this.saveSession);
-    this.socket.send('joinEditor');
+    this.socket.send(OutCmd.EditorJoin);
 
-    this.sub = this.socket.subscribe('saveMap', this.handleSave);
+    this.sub = this.socket.subscribe(InCmd.MapSaved, this.handleSave);
     this.sub.add(this.socket.connected$.subscribe(value => {
-      if (value) this.socket.send('joinEditor');
+      if (value) this.socket.send(OutCmd.EditorJoin);
     }));
 
     window.addEventListener('keydown', this.handleKey);
@@ -142,7 +143,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   private handleSave = () => {
-    this.socket.dispatchMessage({ cmd: 'm', data: { type: 1, message: 'Saved.' } });
+    this.socket.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Saved.' } });
   }
 
   save() {
@@ -157,7 +158,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
     const newTile: any = {};
     Object.assign(newTile, tile);
-    this.socket.send('saveMap', newTile);
+    this.socket.send(OutCmd.MapSave, newTile);
     tile.unsaved = false;
   }
 

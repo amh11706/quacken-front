@@ -7,6 +7,7 @@ import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
 import { Settings } from 'src/app/settings/setting/settings';
+import { Internal } from 'src/app/ws-messages';
 
 const baseSettings: (keyof typeof Settings)[] = ['mapScale', 'speed', 'kbControls'];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -23,7 +24,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   @Input() set lobby(l: Lobby) {
     if (!l) return;
     if (l.map) this.setMapB64(l.map);
-    setTimeout(() => this.ws.dispatchMessage({ cmd: '_boats', data: l }));
+    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.Boats, data: l }));
   }
 
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
@@ -59,7 +60,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.ss.getGroup('l/quacken', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
-    this.sub = this.ws.subscribe('_myBoat', (b: Boat) => this.myBoat = b);
+    this.sub = this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b);
   }
 
   ngOnDestroy() {

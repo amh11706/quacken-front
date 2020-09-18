@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
 @Component({
@@ -24,13 +25,13 @@ export class CadeHudComponent extends HudComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.subs.add(this.ws.subscribe('_myBoat', () => {
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, () => {
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     }));
-    this.subs.add(this.ws.subscribe('turn', () => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, () => {
       this.newTurn = true;
     }));
-    this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
+    this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
       if (this.newTurn) {
         this.usingCannons = 0;
         this.usingMoves = [0, 0, 0];
@@ -54,11 +55,11 @@ export class CadeHudComponent extends HudComponent {
 
   changeWantMove() {
     if (this.auto) this.setAutoWant();
-    else this.ws.send('wantMove', this.wantMove);
+    else this.ws.send(OutCmd.WantMove, this.wantMove);
   }
 
   sendReady() {
-    this.ws.send('r');
+    this.ws.send(OutCmd.Ready);
   }
 
   imReady() {
@@ -76,7 +77,7 @@ export class CadeHudComponent extends HudComponent {
         this.wantMove = move + 1;
       }
     }
-    this.ws.send('wantMove', this.wantMove);
+    this.ws.send(OutCmd.WantMove, this.wantMove);
   }
 
   checkMaxMoves() {
@@ -98,7 +99,7 @@ export class CadeHudComponent extends HudComponent {
       this.usingCannons -= this.shots[i];
       this.shots[i] = 0;
     }
-    this.ws.send('b', this.shots);
+    this.ws.send(OutCmd.Bomb, this.shots);
   }
 
   protected getMoves(): number[] {

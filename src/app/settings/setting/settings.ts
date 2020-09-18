@@ -1,3 +1,5 @@
+import { OutCmd } from 'src/app/ws-messages';
+
 export const Settings = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: 'c/start', data: 'new' },
   nextBoat: {
@@ -55,7 +57,7 @@ export const Settings = {
     admin: true, id: 27, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an<br>entry is in progress'
   },
   cadeMap: {
-    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: 'g/cgmaps'
+    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList
   },
   duckLvl: {
     admin: true, id: 4, group: 'l/quacken', type: 'slider', label: 'Duck Level', min: 0, max: 11, step: 1
@@ -69,10 +71,10 @@ export const Settings = {
     ]
   },
   tileSet: {
-    admin: true, id: 7, group: 'l/quacken', type: 'tileSet', label: 'Tile Set', cmd: 'g/tilesets'
+    admin: true, id: 7, group: 'l/quacken', type: 'tileSet', label: 'Tile Set', cmd: OutCmd.TileSetList
   },
   structureSet: {
-    admin: true, id: 8, group: 'l/quacken', type: 'structureSet', label: 'Structure Set', cmd: 'g/structuresets'
+    admin: true, id: 8, group: 'l/quacken', type: 'structureSet', label: 'Structure Set', cmd: OutCmd.StructureSetList
   },
   hotEntry: {
     admin: true, id: 9, group: 'l/quacken', type: 'checkbox', label: 'Allow join while an<br>entry is in progress'
@@ -84,7 +86,7 @@ export const Settings = {
     id: 11, group: 'lobby', type: 'checkbox', label: 'Enable keyboard<br>move entry'
   },
   customMap: {
-    admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: 'g/maps'
+    admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: OutCmd.MapList
   },
   hideMoves: {
     admin: true, id: 13, group: 'l/quacken', type: 'checkbox', label: 'Hide Moves'

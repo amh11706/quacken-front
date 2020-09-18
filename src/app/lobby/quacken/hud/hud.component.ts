@@ -6,6 +6,7 @@ import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { Boat } from '../boats/boat';
 import { Turn } from '../boats/boats.component';
 import { Lobby } from '../../lobby.component';
+import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -64,7 +65,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     document.addEventListener('keydown', this.kbEvent);
-    this.subs = this.ws.subscribe('_myBoat', (b: Boat) => {
+    this.subs = this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (this.turn > 0) this.locked = false;
       this.myBoat = b;
       this.checkMaxMoves();
@@ -73,17 +74,17 @@ export class HudComponent implements OnInit, OnDestroy {
         this.locked = true;
       }
     });
-    this.subs.add(this.ws.subscribe('_unlockMoves', () => {
+    this.subs.add(this.ws.subscribe(Internal.UnlockMoves, () => {
       if (!this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
       this.resetMoves();
       this.locked = false;
       if (this.selected !== -1) this.selected = 0;
     }));
-    this.subs.add(this.ws.subscribe('boatTick', (t: BoatTick) => {
+    this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
       this.myBoat.damage = t.d;
     }));
 
-    this.subs.add(this.ws.subscribe('_boats', (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       this.turn = m.turn ?? this.turn;
       if (this.turn > 0) this.locked = false;
       else {
@@ -97,7 +98,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);
     }));
 
-    this.subs.add(this.ws.subscribe('turn', (turn: Turn) => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, (turn: Turn) => {
       this.stopTimer();
       if (turn.turn <= this.maxTurn) {
         this.turn = turn.turn;
@@ -199,7 +200,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.locked || !this.weapons[this.myBoat.type] || this.myBoat.tokenPoints < 2) return;
     if (this.myBoat.bomb === i) this.myBoat.bomb = 0;
     else this.myBoat.bomb = i;
-    this.ws.send('b', this.myBoat.bomb);
+    this.ws.send(OutCmd.Bomb, this.myBoat.bomb);
   }
 
   imReady() {
@@ -207,15 +208,16 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
     this.myBoat.ready = true;
     this.locked = true;
-    this.ws.send('r');
+    this.ws.send(OutCmd.Ready);
   }
 
   start() {
-    this.ws.send('c/start', '');
+    // TODO: add commands back
+    // this.ws.send('c/start', '');
   }
 
   private sendMoves() {
-    this.ws.send('s', this.getMoves());
+    this.ws.send(OutCmd.Moves, this.getMoves());
   }
 
   protected getMoves(): number[] {
@@ -285,7 +287,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   private endRound(): void {
-    this.ws.dispatchMessage({ cmd: 'time', data: '0:00' });
+    this.ws.dispatchMessage({ cmd: Internal.Time, data: '0:00' });
     this.seconds$.next(0);
     this.stopTimer();
   }
@@ -308,15 +310,14 @@ export class HudComponent implements OnInit, OnDestroy {
     }
 
     this.seconds--;
-    this.updatetime();
-
     this.turnSeconds--;
-    this.seconds$.next(Math.round(this.turnSeconds * 80 / this.secondsPerTurn - 4));
+    this.updatetime();
   }
 
   protected updatetime(): void {
+    this.seconds$.next(Math.round(this.turnSeconds * 76 / this.secondsPerTurn) - 4);
     const seconds = this.seconds < 10 ? '0' + this.seconds : this.seconds;
-    this.ws.dispatchMessage({ cmd: 'time', data: this.minutes + ':' + seconds });
+    this.ws.dispatchMessage({ cmd: Internal.Time, data: this.minutes + ':' + seconds });
   }
 
 }

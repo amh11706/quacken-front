@@ -4,6 +4,7 @@ import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
 import { WindowService } from 'src/app/window.service';
 import { Message } from '../chat.service';
+import { InCmd, OutCmd } from 'src/app/ws-messages';
 
 export interface Stat {
   statId: number;
@@ -50,8 +51,8 @@ export class StatService {
     private fs: FriendsService,
     private wd: WindowService,
   ) {
-    this.ws.subscribe('stat/user', stats => this.stats = stats);
-    this.ws.subscribe('stat/leaders', (leaders: Leader[]) => {
+    this.ws.subscribe(InCmd.StatsUser, stats => this.stats = stats);
+    this.ws.subscribe(InCmd.StatsTop, (leaders: Leader[]) => {
       this.leaders = leaders;
       if (!leaders || !leaders.length) return;
 
@@ -87,11 +88,11 @@ export class StatService {
 
   refresh() {
     this.stats = [];
-    this.ws.send('stat/user', this.target);
+    this.ws.send(OutCmd.StatsUser, this.target);
   }
 
   refreshLeaders() {
     this.leaders = [];
-    this.ws.send('stat/leaders', this.id);
+    this.ws.send(OutCmd.StatsTop, this.id);
   }
 }

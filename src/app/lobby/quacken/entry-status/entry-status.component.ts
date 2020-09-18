@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Internal, InCmd } from 'src/app/ws-messages';
 
 import { WsService } from '../../../ws.service';
 import { Lobby } from '../../lobby.component';
@@ -20,9 +21,9 @@ export class EntryStatusComponent implements OnInit, OnDestroy {
   constructor(protected ws: WsService) { }
 
   ngOnInit() {
-    this.subs = this.ws.subscribe('time', (time: string) => this.time = time);
-    this.subs.add(this.ws.subscribe('turn', (t: Turn) => this.treasure = t.treasure));
-    this.subs.add(this.ws.subscribe('_boats', (l: Lobby) => this.treasure = l.treasure || this.treasure));
+    this.subs = this.ws.subscribe(Internal.Time, (time: string) => this.time = time);
+    this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.treasure = t.treasure));
+    this.subs.add(this.ws.subscribe(Internal.Boats, (l: Lobby) => this.treasure = l.treasure || this.treasure));
   }
 
   ngOnDestroy() {

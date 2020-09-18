@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
+import { InCmd } from '../ws-messages';
 moment.locale('en-GB');
 
 import { WsService } from '../ws.service';
@@ -27,7 +28,7 @@ export class ChatService {
   historyIndex = -1;
 
   constructor(private socket: WsService) {
-    this.socket.subscribe('m', (message: Message) => {
+    this.socket.subscribe(InCmd.ChatMessage, (message: Message) => {
       this.messages.push(message);
       if (message.type === 5) {
         let command = '/tell ' + message.from;
@@ -46,17 +47,17 @@ export class ChatService {
       if (!value) this.messages = [];
     });
 
-    this.socket.subscribe('friendAdd', (u: string) => {
+    this.socket.subscribe(InCmd.FriendAdd, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.friend = true;
     });
-    this.socket.subscribe('friendRemove', (u: string) => {
+    this.socket.subscribe(InCmd.FriendRemove, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.friend = false;
     });
 
-    this.socket.subscribe('block', (u: string) => {
+    this.socket.subscribe(InCmd.BlockUser, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.blocked = true;
     });
-    this.socket.subscribe('unblock', (u: string) => {
+    this.socket.subscribe(InCmd.UnblockUser, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.blocked = false;
     });
   }

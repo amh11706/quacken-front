@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/cor
 import { BoatSync } from 'src/app/lobby/quacken/boats/boats.component';
 import { WsService } from 'src/app/ws.service';
 import { Subscription } from 'rxjs';
+import { Internal } from 'src/app/ws-messages';
 
 @Component({
   selector: 'q-bnav-map',
@@ -36,7 +37,7 @@ export class BnavMapComponent implements OnInit, OnDestroy {
       this.ourBoat.id = this.ws.sId || 1;
       setTimeout(this.updateBoats);
     }));
-    this.sub.add(this.ws.subscribe('_myBoat', () => null));
+    this.sub.add(this.ws.subscribe(Internal.MyBoat, () => null));
   }
 
   ngOnDestroy() {
@@ -44,7 +45,7 @@ export class BnavMapComponent implements OnInit, OnDestroy {
   }
 
   private updateBoats = () => {
-    this.ws.dispatchMessage({ cmd: '_boats', data: { boats: this.boats } });
+    this.ws.dispatchMessage({ cmd: Internal.Boats, data: { boats: this.boats } });
     const b = this.theirBoat;
     const ob = this.ourBoat;
     const relativeFace = (b.f - ob.f + 4) % 4;
