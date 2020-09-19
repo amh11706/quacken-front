@@ -48,13 +48,11 @@ export class NameComponent implements OnInit {
   }
 
   invite() {
-    // TODO readd commands
-    // this.ws.send('c/invite', this.getName());
+    this.ws.send(OutCmd.ChatCommand, '/invite ' + this.getName());
   }
 
   kick() {
-    // TODO readd commands
-    // this.ws.send('c/kick', this.getName());
+    this.ws.send(OutCmd.ChatCommand, '/kick ' + this.getName());
   }
 
 }

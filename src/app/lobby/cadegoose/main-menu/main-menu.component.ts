@@ -47,6 +47,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       if (!m.players) return;
+      this.haveBoat = false;
       this.open = true;
       this.teams = m.players;
       this.admin = m.owner || this.admin;

@@ -60,7 +60,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.ss.getGroup('l/quacken', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
-    this.sub = this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b);
+    this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
   }
 
   ngOnDestroy() {

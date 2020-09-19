@@ -1,9 +1,9 @@
 import { OutCmd } from 'src/app/ws-messages';
 
 export const Settings = {
-  startNew: { admin: true, type: 'button', label: 'New Round', trigger: 'c/start', data: 'new' },
+  startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' },
   nextBoat: {
-    id: 1, group: 'lobby', type: 'boat', trigger: 'nextBoat',
+    id: 1, group: 'lobby', type: 'boat', trigger: OutCmd.NextBoat,
     titles: ['Rocket', 'Armored', 'Bomb', 'Bread', 'Maiden', , , , , , 'Small Duck', 'Medium Duck', 'Large Duck', 'Defenduck'],
     groups: [
       { name: 'Standard', options: [0, 1, 2, 3, 4] },
@@ -11,7 +11,7 @@ export const Settings = {
     ]
   },
   nextCadeBoat: {
-    id: 19, group: 'cade', name: 'nextBoat', type: 'boat', trigger: 'nextBoat',
+    id: 19, group: 'cade', name: 'nextBoat', type: 'boat', trigger: OutCmd.NextBoat,
     titles: [
       , , , , , , , , , , , , , , 'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
       'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate'
@@ -33,12 +33,12 @@ export const Settings = {
     id: 23, group: 'cade', name: 'speed', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
   },
   spawnSide: {
-    id: 21, group: 'cade', type: 'option', label: 'Spawn Side', trigger: 'spawnSide', options: [
+    id: 21, group: 'cade', type: 'option', label: 'Spawn Side', trigger: OutCmd.SpawnSide, options: [
       'Island', 'Ocean'
     ]
   },
   team: {
-    id: 20, group: 'cade', type: 'option', label: 'Team', trigger: 'team', options: [
+    id: 20, group: 'cade', type: 'option', label: 'Team', trigger: OutCmd.Team, options: [
       'Defenders', 'Attackers'
     ]
   },

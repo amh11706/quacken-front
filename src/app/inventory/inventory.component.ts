@@ -60,18 +60,18 @@ export class InventoryComponent implements OnDestroy {
   ) { }
 
   ngOnDestroy() {
-    if (this.subs) this.subs.unsubscribe();
+    this.subs.unsubscribe();
     this.ws.send(OutCmd.InventoryCmd, { cmd: 'c', id: this.id });
   }
 
   private doSubs() {
     if (!this.id) return;
     this.ws.send(OutCmd.InventoryCmd, { cmd: 'o', id: this.id });
-    this.subs = this.ws.subscribe(InCmd.IntentoryOpen, (i: Inventory) => {
+    this.subs.add(this.ws.subscribe(InCmd.IntentoryOpen, (i: Inventory) => {
       this.inv = i;
       this.inv.filtered = i.items;
       this.sort(i.sort);
-    });
+    }));
     this.subs.add(this.ws.subscribe(InCmd.InventoryCoin, (q: number) => {
       if (this.inv) this.inv.currency = q;
     }));

@@ -43,14 +43,14 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.ss.admin = false;
-    this.sub = this.route.paramMap.subscribe(params => {
+    this.sub.add(this.route.paramMap.subscribe(params => {
       if (this.sent) return;
       const id = +(params.get('id') || 0);
       if (this.id === id) return;
       this.id = id;
-      this.ws.send(OutCmd.LobbyJoin, id);
+      this.ws.send(OutCmd.LobbyJoin, id, true);
       this.sent = true;
-    });
+    }));
     this.sub.add(this.ws.subscribe(InCmd.LobbyJoin, l => {
       this.sent = false;
       this.lobby = l;

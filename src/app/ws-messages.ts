@@ -8,6 +8,7 @@ export const enum Internal {
 
 export const enum OutCmd {
     InventoryCmd = 1,
+    ChatCommand,
 
     SettingSet,
     SettingGetGroup,

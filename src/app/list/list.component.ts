@@ -41,10 +41,10 @@ export class ListComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
-    this.sub = this.ws.subscribe(InCmd.LobbyList, lobbies => {
+    this.sub.add(this.ws.subscribe(InCmd.LobbyList, lobbies => {
       this.lobbies = lobbies;
-    });
-    this.sub = this.ws.subscribe(InCmd.LobbyUpdate, update => {
+    }));
+    this.sub.add(this.ws.subscribe(InCmd.LobbyUpdate, update => {
       for (let i = 0; i < this.lobbies.length; i++) {
         const lobby = this.lobbies[i];
         if (update.id === lobby.id) {
@@ -53,16 +53,16 @@ export class ListComponent implements OnInit, OnDestroy {
         }
       }
       this.lobbies.push(update);
-    });
-    this.sub = this.ws.subscribe(InCmd.LobbyRemove, id => {
+    }));
+    this.sub.add(this.ws.subscribe(InCmd.LobbyRemove, id => {
       this.lobbies = this.lobbies.filter(l => l.id !== id);
-    });
-    this.sub.add(this.ws.connected$.subscribe(value => {
+    }));
+    this.sub.add(this.ws.connected$.subscribe(async value => {
       if (value) this.ws.send(OutCmd.LobbyListJoin);
+      this.settings = await this.ss.getGroup('l/create');
+      this.changeType();
     }));
 
-    this.settings = await this.ss.getGroup('l/create');
-    this.changeType();
   }
 
   ngOnDestroy() {

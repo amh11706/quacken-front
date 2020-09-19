@@ -33,9 +33,9 @@ export class ResetComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.route.paramMap.subscribe(params => {
+    this.sub.add(this.route.paramMap.subscribe(params => {
       this.token = params.get('token') || '';
-    });
+    }));
   }
 
   ngOnDestroy() {

@@ -21,7 +21,7 @@ export class EntryStatusComponent implements OnInit, OnDestroy {
   constructor(protected ws: WsService) { }
 
   ngOnInit() {
-    this.subs = this.ws.subscribe(Internal.Time, (time: string) => this.time = time);
+    this.subs.add(this.ws.subscribe(Internal.Time, (time: string) => this.time = time));
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.treasure = t.treasure));
     this.subs.add(this.ws.subscribe(Internal.Boats, (l: Lobby) => this.treasure = l.treasure || this.treasure));
   }

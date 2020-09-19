@@ -27,7 +27,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit {
     this.ss.getGroup('l/cade', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
-    this.sub = this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b);
+    this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
   }
 
   async getSettings() {

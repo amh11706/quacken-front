@@ -122,7 +122,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
-    this.subs = this.ws.subscribe(Internal.Boats, (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       if (!m.boats) return;
       clearTimeout(this.animateTimeout);
       delete this.turn;
@@ -130,7 +130,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this._boats = {};
       this.setBoats(Object.values(m.boats));
       this.clutter = m.clutter || this.clutter;
-    });
+    }));
     this.subs.add(this.ws.subscribe(InCmd.NewBoat, (boat: BoatSync) => this.setBoats([boat])));
     this.subs.add(this.ws.subscribe(InCmd.DelBoat, this.deleteBoat));
     this.subs.add(this.ws.subscribe(InCmd.Moves, s => {
@@ -152,7 +152,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     clearTimeout(this.animateTimeout);
     document.removeEventListener('visibilitychange', this.visibilityChange);
-    if (this.subs) this.subs.unsubscribe();
+    this.subs.unsubscribe();
   }
 
   private deleteBoat = (id: number) => {

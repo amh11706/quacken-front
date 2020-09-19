@@ -96,7 +96,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   private handleSubs() {
-    this.sub = this.socket.subscribe(InCmd.TileSetList, ts => this.handleTileSet(ts));
+    this.sub.add(this.socket.subscribe(InCmd.TileSetList, ts => this.handleTileSet(ts)));
     this.sub.add(this.socket.subscribe(InCmd.StructureSetList, ss => this.handleStructureSet(ss)));
     this.sub.add(this.socket.subscribe(InCmd.MapCreated, m => this.handleMap(m)));
     this.sub.add(this.socket.subscribe(InCmd.MapSaved, m => this.handleMap(m)));

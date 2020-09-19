@@ -74,13 +74,13 @@ export class SpadesComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
-    this.sub = this.ws.subscribe(InCmd.Cards, (c: number[]) => {
+    this.sub.add(this.ws.subscribe(InCmd.Cards, (c: number[]) => {
       if (!(this.lobby.played.length === 4)) this.setCards(c);
       else setTimeout(() => this.setCards(c), 2000);
       this.lobby.playing = true;
       this.select = 1;
       this.selected = [];
-    });
+    }));
 
     this.sub.add(this.ws.subscribe(InCmd.PlayTo, (p: number) => {
       this.lobby.playTo = p;

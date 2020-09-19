@@ -7,6 +7,7 @@ import { InCmd, Internal, OutCmd } from './ws-messages';
 
 interface Message {
   cmd: InCmd | Internal;
+  id?: number;
   data?: any;
 }
 
@@ -24,6 +25,8 @@ export class WsService {
   private token = '';
   private timeOut?: number;
   private messages = new Map<InCmd | Internal, Subject<any>>();
+  private requests = new Map<number, (value: any) => void>();
+  private nextId = 1;
   private tokenParser = new JwtHelperService();
   user?: TokenUser;
   connected = false;
@@ -71,6 +74,7 @@ export class WsService {
     this.socket.onmessage = message => this.dispatchMessage(JSON.parse(message.data));
 
     this.socket.onclose = () => {
+      this.connected = false;
       this.dispatchMessage({
         cmd: InCmd.ChatMessage,
         data: { type: 1, message: 'Connection closed, attempting to reconnect...' },
@@ -89,6 +93,12 @@ export class WsService {
   }
 
   dispatchMessage(message: Message) {
+    if (message.id) {
+      const cb = this.requests.get(message.id);
+      this.requests.delete(message.id);
+      if (cb) cb(message.data);
+      return;
+    }
     const sub = this.messages.get(message.cmd);
     if (sub) sub.next(message.data);
     else console.log('Unhandled message:', message);
@@ -105,19 +115,20 @@ export class WsService {
     delete this.socket;
   }
 
-  send(cmd: OutCmd, data?: any) {
-    this.sendRaw(JSON.stringify({ cmd, data }));
+  send(cmd: OutCmd, data?: any, force = false) {
+    if (this.connected || force) this.sendRaw(JSON.stringify({ cmd, data }));
   }
 
-  softSend(cmd: OutCmd, data?: any) {
-    if (this.connected) this.sendRaw(JSON.stringify({ cmd, data }));
+  request(cmd: OutCmd, data?: any): Promise<any> {
+    if (this.connected) this.sendRaw(JSON.stringify({ cmd, id: this.nextId, data }));
+    return new Promise((resolve) => {
+      if (!this.connected) return resolve();
+      this.requests.set(this.nextId, resolve);
+      this.nextId++;
+    });
   }
 
-  sendObj(data: any) {
-    this.sendRaw(JSON.stringify(data));
-  }
-
-  sendRaw(data: string) {
+  private sendRaw(data: string) {
     if (this.connected && this.socket) return this.socket.send(data);
     const sub = this.connected$.subscribe((connected: boolean) => {
       if (!connected) return;
