@@ -59,8 +59,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
         this.ss.admin = true;
       }
     }));
-    this.sub.add(this.ws.connected$.subscribe(value => {
-      if (value && !this.sent) this.ws.send(OutCmd.LobbyJoin, this.id);
+    this.sub.add(this.ws.connected$.subscribe(() => {
+      if (!this.sent) this.ws.send(OutCmd.LobbyJoin, this.id);
       this.sent = true;
     }));
   }

@@ -50,26 +50,7 @@ export class StatService {
     private ws: WsService,
     private fs: FriendsService,
     private wd: WindowService,
-  ) {
-    this.ws.subscribe(InCmd.StatsUser, stats => this.stats = stats);
-    this.ws.subscribe(InCmd.StatsTop, (leaders: Leader[]) => {
-      this.leaders = leaders;
-      if (!leaders || !leaders.length) return;
-
-      if (leaders[0].seed) this.columns = mapColumns;
-      else this.columns = [];
-      for (const l of leaders) {
-        l.from = l.name;
-        l.friend = this.fs.isFriend(l.name);
-      }
-    });
-    this.ws.connected$.subscribe(value => {
-      if (!value) {
-        this.open = false;
-        this.leadersOpen = false;
-      }
-    });
-  }
+  ) { }
 
   openUser(name: string) {
     this.target = name;
@@ -86,13 +67,22 @@ export class StatService {
     this.wd.active = 'leaders';
   }
 
-  refresh() {
+  async refresh() {
     this.stats = [];
-    this.ws.send(OutCmd.StatsUser, this.target);
+    this.stats = await this.ws.request(OutCmd.StatsUser, this.target);
   }
 
-  refreshLeaders() {
+  async refreshLeaders() {
     this.leaders = [];
-    this.ws.send(OutCmd.StatsTop, this.id);
+    const leaders = await this.ws.request(OutCmd.StatsTop, this.id);
+    this.leaders = leaders;
+    if (!leaders || !leaders.length) return;
+
+    if (leaders[0].seed) this.columns = mapColumns;
+    else this.columns = [];
+    for (const l of leaders) {
+      l.from = l.name;
+      l.friend = this.fs.isFriend(l.name);
+    }
   }
 }

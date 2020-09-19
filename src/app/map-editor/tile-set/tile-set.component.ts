@@ -32,8 +32,6 @@ export class TileSetComponent implements OnInit, OnDestroy {
   constructor(protected ws: WsService) { }
 
   ngOnInit() {
-    this.sub.add(this.ws.subscribe(InCmd.WeightSaved, () => this.pending = false));
-    this.sub.add(this.ws.subscribe(InCmd.MapDeleted, this.handleDelete));
     if (this.map) this.initTile(this.map.selectedTile);
   }
 
@@ -49,7 +47,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  protected handleDelete = (msg: any) => {
+  protected handleDelete(msg: any) {
     if (!this.map?.tiles) return;
     this.pending = false;
     this.map.tiles[msg.type] = this.map.tiles[msg.type].filter((tile: DBTile) => {
@@ -86,17 +84,18 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.map.tileSettings = true;
   }
 
-  saveWeight(tile: DBTile) {
+  async saveWeight(tile: DBTile) {
     this.pending = true;
     const map = {
       group: this.group + 's',
       weight: tile.weight,
       id: tile.id
     };
-    this.ws.send(OutCmd.WeightSave, map);
+    await this.ws.request(OutCmd.WeightSave, map);
+    this.pending = false;
   }
 
-  deleteTile(tile: DBTile) {
+  async deleteTile(tile: DBTile) {
     if (!confirm(`Delete ${this.group} '${tile.name}'? this cannot be undone.`)) return;
     this.pending = true;
     const map = {
@@ -104,7 +103,8 @@ export class TileSetComponent implements OnInit, OnDestroy {
       type: tile.type,
       id: tile.id
     };
-    this.ws.send(OutCmd.MapDelete, map);
+    const msg = await this.ws.request(OutCmd.MapDelete, map);
+    this.handleDelete(msg);
   }
 
 }

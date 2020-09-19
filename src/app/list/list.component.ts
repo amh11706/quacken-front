@@ -57,8 +57,8 @@ export class ListComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(InCmd.LobbyRemove, id => {
       this.lobbies = this.lobbies.filter(l => l.id !== id);
     }));
-    this.sub.add(this.ws.connected$.subscribe(async value => {
-      if (value) this.ws.send(OutCmd.LobbyListJoin);
+    this.sub.add(this.ws.connected$.subscribe(async () => {
+      this.ws.send(OutCmd.LobbyListJoin);
       this.settings = await this.ss.getGroup('l/create');
       this.changeType();
     }));

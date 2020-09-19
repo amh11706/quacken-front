@@ -74,9 +74,6 @@ export const enum InCmd {
     NavigateTo,
     LobbyInvite,
     SettingSet,
-    SettingsGet,
-    StatsUser,
-    StatsTop,
 
     BlockUser,
     UnblockUser,
@@ -93,20 +90,12 @@ export const enum InCmd {
     InventoryCoin,
     InventoryUpdate,
 
-    MapList,
-    CgMapList,
-    StructureSetList,
-    TileSetList,
-
     LobbyUpdate = 101,
     LobbyList,
     LobbyRemove,
     PlayerAdd,
     PlayerList,
     PlayerRemove,
-
-    BnavPositions,
-    BnavSavedPosition,
 
     LobbyJoin,
     Sync,
@@ -118,15 +107,6 @@ export const enum InCmd {
     Bomb,
     Ready,
     BoatTick,
-
-    WeightSaved,
-    TileSet,
-    StructureSet,
-    Map,
-    Maps,
-    MapSaved,
-    MapCreated,
-    MapDeleted,
 
     Bidding,
     Playing,

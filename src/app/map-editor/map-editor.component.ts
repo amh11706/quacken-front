@@ -95,9 +95,8 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
     window.addEventListener('beforeunload', this.saveSession);
 
-    this.sub.add(this.socket.subscribe(InCmd.MapSaved, this.handleSave));
-    this.sub.add(this.socket.connected$.subscribe(async () => {
-      await this.socket.request(OutCmd.EditorJoin);
+    this.sub.add(this.socket.connected$.subscribe(() => {
+      this.socket.send(OutCmd.EditorJoin);
     }));
 
     window.addEventListener('keydown', this.handleKey);
@@ -141,11 +140,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleSave = () => {
-    this.socket.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Saved.' } });
-  }
-
-  save() {
+  async save() {
     const tile = this.map.selectedTile;
     if (!tile.unsaved) return;
     if (this.map.tileSet) {
@@ -157,7 +152,8 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
     const newTile: any = {};
     Object.assign(newTile, tile);
-    this.socket.send(OutCmd.MapSave, newTile);
+    await this.socket.request(OutCmd.MapSave, newTile);
+    this.socket.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Saved.' } });
     tile.unsaved = false;
   }
 
