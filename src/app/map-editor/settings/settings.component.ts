@@ -51,11 +51,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(private socket: WsService) { }
 
   ngOnInit() {
-    this.handleSubs();
+    this.sub.add(this.socket.connected$.subscribe(() => {
+      setTimeout(async () => this.gotList(await this.socket.request(OutCmd.MapListAll)));
+    }));
     this.shown = this.map.selectedTile;
     if (!this.map.tileSettings) {
       this.shown = this.map.tileSet || this.map.structureSet || this.shown;
-      this.socket.send(OutCmd.MapListAll);
       this.map.hex = this.shown.hex;
     }
     this.shown = { ...this.shown };
@@ -93,15 +94,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-
-  private handleSubs() {
-    this.sub.add(this.socket.subscribe(InCmd.TileSetList, ts => this.handleTileSet(ts)));
-    this.sub.add(this.socket.subscribe(InCmd.StructureSetList, ss => this.handleStructureSet(ss)));
-    this.sub.add(this.socket.subscribe(InCmd.MapCreated, m => this.handleMap(m)));
-    this.sub.add(this.socket.subscribe(InCmd.MapSaved, m => this.handleMap(m)));
-    this.sub.add(this.socket.subscribe(InCmd.Map, m => this.gotMap(m)));
-    this.sub.add(this.socket.subscribe(InCmd.MapList, l => this.gotList(l)));
   }
 
   private gotList(list: any) {
@@ -283,7 +275,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (tile.unsaved) {
       this.pending = true;
       const cmd = this.selected === 'new' ? OutCmd.MapCreate : OutCmd.MapSave;
-      this.socket.send(cmd, tile);
+      this.socket.request(cmd, tile).then(m => this.handleMap(m));
     }
 
     switch (tile.group) {
@@ -307,7 +299,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  edit() {
+  async edit() {
     if (this.map.tileSettings) {
       this.map.tileSettings = false;
       this.map.settingsOpen = false;
@@ -320,16 +312,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
     switch (tile.group) {
       case 'tile_sets':
         this.map.hex = tile.hex;
-        if (!this.map.tiles || this.map.tileSet?.id !== tile.id) this.socket.send(OutCmd.TileSetGet, tile.id);
-        else this.map.settingsOpen = false;
+        if (!this.map.tiles || this.map.tileSet?.id !== tile.id) {
+          this.handleTileSet(await this.socket.request(OutCmd.TileSetGet, tile.id));
+        } else this.map.settingsOpen = false;
         return;
       case 'structure_sets':
-        if (!this.map.structures || this.map.structureSet?.id !== tile.id) this.socket.send(OutCmd.StructureSetGet, tile.id);
-        else this.map.settingsOpen = false;
+        if (!this.map.structures || this.map.structureSet?.id !== tile.id) {
+          this.handleStructureSet(await this.socket.request(OutCmd.StructureSetGet, tile.id));
+        } else this.map.settingsOpen = false;
         return;
       default:
         this.map.hex = tile.hex;
-        this.socket.send(OutCmd.MapGet, { group: tile.group, tile: tile.id });
+        this.gotMap(await this.socket.request(OutCmd.MapGet, { group: tile.group, tile: tile.id }));
     }
   }
 
