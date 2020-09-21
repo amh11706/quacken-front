@@ -75,7 +75,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   join(l: any) {
     if (!l.group.publicMode) this.router.navigate(['lobby', l.id]);
-    else this.ws.send(OutCmd.LobbyJoin, l.id);
+    else this.ws.send(OutCmd.LobbyApply, l.id);
   }
 
   createLobby() {

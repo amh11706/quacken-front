@@ -72,7 +72,6 @@ export const enum InCmd {
     Kick,
     ChatMessage,
     NavigateTo,
-    LobbyInvite,
     SettingSet,
 
     BlockUser,

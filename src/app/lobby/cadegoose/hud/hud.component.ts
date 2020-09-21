@@ -99,7 +99,7 @@ export class CadeHudComponent extends HudComponent {
       this.usingCannons -= this.shots[i];
       this.shots[i] = 0;
     }
-    this.ws.send(OutCmd.Bomb, this.shots);
+    this.ws.send(OutCmd.Shots, this.shots);
   }
 
   protected getMoves(): number[] {
