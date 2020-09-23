@@ -5,7 +5,7 @@ interface Note {
 
 export const Notes: Note[] = [
   {
-    title: 'Release 23 Septemner 2020',
+    title: 'Release 23 September 2020',
     content: `
     <ul>
       <li>Further adjustments to damage and bilge rates.</li>
@@ -15,7 +15,7 @@ export const Notes: Note[] = [
     </ul>`
   },
   {
-    title: 'Release 14 Septemner 2020',
+    title: 'Release 14 September 2020',
     content: `
     <ul>
       <li>Major CadeGoose updates based on feedback and testing.</li>
