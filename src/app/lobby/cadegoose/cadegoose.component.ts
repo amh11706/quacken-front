@@ -37,4 +37,11 @@ export class CadegooseComponent extends QuackenComponent implements OnInit {
     this.settings = await this.ss.getGroup('cade');
   }
 
+  saveScale() {
+    clearTimeout(this.wheelDebounce);
+    this.wheelDebounce = window.setTimeout(() => {
+      this.ss.save({ id: 22, value: this.settings.mapScale, name: 'mapScale', group: 'cade' });
+    }, 1000);
+  }
+
 }

@@ -16,6 +16,7 @@
 
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"
      [style.opacity]="boat.opacity"
+     [style.zIndex]="(boat.pos.y*20 + 20 - boat.pos.x)*100"
      [style.transform]="'translateX(' + (getX(boat.pos)+boat.offsetX) + 'px)'"
      [style.transition]="moveTransition(boat.moveTransition[0]) + (boat.enteringSZ ? szFade : '')">
 
