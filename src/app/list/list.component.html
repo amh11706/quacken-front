@@ -97,7 +97,7 @@
 
           <tr *ngFor="let lobby of lobbies"
               (click)="join(lobby)">
-            <td>{{lobby.type}}</td>
+            <td [title]="descriptions[lobby.type]">{{lobby.type}}</td>
             <td>{{lobby.name}}</td>
             <td>{{lobby.players}} / {{lobby.group.maxPlayers}}</td>
             <td class="settingsView">
@@ -114,6 +114,7 @@
       <h2 id="create">Lobby Type: <q-setting name="createType"
                    (change)="changeType()"></q-setting>
       </h2>
+      <p>{{idDescriptions[settings.createType]}}</p>
       <div id="lsettings">
         <ng-container *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit, cadeEdit][settings.createType]">
         </ng-container>

@@ -5,6 +5,16 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 23 Septemner 2020',
+    content: `
+    <ul>
+      <li>Further adjustments to damage and bilge rates.</li>
+      <li>Randomized fish names for cade ships!</li>
+      <li>Fixed a bug where starting a 2nd round did not close the menu.</li>
+      <li>Fixed forgot password emails not being sent.</li>
+    </ul>`
+  },
+  {
     title: 'Release 14 Septemner 2020',
     content: `
     <ul>

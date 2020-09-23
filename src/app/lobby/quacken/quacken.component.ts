@@ -7,13 +7,15 @@ import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
 import { Settings } from 'src/app/settings/setting/settings';
-import { Internal } from 'src/app/ws-messages';
+import { InCmd, Internal } from 'src/app/ws-messages';
 
 const baseSettings: (keyof typeof Settings)[] = ['mapScale', 'speed', 'kbControls'];
 const ownerSettings: (keyof typeof Settings)[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
   'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'
 ];
+
+export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy ducks to steal their food and bring it home.';
 
 @Component({
   selector: 'q-quacken',
@@ -57,6 +59,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc } });
     this.ss.getGroup('l/quacken', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 

@@ -75,7 +75,8 @@ export class InventoryComponent implements OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.InventoryCoin, (q: number) => {
       if (this.inv) this.inv.currency = q;
     }));
-    this.subs.add(this.ws.connected$.subscribe(value => {
+    this.subs.add(this.ws.connected$.subscribe(v => {
+      if (!v) return;
       this.ws.send(OutCmd.InventoryCmd, { cmd: 'o', id: this.id });
     }));
 

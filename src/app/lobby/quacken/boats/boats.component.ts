@@ -47,6 +47,7 @@ export interface BoatSync extends BoatStatus {
   oId?: number;
   team?: number;
   n: string;
+  ti?: string;
   f: number;
   b: number;
   tp: number;
@@ -126,6 +127,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (!m.boats) return;
       clearTimeout(this.animateTimeout);
       delete this.turn;
+      this.myBoat.isMe = false;
       this.boats = [];
       this._boats = {};
       this.setBoats(Object.values(m.boats));
@@ -286,6 +288,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         .setPos(sBoat.x, sBoat.y)
         .setTreasure(sBoat.t)
         .draw();
+      if (sBoat.ti) boat.title = sBoat.ti;
       boat.spinDeg = 360 / sBoat.ms;
       boat.face = sBoat.f * boat.spinDeg;
       boat.moveLock = sBoat.ml;

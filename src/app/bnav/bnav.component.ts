@@ -27,8 +27,8 @@ export class BnavComponent implements OnInit, OnDestroy {
   constructor(private ws: WsService) { }
 
   ngOnInit(): void {
-    this.sub.add(this.ws.connected$.subscribe(() => {
-      this.ws.send(OutCmd.BnavJoin);
+    this.sub.add(this.ws.connected$.subscribe(v => {
+      if (v) this.ws.send(OutCmd.BnavJoin);
     }));
   }
 

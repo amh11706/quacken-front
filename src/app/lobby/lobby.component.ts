@@ -19,7 +19,7 @@ export interface Lobby {
   clutter?: Clutter[];
   turn?: number;
   seconds?: number;
-  type: 'HexaQuack' | 'Quacken' | 'Spades';
+  type: 'HexaQuack' | 'Quacken' | 'Spades' | 'CadeGoose';
   [key: string]: any;
 }
 
@@ -59,7 +59,8 @@ export class LobbyComponent implements OnInit, OnDestroy {
         this.ss.admin = true;
       }
     }));
-    this.sub.add(this.ws.connected$.subscribe(() => {
+    this.sub.add(this.ws.connected$.subscribe(v => {
+      if (!v) return;
       if (!this.sent) this.ws.send(OutCmd.LobbyJoin, this.id);
       this.sent = true;
     }));

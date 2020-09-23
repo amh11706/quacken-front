@@ -7,6 +7,8 @@ import { SettingsService, SettingMap } from '../settings/settings.service';
 import { Notes } from './notes';
 import { Lobby } from '../lobby/lobby.component';
 import { InCmd, OutCmd } from '../ws-messages';
+import { QuackenDesc } from '../lobby/quacken/quacken.component';
+import { CadeDesc } from '../lobby/cadegoose/cadegoose.component';
 
 const groups = ['quacken', 'quacken', 'spades', 'cade'];
 
@@ -24,6 +26,13 @@ export class ListComponent implements OnInit, OnDestroy {
     { title: 'Release Notes', path: 'notes' },
   ];
   publicModes = ['Public', 'Public Invitation'];
+  descriptions = {
+    Quacken: QuackenDesc,
+    HexaQuack: QuackenDesc,
+    Spades: 'A classic card game.',
+    CadeGoose: CadeDesc,
+  };
+  idDescriptions = Object.values(this.descriptions);
   notes = Notes;
 
   lobbies: Lobby[] = [];
@@ -57,7 +66,8 @@ export class ListComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(InCmd.LobbyRemove, id => {
       this.lobbies = this.lobbies.filter(l => l.id !== id);
     }));
-    this.sub.add(this.ws.connected$.subscribe(async () => {
+    this.sub.add(this.ws.connected$.subscribe(async v => {
+      if (!v) return;
       this.ws.send(OutCmd.LobbyListJoin);
       this.settings = await this.ss.getGroup('l/create');
       this.changeType();

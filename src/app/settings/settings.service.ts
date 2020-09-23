@@ -34,9 +34,10 @@ export class SettingsService {
       if (group) group[s.name] = s.value;
     });
 
-    this.ws.connected$.subscribe(() => {
+    this.ws.connected$.subscribe(v => {
       this.settings.clear();
       this.open = false;
+      if (!v) return;
       this.getGroup('global');
     });
   }

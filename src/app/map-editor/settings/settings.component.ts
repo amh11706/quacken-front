@@ -51,7 +51,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(private socket: WsService) { }
 
   ngOnInit() {
-    this.sub.add(this.socket.connected$.subscribe(() => {
+    this.sub.add(this.socket.connected$.subscribe(v => {
+      if (!v) return;
       setTimeout(async () => this.gotList(await this.socket.request(OutCmd.MapListAll)));
     }));
     this.shown = this.map.selectedTile;

@@ -4,13 +4,15 @@ import { Boat } from '../quacken/boats/boat';
 import { Settings } from 'src/app/settings/setting/settings';
 import { QuackenComponent } from '../quacken/quacken.component';
 import { SettingMap } from 'src/app/settings/settings.service';
-import { Internal } from 'src/app/ws-messages';
+import { InCmd, Internal } from 'src/app/ws-messages';
 
 const baseSettings: (keyof typeof Settings)[] = ['cadeMapScale', 'cadeSpeed'];
 const ownerSettings: (keyof typeof Settings)[] = [
   'jobberQuality', 'cadePublicMode', 'cadeHotEntry',
   'cadeMaxPlayers', 'cadeMap',
 ];
+
+export const CadeDesc = 'CadeGoose: Use your ship to contest flags and sink enemy ships in a battle for points.';
 
 @Component({
   selector: 'q-cadegoose',
@@ -24,6 +26,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit {
   protected mapWidth = 20;
 
   ngOnInit() {
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: CadeDesc } });
     this.ss.getGroup('l/cade', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 

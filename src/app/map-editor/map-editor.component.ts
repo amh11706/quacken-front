@@ -95,8 +95,8 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
     window.addEventListener('beforeunload', this.saveSession);
 
-    this.sub.add(this.socket.connected$.subscribe(() => {
-      this.socket.send(OutCmd.EditorJoin);
+    this.sub.add(this.socket.connected$.subscribe(v => {
+      if (v) this.socket.send(OutCmd.EditorJoin);
     }));
 
     window.addEventListener('keydown', this.handleKey);

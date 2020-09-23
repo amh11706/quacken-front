@@ -34,7 +34,7 @@
                [class.hex]="hex"
                *ngIf="boat.name || boat.isMe">
                <span class="boattitle"
-                     [title]="boat.name + titles[boat.treasure]"
+                     [title]="boat.title + titles[boat.treasure]"
                      [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
                     {{boat.name}}<img *ngIf="boat.treasure"
                          src="/assets/images/obstacle{{boat.treasure}}.png">
