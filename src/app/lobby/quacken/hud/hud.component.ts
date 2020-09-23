@@ -69,8 +69,8 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.turn > 0) this.locked = false;
       this.myBoat = b;
       this.checkMaxMoves();
+      this.resetMoves();
       if (!b.isMe) {
-        this.resetMoves();
         this.locked = true;
       }
     }));

@@ -38,7 +38,7 @@
             <button mat-raised-button
                     id="ready"
                     [class.cancel]="ready"
-                    (click)="toggleReady()">{{haveBoat ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' : 'Ready'}}</button>
+                    (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' : 'Ready'}}</button>
             <q-setting *ngIf="admin"
                        name="startNew"
                        id="start"></q-setting>

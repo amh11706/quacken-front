@@ -29,11 +29,12 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   defenders: Message[] = [];
   attackers: Message[] = [];
   teams: { [key: number]: TeamMessage } = {};
-  haveBoat = false;
+  myBoat = new Boat('');
   myTeam = 99;
   ready = false;
   admin = false;
   open = true;
+  private roundGoing = false;
 
   private subs = new Subscription();
 
@@ -46,8 +47,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
+      this.roundGoing = typeof m.turn === 'number' && m.turn <= 75;
       if (!m.players) return;
-      this.haveBoat = false;
       this.open = true;
       this.teams = m.players;
       this.admin = m.owner || this.admin;
@@ -75,17 +76,21 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (m.sId) this.removeUser(m.sId);
     }));
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
-      if (b.isMe) this.gotBoat();
-      else {
+      if (!this.roundGoing) {
+        this.myBoat.isMe = false;
         this.open = true;
-        this.haveBoat = false;
+        return;
       }
+      if (b.isMe && !this.myBoat.isMe) this.gotBoat();
+      else if (!b.isMe) this.open = true;
+      this.myBoat = b;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
-      if (t.turn <= 75) return;
+      this.roundGoing = t.turn <= 75;
+      if (this.roundGoing) return;
       this.open = true;
-      this.haveBoat = false;
+      this.myBoat.isMe = false;
     }));
     this.subs.add(this.ws.subscribe(Internal.OpenMenu, () => {
       this.open = true;
@@ -93,15 +98,13 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   }
 
   private gotBoat() {
-    if (this.haveBoat) return;
     this.open = false;
     this.ready = false;
-    this.haveBoat = true;
     for (const p of Object.values(this.teams)) p.r = false;
   }
 
   toggleReady() {
-    if (this.haveBoat) {
+    if (this.myBoat.isMe) {
       this.open = false;
       return;
     }

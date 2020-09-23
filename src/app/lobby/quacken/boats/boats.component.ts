@@ -184,13 +184,14 @@ export class BoatsComponent implements OnInit, OnDestroy {
           boat.ready = false;
         }
       }
+      this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
       this.ws.send(OutCmd.Sync);
       this.step = -1;
     } else if (this.turn) {
+      this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
       this.ws.send(OutCmd.Sync);
       clearTimeout(this.animateTimeout);
     }
-    this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
   }
 
   private handleTurn = (turn: Turn) => {
@@ -256,6 +257,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
 
     if (this.step === 4) this.resetBoats();
+    this.sortBoats();
 
     this.step++;
     const delay = (this.turn?.steps[this.step] || this.turn?.cSteps[this.step] ? 750 : 250) * 20 / this.speed;
@@ -264,7 +266,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   }
 
   trackBoatBy(_i: number, b: Boat): string {
-    return b.name;
+    return b.title || b.name;
   }
 
   private syncBoats = (sync: Sync) => {
@@ -277,6 +279,14 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this._boats = {};
       this.setBoats(sync.sync);
     }
+  }
+
+  protected sortBoats() {
+    this.boats.sort((a, b) => {
+      if (a.pos.y > b.pos.y) return 1;
+      if (a.pos.y < b.pos.y) return -1;
+      return b.pos.x - a.pos.x;
+    });
   }
 
   protected setBoats(boats: BoatSync[]) {
@@ -309,20 +319,21 @@ export class BoatsComponent implements OnInit, OnDestroy {
           if (sBoat.ty !== oldBoat.type || oldBoat.damage > 100) {
             this.map?.dispatchEvent(new Event('dblclick'));
             oldBoat.type = sBoat.ty;
-            this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: oldBoat });
+            setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: oldBoat }));
           }
           boat.moves = oldBoat.moves;
           boat.damage = oldBoat.damage;
           Object.assign(oldBoat, boat);
           this._boats[sBoat.id] = oldBoat;
         } else {
-          this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
+          setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat }));
           this.myBoat = boat;
           this.map?.dispatchEvent(new Event('dblclick'));
         }
       }
     }
     this.boats = Object.values(this._boats);
+    this.sortBoats();
   }
 
   private handleUpdate(updates: Clutter[]) {
