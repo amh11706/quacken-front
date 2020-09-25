@@ -80,6 +80,19 @@ export class CadeHudComponent extends HudComponent {
     this.ws.send(OutCmd.WantMove, this.wantMove);
   }
 
+  clickTile(ev: MouseEvent, slot: number) {
+    if (this.locked) return;
+    const moves = this.getMoves();
+    const move = moves[slot];
+    let wantMove = (ev.button + 1 + move) % 4;
+    while (this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0 && wantMove !== 0) {
+      wantMove = (ev.button + 1 + wantMove) % 4;
+    }
+    moves[slot] = wantMove;
+    this.checkMaxMoves();
+    this.sendMoves();
+  }
+
   checkMaxMoves() {
     this.usingMoves = [0, 0, 0];
     if (!this.locked) for (let i = 0; i < this.moves.length; i++) {

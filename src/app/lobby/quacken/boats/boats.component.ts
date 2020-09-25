@@ -254,7 +254,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
 
     if (this.step === 4) this.resetBoats();
-    this.sortBoats();
 
     this.step++;
     const delay = (this.turn?.steps[this.step] || this.turn?.cSteps[this.step] ? 750 : 250) * 20 / this.speed;
@@ -262,8 +261,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
     else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 2500);
   }
 
-  trackBoatBy(_i: number, b: Boat): string {
-    return b.title || b.name;
+  trackBoatBy(_i: number, b: Boat): number {
+    return b.id || 0;
   }
 
   private syncBoats = (sync: Sync) => {

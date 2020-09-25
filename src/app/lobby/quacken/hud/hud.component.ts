@@ -215,7 +215,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.ws.send(OutCmd.ChatCommand, '/start');
   }
 
-  private sendMoves() {
+  protected sendMoves() {
     this.ws.send(OutCmd.Moves, this.getMoves());
   }
 
