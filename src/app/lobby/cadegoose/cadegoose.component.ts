@@ -1,6 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as THREE from 'three';
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import Stats from 'three/examples/jsm/libs/stats.module.js';
+import { Sky } from 'three/examples/jsm/objects/Sky.js';
+import { Water } from 'three/examples/jsm/objects/Water.js';
 
 import { Boat } from '../quacken/boats/boat';
 import { Settings } from 'src/app/settings/setting/settings';
@@ -16,12 +20,29 @@ const ownerSettings: (keyof typeof Settings)[] = [
 
 export const CadeDesc = 'CadeGoose: Use your ship to contest flags and sink enemy ships in a battle for points.';
 
+const sunSettings = {
+  turbidity: 10,
+  rayleigh: 3.33,
+  mieCoefficient: 0.001,
+  mieDirectionalG: 0.995,
+  inclination: 0.48, // elevation / inclination
+  azimuth: 0.25, // Facing front,
+  exposure: 0.7,
+};
+
+interface ObstacleConfig { path: string; offsetX: number; offsetZ: number; scalar?: number; scaleY?: number; }
+
+const obstacleModels: Record<number, ObstacleConfig> = {
+  50: { path: 'rocks', offsetX: 0.35, offsetZ: 0.25, scaleY: 1.5 },
+  51: { path: 'stylized_rocks', offsetX: 0.5, offsetZ: 0.5, scalar: 0.5 },
+};
+
 @Component({
   selector: 'q-cadegoose',
   templateUrl: './cadegoose.component.html',
   styleUrls: ['./cadegoose.component.scss']
 })
-export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit {
+export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('frame') frame?: ElementRef;
   settings: SettingMap = { mapScale: 50, speed: 10 };
   hoveredTeam = -1;
@@ -29,12 +50,19 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected mapWidth = 20;
 
   private scene = new THREE.Scene();
-  private gridScene = new THREE.Scene();
+  private sunScene = new THREE.Scene();
   private camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   private controls?: MapControls;
   private renderer = new THREE.WebGLRenderer();
+  private lastFrame = new Date().valueOf();
   private frameRequested = false;
+  private water?: Water;
+
+  private tileGeometry?: THREE.Geometry;
   private tiles: Record<number, THREE.MeshBasicMaterial> = {};
+  private tileObjects: Record<number, GLTF> = {};
+  private mapObjects: THREE.Object3D[] = [];
+  private stats?: Stats;
 
   ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: CadeDesc } });
@@ -45,8 +73,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   ngAfterViewInit() {
-    this.renderer.autoClear = false;
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.autoClear = false;
     this.frame?.nativeElement.appendChild(this.renderer.domElement);
 
     this.camera.position.x = 10;
@@ -58,42 +86,150 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.controls.target = new THREE.Vector3(5, 0, 5);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.3;
-    this.controls.addEventListener('change', () => {
-      if (this.frameRequested) return;
-      this.frameRequested = true;
-      requestAnimationFrame(this.render);
-    });
+    this.controls.minDistance = 2;
+    this.controls.maxDistance = 35;
+    this.controls.rotateSpeed = 0.75;
+    this.controls.addEventListener('change', this.requestRender);
     this.controls.update();
 
+    const light = new THREE.AmbientLight(0x404040, 5); // soft white light
+    this.scene.add(light);
+
+    this.buildWater();
+    this.buildSky();
     this.buildGrid();
-    this.fillMap();
-    this.render();
+    this.requestRender();
+
+    this.stats = Stats();
+    this.frame?.nativeElement.appendChild(this.stats.dom);
+
+    window.addEventListener('resize', this.onWindowResize, false);
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.onWindowResize);
   }
 
   private animate = () => {
     requestAnimationFrame(this.animate);
-    this.render();
+    this.requestRender();
+  }
+
+  private requestRender = () => {
+    if (this.frameRequested) return;
+    this.frameRequested = true;
+    requestAnimationFrame(this.render);
   }
 
   private render = () => {
+    const time = new Date().valueOf();
+    (this.water?.material as any).uniforms['time'].value += (time - this.lastFrame) / 5000;
+    this.lastFrame = time;
+
     this.renderer.clear();
+    this.renderer.toneMapping = 0;
     this.renderer.render(this.scene, this.camera);
-    this.renderer.clearDepth();
-    this.renderer.render(this.gridScene, this.camera);
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.render(this.sunScene, this.camera);
+
     this.frameRequested = false;
     this.controls?.update();
+    this.stats?.update();
+    this.requestRender();
   }
 
+  private onWindowResize = () => {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.requestRender();
+  }
+
+  private buildWater() {
+    const waterGeometry = new THREE.PlaneBufferGeometry(10000, 10000);
+
+    this.water = new Water(
+      waterGeometry,
+      {
+        textureWidth: 512,
+        textureHeight: 512,
+        waterNormals: new THREE.TextureLoader().load('assets/images/waternormals.jpg', function (texture) {
+          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        }),
+        alpha: 1.0,
+        sunDirection: new THREE.Vector3(),
+        sunColor: 0xaaaaaa,
+        waterColor: 0x001e0f,
+        distortionScale: 6,
+        fog: this.scene.fog !== undefined
+      }
+    );
+
+    this.water.rotation.x = - Math.PI / 2;
+
+    const material = this.water.material as THREE.ShaderMaterial;
+    material.uniforms.size.value = 10;
+
+    this.scene.add(this.water);
+  }
+
+  private buildSky() {
+    const sky = new Sky();
+    sky.scale.setScalar(450000);
+    this.scene.add(sky);
+
+    const sky2 = new Sky();
+    sky2.scale.setScalar(400000);
+    this.sunScene.add(sky2);
+
+    const sun = new THREE.Vector3();
+    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+
+    const uniforms = sky.material.uniforms;
+    sky2.material.uniforms = uniforms;
+    uniforms['turbidity'].value = sunSettings.turbidity;
+    uniforms['rayleigh'].value = sunSettings.rayleigh;
+    uniforms['mieCoefficient'].value = sunSettings.mieCoefficient;
+    uniforms['mieDirectionalG'].value = sunSettings.mieDirectionalG;
+
+    const theta = Math.PI * (sunSettings.inclination - 0.5);
+    const phi = 2 * Math.PI * (sunSettings.azimuth - 0.5);
+
+    sun.x = Math.cos(phi);
+    sun.y = Math.sin(phi) * Math.sin(theta);
+    sun.z = Math.sin(phi) * Math.cos(theta);
+
+    uniforms.sunPosition.value.copy(sun);
+    (this.water?.material as any).uniforms['sunDirection'].value.copy(sun).normalize();
+
+    this.scene.environment = pmremGenerator.fromScene(sky as any).texture;
+  }
+
+  private loadObj(obj: ObstacleConfig): Promise<GLTF> {
+    return new Promise((resolve) => {
+      const loader = new GLTFLoader();
+      loader.load('assets/models/' + obj.path + '/scene.gltf', (gltf) => {
+        gltf.scene.position.x = obj.offsetX;
+        gltf.scene.position.z = obj.offsetZ;
+        if (obj.scalar) gltf.scene.scale.setScalar(obj.scalar);
+        if (obj.scaleY) gltf.scene.scale.setY(obj.scaleY);
+        gltf.scene.position.y = -new THREE.Box3().setFromObject(gltf.scene).min.y;
+        resolve(gltf);
+      }, undefined, function (error) {
+        console.error(error);
+      });
+    });
+  }
 
   private buildGrid() {
     const grid = new THREE.Object3D();
-    grid.position.y = -0.01;
+    grid.position.y = 0.05;
     let points: THREE.Vector3[] = [];
     for (let i = 0; i <= this.map[0].length; i++) {
       points.push(new THREE.Vector3(i, 0, 0));
     }
     let geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({ color: 'darkgrey' });
+    const material = new THREE.LineBasicMaterial({ color: '#666' });
     let line = new THREE.Line(geometry, material);
     for (let i = 0; i <= this.map.length; i++) {
       grid.add(line);
@@ -101,7 +237,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       line.position.z++;
     }
 
-    geometry.dispose();
     points = [];
     for (let i = 0; i <= this.map.length; i++) {
       points.push(new THREE.Vector3(0, 0, i));
@@ -113,53 +248,74 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       line = line.clone();
       line.position.x++;
     }
-    geometry.dispose();
-    material.dispose();
-    this.gridScene.add(grid);
+    this.scene.add(grid);
+  }
+
+  protected setMapB64(map: string) {
+    super.setMapB64(map);
+    this.fillMap();
   }
 
   private fillMap() {
-    const geometry = new THREE.BoxGeometry(1, 0, 1);
+    this.scene.remove(...this.mapObjects);
+    this.mapObjects = [];
+
+    const geometry = this.tileGeometry || new THREE.BoxGeometry(1, 0, 1);
+    this.tileGeometry = geometry;
     const loader = new THREE.TextureLoader();
-    const water = loader.load('assets/images/water.png', this.render);
-    const material = new THREE.MeshBasicMaterial({ map: water, transparent: true });
-    let square = new THREE.Mesh(geometry, material);
-    material.dispose();
+    let square = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true }));
+    const objs: { x: number, y: number, tile: number }[] = [];
 
     for (let y = 0; y < this.map.length; y++) {
       for (let x = 0; x < this.map[y].length; x++) {
-        square.position.x = 0.5 + x;
-        square.position.z = 0.5 + y;
-        this.scene.add(square);
-
         const tile = this.map[y][x];
         if (tile > 0) {
-          let mat = this.tiles[tile];
-          if (!mat) {
-            mat = square.material.clone();
-            mat.map = loader.load('assets/images/obstacle' + tile + '.png', this.render);
-            this.tiles[tile] = mat;
+          if (obstacleModels[tile]) {
+            // load 3d
+            objs.push({ x, y, tile });
+
+          } else {
+            // load 2d
+            let mat = this.tiles[tile];
+            if (!mat) {
+              mat = square.material.clone();
+              mat.map = loader.load('assets/images/obstacle' + tile + '.png', this.requestRender);
+              mat.map.minFilter = THREE.LinearFilter;
+              mat.map.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+              this.tiles[tile] = mat;
+            }
+            square.position.x = 0.5 + x;
+            square.position.z = 0.5 + y;
+            const toPlace = square.clone();
+            toPlace.material = mat;
+            toPlace.position.y = 0.05;
+            this.scene.add(toPlace);
+            this.mapObjects.push(toPlace);
+            square = square.clone();
           }
-          const toPlace = square.clone();
-          toPlace.material = mat;
-          toPlace.position.y = 0.01;
-          this.scene.add(toPlace);
         }
-        square = square.clone();
       }
     }
-    geometry.dispose();
+
+    setTimeout(async () => {
+      for (const o of objs) {
+        let model = this.tileObjects[o.tile];
+        if (!model) {
+          model = await this.loadObj(obstacleModels[o.tile]);
+          this.tileObjects[o.tile] = model;
+        }
+        const newObj = model.scene.clone();
+        newObj.position.x += o.x;
+        newObj.position.z += o.y;
+        this.scene.add(newObj);
+        this.mapObjects.push(newObj);
+        this.requestRender();
+      }
+    });
   }
 
   async getSettings() {
     this.settings = await this.ss.getGroup('cade');
-  }
-
-  saveScale() {
-    clearTimeout(this.wheelDebounce);
-    this.wheelDebounce = window.setTimeout(() => {
-      this.ss.save({ id: 22, value: this.settings.mapScale, name: 'mapScale', group: 'cade' });
-    }, 1000);
   }
 
 }
