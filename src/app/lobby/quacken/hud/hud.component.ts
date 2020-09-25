@@ -75,7 +75,7 @@ export class HudComponent implements OnInit, OnDestroy {
       }
     }));
     this.subs.add(this.ws.subscribe(Internal.UnlockMoves, () => {
-      if (!this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
+      if (!this.locked || !this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
       this.resetMoves();
       this.locked = false;
       if (this.selected !== -1) this.selected = 0;
@@ -86,7 +86,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
     this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       this.turn = m.turn ?? this.turn;
-      if (this.turn > 0) this.locked = false;
+      if (this.turn > 0 && this.myBoat.isMe) this.locked = false;
       else {
         this.myBoat.ready = false;
         this.locked = true;

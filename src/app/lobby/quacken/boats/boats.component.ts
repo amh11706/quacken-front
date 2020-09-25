@@ -177,20 +177,17 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     if (this.blurred) {
       clearTimeout(this.animateTimeout);
-      if (this.step >= 0) {
+      if (this.step >= 0 || this.turn) {
         for (const boat of this.boats) {
           boat.moves = [0, 0, 0, 0];
           boat.bomb = 0;
           boat.ready = false;
         }
       }
-      this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
       this.ws.send(OutCmd.Sync);
       this.step = -1;
-    } else if (this.turn) {
+    } else {
       this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
-      this.ws.send(OutCmd.Sync);
-      clearTimeout(this.animateTimeout);
     }
   }
 
@@ -227,7 +224,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.moves = [0, 0, 0, 0];
       boat.bomb = 0;
     }
-    if (this.turn && this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
+    this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
   }
 
   private playTurn = () => {
@@ -262,7 +259,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.step++;
     const delay = (this.turn?.steps[this.step] || this.turn?.cSteps[this.step] ? 750 : 250) * 20 / this.speed;
     if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, delay);
-    else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 1500);
+    else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 2500);
   }
 
   trackBoatBy(_i: number, b: Boat): string {
@@ -334,6 +331,11 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
     this.boats = Object.values(this._boats);
     this.sortBoats();
+
+    if (this.myBoat.isMe && !this._boats[this.ws.sId || 0]) {
+      this.myBoat = new Boat('');
+      this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
+    }
   }
 
   private handleUpdate(updates: Clutter[]) {

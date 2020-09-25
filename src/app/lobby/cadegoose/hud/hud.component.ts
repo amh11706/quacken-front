@@ -92,6 +92,7 @@ export class CadeHudComponent extends HudComponent {
   }
 
   addShot(i: number) {
+    if (this.locked) return;
     const oldShots = this.shots[i];
     this.shots[i] = (oldShots + 1) % (this.myBoat.doubleShot ? 3 : 2);
     this.usingCannons += this.shots[i] - oldShots;
