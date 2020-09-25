@@ -85,7 +85,7 @@ export class CadeHudComponent extends HudComponent {
     const moves = this.getMoves();
     const move = moves[slot];
     let wantMove = (ev.button + 1 + move) % 4;
-    while (this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0 && wantMove !== 0) {
+    while (wantMove !== 0 && this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0) {
       wantMove = (ev.button + 1 + wantMove) % 4;
     }
     moves[slot] = wantMove;
