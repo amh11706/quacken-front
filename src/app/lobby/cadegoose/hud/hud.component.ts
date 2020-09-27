@@ -80,6 +80,19 @@ export class CadeHudComponent extends HudComponent {
     this.ws.send(OutCmd.WantMove, this.wantMove);
   }
 
+  clickTile(ev: MouseEvent, slot: number) {
+    if (this.locked) return;
+    const moves = this.getMoves();
+    const move = moves[slot];
+    let wantMove = (ev.button + 1 + move) % 4;
+    while (wantMove !== 0 && this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0) {
+      wantMove = (ev.button + 1 + wantMove) % 4;
+    }
+    moves[slot] = wantMove;
+    this.checkMaxMoves();
+    this.sendMoves();
+  }
+
   checkMaxMoves() {
     this.usingMoves = [0, 0, 0];
     if (!this.locked) for (let i = 0; i < this.moves.length; i++) {
@@ -92,6 +105,7 @@ export class CadeHudComponent extends HudComponent {
   }
 
   addShot(i: number) {
+    if (this.locked) return;
     const oldShots = this.shots[i];
     this.shots[i] = (oldShots + 1) % (this.myBoat.doubleShot ? 3 : 2);
     this.usingCannons += this.shots[i] - oldShots;
