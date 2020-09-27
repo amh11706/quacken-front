@@ -82,7 +82,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   myBoat = new Boat('');
   boats: Boat[] = [];
 
-  private _boats: { [k: number]: Boat } = {};
+  protected _boats: { [k: number]: Boat } = {};
   private subs = new Subscription();
   private animateTimeout?: number;
   private blurred = false;
@@ -230,7 +230,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (this.turn && this.turn.turn <= 90) this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
   }
 
-  private playTurn = () => {
+  protected playTurn() {
     const clutterPart = this.turn?.cSteps[this.step] || [];
     setTimeout(() => this.handleUpdate(clutterPart), 10000 / this.speed);
     const turnPart = this.turn?.steps[this.step] || [];
@@ -261,7 +261,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     this.step++;
     const delay = (this.turn?.steps[this.step] || this.turn?.cSteps[this.step] ? 750 : 250) * 20 / this.speed;
-    if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, delay);
+    if (this.step < 8) this.animateTimeout = window.setTimeout(() => this.playTurn, delay);
     else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 1500);
   }
 

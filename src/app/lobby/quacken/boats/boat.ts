@@ -25,6 +25,7 @@ export class Boat {
   offsetY = 0;
   moveLock = 0;
   spinDeg = 90;
+  rendered = false;
 
   constructor(
     public name: string,

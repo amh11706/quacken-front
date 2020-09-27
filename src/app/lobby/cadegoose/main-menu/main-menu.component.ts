@@ -49,7 +49,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       this.roundGoing = typeof m.turn === 'number' && m.turn <= 75;
       if (!m.players) return;
-      this.open = false;
+      this.open = true;
       this.teams = m.players;
       this.admin = m.owner || this.admin;
       this.ready = false;

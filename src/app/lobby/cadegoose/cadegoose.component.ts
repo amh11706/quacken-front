@@ -5,12 +5,16 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import { Water } from 'three/examples/jsm/objects/Water.js';
+import TWEEN from '@tweenjs/tween.js';
 
 import { Boat } from '../quacken/boats/boat';
 import { Settings } from 'src/app/settings/setting/settings';
 import { QuackenComponent } from '../quacken/quacken.component';
-import { SettingMap } from 'src/app/settings/settings.service';
+import { SettingMap, SettingsService } from 'src/app/settings/settings.service';
 import { InCmd, Internal } from 'src/app/ws-messages';
+import { FriendsService } from 'src/app/chat/friends/friends.service';
+import { WsService } from 'src/app/ws.service';
+import { BoatService } from './boat.service';
 
 const baseSettings: (keyof typeof Settings)[] = ['cadeMapScale', 'cadeSpeed'];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -29,12 +33,17 @@ const sunSettings = {
   azimuth: 0.25, // Facing front,
   exposure: 0.7,
 };
+const GRID_DEPTH = -0.2;
 
-interface ObstacleConfig { path: string; offsetX: number; offsetZ: number; scalar?: number; scaleY?: number; }
+export interface ObstacleConfig {
+  path: string; ext?: string;
+  offsetX: number; offsetZ: number; offsetY?: number;
+  scalar?: number; scaleY?: number; rotate?: number;
+}
 
 const obstacleModels: Record<number, ObstacleConfig> = {
-  50: { path: 'rocks', offsetX: 0.35, offsetZ: 0.25, scaleY: 1.5 },
-  51: { path: 'stylized_rocks', offsetX: 0.5, offsetZ: 0.5, scalar: 0.5 },
+  50: { path: 'rocks', offsetX: 0.35, offsetZ: 0.25 },
+  51: { path: 'stylized_rocks', offsetX: 0.5, offsetZ: 0.5, scalar: 0.5, scaleY: 0.25 },
 };
 
 @Component({
@@ -54,76 +63,94 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   private controls?: MapControls;
   private renderer = new THREE.WebGLRenderer();
-  private lastFrame = new Date().valueOf();
-  private frameRequested = false;
+  private lastFrame = 0;
+  private frameRequested = true;
   private water?: Water;
 
   private tileGeometry?: THREE.Geometry;
-  private tiles: Record<number, THREE.MeshBasicMaterial> = {};
+  private tiles: Record<number, THREE.MeshStandardMaterial> = {};
   private tileObjects: Record<number, GLTF> = {};
   private mapObjects: THREE.Object3D[] = [];
   private stats?: Stats;
 
-  ngOnInit() {
+  constructor(
+    protected ws: WsService,
+    protected ss: SettingsService,
+    protected fs: FriendsService,
+    private bs: BoatService,
+  ) {
+    super(ws, ss, fs);
+    bs.setScene(this.scene, this.loadObj);
+
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.autoClear = false;
+
+    const light = new THREE.AmbientLight(0x404040, 7); // soft white light
+    this.scene.add(light);
+
+    this.buildWater();
+    this.buildSky();
+
+    window.addEventListener('resize', this.onWindowResize, false);
+  }
+
+  async ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: CadeDesc } });
     this.ss.getGroup('l/cade', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
+
+    this.buildGrid();
   }
 
   ngAfterViewInit() {
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.autoClear = false;
     this.frame?.nativeElement.appendChild(this.renderer.domElement);
 
-    this.camera.position.x = 10;
-    this.camera.position.y = 10;
-    this.camera.position.z = 10;
+    this.camera.position.x = 5;
+    this.camera.position.y = 15;
+    this.camera.position.z = 38;
 
     this.controls = new MapControls(this.camera, this.frame?.nativeElement);
-    this.controls.maxPolarAngle = Math.PI * 7 / 16;
-    this.controls.target = new THREE.Vector3(5, 0, 5);
+    this.controls.maxPolarAngle = Math.PI * 15 / 32;
+    this.controls.target = new THREE.Vector3(10, 0.3, 33);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.3;
-    this.controls.minDistance = 2;
+    this.controls.minDistance = 1;
     this.controls.maxDistance = 35;
     this.controls.rotateSpeed = 0.75;
     this.controls.addEventListener('change', this.requestRender);
     this.controls.update();
 
-    const light = new THREE.AmbientLight(0x404040, 5); // soft white light
-    this.scene.add(light);
-
-    this.buildWater();
-    this.buildSky();
-    this.buildGrid();
-    this.requestRender();
-
     this.stats = Stats();
     this.frame?.nativeElement.appendChild(this.stats.dom);
 
-    window.addEventListener('resize', this.onWindowResize, false);
+    this.lastFrame = new Date().valueOf();
+    this.frameRequested = false;
+    this.requestRender();
   }
 
   ngOnDestroy() {
     window.removeEventListener('resize', this.onWindowResize);
   }
 
-  private animate = () => {
-    requestAnimationFrame(this.animate);
+  private animate = (t: number) => {
+    this.render(t);
     this.requestRender();
   }
 
   private requestRender = () => {
     if (this.frameRequested) return;
     this.frameRequested = true;
-    requestAnimationFrame(this.render);
+    requestAnimationFrame(this.animate);
   }
 
-  private render = () => {
+  private render = (t: number) => {
     const time = new Date().valueOf();
-    (this.water?.material as any).uniforms['time'].value += (time - this.lastFrame) / 5000;
+    if (this.water) {
+      (this.water.material as THREE.ShaderMaterial).uniforms['time'].value += (time - this.lastFrame) / 5000;
+    }
+    TWEEN.update(t);
     this.lastFrame = time;
 
     this.renderer.clear();
@@ -135,7 +162,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.frameRequested = false;
     this.controls?.update();
     this.stats?.update();
-    this.requestRender();
   }
 
   private onWindowResize = () => {
@@ -156,7 +182,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
         waterNormals: new THREE.TextureLoader().load('assets/images/waternormals.jpg', function (texture) {
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         }),
-        alpha: 1.0,
+        alpha: 0.6,
         sunDirection: new THREE.Vector3(),
         sunColor: 0xaaaaaa,
         waterColor: 0x001e0f,
@@ -168,8 +194,10 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.water.rotation.x = - Math.PI / 2;
 
     const material = this.water.material as THREE.ShaderMaterial;
-    material.uniforms.size.value = 10;
+    material.transparent = true;
+    material.uniforms.size.value = 50;
 
+    this.water.renderOrder = 2;
     this.scene.add(this.water);
   }
 
@@ -200,7 +228,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     sun.z = Math.sin(phi) * Math.cos(theta);
 
     uniforms.sunPosition.value.copy(sun);
-    (this.water?.material as any).uniforms['sunDirection'].value.copy(sun).normalize();
+    (this.water?.material as THREE.ShaderMaterial).uniforms['sunDirection'].value.copy(sun).normalize();
 
     this.scene.environment = pmremGenerator.fromScene(sky as any).texture;
   }
@@ -208,12 +236,14 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private loadObj(obj: ObstacleConfig): Promise<GLTF> {
     return new Promise((resolve) => {
       const loader = new GLTFLoader();
-      loader.load('assets/models/' + obj.path + '/scene.gltf', (gltf) => {
+      loader.load('assets/models/' + obj.path + '/scene.' + (obj.ext || 'gltf'), (gltf) => {
         gltf.scene.position.x = obj.offsetX;
         gltf.scene.position.z = obj.offsetZ;
         if (obj.scalar) gltf.scene.scale.setScalar(obj.scalar);
         if (obj.scaleY) gltf.scene.scale.setY(obj.scaleY);
-        gltf.scene.position.y = -new THREE.Box3().setFromObject(gltf.scene).min.y;
+        gltf.scene.position.y = -new THREE.Box3().setFromObject(gltf.scene).min.y - 0.25;
+        gltf.scene.position.y += obj.offsetY || 0;
+        if (obj.rotate) gltf.scene.rotateY(obj.rotate);
         resolve(gltf);
       }, undefined, function (error) {
         console.error(error);
@@ -223,13 +253,13 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   private buildGrid() {
     const grid = new THREE.Object3D();
-    grid.position.y = 0.05;
+    grid.position.y = GRID_DEPTH;
     let points: THREE.Vector3[] = [];
     for (let i = 0; i <= this.map[0].length; i++) {
       points.push(new THREE.Vector3(i, 0, 0));
     }
     let geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({ color: '#666' });
+    const material = new THREE.LineBasicMaterial({ color: '#fff' });
     let line = new THREE.Line(geometry, material);
     for (let i = 0; i <= this.map.length; i++) {
       grid.add(line);
@@ -248,6 +278,19 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       line = line.clone();
       line.position.x++;
     }
+
+    const szGeo = new THREE.PlaneGeometry(20, 3);
+    const szMat = new THREE.MeshBasicMaterial({ color: 'cyan', opacity: 0.2, transparent: true });
+    let sz = new THREE.Mesh(szGeo, szMat);
+    sz.rotateX(-Math.PI / 2);
+    sz.position.x = 10;
+    sz.position.z = 1.5;
+    sz.position.y = -0.01;
+    grid.add(sz);
+    sz = sz.clone();
+    sz.position.z += 33;
+    grid.add(sz);
+
     this.scene.add(grid);
   }
 
@@ -260,10 +303,12 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.scene.remove(...this.mapObjects);
     this.mapObjects = [];
 
-    const geometry = this.tileGeometry || new THREE.BoxGeometry(1, 0, 1);
+    const geometry = this.tileGeometry || new THREE.PlaneGeometry(1, 1);
+    geometry.rotateX(-Math.PI / 2);
     this.tileGeometry = geometry;
     const loader = new THREE.TextureLoader();
-    let square = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true }));
+    let square = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ transparent: true }));
+    square.position.y = GRID_DEPTH;
     const objs: { x: number, y: number, tile: number }[] = [];
 
     for (let y = 0; y < this.map.length; y++) {
@@ -279,18 +324,16 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
             let mat = this.tiles[tile];
             if (!mat) {
               mat = square.material.clone();
-              mat.map = loader.load('assets/images/obstacle' + tile + '.png', this.requestRender);
+              mat.map = loader.load('assets/images/obstacle' + tile + '.png');
               mat.map.minFilter = THREE.LinearFilter;
-              mat.map.anisotropy = this.renderer.capabilities.getMaxAnisotropy();
+              mat.map.anisotropy = this.renderer.capabilities.getMaxAnisotropy() || 0;
               this.tiles[tile] = mat;
             }
             square.position.x = 0.5 + x;
             square.position.z = 0.5 + y;
-            const toPlace = square.clone();
-            toPlace.material = mat;
-            toPlace.position.y = 0.05;
-            this.scene.add(toPlace);
-            this.mapObjects.push(toPlace);
+            square.material = mat;
+            this.scene.add(square);
+            this.mapObjects.push(square);
             square = square.clone();
           }
         }
@@ -309,7 +352,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
         newObj.position.z += o.y;
         this.scene.add(newObj);
         this.mapObjects.push(newObj);
-        this.requestRender();
       }
     });
   }
