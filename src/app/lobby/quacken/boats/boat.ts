@@ -106,5 +106,6 @@ export class Boat {
   private enterSZ() {
     this.enteringSZ = true;
     this.opacity = 0;
+    this.imageOpacity = 0;
   }
 }

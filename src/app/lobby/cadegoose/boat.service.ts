@@ -187,7 +187,6 @@ export class BoatService extends BoatsComponent {
   }
 
   private updateRender() {
-    console.log(this.boats, this.boatRenders)
     if (this.rendering || !this.scene || !this.getModel || !this.controls) return;
     this.rendering = true;
 
@@ -346,6 +345,8 @@ export class BoatService extends BoatsComponent {
       new TWEEN.Tween(br.obj.scale as any)
         .to({ x: 0, y: 0, z: 0 }, 5000)
         .start(startTime);
+
+      boat.imageOpacity = 1;
     }
     br.rotateDeg = boat.face;
   }
