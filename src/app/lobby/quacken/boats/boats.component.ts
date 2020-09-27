@@ -162,6 +162,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       const pos = this.myBoat.pos;
       this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: new Boat('').setPos(pos.x, pos.y) });
       this.myBoat.isMe = false;
+      this.myBoat.rendered = false;
     }
     if (this.turn) return;
     delete this._boats[id];
@@ -286,7 +287,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   }
 
   protected setBoats(boats: BoatSync[]) {
-    if (this.turn) return;
+    if (this.turn && boats.length > 1) return;
     for (const sBoat of boats) {
       if (sBoat.oId) delete this._boats[sBoat.oId];
       const oldBoat = this.myBoat;

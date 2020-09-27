@@ -102,8 +102,7 @@ export class BoatService extends BoatsComponent {
 
   protected deleteBoat(id: number) {
     super.deleteBoat(id);
-    const br = this.boatRenders.find(b => b.id === id);
-    if (br) this.delBoatRender(br);
+    this.updateRender();
   }
 
 
@@ -117,20 +116,10 @@ export class BoatService extends BoatsComponent {
 
       if (u.c && u.c > 0) boat.addDamage(u.c - 1, u.cd || 0);
       boat.rotateTransition = 1;
-      boat.setTreasure(u.t)
-        .setPos(u.x, u.y)
-        .setTransition(u.tf, u.tm)
-        .draw();
+      boat.setPos(u.x, u.y)
+        .setTransition(u.tf, u.tm);
 
-      if (u.s) {
-        boat.face += boat.spinDeg * u.s;
-        if (u.s > -2) {
-          boat.rotateTransition = 4;
-          setTimeout(() => { if (u.tm) boat.rotateByMove(u.tm).rotateTransition = 1; }, 300);
-        } else {
-          boat.rotateByMove(u.tm).rotateTransition = 3;
-        }
-      } else boat.rotateByMove(u.tm);
+      boat.rotateByMove(u.tm);
     }
 
     if (this.step === 4) this.resetBoats();
@@ -198,6 +187,7 @@ export class BoatService extends BoatsComponent {
   }
 
   private updateRender() {
+    console.log(this.boats, this.boatRenders)
     if (this.rendering || !this.scene || !this.getModel || !this.controls) return;
     this.rendering = true;
 
