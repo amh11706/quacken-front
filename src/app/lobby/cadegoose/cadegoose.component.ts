@@ -72,6 +72,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private tileObjects: Record<number, GLTF> = {};
   private mapObjects: THREE.Object3D[] = [];
   private stats?: Stats;
+  private cameraTween: any;
+  private controlTween: any;
 
   constructor(
     protected ws: WsService,
@@ -80,7 +82,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     private bs: BoatService,
   ) {
     super(ws, ss, fs);
-    bs.setScene(this.scene, this.loadObj);
+    bs.setScene(this.scene, this.loadObj, this.camera);
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.autoClear = false;
@@ -94,7 +96,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     window.addEventListener('resize', this.onWindowResize, false);
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: CadeDesc } });
     this.ss.getGroup('l/cade', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
@@ -106,6 +108,24 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngAfterViewInit() {
     this.frame?.nativeElement.appendChild(this.renderer.domElement);
+    this.frame?.nativeElement.addEventListener('dblclick', () => {
+      if (!this.myBoat.isMe || this.cameraTween) return;
+      const time = new Date().valueOf();
+      const pos = this.myBoat.pos;
+      this.cameraTween = new TWEEN.Tween(this.camera.position as any)
+        .to({ x: pos.x - 2.5, y: 9, z: pos.y + 3.5 }, 1000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onComplete(() => delete this.cameraTween)
+        .start(time);
+
+      if (!this.controls || this.controlTween) return;
+      this.controlTween = new TWEEN.Tween(this.controls.target as any)
+        .to({ x: pos.x + 0.5, z: pos.y + 0.5 }, 1000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onComplete(() => delete this.controlTween)
+        .start(time);
+    });
+    this.bs.map = this.frame?.nativeElement;
 
     this.camera.position.x = 5;
     this.camera.position.y = 15;
@@ -121,6 +141,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.controls.rotateSpeed = 0.75;
     this.controls.addEventListener('change', this.requestRender);
     this.controls.update();
+    this.bs.setControls(this.controls);
 
     this.stats = Stats();
     this.frame?.nativeElement.appendChild(this.stats.dom);
@@ -134,8 +155,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     window.removeEventListener('resize', this.onWindowResize);
   }
 
-  private animate = (t: number) => {
-    this.render(t);
+  private animate = () => {
+    this.render();
     this.requestRender();
   }
 
@@ -145,12 +166,13 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     requestAnimationFrame(this.animate);
   }
 
-  private render = (t: number) => {
+  private render = () => {
+    this.bs.speed = this.settings.speed || 15;
     const time = new Date().valueOf();
     if (this.water) {
       (this.water.material as THREE.ShaderMaterial).uniforms['time'].value += (time - this.lastFrame) / 5000;
     }
-    TWEEN.update(t);
+    TWEEN.update(time);
     this.lastFrame = time;
 
     this.renderer.clear();

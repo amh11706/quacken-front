@@ -26,6 +26,7 @@ export class Boat {
   moveLock = 0;
   spinDeg = 90;
   rendered = false;
+  crunchDir = -1;
 
   constructor(
     public name: string,
@@ -74,7 +75,11 @@ export class Boat {
   }
 
   addDamage(crunchDir: number, damage: number = 1) {
-    if (damage >= 100) setTimeout(() => this.sink(), 500);
+    this.crunchDir = crunchDir;
+    if (damage >= 100) {
+      this.damage = this.maxDamage;
+      this.sink();
+    }
     setTimeout(() => this.crunch(crunchDir), 100);
     return this;
   }
