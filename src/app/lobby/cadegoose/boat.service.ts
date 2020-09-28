@@ -10,18 +10,32 @@ import { OutCmd } from 'src/app/ws-messages';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Boat } from '../quacken/boats/boat';
 
+const checkSZ = (pos: { x: number, y: number }) => {
+  return pos.y > 32 || pos.y < 3;
+};
+
+function headerColor(boat: Boat): string {
+  if (boat.isMe) {
+    if (boat.team) return 'red';
+    return 'lime';
+  }
+  if (boat.team) return '#ff6600';
+  return '#019901';
+}
+
+const moveColor = [,
+  '#b9cef1',
+  '#97c469',
+  '#ff9d55',
+  '#eee',
+  'red',
+];
+
 const moveEase: any[] = [,
   TWEEN.Easing.Linear.None,
   TWEEN.Easing.Quadratic.In,
   TWEEN.Easing.Quadratic.Out,
   TWEEN.Easing.Linear.None,
-];
-
-const rotateTransition = [,
-  ,
-  { duration: 3000, easing: TWEEN.Easing.Linear.None, delay: 500 },
-  { duration: 1000, easing: TWEEN.Easing.Quadratic.InOut },
-  { duration: 200, easing: TWEEN.Easing.Quadratic.InOut },
 ];
 
 const shipModels: any = {
@@ -39,6 +53,8 @@ interface BoatRender {
   pos: { x: number, y: number };
   rotateDeg: number;
   name: string;
+  team: number;
+  moves: number[];
 }
 
 @Injectable({
@@ -97,6 +113,7 @@ export class BoatService extends BoatsComponent {
 
   protected setBoats(b: BoatSync[]) {
     super.setBoats(b);
+    for (const boat of this.boats) boat.checkSZ = checkSZ;
     this.updateRender();
   }
 
@@ -105,6 +122,32 @@ export class BoatService extends BoatsComponent {
     this.updateRender();
   }
 
+  protected handleMoves(s: { t: number, m: number[] }) {
+    const boat = this._boats[s.t];
+    if (!boat) return;
+    boat.moves = s.m;
+    const br = this.boatRenders.find(r => r.id === s.t);
+    if (br) for (let i = 0; i < boat.moves.length; i++) {
+      if (boat.moves[i] !== br.moves[i]) {
+        this.rebuildHeader(boat, br);
+        return;
+      }
+    }
+  }
+
+  protected resetBoats(): void {
+    super.resetBoats();
+    renderLoop:
+    for (const br of this.boatRenders) {
+      const boat = this._boats[br.id];
+      for (let i = 0; i < boat.moves.length; i++) {
+        if (boat.moves[i] !== br.moves[i]) {
+          this.rebuildHeader(boat, br);
+          continue renderLoop;
+        }
+      }
+    }
+  }
 
   protected playTurn = () => {
     const clutterPart = this.turn?.cSteps[this.step] || [];
@@ -114,12 +157,11 @@ export class BoatService extends BoatsComponent {
       const boat = this._boats[u.id];
       if (!boat || u.tm === undefined || u.tf === undefined) continue;
 
-      if (u.c && u.c > 0) boat.addDamage(u.c - 1, u.cd || 0);
       boat.rotateTransition = 1;
+      if (u.c && u.c > 0) boat.addDamage(u.c - 1, u.cd || 0);
       boat.setPos(u.x, u.y)
-        .setTransition(u.tf, u.tm);
-
-      boat.rotateByMove(u.tm);
+        .setTransition(u.tf, u.tm)
+        .rotateByMove(u.tm);
     }
 
     if (this.step === 4) this.resetBoats();
@@ -131,16 +173,16 @@ export class BoatService extends BoatsComponent {
     if (this.turn?.steps[this.step - 1]?.length) this.updateRender();
   }
 
-  private makeName(name: string, size = 36): THREE.Sprite {
+  private makeHeader(boat: Boat, size = 36): THREE.Sprite {
     const ctx = document.createElement('canvas').getContext('2d');
     if (!ctx) return new THREE.Sprite();
     const font = `${size}px bold sans-serif`;
     ctx.font = font;
 
-    const width = ctx.measureText(name).width;
+    const width = ctx.measureText(boat.name).width;
     const height = size;
     ctx.canvas.width = width;
-    ctx.canvas.height = height;
+    ctx.canvas.height = height + 36;
 
     // need to set font again after resizing canvas
     ctx.font = font;
@@ -148,8 +190,17 @@ export class BoatService extends BoatsComponent {
     ctx.textAlign = 'center';
 
     ctx.translate(width / 2, height / 2);
-    ctx.fillStyle = 'blue';
-    ctx.fillText(name, 0, 0);
+    ctx.fillStyle = headerColor(boat);
+    ctx.fillText(boat.name, 0, 0);
+
+    for (let i = 0; i < boat.moves.length; i++) {
+      const color = moveColor[boat.moves[i]];
+      if (!color) continue;
+      ctx.fillStyle = color;
+      ctx.fillRect(-60 + 30 * i, 18, 30, 20);
+    }
+    ctx.lineWidth = 2;
+    ctx.strokeRect(- 60, 18, 120, 20);
 
     const canvas = ctx.canvas;
     const texture = new THREE.CanvasTexture(canvas);
@@ -167,8 +218,8 @@ export class BoatService extends BoatsComponent {
 
     const sprite = new THREE.Sprite(labelMaterial);
     sprite.renderOrder = 3;
-    sprite.scale.x = 0.035 / height * width;
-    sprite.scale.y = 0.035;
+    sprite.scale.x = 0.03 / height * width;
+    sprite.scale.y = 0.06;
     return sprite;
   }
 
@@ -209,15 +260,8 @@ export class BoatService extends BoatsComponent {
         this.updateBoatRot(boat, br, startTime);
       }
 
-      if (boat.name !== br.name) {
-        br.header.remove(br.title);
-        br.title.material.dispose();
-        br.title.geometry.dispose();
-
-        const name = this.makeName(boat.name);
-        br.title = name;
-        br.header.add(name);
-        br.name = boat.name;
+      if (boat.name !== br.name || boat.team !== br.team) {
+        this.rebuildHeader(boat, br);
       }
       newRenders.push(br);
       boat.rendered = true;
@@ -226,6 +270,18 @@ export class BoatService extends BoatsComponent {
 
     this.checkNewShips();
     this.rendering = false;
+  }
+
+  private rebuildHeader(boat: Boat, br: BoatRender) {
+    br.header.remove(br.title);
+    br.title.material.dispose();
+    br.title.geometry.dispose();
+
+    const name = this.makeHeader(boat);
+    br.title = name;
+    br.header.add(name);
+    br.name = boat.name;
+    br.moves = [...boat.moves];
   }
 
   private delBoatRender(br: BoatRender) {
@@ -256,13 +312,13 @@ export class BoatService extends BoatsComponent {
         } else header.scale.setScalar(1);
         header.position.y = 0.6 + scale;
         boatObj.add(header);
-        const name = this.makeName(boat.name);
+        const name = this.makeHeader(boat);
         header.add(name);
 
         this.scene?.add(boatObj);
         this.boatRenders.push({
-          id: boat.id || 0, obj: boatObj, header, title: name, type: boat.type,
-          pos: boat.pos, rotateDeg: boat.face, name: boat.name
+          id: boat.id || 0, obj: boatObj, header, title: name, type: boat.type, moves: [...boat.moves],
+          pos: boat.pos, rotateDeg: boat.face, name: boat.name, team: boat.team || 0,
         });
         console.log('added boat', boat.id);
       }
@@ -326,12 +382,10 @@ export class BoatService extends BoatsComponent {
           .easing(TWEEN.Easing.Quadratic.InOut)
           .start(startTime + 1000 / this.speed));
       } else {
-        const rotation = rotateTransition[boat.rotateTransition];
-        if (!rotation) return;
         this.tweens.add(new TWEEN.Tween(br.obj.rotation as any)
-          .to({ y: -boat.face * Math.PI / 180 }, rotation.duration)
-          .easing(rotation.easing)
-          .delay(rotation.delay || 0)
+          .to({ y: -boat.face * Math.PI / 180 }, 3000)
+          .easing(TWEEN.Easing.Quadratic.In)
+          .delay(500)
           .start(startTime));
       }
     } else br.obj.rotation.y = -boat.face * Math.PI / 180;
@@ -339,7 +393,7 @@ export class BoatService extends BoatsComponent {
     if (boat.imageOpacity === 0) {
       new TWEEN.Tween(br.obj.position as any)
         .to({ y: -5 }, 5000)
-        .delay(500)
+        .delay(2000)
         .easing(TWEEN.Easing.Quadratic.In)
         .start(startTime);
       new TWEEN.Tween(br.obj.scale as any)

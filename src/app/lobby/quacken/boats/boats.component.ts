@@ -135,10 +135,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.NewBoat, (boat: BoatSync) => this.setBoats([boat])));
     this.subs.add(this.ws.subscribe(InCmd.DelBoat, (id: number) => this.deleteBoat(id)));
-    this.subs.add(this.ws.subscribe(InCmd.Moves, s => {
-      const boat = this._boats[s.t];
-      if (boat) boat.moves = s.m;
-    }));
+    this.subs.add(this.ws.subscribe(InCmd.Moves, s => this.handleMoves(s)));
     this.subs.add(this.ws.subscribe(InCmd.Ready, id => {
       const boat = this._boats[id];
       if (boat) boat.ready = true;
@@ -155,6 +152,11 @@ export class BoatsComponent implements OnInit, OnDestroy {
     clearTimeout(this.animateTimeout);
     document.removeEventListener('visibilitychange', this.visibilityChange);
     this.subs.unsubscribe();
+  }
+
+  protected handleMoves(s: { t: number, m: number[] }) {
+    const boat = this._boats[s.t];
+    if (boat) boat.moves = s.m;
   }
 
   protected deleteBoat(id: number) {
