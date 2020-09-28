@@ -31,7 +31,6 @@ const sunSettings = {
   mieDirectionalG: 0.995,
   inclination: 0.48, // elevation / inclination
   azimuth: 0.25, // Facing front,
-  exposure: 0.7,
 };
 const GRID_DEPTH = -0.2;
 
@@ -68,7 +67,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private water?: Water;
 
   private tileGeometry?: THREE.Geometry;
-  private tiles: Record<number, THREE.MeshStandardMaterial> = {};
+  private tiles: Record<number, THREE.MeshBasicMaterial> = {};
   private tileObjects: Record<number, GLTF> = {};
   private mapObjects: THREE.Object3D[] = [];
   private stats?: Stats;
@@ -206,7 +205,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
         }),
         alpha: 0.6,
         sunDirection: new THREE.Vector3(),
-        sunColor: 0xaaaaaa,
+        sunColor: 1,
         waterColor: 0x001e0f,
         distortionScale: 6,
         fog: this.scene.fog !== undefined
@@ -281,7 +280,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       points.push(new THREE.Vector3(i, 0, 0));
     }
     let geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({ color: '#fff' });
+    const material = new THREE.LineBasicMaterial({ color: '#aaa' });
     let line = new THREE.Line(geometry, material);
     for (let i = 0; i <= this.map.length; i++) {
       grid.add(line);
@@ -329,7 +328,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     geometry.rotateX(-Math.PI / 2);
     this.tileGeometry = geometry;
     const loader = new THREE.TextureLoader();
-    let square = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ transparent: true }));
+    let square = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true }));
     square.position.y = GRID_DEPTH;
     const objs: { x: number, y: number, tile: number }[] = [];
 
