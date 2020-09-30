@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import * as THREE from 'three';
 import TWEEN from '@tweenjs/tween.js';
-
-import { BoatsComponent, BoatSync } from '../quacken/boats/boats.component';
-import { ObstacleConfig } from './cadegoose.component';
+import { Object3D, Group, Sprite, Scene, PerspectiveCamera, CanvasTexture, LinearFilter, ClampToEdgeWrapping, SpriteMaterial } from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+
+import { BoatsComponent, BoatSync, Clutter } from '../quacken/boats/boats.component';
+import { ObstacleConfig } from './cadegoose.component';
 import { WsService } from 'src/app/ws.service';
 import { OutCmd } from 'src/app/ws-messages';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Boat } from '../quacken/boats/boat';
+import { Cannonball } from './clutter/cannonball';
 
 const checkSZ = (pos: { x: number, y: number }) => {
   return pos.y > 32 || pos.y < 3;
@@ -46,9 +47,9 @@ const shipModels: any = {
 
 interface BoatRender {
   id: number;
-  obj: THREE.Object3D;
-  header: THREE.Group;
-  title: THREE.Sprite;
+  obj: Object3D;
+  header: Group;
+  title: Sprite;
   type: number;
   pos: { x: number, y: number };
   rotateDeg: number;
@@ -62,9 +63,9 @@ interface BoatRender {
 })
 export class BoatService extends BoatsComponent {
   private boatRenders: BoatRender[] = [];
-  private scene?: THREE.Scene;
+  private scene?: Scene;
   private getModel?: (c: ObstacleConfig) => Promise<GLTF>;
-  private camera?: THREE.PerspectiveCamera;
+  private camera?: PerspectiveCamera;
   private controls?: OrbitControls;
   private ships: Record<number, Promise<GLTF>> = {};
   private rendering = true;
@@ -76,7 +77,7 @@ export class BoatService extends BoatsComponent {
     super.ngOnInit();
   }
 
-  async setScene(s: THREE.Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: THREE.PerspectiveCamera) {
+  async setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: PerspectiveCamera) {
     this.scene = s;
     this.getModel = objGetter;
     this.camera = cam;
@@ -168,9 +169,20 @@ export class BoatService extends BoatsComponent {
     if (this.turn?.steps[this.step - 1]?.length) this.updateRender();
   }
 
-  private makeHeader(boat: Boat, size = 36): THREE.Sprite {
+  protected handleUpdate(updates: Clutter[]) {
+    if (!this.scene) return;
+    for (const u of updates) {
+      new Cannonball(this.scene, u).start();
+      if (u.dbl) setTimeout(() => {
+        if (!this.scene) return;
+        new Cannonball(this.scene, u).start();
+      }, 100);
+    }
+  }
+
+  private makeHeader(boat: Boat, size = 36): Sprite {
     const ctx = document.createElement('canvas').getContext('2d');
-    if (!ctx) return new THREE.Sprite();
+    if (!ctx) return new Sprite();
     const font = `${size}px bold sans-serif`;
     ctx.font = font;
 
@@ -200,20 +212,20 @@ export class BoatService extends BoatsComponent {
     ctx.strokeRect(- 60, 24, 120, 20);
 
     const canvas = ctx.canvas;
-    const texture = new THREE.CanvasTexture(canvas);
+    const texture = new CanvasTexture(canvas);
     // because our canvas is likely not a power of 2
     // in both dimensions set the filtering appropriately.
-    texture.minFilter = THREE.LinearFilter;
-    texture.wrapS = THREE.ClampToEdgeWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
+    texture.minFilter = LinearFilter;
+    texture.wrapS = ClampToEdgeWrapping;
+    texture.wrapT = ClampToEdgeWrapping;
 
-    const labelMaterial = new THREE.SpriteMaterial({
+    const labelMaterial = new SpriteMaterial({
       map: texture,
       transparent: true,
       sizeAttenuation: false,
     });
 
-    const sprite = new THREE.Sprite(labelMaterial);
+    const sprite = new Sprite(labelMaterial);
     sprite.renderOrder = 3;
     sprite.scale.x = 0.03 / height * width;
     sprite.scale.y = 0.06;
@@ -284,7 +296,7 @@ export class BoatService extends BoatsComponent {
   private delBoatRender(br: BoatRender) {
     this.scene?.remove(br.obj);
     for (const c of br.header.children) {
-      if (!(c instanceof THREE.Sprite)) continue;
+      if (!(c instanceof Sprite)) continue;
       c.geometry.dispose();
       c.material.dispose();
     }
@@ -297,13 +309,13 @@ export class BoatService extends BoatsComponent {
         boat.rendered = true;
         const prom = this.ships[boat.type] || this.ships[24];
         prom?.then(gltf => {
-          const boatObj = new THREE.Object3D();
+          const boatObj = new Object3D();
           boatObj.add(gltf.scene.clone());
           boatObj.position.x = boat.pos.x + 0.5;
           boatObj.position.z = boat.pos.y + 0.5;
           boatObj.rotation.y = -boat.face * Math.PI / 180;
 
-          const header = new THREE.Group();
+          const header = new Group();
           let scale = (this.camera?.position.distanceTo(boatObj.position) || 16) / 36;
           if (scale > 0.5) {
             header.scale.setScalar(0.5 / scale);

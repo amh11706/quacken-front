@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import * as THREE from 'three';
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
@@ -15,6 +14,33 @@ import { InCmd, Internal } from 'src/app/ws-messages';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { WsService } from 'src/app/ws.service';
 import { BoatService } from './boat.service';
+import {
+  WebGLRenderer,
+  Scene,
+  Fog,
+  Object3D,
+  ACESFilmicToneMapping,
+  LinearFilter,
+  AmbientLight,
+  PMREMGenerator,
+  PerspectiveCamera,
+  MeshStandardMaterial,
+  MeshBasicMaterial,
+  LineBasicMaterial,
+  ShaderMaterial,
+  TextureLoader,
+  RepeatWrapping,
+  Geometry,
+  PlaneBufferGeometry,
+  PlaneGeometry,
+  BufferGeometry,
+  Vector2,
+  Vector3,
+  Box3,
+  Line,
+  Group,
+  Mesh,
+} from 'three';
 
 const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed'];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -69,17 +95,17 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected mapHeight = 36;
   protected mapWidth = 20;
 
-  private scene = new THREE.Scene();
-  private camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  private scene = new Scene();
+  private camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   private controls?: MapControls;
-  private renderer = new THREE.WebGLRenderer();
+  private renderer = new WebGLRenderer();
   private frameRequested = true;
   private water?: Water;
 
-  private tileGeometry?: THREE.Geometry;
-  private tiles: Record<number, THREE.MeshBasicMaterial> = {};
+  private tileGeometry?: Geometry;
+  private tiles: Record<number, MeshBasicMaterial> = {};
   private tileObjects: Record<number, Promise<GLTF>> = {};
-  private mapObjects: THREE.Object3D[] = [];
+  private mapObjects: Object3D[] = [];
   private stats?: Stats;
   private cameraTween: any;
   private controlTween: any;
@@ -95,10 +121,10 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.toneMappingExposure = sunSettings.exposure;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.scene.fog = new THREE.Fog(0);
+    this.renderer.toneMapping = ACESFilmicToneMapping;
+    this.scene.fog = new Fog(0);
 
-    const light = new THREE.AmbientLight(0x404040, 4); // soft white light
+    const light = new AmbientLight(0x404040, 4); // soft white light
     this.scene.add(light);
 
     this.buildWater();
@@ -144,7 +170,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
     this.controls = new MapControls(this.camera, this.frame?.nativeElement);
     this.controls.maxPolarAngle = Math.PI * 15 / 32;
-    this.controls.target = new THREE.Vector3(10, 0.3, 33);
+    this.controls.target = new Vector3(10, 0.3, 33);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.3;
     this.controls.minDistance = 1;
@@ -181,7 +207,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     const time = new Date().valueOf();
     TWEEN.update(time);
 
-    if (this.scene.fog instanceof THREE.Fog) {
+    if (this.scene.fog instanceof Fog) {
       this.scene.fog.near = this.camera.position.y;
       this.scene.fog.far = this.camera.position.y * 2 + 50;
     }
@@ -201,14 +227,14 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   private buildWater() {
-    const waterGeometry = new THREE.PlaneBufferGeometry(10000, 10000);
-    const floorGeo = new THREE.PlaneGeometry(10000, 10000);
-    const loader = new THREE.TextureLoader();
+    const waterGeometry = new PlaneBufferGeometry(10000, 10000);
+    const floorGeo = new PlaneGeometry(10000, 10000);
+    const loader = new TextureLoader();
     const floorTex = loader.load('assets/images/kingwall.png');
-    floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
-    floorTex.repeat = new THREE.Vector2(10, 10);
-    const floorMat = new THREE.MeshStandardMaterial({ map: floorTex });
-    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floorTex.wrapS = floorTex.wrapT = RepeatWrapping;
+    floorTex.repeat = new Vector2(10, 10);
+    const floorMat = new MeshStandardMaterial({ map: floorTex });
+    const floor = new Mesh(floorGeo, floorMat);
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = -10;
     this.scene.add(floor);
@@ -217,7 +243,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       color: '#9bd',
       scale: 1000,
       reflectivity: 0.1,
-      flowDirection: new THREE.Vector2(0.15, 0.15),
+      flowDirection: new Vector2(0.15, 0.15),
       textureWidth: 1024,
       textureHeight: 1024,
       normalMap0: loader.load('assets/images/Water_1_M_Normal.jpg'),
@@ -225,7 +251,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     });
 
     this.water.rotation.x = - Math.PI / 2;
-    (this.water.material as THREE.ShaderMaterial).fog = false;
+    (this.water.material as ShaderMaterial).fog = false;
 
     this.scene.add(this.water);
   }
@@ -235,8 +261,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     sky.scale.setScalar(450000);
     this.scene.add(sky);
 
-    const sun = new THREE.Vector3();
-    const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
+    const sun = new Vector3();
+    const pmremGenerator = new PMREMGenerator(this.renderer);
 
     const uniforms = sky.material.uniforms;
     uniforms['turbidity'].value = sunSettings.turbidity;
@@ -264,7 +290,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
         gltf.scene.position.z = obj.offsetZ;
         if (obj.scalar) gltf.scene.scale.setScalar(obj.scalar);
         if (obj.scaleY) gltf.scene.scale.setY(obj.scaleY);
-        gltf.scene.position.y = -new THREE.Box3().setFromObject(gltf.scene).min.y - 0.25;
+        gltf.scene.position.y = -new Box3().setFromObject(gltf.scene).min.y - 0.25;
         gltf.scene.position.y += obj.offsetY || 0;
         if (obj.rotate) gltf.scene.rotateY(obj.rotate);
         resolve(gltf);
@@ -275,15 +301,15 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   private buildGrid() {
-    const grid = new THREE.Object3D();
+    const grid = new Object3D();
     grid.position.y = GRID_DEPTH;
-    let points: THREE.Vector3[] = [];
+    let points: Vector3[] = [];
     for (let i = 0; i <= this.map[0].length; i++) {
-      points.push(new THREE.Vector3(i, 0, 0));
+      points.push(new Vector3(i, 0, 0));
     }
-    let geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({ color: '#aaa', fog: false });
-    let line = new THREE.Line(geometry, material);
+    let geometry = new BufferGeometry().setFromPoints(points);
+    const material = new LineBasicMaterial({ color: '#aaa', fog: false });
+    let line = new Line(geometry, material);
     for (let i = 0; i <= this.map.length; i++) {
       grid.add(line);
       line = line.clone();
@@ -292,19 +318,19 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
     points = [];
     for (let i = 0; i <= this.map.length; i++) {
-      points.push(new THREE.Vector3(0, 0, i));
+      points.push(new Vector3(0, 0, i));
     }
-    geometry = new THREE.BufferGeometry().setFromPoints(points);
-    line = new THREE.Line(geometry, material);
+    geometry = new BufferGeometry().setFromPoints(points);
+    line = new Line(geometry, material);
     for (let i = 0; i <= this.map[0].length; i++) {
       grid.add(line);
       line = line.clone();
       line.position.x++;
     }
 
-    const szGeo = new THREE.PlaneGeometry(20, 3);
-    const szMat = new THREE.MeshBasicMaterial({ color: 'cyan', opacity: 0.3, transparent: true });
-    let sz = new THREE.Mesh(szGeo, szMat);
+    const szGeo = new PlaneGeometry(20, 3);
+    const szMat = new MeshBasicMaterial({ color: 'cyan', opacity: 0.3, transparent: true });
+    let sz = new Mesh(szGeo, szMat);
     sz.renderOrder = 2;
     sz.rotateX(-Math.PI / 2);
     sz.position.x = 10;
@@ -327,11 +353,11 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.scene.remove(...this.mapObjects);
     this.mapObjects = [];
 
-    const geometry = this.tileGeometry || new THREE.PlaneGeometry(1, 1);
+    const geometry = this.tileGeometry || new PlaneGeometry(1, 1);
     geometry.rotateX(-Math.PI / 2);
     this.tileGeometry = geometry;
-    const loader = new THREE.TextureLoader();
-    let square = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true, fog: false }));
+    const loader = new TextureLoader();
+    let square = new Mesh(geometry, new MeshBasicMaterial({ transparent: true, fog: false }));
     square.position.y = GRID_DEPTH;
     square.renderOrder = 2;
 
@@ -348,7 +374,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
           }
           prom.then(model => {
             const newObj = model.scene.clone();
-            const centered = new THREE.Group();
+            const centered = new Group();
             centered.add(newObj);
             centered.position.x += x + 0.5;
             centered.position.z += y + 0.5;
@@ -363,7 +389,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
         if (!mat) {
           mat = square.material.clone();
           mat.map = loader.load('assets/images/obstacle' + tile + '.png');
-          mat.map.minFilter = THREE.LinearFilter;
+          mat.map.minFilter = LinearFilter;
           mat.map.anisotropy = this.renderer.capabilities.getMaxAnisotropy() || 0;
           this.tiles[tile] = mat;
         }

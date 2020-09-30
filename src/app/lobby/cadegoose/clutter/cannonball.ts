@@ -1,0 +1,55 @@
+import { Mesh, MeshPhongMaterial, Scene, SphereGeometry, Vector3 } from 'three';
+import TWEEN from '@tweenjs/tween.js';
+import { Clutter } from '../../quacken/boats/boats.component';
+
+const decodeX = [0, 1, 0, -1];
+const decodeY = [-1, 0, 1, 0];
+
+export class Cannonball {
+    static speed = 15;
+    private static template: Mesh;
+    private cb: Mesh;
+    private group = new TWEEN.Group();
+
+    constructor(private scene: Scene, private obj: Clutter) {
+        if (!Cannonball.template) {
+            const geo = new SphereGeometry(0.05);
+            const mat = new MeshPhongMaterial({ color: 'silver' });
+            Cannonball.template = new Mesh(geo, mat);
+        }
+
+        this.cb = Cannonball.template.clone();
+        this.cb.position.copy(new Vector3(obj.x + 0.5, 0.1, obj.y + 0.5));
+        scene.add(this.cb);
+    }
+
+    start() {
+        const obj = this.obj;
+        if (!obj.dir || !obj.dis) return;
+        const hit = obj.dis < 4;
+        if (!hit) obj.dis = 3;
+        const p = this.cb.position;
+        const time = new Date().valueOf();
+        this.group.add(new TWEEN.Tween(p as any)
+            .to({ x: p.x + decodeX[obj.dir] * obj.dis, z: p.z + decodeY[obj.dir] * obj.dis }, 500)
+            .start(time)
+            .onComplete(() => {
+                this.remove();
+            })
+        );
+        this.group.add(new TWEEN.Tween(p as any)
+            .to({ y: 0.3 }, 250)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .yoyo(true)
+            .repeat(1)
+            .start(time)
+        );
+    }
+
+    remove() {
+        for (const t of this.group.getAll()) TWEEN.remove(t);
+        this.group.removeAll();
+        this.scene.remove(this.cb);
+    }
+
+}

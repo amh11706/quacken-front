@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
+import { Boat } from '../../quacken/boats/boat';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
 @Component({
@@ -25,7 +26,7 @@ export class CadeHudComponent extends HudComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, () => {
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, (boat: Boat) => {
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, () => {
