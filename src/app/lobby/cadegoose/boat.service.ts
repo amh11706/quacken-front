@@ -171,12 +171,10 @@ export class BoatService extends BoatsComponent {
 
   protected handleUpdate(updates: Clutter[]) {
     if (!this.scene) return;
+    Cannonball.speed = this.speed;
     for (const u of updates) {
       new Cannonball(this.scene, u).start();
-      if (u.dbl) setTimeout(() => {
-        if (!this.scene) return;
-        new Cannonball(this.scene, u).start();
-      }, 100);
+      new Cannonball(this.scene, u).start(2000 / this.speed);
     }
   }
 

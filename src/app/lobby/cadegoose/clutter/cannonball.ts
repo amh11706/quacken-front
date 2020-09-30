@@ -13,7 +13,7 @@ export class Cannonball {
 
     constructor(private scene: Scene, private obj: Clutter) {
         if (!Cannonball.template) {
-            const geo = new SphereGeometry(0.05);
+            const geo = new SphereGeometry(0.025);
             const mat = new MeshPhongMaterial({ color: 'silver' });
             Cannonball.template = new Mesh(geo, mat);
         }
@@ -23,26 +23,27 @@ export class Cannonball {
         scene.add(this.cb);
     }
 
-    start() {
+    start(delay = 0) {
         const obj = this.obj;
         if (!obj.dir || !obj.dis) return;
         const hit = obj.dis < 4;
         if (!hit) obj.dis = 3;
         const p = this.cb.position;
-        const time = new Date().valueOf();
+        const time = new Date().valueOf() + delay;
         this.group.add(new TWEEN.Tween(p as any)
-            .to({ x: p.x + decodeX[obj.dir] * obj.dis, z: p.z + decodeY[obj.dir] * obj.dis }, 500)
+            .to({ x: p.x + decodeX[obj.dir] * obj.dis, z: p.z + decodeY[obj.dir] * obj.dis }, 3000 / Cannonball.speed * obj.dis)
             .start(time)
             .onComplete(() => {
                 this.remove();
             })
         );
         this.group.add(new TWEEN.Tween(p as any)
-            .to({ y: 0.3 }, 250)
+            .to({ y: 0.2 }, 1500 / Cannonball.speed * obj.dis)
             .easing(TWEEN.Easing.Quadratic.Out)
-            .yoyo(true)
-            .repeat(1)
-            .start(time)
+            .start(time).chain(new TWEEN.Tween(p as any)
+                .to({ y: 0.1 }, 1500 / Cannonball.speed * obj.dis)
+                .easing(TWEEN.Easing.Quadratic.In)
+            )
         );
     }
 

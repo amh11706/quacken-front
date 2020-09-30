@@ -70,7 +70,7 @@ const sunSettings = {
 //   azimuth: 0.25, // Facing front,
 //   exposure: 0.7,
 // };
-const GRID_DEPTH = 0.06;
+const GRID_DEPTH = -0.05;
 
 export interface ObstacleConfig {
   path: string; ext?: string;
@@ -96,6 +96,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected mapWidth = 20;
 
   private scene = new Scene();
+  private mapScene = new Scene();
   private camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   private controls?: MapControls;
   private renderer = new WebGLRenderer();
@@ -122,6 +123,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.toneMappingExposure = sunSettings.exposure;
     this.renderer.toneMapping = ACESFilmicToneMapping;
+    this.renderer.autoClear = false;
     this.scene.fog = new Fog(0);
 
     const light = new AmbientLight(0x404040, 4); // soft white light
@@ -212,7 +214,9 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       this.scene.fog.far = this.camera.position.y * 2 + 50;
     }
 
+    this.renderer.clear();
     this.renderer.render(this.scene, this.camera);
+    this.renderer.render(this.mapScene, this.camera);
 
     this.frameRequested = false;
     this.controls?.update();
@@ -252,6 +256,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
     this.water.rotation.x = - Math.PI / 2;
     (this.water.material as ShaderMaterial).fog = false;
+    (this.water.material as ShaderMaterial).depthWrite = false;
+
 
     this.scene.add(this.water);
   }
@@ -335,13 +341,12 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     sz.rotateX(-Math.PI / 2);
     sz.position.x = 10;
     sz.position.z = 1.5;
-    sz.position.y = -GRID_DEPTH - 0.05;
     grid.add(sz);
     sz = sz.clone();
     sz.position.z += 33;
     grid.add(sz);
 
-    this.scene.add(grid);
+    this.mapScene.add(grid);
   }
 
   protected setMapB64(map: string) {
@@ -396,7 +401,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
         square.position.x = 0.5 + x;
         square.position.z = 0.5 + y;
         square.material = mat;
-        this.scene.add(square);
+        this.mapScene.add(square);
         this.mapObjects.push(square);
         square = square.clone();
       }
