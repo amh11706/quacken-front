@@ -4,7 +4,7 @@ import { MapControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
-import { Water } from 'three/examples/jsm/objects/Water.js';
+import { Water } from 'three/examples/jsm/objects/Water2.js';
 import TWEEN from '@tweenjs/tween.js';
 
 import { Boat } from '../quacken/boats/boat';
@@ -16,7 +16,7 @@ import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { WsService } from 'src/app/ws.service';
 import { BoatService } from './boat.service';
 
-const baseSettings: (keyof typeof Settings)[] = ['cadeMapScale', 'cadeSpeed'];
+const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed'];
 const ownerSettings: (keyof typeof Settings)[] = [
   'jobberQuality', 'cadePublicMode', 'cadeHotEntry',
   'cadeMaxPlayers', 'cadeMap',
@@ -25,14 +25,26 @@ const ownerSettings: (keyof typeof Settings)[] = [
 export const CadeDesc = 'CadeGoose: Use your ship to contest flags and sink enemy ships in a battle for points.';
 
 const sunSettings = {
-  turbidity: 10,
-  rayleigh: 3.33,
+  turbidity: 20,
+  rayleigh: 4,
   mieCoefficient: 0.001,
-  mieDirectionalG: 0.995,
-  inclination: 0.48, // elevation / inclination
+  mieDirectionalG: 0.997,
+  inclination: 0.4, // elevation / inclination
   azimuth: 0.25, // Facing front,
+  exposure: 0.75,
 };
-const GRID_DEPTH = -0.2;
+
+// moonlight
+// const sunSettings = {
+//   turbidity: 20,
+//   rayleigh: 0,
+//   mieCoefficient: 0.001,
+//   mieDirectionalG: 0.997,
+//   inclination: 0.43, // elevation / inclination
+//   azimuth: 0.25, // Facing front,
+//   exposure: 0.7,
+// };
+const GRID_DEPTH = 0.06;
 
 export interface ObstacleConfig {
   path: string; ext?: string;
@@ -41,8 +53,8 @@ export interface ObstacleConfig {
 }
 
 const obstacleModels: Record<number, ObstacleConfig> = {
-  50: { path: 'rocks', offsetX: 0.35, offsetZ: 0.25 },
-  51: { path: 'stylized_rocks', offsetX: 0.5, offsetZ: 0.5, scalar: 0.5, scaleY: 0.25 },
+  50: { path: 'rocks', offsetX: -0.15, offsetZ: -0.25 },
+  51: { path: 'stylized_rocks', offsetX: 0, offsetZ: 0, scalar: 0.5, scaleY: 0.25 },
 };
 
 @Component({
@@ -58,17 +70,15 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected mapWidth = 20;
 
   private scene = new THREE.Scene();
-  private sunScene = new THREE.Scene();
   private camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   private controls?: MapControls;
   private renderer = new THREE.WebGLRenderer();
-  private lastFrame = 0;
   private frameRequested = true;
   private water?: Water;
 
   private tileGeometry?: THREE.Geometry;
   private tiles: Record<number, THREE.MeshBasicMaterial> = {};
-  private tileObjects: Record<number, GLTF> = {};
+  private tileObjects: Record<number, Promise<GLTF>> = {};
   private mapObjects: THREE.Object3D[] = [];
   private stats?: Stats;
   private cameraTween: any;
@@ -84,9 +94,11 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     bs.setScene(this.scene, this.loadObj, this.camera);
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.autoClear = false;
+    this.renderer.toneMappingExposure = sunSettings.exposure;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.scene.fog = new THREE.Fog(0);
 
-    const light = new THREE.AmbientLight(0x404040, 7); // soft white light
+    const light = new THREE.AmbientLight(0x404040, 4); // soft white light
     this.scene.add(light);
 
     this.buildWater();
@@ -145,7 +157,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.stats = Stats();
     this.frame?.nativeElement.appendChild(this.stats.dom);
 
-    this.lastFrame = new Date().valueOf();
     this.frameRequested = false;
     this.requestRender();
   }
@@ -168,17 +179,14 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private render = () => {
     this.bs.speed = this.settings.speed || 15;
     const time = new Date().valueOf();
-    if (this.water) {
-      (this.water.material as THREE.ShaderMaterial).uniforms['time'].value += (time - this.lastFrame) / 5000;
-    }
     TWEEN.update(time);
-    this.lastFrame = time;
 
-    this.renderer.clear();
-    this.renderer.toneMapping = 0;
+    if (this.scene.fog instanceof THREE.Fog) {
+      this.scene.fog.near = this.camera.position.y;
+      this.scene.fog.far = this.camera.position.y * 2 + 50;
+    }
+
     this.renderer.render(this.scene, this.camera);
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.render(this.sunScene, this.camera);
 
     this.frameRequested = false;
     this.controls?.update();
@@ -194,31 +202,31 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   private buildWater() {
     const waterGeometry = new THREE.PlaneBufferGeometry(10000, 10000);
+    const floorGeo = new THREE.PlaneGeometry(10000, 10000);
+    const loader = new THREE.TextureLoader();
+    const floorTex = loader.load('assets/images/kingwall.png');
+    floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
+    floorTex.repeat = new THREE.Vector2(10, 10);
+    const floorMat = new THREE.MeshStandardMaterial({ map: floorTex });
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = -10;
+    this.scene.add(floor);
 
-    this.water = new Water(
-      waterGeometry,
-      {
-        textureWidth: 512,
-        textureHeight: 512,
-        waterNormals: new THREE.TextureLoader().load('assets/images/waternormals.jpg', function (texture) {
-          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        }),
-        alpha: 0.6,
-        sunDirection: new THREE.Vector3(),
-        sunColor: 1,
-        waterColor: 0x001e0f,
-        distortionScale: 6,
-        fog: this.scene.fog !== undefined
-      }
-    );
+    this.water = new Water(waterGeometry, {
+      color: '#9bd',
+      scale: 1000,
+      reflectivity: 0.1,
+      flowDirection: new THREE.Vector2(0.15, 0.15),
+      textureWidth: 1024,
+      textureHeight: 1024,
+      normalMap0: loader.load('assets/images/Water_1_M_Normal.jpg'),
+      normalMap1: loader.load('assets/images/Water_2_M_Normal.jpg'),
+    });
 
     this.water.rotation.x = - Math.PI / 2;
+    (this.water.material as THREE.ShaderMaterial).fog = false;
 
-    const material = this.water.material as THREE.ShaderMaterial;
-    material.transparent = true;
-    material.uniforms.size.value = 50;
-
-    this.water.renderOrder = 2;
     this.scene.add(this.water);
   }
 
@@ -227,15 +235,10 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     sky.scale.setScalar(450000);
     this.scene.add(sky);
 
-    const sky2 = new Sky();
-    sky2.scale.setScalar(400000);
-    this.sunScene.add(sky2);
-
     const sun = new THREE.Vector3();
     const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
 
     const uniforms = sky.material.uniforms;
-    sky2.material.uniforms = uniforms;
     uniforms['turbidity'].value = sunSettings.turbidity;
     uniforms['rayleigh'].value = sunSettings.rayleigh;
     uniforms['mieCoefficient'].value = sunSettings.mieCoefficient;
@@ -249,7 +252,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     sun.z = Math.sin(phi) * Math.cos(theta);
 
     uniforms.sunPosition.value.copy(sun);
-    (this.water?.material as THREE.ShaderMaterial).uniforms['sunDirection'].value.copy(sun).normalize();
 
     this.scene.environment = pmremGenerator.fromScene(sky as any).texture;
   }
@@ -280,7 +282,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       points.push(new THREE.Vector3(i, 0, 0));
     }
     let geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({ color: '#aaa' });
+    const material = new THREE.LineBasicMaterial({ color: '#aaa', fog: false });
     let line = new THREE.Line(geometry, material);
     for (let i = 0; i <= this.map.length; i++) {
       grid.add(line);
@@ -301,12 +303,13 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     }
 
     const szGeo = new THREE.PlaneGeometry(20, 3);
-    const szMat = new THREE.MeshBasicMaterial({ color: 'cyan', opacity: 0.2, transparent: true });
+    const szMat = new THREE.MeshBasicMaterial({ color: 'cyan', opacity: 0.3, transparent: true });
     let sz = new THREE.Mesh(szGeo, szMat);
+    sz.renderOrder = 2;
     sz.rotateX(-Math.PI / 2);
     sz.position.x = 10;
     sz.position.z = 1.5;
-    sz.position.y = -0.01;
+    sz.position.y = -GRID_DEPTH - 0.05;
     grid.add(sz);
     sz = sz.clone();
     sz.position.z += 33;
@@ -328,53 +331,50 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     geometry.rotateX(-Math.PI / 2);
     this.tileGeometry = geometry;
     const loader = new THREE.TextureLoader();
-    let square = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true }));
+    let square = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ transparent: true, fog: false }));
     square.position.y = GRID_DEPTH;
-    const objs: { x: number, y: number, tile: number }[] = [];
+    square.renderOrder = 2;
 
     for (let y = 0; y < this.map.length; y++) {
       for (let x = 0; x < this.map[y].length; x++) {
         const tile = this.map[y][x];
-        if (tile > 0) {
-          if (obstacleModels[tile]) {
-            // load 3d
-            objs.push({ x, y, tile });
-
-          } else {
-            // load 2d
-            let mat = this.tiles[tile];
-            if (!mat) {
-              mat = square.material.clone();
-              mat.map = loader.load('assets/images/obstacle' + tile + '.png');
-              mat.map.minFilter = THREE.LinearFilter;
-              mat.map.anisotropy = this.renderer.capabilities.getMaxAnisotropy() || 0;
-              this.tiles[tile] = mat;
-            }
-            square.position.x = 0.5 + x;
-            square.position.z = 0.5 + y;
-            square.material = mat;
-            this.scene.add(square);
-            this.mapObjects.push(square);
-            square = square.clone();
+        if (!tile) continue;
+        if (obstacleModels[tile]) {
+          // load 3d
+          let prom = this.tileObjects[tile];
+          if (!prom) {
+            prom = this.loadObj(obstacleModels[tile]);
+            this.tileObjects[tile] = prom;
           }
+          prom.then(model => {
+            const newObj = model.scene.clone();
+            const centered = new THREE.Group();
+            centered.add(newObj);
+            centered.position.x += x + 0.5;
+            centered.position.z += y + 0.5;
+            centered.rotateY(Math.round(Math.random() * 3) * Math.PI / 2);
+            this.scene.add(centered);
+            this.mapObjects.push(newObj);
+          });
+          continue;
         }
+        // load 2d
+        let mat = this.tiles[tile];
+        if (!mat) {
+          mat = square.material.clone();
+          mat.map = loader.load('assets/images/obstacle' + tile + '.png');
+          mat.map.minFilter = THREE.LinearFilter;
+          mat.map.anisotropy = this.renderer.capabilities.getMaxAnisotropy() || 0;
+          this.tiles[tile] = mat;
+        }
+        square.position.x = 0.5 + x;
+        square.position.z = 0.5 + y;
+        square.material = mat;
+        this.scene.add(square);
+        this.mapObjects.push(square);
+        square = square.clone();
       }
     }
-
-    setTimeout(async () => {
-      for (const o of objs) {
-        let model = this.tileObjects[o.tile];
-        if (!model) {
-          model = await this.loadObj(obstacleModels[o.tile]);
-          this.tileObjects[o.tile] = model;
-        }
-        const newObj = model.scene.clone();
-        newObj.position.x += o.x;
-        newObj.position.z += o.y;
-        this.scene.add(newObj);
-        this.mapObjects.push(newObj);
-      }
-    });
   }
 
   async getSettings() {

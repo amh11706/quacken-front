@@ -39,9 +39,9 @@ const moveEase: any[] = [,
 ];
 
 const shipModels: any = {
-  22: { path: 'WB', offsetX: 0, offsetZ: 0, offsetY: 0.17, scalar: 0.02, rotate: -Math.PI / 2 },
-  24: { path: 'xebec', offsetX: -0.05, offsetZ: 0, scalar: 0.015, rotate: Math.PI },
-  26: { path: 'WF', ext: 'glb', offsetX: 0, offsetZ: 0, offsetY: 0.18, scalar: 0.22 },
+  22: { path: 'WB', offsetX: 0, offsetZ: 0, offsetY: 0.16, scalar: 0.02, rotate: -Math.PI / 2 },
+  24: { path: 'xebec', offsetX: -0.05, offsetZ: 0, offsetY: 0, scalar: 0.015, rotate: Math.PI },
+  26: { path: 'WF', ext: 'glb', offsetX: 0, offsetZ: 0, offsetY: 0.175, scalar: 0.22 },
 };
 
 interface BoatRender {
@@ -66,7 +66,7 @@ export class BoatService extends BoatsComponent {
   private getModel?: (c: ObstacleConfig) => Promise<GLTF>;
   private camera?: THREE.PerspectiveCamera;
   private controls?: OrbitControls;
-  private ships: Record<number, GLTF> = {};
+  private ships: Record<number, Promise<GLTF>> = {};
   private rendering = true;
   private tweens = new TWEEN.Group();
   private myLastPos = { x: 0, z: 0 };
@@ -82,15 +82,10 @@ export class BoatService extends BoatsComponent {
     this.camera = cam;
 
     if (!Object.keys(this.ships).length) {
-      const models = Object.entries(shipModels);
-      const promises = [];
-      for (const [, config] of models) {
-        promises.push(objGetter(config as any));
+      for (const [id, config] of Object.entries(shipModels)) {
+        this.ships[+id] = objGetter(config as any);
       }
-      const ships = await Promise.all(promises);
-      for (let i = 0; i < ships.length; i++) {
-        this.ships[+models[i][0]] = ships[i];
-      }
+
       this.rendering = false;
     }
     this.updateRender();
@@ -188,6 +183,8 @@ export class BoatService extends BoatsComponent {
     ctx.font = font;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+    ctx.fillRect(0, 0, width, height);
 
     ctx.translate(width / 2, height / 2);
     ctx.fillStyle = headerColor(boat);
@@ -197,10 +194,10 @@ export class BoatService extends BoatsComponent {
       const color = moveColor[boat.moves[i]];
       if (!color) continue;
       ctx.fillStyle = color;
-      ctx.fillRect(-60 + 30 * i, 18, 30, 20);
+      ctx.fillRect(-60 + 30 * i, 24, 30, 20);
     }
     ctx.lineWidth = 2;
-    ctx.strokeRect(- 60, 18, 120, 20);
+    ctx.strokeRect(- 60, 24, 120, 20);
 
     const canvas = ctx.canvas;
     const texture = new THREE.CanvasTexture(canvas);
@@ -297,32 +294,35 @@ export class BoatService extends BoatsComponent {
   private checkNewShips() {
     for (const boat of this.boats) {
       if (!boat.rendered) {
-        const gltf = this.ships[boat.type] || this.ships[24];
-        const boatObj = new THREE.Object3D();
-        boatObj.add(gltf.scene.clone());
-        boatObj.position.x = boat.pos.x + 0.5;
-        boatObj.position.z = boat.pos.y + 0.5;
-        boatObj.rotation.y = -boat.face * Math.PI / 180;
+        boat.rendered = true;
+        const prom = this.ships[boat.type] || this.ships[24];
+        prom?.then(gltf => {
+          const boatObj = new THREE.Object3D();
+          boatObj.add(gltf.scene.clone());
+          boatObj.position.x = boat.pos.x + 0.5;
+          boatObj.position.z = boat.pos.y + 0.5;
+          boatObj.rotation.y = -boat.face * Math.PI / 180;
 
-        const header = new THREE.Group();
-        let scale = (this.camera?.position.distanceTo(boatObj.position) || 16) / 36;
-        if (scale > 0.5) {
-          header.scale.setScalar(0.5 / scale);
-          scale = 0.5;
-        } else header.scale.setScalar(1);
-        header.position.y = 0.6 + scale;
-        boatObj.add(header);
-        const name = this.makeHeader(boat);
-        header.add(name);
+          const header = new THREE.Group();
+          let scale = (this.camera?.position.distanceTo(boatObj.position) || 16) / 36;
+          if (scale > 0.5) {
+            header.scale.setScalar(0.5 / scale);
+            scale = 0.5;
+          } else header.scale.setScalar(1);
+          header.position.y = 0.6 + scale;
+          boatObj.add(header);
+          const name = this.makeHeader(boat);
+          header.add(name);
 
-        this.scene?.add(boatObj);
-        this.boatRenders.push({
-          id: boat.id || 0, obj: boatObj, header, title: name, type: boat.type, moves: [...boat.moves],
-          pos: boat.pos, rotateDeg: boat.face, name: boat.name, team: boat.team || 0,
+          this.scene?.add(boatObj);
+          this.boatRenders.push({
+            id: boat.id || 0, obj: boatObj, header, title: name, type: boat.type, moves: [...boat.moves],
+            pos: boat.pos, rotateDeg: boat.face, name: boat.name, team: boat.team || 0,
+          });
+          console.log('added boat', boat.id);
+          boat.rendered = false;
         });
-        console.log('added boat', boat.id);
       }
-      boat.rendered = false;
     }
   }
 
