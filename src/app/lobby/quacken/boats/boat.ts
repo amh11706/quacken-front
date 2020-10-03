@@ -9,7 +9,7 @@ export class Boat {
   title?: string;
   maxDamage = 3;
   maxMoves = 4;
-  influence = '50px';
+  influence = 1;
   doubleShot?: boolean;
 
   bomb = 0;

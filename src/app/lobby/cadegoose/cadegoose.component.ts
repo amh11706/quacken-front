@@ -13,7 +13,7 @@ import { SettingMap, SettingsService } from 'src/app/settings/settings.service';
 import { InCmd, Internal } from 'src/app/ws-messages';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { WsService } from 'src/app/ws.service';
-import { BoatService } from './boat.service';
+import { BoatService, flagMats } from './boat.service';
 import {
   WebGLRenderer,
   Scene,
@@ -40,6 +40,7 @@ import {
   Line,
   Group,
   Mesh,
+  Raycaster, Material, Color
 } from 'three';
 
 const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed'];
@@ -79,6 +80,9 @@ export interface ObstacleConfig {
 }
 
 const obstacleModels: Record<number, ObstacleConfig> = {
+  21: { path: 'flag', offsetX: 0, offsetZ: 0, rotate: Math.PI },
+  22: { path: 'flag2', offsetX: 0, offsetZ: 0, rotate: Math.PI },
+  23: { path: 'flag3', offsetX: 0, offsetZ: 0, rotate: Math.PI },
   50: { path: 'rocks', offsetX: -0.15, offsetZ: -0.25 },
   51: { path: 'stylized_rocks', offsetX: 0, offsetZ: 0, scalar: 0.5, scaleY: 0.25 },
 };
@@ -110,6 +114,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private stats?: Stats;
   private cameraTween: any;
   private controlTween: any;
+  private mouse = new Vector2(0, 0);
+  private rayCaster = new Raycaster();
 
   constructor(
     protected ws: WsService,
@@ -126,7 +132,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.renderer.autoClear = false;
     this.scene.fog = new Fog(0);
 
-    const light = new AmbientLight(0x404040, 4); // soft white light
+    const light = new AmbientLight(0x404040, 1); // soft white light
     this.scene.add(light);
 
     this.buildWater();
@@ -187,14 +193,27 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
     this.frameRequested = false;
     this.requestRender();
+    this.frame?.nativeElement.addEventListener('mousemove', this.mouseMove, false);
   }
 
   ngOnDestroy() {
     window.removeEventListener('resize', this.onWindowResize);
   }
 
+  private mouseMove = (event: MouseEvent) => {
+    // event.preventDefault();
+    this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  }
+
+  private updateIntersects() {
+    this.rayCaster.setFromCamera(this.mouse, this.camera);
+    this.bs.showInfluence(this.rayCaster.ray, this.hoveredTeam);
+  }
+
   private animate = () => {
     this.render();
+    this.updateIntersects();
     this.requestRender();
   }
 
@@ -291,7 +310,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private loadObj(obj: ObstacleConfig): Promise<GLTF> {
     return new Promise((resolve) => {
       const loader = new GLTFLoader();
-      loader.load('assets/models/' + obj.path + '/scene.' + (obj.ext || 'gltf'), (gltf) => {
+      loader.load('assets/models/' + obj.path + '/scene.' + (obj.ext || 'glb'), (gltf) => {
         gltf.scene.position.x = obj.offsetX;
         gltf.scene.position.z = obj.offsetZ;
         if (obj.scalar) gltf.scene.scale.setScalar(obj.scalar);
@@ -358,13 +377,14 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.scene.remove(...this.mapObjects);
     this.mapObjects = [];
 
-    const geometry = this.tileGeometry || new PlaneGeometry(1, 1);
-    geometry.rotateX(-Math.PI / 2);
+    const geometry = this.tileGeometry || new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
     this.tileGeometry = geometry;
     const loader = new TextureLoader();
     let square = new Mesh(geometry, new MeshBasicMaterial({ transparent: true, fog: false }));
     square.position.y = GRID_DEPTH;
     square.renderOrder = 2;
+    let flagIndex = 0;
+    this.bs.flags = [];
 
     for (let y = 0; y < this.map.length; y++) {
       for (let x = 0; x < this.map[y].length; x++) {
@@ -374,16 +394,32 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
           // load 3d
           let prom = this.tileObjects[tile];
           if (!prom) {
-            prom = this.loadObj(obstacleModels[tile]);
+            prom = this.loadObj(obstacleModels[tile]).then(gltf => gltf);
+            if (tile >= 21 && tile <= 23) {
+              prom.then(gltf => {
+                const flag = gltf.scene.getObjectByName('flag');
+                if (flag instanceof Mesh) flag.material?.dispose();
+              });
+            }
             this.tileObjects[tile] = prom;
           }
+
+          const thisFlag = flagIndex;
+          if (tile <= 23) flagIndex++;
           prom.then(model => {
             const newObj = model.scene.clone();
             const centered = new Group();
             centered.add(newObj);
             centered.position.x += x + 0.5;
             centered.position.z += y + 0.5;
-            centered.rotateY(Math.round(Math.random() * 3) * Math.PI / 2);
+            if (tile > 23) centered.rotateY(Math.round(Math.random() * 3) * Math.PI / 2);
+            else {
+              const flag = centered.getObjectByName('flag');
+              if (flag instanceof Mesh && this.lobby) {
+                flag.material = flagMats[this.lobby.flags[thisFlag].t as keyof typeof flagMats];
+                this.bs.flags[thisFlag] = flag;
+              }
+            }
             this.scene.add(centered);
             this.mapObjects.push(newObj);
           });

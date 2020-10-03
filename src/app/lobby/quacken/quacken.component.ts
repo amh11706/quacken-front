@@ -23,10 +23,15 @@ export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy duc
   styleUrls: ['./quacken.component.css']
 })
 export class QuackenComponent implements OnInit, OnDestroy {
-  @Input() set lobby(l: Lobby) {
+  private _lobby?: Lobby;
+  @Input() set lobby(l: Lobby | undefined) {
     if (!l) return;
+    this._lobby = l;
     if (l.map) this.setMapB64(l.map);
     setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.Boats, data: l }));
+  }
+  get lobby(): Lobby | undefined {
+    return this._lobby;
   }
 
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];

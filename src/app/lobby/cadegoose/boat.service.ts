@@ -1,15 +1,34 @@
 import { Injectable } from '@angular/core';
 import TWEEN from '@tweenjs/tween.js';
-import { Object3D, Group, Sprite, Scene, PerspectiveCamera, CanvasTexture, LinearFilter, ClampToEdgeWrapping, SpriteMaterial } from 'three';
+import {
+  Object3D,
+  Group,
+  Sprite,
+  Scene,
+  PerspectiveCamera,
+  CanvasTexture,
+  LinearFilter,
+  ClampToEdgeWrapping,
+  SpriteMaterial,
+  Box3,
+  EllipseCurve, Line, BufferGeometry, LineBasicMaterial, Ray, LineSegments, MeshStandardMaterial, Mesh, Side, DoubleSide
+} from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import { BoatsComponent, BoatSync, Clutter } from '../quacken/boats/boats.component';
+import { BoatsComponent, BoatSync, Clutter, Turn } from '../quacken/boats/boats.component';
 import { ObstacleConfig } from './cadegoose.component';
 import { WsService } from 'src/app/ws.service';
 import { OutCmd } from 'src/app/ws-messages';
 import { Boat } from '../quacken/boats/boat';
 import { Cannonball } from './clutter/cannonball';
+
+export const flagMats = {
+  0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
+  1: new MeshStandardMaterial({ color: 'darkred', side: DoubleSide }),
+  99: new MeshStandardMaterial({ color: '#CDCA97', side: DoubleSide }),
+  100: new MeshStandardMaterial({ color: '#444', side: DoubleSide }),
+};
 
 const checkSZ = (pos: { x: number, y: number }) => {
   return pos.y > 32 || pos.y < 3;
@@ -42,8 +61,11 @@ const moveEase: any[] = [,
 const shipModels: any = {
   22: { path: 'WB', offsetX: 0, offsetZ: 0, offsetY: 0.16, scalar: 0.02, rotate: -Math.PI / 2 },
   24: { path: 'xebec', offsetX: -0.05, offsetZ: 0, offsetY: 0, scalar: 0.015, rotate: Math.PI },
-  26: { path: 'WF', ext: 'glb', offsetX: 0, offsetZ: 0, offsetY: 0.175, scalar: 0.22 },
+  26: { path: 'WF', offsetX: 0, offsetZ: 0, offsetY: 0.175, scalar: 0.22 },
 };
+
+const red = new LineBasicMaterial({ color: 'red', linewidth: 1 });
+const green = new LineBasicMaterial({ color: 'lime', linewidth: 1 });
 
 interface BoatRender {
   id: number;
@@ -56,6 +78,8 @@ interface BoatRender {
   name: string;
   team: number;
   moves: number[];
+  influence: Line;
+  hitbox?: LineSegments;
 }
 
 @Injectable({
@@ -71,10 +95,18 @@ export class BoatService extends BoatsComponent {
   private rendering = true;
   private tweens = new TWEEN.Group();
   private myLastPos = { x: 0, z: 0 };
+  private circle = new Line();
+  flags: Mesh[] = [];
 
   constructor(ws: WsService) {
     super(ws);
     super.ngOnInit();
+
+    const circle = new EllipseCurve(0, 0, 0.5, 0.5, 0, 2 * Math.PI, false, 0);
+    const circleGeo = new BufferGeometry().setFromPoints(circle.getPoints(50));
+    circleGeo.rotateX(-Math.PI / 2);
+    circleGeo.translate(0, 0.02, 0);
+    this.circle = new Line(circleGeo, green);
   }
 
   async setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: PerspectiveCamera) {
@@ -143,6 +175,14 @@ export class BoatService extends BoatsComponent {
         }
       }
     }
+  }
+
+  protected handleTurn(turn: Turn) {
+    for (let i = 0; i < this.flags.length; i++) {
+      this.flags[i].material = flagMats[turn.flags[i]?.t as keyof typeof flagMats];
+    }
+
+    super.handleTurn(turn);
   }
 
   protected playTurn = () => {
@@ -244,6 +284,24 @@ export class BoatService extends BoatsComponent {
     }
   }
 
+  showInfluence(ray: Ray, team: number) {
+    if (!this.camera) return;
+    const cam = this.camera;
+    this.boatRenders.sort((a, b) => a.obj.position.distanceToSquared(cam.position) - b.obj.position.distanceToSquared(cam.position));
+    const box = new Box3();
+
+    for (const br of this.boatRenders) br.influence.visible = br.team === team;
+    if (team >= 0) return;
+    for (const br of this.boatRenders) {
+      if (!br.hitbox) continue;
+      box.setFromObject(br.hitbox);
+      if (ray.intersectsBox(box)) {
+        br.influence.visible = true;
+        return;
+      }
+    }
+  }
+
   private updateRender() {
     if (this.rendering || !this.scene || !this.getModel || !this.controls) return;
     this.rendering = true;
@@ -267,9 +325,8 @@ export class BoatService extends BoatsComponent {
         this.updateBoatRot(boat, br, startTime);
       }
 
-      if (boat.name !== br.name || boat.team !== br.team) {
-        this.rebuildHeader(boat, br);
-      }
+      this.rebuildHeader(boat, br);
+      br.influence.material = boat.team ? red : green;
       newRenders.push(br);
       boat.rendered = true;
     }
@@ -280,6 +337,15 @@ export class BoatService extends BoatsComponent {
   }
 
   private rebuildHeader(boat: Boat, br: BoatRender) {
+    let movesChanged = false;
+    for (let i = 0; i < 4; i++) {
+      if (boat.moves[i] !== br.moves[i]) {
+        movesChanged = true;
+        break;
+      }
+    }
+    if (!movesChanged && boat.team === br.team && boat.name === br.name) return;
+
     br.header.remove(br.title);
     br.title.material.dispose();
     br.title.geometry.dispose();
@@ -313,6 +379,11 @@ export class BoatService extends BoatsComponent {
           boatObj.position.z = boat.pos.y + 0.5;
           boatObj.rotation.y = -boat.face * Math.PI / 180;
 
+          const influence = this.circle.clone();
+          influence.scale.setScalar(boat.influence);
+          influence.material = boat.team ? red : green;
+          boatObj.add(influence);
+
           const header = new Group();
           let scale = (this.camera?.position.distanceTo(boatObj.position) || 16) / 36;
           if (scale > 0.5) {
@@ -327,7 +398,8 @@ export class BoatService extends BoatsComponent {
           this.scene?.add(boatObj);
           this.boatRenders.push({
             id: boat.id || 0, obj: boatObj, header, title: name, type: boat.type, moves: [...boat.moves],
-            pos: boat.pos, rotateDeg: boat.face, name: boat.name, team: boat.team || 0,
+            pos: boat.pos, rotateDeg: boat.face, name: boat.name, team: boat.team || 0, influence,
+            hitbox: boatObj.getObjectByName('hitbox') as LineSegments,
           });
           console.log('added boat', boat.id);
           boat.rendered = false;

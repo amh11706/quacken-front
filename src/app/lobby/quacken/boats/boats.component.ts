@@ -24,6 +24,7 @@ export interface Turn {
   cSteps: Clutter[][];
   treasure: number[];
   points: number[];
+  flags: { x: number, y: number, t: number, p: number, cs: number[] }[];
 }
 
 interface Sync {
@@ -144,7 +145,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       const boat = this._boats[b.t];
       if (boat) boat.bomb = b.m;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Turn, this.handleTurn));
+    this.subs.add(this.ws.subscribe(InCmd.Turn, (t) => this.handleTurn(t)));
     this.subs.add(this.ws.subscribe(InCmd.Sync, this.syncBoats));
   }
 
@@ -194,7 +195,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleTurn = (turn: Turn) => {
+  protected handleTurn(turn: Turn) {
     // first turn is only for starting the entry
     if (turn.turn === 1) {
       setTimeout(() => {
@@ -308,7 +309,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.team = sBoat.team;
       boat.maxDamage = sBoat.mDamage;
       boat.maxMoves = sBoat.mMoves;
-      boat.influence = Math.sqrt(sBoat.inSq) * 100 + 'px';
+      boat.influence = Math.sqrt(sBoat.inSq) * 2 || 1;
       boat.doubleShot = sBoat.dShot;
       this._boats[sBoat.id] = boat;
 
