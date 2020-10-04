@@ -40,8 +40,9 @@ import {
   Line,
   Group,
   Mesh,
-  Raycaster, Material, Color
+  Raycaster
 } from 'three';
+import { BoatRender } from './boat-render';
 
 const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed'];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -132,7 +133,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.renderer.autoClear = false;
     this.scene.fog = new Fog(0);
 
-    const light = new AmbientLight(0x404040, 1); // soft white light
+    const light = new AmbientLight(0x404040, 4); // soft white light
     this.scene.add(light);
 
     this.buildWater();
@@ -225,6 +226,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   private render = () => {
     this.bs.speed = this.settings.speed || 15;
+    BoatRender.speed = this.bs.speed;
     const time = new Date().valueOf();
     TWEEN.update(time);
 
@@ -374,7 +376,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   private fillMap() {
-    this.scene.remove(...this.mapObjects);
+    for (const o of this.mapObjects) o.parent?.remove(o);
     this.mapObjects = [];
 
     const geometry = this.tileGeometry || new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
@@ -421,7 +423,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
               }
             }
             this.scene.add(centered);
-            this.mapObjects.push(newObj);
+            this.mapObjects.push(centered);
           });
           continue;
         }

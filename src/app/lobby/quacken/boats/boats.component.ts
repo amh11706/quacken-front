@@ -165,7 +165,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
       const pos = this.myBoat.pos;
       this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: new Boat('').setPos(pos.x, pos.y) });
       this.myBoat.isMe = false;
-      this.myBoat.rendered = false;
     }
     if (this.turn) return;
     delete this._boats[id];
@@ -294,8 +293,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
     for (const sBoat of boats) {
       if (sBoat.oId) delete this._boats[sBoat.oId];
       const oldBoat = this.myBoat;
-      const boat = new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId)
-        .setPos(sBoat.x, sBoat.y)
+      const id = this.turn ? -sBoat.id : sBoat.id;
+      const boat = this._boats[id] || new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId);
+      this._boats[id] = boat;
+      boat.setPos(sBoat.x, sBoat.y)
         .setTreasure(sBoat.t)
         .draw();
       if (sBoat.ti) boat.title = sBoat.ti;
@@ -311,7 +312,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.maxMoves = sBoat.mMoves;
       boat.influence = Math.sqrt(sBoat.inSq) * 2 || 1;
       boat.doubleShot = sBoat.dShot;
-      this._boats[sBoat.id] = boat;
 
       if (boat.isMe) {
         if (oldBoat.isMe) {
