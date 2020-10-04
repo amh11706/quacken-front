@@ -5,6 +5,14 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 04 October 2020',
+    content: `
+    <ul>
+      <li>3D Cadegoose is released!</li>
+      <li>It is mostly playable on mobile, but expect improvements in that area in the next update.</li>
+    </ul>`
+  },
+  {
     title: 'Release 23 September 2020',
     content: `
     <ul>

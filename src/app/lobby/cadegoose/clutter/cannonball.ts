@@ -25,7 +25,7 @@ export class Cannonball {
 
     start(delay = 0) {
         const obj = this.obj;
-        if (!obj.dir || !obj.dis) return;
+        if (typeof obj.dir !== 'number' || !obj.dis) return;
         const hit = obj.dis < 4;
         if (!hit) obj.dis = 3;
         const p = this.cb.position;
@@ -38,10 +38,10 @@ export class Cannonball {
             })
         );
         this.group.add(new TWEEN.Tween(p as any)
-            .to({ y: 0.2 }, 1500 / Cannonball.speed * obj.dis)
+            .to({ y: 0.2 }, 1500 / Cannonball.speed * 3)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start(time).chain(new TWEEN.Tween(p as any)
-                .to({ y: 0.1 }, 1500 / Cannonball.speed * obj.dis)
+                .to({ y: 0.1 }, 1500 / Cannonball.speed * 3)
                 .easing(TWEEN.Easing.Quadratic.In)
             )
         );

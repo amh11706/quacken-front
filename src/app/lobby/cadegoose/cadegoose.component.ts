@@ -99,6 +99,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   hoveredTeam = -1;
   protected mapHeight = 36;
   protected mapWidth = 20;
+  protected alive = true;
 
   private scene = new Scene();
   private mapScene = new Scene();
@@ -199,6 +200,11 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngOnDestroy() {
     window.removeEventListener('resize', this.onWindowResize);
+    this.renderer.dispose();
+    this.scene.dispose();
+    this.mapScene.dispose();
+    this.controls?.dispose();
+    this.alive = false;
   }
 
   private mouseMove = (event: MouseEvent) => {
@@ -219,12 +225,13 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   private requestRender = () => {
-    if (this.frameRequested) return;
+    if (!this.alive || this.frameRequested) return;
     this.frameRequested = true;
     requestAnimationFrame(this.animate);
   }
 
   private render = () => {
+    if (!this.alive) return;
     this.bs.speed = this.settings.speed || 15;
     BoatRender.speed = this.bs.speed;
     const time = new Date().valueOf();

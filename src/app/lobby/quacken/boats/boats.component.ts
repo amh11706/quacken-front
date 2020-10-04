@@ -294,7 +294,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (sBoat.oId) delete this._boats[sBoat.oId];
       const oldBoat = this.myBoat;
       const id = this.turn ? -sBoat.id : sBoat.id;
-      const boat = this._boats[id] || new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId);
+      const boat = this._boats[id] || this._boats[sBoat.id] || new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId);
       this._boats[id] = boat;
       boat.setPos(sBoat.x, sBoat.y)
         .setTreasure(sBoat.t)

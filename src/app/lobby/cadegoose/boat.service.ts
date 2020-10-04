@@ -19,7 +19,7 @@ export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
   1: new MeshStandardMaterial({ color: 'darkred', side: DoubleSide }),
   99: new MeshStandardMaterial({ color: '#CDCA97', side: DoubleSide }),
-  100: new MeshStandardMaterial({ color: '#444', side: DoubleSide }),
+  100: new MeshStandardMaterial({ color: '#333', side: DoubleSide }),
 };
 
 const checkSZ = (pos: { x: number, y: number }) => {
@@ -180,7 +180,8 @@ export class BoatService extends BoatsComponent {
 
     const newRenders: BoatRender[] = [];
     for (const br of this.boatRenders) {
-      if ((!doDelete || this._boats[br.boat.id || 0] === br.boat) && br.update(startTime)) newRenders.push(br);
+      br.boat = this._boats[br.boat.id || 0] || br.boat;
+      if (!doDelete || br.update(startTime)) newRenders.push(br);
       else br.dispose();
     }
     this.boatRenders = newRenders;
