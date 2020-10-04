@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   Scene,
-  PerspectiveCamera,
   Box3,
-  Ray, MeshStandardMaterial, Mesh, DoubleSide
+  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -38,7 +37,7 @@ const shipModels: any = {
 export class BoatService extends BoatsComponent {
   private boatRenders: BoatRender[] = [];
   private scene?: Scene;
-  private camera?: PerspectiveCamera;
+  private camera?: Camera;
   private controls?: OrbitControls;
   private ships: Record<number, Promise<GLTF>> = {};
   private blockRender = true;
@@ -50,7 +49,7 @@ export class BoatService extends BoatsComponent {
     BoatRender.updateCam = (br) => this.updateCam(br);
   }
 
-  async setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: PerspectiveCamera) {
+  async setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: Camera) {
     this.scene = s;
     this.camera = cam;
 
@@ -181,7 +180,7 @@ export class BoatService extends BoatsComponent {
     const newRenders: BoatRender[] = [];
     for (const br of this.boatRenders) {
       br.boat = this._boats[br.boat.id || 0] || br.boat;
-      if (!doDelete || br.update(startTime)) newRenders.push(br);
+      if (br.update(startTime) || !doDelete) newRenders.push(br);
       else br.dispose();
     }
     this.boatRenders = newRenders;
