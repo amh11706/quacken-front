@@ -204,7 +204,6 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   imReady() {
-    if (this.myBoat.ready) return;
     this.stopTimer();
     this.myBoat.ready = true;
     this.locked = true;

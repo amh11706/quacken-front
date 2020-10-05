@@ -128,7 +128,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (!m.boats) return;
       clearTimeout(this.animateTimeout);
       delete this.turn;
-      this.myBoat.isMe = false;
+      this.myBoat.isMe = this._boats[this.myBoat.id] === this.myBoat;
       this.boats = [];
       this.setBoats(Object.values(m.boats));
       this.clutter = m.clutter || this.clutter;
@@ -225,6 +225,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     for (const boat of this.boats) {
       boat.moves = [0, 0, 0, 0];
       boat.bomb = 0;
+      boat.ready = false;
     }
     this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
   }
@@ -235,9 +236,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
     const turnPart = this.turn?.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
-      if (!boat || u.tm === undefined || u.tf === undefined) continue;
+      if (!boat) continue;
+      if (u.c) boat.addDamage(u.c - 1, u.cd || 0);
 
-      if (u.c && u.c > 0) boat.addDamage(u.c - 1, u.cd || 0);
+      if (u.tm === undefined || u.tf === undefined) continue;
       boat.rotateTransition = 1;
       boat.setTreasure(u.t)
         .setPos(u.x, u.y)
@@ -259,7 +261,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     this.step++;
     const delay = (this.turn?.steps[this.step] || this.turn?.cSteps[this.step] ? 750 : 250) * 20 / this.speed;
-    if (this.step < 8) this.animateTimeout = window.setTimeout(() => this.playTurn, delay);
+    if (this.step < 8) this.animateTimeout = window.setTimeout(() => this.playTurn(), delay);
     else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 2500);
   }
 
@@ -302,6 +304,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (sBoat.ti) boat.title = sBoat.ti;
       boat.spinDeg = 360 / sBoat.ms;
       boat.rotateTransition = 0;
+      boat.imageOpacity = 1;
+      boat.opacity = 1;
+      boat.moveTransition = [0, 0];
       boat.face = sBoat.f * boat.spinDeg;
       boat.moveLock = sBoat.ml;
       boat.tokenPoints = sBoat.tp;
@@ -313,21 +318,18 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.maxMoves = sBoat.mMoves;
       boat.influence = Math.sqrt(sBoat.inSq) * 2 || 1;
       boat.doubleShot = sBoat.dShot;
+      boat.type = sBoat.ty;
 
       if (boat.isMe) {
         if (this.myBoat.isMe) {
           if (boat.oId !== this.myBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
-          if (sBoat.ty !== this.myBoat.type || this.myBoat.damage > 100) {
-            this.myBoat.type = sBoat.ty;
+          if (sBoat.ty !== this.myBoat.type || this.myBoat.damage >= this.myBoat.maxDamage) {
+            this.myBoat.damage = 0;
             setTimeout(() => {
               this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
               this.map?.dispatchEvent(new Event('dblclick'));
             });
           }
-          boat.moves = this.myBoat.moves;
-          boat.damage = this.myBoat.damage;
-          Object.assign(this.myBoat, boat);
-          this._boats[sBoat.id] = this.myBoat;
         } else {
           setTimeout(() => {
             this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });

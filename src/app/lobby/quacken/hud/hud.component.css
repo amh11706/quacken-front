@@ -37,8 +37,8 @@ q-chat {
 
 #damage {
   float: left;
-  margin: 5px 37px;
-  width: 96px;
+  margin: 5px 35px;
+  width: 100px;
   height: 15px;
   background-color: #aaaaaa;
   overflow: hidden;
