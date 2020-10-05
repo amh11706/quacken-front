@@ -130,11 +130,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
       delete this.turn;
       this.myBoat.isMe = false;
       this.boats = [];
-      this._boats = {};
       this.setBoats(Object.values(m.boats));
       this.clutter = m.clutter || this.clutter;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.NewBoat, (boat: BoatSync) => this.setBoats([boat])));
+    this.subs.add(this.ws.subscribe(InCmd.NewBoat, (boat: BoatSync) => this.setBoats([boat], false)));
     this.subs.add(this.ws.subscribe(InCmd.DelBoat, (id: number) => this.deleteBoat(id)));
     this.subs.add(this.ws.subscribe(InCmd.Moves, s => this.handleMoves(s)));
     this.subs.add(this.ws.subscribe(InCmd.Ready, id => {
@@ -265,7 +264,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   }
 
   trackBoatBy(_i: number, b: Boat): number {
-    return b.id || 0;
+    return b.id;
   }
 
   private syncBoats = (sync: Sync) => {
@@ -275,7 +274,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     setTimeout(() => this.clutter = sync.cSync || [], 1000);
     if (sync.sync) {
-      this._boats = {};
       this.setBoats(sync.sync);
     }
   }
@@ -288,19 +286,22 @@ export class BoatsComponent implements OnInit, OnDestroy {
     });
   }
 
-  protected setBoats(boats: BoatSync[]) {
+  protected setBoats(boats: BoatSync[], reset = true) {
+    const newBoats: Record<number, Boat> = {};
+    if (!reset) Object.assign(newBoats, this._boats);
     if (this.turn && boats.length > 1) return;
     for (const sBoat of boats) {
       if (sBoat.oId) delete this._boats[sBoat.oId];
-      const oldBoat = this.myBoat;
+      let boat = this._boats[-sBoat.id] || this._boats[sBoat.id];
+      if (!boat || boat.name !== sBoat.n) boat = new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId);
       const id = this.turn ? -sBoat.id : sBoat.id;
-      const boat = this._boats[id] || this._boats[sBoat.id] || new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId);
-      this._boats[id] = boat;
+      newBoats[id] = boat;
       boat.setPos(sBoat.x, sBoat.y)
         .setTreasure(sBoat.t)
         .draw();
       if (sBoat.ti) boat.title = sBoat.ti;
       boat.spinDeg = 360 / sBoat.ms;
+      boat.rotateTransition = 0;
       boat.face = sBoat.f * boat.spinDeg;
       boat.moveLock = sBoat.ml;
       boat.tokenPoints = sBoat.tp;
@@ -314,28 +315,29 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.doubleShot = sBoat.dShot;
 
       if (boat.isMe) {
-        if (oldBoat.isMe) {
-          if (boat.oId !== oldBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
-          if (sBoat.ty !== oldBoat.type || oldBoat.damage > 100) {
-            oldBoat.type = sBoat.ty;
+        if (this.myBoat.isMe) {
+          if (boat.oId !== this.myBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
+          if (sBoat.ty !== this.myBoat.type || this.myBoat.damage > 100) {
+            this.myBoat.type = sBoat.ty;
             setTimeout(() => {
-              this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: oldBoat });
+              this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
               this.map?.dispatchEvent(new Event('dblclick'));
             });
           }
-          boat.moves = oldBoat.moves;
-          boat.damage = oldBoat.damage;
-          Object.assign(oldBoat, boat);
-          this._boats[sBoat.id] = oldBoat;
+          boat.moves = this.myBoat.moves;
+          boat.damage = this.myBoat.damage;
+          Object.assign(this.myBoat, boat);
+          this._boats[sBoat.id] = this.myBoat;
         } else {
           setTimeout(() => {
             this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
             this.map?.dispatchEvent(new Event('dblclick'));
           });
-          this.myBoat = boat;
         }
+        this.myBoat = boat;
       }
     }
+    this._boats = newBoats;
     this.boats = Object.values(this._boats);
     this.sortBoats();
 

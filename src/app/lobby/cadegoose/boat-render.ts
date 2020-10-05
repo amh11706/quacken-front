@@ -20,8 +20,8 @@ const moveColor = [,
     'red',
 ];
 
-const red = new THREE.LineBasicMaterial({ color: 'red', linewidth: 1 });
-const green = new THREE.LineBasicMaterial({ color: 'lime', linewidth: 1 });
+const red = new THREE.LineBasicMaterial({ color: 'red', transparent: true, opacity: 0 });
+const green = new THREE.LineBasicMaterial({ color: 'lime', transparent: true, opacity: 0 });
 
 const moveEase: any[] = [,
     TWEEN.Easing.Linear.None,
@@ -39,16 +39,21 @@ export class BoatRender {
 
     obj = new THREE.Group();
     team: number;
-    influence: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>;
     hitbox?: THREE.LineSegments<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
 
+    private influence: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>;
     private header = new THREE.Group();
-    private title?: THREE.Sprite;
+    private title: THREE.Sprite;
+    private headerTex: THREE.CanvasTexture;
+    private headerCtx: CanvasRenderingContext2D;
     private type: number;
     private pos: { x: number, y: number };
     private rotateDeg: number;
     private name: string;
     private moves: number[];
+    private influenceTween: any;
+    private tweenTarget = 0;
+    private nameTimeout = 0;
 
     constructor(public boat: Boat, gltf: GLTF) {
         if (!BoatRender.circle) {
@@ -56,7 +61,7 @@ export class BoatRender {
             const circleGeo = new THREE.BufferGeometry().setFromPoints(circle.getPoints(50));
             circleGeo.rotateX(-Math.PI / 2);
             circleGeo.translate(0, 0.02, 0);
-            BoatRender.circle = new THREE.Line(circleGeo, green);
+            BoatRender.circle = new THREE.Line(circleGeo);
             BoatRender.circle.visible = false;
         }
 
@@ -67,10 +72,19 @@ export class BoatRender {
 
         this.influence = BoatRender.circle.clone();
         this.influence.scale.setScalar(boat.influence);
-        this.influence.material = boat.team ? red : green;
+        this.influence.material = (boat.team ? red : green).clone();
         this.obj.add(this.influence);
 
         this.obj.add(this.header);
+        this.headerCtx = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
+        this.headerTex = new THREE.CanvasTexture(this.headerCtx.canvas);
+        this.title = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: this.headerTex,
+            transparent: true,
+            sizeAttenuation: false,
+        }));
+        this.title.renderOrder = 3;
+        this.title.scale.y = 0.06;
         this.makeHeader();
 
         this.type = boat.type;
@@ -86,12 +100,39 @@ export class BoatRender {
 
     dispose() {
         this.obj.parent?.remove(this.obj);
-        for (const c of this.header.children) {
-            if (!(c instanceof THREE.Sprite)) continue;
-            c.geometry.dispose();
-            c.material.dispose();
+        this.influence.material.dispose();
+        if (this.title) {
+            this.title.geometry.dispose();
+            this.title.material.dispose();
+            this.title.material.map?.dispose();
         }
         console.log('removed boat', this.boat.id);
+    }
+
+    showInfluence(v = true): void {
+        if (this.tweenTarget === +v) return;
+        this.tweenTarget = +v;
+        this.boat.renderName = v ? this.boat.title : this.boat.name;
+
+        if (this.nameTimeout) clearTimeout(this.nameTimeout);
+        this.nameTimeout = setTimeout(() => {
+            if (this.name !== this.boat.renderName) this.rebuildHeader();
+
+            if (this.influenceTween) {
+                this.influenceTween.end();
+                TWEEN.remove(this.influenceTween);
+            }
+            if (this.influence.material.opacity === this.tweenTarget) {
+                this.influence.visible = v;
+                return;
+            }
+            if (v) this.influence.visible = true;
+
+            this.influenceTween = new TWEEN.Tween(this.influence.material as any)
+                .to({ opacity: this.tweenTarget }, 200)
+                .start(new Date().valueOf())
+                .onComplete(() => this.influence.visible = v);
+        }, 200);
     }
 
     updateMoves(): BoatRender {
@@ -120,7 +161,8 @@ export class BoatRender {
         if (this.name !== this.boat.name || this.team !== this.boat.team) {
             this.rebuildHeader();
         }
-        this.influence.material = this.boat.team ? red : green;
+        this.influence.material.dispose();
+        this.influence.material = (this.boat.team ? red : green).clone();
         this.boat.rendered = true;
         return true;
     }
@@ -130,10 +172,11 @@ export class BoatRender {
             this.header.remove(this.title);
             this.title.material.dispose();
             this.title.geometry.dispose();
+            this.title.material.map?.dispose();
         }
 
         this.makeHeader();
-        this.name = this.boat.name;
+        this.name = this.boat.renderName;
         this.team = this.boat.team || 0;
         this.moves = [...this.boat.moves];
     }
@@ -149,12 +192,12 @@ export class BoatRender {
     }
 
     private makeHeader(size = 36): BoatRender {
-        const ctx = document.createElement('canvas').getContext('2d');
-        if (!ctx) return this;
+        const ctx = this.headerCtx;
+        ctx.restore();
         const font = `${size}px bold sans-serif`;
         ctx.font = font;
 
-        const width = ctx.measureText(this.boat.name).width;
+        const width = ctx.measureText(this.boat.renderName).width;
         const height = size;
         ctx.canvas.width = width;
         ctx.canvas.height = height + 36;
@@ -168,7 +211,7 @@ export class BoatRender {
 
         ctx.translate(width / 2, height / 2);
         ctx.fillStyle = headerColor(this.boat);
-        ctx.fillText(this.boat.name, 0, 0);
+        ctx.fillText(this.boat.renderName, 0, 0);
 
         for (let i = 0; i < this.boat.moves.length; i++) {
             const color = moveColor[this.boat.moves[i]];
@@ -179,24 +222,9 @@ export class BoatRender {
         ctx.lineWidth = 2;
         ctx.strokeRect(- 60, 24, 120, 20);
 
-        const canvas = ctx.canvas;
-        const texture = new THREE.CanvasTexture(canvas);
-        // because our canvas is likely not a power of 2
-        // in both dimensions set the filtering appropriately.
-        texture.minFilter = THREE.LinearFilter;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
+        this.headerTex.needsUpdate = true;
 
-        const labelMaterial = new THREE.SpriteMaterial({
-            map: texture,
-            transparent: true,
-            sizeAttenuation: false,
-        });
-
-        this.title = new THREE.Sprite(labelMaterial);
-        this.title.renderOrder = 3;
         this.title.scale.x = 0.03 / height * width;
-        this.title.scale.y = 0.06;
         this.header.add(this.title);
         return this;
     }

@@ -3,10 +3,11 @@ export class Boat {
   damage = 0;
   pos = { x: 12, y: 49 };
   moves = [0, 0, 0, 0];
-  id?: number;
+  id = 0;
   oId?: number;
   team?: number;
-  title?: string;
+  title: string;
+  renderName: string;
   maxDamage = 3;
   maxMoves = 4;
   influence = 1;
@@ -34,6 +35,7 @@ export class Boat {
     public isMe = false,
   ) {
     this.title = this.name;
+    this.renderName = this.name;
   }
 
   draw(offsetX: number = 0, offsetY: number = 0) {

@@ -11,7 +11,7 @@ export class Cannonball {
     private cb: Mesh;
     private group = new TWEEN.Group();
 
-    constructor(private scene: Scene, private obj: Clutter) {
+    constructor(scene: Scene, private obj: Clutter) {
         if (!Cannonball.template) {
             const geo = new SphereGeometry(0.025);
             const mat = new MeshPhongMaterial({ color: 'silver' });
@@ -25,7 +25,7 @@ export class Cannonball {
 
     start(delay = 0) {
         const obj = this.obj;
-        if (typeof obj.dir !== 'number' || !obj.dis) return;
+        if (typeof obj.dir !== 'number' || !obj.dis) return this.remove();
         const hit = obj.dis < 4;
         if (!hit) obj.dis = 3;
         const p = this.cb.position;
@@ -50,7 +50,7 @@ export class Cannonball {
     remove() {
         for (const t of this.group.getAll()) TWEEN.remove(t);
         this.group.removeAll();
-        this.scene.remove(this.cb);
+        this.cb.parent?.remove(this.cb);
     }
 
 }

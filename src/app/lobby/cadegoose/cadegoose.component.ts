@@ -110,8 +110,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private water?: Water;
 
   private tileGeometry?: Geometry;
-  private tiles: Record<number, MeshBasicMaterial> = {};
-  private tileObjects: Record<number, Promise<GLTF>> = {};
+  private tiles = new Map<number, MeshBasicMaterial>();
+  private tileObjects = new Map<number, Promise<GLTF>>();
   private mapObjects: Object3D[] = [];
   private stats?: Stats;
   private cameraTween: any;
@@ -141,6 +141,26 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.buildSky();
 
     window.addEventListener('resize', this.onWindowResize, false);
+  }
+
+  private static dispose(o: any) {
+    if (o.geometry) {
+      o.geometry.dispose();
+    }
+
+    if (o.material) {
+      if (o.material.length) {
+        for (let i = 0; i < o.material.length; ++i) {
+          o.material[i].dispose();
+        }
+      } else {
+        o.material.dispose();
+      }
+    }
+
+    if (o.children?.length) {
+      for (const c of o.children) CadegooseComponent.dispose(c);
+    }
   }
 
   ngOnInit() {
@@ -201,9 +221,10 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   ngOnDestroy() {
     window.removeEventListener('resize', this.onWindowResize);
     this.renderer.dispose();
-    this.scene.dispose();
-    this.mapScene.dispose();
     this.controls?.dispose();
+    this.tileGeometry?.dispose();
+    for (const [, m] of this.tiles) m.dispose();
+    for (const [, o] of this.tileObjects) CadegooseComponent.dispose(o);
     this.alive = false;
   }
 
@@ -249,6 +270,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.frameRequested = false;
     this.controls?.update();
     this.stats?.update();
+    // console.log(this.renderer.info.memory)
   }
 
   private onWindowResize = () => {
@@ -401,7 +423,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
         if (!tile) continue;
         if (obstacleModels[tile]) {
           // load 3d
-          let prom = this.tileObjects[tile];
+          let prom = this.tileObjects.get(tile);
           if (!prom) {
             prom = this.loadObj(obstacleModels[tile]).then(gltf => gltf);
             if (tile >= 21 && tile <= 23) {
@@ -410,7 +432,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
                 if (flag instanceof Mesh) flag.material?.dispose();
               });
             }
-            this.tileObjects[tile] = prom;
+            this.tileObjects.set(tile, prom);
           }
 
           const thisFlag = flagIndex;
@@ -435,13 +457,13 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
           continue;
         }
         // load 2d
-        let mat = this.tiles[tile];
+        let mat = this.tiles.get(tile);
         if (!mat) {
           mat = square.material.clone();
           mat.map = loader.load('assets/images/obstacle' + tile + '.png');
           mat.map.minFilter = LinearFilter;
           mat.map.anisotropy = this.renderer.capabilities.getMaxAnisotropy() || 0;
-          this.tiles[tile] = mat;
+          this.tiles.set(tile, mat);
         }
         square.position.x = 0.5 + x;
         square.position.z = 0.5 + y;

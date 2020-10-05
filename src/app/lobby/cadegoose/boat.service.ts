@@ -13,6 +13,7 @@ import { WsService } from 'src/app/ws.service';
 import { OutCmd } from 'src/app/ws-messages';
 import { Cannonball } from './clutter/cannonball';
 import { BoatRender } from './boat-render';
+import { Boat } from '../quacken/boats/boat';
 
 export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
@@ -73,8 +74,8 @@ export class BoatService extends BoatsComponent {
     });
   }
 
-  protected setBoats(b: BoatSync[]) {
-    super.setBoats(b);
+  protected setBoats(b: BoatSync[], reset = true) {
+    super.setBoats(b, reset);
     for (const boat of this.boats) boat.checkSZ = checkSZ;
     this.updateRender(!this.turn);
   }
@@ -85,7 +86,7 @@ export class BoatService extends BoatsComponent {
   }
 
   protected handleMoves(s: { t: number, m: number[] }) {
-    const boat = this._boats[s.t];
+    const boat = this._boats[-s.t] || this._boats[s.t];
     if (!boat) return;
     boat.moves = s.m;
     const br = this.boatRenders.find(r => r.boat === boat);
@@ -159,16 +160,21 @@ export class BoatService extends BoatsComponent {
     this.boatRenders.sort((a, b) => a.obj.position.distanceToSquared(cam.position) - b.obj.position.distanceToSquared(cam.position));
     const box = new Box3();
 
-    for (const br of this.boatRenders) br.influence.visible = br.team === team;
-    if (team >= 0) return;
+    if (team >= 0) {
+      for (const br of this.boatRenders) br.showInfluence(br.team === team);
+      return;
+    }
+
+    let hovered = 0;
     for (const br of this.boatRenders) {
       if (!br.hitbox) continue;
       box.setFromObject(br.hitbox);
       if (ray.intersectsBox(box)) {
-        br.influence.visible = true;
-        return;
+        hovered = br.boat.id;
+        break;
       }
     }
+    for (const br of this.boatRenders) br.showInfluence(br.boat.id === hovered);
   }
 
   private updateRender(doDelete = false) {
@@ -179,8 +185,7 @@ export class BoatService extends BoatsComponent {
 
     const newRenders: BoatRender[] = [];
     for (const br of this.boatRenders) {
-      br.boat = this._boats[br.boat.id || 0] || br.boat;
-      if (br.update(startTime) || !doDelete) newRenders.push(br);
+      if ((br.boat === this._boats[br.boat.id] || !doDelete) && br.update(startTime)) newRenders.push(br);
       else br.dispose();
     }
     this.boatRenders = newRenders;
