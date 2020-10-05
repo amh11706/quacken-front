@@ -79,7 +79,6 @@ export const enum InCmd {
     FriendOnline,
     FriendOffline,
     FriendList,
-    FriendInvite,
     FriendAdd,
     FriendRemove,
     InviteAdd,

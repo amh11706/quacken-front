@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import {
   Scene,
   Box3,
@@ -13,7 +13,6 @@ import { WsService } from 'src/app/ws.service';
 import { OutCmd } from 'src/app/ws-messages';
 import { Cannonball } from './clutter/cannonball';
 import { BoatRender } from './boat-render';
-import { Boat } from '../quacken/boats/boat';
 
 export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
@@ -32,10 +31,8 @@ const shipModels: any = {
   26: { path: 'WF', offsetX: 0, offsetZ: 0, offsetY: 0.175, scalar: 0.22 },
 };
 
-@Injectable({
-  providedIn: 'root'
-})
-export class BoatService extends BoatsComponent {
+@Injectable()
+export class BoatService extends BoatsComponent implements OnDestroy {
   private boatRenders: BoatRender[] = [];
   private scene?: Scene;
   private camera?: Camera;
@@ -48,6 +45,32 @@ export class BoatService extends BoatsComponent {
     super(ws);
     super.ngOnInit();
     BoatRender.updateCam = (br) => this.updateCam(br);
+  }
+
+  static dispose(o: any) {
+    if (o.geometry) {
+      o.geometry.dispose();
+    }
+
+    if (o.material) {
+      if (o.material.length) {
+        for (let i = 0; i < o.material.length; ++i) {
+          o.material[i].dispose();
+        }
+      } else {
+        o.material.dispose();
+      }
+    }
+
+    if (o.children?.length) {
+      for (const c of o.children) BoatService.dispose(c);
+    }
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+
+    for (const p of Object.values(this.ships)) p.then(s => BoatService.dispose(s.scene));
   }
 
   async setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: Camera) {
@@ -99,6 +122,7 @@ export class BoatService extends BoatsComponent {
   }
 
   protected handleTurn(turn: Turn) {
+    if (!this.flags || !turn.flags) return;
     for (let i = 0; i < this.flags.length; i++) {
       this.flags[i].material = flagMats[turn.flags[i]?.t as keyof typeof flagMats];
     }

@@ -91,7 +91,8 @@ const obstacleModels: Record<number, ObstacleConfig> = {
 @Component({
   selector: 'q-cadegoose',
   templateUrl: './cadegoose.component.html',
-  styleUrls: ['./cadegoose.component.scss']
+  styleUrls: ['./cadegoose.component.scss'],
+  providers: [BoatService],
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('frame') frame?: ElementRef;
@@ -141,26 +142,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.buildSky();
 
     window.addEventListener('resize', this.onWindowResize, false);
-  }
-
-  private static dispose(o: any) {
-    if (o.geometry) {
-      o.geometry.dispose();
-    }
-
-    if (o.material) {
-      if (o.material.length) {
-        for (let i = 0; i < o.material.length; ++i) {
-          o.material[i].dispose();
-        }
-      } else {
-        o.material.dispose();
-      }
-    }
-
-    if (o.children?.length) {
-      for (const c of o.children) CadegooseComponent.dispose(c);
-    }
   }
 
   ngOnInit() {
@@ -224,7 +205,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.controls?.dispose();
     this.tileGeometry?.dispose();
     for (const [, m] of this.tiles) m.dispose();
-    for (const [, o] of this.tileObjects) CadegooseComponent.dispose(o);
+    for (const [, o] of this.tileObjects) BoatService.dispose(o);
     this.alive = false;
   }
 
