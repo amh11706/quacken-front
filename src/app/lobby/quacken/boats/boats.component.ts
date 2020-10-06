@@ -321,9 +321,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.type = sBoat.ty;
 
       if (boat.isMe) {
-        if (this.myBoat.isMe) {
+        if (boat === this.myBoat) {
           if (boat.oId !== this.myBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
-          if (sBoat.ty !== this.myBoat.type || this.myBoat.damage >= this.myBoat.maxDamage) {
+          if (this.myBoat.damage >= this.myBoat.maxDamage) {
             this.myBoat.damage = 0;
             setTimeout(() => {
               this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });

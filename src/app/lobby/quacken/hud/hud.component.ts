@@ -69,8 +69,8 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.turn > 0) this.locked = false;
       this.myBoat = b;
       this.checkMaxMoves();
-      this.resetMoves();
       if (!b.isMe) {
+        this.resetMoves();
         this.locked = true;
       }
     }));
@@ -78,6 +78,7 @@ export class HudComponent implements OnInit, OnDestroy {
       if (!this.locked || !this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
       this.resetMoves();
       this.locked = false;
+      this.myBoat.ready = false;
       if (this.selected !== -1) this.selected = 0;
     }));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
