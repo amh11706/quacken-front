@@ -40,11 +40,16 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   private ships: Record<number, Promise<GLTF>> = {};
   private blockRender = true;
   flags: Mesh[] = [];
+  private flagData: { x: number, y: number, t: number, p: number, cs: number[] }[] = [];
 
   constructor(ws: WsService) {
     super(ws);
     super.ngOnInit();
     BoatRender.updateCam = (br) => this.updateCam(br);
+
+    // this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
+    //   this.flagData = m.flags || [];
+    // }));
   }
 
   static dispose(o: any) {
@@ -122,12 +127,33 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   }
 
   protected handleTurn(turn: Turn) {
-    if (!this.flags || !turn.flags) return;
-    for (let i = 0; i < this.flags.length; i++) {
-      this.flags[i].material = flagMats[turn.flags[i]?.t as keyof typeof flagMats];
-    }
-
+    this.flagData = turn.flags;
+    this.setHeaderFlags();
     super.handleTurn(turn);
+  }
+
+  private setHeaderFlags() {
+    if (!this.flags) return;
+
+    const brs: Record<number, BoatRender> = {};
+    for (const br of this.boatRenders) {
+      br.flags = [];
+      brs[br.boat.id] = br;
+    }
+    for (let i = 0; i < this.flags.length; i++) {
+      const f = this.flagData[i];
+      if (!f) continue;
+      this.flags[i].material = flagMats[f.t as keyof typeof flagMats];
+      if (f.cs) for (const id of f.cs) brs[id]?.flags.push({ p: f.p, t: f.t });
+    }
+    for (const br of this.boatRenders) {
+      br.flags.sort((a, b) => {
+        if (a.p > b.p) return -1;
+        if (a.p < b.p) return 1;
+        return b.t - a.t;
+      });
+      br.rebuildHeader();
+    }
   }
 
   protected playTurn = () => {
@@ -227,6 +253,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
           const br = new BoatRender(boat, gltf).scaleHeader(this.camera);
           this.scene?.add(br.obj);
           this.boatRenders.push(br);
+          // this.setHeaderFlags();
         });
       }
     }

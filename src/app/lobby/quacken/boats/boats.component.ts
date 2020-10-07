@@ -84,7 +84,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   boats: Boat[] = [];
 
   protected _boats: { [k: number]: Boat } = {};
-  private subs = new Subscription();
+  protected subs = new Subscription();
   protected animateTimeout?: number;
   private blurred = false;
   protected step = -1;
@@ -343,7 +343,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.boats = Object.values(this._boats);
     this.sortBoats();
 
-    if (this.myBoat.isMe && !this._boats[this.ws.sId || 0]) {
+    const sId = this.ws.sId || 0;
+    if (this.myBoat.isMe && !this._boats[sId] && !this._boats[-sId]) {
       this.myBoat = new Boat('');
       this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
     }

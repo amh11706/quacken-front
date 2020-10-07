@@ -20,6 +20,9 @@ const moveColor = [,
     'red',
 ];
 
+const flagColor = { 0: 'lime', 1: 'red', 100: '#666' };
+
+
 const red = new THREE.LineBasicMaterial({ color: 'red', transparent: true, opacity: 0 });
 const green = new THREE.LineBasicMaterial({ color: 'lime', transparent: true, opacity: 0 });
 
@@ -40,6 +43,7 @@ export class BoatRender {
     obj = new THREE.Group();
     team: number;
     hitbox?: THREE.LineSegments<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
+    flags: { p: number, t: number }[] = [];
 
     private influence: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>;
     private header = new THREE.Group();
@@ -82,6 +86,7 @@ export class BoatRender {
             map: this.headerTex,
             transparent: true,
             sizeAttenuation: false,
+            // depthWrite: false,
         }));
         this.title.renderOrder = 3;
         this.title.scale.y = 0.06;
@@ -167,13 +172,8 @@ export class BoatRender {
         return true;
     }
 
-    private rebuildHeader() {
-        if (this.title) {
-            this.header.remove(this.title);
-            this.title.material.dispose();
-            this.title.geometry.dispose();
-            this.title.material.map?.dispose();
-        }
+    rebuildHeader() {
+        if (this.title) this.header.remove(this.title);
 
         this.makeHeader();
         this.name = this.boat.renderName;
@@ -184,9 +184,9 @@ export class BoatRender {
     scaleHeader(cam: THREE.Camera): BoatRender {
         let scale = (cam.position.distanceTo(this.obj.position) || 16) / 36;
         if (scale > 0.5) {
-            this.header.scale.setScalar(0.5 / scale);
+            this.header.scale.setScalar(0.65 / scale);
             scale = 0.5;
-        } else this.header.scale.setScalar(1);
+        } else this.header.scale.setScalar(1.3);
         this.header.position.y = 0.6 + scale;
         return this;
     }
@@ -197,10 +197,10 @@ export class BoatRender {
         const font = `${size}px bold sans-serif`;
         ctx.font = font;
 
-        const width = ctx.measureText(this.boat.renderName).width;
-        const height = size;
+        const width = Math.max(ctx.measureText(this.boat.renderName).width, 160);
+        const height = size + 72;
         ctx.canvas.width = width;
-        ctx.canvas.height = height + 36;
+        ctx.canvas.height = height;
 
         // need to set font again after resizing canvas
         ctx.font = font;
@@ -209,7 +209,7 @@ export class BoatRender {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
         ctx.fillRect(0, 0, width, height);
 
-        ctx.translate(width / 2, height / 2);
+        ctx.translate(width / 2, size / 2);
         ctx.fillStyle = headerColor(this.boat);
         ctx.fillText(this.boat.renderName, 0, 0);
 
@@ -222,9 +222,22 @@ export class BoatRender {
         ctx.lineWidth = 2;
         ctx.strokeRect(- 60, 24, 120, 20);
 
+        if (this.flags.length) {
+            ctx.font = font;
+            ctx.textAlign = 'left';
+            const flagWidth = ctx.measureText(this.flags.reduce((p, c) => p + c.p, '')).width;
+            let shownFlags = '';
+            for (const f of this.flags) {
+                ctx.fillStyle = flagColor[f.t as keyof typeof flagColor];
+                const offset = ctx.measureText(shownFlags).width;
+                ctx.fillText(String(f.p), -flagWidth / 2 + offset, 64);
+                shownFlags += f.p;
+            }
+        }
+
         this.headerTex.needsUpdate = true;
 
-        this.title.scale.x = 0.03 / height * width;
+        this.title.scale.x = 0.08 / height * width;
         this.header.add(this.title);
         return this;
     }
