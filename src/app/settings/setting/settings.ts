@@ -26,8 +26,11 @@ export const Settings = {
   speed: {
     id: 3, group: 'lobby', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
   },
-  cadeMapScale: {
-    id: 22, group: 'cade', name: 'mapScale', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1
+  cadeLockAngle: {
+    id: 22, group: 'cade', name: 'lockAngle', type: 'checkbox', label: 'Lock Angle'
+  },
+  cadeMaxFps: {
+    id: 28, group: 'cade', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 30, max: 240, step: 15
   },
   cadeSpeed: {
     id: 23, group: 'cade', name: 'speed', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5

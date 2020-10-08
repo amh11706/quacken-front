@@ -326,6 +326,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
           if (this.myBoat.damage >= this.myBoat.maxDamage) {
             this.myBoat.damage = 0;
             setTimeout(() => {
+              console.log('sunk boat refresh')
               this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
               this.map?.dispatchEvent(new Event('dblclick'));
             });
@@ -333,6 +334,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         } else {
           setTimeout(() => {
             this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
+            console.log('new boat refresh')
             this.map?.dispatchEvent(new Event('dblclick'));
           });
         }

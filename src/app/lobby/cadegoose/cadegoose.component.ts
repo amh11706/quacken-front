@@ -40,11 +40,11 @@ import {
   Line,
   Group,
   Mesh,
-  Raycaster
+  Raycaster, MOUSE
 } from 'three';
 import { BoatRender } from './boat-render';
 
-const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed'];
+const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed', 'cadeMaxFps', 'cadeLockAngle'];
 const ownerSettings: (keyof typeof Settings)[] = [
   'jobberQuality', 'cadePublicMode', 'cadeHotEntry',
   'cadeMaxPlayers', 'cadeMap',
@@ -85,7 +85,7 @@ const obstacleModels: Record<number, ObstacleConfig> = {
   22: { path: 'flag2', offsetX: 0, offsetZ: 0, rotate: Math.PI },
   23: { path: 'flag3', offsetX: 0, offsetZ: 0, rotate: Math.PI },
   50: { path: 'rocks', offsetX: -0.15, offsetZ: -0.25 },
-  51: { path: 'stylized_rocks', offsetX: 0, offsetZ: 0, scalar: 0.5, scaleY: 0.25 },
+  51: { path: 'stylized_rocks', offsetX: 0, offsetZ: 0, scalar: 0.5, scaleY: 0.3 },
 };
 
 @Component({
@@ -108,6 +108,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private controls?: MapControls;
   private renderer = new WebGLRenderer();
   private frameRequested = true;
+  private frameTarget = 0;
   private water?: Water;
 
   private tileGeometry?: Geometry;
@@ -221,6 +222,14 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   private animate = () => {
+    const t = new Date().valueOf();
+    if (t < this.frameTarget) {
+      this.frameRequested = false;
+      this.requestRender();
+      return;
+    }
+    if (this.settings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.settings.maxFps);
+
     this.render();
     this.updateIntersects();
     this.requestRender();
@@ -233,11 +242,13 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   private render = () => {
-    if (!this.alive) return;
+    if (!this.alive || !this.controls) return;
     this.bs.speed = this.settings.speed || 15;
     BoatRender.speed = this.bs.speed;
     const time = new Date().valueOf();
     TWEEN.update(time);
+
+    this.controls.mouseButtons.RIGHT = this.settings.lockAngle ? MOUSE.PAN : MOUSE.ROTATE;
 
     if (this.scene.fog instanceof Fog) {
       this.scene.fog.near = this.camera.position.y;
