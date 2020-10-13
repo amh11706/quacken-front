@@ -166,7 +166,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       if (u.c) boat.addDamage(u.c - 1, u.cd || 0);
 
       if (u.tm === undefined || u.tf === undefined) continue;
-      boat.rotateTransition = 1;
+      if (boat.rotateTransition === 0) boat.rotateTransition = 1;
       boat.setPos(u.x, u.y)
         .setTransition(u.tf, u.tm)
         .rotateByMove(u.tm);
