@@ -20,8 +20,4 @@ export class CadeEntryStatusComponent extends EntryStatusComponent {
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.points = t.points));
     this.subs.add(this.ws.subscribe(Internal.Boats, (l: Lobby) => this.points = l.points));
   }
-
-  openMenu() {
-    this.ws.dispatchMessage({ cmd: Internal.OpenMenu });
-  }
 }

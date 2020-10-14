@@ -5,10 +5,9 @@
 }
 
 q-chat {
-  position: absolute;
-  right: 8px;
-  top: 4px;
+  display: inline-block;
   width: calc(99% - 270px);
+  min-width: 150px;
 }
 
 #hud {
@@ -21,6 +20,12 @@ q-chat {
   min-width: 320px;
   padding: 5px;
   text-align: center;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+#hud * {
+  white-space: normal;
 }
 
 #movesource, #buttons {

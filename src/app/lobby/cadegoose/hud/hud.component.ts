@@ -128,4 +128,8 @@ export class CadeHudComponent extends HudComponent {
     this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     this.usingCannons = 0;
   }
+
+  openMenu() {
+    this.ws.dispatchMessage({ cmd: Internal.OpenMenu });
+  }
 }

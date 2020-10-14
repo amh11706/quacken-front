@@ -176,9 +176,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     });
     this.bs.map = this.frame?.nativeElement;
 
-    this.camera.position.x = 5;
-    this.camera.position.y = 15;
-    this.camera.position.z = 38;
+    this.camera.position.set(5, 15, 38);
 
     this.controls = new MapControls(this.camera, this.frame?.nativeElement);
     this.controls.maxPolarAngle = Math.PI * 15 / 32;

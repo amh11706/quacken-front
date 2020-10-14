@@ -1,15 +1,14 @@
-<div [qDrag]
-     [bindToWindow]="true"
-     class="container noselect"
+<div class="container noselect"
      id="timer">
     <p id="turncount">{{time}}</p>
-    <ng-container *ngFor="let team of points; let i = index">
-        <p class="team team{{i}}"
-           (mouseover)="hoveredTeam.emit(i)"
-           (mouseleave)="hoveredTeam.emit(-1)">
-            {{teams[i]}}: <br>{{team}}
-        </p>
-    </ng-container>
-    <button mat-raised-button
-            (click)="openMenu()">Menu</button>
+    <p class="team team0"
+       (mouseover)="hoveredTeam.emit(0)"
+       (mouseleave)="hoveredTeam.emit(-1)">
+        {{points[0]}}
+    </p> -
+    <p class="team team1"
+       (mouseover)="hoveredTeam.emit(1)"
+       (mouseleave)="hoveredTeam.emit(-1)">
+        {{points[1]}}
+    </p>
 </div>

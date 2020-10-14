@@ -4,26 +4,38 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 #menu {
-	position: absolute;
+    position: absolute;
     top: calc(50% - 50px);
     left: 50%;
-    height: 60%;
     width: 75%;
+    max-height: 60vh;
     max-width: 800px;
     color: #efefef;
     transform: translate(-50%, -50%);
     text-align: center;
 }
 
+#flexmenu {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 12px;
+    row-gap: 8px;
+    justify-content: center;
+    overflow-y: auto;
+    height: 420px;
+    max-height: calc(60vh - 80px);
+}
+
 .teamwrap {
     display: inline-block;
 }
 
-#defenders, #attackers {
+#defenders,
+#attackers {
     display: inline-block;
     margin-top: 8px;
     padding-top: 4px;
@@ -31,12 +43,11 @@
     height: 250px;
     border: 1px solid green;
     border-radius: 4px;
-    background: rgba(0, 0, 0, .3);
+    background: rgba(0, 0, 0, 0.3);
     overflow: hidden;
 }
 
 #attackers {
-    margin-left: 12px;
     border-color: red;
 }
 
@@ -60,8 +71,6 @@
 }
 
 #buttons {
-    position: absolute;
-    bottom: 4px;
     width: 100%;
 
     q-setting {
@@ -73,6 +82,7 @@
 
 #ready {
     background: darkgreen;
+    margin-bottom: 4px;
 }
 
 #ready.cancel {
@@ -81,7 +91,6 @@
 
 #start {
     display: inline-block;
-    margin-left: 8px;
     top: 0 !important;
 }
 

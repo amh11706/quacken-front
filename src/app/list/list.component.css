@@ -94,6 +94,8 @@ q-chat-box {
   text-align: left;
   background-color: grey;
   border-bottom: 2px solid grey;
+  white-space: nowrap;
+  overflow-x: auto;
 }
 
 button {

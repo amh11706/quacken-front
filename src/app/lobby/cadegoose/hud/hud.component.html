@@ -112,6 +112,8 @@
                          {{haveMoves[2] - usingMoves[2]}}X
                     </div>
                </mat-radio-group>
+               <button mat-raised-button
+                       (click)="openMenu()">Menu</button>
           </div>
 
           <p *ngIf="myBoat.moveLock">

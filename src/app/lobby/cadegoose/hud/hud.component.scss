@@ -1,188 +1,194 @@
 #boatcontrol {
-    float: left;
-    width: 277px;
-    height: 148px;
+  display: inline-block;
+  width: 277px;
+  height: 148px;
+}
+
+q-chat {
+  display: inline-block;
+  width: calc(99% - 285px);
+  min-width: 150px;
+}
+
+#hud {
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 95%;
+  max-width: 900px;
+  min-width: 320px;
+  padding: 5px;
+  text-align: center;
+  overflow-x: auto;
+  white-space: nowrap;
+
+  * {
+    white-space: normal;
   }
-  
-  q-chat {
-    position: absolute;
-    right: 8px;
-    top: 4px;
-    width: calc(99% - 285px);
-  }
-  
-  #hud {
-    position: absolute;
-    bottom: 1%;
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: 95%;
-    max-width: 900px;
-    min-width: 320px;
-    padding: 5px;
-    text-align: center;
-  }
-  
-  #movesource {
+}
+
+#movesource {
+  position: relative;
+  float: left;
+  width: 150px;
+  min-height: 10px;
+  margin: 10px;
+}
+
+mat-radio-button {
+  transform: scale(0.5);
+}
+
+mat-checkbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#movesource div {
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+  color: #eee;
+}
+
+#damage,
+#bilge {
+  float: left;
+  margin: 2px 35px;
+  width: 100px;
+  height: 15px;
+  background-color: #aaaaaa;
+  overflow: hidden;
+}
+
+#bilge {
+  margin-top: 0;
+}
+
+#damagebar,
+#bilgebar {
+  position: relative;
+  background: red;
+  height: 15px;
+  left: -100%;
+  transition: 0.3s linear;
+  pointer-events: none;
+}
+
+#bilgebar {
+  background: blue;
+}
+
+#time {
+  position: relative;
+  margin: 30px 10px;
+  float: right;
+  height: 76px;
+  width: 15px;
+  background-color: #aaaaaa;
+  overflow: hidden;
+}
+
+#timebar {
+  position: relative;
+  height: 76px;
+  top: 100%;
+  background-color: khaki;
+  transition: 0.9s linear;
+}
+
+#moves {
+  float: right;
+  margin-right: 27px;
+}
+
+.moverow {
+  position: relative;
+}
+
+.move {
+  background-color: lightgrey;
+  width: 35px;
+  height: 35px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.move img {
+  height: 100%;
+  width: 100%;
+}
+
+.bombslot {
+  position: absolute;
+  top: 10px;
+  left: -14px;
+  background-color: lightgrey;
+  width: 16px;
+  height: 16px;
+  border: 1px solid black;
+  border-radius: 8px;
+}
+
+.bombslot.right {
+  left: 33px;
+}
+
+.bombslot.left2 {
+  left: -28px;
+}
+
+.bombslot.right2 {
+  left: 47px;
+}
+
+#cannons {
+  position: relative;
+  right: 12px;
+
+  .bombslot {
     position: relative;
-    float: left;
-    width: 150px;
-    min-height: 10px;
-    margin: 10px;
-  }
-
-  mat-radio-button {
-    transform: scale(0.5);
-  }
-
-  mat-checkbox {
-    position: absolute;
-    top: 0;
+    top: -6px;
     left: 0;
   }
+}
 
-  #movesource div {
-    display: inline-block;
-    text-align: center;
-    font-size: 12px;
-    color: #eee;
-  }
-  
-  #damage, #bilge {
-    float: left;
-    margin: 2px 35px;
-    width: 100px;
-    height: 15px;
-    background-color: #aaaaaa;
-    overflow: hidden;
-  }
+#treasurebox,
+.token {
+  float: left;
+  margin-left: 8px;
+  height: 35px;
+  width: 35px;
+  border: 2px solid grey;
+  border-radius: 5px;
+  background-color: rgba(100, 100, 100, 0.3);
+}
 
-  #bilge {
-    margin-top: 0;
-  }
-  
-  #damagebar, #bilgebar {
-    position: relative;
-    background: red;
-    height: 15px;
-    left: -100%;
-    transition: .3s linear;
-    pointer-events: none;
-  }
-  
-  #bilgebar {
-    background: blue;
-  }
-  
-  #time {
-    position: relative;
-    margin: 30px 10px;
-    float: right;
-    height: 76px;
-    width: 15px;
-    background-color: #aaaaaa;
-    overflow: hidden;
-  }
-  
-  #timebar {
-    position: relative;
-    height: 76px;
-    top: 100%;
-    background-color: khaki;
-    transition: .9s linear;
-  }
-  
-  #moves {
-    float: right;
-    margin-right: 27px;
-  }
-  
-  .moverow {
-    position: relative;
-  }
-  
-  .move {
-    background-color: lightgrey;
-    width: 35px;
-    height: 35px;
-    border: 1px solid black;
-    border-radius: 10px;
-  }
-  
-  .move img {
-    height: 100%;
-    width: 100%;
-  }
-  
-  .bombslot {
-    position: absolute;
-    top: 10px;
-    left: -14px;
-    background-color: lightgrey;
-    width: 16px;
-    height: 16px;
-    border: 1px solid black;
-    border-radius: 8px;
-  }
-  
-  .bombslot.right {
-    left: 33px;
-  }
-  
-  .bombslot.left2 {
-    left: -28px;
-  }
-  
-  .bombslot.right2 {
-    left: 47px;
-  }
+#tokens {
+  margin-left: 37px;
+}
 
-  #cannons {
-    position: relative;
-    right: 12px;
+.token img {
+  margin-top: 4px;
+  height: 23px;
+  width: 23px;
+}
 
-    .bombslot {
-      position: relative;
-      top: -6px;
-      left: 0;
-    }
-  }
+#settings {
+  margin-left: 6px;
+  color: #bbb;
+}
 
-  
-  #treasurebox, .token {
-    float: left;
-    margin-left: 8px;
-    height: 35px;
-    width: 35px;
-    border: 2px solid grey;
-    border-radius: 5px;
-    background-color: rgba(100, 100, 100, 0.3);
-  }
-  
-  #tokens {
-    margin-left: 37px;
-  }
-  
-  .token img {
-    margin-top: 4px;
-    height: 23px;
-    width: 23px;
-  }
-  
-  #settings {
-    margin-left: 6px;
-    color: #bbb;
-  }
-  
-  .blocked {
-    background-color: #999;
-  }
-  
-  .bomb {
-    background: #9c382d;
-  }
-  
-  .selected {
-    border: 2px solid orange;
-  }
-  
+.blocked {
+  background-color: #999;
+}
+
+.bomb {
+  background: #9c382d;
+}
+
+.selected {
+  border: 2px solid orange;
+}

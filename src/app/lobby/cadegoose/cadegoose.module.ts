@@ -14,9 +14,10 @@ import { CadeEntryStatusComponent } from './cade-entry-status/cade-entry-status.
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { NameModule } from 'src/app/chat/name/name.module';
+import { StatsComponent } from './stats/stats.component';
 
 @NgModule({
-  declarations: [CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent, MainMenuComponent],
+  declarations: [CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent, MainMenuComponent, StatsComponent],
   imports: [
     CommonModule,
     FormsModule,
