@@ -6,6 +6,7 @@ import { Boat } from './boat';
 import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
+import { StatRow } from '../../cadegoose/stats/stats.component';
 
 export interface Clutter {
   t: number;
@@ -25,6 +26,7 @@ export interface Turn {
   treasure: number[];
   points: number[];
   flags: { x: number, y: number, t: number, p: number, cs: number[] }[];
+  stats: Record<number, StatRow>;
 }
 
 interface Sync {
@@ -83,7 +85,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   myBoat = new Boat('');
   boats: Boat[] = [];
 
-  protected _boats: { [k: number]: Boat } = {};
+  _boats: { [k: number]: Boat } = {};
   protected subs = new Subscription();
   protected animateTimeout?: number;
   private blurred = false;

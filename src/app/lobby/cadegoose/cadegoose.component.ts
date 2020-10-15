@@ -43,6 +43,7 @@ import {
   Raycaster, MOUSE
 } from 'three';
 import { BoatRender } from './boat-render';
+import { Turn } from '../quacken/boats/boats.component';
 
 const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed', 'cadeMaxFps', 'cadeLockAngle'];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -98,6 +99,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   @ViewChild('frame') frame?: ElementRef;
   settings: SettingMap = { mapScale: 50, speed: 10 };
   hoveredTeam = -1;
+  statOpacity = 0;
   protected mapHeight = 36;
   protected mapWidth = 20;
   protected alive = true;
@@ -151,6 +153,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
+    this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));
 
     this.buildGrid();
   }

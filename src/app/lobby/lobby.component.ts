@@ -7,6 +7,7 @@ import { SettingsService } from '../settings/settings.service';
 import { FriendsService } from '../chat/friends/friends.service';
 import { Clutter, BoatSync } from './quacken/boats/boats.component';
 import { InCmd, OutCmd } from '../ws-messages';
+import { StatRow } from './cadegoose/stats/stats.component';
 
 export interface Lobby {
   owner: boolean;
@@ -19,6 +20,7 @@ export interface Lobby {
   clutter?: Clutter[];
   turn?: number;
   seconds?: number;
+  stats?: Record<number, StatRow>;
   type: 'HexaQuack' | 'Quacken' | 'Spades' | 'CadeGoose';
   [key: string]: any;
 }

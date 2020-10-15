@@ -5,6 +5,10 @@
     <!-- three.js canvas goes here -->
 </div>
 
-<q-cade-entry-status (hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>
+<q-cade-entry-status (mouseover)="statOpacity = 1"
+                     (mouseleave)="statOpacity = 0"
+                     (hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>
 <q-main-menu></q-main-menu>
+<q-stats [style.opacity]="statOpacity"
+         [stats]="lobby?.stats"></q-stats>
 <q-cade-hud></q-cade-hud>
