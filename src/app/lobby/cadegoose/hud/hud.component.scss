@@ -33,7 +33,11 @@ q-chat {
   float: left;
   width: 150px;
   min-height: 10px;
-  margin: 10px;
+  margin: 8px;
+
+  button {
+    margin-top: 4px;
+  }
 }
 
 mat-radio-button {

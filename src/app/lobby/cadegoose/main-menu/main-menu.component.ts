@@ -92,7 +92,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.myBoat.isMe = false;
     }));
     this.subs.add(this.ws.subscribe(Internal.OpenMenu, () => {
-      this.open = true;
+      this.open = !this.open;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       if (!this.roundGoing) this.open = true;
