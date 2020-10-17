@@ -8,6 +8,11 @@
   overflow: hidden;
 }
 
+#fps {
+  position: absolute;
+  bottom: 0;
+}
+
 canvas {
   display: block;
 }

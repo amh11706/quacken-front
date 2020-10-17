@@ -5,6 +5,15 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 16 October 2020',
+    content: `
+    <ul>
+      <li>Round statistics added.</li>
+      <li>Hover over the scoreboard to see statistics per player.</li>
+      <li>Total scores for the round will be in the next update!</li>
+    </ul>`
+  },
+  {
     title: 'Release 04 October 2020',
     content: `
     <ul>

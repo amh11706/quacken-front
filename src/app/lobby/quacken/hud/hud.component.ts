@@ -280,7 +280,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }
 
     this.minutes = Math.floor(turn / 60 * this.secondsPerTurn);
-    this.seconds = (turn * this.secondsPerTurn % 60) + sec;
+    this.seconds = (turn * this.secondsPerTurn + sec) % 60;
     this.turnSeconds = sec;
     this.updatetime();
   }
@@ -309,6 +309,10 @@ export class HudComponent implements OnInit, OnDestroy {
     }
 
     this.seconds--;
+    if (this.seconds < 0) {
+      this.seconds += 60;
+      this.minutes--;
+    }
     this.turnSeconds--;
     this.updatetime();
   }

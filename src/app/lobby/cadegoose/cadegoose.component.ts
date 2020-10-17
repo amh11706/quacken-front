@@ -45,9 +45,9 @@ import {
 import { BoatRender } from './boat-render';
 import { Turn } from '../quacken/boats/boats.component';
 
-const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed', 'cadeMaxFps', 'cadeLockAngle'];
+const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed', 'cadeMaxFps', 'showFps', 'cadeLockAngle'];
 const ownerSettings: (keyof typeof Settings)[] = [
-  'jobberQuality', 'cadePublicMode', 'cadeHotEntry',
+  'jobberQuality', 'cadeTurnTime', 'cadePublicMode', 'cadeHotEntry',
   'cadeMaxPlayers', 'cadeMap',
 ];
 
@@ -97,6 +97,7 @@ const obstacleModels: Record<number, ObstacleConfig> = {
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('frame') frame?: ElementRef;
+  @ViewChild('fps') fps?: ElementRef;
   settings: SettingMap = { mapScale: 50, speed: 10 };
   hoveredTeam = -1;
   statOpacity = 0;
@@ -145,11 +146,11 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.buildSky();
 
     window.addEventListener('resize', this.onWindowResize, false);
+    this.ss.getGroup('l/cade', true);
   }
 
   ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: CadeDesc } });
-    this.ss.getGroup('l/cade', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
@@ -194,7 +195,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.bs.setControls(this.controls);
 
     this.stats = Stats();
-    this.frame?.nativeElement.appendChild(this.stats.dom);
+    this.fps?.nativeElement.appendChild(this.stats.dom);
+    this.stats.dom.style.position = 'relative';
 
     this.frameRequested = false;
     this.requestRender();

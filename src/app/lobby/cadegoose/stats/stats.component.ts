@@ -28,8 +28,8 @@ export class StatsComponent implements OnInit, OnChanges {
   columns = [
     { stat: Stat.PointsScored, title: 'Points Scored' },
     { stat: Stat.PointsContested, title: 'Contested' },
-    // { stat: Stat.Kills, title: 'Enemies Sank' },
-    // { stat: Stat.Assists, title: 'Assists' },
+    { stat: Stat.Kills, title: 'Enemies Sank' },
+    { stat: Stat.Assists, title: 'Assists' },
     { stat: Stat.Deaths, title: 'Times Sank' },
     { stat: Stat.ShotsHit, title: 'Shots Hit' },
     { stat: Stat.ShotsFired, title: 'Fired' },

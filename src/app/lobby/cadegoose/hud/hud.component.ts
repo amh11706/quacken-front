@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { FriendsService } from 'src/app/chat/friends/friends.service';
+import { SettingsService } from 'src/app/settings/settings.service';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
+import { WsService } from 'src/app/ws.service';
 import { Boat } from '../../quacken/boats/boat';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
@@ -23,6 +26,10 @@ export class CadeHudComponent extends HudComponent {
 
   wantMove = 2;
   auto = true;
+
+  constructor(ws: WsService, fs: FriendsService, private ss: SettingsService) {
+    super(ws, fs);
+  }
 
   ngOnInit() {
     super.ngOnInit();
@@ -131,5 +138,11 @@ export class CadeHudComponent extends HudComponent {
 
   openMenu() {
     this.ws.dispatchMessage({ cmd: Internal.OpenMenu });
+  }
+
+  async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
+    const old = this.secondsPerTurn;
+    this.secondsPerTurn = await this.ss.get('l/cade', 'turnTime');
+    super.setTurn(turn, sec + this.secondsPerTurn - old);
   }
 }

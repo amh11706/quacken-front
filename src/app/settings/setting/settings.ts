@@ -29,6 +29,9 @@ export const Settings = {
   cadeLockAngle: {
     id: 22, group: 'cade', name: 'lockAngle', type: 'checkbox', label: 'Lock Angle'
   },
+  showFps: {
+    id: 29, group: 'cade', name: 'showFps', type: 'checkbox', label: 'Show FPS'
+  },
   cadeMaxFps: {
     id: 28, group: 'cade', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 30, max: 240, step: 15
   },
@@ -47,6 +50,9 @@ export const Settings = {
   },
   jobberQuality: {
     admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 100, step: 5
+  },
+  cadeTurnTime: {
+    admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 35, step: 5
   },
   cadePublicMode: {
     admin: true, id: 25, group: 'l/cade', name: 'publicMode', type: 'option', label: 'Lobby Privacy', options: [
