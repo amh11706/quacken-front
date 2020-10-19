@@ -13,7 +13,7 @@ export class StatEndComponent implements OnChanges {
   @Output() close = new EventEmitter<void>();
   scores: StatRow[] = [];
   myScore?: StatRow;
-  pointValues = [5, 3, 0, 1, 0, 0, 10, 10];
+  pointValues = [50, 25, 0, 10, 0, 0, 10, 20];
 
   columns = [
     { stat: Stat.PointsScored, title: 'Points Scored' },

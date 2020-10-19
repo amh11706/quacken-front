@@ -109,7 +109,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private mapScene = new Scene();
   private camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   private controls?: MapControls;
-  private renderer = new WebGLRenderer();
+  private renderer = new WebGLRenderer({ antialias: true });
   private frameRequested = true;
   private frameTarget = 0;
   private water?: Water;
