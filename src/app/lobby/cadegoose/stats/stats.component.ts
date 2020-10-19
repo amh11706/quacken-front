@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 export interface StatRow {
-  user: string; team: number; stats: (string | number)[];
+  user: string; team: number; stats: (string | number)[]; score: number;
 }
 
-const enum Stat {
+export const enum Stat {
   Kills,
   Assists,
   Deaths,
@@ -34,7 +34,7 @@ export class StatsComponent implements OnInit, OnChanges {
     { stat: Stat.ShotsHit, title: 'Shots Hit' },
     { stat: Stat.ShotsFired, title: 'Fired' },
     { stat: Stat.ShotsTaken, title: 'Taken' },
-  ]
+  ];
 
   constructor() { }
 
@@ -47,13 +47,13 @@ export class StatsComponent implements OnInit, OnChanges {
     this.defenders = [];
     this.attackers = [];
     for (const row of Object.values(this.stats)) {
-      const s = row.stats;
+      const s = [...row.stats];
       if (s[Stat.ShotsFired]) s[Stat.ShotsHit] += ` (${Math.round(+s[Stat.ShotsHit] / +s[Stat.ShotsFired] * 100)}%)`;
-      (row.team === 0 ? this.defenders : this.attackers).push(row);
+      (row.team === 0 ? this.defenders : this.attackers).push({ ...row, stats: s });
     }
 
-    this.defenders.sort((a, b) => +a.stats[Stat.PointsScored] - +b.stats[Stat.PointsScored]);
-    this.attackers.sort((a, b) => +a.stats[Stat.PointsScored] - +b.stats[Stat.PointsScored]);
+    this.defenders.sort((a, b) => +b.stats[Stat.PointsScored] - +a.stats[Stat.PointsScored]);
+    this.attackers.sort((a, b) => +b.stats[Stat.PointsScored] - +a.stats[Stat.PointsScored]);
   }
 
 }

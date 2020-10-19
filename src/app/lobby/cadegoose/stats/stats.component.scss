@@ -1,8 +1,4 @@
 .container {
-    position: absolute;
-    top: 67px;
-    left: 50%;
-    transform: translateX(-50%);
     border-radius: 4px;
     color: #eee;
     font-size: 12px;
@@ -21,11 +17,11 @@ td {
     padding: 4px 8px;
 }
 
-.defender {
+.defenders {
     border: 1px solid lime;
 }
 
-.attacker {
+.attackers {
     margin-top: 6px;
     border: 1px solid red;
 }

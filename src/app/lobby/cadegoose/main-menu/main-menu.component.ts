@@ -34,8 +34,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   ready = false;
   admin = false;
   open = true;
+  statsOpen = false;
   private roundGoing = false;
-
   private subs = new Subscription();
 
   @Input() lobby?: Lobby;
@@ -89,7 +89,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       for (const p of Object.values(this.teams)) p.r = false;
       this.roundGoing = t.turn <= 75;
       if (this.roundGoing) return;
-      this.myBoat.isMe = false;
+      this.statsOpen = true;
+      this.myBoat = new Boat('');
     }));
     this.subs.add(this.ws.subscribe(Internal.OpenMenu, () => {
       this.open = !this.open;

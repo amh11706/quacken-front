@@ -2,7 +2,7 @@
      class="noselect"
      id="background"
      oncontextmenu="event.preventDefault();">
-    <!-- three.js canvas goes here -->
+     <!-- three.js canvas goes here -->
 </div>
 <div #fps
      [hidden]="!settings.showFps"
@@ -11,7 +11,7 @@
 <q-cade-entry-status (mouseover)="statOpacity = 1"
                      (mouseleave)="statOpacity = 0"
                      (hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>
-<q-main-menu></q-main-menu>
+<q-main-menu [lobby]="lobby"></q-main-menu>
 <q-stats [style.opacity]="statOpacity"
          [stats]="lobby?.stats"></q-stats>
 <q-cade-hud></q-cade-hud>

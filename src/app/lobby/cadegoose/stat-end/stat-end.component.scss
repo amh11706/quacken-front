@@ -1,0 +1,19 @@
+@import "../stats/stats.component.scss";
+
+table {
+    margin-bottom: 20px;
+}
+
+.defender {
+    color: lime;
+}
+
+.attacker {
+    color: red;
+}
+
+table {
+    width: auto;
+    margin: auto;
+    margin-bottom: 20px;
+}
