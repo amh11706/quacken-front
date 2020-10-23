@@ -89,7 +89,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       for (const p of Object.values(this.teams)) p.r = false;
       this.roundGoing = t.turn <= 75;
       if (this.roundGoing) return;
-      this.statsOpen = true;
+      this.statsOpen = !!(this.lobby?.stats && Object.keys(this.lobby.stats).length);
       this.myBoat = new Boat('');
     }));
     this.subs.add(this.ws.subscribe(Internal.OpenMenu, () => {

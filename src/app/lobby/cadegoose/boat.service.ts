@@ -186,7 +186,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     Cannonball.speed = this.speed;
     for (const u of updates) {
       new Cannonball(this.scene, u).start();
-      new Cannonball(this.scene, u).start(2000 / this.speed);
+      if (u.dbl) new Cannonball(this.scene, u).start(2000 / this.speed);
     }
   }
 

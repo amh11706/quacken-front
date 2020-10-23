@@ -5,6 +5,16 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 22 October 2020',
+    content: `
+    <ul>
+      <li>Round statistics for sinks / assists added.</li>
+      <li>A score summary now shows at the end of a round.</li>
+      <li>New setting for turn time between 10 and 35 seconds.</li>
+      <li>New setting for showing or hiding the fps counter.</li>
+    </ul>`
+  },
+  {
     title: 'Release 16 October 2020',
     content: `
     <ul>
