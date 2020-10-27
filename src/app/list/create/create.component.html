@@ -1,0 +1,49 @@
+<ng-template #quackenEdit>
+    <q-setting name="maxPlayers"></q-setting>
+    <q-setting name="duckLvl"></q-setting>
+    <q-setting name="publicMode"></q-setting>
+    <q-setting name="customMap"></q-setting>
+    <q-setting name="tileSet"></q-setting>
+    <q-setting name="structureSet"></q-setting>
+    <q-setting name="hotEntry"></q-setting>
+    <q-setting name="autoGen"></q-setting>
+    <q-setting name="hideMoves"></q-setting>
+</ng-template>
+
+<ng-template #spadesEdit>
+    <q-setting name="turnTime"></q-setting>
+    <q-setting name="playTo"></q-setting>
+    <q-setting name="watchers"></q-setting>
+</ng-template>
+
+<ng-template #cadeEdit>
+    <q-setting name="cadeMaxPlayers"></q-setting>
+    <q-setting name="jobberQuality"></q-setting>
+    <q-setting name="cadeTurnTime"></q-setting>
+    <q-setting name="cadePublicMode"></q-setting>
+    <q-setting name="cadeMap"></q-setting>
+    <q-setting name="cadeHotEntry"></q-setting>
+</ng-template>
+
+<h2 id="create">Lobby Type: <q-setting name="createType"
+               (change)="changeType()"></q-setting>
+</h2>
+<p>{{idDescriptions[settings.createType]}}</p>
+<div id="lsettings">
+    <ng-container *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit, cadeEdit][settings.createType]">
+    </ng-container>
+</div>
+
+<p *ngIf="createGroup.customMap"
+   class="error">
+    Note: Selecting a custom map will override map generation settings.
+    Clear the custom map selection to re enable map generation.
+</p>
+<button mat-raised-button
+        (click)="createLobby()"
+        [disabled]="!ws.user?.id || created">Create</button>
+<p *ngIf="!ws.user?.id"
+   class="error">
+    Guests cannot make lobbies. Join an existing lobby or create an account
+    to make your own.
+</p>

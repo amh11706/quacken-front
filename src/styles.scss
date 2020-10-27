@@ -1,4 +1,4 @@
-@import '@angular/material/prebuilt-themes/purple-green.css';
+@import "@angular/material/prebuilt-themes/purple-green.css";
 @import "./styles/ng-select-custom.css";
 
 * {
@@ -45,6 +45,15 @@ button {
   overflow: hidden;
 }
 
+.error {
+  max-width: 500px;
+  margin: 8px auto;
+  padding: 4px 8px;
+  color: #f7dc6f;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
 .top {
   position: absolute;
   width: 100vw;
@@ -53,7 +62,8 @@ button {
   z-index: 100;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 

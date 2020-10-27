@@ -9,45 +9,6 @@
   overflow: auto;
 }
 
-#lsettings {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  padding: 8px 24px;
-  max-width: 450px;
-  margin: 16px auto;
-  background: rgba(66, 66, 66, 0.4);
-  border: 1px solid grey;
-  border-radius: 8px;
-}
-
-.settingsView span {
-  position: relative;
-  top: -6px;
-  margin-left: 8px;
-}
-
-#create {
-  margin: 0;
-  height: 60px;
-}
-
-#create q-setting {
-  width: 150px;
-  font-size: 18px;
-}
-
-div {
-  text-align: center;
-}
-
-q-setting {
-  padding: 0 8px;
-  text-align: left;
-}
-
 q-chat-box {
   display: block;
   width: 100%;
@@ -55,7 +16,7 @@ q-chat-box {
   margin: auto;
 }
 
-#selection {
+#cards {
   position: relative;
   min-height: 150px;
   height: calc(100vh - 300px);
@@ -76,89 +37,4 @@ q-chat-box {
   border: 2px solid grey;
   border-radius: 8px;
   user-select: none;
-}
-
-#lobbylist {
-  position: relative;
-  max-width: 750px;
-  min-height: 150px;
-  margin: auto;
-  margin-bottom: 16px;
-}
-
-#nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  text-align: left;
-  background-color: grey;
-  border-bottom: 2px solid grey;
-  white-space: nowrap;
-  overflow-x: auto;
-}
-
-button {
-  background: darkgreen;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-tr {
-  background-color: #FCF3CF;
-  transition: .2s;
-  cursor: pointer;
-}
-
-tr:hover {
-  background-color: #F9E79F;
-}
-
-th {
-  padding: 4px;
-  background-color: #1F618D;
-  cursor: default;
-  border: 1px solid grey;
-}
-
-td {
-  padding: 12px;
-  color: black;
-  border: 1px solid lightgrey;
-}
-
-.error {
-  max-width: 500px;
-  margin: 8px auto;
-  padding: 4px 8px;
-  color: #F7DC6F;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-}
-
-.link {
-  display: inline-block;
-  width: auto;
-  padding: 12px;
-  color: #fff;
-  cursor: pointer;
-  transition: .3s;
-  user-select: none;
-}
-
-.link:hover, .link.active {
-  background-color: #666;
-}
-
-.link.active {
-  color: #F7DC6F;
-  cursor: default;
-}
-
-.note {
-  text-align: left;
-  margin: 0px 16px;
 }

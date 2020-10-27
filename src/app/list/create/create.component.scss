@@ -1,0 +1,13 @@
+#lsettings {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding: 8px 24px;
+    max-width: 450px;
+    margin: 16px auto;
+    background: rgba(66, 66, 66, 0.4);
+    border: 1px solid grey;
+    border-radius: 8px;
+}

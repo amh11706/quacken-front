@@ -1,0 +1,54 @@
+<ng-template #quackenView
+             let-settings="settings">
+    <mat-icon title="Duck Level ({{settings.duckLvl}})"
+              [style.color]="'rgb('+settings.duckLvl*20+','+(11-settings.duckLvl)*20+',0)'">
+        show_chart
+    </mat-icon>
+    <mat-icon title="Hot Entry ({{settings.hotEntry ? 'allowed' : 'blocked'}})"
+              [style.color]="settings.hotEntry ? 'green' : 'maroon'">
+        whatshot
+    </mat-icon>
+    <mat-icon title="{{publicModes[settings.publicMode]}}"
+              [style.color]="settings.publicMode ? 'orange' : 'green'">
+        public
+    </mat-icon>
+    <span title="Tile Set">{{settings.tileSet}}</span>
+    <span title="Structure Set">{{settings.structureSet}}</span>
+</ng-template>
+
+<ng-template #spadesView
+             let-settings="settings">
+    <mat-icon title="Watchers ({{settings.watchers ? 'allowed' : 'blocked'}})"
+              [style.color]="settings.watchers ? 'green' : 'maroon'">
+        {{settings.watchers ? 'visibility' : 'visibility_off'}}
+    </mat-icon>
+    <span title="Timer (seconds)">{{settings.turnTime}}</span>
+    <span title="Play to">{{settings.playTo}}</span>
+</ng-template>
+
+<ng-template #cadeView
+             let-settings="settings">
+    <mat-icon title="Jobber Quality ({{settings.jobberQuality}})"
+              [style.color]="'rgb('+(255-settings.jobberQuality*2)+','+(settings.jobberQuality)*2+',0)'">
+        show_chart
+    </mat-icon>
+    <mat-icon title="Hot Entry ({{settings.hotEntry ? 'allowed' : 'blocked'}})"
+              [style.color]="settings.hotEntry ? 'green' : 'maroon'">
+        whatshot
+    </mat-icon>
+    <mat-icon title="{{publicModes[settings.publicMode]}}"
+              [style.color]="settings.publicMode ? 'orange' : 'green'">
+        public
+    </mat-icon>
+    <span title="Map Id">{{settings.map}}</span>
+    <span title="Timer (seconds)">{{settings.turnTime}}</span>
+</ng-template>
+
+<h2 [title]="descriptions[lobby.type]">{{lobby.type}}</h2>
+<h5>{{lobby.name}}</h5>
+<p>{{lobby.players}} / {{lobby.group.maxPlayers}}</p>
+<p class="settingsView">
+    <ng-container
+                  *ngTemplateOutlet="{HexaQuack: quackenView, Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView}[lobby.type]; context: {settings: lobby.group}">
+    </ng-container>
+</p>

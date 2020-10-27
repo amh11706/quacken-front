@@ -10,9 +10,12 @@ import { ChatModule } from '../chat/chat.module';
 import { ListComponent } from './list.component';
 import { SettingsModule } from '../settings/settings.module';
 import { ListRoutingModule } from './list-routing.module';
+import { CreateComponent } from './create/create.component';
+import { NewsComponent } from './news/news.component';
+import { LobbyCardComponent } from './lobby-card/lobby-card.component';
 
 @NgModule({
-  declarations: [ListComponent],
+  declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent],
   imports: [
     CommonModule,
     ListRoutingModule,
