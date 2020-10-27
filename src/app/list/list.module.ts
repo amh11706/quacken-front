@@ -13,9 +13,10 @@ import { ListRoutingModule } from './list-routing.module';
 import { CreateComponent } from './create/create.component';
 import { NewsComponent } from './news/news.component';
 import { LobbyCardComponent } from './lobby-card/lobby-card.component';
+import { EditorErrorComponent } from './editor-error/editor-error.component';
 
 @NgModule({
-  declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent],
+  declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent, EditorErrorComponent],
   imports: [
     CommonModule,
     ListRoutingModule,

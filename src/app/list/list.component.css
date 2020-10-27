@@ -18,10 +18,32 @@ q-chat-box {
 
 #cards {
   position: relative;
-  min-height: 150px;
-  height: calc(100vh - 300px);
-  padding-top: 16px;
-  overflow: auto;
+  min-height: 100px;
+  height: calc(100vh - 328px);
+  padding: 12px 0;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid darkgrey;
+  column-gap: 12px;
+  row-gap: 12px;
+}
+
+.card {
+  height: 200px;
+  width: 150px;
+  overflow: hidden;
+  padding: 8px 16px;
+  text-align: center;
+  background-color: rgba(112, 123, 124, .8);
+  border: 1px solid darkgrey;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card:hover {
+  background-color: rgba(102, 113, 114, .8);
 }
 
 #frame {
@@ -31,10 +53,16 @@ q-chat-box {
   min-height: 360px;
   margin: auto;
   padding: 16px;
-  padding-top: 50px;
   background-color: rgba(112, 123, 124, .8);
   color: #eee;
   border: 2px solid grey;
   border-radius: 8px;
   user-select: none;
+  text-align: center;
+}
+
+#addLobby {
+  height: 60px;
+  width: 60px;
+  font-size: 60px;
 }

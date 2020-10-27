@@ -1,5 +1,7 @@
 <div *ngFor="let note of notes"
      class="note">
     <h2>{{note.title}}</h2>
-    <p [innerHTML]="note.content"></p>
+    <ul>
+        <li *ngFor="let p of note.points">{{p}}</li>
+    </ul>
 </div>

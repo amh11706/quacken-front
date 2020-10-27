@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { CadeDesc } from 'src/app/lobby/cadegoose/cadegoose.component';
 import { QuackenDesc } from 'src/app/lobby/quacken/quacken.component';
 import { SettingMap, SettingsService } from 'src/app/settings/settings.service';
-import { OutCmd } from 'src/app/ws-messages';
+import { InCmd, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 
 export const Descriptions = {
@@ -28,7 +29,11 @@ export class CreateComponent implements OnInit {
 
   private sub = new Subscription();
 
-  constructor(public ws: WsService, private ss: SettingsService) { }
+  constructor(
+    public ws: WsService,
+    private ss: SettingsService,
+    private ref: MatDialogRef<CreateComponent>,
+  ) { }
 
   ngOnInit(): void {
     this.sub.add(this.ws.connected$.subscribe(async v => {
@@ -37,6 +42,11 @@ export class CreateComponent implements OnInit {
       this.settings = await this.ss.getGroup('l/create');
       this.changeType();
     }));
+    this.sub.add(this.ws.subscribe(InCmd.NavigateTo, () => this.ref.close()));
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
   createLobby(): void {

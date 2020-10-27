@@ -3,9 +3,13 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
-import { SettingsService } from '../settings/settings.service';
 import { Lobby } from '../lobby/lobby.component';
 import { InCmd, OutCmd } from '../ws-messages';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateComponent } from './create/create.component';
+import { NewsComponent } from './news/news.component';
+import { Notes } from './news/notes';
+import { EditorErrorComponent } from './editor-error/editor-error.component';
 
 @Component({
   selector: 'q-lobby-list',
@@ -14,15 +18,16 @@ import { InCmd, OutCmd } from '../ws-messages';
 })
 export class ListComponent implements OnInit, OnDestroy {
   lobbies: Lobby[] = [];
+  note = Notes[0];
   private sub = new Subscription();
 
   constructor(
     public ws: WsService,
-    public ss: SettingsService,
-    public router: Router,
+    private dialog: MatDialog,
+    private router: Router,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.sub.add(this.ws.subscribe(InCmd.LobbyList, lobbies => {
       this.lobbies = lobbies;
     }));
@@ -49,9 +54,22 @@ export class ListComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  join(l: any) {
+  join(l: Lobby) {
     if (!l.group.publicMode) this.router.navigate(['lobby', l.id]);
     else this.ws.send(OutCmd.LobbyApply, l.id);
+  }
+
+  createLobby() {
+    this.dialog.open(CreateComponent, { maxHeight: '90vh' });
+  }
+
+  openEditor() {
+    if (this.ws.sId) this.router.navigate(['/editor']);
+    else this.dialog.open(EditorErrorComponent);
+  }
+
+  openNews() {
+    this.dialog.open(NewsComponent, { maxHeight: '90vh' });
   }
 
 }
