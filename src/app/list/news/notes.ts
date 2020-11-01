@@ -5,6 +5,14 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 31 October 2020',
+    points: [
+      'UI update for the lobby list.',
+      'This is meant to be more phone friendly as well as making all of the options more visible.',
+      'There will be a much bigger update next time :)',
+    ],
+  },
+  {
     title: 'Release 22 October 2020',
     points: [
       'Round statistics for sinks / assists added.',
