@@ -28,44 +28,47 @@
 
 <mat-menu #nameMenu="matMenu">
   <ng-template matMenuContent>
-    <button *ngIf="message.from !== 'Guest'"
-            mat-menu-item
-            (click)="stat.openUser(message.from)">
-      Profile
-    </button>
-    <ng-container *ngIf="!offline">
-      <button mat-menu-item
-              (click)="sendTell()">
-        Send Tell
+    <p *ngIf="message.from === 'Bot'; else notabot">It's a bot</p>
+    <ng-template #notabot>
+      <button *ngIf="message.from !== 'Guest'"
+              mat-menu-item
+              (click)="stat.openUser(message.from)">
+        Profile
       </button>
-      <ng-container *ngIf="ws.user?.name !== 'Guest'">
-        <button *ngIf="!message.friend"
-                mat-menu-item
-                (click)="add()">
-          Add friend
+      <ng-container *ngIf="!offline">
+        <button mat-menu-item
+                (click)="sendTell()">
+          Send Tell
         </button>
-        <button *ngIf="!message.blocked; else unblockButton"
-                mat-menu-item
-                (click)="block()">
-          Block
-        </button>
+        <ng-container *ngIf="ws.user?.name !== 'Guest'">
+          <button *ngIf="!message.friend"
+                  mat-menu-item
+                  (click)="add()">
+            Add friend
+          </button>
+          <button *ngIf="!message.blocked; else unblockButton"
+                  mat-menu-item
+                  (click)="block()">
+            Block
+          </button>
+        </ng-container>
+        <ng-template #unblockButton>
+          <button mat-menu-item
+                  (click)="unblock()">
+            Unblock
+          </button>
+        </ng-template>
+        <ng-container *ngIf="fs.allowInvite">
+          <button mat-menu-item
+                  (click)="invite()">
+            Invite to Lobby
+          </button>
+          <button mat-menu-item
+                  (click)="kick()">
+            Kick
+          </button>
+        </ng-container>
       </ng-container>
-      <ng-template #unblockButton>
-        <button mat-menu-item
-                (click)="unblock()">
-          Unblock
-        </button>
-      </ng-template>
-      <ng-container *ngIf="fs.allowInvite">
-        <button mat-menu-item
-                (click)="invite()">
-          Invite to Lobby
-        </button>
-        <button mat-menu-item
-                (click)="kick()">
-          Kick
-        </button>
-      </ng-container>
-    </ng-container>
+    </ng-template>
   </ng-template>
 </mat-menu>
