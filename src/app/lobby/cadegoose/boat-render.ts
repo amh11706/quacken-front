@@ -163,11 +163,15 @@ export class BoatRender {
             this.updateBoatRot(startTime);
         }
 
-        if (this.name !== this.boat.name || this.team !== this.boat.team) {
+        if (this.team !== this.boat.team) {
+            this.influence.material.dispose();
+            this.influence.material = (this.boat.team ? red : green).clone();
             this.rebuildHeader();
         }
-        this.influence.material.dispose();
-        this.influence.material = (this.boat.team ? red : green).clone();
+
+        if (this.name !== this.boat.name) {
+            this.rebuildHeader();
+        }
         this.boat.rendered = true;
         return true;
     }
