@@ -1,33 +1,35 @@
 <h2>Round Summary</h2>
 
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Score</th>
-        <th *ngFor="let c of columns">{{c.title}}</th>
-    </tr>
-    <tr *ngFor="let r of scores">
-        <td class="{{ r.team ? 'attacker' : 'defender' }}">{{r.user}}</td>
-        <td>{{r.score}}</td>
-        <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
-    </tr>
-</table>
-
-<ng-container *ngIf="myScore">
-    <h4>Your Score Breakdown</h4>
+<div id="statFrame">
     <table>
         <tr>
-            <th>Category</th>
-            <th>Points</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th *ngFor="let c of columns">{{c.title}}</th>
         </tr>
-        <ng-container *ngFor="let c of columns">
-            <tr *ngIf="pointValues[c.stat] && myScore.stats[c.stat]">
-                <td>{{c.title}}</td>
-                <td>{{pointValues[c.stat] * Number(myScore.stats[c.stat])}}</td>
-            </tr>
-        </ng-container>
+        <tr *ngFor="let r of scores">
+            <td class="{{ r.team ? 'attacker' : 'defender' }}">{{r.user}}</td>
+            <td>{{r.score}}</td>
+            <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
+        </tr>
     </table>
-</ng-container>
+
+    <ng-container *ngIf="myScore">
+        <h4>Your Score Breakdown</h4>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Points</th>
+            </tr>
+            <ng-container *ngFor="let c of columns">
+                <tr *ngIf="pointValues[c.stat] && myScore.stats[c.stat]">
+                    <td>{{c.title}}</td>
+                    <td>{{pointValues[c.stat] * Number(myScore.stats[c.stat])}}</td>
+                </tr>
+            </ng-container>
+        </table>
+    </ng-container>
+</div>
 
 <div id="buttons">
     <button mat-raised-button

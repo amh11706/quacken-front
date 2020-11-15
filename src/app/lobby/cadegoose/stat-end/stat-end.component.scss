@@ -1,5 +1,10 @@
 @import "../stats/stats.component.scss";
 
+#statFrame {
+    height: 300px;
+    overflow-y: auto;
+}
+
 table {
     margin-bottom: 20px;
 }

@@ -5,6 +5,15 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 16 November 2020',
+    points: [
+      'It\'s alive!',
+      'There are now 3 default lobbies with bots to play against.',
+      'The AI does not cheat. It makes calculated decisions based on flags, teammate plans, and opponent possible moves. It can detect when you are dead in the water, but otherwise it is just doing a toooon of math',
+      'If you hate losing, you may prefer to wait for the next AI update which will make them more "fair". In the meantime, we hope you enjoy testing this one out as much as we did :)',
+    ],
+  },
+  {
     title: 'Release 31 October 2020',
     points: [
       'UI update for the lobby list.',
