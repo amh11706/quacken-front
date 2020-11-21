@@ -279,8 +279,9 @@ export class HudComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.minutes = Math.floor(turn / 60 * this.secondsPerTurn);
-    this.seconds = (turn * this.secondsPerTurn + sec) % 60;
+    const remaining = this.secondsPerTurn * turn + sec;
+    this.minutes = Math.floor(remaining / 60);
+    this.seconds = remaining % 60;
     this.turnSeconds = sec;
     this.updatetime();
   }
