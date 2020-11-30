@@ -7,6 +7,7 @@ import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { StatRow } from '../../cadegoose/stats/stats.component';
+import TWEEN from '@tweenjs/tween.js';
 
 export interface Clutter {
   t: number;
@@ -181,6 +182,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     if (this.blurred) {
       clearTimeout(this.animateTimeout);
+      TWEEN.update(Infinity);
       if (this.step >= 0 || this.turn) {
         for (const boat of this.boats) {
           boat.moves = [0, 0, 0, 0];
