@@ -5,6 +5,14 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 04 December 2020',
+    points: [
+      'AI improvements.',
+      'Big focus on player predictions and collision awareness.',
+      'Server stability improvements. If something goes wrong, it will make a better effort to recover without crashing your connection.',
+    ],
+  },
+  {
     title: 'Release 16 November 2020',
     points: [
       'It\'s alive!',
