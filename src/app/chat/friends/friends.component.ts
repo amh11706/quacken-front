@@ -55,7 +55,7 @@ export class FriendsComponent implements OnInit {
   }
 
   invite(friend: string) {
-    this.ws.send(OutCmd.FriendInvite, friend);
+    this.ws.send(OutCmd.ChatCommand, '/invite ' + friend);
   }
 
 }
