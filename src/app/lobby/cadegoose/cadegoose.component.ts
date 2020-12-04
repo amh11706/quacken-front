@@ -40,12 +40,12 @@ import {
   Line,
   Group,
   Mesh,
-  Raycaster, MOUSE
+  Raycaster, MOUSE, Material
 } from 'three';
 import { BoatRender } from './boat-render';
 import { Turn } from '../quacken/boats/boats.component';
 
-const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed', 'cadeMaxFps', 'showFps', 'cadeLockAngle'];
+const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed', 'cadeMaxFps', 'showFps', 'cadeLockAngle', 'water'];
 const ownerSettings: (keyof typeof Settings)[] = [
   'jobberQuality', 'cadeTurnTime', 'cadePublicMode', 'cadeHotEntry',
   'cadeMaxPlayers', 'cadeMap',
@@ -98,7 +98,7 @@ const obstacleModels: Record<number, ObstacleConfig> = {
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('frame') frame?: ElementRef;
   @ViewChild('fps') fps?: ElementRef;
-  settings: SettingMap = { mapScale: 50, speed: 10 };
+  settings: SettingMap = { mapScale: 50, speed: 10, water: 0 };
   hoveredTeam = -1;
   statOpacity = 0;
   protected mapHeight = 36;
@@ -112,6 +112,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private renderer = new WebGLRenderer({ antialias: true });
   private frameRequested = true;
   private frameTarget = 0;
+  private lastFrame = 0;
+  private slowFrames = 0;
   private water?: Water;
 
   private tileGeometry?: Geometry;
@@ -252,6 +254,18 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     TWEEN.update(time);
 
     this.controls.mouseButtons.RIGHT = this.settings.lockAngle ? MOUSE.PAN : MOUSE.ROTATE;
+    if (time - this.lastFrame > 50 && this.slowFrames < 50) this.slowFrames++;
+    else if (this.slowFrames > 0) this.slowFrames /= 2;
+    this.lastFrame = time;
+    if (this.slowFrames > 5) this.settings.water = 0;
+
+    if (this.settings.water && !this.water) this.buildWater();
+    if (!this.settings.water && this.water) {
+      this.scene.remove(this.water);
+      (this.water.material as Material).dispose();
+      this.water.geometry.dispose();
+      delete this.water;
+    }
 
     if (this.scene.fog instanceof Fog) {
       this.scene.fog.near = this.camera.position.y;

@@ -29,11 +29,14 @@ export const Settings = {
   cadeLockAngle: {
     id: 22, group: 'cade', name: 'lockAngle', type: 'checkbox', label: 'Lock Angle'
   },
+  water: {
+    id: 31, group: 'cade', name: 'water', type: 'checkbox', label: 'Animated Water'
+  },
   showFps: {
     id: 29, group: 'cade', name: 'showFps', type: 'checkbox', label: 'Show FPS'
   },
   cadeMaxFps: {
-    id: 28, group: 'cade', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 30, max: 240, step: 15
+    id: 28, group: 'cade', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 15, max: 240, step: 15
   },
   cadeSpeed: {
     id: 23, group: 'cade', name: 'speed', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
