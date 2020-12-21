@@ -31,6 +31,6 @@ import { StatEndComponent } from './stat-end/stat-end.component';
     QuackenModule,
     NameModule,
   ],
-  exports: [CadegooseComponent],
+  exports: [CadegooseComponent, CadeHudComponent, StatsComponent, MainMenuComponent, CadeEntryStatusComponent, StatEndComponent],
 })
 export class CadegooseModule { }

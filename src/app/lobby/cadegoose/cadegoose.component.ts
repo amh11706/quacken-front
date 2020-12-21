@@ -73,7 +73,7 @@ const sunSettings = {
 //   azimuth: 0.25, // Facing front,
 //   exposure: 0.7,
 // };
-const GRID_DEPTH = -0.05;
+export const GRID_DEPTH = -0.05;
 
 export interface ObstacleConfig {
   path: string; ext?: string;
@@ -106,7 +106,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected alive = true;
 
   private scene = new Scene();
-  private mapScene = new Scene();
+  protected mapScene = new Scene();
   private camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   private controls?: MapControls;
   private renderer = new WebGLRenderer({ antialias: true });
@@ -221,7 +221,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   }
 
-  private updateIntersects() {
+  protected updateIntersects() {
     this.rayCaster.setFromCamera(this.mouse, this.camera);
     this.bs.showInfluence(this.rayCaster.ray, this.hoveredTeam);
   }
@@ -365,7 +365,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     });
   }
 
-  private buildGrid() {
+  protected buildGrid() {
     const grid = new Object3D();
     grid.position.y = GRID_DEPTH;
     let points: Vector3[] = [];

@@ -1,0 +1,57 @@
+<div id="shade"
+     [hidden]="!open">
+    <div id="menu"
+         class="container noselect">
+        <div *ngIf="statsOpen; else teams">
+            <q-stat-end [stats]="lobby?.stats"
+                        [columns]="SB_STATS"
+                        (close)="statsOpen = false"></q-stat-end>
+        </div>
+        <ng-template #teams>
+            <h2>Match Settings</h2>
+            <div id="flexmenu">
+                <div class="teamwrap">
+                    <div id="defenders">
+                        <div *ngFor="let m of defenders"
+                             class="lobbyPlayer"
+                             [class.ready]="m.message.r">
+                            <q-name [message]="m"></q-name>
+                            <q-setting *ngIf="myTeam === 0; else viewBoat"
+                                       name="nextCadeBoat"></q-setting>
+                            <ng-template #viewBoat>
+                                <img src="./assets/boats/boat{{m.message.b}}.png"
+                                     [title]="boatTitles[m.message.b]">
+                            </ng-template>
+                        </div>
+                    </div>
+                    <br>
+                    <button *ngIf="myTeam === 0 || defenders.length === 0"
+                            mat-raised-button
+                            (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
+                </div>
+                <div class="teamwrap">
+                    <div id="attackers">
+                        <div *ngFor="let m of attackers"
+                             class="lobbyPlayer"
+                             [class.ready]="m.message.r">
+                            <q-name [message]="m"></q-name>
+                            <img src="./assets/boats/boat{{m.message.b}}.png"
+                                 [title]="boatTitles[m.message.b]">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="buttons">
+                    <button mat-raised-button
+                            id="ready"
+                            [class.cancel]="ready"
+                            (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not
+                        Ready' : 'Ready'}}</button>
+                    <q-setting *ngIf="admin"
+                               name="startNew"
+                               id="start"></q-setting>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>

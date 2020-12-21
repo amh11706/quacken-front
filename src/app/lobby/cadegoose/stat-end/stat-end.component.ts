@@ -15,7 +15,7 @@ export class StatEndComponent implements OnChanges {
   myScore?: StatRow;
   pointValues = [50, 25, 0, 10, 0, 0, 10, 20];
 
-  columns = [
+  @Input() columns = [
     { stat: Stat.PointsScored, title: 'Points Scored' },
     { stat: Stat.PointsContested, title: 'Contested' },
     { stat: Stat.Kills, title: 'Enemies Sank' },

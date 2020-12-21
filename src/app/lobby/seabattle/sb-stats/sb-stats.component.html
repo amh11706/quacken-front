@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="defenders">
+        <table>
+            <tr>
+                <th>Defenders</th>
+                <th *ngFor="let c of columns">{{c.title}}</th>
+            </tr>
+            <tr *ngFor="let r of defenders">
+                <td>{{r.user}}</td>
+                <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="attackers">
+        <table>
+            <tr>
+                <th>Attackers</th>
+                <th *ngFor="let c of columns">{{c.title}}</th>
+            </tr>
+            <tr *ngFor="let r of attackers">
+                <td>{{r.user}}</td>
+                <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
