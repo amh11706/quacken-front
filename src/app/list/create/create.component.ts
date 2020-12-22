@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { CadeDesc } from 'src/app/lobby/cadegoose/cadegoose.component';
 import { QuackenDesc } from 'src/app/lobby/quacken/quacken.component';
+import { SbDesc } from 'src/app/lobby/seabattle/seabattle.component';
 import { SettingMap, SettingsService } from 'src/app/settings/settings.service';
 import { InCmd, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
@@ -12,9 +13,10 @@ export const Descriptions = {
   HexaQuack: QuackenDesc,
   Spades: 'A classic card game.',
   CadeGoose: CadeDesc,
+  SeaBattle: SbDesc,
 };
 
-const groups = ['quacken', 'quacken', 'spades', 'cade'];
+const groups = ['quacken', 'quacken', 'spades', 'cade', 'cade'];
 
 @Component({
   selector: 'q-create',

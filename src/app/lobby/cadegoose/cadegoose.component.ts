@@ -104,6 +104,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected mapHeight = 36;
   protected mapWidth = 20;
   protected alive = true;
+  protected joinMessage = CadeDesc;
 
   private scene = new Scene();
   protected mapScene = new Scene();
@@ -152,7 +153,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   ngOnInit() {
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: CadeDesc } });
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));

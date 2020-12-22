@@ -10,24 +10,26 @@
           <div id="moves">
                <div *ngFor="let move of moves; let i=index"
                     class="moverow">
-                    <div class="bombslot"
-                         [class.blocked]="locked"
-                         (click)="addShot(i*2)"
-                         [class.bomb]="shots[i*2] > 0"></div>
-                    <div class="bombslot right"
-                         [class.blocked]="locked"
-                         (click)="addShot(i*2+1)"
-                         [class.bomb]="shots[i*2+1] > 0"></div>
-                    <ng-container *ngIf="myBoat.doubleShot === 2">
-                         <div class="bombslot left2"
+                    <div class="leftbombs"
+                         (click)="addShot(i*2)">
+                         <div class="bombslot"
                               [class.blocked]="locked"
-                              (click)="addShot(i*2)"
+                              [class.bomb]="shots[i*2] > 0"></div>
+                         <div *ngIf="myBoat.doubleShot === 2"
+                              class="bombslot"
+                              [class.blocked]="locked"
                               [class.bomb]="shots[i*2] > 1"></div>
-                         <div class="bombslot right2"
+                    </div>
+                    <div class="rightbombs"
+                         (click)="addShot(i*2+1)">
+                         <div class="bombslot"
                               [class.blocked]="locked"
-                              (click)="addShot(i*2+1)"
+                              [class.bomb]="shots[i*2+1] > 0"></div>
+                         <div *ngIf="myBoat.doubleShot === 2"
+                              class="bombslot"
+                              [class.blocked]="locked"
                               [class.bomb]="shots[i*2+1] > 1"></div>
-                    </ng-container>
+                    </div>
 
                     <div class="move"
                          [class.blocked]="maxMoves || locked"

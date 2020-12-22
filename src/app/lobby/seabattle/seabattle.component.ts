@@ -3,6 +3,8 @@ import { BufferGeometry, Line, LineBasicMaterial, Object3D, Vector3 } from 'thre
 import { BoatService } from '../cadegoose/boat.service';
 import { CadegooseComponent, GRID_DEPTH } from '../cadegoose/cadegoose.component';
 
+export const SbDesc = 'Sea Battle: Sink the enemy ship to win!';
+
 @Component({
   selector: 'q-seabattle',
   templateUrl: './seabattle.component.html',
@@ -12,6 +14,7 @@ import { CadegooseComponent, GRID_DEPTH } from '../cadegoose/cadegoose.component
 export class SeabattleComponent extends CadegooseComponent {
   protected mapHeight = 25;
   protected mapWidth = 25;
+  protected joinMessage = SbDesc;
 
   protected buildGrid() {
     const grid = new Object3D();

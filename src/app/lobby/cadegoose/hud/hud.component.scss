@@ -125,32 +125,36 @@ mat-checkbox {
   width: 100%;
 }
 
-.bombslot {
+.leftbombs, .rightbombs {
   position: absolute;
-  top: 10px;
-  left: -14px;
+  height: 100%;
+  width: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.leftbombs {
+  left: -31px;
+  flex-direction: row-reverse;
+}
+
+.rightbombs {
+  left: 34px;
+}
+
+.bombslot {
   background-color: lightgrey;
   width: 16px;
   height: 16px;
+  margin: -1px;
   border: 1px solid black;
   border-radius: 8px;
-}
-
-.bombslot.right {
-  left: 33px;
-}
-
-.bombslot.left2 {
-  left: -28px;
-}
-
-.bombslot.right2 {
-  left: 47px;
 }
 
 #cannons {
   position: relative;
   right: 12px;
+  width: 20px;
 
   .bombslot {
     position: relative;

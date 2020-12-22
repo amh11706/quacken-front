@@ -181,6 +181,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.blurred = document.hidden;
 
     if (this.blurred) {
+      if (!this.turn) return;
       clearTimeout(this.animateTimeout);
       TWEEN.update(Infinity);
       if (this.step >= 0 || this.turn) {
@@ -192,7 +193,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       }
       this.ws.send(OutCmd.Sync);
       this.step = -1;
-    } else {
+    } else if (this.myBoat.isMe) {
       this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
     }
   }
