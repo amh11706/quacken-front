@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { BufferGeometry, Line, LineBasicMaterial, Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Vector3 } from 'three';
+import { Component } from '@angular/core';
+import { BufferGeometry, Line, LineBasicMaterial, Object3D, Vector3 } from 'three';
 import { BoatService } from '../cadegoose/boat.service';
 import { CadegooseComponent, GRID_DEPTH } from '../cadegoose/cadegoose.component';
 

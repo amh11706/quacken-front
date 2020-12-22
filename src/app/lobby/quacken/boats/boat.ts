@@ -11,7 +11,7 @@ export class Boat {
   maxDamage = 3;
   maxMoves = 4;
   influence = 1;
-  doubleShot?: boolean;
+  doubleShot?: number;
 
   bomb = 0;
   tokenPoints = 0;

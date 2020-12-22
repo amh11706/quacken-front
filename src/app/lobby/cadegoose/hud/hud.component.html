@@ -18,7 +18,7 @@
                          [class.blocked]="locked"
                          (click)="addShot(i*2+1)"
                          [class.bomb]="shots[i*2+1] > 0"></div>
-                    <ng-container *ngIf="myBoat.doubleShot">
+                    <ng-container *ngIf="myBoat.doubleShot === 2">
                          <div class="bombslot left2"
                               [class.blocked]="locked"
                               (click)="addShot(i*2)"
