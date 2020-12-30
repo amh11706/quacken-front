@@ -21,6 +21,7 @@ import { GuideComponent } from './guide/guide.component';
 import { ObstaclesComponent } from './obstacles/obstacles.component';
 import { MapComponent } from './map/map.component';
 import { MapEditorRoutingModule } from './map-editor-routing.module';
+import { TmapSetComponent } from './tmap-set/tmap-set.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MapEditorRoutingModule } from './map-editor-routing.module';
     GuideComponent,
     ObstaclesComponent,
     MapComponent,
+    TmapSetComponent,
   ],
   entryComponents: [GuideComponent],
   imports: [

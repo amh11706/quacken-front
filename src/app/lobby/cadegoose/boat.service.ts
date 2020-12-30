@@ -156,9 +156,8 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }
   }
 
-  protected playTurn = () => {
+  protected playTurn = async () => {
     const clutterPart = this.turn?.cSteps[this.step] || [];
-    setTimeout(() => this.handleUpdate(clutterPart), 10000 / this.speed);
     const turnPart = this.turn?.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
@@ -175,10 +174,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     if (this.step === 4) this.resetBoats();
 
     this.step++;
-    const delay = (this.turn?.steps[this.step] || this.turn?.cSteps[this.step] ? 750 : 250) * 20 / this.speed;
-    if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, delay);
-    else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 2500);
-    if (this.turn?.steps[this.step - 1]?.length) this.updateRender();
+    if (this.turn?.steps[this.step - 1]?.length) await this.updateRender();
+    if (!this.turn) return;
+    if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, 350 * 20 / this.speed);
+    else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 750 * 20 / this.speed);
+    this.handleUpdate(clutterPart);
   }
 
   protected handleUpdate(updates: Clutter[]) {
@@ -233,14 +233,21 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     const startTime = new Date().valueOf();
     for (const b of this.boats) b.rendered = false;
 
+    const animations: Promise<any>[] = [];
     const newRenders: BoatRender[] = [];
     for (const br of this.boatRenders) {
-      if ((br.boat === this._boats[br.boat.id] || !doDelete) && br.update(startTime)) newRenders.push(br);
-      else br.dispose();
+      if ((br.boat === this._boats[br.boat.id] || !doDelete)) {
+        const animation = br.update(startTime);
+        if (animation) {
+          newRenders.push(br);
+          animations.push(animation);
+        } else br.dispose();
+      } else br.dispose();
     }
     this.boatRenders = newRenders;
 
     this.checkNewShips();
+    return Promise.all(animations);
   }
 
   private checkNewShips() {

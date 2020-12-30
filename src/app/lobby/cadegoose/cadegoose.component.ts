@@ -136,6 +136,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     super(ws, ss, fs);
     bs.setScene(this.scene, this.loadObj, this.camera);
 
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.toneMappingExposure = sunSettings.exposure;
     this.renderer.toneMapping = ACESFilmicToneMapping;
@@ -286,6 +287,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private onWindowResize = () => {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.requestRender();
   }

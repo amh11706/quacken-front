@@ -27,6 +27,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   groups = {
     maps: 'Map',
     tile_sets: 'Tile Set',
+    tmap_sets: 'Challenge Set',
     structure_sets: 'Structure Set',
     cgmaps: 'Map'
   };
@@ -57,11 +58,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }));
     this.shown = this.map.selectedTile;
     if (!this.map.tileSettings) {
-      this.shown = this.map.tileSet || this.map.structureSet || this.shown;
+      this.shown = this.map.tileSet || this.map.structureSet || this.map.tmapSet || this.shown;
       this.map.hex = this.shown.hex;
     }
     this.shown = { ...this.shown };
-    this.selected = typeof this.shown.id === 'number' ? this.shown.id : 'new';
+    this.selected = this.shown.id || 'new';
 
     let unsaved = this.shown.unsaved;
     if (!this.map.tileSettings) switch (this.shown.group) {
@@ -88,6 +89,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
           }
         }
         break;
+      case 'tmap_sets':
+        if (this.map.tmaps) for (const map of this.map.tmaps) {
+          if (map.unsaved) {
+            unsaved = true;
+            break;
+          }
+        }
+        break;
       default:
     }
     if (unsaved) this.error = 'Unsaved changes! They will be discarded if you select a different map without saving.';
@@ -101,7 +110,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.mapData = list;
     const tile = this.shown;
     this.options = list[tile?.group ?? 'maps'];
-    if (tile) for (const o of this.options) {
+    if (tile && this.options) for (const o of this.options) {
       if (o.id === tile.id) {
         this.shown = { ...tile, ...o };
         break;
@@ -112,6 +121,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private handleTileSet(tileSet: any) {
     delete this.map.structures;
     delete this.map.structureSet;
+    delete this.map.tmaps;
+    delete this.map.tmapSet;
     const tiles: DBTile[][] = [];
     this.map.tiles = tiles;
     this.map.tileSet = this.shown || this.map.selectedTile;
@@ -134,10 +145,29 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private handleStructureSet(structureSet: DBTile[]) {
     delete this.map.tiles;
     delete this.map.tileSet;
+    delete this.map.tmaps;
+    delete this.map.tmapSet;
     this.map.structures = structureSet;
     this.map.structureSet = this.shown || this.map.selectedTile;
     this.map.structureSet.data = [[]];
     this.map.selectedTile = structureSet[0] || {
+      id: null, name: '', undos: [], redos: [],
+    };
+    const tile = this.map.selectedTile;
+    tile.undos = tile.undos || [];
+    tile.redos = tile.redos || [];
+    this.map.settingsOpen = false;
+  }
+
+  private handleTMapSet(tmaps: DBTile[]) {
+    delete this.map.tiles;
+    delete this.map.tileSet;
+    delete this.map.structures;
+    delete this.map.structureSet;
+    this.map.tmaps = tmaps;
+    this.map.tmapSet = this.shown || this.map.selectedTile;
+    this.map.tmapSet.data = [[]];
+    this.map.selectedTile = tmaps[0] || {
       id: null, name: '', undos: [], redos: [],
     };
     const tile = this.map.selectedTile;
@@ -152,6 +182,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     delete this.map.tileSet;
     delete this.map.structures;
     delete this.map.structureSet;
+    delete this.map.tmaps;
+    delete this.map.tmapSet;
     const tile = this.shown || this.map.selectedTile;
     tile.data = map.data || tile.data;
     tile.undos = map.undos || [];
@@ -196,11 +228,24 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.map.selectedTile = oldStructure || tile;
         this.map.settingsOpen = false;
         return;
+      case 'tmaps':
+        const maps = this.map.tmaps || [];
+        this.map.tmaps = maps;
+
+        const oldMap = maps.find(el => el.id === tile.id);
+        if (oldMap) Object.assign(oldMap, tile);
+        else this.map.tmaps.push(tile as any);
+        this.map.selectedTile = oldMap || tile;
+        this.map.settingsOpen = false;
+        return;
       case 'tile_sets':
         this.map.tileSet = tile;
         break;
       case 'structure_sets':
         this.map.structureSet = tile;
+        break;
+      case 'tmap_sets':
+        this.map.tmapSet = tile;
         break;
       default:
     }
@@ -222,6 +267,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.success = '';
     delete this.map.tiles;
     delete this.map.structures;
+    delete this.map.tmaps;
     const tile = this.shown || this.map.selectedTile;
     tile.unsaved = false;
     tile.hex = false;
@@ -244,9 +290,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const types = {
       cgmaps: { x: 20, y: 36 },
       maps: { x: 25, y: 52 },
+      tmaps: { x: 25, y: 52 },
       tiles: { x: 8, y: 8 },
       structure_sets: null,
       tile_sets: null,
+      tmap_sets: null,
       structures: null,
     };
 
@@ -296,6 +344,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
           structure.unsaved = false;
         }
         break;
+      case 'tmap_sets':
+        if (this.map.tmaps) for (const map of this.map.tmaps) {
+          map.group = 'tmaps';
+          if (map.unsaved) this.save(map);
+          map.unsaved = false;
+        }
+        break;
       default:
     }
   }
@@ -320,6 +375,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
       case 'structure_sets':
         if (!this.map.structures || this.map.structureSet?.id !== tile.id) {
           this.handleStructureSet(await this.socket.request(OutCmd.StructureSetGet, tile.id));
+        } else this.map.settingsOpen = false;
+        return;
+      case 'tmap_sets':
+        if (!this.map.tmaps || this.map.tmapSet?.id !== tile.id) {
+          this.handleTMapSet(await this.socket.request(OutCmd.TMapSetGet, tile.id));
         } else this.map.settingsOpen = false;
         return;
       default:

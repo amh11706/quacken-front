@@ -11,8 +11,8 @@
           <mat-option value="cgmaps">Cade Goose Map</mat-option>
           <mat-option value="maps">Quacken Map</mat-option>
           <mat-option value="tile_sets">Quacken Tile Set</mat-option>
-          <mat-option value="structure_sets">Quacken Structure Set
-          </mat-option>
+          <mat-option value="structure_sets">Quacken Structure Set</mat-option>
+          <mat-option value="tmap_sets">Challenge Map Set</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -84,7 +84,8 @@
     <div class="setting center"><button mat-raised-button
               [disabled]="pending || (!error && !shown.unsaved) || !shown.name"
               (click)="save()">
-        {{selected === 'new' ? 'Create' : 'Save' + (['tile_sets', 'structure_sets'].includes(shown.group) ? ' All' : '')}}
+        {{selected === 'new' ? 'Create' : 'Save' + (['tile_sets', 'structure_sets'].includes(shown.group) ? ' All' :
+        '')}}
       </button></div>
 
     <div class="setting center">

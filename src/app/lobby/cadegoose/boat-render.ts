@@ -150,17 +150,18 @@ export class BoatRender {
         return this;
     }
 
-    update(startTime: number): boolean {
+    update(startTime: number) {
         if (this.boat.type !== this.type) {
-            return false;
+            return;
         }
+        const promises: Promise<any>[] = [];
 
         if (this.boat.pos.x !== this.pos.x || this.boat.pos.y !== this.pos.y || this.boat.crunchDir !== -1) {
-            this.updateBoatPos(startTime);
+            promises.push(this.updateBoatPos(startTime));
         }
 
         if (this.boat.face !== this.rotateDeg || this.boat.imageOpacity === 0) {
-            this.updateBoatRot(startTime);
+            promises.push(this.updateBoatRot(startTime));
         }
 
         if (this.team !== this.boat.team) {
@@ -173,7 +174,7 @@ export class BoatRender {
             this.rebuildHeader();
         }
         this.boat.rendered = true;
-        return true;
+        return Promise.all(promises);
     }
 
     rebuildHeader() {
@@ -211,7 +212,7 @@ export class BoatRender {
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
-        ctx.fillRect(0, 0, width, height);
+        ctx.fillRect(0, 0, width, size);
 
         ctx.translate(width / 2, size / 2);
         ctx.fillStyle = headerColor(this.boat);
@@ -251,39 +252,54 @@ export class BoatRender {
         const decodeX = [0, 0.4, 0, -0.4];
         const decodeY = [-0.4, 0, 0.4, 0];
 
-        const offsetX = decodeX[this.boat.crunchDir];
-        if (offsetX) {
-            BoatRender.tweens.add(new TWEEN.Tween(this.obj.position as any)
-                .to({ x: this.pos.x + offsetX + 0.5 }, 3000 / BoatRender.speed)
-                .delay(4000 / BoatRender.speed)
-                .repeatDelay(500 / BoatRender.speed)
-                .repeat(1).yoyo(true)
-                .start(startTime));
+        const p = Promise.all([
+            new Promise<void>(resolve => {
+                const offsetX = decodeX[this.boat.crunchDir];
+                if (offsetX) {
+                    BoatRender.tweens.add(new TWEEN.Tween(this.obj.position as any)
+                        .to({ x: this.pos.x + offsetX + 0.5 }, 3000 / BoatRender.speed)
+                        .delay(4000 / BoatRender.speed)
+                        .repeatDelay(500 / BoatRender.speed)
+                        .repeat(1).yoyo(true)
+                        .start(startTime)
+                        .onComplete(resolve));
 
-        } else if (this.boat.moveTransition[0]) {
-            t = new TWEEN.Tween(this.obj.position as any)
-                .easing(moveEase[this.boat.moveTransition[0]])
-                .to({ x: this.boat.pos.x + 0.5 }, 10000 / BoatRender.speed)
-                .start(startTime);
-            BoatRender.tweens.add(t);
-        } else this.obj.position.x = this.boat.pos.x + 0.5;
+                } else if (this.boat.moveTransition[0]) {
+                    t = new TWEEN.Tween(this.obj.position as any)
+                        .easing(moveEase[this.boat.moveTransition[0]])
+                        .to({ x: this.boat.pos.x + 0.5 }, 10000 / BoatRender.speed)
+                        .start(startTime)
+                        .onComplete(resolve);
+                    BoatRender.tweens.add(t);
+                } else {
+                    this.obj.position.x = this.boat.pos.x + 0.5;
+                    resolve();
+                }
+            }),
+            new Promise<void>(resolve => {
+                const offsetY = decodeY[this.boat.crunchDir];
+                if (offsetY) {
+                    BoatRender.tweens.add(new TWEEN.Tween(this.obj.position as any)
+                        .to({ z: this.pos.y + offsetY + 0.5 }, 3000 / BoatRender.speed)
+                        .delay(4000 / BoatRender.speed)
+                        .repeatDelay(500 / BoatRender.speed)
+                        .repeat(1).yoyo(true)
+                        .start(startTime)
+                        .onComplete(resolve));
 
-        const offsetY = decodeY[this.boat.crunchDir];
-        if (offsetY) {
-            BoatRender.tweens.add(new TWEEN.Tween(this.obj.position as any)
-                .to({ z: this.pos.y + offsetY + 0.5 }, 3000 / BoatRender.speed)
-                .delay(4000 / BoatRender.speed)
-                .repeatDelay(500 / BoatRender.speed)
-                .repeat(1).yoyo(true)
-                .start(startTime));
-
-        } else if (this.boat.moveTransition[1]) {
-            t = new TWEEN.Tween(this.obj.position as any)
-                .easing(moveEase[this.boat.moveTransition[1]])
-                .to({ z: this.boat.pos.y + 0.5 }, 10000 / BoatRender.speed)
-                .start(startTime);
-            BoatRender.tweens.add(t);
-        } else this.obj.position.z = this.boat.pos.y + 0.5;
+                } else if (this.boat.moveTransition[1]) {
+                    t = new TWEEN.Tween(this.obj.position as any)
+                        .easing(moveEase[this.boat.moveTransition[1]])
+                        .to({ z: this.boat.pos.y + 0.5 }, 10000 / BoatRender.speed)
+                        .start(startTime)
+                        .onComplete(resolve);
+                    BoatRender.tweens.add(t);
+                } else {
+                    this.obj.position.z = this.boat.pos.y + 0.5;
+                    resolve();
+                }
+            }),
+        ]);
 
         if (this.boat.isMe && t) {
             BoatRender.myLastPos = { ...this.obj.position };
@@ -292,37 +308,47 @@ export class BoatRender {
 
         this.boat.crunchDir = -1;
         this.pos = this.boat.pos;
+        return p;
     }
 
     private updateBoatRot(startTime: number) {
+        const promises: Promise<void>[] = [];
+
         if (this.boat.rotateTransition) {
-            if (this.boat.rotateTransition === 1) {
-                BoatRender.tweens.add(new TWEEN.Tween(this.obj.rotation as any)
-                    .to({ y: -this.boat.face * Math.PI / 180 }, 9000 / BoatRender.speed)
-                    .easing(TWEEN.Easing.Quadratic.InOut)
-                    .start(startTime + 1000 / BoatRender.speed));
-            } else {
-                BoatRender.tweens.add(new TWEEN.Tween(this.obj.rotation as any)
-                    .to({ y: -this.boat.face * Math.PI / 180 }, 3000)
-                    .easing(TWEEN.Easing.Quadratic.In)
-                    .delay(500)
-                    .start(startTime));
-            }
+            promises.push(new Promise(resolve => {
+                if (this.boat.rotateTransition === 1) {
+                    BoatRender.tweens.add(new TWEEN.Tween(this.obj.rotation as any)
+                        .to({ y: -this.boat.face * Math.PI / 180 }, 9000 / BoatRender.speed)
+                        .easing(TWEEN.Easing.Quadratic.InOut)
+                        .start(startTime + 1000 / BoatRender.speed)
+                        .onComplete(resolve));
+                } else {
+                    BoatRender.tweens.add(new TWEEN.Tween(this.obj.rotation as any)
+                        .to({ y: -this.boat.face * Math.PI / 180 }, 30000 / BoatRender.speed)
+                        .easing(TWEEN.Easing.Quadratic.In)
+                        .delay(500)
+                        .start(startTime)
+                        .onComplete(resolve));
+                }
+            }));
         } else this.obj.rotation.y = -this.boat.face * Math.PI / 180;
 
-        if (this.boat.imageOpacity === 0) {
-            new TWEEN.Tween(this.obj.position as any)
-                .to({ y: -5 }, 5000)
-                .delay(2000)
-                .easing(TWEEN.Easing.Quadratic.In)
-                .start(startTime);
-            new TWEEN.Tween(this.obj.scale as any)
-                .to({ x: 0, y: 0, z: 0 }, 5000)
-                .start(startTime);
+        if (this.boat.rotateTransition > 1) {
+            promises.push(new Promise(resolve => {
+                new TWEEN.Tween(this.obj.position as any)
+                    .to({ y: -5 }, 20000 / BoatRender.speed)
+                    .delay(2000)
+                    .easing(TWEEN.Easing.Quadratic.In)
+                    .start(startTime)
+                    .onComplete(resolve);
+                new TWEEN.Tween(this.obj.scale as any)
+                    .to({ x: 0, y: 0, z: 0 }, 20000 / BoatRender.speed)
+                    .start(startTime);
+            }));
 
             this.boat.imageOpacity = 1;
         }
         this.rotateDeg = this.boat.face;
+        return Promise.all(promises);
     }
-
 }

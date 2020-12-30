@@ -10,7 +10,7 @@ export interface MapTile {
   x: number; y: number; v: number;
 }
 
-export type MapGroups = 'maps' | 'cgmaps' | 'tile_sets' | 'tiles' | 'structure_sets' | 'structures';
+export type MapGroups = 'maps' | 'cgmaps' | 'tile_sets' | 'tiles' | 'structure_sets' | 'structures' | 'tmaps' | 'tmap_sets';
 
 export interface DBTile {
   id: number;
@@ -21,6 +21,7 @@ export interface DBTile {
   type: number;
   group: MapGroups;
   tile_set?: number;
+  tmap_set?: number;
   structure_set?: number;
   released?: boolean;
   weight?: number;
@@ -29,6 +30,7 @@ export interface DBTile {
   activeFeature?: StructureData;
   activeGroup?: number;
   hex?: boolean;
+  settings?: any;
 }
 
 export interface StructureData {
@@ -46,6 +48,8 @@ export interface MapEditor {
   selectedTile: DBTile;
   tileSet?: DBTile;
   tiles?: DBTile[][];
+  tmapSet?: DBTile;
+  tmaps?: DBTile[];
   structureSet?: DBTile;
   structures?: DBTile[];
   settingsOpen: boolean;
@@ -149,6 +153,9 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     } else if (this.map.structureSet) {
       tile.group = 'structures';
       tile.structure_set = this.map.structureSet.id;
+    } else if (this.map.tmapSet) {
+      tile.group = 'tmaps';
+      tile.tmap_set = this.map.tmapSet.id;
     }
     const newTile: any = {};
     Object.assign(newTile, tile);

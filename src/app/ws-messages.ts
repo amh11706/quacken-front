@@ -57,6 +57,7 @@ export const enum OutCmd {
     TileSetGet,
     StructureSetGet,
     WeightSave,
+    TMapSetGet,
 
     Sit,
     Kick,

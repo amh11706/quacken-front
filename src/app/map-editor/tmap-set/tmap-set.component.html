@@ -1,0 +1,67 @@
+<div *ngIf="map && map.selectedTile && map.tmaps && map.tmapSet"
+     [qDrag]="handle2"
+     [bindToWindow]="true"
+     id="structureset"
+     class="container">
+    <div #handle2
+         id="handle2"></div>
+    <span>{{map.tmapSet.name}}</span>
+    <div id="structurebox">
+        <div class="structuretype"
+             *ngIf="map.tmaps">
+            <div *ngFor="let structure of map.tmaps"
+                 class="structure"
+                 [class.unsaved]="structure.unsaved"
+                 [class.selected]="structure === map.selectedTile"
+                 (click)="select(structure)">
+                <div (dblclick)="editTile()"
+                     [title]="structure.description">
+                    {{structure.name}}</div>
+                <span class="delete"
+                      (click)="deleteTile(structure)">
+                    X
+                </span>
+            </div>
+        </div>
+        <p *ngIf="!map.tmaps.length">This map set is empty. Create a
+            map to get started!</p>
+    </div>
+    <button mat-raised-button
+            (click)="newTile()">New Map</button>
+
+    <ng-container *ngIf="map.selectedTile.settings">
+        <p>Win Conditions</p>
+        <div *ngFor="let s of winConditions; let i = index"
+             class="structuretype structure">
+            <mat-select class="condition-select"
+                        (selectionChange)="map.selectedTile.unsaved = true"
+                        [(ngModel)]="s.id">
+                <mat-option *ngFor="let c of conditions"
+                            [value]="c.id">
+                    {{c.name}}
+                </mat-option>
+            </mat-select>
+            <mat-select class="small-select"
+                        (selectionChange)="map.selectedTile.unsaved = true"
+                        [(ngModel)]="s.type">
+                <mat-option *ngFor="let t of types; let ti = index"
+                            [value]="ti">
+                    {{t}}
+                </mat-option>
+            </mat-select>
+            <input matInput
+                   class="small-select"
+                   [(ngModel)]="s.value"
+                   (change)="map.selectedTile.unsaved = true"
+                   type="number"
+                   min="0"
+                   max="100">
+            <span class="delete"
+                  (click)="removeCondition(i)">
+                X
+            </span>
+        </div>
+        <button mat-raised-button
+                (click)="addCondition()">Add Condition</button>
+    </ng-container>
+</div>

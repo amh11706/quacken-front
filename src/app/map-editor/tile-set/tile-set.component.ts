@@ -22,7 +22,7 @@ export const TileTypes = [
 export class TileSetComponent implements OnInit, OnDestroy {
   @Input() map?: MapEditor;
   protected sub = new Subscription();
-  protected group: 'tile' | 'structure' = 'tile';
+  protected group: 'tile' | 'structure' | 'tmap' = 'tile';
 
   types = TileTypes;
   error = '';
@@ -72,12 +72,13 @@ export class TileSetComponent implements OnInit, OnDestroy {
       type: this.map.selectedTile.type || 0,
       structure_set: this.map.structureSet?.id,
       tile_set: this.map.tileSet?.id,
+      tmap_set: this.map.tmapSet?.id,
     };
     this.editTile();
   }
 
   editTile() {
-    const groups: { [key: string]: MapGroups } = { tile: 'tiles', structure: 'structures' };
+    const groups: { [key: string]: MapGroups } = { tile: 'tiles', structure: 'structures', tmap: 'tmaps' };
     if (!this.map?.selectedTile) return;
     this.map.selectedTile.group = groups[this.group];
     this.map.settingsOpen = true;
