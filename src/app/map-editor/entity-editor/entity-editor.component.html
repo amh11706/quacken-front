@@ -1,0 +1,23 @@
+<div *ngIf="map && map.selectedTile && map.tmaps && map.tmapSet"
+     [qDrag]="handle3"
+     [bindToWindow]="true"
+     id="entityedit"
+     class="container">
+    <div #handle3
+         id="handle3"></div>
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                Entity Editor
+            </mat-expansion-panel-header>
+            content
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                Win Conditions
+            </mat-expansion-panel-header>
+            <q-win-conditions [tile]="map.selectedTile"></q-win-conditions>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

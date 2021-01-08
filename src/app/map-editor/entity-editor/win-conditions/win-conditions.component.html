@@ -1,0 +1,32 @@
+<div *ngFor="let s of winConditions; let i = index"
+     class="condition">
+    <mat-select class="condition-select"
+                (selectionChange)="tile && tile.unsaved = true"
+                [(ngModel)]="s.id">
+        <mat-option *ngFor="let c of conditions"
+                    [value]="c.id">
+            {{c.name}}
+        </mat-option>
+    </mat-select>
+    <mat-select class="small-select"
+                (selectionChange)="tile && tile.unsaved = true"
+                [(ngModel)]="s.type">
+        <mat-option *ngFor="let t of types; let ti = index"
+                    [value]="ti">
+            {{t}}
+        </mat-option>
+    </mat-select>
+    <input matInput
+           class="small-select"
+           [(ngModel)]="s.value"
+           (change)="tile && tile.unsaved = true"
+           type="number"
+           min="0"
+           max="100">
+    <span class="delete"
+          (click)="removeCondition(i)">
+        X
+    </span>
+</div>
+<button mat-raised-button
+        (click)="addCondition()">Add Condition</button>

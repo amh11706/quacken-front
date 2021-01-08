@@ -24,6 +24,8 @@
                  [map]="map"></q-structure-set>
 <q-tmap-set *ngIf="map.tmaps"
             [map]="map"></q-tmap-set>
+<q-entity-editor *ngIf="map.selectedTile.settings"
+                 [map]="map"></q-entity-editor>
 <q-settings *ngIf="map.settingsOpen"
             [map]="map"></q-settings>
 

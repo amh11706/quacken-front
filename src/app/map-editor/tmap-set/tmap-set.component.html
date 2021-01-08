@@ -23,45 +23,8 @@
                 </span>
             </div>
         </div>
-        <p *ngIf="!map.tmaps.length">This map set is empty. Create a
-            map to get started!</p>
+        <p *ngIf="!map.tmaps.length">This map set is empty. Create a map to get started!</p>
     </div>
     <button mat-raised-button
             (click)="newTile()">New Map</button>
-
-    <ng-container *ngIf="map.selectedTile.settings">
-        <p>Win Conditions</p>
-        <div *ngFor="let s of winConditions; let i = index"
-             class="structuretype structure">
-            <mat-select class="condition-select"
-                        (selectionChange)="map.selectedTile.unsaved = true"
-                        [(ngModel)]="s.id">
-                <mat-option *ngFor="let c of conditions"
-                            [value]="c.id">
-                    {{c.name}}
-                </mat-option>
-            </mat-select>
-            <mat-select class="small-select"
-                        (selectionChange)="map.selectedTile.unsaved = true"
-                        [(ngModel)]="s.type">
-                <mat-option *ngFor="let t of types; let ti = index"
-                            [value]="ti">
-                    {{t}}
-                </mat-option>
-            </mat-select>
-            <input matInput
-                   class="small-select"
-                   [(ngModel)]="s.value"
-                   (change)="map.selectedTile.unsaved = true"
-                   type="number"
-                   min="0"
-                   max="100">
-            <span class="delete"
-                  (click)="removeCondition(i)">
-                X
-            </span>
-        </div>
-        <button mat-raised-button
-                (click)="addCondition()">Add Condition</button>
-    </ng-container>
 </div>

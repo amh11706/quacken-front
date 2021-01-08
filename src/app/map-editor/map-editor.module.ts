@@ -22,6 +22,9 @@ import { ObstaclesComponent } from './obstacles/obstacles.component';
 import { MapComponent } from './map/map.component';
 import { MapEditorRoutingModule } from './map-editor-routing.module';
 import { TmapSetComponent } from './tmap-set/tmap-set.component';
+import { EntityEditorComponent } from './entity-editor/entity-editor.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { WinConditionsComponent } from './entity-editor/win-conditions/win-conditions.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +37,8 @@ import { TmapSetComponent } from './tmap-set/tmap-set.component';
     ObstaclesComponent,
     MapComponent,
     TmapSetComponent,
+    EntityEditorComponent,
+    WinConditionsComponent,
   ],
   entryComponents: [GuideComponent],
   imports: [
@@ -49,6 +54,7 @@ import { TmapSetComponent } from './tmap-set/tmap-set.component';
     MatSelectModule,
     MatFormFieldModule,
     MatDialogModule,
+    MatExpansionModule,
   ],
   exports: [MapEditorComponent]
 })

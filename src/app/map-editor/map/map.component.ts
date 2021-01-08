@@ -48,19 +48,19 @@ export class MapComponent implements OnInit {
     if (!this.map || !this.setTile) return;
     const tile = this.map.selectedTile;
     if (!tile.data) return;
-    if (this.painting && e.button === 0 && tile.data[y][x]) return;
+    if (this.painting && e.buttons === 1 && tile.data[y][x]) return;
     if (e.shiftKey) {
       this.map.selected = tile.data[y][x] || this.map.selected;
       return;
     }
-    this.painting = e.ctrlKey;
+    if (e.ctrlKey) this.painting = true;
     if (!e.ctrlKey) {
       this.clickX = e.clientX;
       this.clickY = e.clientY;
       return;
     }
 
-    const newValue = e.button === 0 ? this.map.selected : 0;
+    const newValue = e.buttons === 1 ? this.map.selected : 0;
     const change = this.setTile(x, y, newValue);
     if (!change) {
       if (newValue < 17 && newValue > 8) this.finishWhirl(x, y, []);
@@ -80,7 +80,7 @@ export class MapComponent implements OnInit {
     this.clickX = 0;
     this.clickY = 0;
 
-    const newValue = e.button === 0 ? this.map.selected : 0;
+    const newValue = e.buttons === 1 ? this.map.selected : 0;
     const change = this.setTile(x, y, newValue);
     if (!change) return;
 

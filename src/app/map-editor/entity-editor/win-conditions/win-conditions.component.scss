@@ -1,0 +1,33 @@
+.condition {
+  position: relative;
+  margin-bottom: 8px;
+  padding-right: 16px;
+  border: 1px solid grey;
+}
+
+.condition-select {
+    margin-bottom: 8px;
+  }
+  
+  .small-select {
+    width: 40%;
+  }
+
+  .delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px;
+    font-size: 10px;
+    background-color: lightgrey;
+    transition: .2s;
+    font-size: 10px;
+    line-height: 10px;
+    color: black;
+    cursor: pointer;
+  }
+  
+  .delete:hover {
+    color: lightgrey;
+    background-color: red;
+  }
