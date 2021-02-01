@@ -3,10 +3,6 @@ import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
 import { ChatService } from './chat.service';
-import { FriendsService } from './friends/friends.service';
-import { SettingsService } from '../settings/settings.service';
-import { InventoryService } from '../inventory/inventory.service';
-import { WindowService } from '../window.service';
 import { InCmd, OutCmd } from '../ws-messages';
 
 @Component({
@@ -45,10 +41,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     public socket: WsService,
     public chat: ChatService,
-    public fs: FriendsService,
-    public ss: SettingsService,
-    public is: InventoryService,
-    public wd: WindowService,
   ) { }
 
   ngOnInit() {

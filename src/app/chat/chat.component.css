@@ -1,29 +1,8 @@
-#chatbox {
+.chatbox {
   font-size: 14px;
 }
 
-#icons {
-  position: absolute;
-  right: 2px;
-  display: flex;
-  flex-direction: column;
-  color: #444;
-}
-
-#icons button {
-  height: 28px;
-}
-
-#icons mat-icon {
-  font-size: 16px;
-  line-height: 16px;
-}
-
-.highlight {
-  color: orange;
-}
-
-#output {
+.output {
   position: relative;
   margin-bottom: 2px;
   height: 120px;
@@ -34,7 +13,7 @@
   color: #eee;
 }
 
-#textbox {
+.textbox {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -43,7 +22,7 @@
   overflow: auto;
 }
 
-#textinput {
+.textinput {
   width: 100%;
   padding: 3px 5px;
   background-color: #aaa;
@@ -51,11 +30,11 @@
   transition: .3s;
 }
 
-#textinput:focus {
+.textinput:focus {
   background-color: #eee;
 }
 
-#textbox p {
+.textbox p {
   user-select: text;
   word-wrap: break-word;
   float: left;

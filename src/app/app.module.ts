@@ -8,7 +8,7 @@ import { FriendsModule } from './chat/friends/friends.module';
 import { LoginModule } from './login/login.module';
 import { SettingsModule } from './settings/settings.module';
 import { ChatModule } from './chat/chat.module';
-import { InventoryModule } from './inventory/inventory.module';
+import { EscMenuModule } from './esc-menu/esc-menu.module';
 
 import { AppComponent } from './app.component';
 import { RecordComponent } from './record/record.component';
@@ -27,7 +27,7 @@ import { MatButtonModule } from '@angular/material/button';
     FriendsModule,
     SettingsModule,
     ChatModule,
-    InventoryModule,
+    EscMenuModule,
   ],
   bootstrap: [AppComponent]
 })

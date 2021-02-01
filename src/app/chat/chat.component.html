@@ -1,7 +1,7 @@
-<div id="chatbox">
-  <div id="output">
+<div class="chatbox">
+  <div class="output">
     <div #output
-         id="textbox">
+         class="textbox">
       <ng-container *ngFor="let m of chat.messages">
         <p *ngIf="!m.blocked"
            [style.backgroundColor]="colors[m.type]">
@@ -76,31 +76,11 @@
         </p>
       </ng-container>
     </div>
-
-    <div id="icons">
-      <button mat-icon-button
-              (click)="fs.open = true; fs.selected = 'lobby'; wd.active = 'friends'">
-        <mat-icon title="Player List">group</mat-icon>
-      </button>
-      <button mat-icon-button
-              (click)="fs.open = true; fs.selected = 'invite'; wd.active = 'friends'"
-              [class.highlight]="fs.invites.length">
-        <mat-icon title="Alerts">notifications</mat-icon>
-      </button>
-      <button mat-icon-button
-              (click)="ss.open = true; wd.active = 'settings'">
-        <mat-icon title="Settings">settings</mat-icon>
-      </button>
-      <button mat-icon-button
-              (click)="is.open = true; wd.active = 'inventory'">
-        <mat-icon title="Inventory">apps</mat-icon>
-      </button>
-    </div>
   </div>
 
   <form (submit)="sendInput($event)">
     <input #inputEl
-           id="textinput"
+           class="textinput"
            autocomplete="off"
            maxlength="200"
            name="value"

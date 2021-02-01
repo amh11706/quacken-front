@@ -2,10 +2,9 @@ import { Component, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 
-import { WsService } from '../ws.service';
-import { InventoryService } from './inventory.service';
+import { WsService } from '../../ws.service';
 import { SplitComponent } from './split/split.component';
-import { InCmd, OutCmd } from '../ws-messages';
+import { InCmd, OutCmd } from '../../ws-messages';
 
 export interface Item {
   s: number;
@@ -55,9 +54,10 @@ export class InventoryComponent implements OnDestroy {
 
   constructor(
     public ws: WsService,
-    public is: InventoryService,
     private dialog: MatDialog,
-  ) { }
+  ) {
+    this.id = this.ws.user?.inventory;
+  }
 
   ngOnDestroy() {
     this.subs.unsubscribe();

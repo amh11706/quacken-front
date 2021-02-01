@@ -1,0 +1,43 @@
+<div id="background"
+     *ngIf="es.open">
+    <div id="side-menu">
+        <div class="action"
+             (click)="es.open = false">
+            Back to Game
+        </div>
+        <div *ngIf="es.lobbyComponent"
+             [class.selected]="es.activeComponent === es.lobbyComponent"
+             (click)="es.activeComponent = es.lobbyComponent">
+            Lobby
+        </div>
+        <div [class.selected]="es.activeComponent === InventoryComponent"
+             (click)="es.activeComponent = InventoryComponent">
+            Inventory
+        </div>
+        <div [class.selected]="es.activeComponent === ProfileComponent"
+             (click)="es.activeComponent = ProfileComponent">
+            Profile
+        </div>
+        <div [class.selected]="es.activeComponent === AccountComponent"
+             (click)="es.activeComponent = AccountComponent">
+            Account
+        </div>
+        <div *ngIf="es.lobbyComponent"
+             class="action"
+             (click)="leave()">
+            Leave Lobby
+        </div>
+        <div class="action"
+             (click)="logout()">
+            Logout
+        </div>
+    </div>
+
+    <div id="content">
+        <ng-container *ngComponentOutlet="es.activeComponent"></ng-container>
+    </div>
+
+    <div id="chatframe">
+        <q-chat></q-chat>
+    </div>
+</div>

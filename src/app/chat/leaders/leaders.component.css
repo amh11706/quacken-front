@@ -1,37 +1,15 @@
 #leaders {
-  position: absolute;
-  top: calc(50% - 150px);
-  right: 50%;
-  width: 500px;
-  max-height: 300px;
-  padding: 0;
-  overflow: hidden;
-  background: rgba(66, 66, 66, 0.85);
-  z-index: 1;
   color: #eee;
   text-align: center;
   pointer-events: auto;
 }
 
-.handle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  cursor: grab;
-}
-
-.close, .refresh {
+.refresh {
   position: absolute;
   top: 4px;
   right: 8px;
   cursor: pointer;
   color: #fff;
-}
-
-.refresh {
-  right: 40px;
 }
 
 h2 {
@@ -43,8 +21,7 @@ h2 {
 
 #selection {
   position: relative;
-  height: 250px;
-  overflow: auto;
+  overflow-y: auto;
   padding-bottom: 24px;
   padding-top: 8px;
 }
@@ -54,8 +31,8 @@ button {
 }
 
 table {
-  width: 100%;
   border-collapse: collapse;
+  margin: auto;
 }
 
 th {
@@ -68,5 +45,8 @@ td, th {
   max-width: 148px;
   padding: 4px 8px;
   border: 1px solid grey;
-  background: rgb(66, 66, 66);
+}
+
+mat-form-field {
+  margin: 8px 16px;
 }

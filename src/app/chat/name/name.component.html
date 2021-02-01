@@ -20,7 +20,7 @@
   <ng-template matMenuContent>
     <button *ngIf="message.from !== 'Guest'; else guest"
             mat-menu-item
-            (click)="stat.openUser(message.from)">
+            (click)="openProfile()">
       Profile
     </button>
   </ng-template>
@@ -32,7 +32,7 @@
     <ng-template #notabot>
       <button *ngIf="message.from !== 'Guest'"
               mat-menu-item
-              (click)="stat.openUser(message.from)">
+              (click)="openProfile()">
         Profile
       </button>
       <ng-container *ngIf="!offline">

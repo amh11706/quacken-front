@@ -1,19 +1,14 @@
-<div *ngIf="ws.connected && stat.open"
-     id="stats"
-     class="container"
-     [qDrag]="handle"
-     [bindToWindow]="true">
+<div *ngIf="ws.connected"
+     id="stats">
      <div #handle
           class="handle"></div>
-     <mat-icon class="close"
-               (click)="stat.open=false">close</mat-icon>
      <mat-icon class="refresh"
                (click)="stat.refresh()">refresh</mat-icon>
      <h2>{{stat.target}}</h2>
      <div id="selection">
           <div *ngFor="let s of stat.stats"
                class="stat"
-               (click)="stat.openLeaders(s.statId, s.name)">
+               (click)="stat.openLeaders(s.statId)">
                <h4 class="statName">{{s.name}}</h4>
                <p class="statValue">{{s.value}}<span *ngIf="s.suffix">
                          {{s.suffix}}</span></p>

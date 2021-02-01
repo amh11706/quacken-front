@@ -8,6 +8,7 @@
   overflow: hidden;
   background: rgba(66, 66, 66, 0.85);
   pointer-events: auto;
+  z-index: 10;
 }
 
 .highlight {
@@ -62,14 +63,6 @@
   right: 0;
   height: 24px;
   cursor: grab;
-}
-
-.close {
-  position: absolute;
-  top: 4px;
-  right: 8px;
-  cursor: pointer;
-  color: #fff;
 }
 
 #selection {

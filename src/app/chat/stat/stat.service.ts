@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
-import { WindowService } from 'src/app/window.service';
 import { Message } from '../chat.service';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
+import { OutCmd } from 'src/app/ws-messages';
 
 export interface Stat {
   statId: number;
@@ -36,35 +35,27 @@ const mapColumns: Column[] = [
   providedIn: 'root'
 })
 export class StatService {
-  open = false;
+  profileTab = 0;
   target = '';
   stats: Stat[] = [];
 
-  leadersOpen = false;
   id = 0;
-  groupName = '';
   leaders: Leader[] = [];
   columns: Column[] = [];
 
   constructor(
     private ws: WsService,
     private fs: FriendsService,
-    private wd: WindowService,
   ) { }
 
   openUser(name: string) {
     this.target = name;
-    this.open = true;
     this.refresh();
-    this.wd.active = 'stat';
   }
 
-  openLeaders(id: number, name: string) {
+  openLeaders(id: number) {
     this.id = id;
-    this.groupName = name;
-    this.leadersOpen = true;
     this.refreshLeaders();
-    this.wd.active = 'leaders';
   }
 
   async refresh() {

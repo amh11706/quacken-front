@@ -1,15 +1,6 @@
 #inventory {
-  position: absolute;
-  top: calc(50% - 150px);
-  right: calc(50% - 200px);
-  width: 402px;
-  padding: 0;
-  overflow: hidden;
-  background: rgba(66, 66, 66, 0.85);
-  z-index: 1;
   color: #eee;
   text-align: center;
-  pointer-events: auto;
 }
 
 h2 {
@@ -25,23 +16,6 @@ h2 {
   overflow-y: auto;
   overflow-x: hidden;
   border-top: 2px solid grey;
-}
-
-.handle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  cursor: grab;
-}
-
-.close {
-  position: absolute;
-  top: 4px;
-  right: 8px;
-  cursor: pointer;
-  color: #fff;
 }
 
 .coin {

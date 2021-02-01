@@ -44,6 +44,8 @@ import {
 } from 'three';
 import { BoatRender } from './boat-render';
 import { Turn } from '../quacken/boats/boats.component';
+import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
+import { MainMenuComponent } from './main-menu/main-menu.component';
 
 const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed', 'cadeMaxFps', 'showFps', 'cadeLockAngle', 'water'];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -132,6 +134,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     protected ss: SettingsService,
     protected fs: FriendsService,
     private bs: BoatService,
+    private es: EscMenuService,
   ) {
     super(ws, ss, fs);
     bs.setScene(this.scene, this.loadObj, this.camera);
@@ -156,6 +159,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
+    this.es.setLobby(MainMenuComponent, this.lobby);
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));
@@ -208,6 +212,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   ngOnDestroy() {
+    this.es.setLobby();
     window.removeEventListener('resize', this.onWindowResize);
     this.renderer.dispose();
     this.controls?.dispose();

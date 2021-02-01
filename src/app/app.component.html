@@ -1,28 +1,6 @@
 <div>
-  <div *ngIf="ws.connected"
-       id="banner">
-    <span *ngIf="router.url !== '/list'"
-          title="Back to lobby list"
-          [routerLink]="['list']">
-      &lt;
-    </span>
-    <span id="logout"
-          title="Logout"
-          (click)="logout()">x</span>
-  </div>
-  <router-outlet></router-outlet>
+        <router-outlet></router-outlet>
 
-  <q-friends [class.top]="wd.active==='friends'"
-             (mousedown)=" wd.active='friends'"></q-friends>
-  <q-settings [class.top]="wd.active === 'settings'"
-              (mousedown)="wd.active = 'settings'"></q-settings>
-  <q-stat [class.top]="wd.active === 'stat'"
-          (mousedown)="wd.active = 'stat'">
-  </q-stat>
-  <q-leaders [class.top]="wd.active === 'leaders'"
-             (mousedown)="wd.active = 'leaders'"></q-leaders>
-  <q-inventory [class.top]="wd.active === 'inventory'"
-               (mousedown)="wd.active = 'inventory'"
-               [id]=" ws.user?.inventory">
-  </q-inventory>
+        <q-esc-menu></q-esc-menu>
+        <q-friends></q-friends>
 </div>

@@ -5,6 +5,8 @@ import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
 import { StatService } from '../stat/stat.service';
 import { OutCmd } from 'src/app/ws-messages';
+import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
+import { ProfileComponent } from 'src/app/esc-menu/profile/profile.component';
 
 @Component({
   selector: 'q-name',
@@ -20,6 +22,7 @@ export class NameComponent implements OnInit {
     public stat: StatService,
     public ws: WsService,
     public fs: FriendsService,
+    private es: EscMenuService,
   ) { }
 
   ngOnInit() {
@@ -29,6 +32,13 @@ export class NameComponent implements OnInit {
     let name = this.message.from;
     if (name === 'Guest') name += `(${this.message.copy})`;
     return name;
+  }
+
+  openProfile() {
+    this.stat.openUser(this.message.from);
+    this.stat.profileTab = 0;
+    this.es.activeComponent = ProfileComponent;
+    this.es.open = true;
   }
 
   sendTell() {

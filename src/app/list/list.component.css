@@ -9,13 +9,6 @@
   overflow: auto;
 }
 
-q-chat-box {
-  display: block;
-  width: 100%;
-  max-width: 750px;
-  margin: auto;
-}
-
 #cards {
   position: relative;
   min-height: 100px;

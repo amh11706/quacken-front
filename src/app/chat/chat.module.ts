@@ -9,6 +9,8 @@ import { ChatComponent } from './chat.component';
 import { StatComponent } from './stat/stat.component';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { LeadersComponent } from './leaders/leaders.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [ChatComponent, StatComponent, LeadersComponent],
@@ -17,6 +19,8 @@ import { LeadersComponent } from './leaders/leaders.component';
     FormsModule,
     MatButtonModule,
     MatIconModule,
+    MatSelectModule,
+    MatFormFieldModule,
     NameModule,
     QdragModule,
   ],

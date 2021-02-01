@@ -49,15 +49,13 @@
   </ng-template>
 </mat-menu>
 
-<div *ngIf="fs.open && ws.connected"
+<div *ngIf="ws.connected"
      id="friends"
      class="container"
      [qDrag]="handle"
      [bindToWindow]="true">
   <div #handle
        class="handle"></div>
-  <mat-icon class="close"
-            (click)="fs.open=false">close</mat-icon>
   <div id="nav">
     <div *ngFor="let link of links"
          class="link"

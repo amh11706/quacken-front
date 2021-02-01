@@ -1,0 +1,52 @@
+<mat-tab-group [(selectedIndex)]="stat.profileTab"
+               mat-align-tabs="center">
+    <mat-tab label="Profile">
+        <div id="stats">
+            <mat-icon class="refresh"
+                      (click)="stat.refresh()">refresh</mat-icon>
+            <mat-form-field>
+                <input matInput
+                       [value]="stat.target"
+                       (blur)="searchUser($event)"
+                       (focus)="stat.stats = []">
+            </mat-form-field>
+            <div id="selection">
+                <div class="badges">
+                    <div>
+                        <div class="badge gold"
+                             title="Lvl 40 gold tier">
+                            40
+                        </div>
+                        <div class="badgetitle">Quacken</div>
+                    </div>
+                    <div>
+                        <div class="badge bronze"
+                             title="Lvl 15 bronze tier">
+                            15
+                        </div>
+                        <div class="badgetitle">Cadegoose</div>
+                    </div>
+                </div>
+                <mat-form-field>
+                    <mat-select [value]="'q'"
+                                placeholder="Category">
+                        <mat-option value="q">Quacken</mat-option>
+                        <mat-option value="c">Cadegoose</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <table>
+                    <tr *ngFor="let s of stat.stats"
+                        class="stat"
+                        (click)="showLeaders(s)">
+                        <td>{{s.name}}</td>
+                        <td>{{s.value}}<span *ngIf="s.suffix"> {{s.suffix}}</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Lookup"> Content 2 </mat-tab>
+    <mat-tab label="Leaderboards">
+        <q-leaders></q-leaders>
+    </mat-tab>
+</mat-tab-group>

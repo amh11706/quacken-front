@@ -64,7 +64,7 @@ export class ListComponent implements OnInit, OnDestroy {
   }
 
   openEditor() {
-    if (this.ws.user?.id) this.router.navigate(['/editor']);
+    if (this.ws.user?.id) this.router.navigate(['editor']);
     else this.dialog.open(EditorErrorComponent);
   }
 

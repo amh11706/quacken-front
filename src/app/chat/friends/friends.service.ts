@@ -14,7 +14,6 @@ export interface Invite {
   providedIn: 'root'
 })
 export class FriendsService {
-  open = true;
   selected = 'lobby';
   allowInvite = false;
 

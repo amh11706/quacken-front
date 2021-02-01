@@ -12,7 +12,9 @@ export class StatComponent implements OnInit {
   constructor(
     public stat: StatService,
     public ws: WsService,
-  ) { }
+  ) {
+    this.stat.target = this.ws.user?.name || '';
+  }
 
   ngOnInit() {
   }

@@ -10,7 +10,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 
-import { QdragModule } from '../qdrag/qdrag.module';
 import { InventoryComponent } from './inventory.component';
 import { SplitComponent } from './split/split.component';
 
@@ -27,7 +26,6 @@ import { SplitComponent } from './split/split.component';
     MatDialogModule,
     MatButtonModule,
     MatSliderModule,
-    QdragModule,
   ],
   exports: [InventoryComponent]
 })
