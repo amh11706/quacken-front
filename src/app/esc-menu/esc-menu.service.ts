@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AccountComponent } from './account/account.component';
 import { ProfileComponent } from './profile/profile.component';
 
 @Injectable({
@@ -7,7 +6,7 @@ import { ProfileComponent } from './profile/profile.component';
 })
 export class EscMenuService {
   open = false;
-  activeComponent: any = AccountComponent;
+  activeComponent: any = ProfileComponent;
   lobbyComponent: any;
   lobbyContext: any;
 
@@ -17,7 +16,6 @@ export class EscMenuService {
     if (this.activeComponent === this.lobbyComponent) this.activeComponent = ProfileComponent;
     else if (component) {
       this.activeComponent = component;
-      this.open = true;
     }
     this.lobbyComponent = component;
     this.lobbyContext = context;

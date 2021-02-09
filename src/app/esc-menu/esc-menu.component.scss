@@ -45,25 +45,23 @@
     background: linear-gradient(90deg, rgba(0, 0, 90, 1) 0%, rgba(9, 9, 121, 1) 99%, rgba(0, 146, 255, 1) 100%);
     border-right: 2px solid black;
 
-    div {
-        width: 100%;
+    button {
         border-bottom: 1px solid grey;
-        padding: 16px;
-        text-align: center;
-        cursor: pointer;
         transition: 0.2s;
+        font-size: 18px;
+        padding: 8px;
     }
 
-    div:last-child {
+    button:last-child {
         border-bottom: none;
     }
 
-    div.selected {
+    button.selected {
         color: mat-color($primary);
         background-color: rgba(255, 255, 255, 0.08);
     }
 
-    div:hover {
+    button:hover {
         background-color: rgba(255, 255, 255, 0.1);
     }
 

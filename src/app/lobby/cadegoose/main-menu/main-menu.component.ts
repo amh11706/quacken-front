@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Message } from 'src/app/chat/chat.service';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { WsService } from 'src/app/ws.service';
@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { Turn } from '../../quacken/boats/boats.component';
 import { Boat } from '../../quacken/boats/boat';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
+import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 interface TeamMessage {
   id: number;
@@ -33,23 +34,22 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   myTeam = 99;
   ready = false;
   admin = false;
-  open = true;
   statsOpen = false;
   private roundGoing = false;
   private subs = new Subscription();
 
-  @Input() lobby?: Lobby;
-
   constructor(
     private ws: WsService,
     private fs: FriendsService,
+    public es: EscMenuService,
   ) { }
 
   ngOnInit(): void {
     this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       this.roundGoing = m.turn && m.turn <= 75 || false;
       if (!m.players) return;
-      this.open = true;
+      this.es.open = true;
+      this.es.activeComponent = this.es.lobbyComponent;
       this.teams = m.players;
       this.admin = m.owner || this.admin;
       this.ready = false;
@@ -78,41 +78,45 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (!this.roundGoing) {
         this.myBoat.isMe = false;
-        this.open = true;
+        this.es.open = true;
+        this.es.activeComponent = this.es.lobbyComponent;
         return;
       }
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
-      else if (!b.isMe) this.open = true;
+      else if (!b.isMe) {
+        this.es.open = true;
+        this.es.activeComponent = this.es.lobbyComponent;
+      }
       this.myBoat = b;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
       this.roundGoing = t.turn <= 75;
       if (this.roundGoing) return;
-      this.statsOpen = !!(this.lobby?.stats && Object.keys(this.lobby.stats).length);
+      this.statsOpen = !!(this.es.lobbyContext?.stats && Object.keys(this.es.lobbyContext.stats).length);
       this.myBoat = new Boat('');
     }));
-    this.subs.add(this.ws.subscribe(Internal.OpenMenu, () => {
-      this.open = !this.open;
-    }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
-      if (!this.roundGoing) this.open = true;
+      if (!this.roundGoing) {
+        this.es.open = true;
+        this.es.activeComponent = this.es.lobbyComponent;
+      }
     }));
   }
 
   private gotBoat() {
-    this.open = false;
+    this.es.open = false;
     this.ready = false;
     for (const p of Object.values(this.teams)) p.r = false;
   }
 
   toggleReady() {
     if (this.myBoat.isMe) {
-      this.open = false;
+      this.es.open = false;
       return;
     }
     if (this.myTeam === 99) {
-      this.open = false;
+      this.es.open = false;
       return;
     }
     this.ready = !this.ready;

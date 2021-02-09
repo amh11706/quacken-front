@@ -1,9 +1,8 @@
-<div id="shade"
-     [hidden]="!open">
+<div id="shade">
     <div id="menu"
          class="container noselect">
         <div *ngIf="statsOpen; else teams">
-            <q-stat-end [stats]="lobby?.stats"
+            <q-stat-end [stats]="es.lobbyContext?.stats"
                         [columns]="SB_STATS"
                         (close)="statsOpen = false"></q-stat-end>
         </div>
@@ -27,6 +26,7 @@
                     <br>
                     <button *ngIf="myTeam === 0 || defenders.length === 0"
                             mat-raised-button
+                            [disabled]="!es.open"
                             (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
                 </div>
                 <div class="teamwrap">
@@ -43,6 +43,8 @@
 
                 <div id="buttons">
                     <button mat-raised-button
+                            [disabled]="!es.open"
+                            color="accent"
                             id="ready"
                             [class.cancel]="ready"
                             (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not

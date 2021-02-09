@@ -2,7 +2,6 @@ export const enum Internal {
     Boats = -100,
     MyBoat,
     UnlockMoves,
-    OpenMenu,
     Time
 }
 

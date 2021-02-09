@@ -14,7 +14,7 @@ import { EditorErrorComponent } from './editor-error/editor-error.component';
 @Component({
   selector: 'q-lobby-list',
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css']
+  styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit, OnDestroy {
   lobbies: Lobby[] = [];

@@ -10,6 +10,7 @@ import { QdragModule } from '../../qdrag/qdrag.module';
 
 import { FriendsComponent } from './friends.component';
 import { NameModule } from '../name/name.module';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [FriendsComponent],
@@ -19,6 +20,7 @@ import { NameModule } from '../name/name.module';
     MatExpansionModule,
     MatMenuModule,
     MatButtonModule,
+    MatTabsModule,
     QdragModule,
     NameModule,
   ],

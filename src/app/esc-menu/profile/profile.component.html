@@ -2,8 +2,11 @@
                mat-align-tabs="center">
     <mat-tab label="Profile">
         <div id="stats">
-            <mat-icon class="refresh"
-                      (click)="reset()">refresh</mat-icon>
+            <button mat-icon-button
+                    class="refresh"
+                    (click)="reset()">
+                <mat-icon>refresh</mat-icon>
+            </button>
             <mat-form-field>
                 <input matInput
                        [value]="stat.target"

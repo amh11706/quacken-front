@@ -100,6 +100,7 @@ const obstacleModels: Record<number, ObstacleConfig> = {
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('frame') frame?: ElementRef;
   @ViewChild('fps') fps?: ElementRef;
+  protected menuComponent = MainMenuComponent;
   settings: SettingMap = { mapScale: 50, speed: 10, water: 0 };
   hoveredTeam = -1;
   statOpacity = 0;
@@ -130,13 +131,13 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private rayCaster = new Raycaster();
 
   constructor(
-    protected ws: WsService,
-    protected ss: SettingsService,
-    protected fs: FriendsService,
+    ws: WsService,
+    ss: SettingsService,
+    fs: FriendsService,
     private bs: BoatService,
-    private es: EscMenuService,
+    es: EscMenuService,
   ) {
-    super(ws, ss, fs);
+    super(ws, ss, fs, es);
     bs.setScene(this.scene, this.loadObj, this.camera);
 
     this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -159,7 +160,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
-    this.es.setLobby(MainMenuComponent, this.lobby);
+    this.es.setLobby(this.menuComponent, this.lobby);
+    this.es.open = true;
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));

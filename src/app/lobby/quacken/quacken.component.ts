@@ -8,6 +8,7 @@ import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
 import { Settings } from 'src/app/settings/setting/settings';
 import { InCmd, Internal } from 'src/app/ws-messages';
+import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 const baseSettings: (keyof typeof Settings)[] = ['mapScale', 'speed', 'kbControls'];
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -59,6 +60,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     protected ws: WsService,
     protected ss: SettingsService,
     protected fs: FriendsService,
+    protected es: EscMenuService,
   ) {
     this.getSettings();
   }
@@ -67,6 +69,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc } });
     this.ss.getGroup('l/quacken', true);
     this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
+    this.es.setLobby(undefined, 'quacken');
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
   }
@@ -76,6 +79,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
     this.ss.admin = true;
+    this.es.setLobby();
   }
 
   async getSettings() {

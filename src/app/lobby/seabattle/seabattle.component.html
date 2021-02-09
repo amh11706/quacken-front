@@ -2,7 +2,7 @@
      class="noselect"
      id="background"
      oncontextmenu="event.preventDefault();">
-    <!-- three.js canvas goes here -->
+     <!-- three.js canvas goes here -->
 </div>
 <div #fps
      [hidden]="!settings.showFps"
@@ -10,7 +10,6 @@
 
 <q-sb-entry-status (mouseover)="statOpacity = 1"
                    (mouseleave)="statOpacity = 0"></q-sb-entry-status>
-<q-sb-main-menu [lobby]="lobby"></q-sb-main-menu>
 <q-sb-stats [style.opacity]="statOpacity"
             [stats]="lobby?.stats"></q-sb-stats>
 <q-cade-hud></q-cade-hud>

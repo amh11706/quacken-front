@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
-import { MatDialog } from '@angular/material/dialog';
 import { GuideComponent } from './guide/guide.component';
 import { InCmd, OutCmd } from '../ws-messages';
+import { EscMenuService } from '../esc-menu/esc-menu.service';
 
 export interface MapTile {
   x: number; y: number; v: number;
@@ -81,7 +81,10 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   };
 
 
-  constructor(private socket: WsService, private dialog: MatDialog) {
+  constructor(
+    private socket: WsService,
+    private es: EscMenuService,
+  ) {
     const tile = this.map.selectedTile;
     for (let i = 0; i < 8; i++) {
       tile.data?.push([0, 0, 0, 0, 0, 0, 0, 0]);
@@ -105,6 +108,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }));
 
     window.addEventListener('keydown', this.handleKey);
+    this.es.setLobby(GuideComponent);
   }
 
   ngOnDestroy() {
@@ -112,6 +116,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     window.removeEventListener('beforeunload', this.saveSession);
     this.sub.unsubscribe();
     window.removeEventListener('keydown', this.handleKey);
+    this.es.setLobby();
   }
 
   private saveSession = () => {
@@ -121,7 +126,8 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   openGuide() {
-    this.dialog.open(GuideComponent, { hasBackdrop: false });
+    this.es.open = true;
+    this.es.activeComponent = this.es.lobbyComponent;
   }
 
   resetUndos = () => {

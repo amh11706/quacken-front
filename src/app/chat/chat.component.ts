@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
@@ -13,6 +13,7 @@ import { InCmd, OutCmd } from '../ws-messages';
 export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('inputEl', { static: true }) input?: ElementRef<HTMLElement>;
   @ViewChild('output', { static: true }) output?: ElementRef<HTMLElement>;
+  @Input() disabled = false;
   colors = [
     '#873600', // info message
     '#873600', // HTML info message

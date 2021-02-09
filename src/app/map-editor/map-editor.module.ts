@@ -6,7 +6,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
 import { QdragModule } from '../qdrag/qdrag.module';
@@ -53,7 +52,6 @@ import { WinConditionsComponent } from './entity-editor/win-conditions/win-condi
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatDialogModule,
     MatExpansionModule,
   ],
   exports: [MapEditorComponent]

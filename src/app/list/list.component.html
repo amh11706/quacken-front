@@ -2,29 +2,34 @@
   <h2>Welcome {{ws.user?.name}}! Select an option below to play:</h2>
 
   <div id="cards">
-    <div class="card"
-         (click)="openNews()">
+    <button mat-button
+            class="card"
+            (click)="openNews()">
       <h3>{{note.title}}</h3>
       <p>{{note.points[0]}}</p>
       <p>...</p>
-    </div>
+    </button>
 
-    <div class="card"
-         (click)="openEditor()">
+    <button mat-button
+            class="card"
+            (click)="openEditor()">
       <h3>Enter Map Editor</h3>
       <p>Make maps for you and other players to use!</p>
-    </div>
+    </button>
 
-    <div class="card"
-         (click)="createLobby()">
+    <button mat-button
+            class="card"
+            (click)="createLobby()">
       <h3>Create Lobby</h3>
       <mat-icon id="addLobby">add</mat-icon>
-    </div>
+    </button>
 
-    <q-lobby-card *ngFor="let l of lobbies"
-                  class="card"
-                  [lobby]="l"
-                  (click)="join(l)"></q-lobby-card>
+    <button mat-button
+            *ngFor="let l of lobbies"
+            (click)="join(l)"
+            class="card">
+      <q-lobby-card [lobby]="l"></q-lobby-card>
+    </button>
   </div>
 
   <q-chat></q-chat>

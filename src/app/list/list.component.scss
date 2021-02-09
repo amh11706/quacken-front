@@ -5,7 +5,7 @@
   height: 100vh;
   width: 100vw;
   padding: 40px 2% 0 2%;
-  background: center/cover url('/assets/background.jpg');
+  background: center/cover url("/assets/background.jpg");
   overflow: auto;
 }
 
@@ -28,16 +28,12 @@
   width: 150px;
   overflow: hidden;
   padding: 8px 16px;
-  text-align: center;
-  background-color: rgba(112, 123, 124, .8);
+  background-color: rgba(112, 123, 124, 0.8);
   border: 1px solid darkgrey;
   border-radius: 16px;
-  cursor: pointer;
+  white-space: normal;
+  line-height: inherit;
   transition: 0.3s;
-}
-
-.card:hover {
-  background-color: rgba(102, 113, 114, .8);
 }
 
 #frame {
@@ -47,7 +43,7 @@
   min-height: 360px;
   margin: auto;
   padding: 16px;
-  background-color: rgba(112, 123, 124, .8);
+  background-color: rgba(112, 123, 124, 0.8);
   color: #eee;
   border: 2px solid grey;
   border-radius: 8px;

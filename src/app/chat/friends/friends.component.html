@@ -57,24 +57,12 @@
   <div #handle
        class="handle"></div>
   <div id="nav">
-    <div *ngFor="let link of links"
-         class="link"
-         [title]="link.title"
-         (click)="fs.selected = link.path"
-         [class.active]="fs.selected === link.path">
-      <mat-icon>{{link.icon}}</mat-icon>
-    </div>
-    <div class="link"
-         (click)="fs.selected = 'invite'"
-         title="Invitations"
-         [class.active]="fs.selected === 'invite'">
-      <mat-icon [class.highlight]="fs.invites.length">notifications</mat-icon>
-    </div>
-  </div>
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>group</mat-icon>
+        </ng-template>
 
-  <div id="selection">
-    <ng-container [ngSwitch]="fs.selected">
-      <ng-container *ngSwitchCase="'lobby'">
         <p *ngIf="fs.lobby.length > 1; else alone"
            class="empty">
           There are {{fs.lobby.length}} players in this lobby:
@@ -86,9 +74,13 @@
              class="lobbyPlayer">
           <q-name [message]="m"></q-name>
         </div>
-      </ng-container>
+      </mat-tab>
 
-      <ng-container *ngSwitchCase="'friend'">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>mood</mat-icon>
+        </ng-template>
+
         <mat-expansion-panel expanded>
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -125,9 +117,35 @@
             </div>
           </ng-template>
         </mat-expansion-panel>
-      </ng-container>
+      </mat-tab>
 
-      <ng-container *ngSwitchCase="'invite'">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>block</mat-icon>
+        </ng-template>
+
+        <p *ngIf="!fs.blocked.length; else blockCount"
+           class="empty">
+          No blocked players. Hooray!
+        </p>
+        <ng-template #blockCount>
+          <p class="empty">
+            {{fs.blocked.length}} blocked player<span *ngIf="fs.blocked.length > 1">s</span>.
+          </p>
+        </ng-template>
+        <div *ngFor="let blocked of fs.blocked"
+             class="lobbyPlayer offline"
+             [matMenuTriggerFor]="blockedMenu"
+             [matMenuTriggerData]="{blocked: blocked}">
+          {{blocked}}
+        </div>
+      </mat-tab>
+
+      <mat-tab title="Invitations">
+        <ng-template mat-tab-label>
+          <mat-icon [class.highlight]="fs.invites.length">notifications</mat-icon>
+        </ng-template>
+
         <p *ngIf="!fs.invites.length"
            class="empty">No invites.</p>
         <div *ngFor="let invite of fs.invites"
@@ -145,25 +163,7 @@
           <button mat-raised-button
                   (click)="decline(invite)">Decline</button>
         </div>
-      </ng-container>
-
-      <ng-container *ngSwitchCase="'block'">
-        <p *ngIf="!fs.blocked.length; else blockCount"
-           class="empty">
-          No blocked players. Hooray!
-        </p>
-        <ng-template #blockCount>
-          <p class="empty">
-            {{fs.blocked.length}} blocked player<span *ngIf="fs.blocked.length > 1">s</span>.
-          </p>
-        </ng-template>
-        <div *ngFor="let blocked of fs.blocked"
-             class="lobbyPlayer offline"
-             [matMenuTriggerFor]="blockedMenu"
-             [matMenuTriggerData]="{blocked: blocked}">
-          {{blocked}}
-        </div>
-      </ng-container>
-    </ng-container>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

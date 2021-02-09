@@ -80,6 +80,7 @@
 
   <form (submit)="sendInput($event)">
     <input #inputEl
+           [disabled]="disabled"
            class="textinput"
            autocomplete="off"
            maxlength="200"

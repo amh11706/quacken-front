@@ -136,10 +136,6 @@ export class CadeHudComponent extends HudComponent {
     this.usingCannons = 0;
   }
 
-  openMenu() {
-    this.ws.dispatchMessage({ cmd: Internal.OpenMenu });
-  }
-
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
     const old = this.secondsPerTurn;
     this.secondsPerTurn = await this.ss.get('l/cade', 'turnTime');
