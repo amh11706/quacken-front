@@ -1,3 +1,5 @@
+@import "../../../../styles/colors.scss";
+
 #boatcontrol {
   display: inline-block;
   width: 277px;
@@ -125,7 +127,8 @@ mat-checkbox {
   width: 100%;
 }
 
-.leftbombs, .rightbombs {
+.leftbombs,
+.rightbombs {
   position: absolute;
   height: 100%;
   width: 32px;
@@ -198,5 +201,5 @@ mat-checkbox {
 }
 
 .selected {
-  border: 2px solid orange;
+  border: 2px solid mat-color($primary);
 }

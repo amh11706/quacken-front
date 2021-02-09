@@ -8,7 +8,7 @@ import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
 @Component({
   selector: 'q-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css']
+  styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   @Input() map: MapEditor = {
@@ -106,7 +106,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  private gotList(list: any) {
+  private gotList(list: { [key: string]: DBTile[] }) {
     this.mapData = list;
     const tile = this.shown;
     this.options = list[tile?.group ?? 'maps'];
@@ -118,7 +118,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleTileSet(tileSet: any) {
+  private handleTileSet(tileSet: DBTile[]) {
     delete this.map.structures;
     delete this.map.structureSet;
     delete this.map.tmaps;
@@ -177,7 +177,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   // Fetched data
-  private gotMap(map: any) {
+  private gotMap(map: DBTile) {
     delete this.map.tiles;
     delete this.map.tileSet;
     delete this.map.structures;
@@ -194,9 +194,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   // Create or save
-  private handleMap(msg: any) {
+  private handleMap(msg: DBTile) {
     this.pending = false;
-    this.error = msg && msg.error;
+    this.error = msg && msg.error || '';
     if (this.error) return;
     this.map.tileSettings = false;
 

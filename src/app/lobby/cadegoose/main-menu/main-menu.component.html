@@ -20,8 +20,8 @@
                             <q-name [message]="m"></q-name>
                             <img src="./assets/boats/boat{{m.message.b}}.png"
                                  [title]="boatTitles[m.message.b]">
-                            <span
-                                  [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' : 'I'}}</span>
+                            <span [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' :
+                                'I'}}</span>
                         </div>
                     </div>
                 </div>
@@ -36,17 +36,19 @@
                             <q-name [message]="m"></q-name>
                             <img src="./assets/boats/boat{{m.message.b}}.png"
                                  [title]="boatTitles[m.message.b]">
-                            <span
-                                  [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' : 'I'}}</span>
+                            <span [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' :
+                                'I'}}</span>
                         </div>
                     </div>
                 </div>
 
                 <div id="buttons">
                     <button mat-raised-button
+                            color="accent"
                             id="ready"
                             [class.cancel]="ready"
-                            (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' : 'Ready'}}</button>
+                            (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not
+                        Ready' : 'Ready'}}</button>
                     <q-setting *ngIf="admin"
                                name="startNew"
                                id="start"></q-setting>

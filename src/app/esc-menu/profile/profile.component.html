@@ -3,7 +3,7 @@
     <mat-tab label="Profile">
         <div id="stats">
             <mat-icon class="refresh"
-                      (click)="stat.refresh()">refresh</mat-icon>
+                      (click)="reset()">refresh</mat-icon>
             <mat-form-field>
                 <input matInput
                        [value]="stat.target"
@@ -45,7 +45,6 @@
             </div>
         </div>
     </mat-tab>
-    <mat-tab label="Lookup"> Content 2 </mat-tab>
     <mat-tab label="Leaderboards">
         <q-leaders></q-leaders>
     </mat-tab>

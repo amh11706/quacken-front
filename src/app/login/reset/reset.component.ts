@@ -3,20 +3,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'q-reset',
   templateUrl: './reset.component.html',
-  styleUrls: ['./reset.component.css']
+  styleUrls: ['./reset.component.scss']
 })
 export class ResetComponent implements OnInit, OnDestroy {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
-  private path = location.port === '4200' ? 'https://dev.superquacken.com/' : '/';
+  private path = environment.api;
   private token = '';
   private sub = new Subscription();
 
   password = '';
-  cPassword = '';
   pending = false;
   err = '';
 
@@ -43,12 +43,6 @@ export class ResetComponent implements OnInit, OnDestroy {
   }
 
   reset() {
-    if (this.password !== this.cPassword) {
-      this.err = 'Passwords do not match!';
-      if (this.errComponent) this.dialog.open(this.errComponent);
-      return;
-    }
-
     this.pending = true;
     this.http.post<any>(this.path + 'reset', JSON.stringify({
       password: this.password, token: this.token,

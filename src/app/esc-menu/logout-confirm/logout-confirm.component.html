@@ -3,6 +3,8 @@
   Logging out in {{seconds}} seconds.
 </p>
 <div mat-dialog-actions>
-  <button mat-button (click)="dialogRef.close()">Cancel</button>
-  <button mat-button (click)="logout()">Ok</button>
+  <button mat-raised-button
+          (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button
+          (click)="logout()">Ok</button>
 </div>

@@ -1,0 +1,51 @@
+<div id="logincontainer">
+    <h1>Disturb the Quacken</h1>
+    <form id="loginform"
+          ngNativeValidate
+          (ngSubmit)="reset()"
+          #loginForm="ngForm">
+        <h3>Enter your email address and a new password to continue.</h3>
+        <mat-form-field>
+            <input [(ngModel)]="user.email"
+                   name="email"
+                   matInput
+                   qAutoSelect
+                   placeholder="Email"
+                   autocomplete="username"
+                   required>
+        </mat-form-field>
+        <mat-form-field>
+            <input [(ngModel)]="user.password"
+                   name="password"
+                   matInput
+                   qAutoSelect
+                   type="password"
+                   minlength="6"
+                   placeholder="Password"
+                   autocomplete="new-password"
+                   required>
+        </mat-form-field>
+
+        <button [disabled]="pending"
+                type="submit"
+                mat-raised-button
+                color="accent">Restore Account</button>
+        <br>
+        <p>
+            <span class="link"
+                  (click)="back()">Back to login</span>.
+        </p>
+    </form>
+</div>
+
+<ng-template #error>
+    <mat-dialog-content>
+        <p>{{err}}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button
+                color="accent"
+                mat-dialog-close
+                cdkFocusInitial>Close</button>
+    </mat-dialog-actions>
+</ng-template>

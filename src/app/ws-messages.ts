@@ -32,6 +32,10 @@ export const enum OutCmd {
     StatsUser,
     StatsTop,
 
+    ChangeEmail,
+    ChangePass,
+    ChangeName,
+
     LobbyCreate = 101,
     LobbyApply,
     ChatMessage,

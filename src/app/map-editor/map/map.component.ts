@@ -80,7 +80,7 @@ export class MapComponent implements OnInit {
     this.clickX = 0;
     this.clickY = 0;
 
-    const newValue = e.buttons === 1 ? this.map.selected : 0;
+    const newValue = e.button !== 2 ? this.map.selected : 0;
     const change = this.setTile(x, y, newValue);
     if (!change) return;
 
@@ -90,7 +90,7 @@ export class MapComponent implements OnInit {
     if (tile.undos.length > MAX_UNDOS) tile.undos = tile.undos.slice(-MAX_UNDOS);
   }
 
-  private finishWhirl(x: number, y: number, changes: any[]) {
+  private finishWhirl(x: number, y: number, changes: MapTile[]) {
     if (!this.setTile || !this.map) return;
     this.painting = false;
     const sides = this.map.hex ? 6 : 4;

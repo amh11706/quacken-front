@@ -5,11 +5,12 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { TermsComponent } from '../terms/terms.component';
 import { PrivacyComponent } from '../privacy/privacy.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'q-create',
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.css']
+  styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -22,7 +23,7 @@ export class CreateComponent implements OnInit {
   };
   pending = false;
 
-  private path = location.port === '4200' ? 'https://dev.superquacken.com/' : '/';
+  private path = environment.api;
 
   constructor(
     private dialog: MatDialog,

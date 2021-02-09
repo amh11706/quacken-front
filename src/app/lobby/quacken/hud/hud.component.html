@@ -90,6 +90,7 @@
           <div id="buttons">
                <button *ngIf="!fs.allowInvite || !(myBoat.ready && turn === 0); else fstart"
                        mat-raised-button
+                       color="accent"
                        id="ready"
                        (click)="imReady()"
                        [disabled]="myBoat.ready">Ready</button>

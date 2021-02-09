@@ -13,6 +13,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { PassPromptComponent } from './account/pass-prompt/pass-prompt.component';
+import { MessageComponent } from './account/message/message.component';
+import { FormsModule } from '@angular/forms';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
@@ -22,15 +26,19 @@ import { MatInputModule } from '@angular/material/input';
     LogoutConfirmComponent,
     AccountComponent,
     ProfileComponent,
+    PassPromptComponent,
+    MessageComponent,
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatDialogModule,
     MatIconModule,
     MatTabsModule,
     MatSelectModule,
     MatInputModule,
+    MatExpansionModule,
     ChatModule,
     InventoryModule,
   ],

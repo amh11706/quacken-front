@@ -1,26 +1,57 @@
 <div id="logincontainer">
   <h1>Disturb the Quacken</h1>
-  <form id="loginform" (ngSubmit)="create()" #loginForm="ngForm">
+  <form id="loginform"
+        ngNativeValidate
+        (ngSubmit)="create()"
+        #loginForm="ngForm">
     <mat-form-field>
-      <input [(ngModel)]="user.email" name="email" matInput placeholder="Email" required>
+      <input [(ngModel)]="user.email"
+             name="email"
+             type="email"
+             matInput
+             qAutoSelect
+             placeholder="Email"
+             autocomplete="username"
+             required>
     </mat-form-field>
     <mat-form-field>
-      <input [(ngModel)]="user.password" name="password" matInput type="password"
-      minlength="6" placeholder="Password" required>
+      <input [(ngModel)]="user.password"
+             name="password"
+             matInput
+             qAutoSelect
+             type="password"
+             minlength="6"
+             placeholder="Password"
+             autocomplete="new-password"
+             required>
     </mat-form-field>
     <mat-form-field>
-      <input [(ngModel)]="user.name" name="name" matInput
-      minlength="2" maxlength="16" placeholder="Display Name" required>
+      <input [(ngModel)]="user.name"
+             name="name"
+             matInput
+             qAutoSelect
+             minlength="2"
+             maxlength="16"
+             placeholder="Display Name"
+             autocomplete="nickname"
+             required>
     </mat-form-field>
     <p id="terms">By creating an account, you agree to our
-      <span class="link" (click)="showTerms()">terms of use</span>
+      <span class="link"
+            (click)="showTerms()">terms of use</span>
       and
-      <span class="link" (click)="showPrivacy()">privacy policy</span>.</p>
+      <span class="link"
+            (click)="showPrivacy()">privacy policy</span>.
+    </p>
     <br>
-    <button [disabled]="pending || !loginForm.form.valid" type="submit" mat-raised-button>Create Account</button>
+    <button [disabled]="pending"
+            type="submit"
+            mat-raised-button
+            color="accent">Create Account</button>
     <br>
     <p>
-      <span class="link" (click)="back()">Back to login</span>.
+      <span class="link"
+            (click)="back()">Back to login</span>.
     </p>
   </form>
 </div>
@@ -30,6 +61,9 @@
     <p>{{err}}</p>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
+    <button mat-raised-button
+            color="accent"
+            mat-dialog-close
+            cdkFocusInitial>Close</button>
   </mat-dialog-actions>
 </ng-template>

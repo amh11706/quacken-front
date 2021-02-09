@@ -12,6 +12,8 @@ import { CreateComponent } from './create/create.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { TermsComponent } from './terms/terms.component';
 import { ResetComponent } from './reset/reset.component';
+import { RestoreComponent } from './restore/restore.component';
+import { AutoSelectModule } from '../autoselect/autoselect.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { ResetComponent } from './reset/reset.component';
     PrivacyComponent,
     TermsComponent,
     ResetComponent,
+    RestoreComponent,
   ],
   entryComponents: [
     TermsComponent,
@@ -32,6 +35,7 @@ import { ResetComponent } from './reset/reset.component';
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
+    AutoSelectModule,
   ]
 })
 export class LoginModule { }

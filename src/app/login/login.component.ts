@@ -6,11 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { TermsComponent } from './terms/terms.component';
 import { PrivacyComponent } from './privacy/privacy.component';
 import { AuthGuard } from '../auth.guard';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'q-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -22,7 +23,7 @@ export class LoginComponent implements OnInit {
   pending = false;
   errMessage = '';
 
-  private path = location.port === '4200' ? 'https://dev.superquacken.com/' : '/';
+  private path = environment.api;
 
   constructor(
     private dialog: MatDialog,

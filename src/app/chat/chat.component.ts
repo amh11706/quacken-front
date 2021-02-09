@@ -28,7 +28,8 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private subs = new Subscription();
   private focus = (e: KeyboardEvent) => {
-    if (document.activeElement?.id !== 'textinput' && (e.key === 'Tab' || e.code === 'Slash')) {
+    if (!this.ws.connected) return;
+    if (document.activeElement?.className !== 'textinput' && (e.key === 'Tab' || e.code === 'Slash')) {
       this.input?.nativeElement.focus();
       if (e.code === 'Slash') this.chat.value += '/';
       e.preventDefault();
@@ -41,6 +42,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     public socket: WsService,
     public chat: ChatService,
+    private ws: WsService,
   ) { }
 
   ngOnInit() {
@@ -49,13 +51,13 @@ export class ChatComponent implements OnInit, OnDestroy {
     const output = this.output.nativeElement;
     setTimeout(() => output.scrollTop = output.scrollHeight);
 
-    document.addEventListener('keydown', this.focus);
+    // document.addEventListener('keydown', this.focus);
     this.input?.nativeElement.focus();
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
-    document.removeEventListener('keydown', this.focus);
+    // document.removeEventListener('keydown', this.focus);
   }
 
   handleKey(e: KeyboardEvent) {

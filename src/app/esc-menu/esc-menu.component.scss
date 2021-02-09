@@ -1,8 +1,31 @@
+@import "../../styles/colors.scss";
+
+#backgroundframe {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    transition: 0.2s ease-out, opacity 0.4s linear;
+    z-index: 10;
+
+    &.closed {
+        height: 40px;
+        width: 40px;
+        opacity: 0.3;
+    }
+}
+
+#toggleesc {
+    position: absolute;
+    color: #eee;
+    font-size: 24px;
+    z-index: 10;
+}
+
 #background {
     display: grid;
     grid-template-columns: 250px auto;
     grid-template-rows: calc(100vh - 150px) 150px;
-    position: absolute;
     width: 100vw;
     height: 100vh;
     background-color: rgba(7, 7, 48, 0.9);
@@ -36,7 +59,7 @@
     }
 
     div.selected {
-        color: yellow;
+        color: mat-color($primary);
         background-color: rgba(255, 255, 255, 0.08);
     }
 

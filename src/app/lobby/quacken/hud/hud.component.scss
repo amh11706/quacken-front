@@ -1,3 +1,5 @@
+@import "../../../../styles/colors.scss";
+
 #boatcontrol {
   float: left;
   width: 262px;
@@ -28,7 +30,8 @@ q-chat {
   white-space: normal;
 }
 
-#movesource, #buttons {
+#movesource,
+#buttons {
   float: left;
   width: 150px;
   min-height: 10px;
@@ -54,7 +57,7 @@ q-chat {
   background: red;
   height: 15px;
   left: -100%;
-  transition: .3s linear;
+  transition: 0.3s linear;
 }
 
 #time {
@@ -72,7 +75,7 @@ q-chat {
   height: 76px;
   top: 100%;
   background-color: khaki;
-  transition: .9s linear;
+  transition: 0.9s linear;
 }
 
 #moves {
@@ -112,7 +115,8 @@ q-chat {
   left: 37px;
 }
 
-#treasurebox, .token {
+#treasurebox,
+.token {
   float: left;
   margin-left: 8px;
   height: 35px;
@@ -137,16 +141,8 @@ q-chat {
   width: 35px;
 }
 
-#ready {
-  background: darkgreen;
-}
-
 #start {
   background: #154360;
-}
-
-#ready:disabled {
-  background: grey;
 }
 
 #settings {
@@ -159,9 +155,9 @@ q-chat {
 }
 
 .bomb {
-  background: #CB4335;
+  background: #cb4335;
 }
 
 .selected {
-  border: 2px solid orange;
+  border: 2px solid mat-color($primary);
 }

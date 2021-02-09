@@ -1,3 +1,5 @@
+@import "../../../styles/colors.scss";
+
 :host {
   position: absolute;
   top: 0;
@@ -8,17 +10,13 @@
 }
 
 h1 {
-  color: orange;
+  color: mat-color($primary);
   font-size: 3em;
   text-align: center;
-  text-shadow: 4px 4px rgba(0, 0, 64, 2);
+	text-shadow: 4px 4px rgba(0, 0, 64, 2);
   padding: 8px 64px;
   margin-bottom: 32px;
   background: radial-gradient(rgba(0, 0, 0, .3), transparent 80%);
-}
-
-button {
-  background: #006064;
 }
 
 input {

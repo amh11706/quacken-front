@@ -11,23 +11,14 @@
 
 #submitNew {
   position: absolute;
-	top: calc(50% - 125px);
-	left: 10px;
+  top: calc(50% - 125px);
+  left: 10px;
   width: 200px;
   padding: 8px 16px;
   color: #fff;
-  
+
   mat-form-field {
     width: 100%;
-  }
-
-  button {
-    background: darkgreen;
-    color: white;
-  }
-
-  button:disabled {
-    color: grey;
   }
 }
 
@@ -62,19 +53,19 @@ table {
 }
 
 tr {
-  background-color: #FCF3CF;
-  transition: .2s;
+  background-color: #fcf3cf;
+  transition: 0.2s;
 }
 
 tr:hover {
-  background-color: #F9E79F;
+  background-color: #f9e79f;
 }
 
 th {
   position: sticky;
   top: 0;
   padding: 4px;
-  background-color: #1F618D;
+  background-color: #1f618d;
   cursor: default;
   border: 1px solid grey;
 }
@@ -83,4 +74,3 @@ td {
   color: black;
   border: 1px solid lightgrey;
 }
-  

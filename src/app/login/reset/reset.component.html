@@ -1,20 +1,29 @@
 <div id="logincontainer">
   <h1>Disturb the Quacken</h1>
-  <form id="loginform" (ngSubmit)="reset()" #loginForm="ngForm">
+  <form id="loginform"
+        ngNativeValidate
+        (ngSubmit)="reset()"
+        #loginForm="ngForm">
     <mat-form-field>
-      <input [(ngModel)]="password" name="password" matInput type="password"
-        minlength="6" placeholder="Password" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input [(ngModel)]="cPassword" name="cPassword" matInput type="password"
-        minlength="6" placeholder="Confirm Password" required>
+      <input [(ngModel)]="password"
+             name="password"
+             matInput
+             qAutoSelect
+             type="password"
+             minlength="6"
+             placeholder="Password"
+             autocomplete="new-password"
+             required>
     </mat-form-field>
 
-    <button [disabled]="pending || !loginForm.form.valid" type="submit"
-      mat-raised-button>Reset Password</button>
+    <button [disabled]="pending"
+            type="submit"
+            mat-raised-button
+            color="accent">Reset Password</button>
     <br>
     <p>
-      <span class="link" (click)="back()">Back to login</span>.
+      <span class="link"
+            (click)="back()">Back to login</span>.
     </p>
   </form>
 </div>
@@ -24,6 +33,9 @@
     <p>{{err}}</p>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
+    <button mat-raised-button
+            color="accent"
+            mat-dialog-close
+            cdkFocusInitial>Close</button>
   </mat-dialog-actions>
 </ng-template>

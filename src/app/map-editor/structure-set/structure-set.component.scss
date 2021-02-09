@@ -1,3 +1,5 @@
+@import "../../../styles/colors.scss";
+
 #structureset {
   position: absolute;
   left: 8px;
@@ -20,7 +22,8 @@
   color: #eee;
 }
 
-#handle2, #handle3 {
+#handle2,
+#handle3 {
   position: absolute;
   top: 0;
   left: 0;
@@ -29,7 +32,8 @@
   cursor: grab;
 }
 
-#structurebox, #structuredetail {
+#structurebox,
+#structuredetail {
   height: 400px;
   overflow-y: auto;
   padding: 8px;
@@ -72,7 +76,7 @@ p input {
   position: relative;
   padding: 4px 8px;
   border: 1px solid grey;
-  transition: .2s;
+  transition: 0.2s;
   user-select: none;
 }
 
@@ -85,7 +89,7 @@ p input {
 }
 
 .unsaved {
-  color: yellow;
+  color: mat-color($primary, 400);
 }
 
 .delete {
@@ -95,7 +99,7 @@ p input {
   padding: 4px;
   font-size: 10px;
   background-color: lightgrey;
-  transition: .2s;
+  transition: 0.2s;
   color: black;
 }
 

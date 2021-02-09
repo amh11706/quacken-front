@@ -1,3 +1,5 @@
+@import "../../../styles/colors.scss";
+
 #inventory {
   color: #eee;
   text-align: center;
@@ -48,7 +50,7 @@ mat-form-field {
   height: 50px;
   padding: 4px;
   border: 1px solid grey;
-  transition: border .2s ease-in .5s;
+  transition: border 0.2s ease-in 0.5s;
   background: rgb(66, 66, 66);
   cursor: grab;
 }
@@ -65,7 +67,7 @@ mat-form-field {
 }
 
 .new {
-  border-color: orange;
+  border-color: mat-color($primary);
 }
 
 .dropable {

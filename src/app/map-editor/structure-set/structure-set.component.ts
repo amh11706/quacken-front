@@ -6,7 +6,7 @@ import { DBTile } from '../map-editor.component';
 @Component({
   selector: 'q-structure-set',
   templateUrl: './structure-set.component.html',
-  styleUrls: ['./structure-set.component.css']
+  styleUrls: ['./structure-set.component.scss']
 })
 export class StructureSetComponent extends TileSetComponent implements OnInit, OnDestroy {
   protected group: 'tile' | 'structure' = 'structure';
@@ -46,8 +46,8 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
     this.map.selectedTile.unsaved = true;
   }
 
-  updatePosition(e: any, which: 'x1' | 'x2' | 'y1' | 'y2') {
-    if (!this.map) return;
+  updatePosition(e: Event, which: 'x1' | 'x2' | 'y1' | 'y2') {
+    if (!this.map || !(e.target instanceof HTMLInputElement)) return;
     this.map.selectedTile.unsaved = true;
     const feature = this.map.selectedTile.activeFeature;
     if (!feature) return;

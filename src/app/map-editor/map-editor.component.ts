@@ -31,6 +31,7 @@ export interface DBTile {
   activeGroup?: number;
   hex?: boolean;
   settings?: any;
+  error?: string;
 }
 
 export interface StructureData {

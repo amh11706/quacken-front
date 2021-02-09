@@ -1,10 +1,12 @@
+@import "../../../styles/colors.scss";
+
 #shade {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, .3);
+  background-color: rgba(0, 0, 0, 0.3);
   z-index: 1;
 }
 
@@ -20,10 +22,11 @@
   transform: translate(-50%, -50%);
 }
 
-#error, #success {
+#error,
+#success {
   float: left;
   width: 100%;
-  color: orange;
+  color: mat-color($primary);
   text-align: center;
 }
 

@@ -1,3 +1,5 @@
+@import "../../../styles/colors.scss";
+
 #tileset {
   position: absolute;
   left: 8px;
@@ -53,7 +55,7 @@ h4 {
   position: relative;
   padding: 4px 8px;
   border: 1px solid grey;
-  transition: .2s;
+  transition: 0.2s;
   user-select: none;
 }
 
@@ -66,7 +68,7 @@ h4 {
 }
 
 .unsaved {
-  color: yellow;
+  color: mat-color($primary, 400);
 }
 
 .delete {
@@ -76,7 +78,7 @@ h4 {
   padding: 4px;
   font-size: 10px;
   background-color: lightgrey;
-  transition: .2s;
+  transition: 0.2s;
   color: black;
 }
 

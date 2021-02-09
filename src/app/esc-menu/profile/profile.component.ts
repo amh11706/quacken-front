@@ -33,8 +33,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.stat.profileTab = 2;
   }
 
+  reset() {
+    this.stat.openUser(this.ws.user?.name || '');
+  }
+
   searchUser(e: Event) {
-    if (e.target instanceof HTMLInputElement) this.stat.openUser(e.target.value);
+    if (e.target instanceof HTMLInputElement) this.stat.openUser(e.target.value || this.ws.user?.name || '');
   }
 
 }

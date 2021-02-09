@@ -82,7 +82,6 @@
 }
 
 #ready {
-    background: darkgreen;
     margin-bottom: 4px;
 }
 
@@ -93,8 +92,4 @@
 #start {
     display: inline-block;
     top: 0 !important;
-}
-
-#ready:disabled {
-    background: grey;
 }

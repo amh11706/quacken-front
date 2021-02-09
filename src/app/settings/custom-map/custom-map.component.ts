@@ -6,7 +6,7 @@ import { WsService } from 'src/app/ws.service';
 @Component({
   selector: 'q-custom-map',
   templateUrl: './custom-map.component.html',
-  styleUrls: ['./custom-map.component.css']
+  styleUrls: ['./custom-map.component.scss']
 })
 export class CustomMapComponent implements OnInit {
   @Input() group?: SettingMap;

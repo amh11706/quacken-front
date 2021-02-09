@@ -20,7 +20,7 @@ export class EscMenuComponent implements OnInit {
 
   constructor(
     public es: EscMenuService,
-    private ws: WsService,
+    public ws: WsService,
     private dialog: MatDialog,
     private router: Router,
   ) { }

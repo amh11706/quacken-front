@@ -1,3 +1,5 @@
+@import "../../../styles/colors.scss";
+
 #friends {
   position: absolute;
   top: calc(50% - 150px);
@@ -12,7 +14,7 @@
 }
 
 .highlight {
-  color: orange;
+  color: mat-color($primary);
 }
 
 .empty {
@@ -32,7 +34,6 @@
 }
 
 .accept {
-  background: darkgreen;
   margin-right: 8px;
 }
 
@@ -45,7 +46,8 @@
   color: #eee;
 }
 
-.online, .offline {
+.online,
+.offline {
   text-align: center;
   font-size: 18px;
   border: 1px solid black;
@@ -83,16 +85,17 @@
   padding: 4px 8px;
   color: #fff;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
   user-select: none;
 }
 
-.link:hover, .link.active {
+.link:hover,
+.link.active {
   background-color: rgba(86, 86, 86, 0.7);
 }
 
 .link.active * {
-  color: #F7DC6F;
+  color: mat-color($primary);
   cursor: default;
 }
 

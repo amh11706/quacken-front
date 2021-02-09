@@ -23,7 +23,7 @@ export interface BoatTick {
 @Component({
   selector: 'q-hud',
   templateUrl: './hud.component.html',
-  styleUrls: ['./hud.component.css']
+  styleUrls: ['./hud.component.scss']
 })
 export class HudComponent implements OnInit, OnDestroy {
   @Input() kbControls = 1;

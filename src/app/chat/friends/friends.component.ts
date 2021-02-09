@@ -10,7 +10,7 @@ import { OutCmd } from 'src/app/ws-messages';
 @Component({
   selector: 'q-friends',
   templateUrl: './friends.component.html',
-  styleUrls: ['./friends.component.css']
+  styleUrls: ['./friends.component.scss']
 })
 export class FriendsComponent implements OnInit {
   links = [

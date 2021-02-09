@@ -33,7 +33,7 @@ interface InvUpdate {
 @Component({
   selector: 'q-inventory',
   templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.css']
+  styleUrls: ['./inventory.component.scss']
 })
 export class InventoryComponent implements OnDestroy {
   private _id?: number;
@@ -125,8 +125,8 @@ export class InventoryComponent implements OnDestroy {
     if (send) this.ws.send(OutCmd.InventoryCmd, { cmd: 'sort', id: this.id, data: by });
     if (!this.inv) return;
     this.inv.filtered.sort((a, b) => {
-      const c: any = a[by];
-      const d: any = b[by];
+      const c = a[by];
+      const d = b[by];
       if (typeof c === 'boolean') {
         if (c === d) return 0;
         return c ? -1 : 1;

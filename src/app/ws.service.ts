@@ -4,6 +4,7 @@ import { Subject, Subscription, ReplaySubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { InCmd, Internal, OutCmd } from './ws-messages';
+import { environment } from 'src/environments/environment';
 
 interface Message {
   cmd: InCmd | Internal;
@@ -65,7 +66,7 @@ export class WsService {
     if (token === 'guest') this.user = { id: 0, name: 'Guest' };
     else this.user = this.tokenParser.decodeToken(token);
 
-    this.socket = new WebSocket(location.port === '4200' ? 'wss://dev.superquacken.com/ws' : 'wss://' + location.hostname + '/ws');
+    this.socket = new WebSocket(environment.ws);
 
     this.socket.onopen = () => {
       this.socket?.send(token);

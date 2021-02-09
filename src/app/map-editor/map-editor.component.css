@@ -27,19 +27,15 @@
 }
 
 #buttons {
+  position: relative;
+  flex-grow: none;
   padding: 0 8px;
+  height: 145px;
   float: left;
   width: 150px;
-}
-
-#buttons button {
   color: #eee;
 }
 
-#buttons button:disabled {
-  color: #aaa;
-}
-
 #editorSettings {
-  margin-top: 12px;
+  margin-top: 36px;
 }

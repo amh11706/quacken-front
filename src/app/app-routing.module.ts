@@ -8,6 +8,7 @@ import { TermsComponent } from './login/terms/terms.component';
 import { PrivacyComponent } from './login/privacy/privacy.component';
 import { ResetComponent } from './login/reset/reset.component';
 import { RecordComponent } from './record/record.component';
+import { RestoreComponent } from './login/restore/restore.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: 'reset/:token',
     component: ResetComponent,
+  },
+  {
+    path: 'restore/:token',
+    component: RestoreComponent,
   },
   {
     path: '',
