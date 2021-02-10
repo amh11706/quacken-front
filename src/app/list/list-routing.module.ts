@@ -1,13 +1,36 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { ListComponent } from './list.component';
+
+import { LobbyListComponent } from './lobby-list/lobby-list.component';
 
 const routes: Routes = [
   {
     path: '',
     component: ListComponent,
-  }
+    children: [
+      {
+        path: 'list',
+        component: LobbyListComponent,
+      },
+      {
+        path: 'bnav',
+        loadChildren: () => import('../bnav/bnav.module').then(m => m.BnavModule),
+      },
+      {
+        path: 'lobby/:id',
+        loadChildren: () => import('../lobby/lobby.module').then(m => m.LobbyModule),
+      },
+      {
+        path: 'editor',
+        loadChildren: () => import('../map-editor/map-editor.module').then(m => m.MapEditorModule),
+      },
+      {
+        path: '**',
+        redirectTo: 'list',
+      },
+    ],
+  },
 ];
 
 @NgModule({

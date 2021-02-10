@@ -59,7 +59,7 @@ export class RestoreComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['login']);
+    this.router.navigate(['auth/login']);
   }
 
 }

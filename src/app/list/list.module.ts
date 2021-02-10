@@ -14,9 +14,12 @@ import { CreateComponent } from './create/create.component';
 import { NewsComponent } from './news/news.component';
 import { LobbyCardComponent } from './lobby-card/lobby-card.component';
 import { EditorErrorComponent } from './editor-error/editor-error.component';
+import { LobbyListComponent } from './lobby-list/lobby-list.component';
+import { FriendsModule } from '../chat/friends/friends.module';
+import { EscMenuModule } from '../esc-menu/esc-menu.module';
 
 @NgModule({
-  declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent, EditorErrorComponent],
+  declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent, EditorErrorComponent, LobbyListComponent],
   imports: [
     CommonModule,
     ListRoutingModule,
@@ -26,6 +29,8 @@ import { EditorErrorComponent } from './editor-error/editor-error.component';
     MatSelectModule,
     ChatModule,
     SettingsModule,
+    FriendsModule,
+    EscMenuModule,
   ],
   exports: [ListComponent],
 })

@@ -42,7 +42,7 @@ export class WsService {
       this.close();
       this.reason = reason;
       localStorage.removeItem('token');
-      this.router.navigate(['login']);
+      this.router.navigate(['auth/login']);
     });
     this.subscribe(InCmd.NavigateTo, (path: string) => {
       this.router.navigate([path]);
@@ -123,7 +123,7 @@ export class WsService {
   request(cmd: OutCmd, data?: any): Promise<any> {
     if (this.connected) this.sendRaw(JSON.stringify({ cmd, id: this.nextId, data }));
     return new Promise((resolve) => {
-      if (!this.connected) return resolve();
+      if (!this.connected) return resolve(undefined);
       this.requests.set(this.nextId, resolve);
       this.nextId++;
     });

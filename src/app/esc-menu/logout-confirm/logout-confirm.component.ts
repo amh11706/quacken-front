@@ -33,7 +33,7 @@ export class LogoutConfirmComponent implements OnInit, OnDestroy {
   logout() {
     this.ws.close();
     localStorage.removeItem('token');
-    this.router.navigate(['login']);
+    this.router.navigate(['auth/login']);
     this.dialogRef.close();
   }
 

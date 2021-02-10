@@ -14,6 +14,8 @@ import { TermsComponent } from './terms/terms.component';
 import { ResetComponent } from './reset/reset.component';
 import { RestoreComponent } from './restore/restore.component';
 import { AutoSelectModule } from '../autoselect/autoselect.module';
+import { LoginRoutingModule } from './login-routing.module';
+import { LoginFormComponent } from './login-form/login-form.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { AutoSelectModule } from '../autoselect/autoselect.module';
     TermsComponent,
     ResetComponent,
     RestoreComponent,
+    LoginFormComponent,
   ],
   entryComponents: [
     TermsComponent,
@@ -30,6 +33,7 @@ import { AutoSelectModule } from '../autoselect/autoselect.module';
   ],
   imports: [
     CommonModule,
+    LoginRoutingModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,

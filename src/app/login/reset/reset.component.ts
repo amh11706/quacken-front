@@ -60,7 +60,7 @@ export class ResetComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.router.navigate(['login']);
+    this.router.navigate(['auth/login']);
   }
 
 

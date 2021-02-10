@@ -4,15 +4,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
-import { FriendsModule } from './chat/friends/friends.module';
 import { LoginModule } from './login/login.module';
-import { SettingsModule } from './settings/settings.module';
-import { ChatModule } from './chat/chat.module';
-import { EscMenuModule } from './esc-menu/esc-menu.module';
 
 import { AppComponent } from './app.component';
 import { RecordComponent } from './record/record.component';
-import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [AppComponent, RecordComponent],
@@ -21,13 +18,8 @@ import { MatButtonModule } from '@angular/material/button';
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatButtonModule,
-
-    LoginModule,
-    FriendsModule,
-    SettingsModule,
-    ChatModule,
-    EscMenuModule,
+    MatMenuModule,
+    MatSelectModule,
   ],
   bootstrap: [AppComponent]
 })

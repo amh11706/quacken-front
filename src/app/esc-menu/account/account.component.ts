@@ -55,7 +55,7 @@ export class AccountComponent implements OnInit {
     if (res === 'Success') {
       this.ws.close();
       localStorage.removeItem('token');
-      await this.router.navigate(['login']);
+      await this.router.navigate(['auth/login']);
     }
     const message = res === 'Success' ? 'Account deleted.' : res;
     this.dialog.open(MessageComponent, { data: message });
