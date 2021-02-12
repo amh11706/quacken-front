@@ -159,7 +159,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
-    this.ss.setLobbySettings([...baseSettings, ...ownerSettings]);
+    this.ss.setLobbySettings(baseSettings, ownerSettings);
     this.es.setLobby(this.menuComponent, this.lobby);
     this.es.open = true;
 
@@ -215,6 +215,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngOnDestroy() {
     this.es.setLobby();
+    this.ss.setLobbySettings([], []);
     window.removeEventListener('resize', this.onWindowResize);
     this.renderer.dispose();
     this.controls?.dispose();

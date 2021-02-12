@@ -3,10 +3,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ChatService, Message } from '../chat.service';
 import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
-import { StatService } from '../stat/stat.service';
 import { OutCmd } from 'src/app/ws-messages';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 import { ProfileComponent } from 'src/app/esc-menu/profile/profile.component';
+import { StatService } from 'src/app/esc-menu/profile/stat.service';
 
 @Component({
   selector: 'q-name',

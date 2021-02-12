@@ -1,35 +1,28 @@
-#settings {
-  position: absolute;
-  top: calc(50% - 150px);
-  padding: 0;
-  right: 25%;
-  width: 200px;
-  background-color: rgba(66, 66, 66, 0.85);
-  pointer-events: auto;
+:host {
+  position: relative;
 }
 
-.content {
-  padding: 16px;
-  height: 250px;
-  overflow-y: auto;
-  overflow-x: hidden;
+h4 {
+  text-align: center;
+  color: #ddd;  
 }
 
-.handle {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 24px;
-  cursor: grab;
+mat-tab-group {
+  height: 100%;
 }
 
-.close {
-  position: absolute;
-  top: 4px;
-  right: 8px;
-  cursor: pointer;
-  color: #fff;
+mat-card {
+  max-width: 500px;
+  padding: 16px 32px;
+  margin: auto;
+  margin-top: 16px;
+}
+
+.settings {
+  display: flex;
+  margin: auto;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .empty {
@@ -39,27 +32,3 @@
   margin-bottom: 8px;
 }
 
-.nav {
-  text-align: left;
-  padding-top: 24px;
-  border-bottom: 2px solid grey;
-}
-
-.link {
-  display: inline-block;
-  width: auto;
-  padding: 4px 8px;
-  color: #fff;
-  cursor: pointer;
-  transition: .3s;
-  user-select: none;
-}
-
-.link:hover, .link.active {
-  background-color: rgba(86, 86, 86, 0.7);
-}
-
-.link.active * {
-  color: #F7DC6F;
-  cursor: default;
-}

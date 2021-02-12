@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { StatService, Stat } from '../stat/stat.service';
+import { StatService } from '../stat.service';
 import { WsService } from 'src/app/ws.service';
 
 @Component({

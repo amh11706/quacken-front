@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FriendsService, Invite } from './friends.service';
 import { WsService } from '../../ws.service';
 import { ChatService } from '../chat.service';
-import { StatService } from '../stat/stat.service';
 import { Router } from '@angular/router';
 import { OutCmd } from 'src/app/ws-messages';
+import { StatService } from 'src/app/esc-menu/profile/stat.service';
 
 @Component({
   selector: 'q-friends',

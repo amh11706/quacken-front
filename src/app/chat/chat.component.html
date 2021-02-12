@@ -1,8 +1,9 @@
 <div class="chatbox">
   <div class="output">
-    <div #output
-         class="textbox">
-      <ng-container *ngFor="let m of chat.messages">
+    <cdk-virtual-scroll-viewport #output
+                                 itemSize="25"
+                                 class="textbox">
+      <ng-container *cdkVirtualFor="let m of messages$">
         <p *ngIf="!m.blocked"
            [style.backgroundColor]="colors[m.type]">
           <ng-container [ngSwitch]="m.type">
@@ -75,7 +76,7 @@
           </ng-container>
         </p>
       </ng-container>
-    </div>
+    </cdk-virtual-scroll-viewport>
   </div>
 
   <form (submit)="sendInput($event)">

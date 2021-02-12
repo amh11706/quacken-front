@@ -16,6 +16,8 @@ export interface SettingMap {
   [key: string]: number;
 }
 
+type SettingList = (keyof typeof Settings)[];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,9 +26,10 @@ export class SettingsService {
   private ready = new Map<string, Subject<SettingMap>>();
 
   open = false;
+  tabIndex = 0;
   admin = true;
-  selected = 'lobby';
-  lSettings: (keyof typeof Settings)[] = [];
+  lSettings: SettingList = [];
+  lAdminSettings: SettingList = [];
 
   constructor(private ws: WsService) {
     ws.subscribe(InCmd.SettingSet, (s: Setting) => {
@@ -42,10 +45,10 @@ export class SettingsService {
     });
   }
 
-  setLobbySettings(names: (keyof typeof Settings)[]) {
+  setLobbySettings(names: SettingList, adminNames: SettingList) {
     this.lSettings = names;
-    if (names.length === 0) this.selected = 'global';
-    else this.selected = 'lobby';
+    this.lAdminSettings = adminNames;
+    this.tabIndex = 0;
   }
 
   async getGroup(group: string, update = false): Promise<SettingMap> {

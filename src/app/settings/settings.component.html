@@ -1,37 +1,37 @@
-<div *ngIf="ss.open"
-     [qDrag]="handle"
-     [bindToWindow]="true"
-     class="container noselect"
-     id="settings">
-  <div #handle
-       class="handle"></div>
-  <mat-icon class="close"
-            (click)="ss.open = false">close</mat-icon>
-  <div class="nav">
-    <div *ngFor="let link of links"
-         class="link"
-         [title]="link.title"
-         (click)="ss.selected = link.path"
-         [class.active]="ss.selected === link.path">
-      <mat-icon>{{link.icon}}</mat-icon>
-    </div>
-  </div>
+<mat-tab-group [(selectedIndex)]="ss.tabIndex"
+               mat-align-tabs="center">
+  <mat-tab label="Lobby">
+    <p *ngIf="ss.lSettings.length === 0; else lobby"
+       class="empty">
+      This lobby does not have any settings for you.
+    </p>
+    <ng-template #lobby>
+      <mat-card>
+        <div class="settings">
+          <q-setting *ngFor="let s of ss.lSettings"
+                     [name]="s"></q-setting>
+        </div>
+      </mat-card>
 
-  <div [ngSwitch]="ss.selected"
-       class="content">
-    <ng-container *ngSwitchCase="'lobby'">
-      <p *ngIf="ss.lSettings.length === 0; else lobby"
-         class="empty">
-        This lobby does not have any settings for you.
-      </p>
-      <ng-template #lobby>
-        <q-setting *ngFor="let s of ss.lSettings"
-                   [name]="s"></q-setting>
-      </ng-template>
-    </ng-container>
+      <mat-card *ngIf="ss.lAdminSettings.length">
+        <h4>Lobby Owner Settings</h4>
+        <div class="settings">
+          <q-setting *ngFor="let s of ss.lAdminSettings"
+                     [name]="s"></q-setting>
+        </div>
+      </mat-card>
+    </ng-template>
+  </mat-tab>
 
-    <ng-container *ngSwitchCase="'global'">
-      <p class="empty">No global settings yet...</p>
-    </ng-container>
-  </div>
-</div>
+  <mat-tab label="Graphics">
+
+  </mat-tab>
+
+  <mat-tab label="Controls">
+
+  </mat-tab>
+
+  <mat-tab label="Account">
+    <q-account></q-account>
+  </mat-tab>
+</mat-tab-group>

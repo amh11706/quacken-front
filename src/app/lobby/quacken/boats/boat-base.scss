@@ -2,7 +2,8 @@
     z-index: 100;
 }
 
-.boat, .clutter {
+.boat,
+.clutter {
     position: absolute;
     top: 0;
     left: 0;
@@ -44,7 +45,7 @@
     margin: auto;
     margin-top: 5px;
     border: 1px solid black;
-    transition: .5s;
+    transition: 0.5s;
 }
 
 .movebarslice {
@@ -54,11 +55,21 @@
     background-color: grey;
 }
 
-.left { background-color: #b9cef1; }
-.forward { background-color: #97c469; }
-.right { background-color: #ff9d55; }
-.obscured { background-color: #eee; }
-.overmove { background-color: red; }
+.left {
+    background-color: #b9cef1;
+}
+.forward {
+    background-color: #97c469;
+}
+.right {
+    background-color: #ff9d55;
+}
+.obscured {
+    background-color: #ddd;
+}
+.overmove {
+    background-color: red;
+}
 
 .sunk {
     opacity: 0;

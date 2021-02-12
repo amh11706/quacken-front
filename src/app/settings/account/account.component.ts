@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
-import { PassPromptComponent } from './pass-prompt/pass-prompt.component';
 import { MessageComponent } from './message/message.component';
 import { Router } from '@angular/router';
 

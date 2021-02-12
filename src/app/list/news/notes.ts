@@ -5,6 +5,16 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 13 February 2021',
+    points: [
+      'Menu Overhaul.',
+      'Added a new escape menu.',
+      'This menu is the home to all kinds of settings and tools and can be opened either by hitting escape or the button at the top left.',
+      'Added account management settings for changing password, username, and email.',
+      'General menu cleanup.'
+    ],
+  },
+  {
     title: 'Release 04 December 2020',
     points: [
       'AI improvements.',

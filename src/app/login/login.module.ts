@@ -16,6 +16,7 @@ import { RestoreComponent } from './restore/restore.component';
 import { AutoSelectModule } from '../autoselect/autoselect.module';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginFormComponent } from './login-form/login-form.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
   ],
   imports: [
     CommonModule,
+    HttpClientModule,
     LoginRoutingModule,
     FormsModule,
     MatFormFieldModule,

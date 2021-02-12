@@ -6,14 +6,13 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { NameModule } from './name/name.module';
 import { ChatComponent } from './chat.component';
-import { StatComponent } from './stat/stat.component';
 import { QdragModule } from '../qdrag/qdrag.module';
-import { LeadersComponent } from './leaders/leaders.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
-  declarations: [ChatComponent, StatComponent, LeadersComponent],
+  declarations: [ChatComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -23,7 +22,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
     NameModule,
     QdragModule,
+    ScrollingModule,
   ],
-  exports: [ChatComponent, StatComponent, LeadersComponent]
+  exports: [ChatComponent]
 })
 export class ChatModule { }

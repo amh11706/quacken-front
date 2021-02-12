@@ -1,18 +1,19 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
-import { ChatService } from './chat.service';
+import { ChatService, Message } from './chat.service';
 import { InCmd, OutCmd } from '../ws-messages';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'q-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.css'],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild('inputEl', { static: true }) input?: ElementRef<HTMLElement>;
-  @ViewChild('output', { static: true }) output?: ElementRef<HTMLElement>;
+  @ViewChild(CdkVirtualScrollViewport, { static: true }) output?: CdkVirtualScrollViewport;
   @Input() disabled = false;
   colors = [
     '#873600', // info message
@@ -26,6 +27,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     ,
     'maroon', // alert/broadcast
   ];
+  messages$ = new Subject<Message[]>();
 
   private subs = new Subscription();
   private focus = (e: KeyboardEvent) => {
@@ -49,8 +51,9 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (!this.output) return;
     this.subs.add(this.socket.subscribe(InCmd.ChatMessage, () => this.addMessage()));
-    const output = this.output.nativeElement;
-    setTimeout(() => output.scrollTop = output.scrollHeight);
+    const output = this.output;
+    this.messages$.next(this.chat.messages);
+    setTimeout(() => output.scrollToIndex(this.chat.messages.length));
 
     // document.addEventListener('keydown', this.focus);
     this.input?.nativeElement.focus();
@@ -109,9 +112,11 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   addMessage(): void {
     if (!this.output) return;
-    const output = this.output.nativeElement;
-    if (output.scrollTop + 135 > output.scrollHeight) {
-      setTimeout(() => output.scrollTop = output.scrollHeight);
+    const output = this.output;
+    const scrolled = output.elementRef.nativeElement;
+    this.messages$.next(this.chat.messages);
+    if (output.measureScrollOffset() + 100 >= scrolled.scrollHeight - scrolled.clientHeight) {
+      setTimeout(() => output.scrollToIndex(this.chat.messages.length + 10));
     }
   }
 

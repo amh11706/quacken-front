@@ -1,5 +1,5 @@
 <div id="backgroundframe"
-     [class.closed]="!es.open">
+     [class.open]="es.open">
     <button mat-icon-button
             id="toggleesc"
             (click)="es.open = !es.open"
@@ -22,6 +22,12 @@
                 Lobby
             </button>
             <button mat-button
+                    [disabled]="!es.open"
+                    [class.selected]="es.activeComponent === SettingsComponent"
+                    (click)="es.activeComponent = SettingsComponent">
+                Settings
+            </button>
+            <button mat-button
                     *ngIf="ws.user?.id"
                     [disabled]="!es.open"
                     [class.selected]="es.activeComponent === InventoryComponent"
@@ -33,13 +39,6 @@
                     [class.selected]="es.activeComponent === ProfileComponent"
                     (click)="es.activeComponent = ProfileComponent">
                 Profile
-            </button>
-            <button mat-button
-                    *ngIf="ws.user?.id"
-                    [disabled]="!es.open"
-                    [class.selected]="es.activeComponent === AccountComponent"
-                    (click)="es.activeComponent = AccountComponent">
-                Account
             </button>
             <button mat-button
                     [disabled]="!es.open"
@@ -66,7 +65,8 @@
             </ng-container>
         </div>
 
-        <div id="chatframe">
+        <div id="chatframe"
+             [hidden]="!es.open">
             <q-chat [disabled]="!es.open"></q-chat>
         </div>
     </div>

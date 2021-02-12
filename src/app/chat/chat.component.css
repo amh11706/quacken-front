@@ -16,10 +16,13 @@
 .textbox {
   position: absolute;
   bottom: 0;
+  height: 100%;
   width: 100%;
-  max-height: 117px;
-  padding-top: 3px;
-  overflow: auto;
+}
+
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  padding-top: calc(var(--height, 118px) - 25px);
+  max-width: 100%;
 }
 
 .textinput {
@@ -40,7 +43,7 @@
   float: left;
   clear: both;
   text-align: left;
-  max-width: 95%;
+  max-width: calc(100% - 6px);
   padding: 3px 7px;
   border-radius: 5px;
   margin: 0 3px 3px 3px;

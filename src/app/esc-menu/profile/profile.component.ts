@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { StatService, Stat } from '../../chat/stat/stat.service';
+import { StatService, Stat } from './stat.service';
 import { WsService } from 'src/app/ws.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'q-stat',
+  selector: 'q-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { WsService } from 'src/app/ws.service';
-import { FriendsService } from '../friends/friends.service';
-import { Message } from '../chat.service';
 import { OutCmd } from 'src/app/ws-messages';
+import { FriendsService } from 'src/app/chat/friends/friends.service';
+import { Message } from 'src/app/chat/chat.service';
 
 export interface Stat {
   statId: number;

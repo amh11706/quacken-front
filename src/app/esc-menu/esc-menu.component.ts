@@ -3,10 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
 import { WsService } from '../ws.service';
 import { EscMenuService } from './esc-menu.service';
-import { AccountComponent } from './account/account.component';
 import { ProfileComponent } from './profile/profile.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { Router } from '@angular/router';
+import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'q-esc-menu',
@@ -14,9 +14,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./esc-menu.component.scss']
 })
 export class EscMenuComponent implements OnInit {
-  AccountComponent = AccountComponent;
   ProfileComponent = ProfileComponent;
   InventoryComponent = InventoryComponent;
+  SettingsComponent = SettingsComponent;
 
   constructor(
     public es: EscMenuService,
