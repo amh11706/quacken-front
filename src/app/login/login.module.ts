@@ -28,10 +28,6 @@ import { HttpClientModule } from '@angular/common/http';
     RestoreComponent,
     LoginFormComponent,
   ],
-  entryComponents: [
-    TermsComponent,
-    PrivacyComponent,
-  ],
   imports: [
     CommonModule,
     HttpClientModule,

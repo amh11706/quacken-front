@@ -15,7 +15,6 @@ import { SplitComponent } from './split/split.component';
 
 @NgModule({
   declarations: [InventoryComponent, SplitComponent],
-  entryComponents: [SplitComponent],
   imports: [
     CommonModule,
     FormsModule,

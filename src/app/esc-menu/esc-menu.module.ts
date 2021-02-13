@@ -18,7 +18,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
 
 @NgModule({
-  entryComponents: [LogoutConfirmComponent],
   declarations: [
     EscMenuComponent,
     ProfileComponent,

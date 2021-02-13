@@ -39,7 +39,6 @@ import { WinConditionsComponent } from './entity-editor/win-conditions/win-condi
     EntityEditorComponent,
     WinConditionsComponent,
   ],
-  entryComponents: [GuideComponent],
   imports: [
     CommonModule,
     MapEditorRoutingModule,
