@@ -5,14 +5,15 @@
     height: 40px;
     width: 40px;
     overflow: hidden;
-    transition: 0.2s ease-out, opacity 0.4s linear;
     z-index: 10;
     opacity: 0.3;
+    transition: 0.2s ease-out, opacity 0.4s linear;
 
     &.open {
         height: 100vh;
         width: 100vw;
         opacity: 1;
+        transition: none;
     }
 }
 
