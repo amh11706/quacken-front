@@ -26,14 +26,6 @@ export class EscMenuComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.ws.connected$.subscribe(v => {
-      if (!v) this.es.open = false;
-    });
-
-    document.addEventListener('keydown', e => {
-      if (e.key !== 'Escape') return;
-      if (this.ws.connected) this.es.open = !this.es.open;
-    });
   }
 
   logout() {
