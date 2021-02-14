@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
 import { ChatService, Message } from './chat.service';
@@ -27,7 +27,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     ,
     'maroon', // alert/broadcast
   ];
-  messages$ = new Subject<Message[]>();
+  messages$ = new ReplaySubject<Message[]>(1);
 
   private subs = new Subscription();
   private focus = (e: KeyboardEvent) => {
