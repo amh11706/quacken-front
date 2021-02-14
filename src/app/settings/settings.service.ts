@@ -28,7 +28,6 @@ export class SettingsService {
   open = false;
   tabIndex = 0;
   admin = true;
-  lSettings: SettingList = [];
   lAdminSettings: SettingList = [];
 
   constructor(private ws: WsService) {
@@ -45,10 +44,10 @@ export class SettingsService {
     });
   }
 
-  setLobbySettings(names: SettingList, adminNames: SettingList) {
-    this.lSettings = names;
+  setLobbySettings(adminNames: SettingList) {
+    if (adminNames.length) this.tabIndex = 0;
+    else if (this.lAdminSettings.length && this.tabIndex > 0) this.tabIndex--;
     this.lAdminSettings = adminNames;
-    this.tabIndex = 0;
   }
 
   async getGroup(group: string, update = false): Promise<SettingMap> {

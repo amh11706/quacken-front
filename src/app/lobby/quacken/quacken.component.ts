@@ -10,7 +10,6 @@ import { Settings } from 'src/app/settings/setting/settings';
 import { InCmd, Internal } from 'src/app/ws-messages';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
-const baseSettings: (keyof typeof Settings)[] = ['mapScale', 'speed', 'kbControls'];
 const ownerSettings: (keyof typeof Settings)[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
   'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'
@@ -37,7 +36,8 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
   titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   map: number[][] = [];
-  settings: SettingMap = { mapScale: 50, speed: 10, kbControls: 1 };
+  graphicSettings: SettingMap = { mapScale: 50, speed: 10 };
+  controlSettings: SettingMap = { kbControls: 1 };
   wheelDebounce?: number;
   myBoat = new Boat('');
   protected sub = new Subscription();
@@ -48,9 +48,9 @@ export class QuackenComponent implements OnInit, OnDestroy {
   moveTransition = (transition: number): string => {
     switch (transition) {
       case 0: return '0s linear';
-      case 1: return 10 / this.settings.speed + 's linear';
-      case 2: return 10 / this.settings.speed + 's ease-in';
-      case 3: return 10 / this.settings.speed + 's ease-out';
+      case 1: return 10 / this.graphicSettings.speed + 's linear';
+      case 2: return 10 / this.graphicSettings.speed + 's ease-in';
+      case 3: return 10 / this.graphicSettings.speed + 's ease-out';
       case 4: return '.1s linear';
       default: return '';
     }
@@ -68,7 +68,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc } });
     this.ss.getGroup('l/quacken', true);
-    this.ss.setLobbySettings(baseSettings, ownerSettings);
+    this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby(undefined, 'quacken');
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
@@ -76,26 +76,29 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-    this.ss.setLobbySettings([], []);
+    this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
     this.ss.admin = true;
     this.es.setLobby();
   }
 
   async getSettings() {
-    this.settings = await this.ss.getGroup('lobby');
+    [this.graphicSettings, this.controlSettings] = await Promise.all([
+      this.ss.getGroup('graphics'),
+      this.ss.getGroup('controls'),
+    ]);
   }
 
   scroll(e: WheelEvent) {
     if (!e.ctrlKey) return;
     if (e.deltaY < 0) {
-      this.settings.mapScale *= 21 / 20;
-      if (this.settings.mapScale > 100) this.settings.mapScale = 100;
+      this.graphicSettings.mapScale *= 21 / 20;
+      if (this.graphicSettings.mapScale > 100) this.graphicSettings.mapScale = 100;
     } else {
-      this.settings.mapScale *= 20 / 21;
-      if (this.settings.mapScale < 15) this.settings.mapScale = 15;
+      this.graphicSettings.mapScale *= 20 / 21;
+      if (this.graphicSettings.mapScale < 15) this.graphicSettings.mapScale = 15;
     }
-    this.settings.mapScale = Math.round(this.settings.mapScale);
+    this.graphicSettings.mapScale = Math.round(this.graphicSettings.mapScale);
     e.preventDefault();
     this.saveScale();
   }
@@ -103,7 +106,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   saveScale() {
     clearTimeout(this.wheelDebounce);
     this.wheelDebounce = window.setTimeout(() => {
-      this.ss.save({ id: 2, value: this.settings.mapScale, name: 'mapScale', group: 'lobby' });
+      this.ss.save({ id: 2, value: this.graphicSettings.mapScale, name: 'mapScale', group: 'graphics' });
     }, 1000);
   }
 

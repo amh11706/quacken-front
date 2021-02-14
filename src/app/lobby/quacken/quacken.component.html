@@ -7,7 +7,7 @@
  	This allows them to be altered independent of each other -->
 	<div id="mapcenter">
 		<div id="mapscale"
-			 [style.transform]="'scale('+settings.mapScale/50+')'">
+			 [style.transform]="'scale('+graphicSettings.mapScale/50+')'">
 			<div id="mapframe"
 				 [qDrag]="frame"
 				 transform="rotateX(45deg) rotateZ(-45deg)">
@@ -29,7 +29,7 @@
 
 						<q-boats [map]="frame"
 								 [moveTransition]="moveTransition"
-								 [speed]="settings.speed">
+								 [speed]="graphicSettings.speed">
 						</q-boats>
 					</div>
 				</div>
@@ -38,5 +38,5 @@
 	</div>
 </div>
 
-<q-hud [kbControls]="settings.kbControls"></q-hud>
+<q-hud [kbControls]="controlSettings.kbControls"></q-hud>
 <q-entry-status></q-entry-status>

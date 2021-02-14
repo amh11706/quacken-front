@@ -20,8 +20,8 @@ import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.componen
 @NgModule({
   declarations: [
     EscMenuComponent,
-    ProfileComponent,
     LeadersComponent,
+    ProfileComponent,
     LogoutConfirmComponent,
   ],
   imports: [

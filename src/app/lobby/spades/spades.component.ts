@@ -11,7 +11,6 @@ import { TimerComponent } from './timer/timer.component';
 import { Settings } from 'src/app/settings/setting/settings';
 import { InCmd, OutCmd } from 'src/app/ws-messages';
 
-const baseSettings: (keyof typeof Settings)[] = [];
 const ownerSettings: (keyof typeof Settings)[] = [
   'watchers', 'turnTime', 'playTo'
 ];
@@ -72,7 +71,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
-    this.ss.setLobbySettings(baseSettings, ownerSettings);
+    this.ss.setLobbySettings(ownerSettings);
 
     this.sub.add(this.ws.subscribe(InCmd.Cards, (c: number[]) => {
       if (!(this.lobby.played.length === 4)) this.setCards(c);
@@ -166,7 +165,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.sub.unsubscribe();
 
-    this.ss.setLobbySettings([], []);
+    this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
     this.ss.admin = true;
   }

@@ -47,7 +47,6 @@ import { Turn } from '../quacken/boats/boats.component';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 
-const baseSettings: (keyof typeof Settings)[] = ['cadeSpeed', 'cadeMaxFps', 'showFps', 'cadeLockAngle', 'water'];
 const ownerSettings: (keyof typeof Settings)[] = [
   'jobberQuality', 'cadeTurnTime', 'cadePublicMode', 'cadeHotEntry',
   'cadeMaxPlayers', 'cadeMap',
@@ -101,7 +100,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   @ViewChild('frame') frame?: ElementRef;
   @ViewChild('fps') fps?: ElementRef;
   protected menuComponent = MainMenuComponent;
-  settings: SettingMap = { mapScale: 50, speed: 10, water: 0 };
+  graphicSettings: SettingMap = { mapScale: 50, speed: 10, water: 0 };
+  controlSettings: SettingMap = { lockAngle: 0 };
   hoveredTeam = -1;
   statOpacity = 0;
   protected mapHeight = 36;
@@ -159,7 +159,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
-    this.ss.setLobbySettings(baseSettings, ownerSettings);
+    this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby(this.menuComponent, this.lobby);
     this.es.open = true;
 
@@ -215,7 +215,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngOnDestroy() {
     this.es.setLobby();
-    this.ss.setLobbySettings([], []);
+    this.ss.setLobbySettings([]);
     window.removeEventListener('resize', this.onWindowResize);
     this.renderer.dispose();
     this.controls?.dispose();
@@ -243,7 +243,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       this.requestRender();
       return;
     }
-    if (this.settings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.settings.maxFps);
+    if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps);
 
     this.render();
     this.updateIntersects();
@@ -258,19 +258,19 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   private render = () => {
     if (!this.alive || !this.controls) return;
-    this.bs.speed = this.settings.speed || 15;
+    this.bs.speed = this.graphicSettings.speed || 15;
     BoatRender.speed = this.bs.speed;
     const time = new Date().valueOf();
     TWEEN.update(time);
 
-    this.controls.mouseButtons.RIGHT = this.settings.lockAngle ? MOUSE.PAN : MOUSE.ROTATE;
+    this.controls.mouseButtons.RIGHT = this.graphicSettings.lockAngle ? MOUSE.PAN : MOUSE.ROTATE;
     if (time - this.lastFrame > 50 && this.slowFrames < 50) this.slowFrames++;
     else if (this.slowFrames > 0) this.slowFrames /= 2;
     this.lastFrame = time;
-    if (this.slowFrames > 5) this.settings.water = 0;
+    if (this.slowFrames > 5) this.graphicSettings.water = 0;
 
-    if (this.settings.water && !this.water) this.buildWater();
-    if (!this.settings.water && this.water) {
+    if (this.graphicSettings.water && !this.water) this.buildWater();
+    if (!this.graphicSettings.water && this.water) {
       this.scene.remove(this.water);
       (this.water.material as Material).dispose();
       this.water.geometry.dispose();
@@ -493,10 +493,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
         square = square.clone();
       }
     }
-  }
-
-  async getSettings() {
-    this.settings = await this.ss.getGroup('cade');
   }
 
 }

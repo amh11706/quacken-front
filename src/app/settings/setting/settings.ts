@@ -3,7 +3,7 @@ import { OutCmd } from 'src/app/ws-messages';
 export const Settings = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' },
   nextBoat: {
-    id: 1, group: 'lobby', type: 'boat', trigger: OutCmd.NextBoat,
+    id: 1, group: 'boats', type: 'boat', trigger: OutCmd.NextBoat,
     titles: ['Rocket', 'Armored', 'Bomb', 'Bread', 'Maiden', , , , , , 'Small Duck', 'Medium Duck', 'Large Duck', 'Defenduck'],
     groups: [
       { name: 'Standard', options: [0, 1, 2, 3, 4] },
@@ -11,7 +11,7 @@ export const Settings = {
     ]
   },
   nextCadeBoat: {
-    id: 19, group: 'cade', name: 'nextBoat', type: 'boat', trigger: OutCmd.NextBoat,
+    id: 19, group: 'boats', name: 'nextBoat', type: 'boat', trigger: OutCmd.NextBoat,
     titles: [
       , , , , , , , , , , , , , , 'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
       'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate'
@@ -21,33 +21,30 @@ export const Settings = {
     ]
   },
   mapScale: {
-    id: 2, group: 'lobby', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1
+    id: 2, group: 'graphics', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1
   },
   speed: {
-    id: 3, group: 'lobby', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
+    id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
   },
-  cadeLockAngle: {
-    id: 22, group: 'cade', name: 'lockAngle', type: 'checkbox', label: 'Lock Angle'
+  lockAngle: {
+    id: 22, group: 'controls', name: 'lockAngle', type: 'checkbox', label: 'Enable camera rotation'
   },
   water: {
-    id: 31, group: 'cade', name: 'water', type: 'checkbox', label: 'Animated Water'
+    id: 31, group: 'graphics', name: 'water', type: 'checkbox', label: 'Animated Water'
   },
   showFps: {
-    id: 29, group: 'cade', name: 'showFps', type: 'checkbox', label: 'Show FPS'
+    id: 29, group: 'graphics', name: 'showFps', type: 'checkbox', label: 'Show FPS'
   },
-  cadeMaxFps: {
-    id: 28, group: 'cade', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 15, max: 240, step: 15
-  },
-  cadeSpeed: {
-    id: 23, group: 'cade', name: 'speed', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
+  maxFps: {
+    id: 28, group: 'graphics', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 15, max: 240, step: 15
   },
   spawnSide: {
-    id: 21, group: 'cade', type: 'option', label: 'Spawn Side', trigger: OutCmd.SpawnSide, options: [
+    id: 21, group: 'boats', type: 'option', label: 'Spawn Side', trigger: OutCmd.SpawnSide, options: [
       'Island', 'Ocean'
     ]
   },
   team: {
-    id: 20, group: 'cade', type: 'option', label: 'Team', trigger: OutCmd.Team, options: [
+    id: 20, group: 'boats', type: 'option', label: 'Team', trigger: OutCmd.Team, options: [
       'Defenders', 'Attackers'
     ]
   },
@@ -95,7 +92,7 @@ export const Settings = {
     admin: true, id: 10, group: 'l/quacken', type: 'checkbox', label: 'Generate new map<br>when a round starts'
   },
   kbControls: {
-    id: 11, group: 'lobby', type: 'checkbox', label: 'Enable keyboard<br>move entry'
+    id: 11, group: 'controls', type: 'checkbox', label: 'Enable keyboard<br>move entry'
   },
   customMap: {
     admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: OutCmd.MapList

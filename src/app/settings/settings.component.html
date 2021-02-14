@@ -1,34 +1,34 @@
 <mat-tab-group [(selectedIndex)]="ss.tabIndex"
                mat-align-tabs="center">
-  <mat-tab label="Lobby">
-    <p *ngIf="ss.lSettings.length === 0; else lobby"
-       class="empty">
-      This lobby does not have any settings for you.
-    </p>
-    <ng-template #lobby>
-      <mat-card>
-        <div class="settings">
-          <q-setting *ngFor="let s of ss.lSettings"
-                     [name]="s"></q-setting>
-        </div>
-      </mat-card>
-
-      <mat-card *ngIf="ss.lAdminSettings.length">
-        <h4>Lobby Owner Settings</h4>
-        <div class="settings">
-          <q-setting *ngFor="let s of ss.lAdminSettings"
-                     [name]="s"></q-setting>
-        </div>
-      </mat-card>
-    </ng-template>
+  <mat-tab label="Lobby"
+           *ngIf="ss.lAdminSettings.length">
+    <mat-card>
+      <h4>Lobby Owner Settings</h4>
+      <div class="settings">
+        <q-setting *ngFor="let s of ss.lAdminSettings"
+                   [name]="s"></q-setting>
+      </div>
+    </mat-card>
   </mat-tab>
 
   <mat-tab label="Graphics">
-
+    <mat-card>
+      <div class="settings">
+        <q-setting name="speed"></q-setting>
+        <q-setting name="maxFps"></q-setting>
+        <q-setting name="water"></q-setting>
+        <q-setting name="showFps"></q-setting>
+      </div>
+    </mat-card>
   </mat-tab>
 
   <mat-tab label="Controls">
-
+    <mat-card>
+      <div class="settings">
+        <q-setting name="kbControls"></q-setting>
+        <q-setting name="lockAngle"></q-setting>
+      </div>
+    </mat-card>
   </mat-tab>
 
   <mat-tab label="Account">
