@@ -1,11 +1,11 @@
+<button mat-icon-button
+        id="toggleesc"
+        (click)="es.open = !es.open"
+        title="Menu (esc)">
+    <mat-icon>menu</mat-icon>
+</button>
 <div id="backgroundframe"
      [class.open]="es.open">
-    <button mat-icon-button
-            id="toggleesc"
-            (click)="es.open = !es.open"
-            title="Menu (esc)">
-        <mat-icon>menu</mat-icon>
-    </button>
     <div id="background">
         <div id="side-menu">
             <button mat-button
