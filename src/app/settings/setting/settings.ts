@@ -43,11 +43,6 @@ export const Settings = {
       'Island', 'Ocean'
     ]
   },
-  team: {
-    id: 20, group: 'boats', type: 'option', label: 'Team', trigger: OutCmd.Team, options: [
-      'Defenders', 'Attackers'
-    ]
-  },
   jobberQuality: {
     admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 100, step: 5
   },
