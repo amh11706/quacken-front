@@ -121,9 +121,8 @@ export class WsService {
   }
 
   request(cmd: OutCmd, data?: any): Promise<any> {
-    if (this.connected) this.sendRaw(JSON.stringify({ cmd, id: this.nextId, data }));
+    this.sendRaw(JSON.stringify({ cmd, id: this.nextId, data }));
     return new Promise((resolve) => {
-      if (!this.connected) return resolve(undefined);
       this.requests.set(this.nextId, resolve);
       this.nextId++;
     });

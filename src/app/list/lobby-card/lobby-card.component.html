@@ -1,52 +1,52 @@
 <ng-template #quackenView
              let-settings="settings">
-    <mat-icon title="Duck Level ({{settings.duckLvl}})"
-              [style.color]="'rgb('+settings.duckLvl*20+','+(11-settings.duckLvl)*20+',0)'">
+    <mat-icon title="Duck Level ({{settings.duckLvl.value}})"
+              [style.color]="'rgb('+settings.duckLvl.value*20+','+(11-settings.duckLvl.value)*20+',0)'">
         show_chart
     </mat-icon>
-    <mat-icon title="Hot Entry ({{settings.hotEntry ? 'allowed' : 'blocked'}})"
-              [style.color]="settings.hotEntry ? 'green' : 'maroon'">
+    <mat-icon title="Hot Entry ({{settings.hotEntry.value ? 'allowed' : 'blocked'}})"
+              [style.color]="settings.hotEntry.value ? 'green' : 'maroon'">
         whatshot
     </mat-icon>
-    <mat-icon title="{{publicModes[settings.publicMode]}}"
-              [style.color]="settings.publicMode ? 'orange' : 'green'">
+    <mat-icon title="{{publicModes[settings.publicMode.value]}}"
+              [style.color]="settings.publicMode.value ? 'orange' : 'green'">
         public
     </mat-icon>
-    <span title="Tile Set">{{settings.tileSet}}</span>
-    <span title="Structure Set">{{settings.structureSet}}</span>
+    <span title="Tile Set">{{settings.tileSet.value}}</span>
+    <span title="Structure Set">{{settings.structureSet.value}}</span>
 </ng-template>
 
 <ng-template #spadesView
              let-settings="settings">
-    <mat-icon title="Watchers ({{settings.watchers ? 'allowed' : 'blocked'}})"
-              [style.color]="settings.watchers ? 'green' : 'maroon'">
+    <mat-icon title="Watchers ({{settings.watchers.value ? 'allowed' : 'blocked'}})"
+              [style.color]="settings.watchers.value ? 'green' : 'maroon'">
         {{settings.watchers ? 'visibility' : 'visibility_off'}}
     </mat-icon>
-    <span title="Timer (seconds)">{{settings.turnTime}}</span>
-    <span title="Play to">{{settings.playTo}}</span>
+    <span title="Timer (seconds)">{{settings.turnTime.value}}</span>
+    <span title="Play to">{{settings.playTo.value}}</span>
 </ng-template>
 
 <ng-template #cadeView
              let-settings="settings">
-    <mat-icon title="Jobber Quality ({{settings.jobberQuality}})"
-              [style.color]="'rgb('+(255-settings.jobberQuality*2)+','+(settings.jobberQuality)*2+',0)'">
+    <mat-icon title="Jobber Quality ({{settings.jobberQuality.value}})"
+              [style.color]="'rgb('+(255-settings.jobberQuality.value*2)+','+(settings.jobberQuality.value)*2+',0)'">
         show_chart
     </mat-icon>
-    <mat-icon title="Hot Entry ({{settings.hotEntry ? 'allowed' : 'blocked'}})"
-              [style.color]="settings.hotEntry ? 'green' : 'maroon'">
+    <mat-icon title="Hot Entry ({{settings.hotEntry.value ? 'allowed' : 'blocked'}})"
+              [style.color]="settings.hotEntry.value ? 'green' : 'maroon'">
         whatshot
     </mat-icon>
-    <mat-icon title="{{publicModes[settings.publicMode]}}"
-              [style.color]="settings.publicMode ? 'orange' : 'green'">
+    <mat-icon title="{{publicModes[settings.publicMode.value]}}"
+              [style.color]="settings.publicMode.value ? 'orange' : 'green'">
         public
     </mat-icon>
-    <span title="Map Id">{{settings.map}}</span>
-    <span title="Timer (seconds)">{{settings.turnTime}}</span>
+    <span title="Map Id">{{settings.map.value}}</span>
+    <span title="Timer (seconds)">{{settings.turnTime.value}}</span>
 </ng-template>
 
 <h3 [title]="descriptions[lobby.type]">{{lobby.type}}</h3>
 <h4>{{lobby.name}}</h4>
-<p>{{lobby.players}} / {{lobby.group.maxPlayers}}</p>
+<p>{{lobby.players}} / {{lobby.group.maxPlayers.value}}</p>
 <p class="settingsView">
     <ng-container
                   *ngTemplateOutlet="{HexaQuack: quackenView, Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView}[lobby.type]; context: {settings: lobby.group}">

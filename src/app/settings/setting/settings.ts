@@ -27,7 +27,7 @@ export const Settings = {
     id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
   },
   lockAngle: {
-    id: 22, group: 'controls', name: 'lockAngle', type: 'checkbox', label: 'Enable camera rotation'
+    id: 22, group: 'controls', name: 'lockAngle', type: 'checkbox', label: 'Lock camera rotation'
   },
   water: {
     id: 31, group: 'graphics', name: 'water', type: 'checkbox', label: 'Animated Water'

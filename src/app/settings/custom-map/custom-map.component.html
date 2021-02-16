@@ -1,6 +1,6 @@
 <label>{{setting.label}}</label>
 <ng-select *ngIf="group"
-           [(ngModel)]="group[setting.name]"
+           [(ngModel)]="group[setting.name].value"
            appendTo="body"
            class="setting"
            [items]="data"

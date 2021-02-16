@@ -58,7 +58,7 @@ export class CreateComponent implements OnInit {
   }
 
   async changeType() {
-    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType], true);
+    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType.value], true);
   }
 
 }

@@ -25,6 +25,7 @@ export class SettingComponent {
   constructor(public ss: SettingsService, private ws: WsService) { }
 
   private async fetch() {
+    this.group[this.setting.name] = { value: 0 };
     if (this.setting.group) this.group = await this.ss.getGroup(this.setting.group);
   }
 
@@ -40,7 +41,7 @@ export class SettingComponent {
 
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
-      const v = +this.group[this.setting.name];
+      const v = +this.group[this.setting.name].value;
       this.change.emit(v);
       this.ss.save({
         id: this.setting.id,

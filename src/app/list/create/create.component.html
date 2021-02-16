@@ -29,14 +29,14 @@
     <h2 id="create">Lobby Type: <q-setting name="createType"
                    (change)="changeType()"></q-setting>
     </h2>
-    <p>{{idDescriptions[settings.createType]}}</p>
+    <p>{{idDescriptions[settings.createType?.value || 0]}}</p>
     <div id="lsettings">
         <ng-container
-                      *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit, cadeEdit, cadeEdit][settings.createType]">
+                      *ngTemplateOutlet="[quackenEdit, quackenEdit, spadesEdit, cadeEdit, cadeEdit][settings.createType?.value || 0]">
         </ng-container>
     </div>
 
-    <p *ngIf="createGroup.customMap || createGroup.map"
+    <p *ngIf="createGroup.customMap?.value || createGroup.map?.value"
        class="error">
         Note: Selecting a custom map will override map generation settings.
         Clear the custom map selection to re enable map generation.

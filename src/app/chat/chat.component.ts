@@ -5,6 +5,8 @@ import { WsService } from '../ws.service';
 import { ChatService, Message } from './chat.service';
 import { InCmd, OutCmd } from '../ws-messages';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { KeyBindingService } from '../settings/key-binding/key-binding.service';
+import { KeyActions } from '../settings/key-binding/key-actions';
 
 @Component({
   selector: 'q-chat',
@@ -46,6 +48,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     public socket: WsService,
     public chat: ChatService,
     private ws: WsService,
+    private kbs: KeyBindingService,
   ) { }
 
   ngOnInit() {
@@ -55,13 +58,14 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.messages$.next(this.chat.messages);
     setTimeout(() => output.scrollToIndex(this.chat.messages.length));
 
-    // document.addEventListener('keydown', this.focus);
+    this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {
+      if (v && !this.disabled) this.input?.nativeElement.focus();
+    }));
     this.input?.nativeElement.focus();
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
-    // document.removeEventListener('keydown', this.focus);
   }
 
   handleKey(e: KeyboardEvent) {
@@ -87,14 +91,15 @@ export class ChatComponent implements OnInit, OnDestroy {
 
       this.chat.historyIndex++;
       this.chat.value = history[this.chat.historyIndex];
-    } else if (e.key === 'Tab') {
-      document.getElementById('textinput')?.focus();
+    } else if (e.key === 'Escape') {
+      this.input?.nativeElement.blur();
     }
   }
 
   sendInput(e: Event) {
     e.preventDefault();
     const text = this.chat.value;
+    this.input?.nativeElement.blur();
     if (!text) return;
     this.chat.value = '';
     this.chat.historyIndex = -1;
@@ -107,7 +112,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     const command = secondSpace > 0 ? text.substr(0, secondSpace + 1) : text;
     this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== command);
     this.chat.commandHistory.push(command);
-
+    this.input?.nativeElement.blur();
   }
 
   addMessage(): void {

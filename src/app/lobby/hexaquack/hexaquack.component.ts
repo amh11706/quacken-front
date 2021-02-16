@@ -13,13 +13,13 @@ export class HexaquackComponent extends QuackenComponent {
       case 0: return '0s linear';
       case 4: return '.1s linear';
       default:
-        const time = 1 / this.graphicSettings.speed;
+        const time = 1 / this.graphicSettings.speed.value;
         return `${time * 10}s linear ${time * 3}s`;
     }
   }
   rotateTransition = (b: Boat): string => {
     if (b.rotateTransition === 1) {
-      return 6 / this.graphicSettings.speed + 's linear';
+      return 6 / this.graphicSettings.speed.value + 's linear';
     }
     return [
       '0s linear',

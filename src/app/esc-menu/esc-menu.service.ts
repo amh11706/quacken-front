@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { KeyActions } from '../settings/key-binding/key-actions';
+import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { WsService } from '../ws.service';
 import { ProfileComponent } from './profile/profile.component';
 
@@ -11,14 +13,13 @@ export class EscMenuService {
   lobbyComponent: any;
   lobbyContext: any;
 
-  constructor(private ws: WsService) {
+  constructor(private ws: WsService, kbs: KeyBindingService) {
     this.ws.connected$.subscribe(v => {
       if (!v) this.open = false;
     });
 
-    document.addEventListener('keydown', e => {
-      if (e.key !== 'Escape') return;
-      if (this.ws.connected) this.open = !this.open;
+    kbs.subscribe(KeyActions.ToggleEscMenu, v => {
+      if (this.ws.connected && v) this.open = !this.open;
     });
   }
 

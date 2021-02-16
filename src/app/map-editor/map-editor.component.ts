@@ -5,6 +5,8 @@ import { WsService } from '../ws.service';
 import { GuideComponent } from './guide/guide.component';
 import { InCmd, OutCmd } from '../ws-messages';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
+import { KeyBindingService } from '../settings/key-binding/key-binding.service';
+import { KeyActions } from '../settings/key-binding/key-actions';
 
 export interface MapTile {
   x: number; y: number; v: number;
@@ -84,6 +86,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   constructor(
     private socket: WsService,
     private es: EscMenuService,
+    private kbs: KeyBindingService,
   ) {
     const tile = this.map.selectedTile;
     for (let i = 0; i < 8; i++) {
@@ -102,12 +105,12 @@ export class MapEditorComponent implements OnInit, OnDestroy {
       }
     }
     window.addEventListener('beforeunload', this.saveSession);
+    this.handleKeys();
 
     this.sub.add(this.socket.connected$.subscribe(v => {
       if (v) this.socket.send(OutCmd.EditorJoin);
     }));
 
-    window.addEventListener('keydown', this.handleKey);
     this.es.setLobby(GuideComponent);
   }
 
@@ -115,7 +118,6 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     this.saveSession();
     window.removeEventListener('beforeunload', this.saveSession);
     this.sub.unsubscribe();
-    window.removeEventListener('keydown', this.handleKey);
     this.es.setLobby();
   }
 
@@ -135,20 +137,25 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     this.map.selectedTile.redos = [];
   }
 
-  private handleKey = (e: KeyboardEvent) => {
-    if (!e.ctrlKey || this.map.settingsOpen) return;
-
-    const tile = this.map.selectedTile;
-    if (e.key === 'z' && tile.undos.length) this.undo(tile.undos, tile.redos);
-    if (e.key === 'y' && tile.redos.length) this.undo(tile.redos, tile.undos);
-    if (e.key === 'e') {
-      this.openSettings();
-      e.preventDefault();
-    }
-    if (e.key === 's') {
-      this.save();
-      e.preventDefault();
-    }
+  private handleKeys() {
+    this.sub.add(this.kbs.subscribe(KeyActions.Save, v => {
+      if (this.map.settingsOpen) return;
+      if (v) this.save();
+    }));
+    this.sub.add(this.kbs.subscribe(KeyActions.Redo, v => {
+      if (this.map.settingsOpen) return;
+      const tile = this.map.selectedTile;
+      if (v && tile.redos.length) this.undo(tile.redos, tile.undos);
+    }));
+    this.sub.add(this.kbs.subscribe(KeyActions.Undo, v => {
+      if (this.map.settingsOpen) return;
+      const tile = this.map.selectedTile;
+      if (v && tile.undos.length) this.undo(tile.undos, tile.redos);
+    }));
+    this.sub.add(this.kbs.subscribe(KeyActions.OpenMenu, v => {
+      if (this.map.settingsOpen) return;
+      if (v) this.openSettings();
+    }));
   }
 
   async save() {

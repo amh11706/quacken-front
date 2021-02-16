@@ -1,0 +1,14 @@
+button.full {
+    width: 100%;
+}
+
+.key-display {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 60px;
+
+    mat-icon {
+        font-size: 16px;
+    }
+}

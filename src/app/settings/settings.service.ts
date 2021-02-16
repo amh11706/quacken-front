@@ -10,10 +10,16 @@ export interface Setting {
   name: string;
   group: string;
   value: number;
+  data?: any;
+}
+
+interface SettingPartial {
+  value: number;
+  data?: any;
 }
 
 export interface SettingMap {
-  [key: string]: number;
+  [key: string]: SettingPartial;
 }
 
 type SettingList = (keyof typeof Settings)[];
@@ -26,14 +32,14 @@ export class SettingsService {
   private ready = new Map<string, Subject<SettingMap>>();
 
   open = false;
-  tabIndex = 0;
+  tabIndex = 1;
   admin = true;
   lAdminSettings: SettingList = [];
 
   constructor(private ws: WsService) {
     ws.subscribe(InCmd.SettingSet, (s: Setting) => {
       const group = this.settings.get(s.group);
-      if (group) group[s.name] = s.value;
+      if (group) group[s.name] = { value: s.value };
     });
 
     this.ws.connected$.subscribe(v => {
@@ -68,7 +74,7 @@ export class SettingsService {
           this.settings.set(group, localSettings);
         }
 
-        for (const setting of m) localSettings[setting.name] = setting.value;
+        for (const setting of m) localSettings[setting.name] = setting;
         ready?.next(localSettings);
         this.ready.delete(group);
       });
@@ -78,7 +84,7 @@ export class SettingsService {
     });
   }
 
-  async get(group: string, name: string): Promise<number> {
+  async get(group: string, name: string): Promise<SettingPartial> {
     const settings = await this.getGroup(group);
     return Promise.resolve(settings[name]);
   }
@@ -86,6 +92,6 @@ export class SettingsService {
   async save(setting: Setting) {
     this.ws.send(OutCmd.SettingSet, setting);
     const settings = await this.getGroup(setting.group);
-    settings[setting.name] = setting.value;
+    settings[setting.name] = setting;
   }
 }

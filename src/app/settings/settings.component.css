@@ -16,6 +16,7 @@ mat-card {
   padding: 16px 32px;
   margin: auto;
   margin-top: 16px;
+  overflow-x: auto;
 }
 
 .settings {

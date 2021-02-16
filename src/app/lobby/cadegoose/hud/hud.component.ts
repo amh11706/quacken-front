@@ -138,7 +138,7 @@ export class CadeHudComponent extends HudComponent {
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
     const old = this.secondsPerTurn;
-    this.secondsPerTurn = await this.ss.get('l/cade', 'turnTime');
+    this.secondsPerTurn = (await this.ss.get('l/cade', 'turnTime')).value;
     super.setTurn(turn, sec + this.secondsPerTurn - old);
   }
 }

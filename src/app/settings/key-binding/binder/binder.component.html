@@ -1,0 +1,25 @@
+<button class="full"
+        mat-button
+        (click)="openDialog(popup)">{{key}}</button>
+
+<ng-template #popup>
+    <h2 mat-dialog-title>Press any key to assign</h2>
+    <mat-dialog-content>
+        <div class="key-display">
+            <div>{{newKey}}</div>
+            <button mat-icon-button
+                    tabindex="-1"
+                    (click)="newKey='n/a'">
+                <mat-icon>clear</mat-icon>
+            </button>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button
+                color="accent"
+                [mat-dialog-close]="newKey"
+                [disabled]="!newKey">Confirm</button>
+        <button mat-raised-button
+                mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+</ng-template>

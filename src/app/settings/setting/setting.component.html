@@ -6,7 +6,7 @@
       <mat-select-trigger>
         <img *ngIf="group[this.setting.name] !== undefined"
              [src]="'/assets/boats/boat'+group[this.setting.name]+'.png'"
-             [title]="setting.titles[group[this.setting.name]]">
+             [title]="setting.titles[group[this.setting.name].value]">
       </mat-select-trigger>
       <mat-optgroup *ngFor="let g of setting.groups"
                     [label]="g.name">
@@ -23,7 +23,7 @@
   <mat-form-field *ngSwitchCase="'option'"
                   class="setting">
     <mat-label>{{setting.label}}</mat-label>
-    <mat-select [(value)]="group[this.setting.name]"
+    <mat-select [(value)]="group[this.setting.name].value"
                 (selectionChange)="save()"
                 [disabled]="this.setting.admin && !ss.admin">
       <mat-option *ngFor="let option of setting.options; let i = index"
@@ -40,19 +40,19 @@
 
   <div *ngSwitchCase="'slider'"
        class="setting">
-    <span class="label">{{setting.label}} ({{group[this.setting.name]}})</span>
+    <span class="label">{{setting.label}} ({{group[this.setting.name].value}})</span>
     <mat-slider [min]="setting.min"
                 [max]="setting.max"
                 [step]="setting.step"
-                [value]="group[this.setting.name]"
+                [value]="group[this.setting.name].value"
                 [disabled]="this.setting.admin && !ss.admin"
-                (input)="group[this.setting.name]=$event.value || 0; save()">
+                (input)="group[this.setting.name].value=$event.value || 0; save()">
     </mat-slider>
   </div>
 
   <div *ngSwitchCase="'checkbox'"
        class="setting">
-    <mat-checkbox [(ngModel)]="group[this.setting.name]"
+    <mat-checkbox [(ngModel)]="group[this.setting.name].value"
                   (change)="save()"
                   [disabled]="this.setting.admin && !ss.admin">
       <span [innerHTML]="setting.label"></span>
@@ -62,7 +62,7 @@
   <mat-form-field *ngSwitchCase="'number'"
                   class="setting">
     <input matInput
-           [(ngModel)]="group[this.setting.name]"
+           [(ngModel)]="group[this.setting.name].value"
            (change)="save()"
            placeholder="Max Players"
            type="number"

@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Lobby, LobbyComponent } from '../lobby.component';
+import { Lobby } from '../lobby.component';
 import { Card } from './card/card.component';
 import { spots } from './spot/spot.component';
 import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
@@ -86,12 +86,12 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.Bidding, () => {
-      this.timer?.go(this.settings.turnTime * 2);
+      this.timer?.go(this.settings.turnTime.value * 2);
       this.lobby.playing = true;
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.Playing, (p: { id: number, quantity: number }) => {
-      this.timer?.go(this.settings.turnTime);
+      this.timer?.go(this.settings.turnTime.value);
       this.lobby.bidding = 0;
       this.lobby.playingP = p.id;
       this.select = p.quantity;
@@ -157,7 +157,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }));
 
     this.settings = await this.ss.getGroup('l/spades', true);
-    if (this.lobby.playing) this.timer?.go(this.settings.turnTime);
+    if (this.lobby.playing) this.timer?.go(this.settings.turnTime.value);
     const me = this.lobby.players[this.lobby.sitting];
     if (me && me.offerBlind) this.select = 2;
   }

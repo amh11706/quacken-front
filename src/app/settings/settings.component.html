@@ -29,6 +29,10 @@
         <q-setting name="lockAngle"></q-setting>
       </div>
     </mat-card>
+
+    <mat-card>
+      <q-key-binding *ngIf="kbs.activeBindings"></q-key-binding>
+    </mat-card>
   </mat-tab>
 
   <mat-tab label="Account">

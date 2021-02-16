@@ -18,9 +18,22 @@ import { CustomMapComponent } from './custom-map/custom-map.component';
 import { AccountComponent } from './account/account.component';
 import { MessageComponent } from './account/message/message.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { KeyBindingComponent } from './key-binding/key-binding.component';
+import { BinderComponent } from './key-binding/binder/binder.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ExitPromptComponent } from './key-binding/exit-prompt/exit-prompt.component';
 
 @NgModule({
-  declarations: [SettingComponent, SettingsComponent, CustomMapComponent, AccountComponent, MessageComponent],
+  declarations: [
+    SettingComponent,
+    SettingsComponent,
+    CustomMapComponent,
+    AccountComponent,
+    MessageComponent,
+    KeyBindingComponent,
+    BinderComponent,
+    ExitPromptComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -35,6 +48,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatTabsModule,
     MatCardModule,
     MatExpansionModule,
+    MatDialogModule,
   ],
   exports: [SettingComponent, SettingsComponent]
 })

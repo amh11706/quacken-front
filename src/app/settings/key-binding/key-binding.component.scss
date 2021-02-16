@@ -1,0 +1,36 @@
+@import "../../../styles/colors.scss";
+
+h2 {
+    text-align: center;
+}
+
+h4 {
+    text-align: center;
+    margin-top: 32px;
+}
+
+#defaults {
+    float: right;
+}
+
+table {
+    width: 100%;
+    text-align: center;
+
+    .changed {
+        color: mat-color($primary);
+    }
+}
+
+th,
+td {
+    padding: 8px 16px;
+    border: 1px solid grey;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    background-color: #424242;
+    z-index: 100;
+}

@@ -1,0 +1,80 @@
+<h2 mat-card-title>Key Bindings</h2>
+<mat-card-actions>
+    <button mat-raised-button
+            color="accent"
+            (click)="save()"
+            [disabled]="!changed">Save changes</button>
+    <button mat-raised-button
+            (click)="cancel()"
+            [disabled]="!changed">Cancel</button>
+    <button mat-raised-button
+            id="defaults"
+            (click)="setDefaults()">Set defaults</button>
+</mat-card-actions>
+
+<ng-container *ngIf="actions">
+    <table>
+        <tr>
+            <th>Action</th>
+            <th>Primary</th>
+            <th>Secondary</th>
+        </tr>
+        <tr *ngFor="let action of actions.general; let i = index">
+            <td>{{action.action}}</td>
+            <td>
+                <q-binder [class.changed]="action.primaryChanged"
+                          [(key)]="action.primary"
+                          (keyChange)="updateChanged(action, 'general', i)"></q-binder>
+            </td>
+            <td>
+                <q-binder [class.changed]="action.secondaryChanged"
+                          [(key)]="action.secondary"
+                          (keyChange)="updateChanged(action, 'general', i)"></q-binder>
+            </td>
+        </tr>
+    </table>
+
+    <h4>Move Input</h4>
+    <table>
+        <tr>
+            <th>Action</th>
+            <th>Primary</th>
+            <th>Secondary</th>
+        </tr>
+        <tr *ngFor="let action of actions.moves; let i = index">
+            <td>{{action.action}}</td>
+            <td>
+                <q-binder [class.changed]="action.primaryChanged"
+                          [(key)]="action.primary"
+                          (keyChange)="updateChanged(action, 'moves', i)"></q-binder>
+            </td>
+            <td>
+                <q-binder [class.changed]="action.secondaryChanged"
+                          [(key)]="action.secondary"
+                          (keyChange)="updateChanged(action, 'moves', i)"></q-binder>
+            </td>
+        </tr>
+    </table>
+
+    <h4>Map Editor</h4>
+    <table>
+        <tr>
+            <th>Action</th>
+            <th>Primary</th>
+            <th>Secondary</th>
+        </tr>
+        <tr *ngFor="let action of actions.editor; let i = index">
+            <td>{{action.action}}</td>
+            <td>
+                <q-binder [class.changed]="action.primaryChanged"
+                          [(key)]="action.primary"
+                          (keyChange)="updateChanged(action, 'editor', i)"></q-binder>
+            </td>
+            <td>
+                <q-binder [class.changed]="action.secondaryChanged"
+                          [(key)]="action.secondary"
+                          (keyChange)="updateChanged(action, 'editor', i)"></q-binder>
+            </td>
+        </tr>
+    </table>
+</ng-container>

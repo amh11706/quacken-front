@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { SettingsService } from './settings.service';
 import { WsService } from '../ws.service';
+import { KeyBindingService } from './key-binding/key-binding.service';
 
 @Component({
   selector: 'q-settings',
@@ -17,6 +18,7 @@ export class SettingsComponent implements OnInit {
   constructor(
     public ss: SettingsService,
     public ws: WsService,
+    public kbs: KeyBindingService,
   ) { }
 
   ngOnInit() {

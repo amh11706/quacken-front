@@ -100,8 +100,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   @ViewChild('frame') frame?: ElementRef;
   @ViewChild('fps') fps?: ElementRef;
   protected menuComponent = MainMenuComponent;
-  graphicSettings: SettingMap = { mapScale: 50, speed: 10, water: 0 };
-  controlSettings: SettingMap = { lockAngle: 0 };
+  graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 } };
+  controlSettings: SettingMap = { lockAngle: { value: 0 } };
   hoveredTeam = -1;
   statOpacity = 0;
   protected mapHeight = 36;
@@ -243,7 +243,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       this.requestRender();
       return;
     }
-    if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps);
+    if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
 
     this.render();
     this.updateIntersects();
@@ -258,7 +258,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   private render = () => {
     if (!this.alive || !this.controls) return;
-    this.bs.speed = this.graphicSettings.speed || 15;
+    this.bs.speed = this.graphicSettings.speed.value || 15;
     BoatRender.speed = this.bs.speed;
     const time = new Date().valueOf();
     TWEEN.update(time);
@@ -267,7 +267,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     if (time - this.lastFrame > 50 && this.slowFrames < 50) this.slowFrames++;
     else if (this.slowFrames > 0) this.slowFrames /= 2;
     this.lastFrame = time;
-    if (this.slowFrames > 5) this.graphicSettings.water = 0;
+    if (this.slowFrames > 5) this.graphicSettings.water.value = 0;
 
     if (this.graphicSettings.water && !this.water) this.buildWater();
     if (!this.graphicSettings.water && this.water) {
