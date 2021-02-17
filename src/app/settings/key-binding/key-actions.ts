@@ -63,7 +63,7 @@ export const DefaultBindings: StaticKeyBindings = {
         { action: KeyActions.Blank, primary: 's', secondary: 'ArrowDown' },
         { action: KeyActions.NextSlot, primary: 'Shift + S', secondary: 'Shift + ArrowDown' },
         { action: KeyActions.PrevSlot, primary: 'Shift + W', secondary: 'Shift + ArrowUp' },
-        { action: KeyActions.Back, primary: 'BackSpace', secondary: 'Ctrl + z' },
+        { action: KeyActions.Back, primary: 'Backspace', secondary: 'Ctrl + z' },
         { action: KeyActions.BombLeft, primary: 'q', secondary: 'Shift + ArrowLeft' },
         { action: KeyActions.BombRight, primary: 'e', secondary: 'Shift + ArrowRight' },
         { action: KeyActions.Token, primary: 'x', secondary: 'n/a' },
