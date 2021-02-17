@@ -45,7 +45,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     const output = this.output;
     this.messages$.next(this.chat.messages);
     setTimeout(() => {
-      output.scrollToIndex(this.chat.messages.length);
+      output.scrollToIndex(this.chat.messages.length * 2);
     });
 
     this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {
