@@ -62,6 +62,17 @@ export class CadeHudComponent extends HudComponent {
     }));
   }
 
+  protected eraseSlot(slot: number) {
+    super.eraseSlot(slot);
+    const usedCannons = this.usingCannons;
+    this.usingCannons -= this.shots[slot * 2] + this.shots[slot * 2 + 1];
+    if (usedCannons > this.usingCannons) {
+      this.shots[slot * 2] = 0;
+      this.shots[slot * 2 + 1] = 0;
+      this.ws.send(OutCmd.Shots, this.shots);
+    }
+  }
+
   setBomb(i: number) {
     if (i === 0) {
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];

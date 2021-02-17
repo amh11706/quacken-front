@@ -124,6 +124,10 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
+  protected eraseSlot(slot: number) {
+    this.getMoves()[slot] = 0;
+  }
+
   private handleKeys() {
     this.subs.add(this.kbs.subscribe(KeyActions.Ready, v => {
       if (v && this.kbControls) this.imReady();
@@ -138,7 +142,7 @@ export class HudComponent implements OnInit, OnDestroy {
         this.setBomb(0);
         this.resetMoves();
       }
-      this.getMoves()[this.selected] = 0;
+      this.eraseSlot(this.selected);
       this.checkMaxMoves();
       this.sendMoves();
     }));
