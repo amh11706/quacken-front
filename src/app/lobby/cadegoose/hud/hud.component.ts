@@ -87,10 +87,6 @@ export class CadeHudComponent extends HudComponent {
   }
 
   imReady() {
-    if (this.myBoat.ready) return;
-    this.stopTimer();
-    this.myBoat.ready = true;
-    this.locked = true;
   }
 
   private setAutoWant() {
