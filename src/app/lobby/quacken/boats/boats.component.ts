@@ -57,7 +57,6 @@ export interface BoatSync extends BoatStatus {
   tp: number;
   ty: number;
   ml: number;
-  ms: number;
   mDamage: number;
   mMoves: number;
   inSq: number;
@@ -309,7 +308,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
         .setTreasure(sBoat.t)
         .draw();
       if (sBoat.ti) boat.title = sBoat.ti;
-      boat.spinDeg = 360 / sBoat.ms;
       boat.rotateTransition = 0;
       boat.imageOpacity = 1;
       boat.opacity = 1;

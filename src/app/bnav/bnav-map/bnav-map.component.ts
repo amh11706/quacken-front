@@ -18,11 +18,11 @@ export class BnavMapComponent implements OnInit, OnDestroy {
 
   private ourBoat: BoatSync = {
     x: 5, y: 5, f: 0,
-    n: 'Our Boat', id: 1, t: 0, b: 0, tp: 0, ty: 0, ml: 0, ms: 4, mDamage: 1, mMoves: 3, inSq: 0,
+    n: 'Our Boat', id: 1, t: 0, b: 0, tp: 0, ty: 0, ml: 0, mDamage: 1, mMoves: 3, inSq: 0,
   };
   private theirBoat: BoatSync = {
     x: 3, y: 5, f: 1,
-    n: 'Their Boat', id: 0, t: 0, b: 0, tp: 0, ty: 2, ml: 0, ms: 4, mDamage: 1, mMoves: 3, inSq: 0,
+    n: 'Their Boat', id: 0, t: 0, b: 0, tp: 0, ty: 2, ml: 0, mDamage: 1, mMoves: 3, inSq: 0,
   };
   private boats = { us: this.ourBoat, them: this.theirBoat };
   private sub = new Subscription();
