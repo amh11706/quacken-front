@@ -7,6 +7,8 @@ import { Boat } from '../boats/boat';
 import { Turn } from '../boats/boats.component';
 import { Lobby } from '../../lobby.component';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
+import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
+import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -28,11 +30,11 @@ export interface BoatTick {
 export class HudComponent implements OnInit, OnDestroy {
   @Input() kbControls = 1;
   keys: { [key: string]: number } = {
-    'ArrowLeft': 1, 'KeyA': 1,
-    'ArrowUp': 2, 'KeyW': 2,
-    'ArrowRight': 3, 'KeyD': 3,
-    'ArrowDown': 0, 'KeyS': 0,
-    'KeyX': 4,
+    [KeyActions.Left]: 1,
+    [KeyActions.Forward]: 2,
+    [KeyActions.Right]: 3,
+    [KeyActions.Blank]: 0,
+    [KeyActions.Token]: 4,
   };
   tokens = [
     '', '', '', '', '', '', '', '', '', '',
@@ -61,10 +63,14 @@ export class HudComponent implements OnInit, OnDestroy {
 
   seconds$ = new BehaviorSubject<number>(76);
 
-  constructor(protected ws: WsService, public fs: FriendsService) { }
+  constructor(
+    protected ws: WsService,
+    public fs: FriendsService,
+    protected kbs: KeyBindingService,
+  ) { }
 
   ngOnInit() {
-    document.addEventListener('keydown', this.kbEvent);
+    this.handleKeys();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (this.turn > 0) this.locked = false;
       this.myBoat = b;
@@ -79,7 +85,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.resetMoves();
       this.locked = false;
       this.myBoat.ready = false;
-      if (this.selected !== -1) this.selected = 0;
+      this.selected = 0;
     }));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
       this.myBoat.damage = t.d;
@@ -114,24 +120,18 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    document.removeEventListener('keydown', this.kbEvent);
     this.subs.unsubscribe();
     this.stopTimer();
   }
 
-  private kbEvent = (e: KeyboardEvent) => {
-    const active = document.activeElement;
-    if (active?.id === 'textinput' || this.kbControls === 0) return;
-    if (active instanceof HTMLElement && active.nodeName !== 'INPUT') active.blur();
-    if (e.code === 'Enter' || e.code === 'Space') {
-      this.imReady();
-      return;
-    }
-    if (this.locked) return;
-    if (e.code === 'Escape') return this.selected = -1;
-    if (this.selected === -1) return this.selected = 0;
+  private handleKeys() {
+    this.subs.add(this.kbs.subscribe(KeyActions.Ready, v => {
+      if (v && this.kbControls) this.imReady();
+    }));
 
-    if (e.code === 'Backspace' || e.code === 'KeyZ' && e.ctrlKey) {
+    this.subs.add(this.kbs.subscribe(KeyActions.Back, v => {
+      if (this.locked || !v || !this.kbControls) return;
+
       if (this.selected > 0 && (this.selected < 3 || this.getMoves()[this.selected] === 0)) {
         this.selected -= 1;
       } else if (this.selected === 0) {
@@ -141,44 +141,49 @@ export class HudComponent implements OnInit, OnDestroy {
       this.getMoves()[this.selected] = 0;
       this.checkMaxMoves();
       this.sendMoves();
-      return;
-    }
-    if (e.code === 'KeyQ') {
+    }));
+
+    this.subs.add(this.kbs.subscribe(KeyActions.BombLeft, v => {
+      if (this.locked || !v || !this.kbControls) return;
+
       if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
         return this.setBomb(this.selected);
       }
-      return this.setBomb(this.selected + 1);
-    }
-    if (e.code === 'KeyE') {
+      this.setBomb(this.selected + 1);
+    }));
+
+    this.subs.add(this.kbs.subscribe(KeyActions.BombRight, v => {
+      if (this.locked || !v || !this.kbControls) return;
+
       if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
         return this.setBomb(this.selected + 4);
       }
-      return this.setBomb(this.selected + 5);
-    }
+      this.setBomb(this.selected + 5);
+    }));
 
-    const move = this.keys[e.code];
-    if (typeof move !== 'number') return;
-    if (e.shiftKey) {
-      if (move === 2) {
-        if (this.selected > 0) this.selected -= 1;
-      } else if (move === 0) {
-        if (this.selected < 3) this.selected += 1;
-      } else if (move === 1) {
-        this.setBomb(this.selected + 1);
-      } else if (move === 3) {
-        this.setBomb(this.selected + 5);
-      }
-    } else {
-      const oldMove = this.getMoves()[this.selected];
-      if (this.maxMoves && !(move === 0 || move === 4) && (oldMove === 0 || oldMove === 4)) {
-        if (this.selected < 3) this.selected += 1;
-        return;
-      }
-      this.getMoves()[this.selected] = move;
+    this.subs.add(this.kbs.subscribe(KeyActions.Left, v => { if (v) this.placeMove(this.keys[KeyActions.Left]); }));
+    this.subs.add(this.kbs.subscribe(KeyActions.Forward, v => { if (v) this.placeMove(this.keys[KeyActions.Forward]); }));
+    this.subs.add(this.kbs.subscribe(KeyActions.Right, v => { if (v) this.placeMove(this.keys[KeyActions.Right]); }));
+    this.subs.add(this.kbs.subscribe(KeyActions.Blank, v => { if (v) this.placeMove(this.keys[KeyActions.Blank]); }));
+    this.subs.add(this.kbs.subscribe(KeyActions.Token, v => { if (v) this.placeMove(this.keys[KeyActions.Token]); }));
+
+    this.subs.add(this.kbs.subscribe(KeyActions.NextSlot, v => { if (v && this.selected < 3) this.selected++; }));
+    this.subs.add(this.kbs.subscribe(KeyActions.PrevSlot, v => { if (v && this.selected > 0) this.selected--; }));
+  }
+
+  private placeMove(move: number) {
+    if (this.locked || !this.kbControls) return;
+
+    const moves = this.getMoves();
+    const oldMove = moves[this.selected];
+    if (this.maxMoves && !(move === 0 || move === 4) && (oldMove === 0 || oldMove === 4)) {
       if (this.selected < 3) this.selected += 1;
-      this.checkMaxMoves();
-      this.sendMoves();
+      return;
     }
+    moves[this.selected] = move;
+    if (this.selected < 3) this.selected += 1;
+    this.checkMaxMoves();
+    this.sendMoves();
   }
 
   protected resetMoves() {
@@ -224,7 +229,6 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   clickTile(ev: MouseEvent, slot: number) {
-    this.selected = -1;
     if (this.locked) return;
     const boat = this.myBoat;
     const moves = this.getMoves();
@@ -242,13 +246,11 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   drag(move: number, slot: number = 4) {
-    this.selected = -1;
     this.move = move;
     this.source = slot;
   }
 
   drop(ev: DragEvent, slot: number) {
-    this.selected = -1;
     ev.preventDefault();
     if (this.locked) return;
     const boat = this.myBoat;

@@ -279,7 +279,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
     delete this.turn;
     this.step = -1;
 
-    setTimeout(() => this.clutter = sync.cSync || [], 1000);
+    setTimeout(() => {
+      this.clutter = sync.cSync || [];
+    }, 1000);
     if (sync.sync) {
       this.setBoats(sync.sync);
     }

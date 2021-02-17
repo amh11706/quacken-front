@@ -41,15 +41,16 @@ export class SettingComponent {
 
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
-      const v = +this.group[this.setting.name].value;
-      this.change.emit(v);
+      const newSetting = this.group[this.setting.name];
+      this.change.emit(+newSetting.value);
       this.ss.save({
         id: this.setting.id,
         name: this.setting.name,
-        value: v,
+        value: +newSetting.value,
         group: this.setting.group,
+        data: newSetting.data,
       });
-      if (this.setting.trigger) this.ws.send(this.setting.trigger, +this.group[this.setting.name]);
+      if (this.setting.trigger) this.ws.send(this.setting.trigger, +newSetting.value);
     }, 750);
   }
 

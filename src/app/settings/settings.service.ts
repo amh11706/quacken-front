@@ -31,7 +31,6 @@ export class SettingsService {
   private settings = new Map<string, SettingMap>();
   private ready = new Map<string, Subject<SettingMap>>();
 
-  open = false;
   tabIndex = 1;
   admin = true;
   lAdminSettings: SettingList = [];
@@ -42,11 +41,9 @@ export class SettingsService {
       if (group) group[s.name] = { value: s.value };
     });
 
-    this.ws.connected$.subscribe(v => {
-      this.settings.clear();
-      this.open = false;
+    ws.connected$.subscribe(v => {
       if (!v) return;
-      this.getGroup('global');
+      this.settings.clear();
     });
   }
 

@@ -10,7 +10,6 @@ import { WsService } from 'src/app/ws.service';
 
 export const Descriptions = {
   Quacken: QuackenDesc,
-  HexaQuack: QuackenDesc,
   Spades: 'A classic card game.',
   CadeGoose: CadeDesc,
   SeaBattle: SbDesc,

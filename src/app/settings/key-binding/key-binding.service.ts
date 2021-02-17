@@ -1,50 +1,29 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { WsService } from 'src/app/ws.service';
 import { SettingsService } from '../settings.service';
-import { KeyActions } from './key-actions';
+import { DefaultBindings, KeyActions, KeyBinding, KeyBindings, StaticKeyBindings } from './key-actions';
 
 const IgnoreKeys = ['Control', 'Shift', 'Alt'];
 
-export interface KeyBinding {
-  action: KeyActions;
-  primary: string;
-  secondary: string;
-  primaryChanged?: boolean;
-  secondaryChanged?: boolean;
+function mergeBindings(input?: KeyBindings): StaticKeyBindings {
+  const bindings = new Map<KeyActions, KeyBinding>();
+  if (input) {
+    for (const k in input) {
+      if (!input.hasOwnProperty(k)) continue;
+      for (const binding of input[k as keyof KeyBindings]) bindings.set(binding.action, binding);
+    }
+  }
+
+  const merged: KeyBindings = { general: [], moves: [], editor: [] };
+  for (const k in DefaultBindings) {
+    if (!DefaultBindings.hasOwnProperty(k)) continue;
+    for (const binding of DefaultBindings[k as keyof KeyBindings]) {
+      merged[k as keyof KeyBindings].push(bindings.get(binding.action) || binding);
+    }
+  }
+  return merged;
 }
-
-export interface KeyBindings {
-  general: KeyBinding[];
-  moves: KeyBinding[];
-  editor: KeyBinding[];
-}
-
-type DeepReadonly<T> = { readonly [K in keyof T]: DeepReadonly<T[K]> };
-type StaticKeyBindings = DeepReadonly<KeyBindings>;
-
-export const DefaultBindings: StaticKeyBindings = {
-  general: [
-    { action: KeyActions.ToggleEscMenu, primary: 'Escape', secondary: 'n/a' },
-    { action: KeyActions.FocusChat, primary: 't', secondary: 'Enter' },
-    { action: KeyActions.ShowStats, primary: 'Tab', secondary: 'n/a' },
-  ],
-  moves: [
-    { action: KeyActions.Left, primary: 'a', secondary: 'ArrowLeft' },
-    { action: KeyActions.Forward, primary: 'w', secondary: 'ArrowUp' },
-    { action: KeyActions.Right, primary: 'd', secondary: 'ArrowRight' },
-    { action: KeyActions.Blank, primary: 's', secondary: 'ArrowDown' },
-    { action: KeyActions.NextSlot, primary: 'Shift + s', secondary: 'Shift + ArrowDown' },
-    { action: KeyActions.PrevSlot, primary: 'shift + w', secondary: 'shift + ArrowUp' },
-    { action: KeyActions.Back, primary: 'Backspace', secondary: 'Ctrl + z' },
-    { action: KeyActions.BombLeft, primary: 'q', secondary: 'Shift + ArrowLeft' },
-    { action: KeyActions.BombRight, primary: 'e', secondary: 'Shift + ArrowRight' },
-  ],
-  editor: [
-    { action: KeyActions.Save, primary: 'Ctrl + s', secondary: 'n/a' },
-    { action: KeyActions.Undo, primary: 'Ctrl + z', secondary: 'n/a' },
-    { action: KeyActions.Redo, primary: 'Ctrl + y', secondary: 'n/a' },
-  ],
-};
 
 @Injectable({
   providedIn: 'root'
@@ -56,20 +35,24 @@ export class KeyBindingService {
   private _activeBindings?: StaticKeyBindings;
   get activeBindings() { return this._activeBindings; }
 
-  constructor(ss: SettingsService) {
+  constructor(ss: SettingsService, private ws: WsService) {
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
-    ss.get('controls', 'bindings').then(setting => {
-      this.setBindings(setting?.data ? setting.data : DefaultBindings);
+    ws.connected$.subscribe(v => {
+      if (!v) return;
+      ss.get('controls', 'bindings').then(setting => {
+        this.setBindings(mergeBindings(setting?.data));
+      });
     });
   }
 
   private getKey(e: KeyboardEvent): string {
+    const key = e.key === ' ' ? 'Space' : e.key;
     let modifiers = '';
     if (e.ctrlKey) modifiers += 'Ctrl + ';
     if (e.shiftKey) modifiers += 'Shift + ';
     if (e.altKey) modifiers += 'Alt + ';
-    return modifiers + e.key;
+    return modifiers + key;
   }
 
   private emitAction(e: KeyboardEvent, key: string, value = true) {
@@ -78,14 +61,15 @@ export class KeyBindingService {
 
     for (const action of actions) {
       const sub = this.subMap.get(action);
-      if (!sub || sub.observers.length === 0) return;
+      if (!sub || sub.observers.length === 0) continue;
       e.preventDefault();
-      sub.next(value);
+      if (!e.repeat) sub.next(value);
     }
   }
 
   private handleKeyDown = (e: KeyboardEvent) => {
-    if (e.repeat || document.activeElement?.tagName === 'INPUT' || IgnoreKeys.includes(e.key)) return;
+    if (!this.ws.connected) return;
+    if (document.activeElement?.tagName === 'INPUT' || IgnoreKeys.includes(e.key)) return;
     const key = this.getKey(e);
 
     if (this.bindSub) {
@@ -98,6 +82,7 @@ export class KeyBindingService {
   }
 
   private handleKeyUp = (e: KeyboardEvent) => {
+    if (!this.ws.connected) return;
     if (this.bindSub || document.activeElement?.tagName === 'INPUT' || IgnoreKeys.includes(e.key)) return;
     const key = this.getKey(e);
 
@@ -124,9 +109,9 @@ export class KeyBindingService {
   }
 
   subscribe(action: KeyActions, cb: (value: boolean) => void) {
-    const sub = this.subMap.get(action) || new Subject();
-    this.subMap.set(action, sub);
-    return sub.subscribe(cb);
+    const subject = this.subMap.get(action) || new Subject();
+    this.subMap.set(action, subject);
+    return subject.subscribe(cb);
   }
 
   bindSubscribe(cb: (e: string) => void) {

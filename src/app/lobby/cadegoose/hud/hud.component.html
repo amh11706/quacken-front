@@ -33,6 +33,7 @@
 
                     <div class="move"
                          [class.blocked]="maxMoves || locked"
+                         [class.selected]="kbControls && selected == i && !locked"
                          (drop)="drop($event, i)"
                          (mouseup)="clickTile($event, i)"
                          (mousedown)="$event.which === 2 ? $event.preventDefault() : null"

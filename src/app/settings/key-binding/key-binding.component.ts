@@ -1,8 +1,9 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SettingsService } from '../settings.service';
-import { DefaultBindings, KeyBinding, KeyBindings, KeyBindingService } from './key-binding.service';
+import { KeyBindingService } from './key-binding.service';
 import { ExitPromptComponent } from './exit-prompt/exit-prompt.component';
+import { KeyBindings, KeyBinding, DefaultBindings } from './key-actions';
 
 @Component({
   selector: 'q-key-binding',

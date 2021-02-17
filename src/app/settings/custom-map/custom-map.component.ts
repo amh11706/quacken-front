@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { SettingMap } from '../settings.service';
+import { Setting, SettingMap } from '../settings.service';
 import { WsService } from 'src/app/ws.service';
 
 @Component({
@@ -10,11 +10,11 @@ import { WsService } from 'src/app/ws.service';
 })
 export class CustomMapComponent implements OnInit {
   @Input() group?: SettingMap;
-  @Input() setting: any = {};
+  @Input() setting: any;
   @Input() disabled?: boolean;
   @Output() save = new EventEmitter();
 
-  data = [];
+  data: { id: number, name: string, label: string, username: string }[] = [];
   loading = true;
 
   constructor(private ws: WsService) { }
@@ -24,6 +24,14 @@ export class CustomMapComponent implements OnInit {
     for (const i of m) i.label = i.name + ' (' + i.username + ')';
     this.data = m;
     this.loading = false;
+  }
+
+  preSave() {
+    const setting = this.group?.[this.setting.name];
+    if (!setting) return;
+    const selected = this.data.find(el => el.id === +setting.value);
+    if (selected) setting.data = selected.label;
+    this.save.emit();
   }
 
 }

@@ -32,36 +32,25 @@ export class ChatComponent implements OnInit, OnDestroy {
   messages$ = new ReplaySubject<Message[]>(1);
 
   private subs = new Subscription();
-  private focus = (e: KeyboardEvent) => {
-    if (!this.ws.connected) return;
-    if (document.activeElement?.className !== 'textinput' && (e.key === 'Tab' || e.code === 'Slash')) {
-      this.input?.nativeElement.focus();
-      if (e.code === 'Slash') this.chat.value += '/';
-      e.preventDefault();
-    } else if (e.key === 'Tab') {
-      this.input?.nativeElement.blur();
-      e.preventDefault();
-    }
-  }
 
   constructor(
-    public socket: WsService,
-    public chat: ChatService,
     private ws: WsService,
+    public chat: ChatService,
     private kbs: KeyBindingService,
   ) { }
 
   ngOnInit() {
     if (!this.output) return;
-    this.subs.add(this.socket.subscribe(InCmd.ChatMessage, () => this.addMessage()));
+    this.subs.add(this.ws.subscribe(InCmd.ChatMessage, () => this.addMessage()));
     const output = this.output;
     this.messages$.next(this.chat.messages);
-    setTimeout(() => output.scrollToIndex(this.chat.messages.length));
+    setTimeout(() => {
+      output.scrollToIndex(this.chat.messages.length);
+    });
 
     this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {
       if (v && !this.disabled) this.input?.nativeElement.focus();
     }));
-    this.input?.nativeElement.focus();
   }
 
   ngOnDestroy() {
@@ -104,8 +93,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chat.value = '';
     this.chat.historyIndex = -1;
 
-    if (text[0] !== '/') return this.socket.send(OutCmd.ChatMessage, text);
-    this.socket.send(OutCmd.ChatCommand, text);
+    if (text[0] !== '/') return this.ws.send(OutCmd.ChatMessage, text);
+    this.ws.send(OutCmd.ChatCommand, text);
 
     const firstSpace = text.indexOf(' ');
     const secondSpace = text.indexOf(' ', firstSpace + 1);
@@ -133,7 +122,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.socket.send(OutCmd.ChatCommand, c.base);
+    this.ws.send(OutCmd.ChatCommand, c.base);
     this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== c.base);
     this.chat.commandHistory.push(c.base);
   }

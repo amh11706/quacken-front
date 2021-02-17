@@ -54,7 +54,7 @@ export class LobbyListComponent implements OnInit {
   }
 
   join(l: Lobby) {
-    if (!l.group.publicMode) this.router.navigate(['lobby', l.id]);
+    if (!l.group.publicMode?.value) this.router.navigate(['lobby', l.id]);
     else this.ws.send(OutCmd.LobbyApply, l.id);
   }
 

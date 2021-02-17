@@ -46,6 +46,8 @@ import { BoatRender } from './boat-render';
 import { Turn } from '../quacken/boats/boats.component';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
+import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'jobberQuality', 'cadeTurnTime', 'cadePublicMode', 'cadeHotEntry',
@@ -100,7 +102,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   @ViewChild('frame') frame?: ElementRef;
   @ViewChild('fps') fps?: ElementRef;
   protected menuComponent = MainMenuComponent;
-  graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 } };
+  graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
   controlSettings: SettingMap = { lockAngle: { value: 0 } };
   hoveredTeam = -1;
   statOpacity = 0;
@@ -135,6 +137,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     ss: SettingsService,
     fs: FriendsService,
     private bs: BoatService,
+    private kbs: KeyBindingService,
     es: EscMenuService,
   ) {
     super(ws, ss, fs, es);
@@ -165,6 +168,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));
+    this.sub.add(this.kbs.subscribe(KeyActions.ShowStats, v => this.statOpacity = v ? 1 : 0));
 
     this.buildGrid();
   }
@@ -214,8 +218,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   ngOnDestroy() {
-    this.es.setLobby();
-    this.ss.setLobbySettings([]);
+    super.ngOnDestroy();
     window.removeEventListener('resize', this.onWindowResize);
     this.renderer.dispose();
     this.controls?.dispose();

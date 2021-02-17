@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { LobbyComponent } from './lobby.component';
 import { QuackenModule } from './quacken/quacken.module';
 import { SpadesModule } from './spades/spades.module';
-import { HexaquackModule } from './hexaquack/hexaquack.module';
 import { CadegooseModule } from './cadegoose/cadegoose.module';
 import { SeabattleModule } from './seabattle/seabattle.module';
 import { LobbyRoutingModule } from './lobby-routing.module';
@@ -19,7 +18,6 @@ import { LobbyRoutingModule } from './lobby-routing.module';
     LobbyRoutingModule,
     QuackenModule,
     SpadesModule,
-    HexaquackModule,
     CadegooseModule,
     SeabattleModule,
   ],

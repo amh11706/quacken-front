@@ -1,0 +1,34 @@
+<div #frame
+     class="noselect"
+     id="background"
+     (wheel)="scroll($event)"
+     oncontextmenu="event.preventDefault();">
+    <!-- mapframe receives the offset transform, map receives the rotate transform.
+ 	This allows them to be altered independent of each other -->
+    <div id="mapcenter">
+        <div id="mapscale"
+             [style.transform]="mapScale">
+            <div id="mapframe"
+                 [qDrag]="frame"
+                 transform="rotateX(45deg) rotateZ(-45deg)">
+                <div [style.transform]="'translateX('+(12-myBoat.pos.x)*50+'px)'"
+                     [style.transition]="moveTransition(myBoat.moveTransition[0])">
+                    <div id="maprows"
+                         [style.transform]="'translateY('+(25.5-myBoat.pos.y)*50+'px)'"
+                         [style.transition]="moveTransition(myBoat.moveTransition[1])">
+                        <!-- Draw map here -->
+                        <canvas id="mapCanvas"
+                                width="1250"
+                                height="2600"
+                                #canvas></canvas>
+
+                        <q-boats [map]="frame"
+                                 [moveTransition]="moveTransition"
+                                 [speed]="speed">
+                        </q-boats>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

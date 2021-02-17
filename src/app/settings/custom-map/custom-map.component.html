@@ -6,6 +6,6 @@
            [items]="data"
            [loading]="loading"
            bindValue="id"
-           (change)="save.emit()"
+           (change)="preSave()"
            [disabled]="disabled">
 </ng-select>

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
+import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
 import { SettingsService } from 'src/app/settings/settings.service';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
@@ -12,7 +13,7 @@ import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
   styleUrls: ['./hud.component.scss']
 })
 export class CadeHudComponent extends HudComponent {
-  kbControls = 0;
+  @Input() kbControls = 0;
   protected secondsPerTurn = 30;
   protected maxTurn = 75;
   shots = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -27,8 +28,8 @@ export class CadeHudComponent extends HudComponent {
   wantMove = 2;
   auto = true;
 
-  constructor(ws: WsService, fs: FriendsService, private ss: SettingsService) {
-    super(ws, fs);
+  constructor(ws: WsService, fs: FriendsService, private ss: SettingsService, kbs: KeyBindingService) {
+    super(ws, fs, kbs);
   }
 
   ngOnInit() {

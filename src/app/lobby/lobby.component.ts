@@ -21,7 +21,7 @@ export interface Lobby {
   turn?: number;
   seconds?: number;
   stats?: Record<number, StatRow>;
-  type: 'HexaQuack' | 'Quacken' | 'Spades' | 'CadeGoose';
+  type: 'Quacken' | 'Spades' | 'CadeGoose';
   [key: string]: any;
 }
 

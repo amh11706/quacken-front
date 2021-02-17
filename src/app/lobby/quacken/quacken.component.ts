@@ -20,7 +20,7 @@ export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy duc
 @Component({
   selector: 'q-quacken',
   templateUrl: './quacken.component.html',
-  styleUrls: ['./quacken.component.css']
+  styleUrls: ['./quacken.component.css'],
 })
 export class QuackenComponent implements OnInit, OnDestroy {
   private _lobby?: Lobby;
@@ -34,27 +34,14 @@ export class QuackenComponent implements OnInit, OnDestroy {
     return this._lobby;
   }
 
-  titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
   map: number[][] = [];
   graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 } };
   controlSettings: SettingMap = { kbControls: { value: 1 } };
-  wheelDebounce?: number;
   myBoat = new Boat('');
   protected sub = new Subscription();
 
   protected mapHeight = 52;
   protected mapWidth = 25;
-
-  moveTransition = (transition: number): string => {
-    switch (transition) {
-      case 0: return '0s linear';
-      case 1: return 10 / this.graphicSettings.speed.value + 's linear';
-      case 2: return 10 / this.graphicSettings.speed.value + 's ease-in';
-      case 3: return 10 / this.graphicSettings.speed.value + 's ease-out';
-      case 4: return '.1s linear';
-      default: return '';
-    }
-  }
 
   constructor(
     protected ws: WsService,
@@ -87,27 +74,6 @@ export class QuackenComponent implements OnInit, OnDestroy {
       this.ss.getGroup('graphics'),
       this.ss.getGroup('controls'),
     ]);
-  }
-
-  scroll(e: WheelEvent) {
-    if (!e.ctrlKey) return;
-    if (e.deltaY < 0) {
-      this.graphicSettings.mapScale.value *= 21 / 20;
-      if (this.graphicSettings.mapScale.value > 100) this.graphicSettings.mapScale.value = 100;
-    } else {
-      this.graphicSettings.mapScale.value *= 20 / 21;
-      if (this.graphicSettings.mapScale.value < 15) this.graphicSettings.mapScale.value = 15;
-    }
-    this.graphicSettings.mapScale.value = Math.round(this.graphicSettings.mapScale.value);
-    e.preventDefault();
-    this.saveScale();
-  }
-
-  saveScale() {
-    clearTimeout(this.wheelDebounce);
-    this.wheelDebounce = window.setTimeout(() => {
-      this.ss.save({ id: 2, value: this.graphicSettings.mapScale.value, name: 'mapScale', group: 'graphics' });
-    }, 1000);
   }
 
   protected setMapB64(map: string) {

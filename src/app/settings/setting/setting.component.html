@@ -1,12 +1,13 @@
 <ng-container [ngSwitch]="setting.type">
   <div *ngSwitchCase="'boat'"
        class="setting boat">
-    <mat-select [(ngModel)]="group[this.setting.name]"
+    <mat-select *ngIf="group[setting.name]"
+                [(ngModel)]="group[setting.name].value"
                 (selectionChange)="save()">
       <mat-select-trigger>
-        <img *ngIf="group[this.setting.name] !== undefined"
-             [src]="'/assets/boats/boat'+group[this.setting.name]+'.png'"
-             [title]="setting.titles[group[this.setting.name].value]">
+        <img *ngIf="group[setting.name].value !== undefined"
+             [src]="'/assets/boats/boat'+group[setting.name].value+'.png'"
+             [title]="setting.titles[group[setting.name].value]">
       </mat-select-trigger>
       <mat-optgroup *ngFor="let g of setting.groups"
                     [label]="g.name">
@@ -23,9 +24,9 @@
   <mat-form-field *ngSwitchCase="'option'"
                   class="setting">
     <mat-label>{{setting.label}}</mat-label>
-    <mat-select [(value)]="group[this.setting.name].value"
+    <mat-select [(value)]="group[setting.name].value"
                 (selectionChange)="save()"
-                [disabled]="this.setting.admin && !ss.admin">
+                [disabled]="setting.admin && !ss.admin">
       <mat-option *ngFor="let option of setting.options; let i = index"
                   [value]="i">{{option}}</mat-option>
     </mat-select>
@@ -33,28 +34,28 @@
 
   <div *ngSwitchCase="'button'"
        class="setting">
-    <button *ngIf="!(this.setting.admin && !ss.admin)"
+    <button *ngIf="!(setting.admin && !ss.admin)"
             mat-raised-button
             (click)="send()">{{setting.label}}</button>
   </div>
 
   <div *ngSwitchCase="'slider'"
        class="setting">
-    <span class="label">{{setting.label}} ({{group[this.setting.name].value}})</span>
+    <span class="label">{{setting.label}} ({{group[setting.name].value}})</span>
     <mat-slider [min]="setting.min"
                 [max]="setting.max"
                 [step]="setting.step"
-                [value]="group[this.setting.name].value"
-                [disabled]="this.setting.admin && !ss.admin"
-                (input)="group[this.setting.name].value=$event.value || 0; save()">
+                [value]="group[setting.name].value"
+                [disabled]="setting.admin && !ss.admin"
+                (input)="group[setting.name].value=$event.value || 0; save()">
     </mat-slider>
   </div>
 
   <div *ngSwitchCase="'checkbox'"
        class="setting">
-    <mat-checkbox [(ngModel)]="group[this.setting.name].value"
+    <mat-checkbox [(ngModel)]="group[setting.name].value"
                   (change)="save()"
-                  [disabled]="this.setting.admin && !ss.admin">
+                  [disabled]="setting.admin && !ss.admin">
       <span [innerHTML]="setting.label"></span>
     </mat-checkbox>
   </div>
@@ -62,13 +63,13 @@
   <mat-form-field *ngSwitchCase="'number'"
                   class="setting">
     <input matInput
-           [(ngModel)]="group[this.setting.name].value"
+           [(ngModel)]="group[setting.name].value"
            (change)="save()"
            placeholder="Max Players"
            type="number"
            [min]="setting.min"
            [max]="setting.max"
-           [disabled]="this.setting.admin && !ss.admin">
+           [disabled]="setting.admin && !ss.admin">
   </mat-form-field>
 
   <div *ngSwitchDefault
@@ -76,7 +77,7 @@
     <q-custom-map [group]="group"
                   (save)="save()"
                   [setting]="setting"
-                  [disabled]="this.setting.admin && !ss.admin">
+                  [disabled]="setting.admin && !ss.admin">
     </q-custom-map>
   </div>
 </ng-container>

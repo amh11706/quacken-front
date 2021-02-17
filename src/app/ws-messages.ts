@@ -2,7 +2,7 @@ export const enum Internal {
     Boats = -100,
     MyBoat,
     UnlockMoves,
-    Time
+    Time,
 }
 
 export const enum OutCmd {

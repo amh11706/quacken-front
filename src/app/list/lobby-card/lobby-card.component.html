@@ -12,8 +12,8 @@
               [style.color]="settings.publicMode.value ? 'orange' : 'green'">
         public
     </mat-icon>
-    <span title="Tile Set">{{settings.tileSet.value}}</span>
-    <span title="Structure Set">{{settings.structureSet.value}}</span>
+    <div title="Tile Set: {{settings.tileSet.data || 'Default'}}">{{settings.tileSet.value}}</div>
+    <div title="Structure Set: {{settings.structureSet.data || 'Default'}}">{{settings.structureSet.value}}</div>
 </ng-template>
 
 <ng-template #spadesView
@@ -22,8 +22,8 @@
               [style.color]="settings.watchers.value ? 'green' : 'maroon'">
         {{settings.watchers ? 'visibility' : 'visibility_off'}}
     </mat-icon>
-    <span title="Timer (seconds)">{{settings.turnTime.value}}</span>
-    <span title="Play to">{{settings.playTo.value}}</span>
+    <div title="Timer (seconds)">{{settings.turnTime.value}}</div>
+    <div title="Play to">{{settings.playTo.value}}</div>
 </ng-template>
 
 <ng-template #cadeView
@@ -40,8 +40,8 @@
               [style.color]="settings.publicMode.value ? 'orange' : 'green'">
         public
     </mat-icon>
-    <span title="Map Id">{{settings.map.value}}</span>
-    <span title="Timer (seconds)">{{settings.turnTime.value}}</span>
+    <div title="Map: {{settings.map.data || 'Random'}}">{{settings.map.value}}</div>
+    <div title="Timer (seconds)">{{settings.turnTime.value}}</div>
 </ng-template>
 
 <h3 [title]="descriptions[lobby.type]">{{lobby.type}}</h3>
@@ -49,6 +49,6 @@
 <p>{{lobby.players}} / {{lobby.group.maxPlayers.value}}</p>
 <p class="settingsView">
     <ng-container
-                  *ngTemplateOutlet="{HexaQuack: quackenView, Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView}[lobby.type]; context: {settings: lobby.group}">
+                  *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView}[lobby.type]; context: {settings: lobby.group}">
     </ng-container>
 </p>

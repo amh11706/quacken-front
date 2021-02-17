@@ -3,7 +3,7 @@ import { OutCmd } from 'src/app/ws-messages';
 export const Settings = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' },
   nextBoat: {
-    id: 1, group: 'boats', type: 'boat', trigger: OutCmd.NextBoat,
+    id: 1, group: 'boats', name: 'quacken', type: 'boat', trigger: OutCmd.NextBoat,
     titles: ['Rocket', 'Armored', 'Bomb', 'Bread', 'Maiden', , , , , , 'Small Duck', 'Medium Duck', 'Large Duck', 'Defenduck'],
     groups: [
       { name: 'Standard', options: [0, 1, 2, 3, 4] },
@@ -11,7 +11,7 @@ export const Settings = {
     ]
   },
   nextCadeBoat: {
-    id: 19, group: 'boats', name: 'nextBoat', type: 'boat', trigger: OutCmd.NextBoat,
+    id: 19, group: 'boats', name: 'cade', type: 'boat', trigger: OutCmd.NextBoat,
     titles: [
       , , , , , , , , , , , , , , 'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
       'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate'
@@ -55,10 +55,10 @@ export const Settings = {
     ]
   },
   cadeMaxPlayers: {
-    admin: true, id: 26, group: 'l/cade', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40
+    admin: true, id: 24, group: 'l/cade', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40
   },
   cadeHotEntry: {
-    admin: true, id: 27, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an<br>entry is in progress'
+    admin: true, id: 26, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an<br>entry is in progress'
   },
   cadeMap: {
     admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList
@@ -97,7 +97,7 @@ export const Settings = {
   },
   createType: {
     id: 14, group: 'l/create', type: 'option', options: [
-      'Quacken', 'HexaQuack', 'Spades', 'CadeGoose', 'Sea Battle',
+      'Quacken', 'Spades', 'CadeGoose', 'Sea Battle',
     ]
   },
   turnTime: {
