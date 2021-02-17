@@ -63,6 +63,13 @@ export class CadeHudComponent extends HudComponent {
   }
 
   setBomb(i: number) {
+    if (i === 0) {
+      this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
+      this.usingCannons = 0;
+      this.ws.send(OutCmd.Shots, this.shots);
+      return;
+    }
+
     i--;
     const side = Math.floor(i / 4);
     const adjusted = (i % 4) * 2 + side;
