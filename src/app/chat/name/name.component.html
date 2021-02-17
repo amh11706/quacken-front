@@ -2,14 +2,13 @@
       [matMenuTriggerFor]="nameMenu">
   <span [class.friend]="message.friend"
         [class.blocked]="message.blocked">{{message.from}}</span>
-  <span *ngIf="message.copy">({{message.copy}})</span>
+  <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
 </span>
 
 <ng-template #you>
   <span class="you"
         title="you"
         [matMenuTriggerFor]="youMenu">{{message.from}}</span>
-  <span *ngIf="message.copy">({{message.copy}})</span>
 </ng-template>
 
 <ng-template #guest>
