@@ -62,6 +62,13 @@ export class CadeHudComponent extends HudComponent {
     }));
   }
 
+  setBomb(i: number) {
+    i--;
+    const side = Math.floor(i / 4);
+    const adjusted = (i % 4) * 2 + side;
+    this.addShot(adjusted);
+  }
+
   changeWantMove() {
     if (this.auto) this.setAutoWant();
     else this.ws.send(OutCmd.WantMove, this.wantMove);
