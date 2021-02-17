@@ -136,9 +136,9 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.kbs.subscribe(KeyActions.Back, v => {
       if (this.locked || !v || !this.kbControls) return;
 
-      if (this.selected > 0 && (this.selected < 3 || this.getMoves()[this.selected] === 0)) {
+      if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
         this.selected -= 1;
-      } else if (this.selected === 0) {
+      } else if (this.selected === 0 && !this.getMoves()[this.selected]) {
         this.setBomb(0);
         this.resetMoves();
       }
