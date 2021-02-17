@@ -322,7 +322,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.maxDamage = sBoat.mDamage;
       boat.maxMoves = sBoat.mMoves;
       boat.influence = Math.sqrt(sBoat.inSq) * 2 || 1;
-      boat.doubleShot = sBoat.dShot;
+      boat.maxShots = sBoat.dShot;
       boat.type = sBoat.ty;
 
       if (boat.isMe) {

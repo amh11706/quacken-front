@@ -72,7 +72,8 @@ export class CadeHudComponent extends HudComponent {
 
     i--;
     const side = Math.floor(i / 4);
-    const adjusted = (i % 4) * 2 + side;
+    let adjusted = (i % 4) * 2 + side;
+    if (this.shots[adjusted] === this.myBoat.maxShots && adjusted < 6) adjusted += 2;
     this.addShot(adjusted);
   }
 
@@ -130,7 +131,7 @@ export class CadeHudComponent extends HudComponent {
   addShot(i: number) {
     if (this.locked) return;
     const oldShots = this.shots[i];
-    this.shots[i] = (oldShots + 1) % (this.myBoat.doubleShot ? 3 : 2);
+    this.shots[i] = (oldShots + 1) % (this.myBoat.maxShots || 1 + 1);
     this.usingCannons += this.shots[i] - oldShots;
     if (this.usingCannons > this.lastTick.tp) {
       this.usingCannons -= this.shots[i];

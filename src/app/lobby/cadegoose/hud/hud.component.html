@@ -15,7 +15,7 @@
                          <div class="bombslot"
                               [class.blocked]="locked"
                               [class.bomb]="shots[i*2] > 0"></div>
-                         <div *ngIf="myBoat.doubleShot === 2"
+                         <div *ngIf="myBoat.maxShots === 2"
                               class="bombslot"
                               [class.blocked]="locked"
                               [class.bomb]="shots[i*2] > 1"></div>
@@ -25,7 +25,7 @@
                          <div class="bombslot"
                               [class.blocked]="locked"
                               [class.bomb]="shots[i*2+1] > 0"></div>
-                         <div *ngIf="myBoat.doubleShot === 2"
+                         <div *ngIf="myBoat.maxShots === 2"
                               class="bombslot"
                               [class.blocked]="locked"
                               [class.bomb]="shots[i*2+1] > 1"></div>
