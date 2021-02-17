@@ -67,6 +67,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   private async renderMap(bString: string) {
+    const hadCanvas = !!this.canvas;
     if (!this.canvas) this.canvas = this.canvasElement?.nativeElement.getContext('2d');
     if (!this.canvas) return;
     const water = await this.getTileImage('water');
@@ -74,6 +75,7 @@ export class MapComponent implements OnInit, OnDestroy {
     ctx.strokeStyle = '#4080bf';
     ctx.lineWidth = 1;
     ctx.fillStyle = '#064886';
+    if (hadCanvas) ctx.clearRect(0, 0, 1250, 2600);
 
     let i = 0;
     for (let y = 0; y < 52; y++) {
@@ -99,6 +101,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       ctx.translate(-1250, 50);
     }
+    ctx.translate(0, -2600);
   }
 
   scroll(e: WheelEvent) {
