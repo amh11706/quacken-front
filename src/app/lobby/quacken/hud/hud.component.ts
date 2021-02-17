@@ -171,8 +171,8 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.kbs.subscribe(KeyActions.Blank, v => { if (v) this.placeMove(this.keys[KeyActions.Blank]); }));
     this.subs.add(this.kbs.subscribe(KeyActions.Token, v => { if (v) this.placeMove(this.keys[KeyActions.Token]); }));
 
-    this.subs.add(this.kbs.subscribe(KeyActions.NextSlot, v => { if (v && this.selected < 3) this.selected++; }));
-    this.subs.add(this.kbs.subscribe(KeyActions.PrevSlot, v => { if (v && this.selected > 0) this.selected--; }));
+    this.subs.add(this.kbs.subscribe(KeyActions.NextSlot, v => { if (v && this.selected < 3 && this.kbControls) this.selected++; }));
+    this.subs.add(this.kbs.subscribe(KeyActions.PrevSlot, v => { if (v && this.selected > 0 && this.kbControls) this.selected--; }));
   }
 
   private placeMove(move: number) {
