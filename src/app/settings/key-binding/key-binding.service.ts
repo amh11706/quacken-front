@@ -2,24 +2,16 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { WsService } from 'src/app/ws.service';
 import { SettingsService } from '../settings.service';
-import { DefaultBindings, KeyActions, KeyBinding, KeyBindings, StaticKeyBindings } from './key-actions';
+import { DefaultBindings, KeyActions, KeyBindings, NotActive, StaticKeyBindings } from './key-actions';
 
 const IgnoreKeys = ['Control', 'Shift', 'Alt'];
 
-function mergeBindings(input?: KeyBindings): StaticKeyBindings {
-  const bindings = new Map<KeyActions, KeyBinding>();
-  if (input) {
-    for (const k in input) {
-      if (!input.hasOwnProperty(k)) continue;
-      for (const binding of input[k as keyof KeyBindings]) bindings.set(binding.action, binding);
-    }
-  }
-
-  const merged: KeyBindings = { general: [], moves: [], editor: [] };
+function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBindings {
+  const merged = new KeyBindings();
   for (const k in DefaultBindings) {
     if (!DefaultBindings.hasOwnProperty(k)) continue;
     for (const binding of DefaultBindings[k as keyof KeyBindings]) {
-      merged[k as keyof KeyBindings].push(bindings.get(binding.action) || binding);
+      merged[k as keyof KeyBindings].push({ ...binding, bindings: input[binding.action] || binding.bindings });
     }
   }
   return merged;
@@ -41,7 +33,7 @@ export class KeyBindingService {
     ws.connected$.subscribe(v => {
       if (!v) return;
       ss.get('controls', 'bindings').then(setting => {
-        this.setBindings(mergeBindings(setting?.data));
+        this.setBindings(mergeBindings(setting?.data || {}));
       });
     });
   }
@@ -90,7 +82,7 @@ export class KeyBindingService {
   }
 
   private addAction(key: string, action: KeyActions) {
-    if (key === 'n/a') return;
+    if (key === NotActive) return;
     const list = this.bindings.get(key) || [];
     this.bindings.set(key, list);
     list.push(action);
@@ -101,14 +93,16 @@ export class KeyBindingService {
     for (const k in bindings) {
       if (!bindings.hasOwnProperty(k)) continue;
       for (const binding of bindings[k as keyof KeyBindings]) {
-        this.addAction(binding.primary, binding.action);
-        if (binding.primary !== binding.secondary) this.addAction(binding.secondary, binding.action);
+        const bs = binding.bindings;
+        if (bs[0] !== NotActive) this.addAction(bs[0], binding.action);
+        if (bs[1] !== NotActive && bs[0] !== bs[1]) this.addAction(bs[1], binding.action);
       }
     }
     this._activeBindings = bindings;
   }
 
   subscribe(action: KeyActions, cb: (value: boolean) => void) {
+    if (action === KeyActions.Noop) return;
     const subject = this.subMap.get(action) || new Subject();
     this.subMap.set(action, subject);
     return subject.subscribe(cb);

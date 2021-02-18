@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
+import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
 import { SettingsService } from 'src/app/settings/settings.service';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
@@ -14,6 +15,22 @@ import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 })
 export class CadeHudComponent extends HudComponent {
   @Input() kbControls = 0;
+  @Input() protected moveKeys: Record<number, KeyActions> = {
+    0: KeyActions.CBlank,
+    1: KeyActions.CLeft,
+    2: KeyActions.CForward,
+    3: KeyActions.CRight,
+  } as const;
+  @Input() protected actions = {
+    bombLeft: KeyActions.CBombLeft,
+    bombRight: KeyActions.CBombRight,
+    BombLeftStrict: KeyActions.CBombLeftStrict,
+    BombRightStrict: KeyActions.CBombRightStrict,
+    prevSlot: KeyActions.CPrevSlot,
+    nextSlot: KeyActions.CNextSlot,
+    ready: KeyActions.Noop,
+    back: KeyActions.CBack,
+  };
   protected secondsPerTurn = 30;
   protected maxTurn = 75;
   shots = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -73,7 +90,7 @@ export class CadeHudComponent extends HudComponent {
     }
   }
 
-  setBomb(i: number) {
+  setBomb(i: number, strict = false) {
     if (i === 0) {
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
       this.usingCannons = 0;
@@ -84,7 +101,7 @@ export class CadeHudComponent extends HudComponent {
     i--;
     const side = Math.floor(i / 4);
     let adjusted = (i % 4) * 2 + side;
-    while (this.shots[adjusted] === this.myBoat.maxShots && adjusted < 6) adjusted += 2;
+    while (!strict && this.shots[adjusted] === this.myBoat.maxShots && adjusted < 6) adjusted += 2;
     this.addShot(adjusted);
   }
 

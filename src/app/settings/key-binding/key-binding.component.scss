@@ -1,12 +1,15 @@
-@import "../../../styles/colors.scss";
-
-h2 {
+:host {
     text-align: center;
+    position: relative;
 }
 
-h4 {
-    text-align: center;
-    margin-top: 32px;
+mat-card-actions {
+    text-align: left;
+}
+
+q-setting {
+    display: inline-block;
+    margin-right: 16px;
 }
 
 #defaults {
@@ -15,15 +18,28 @@ h4 {
 
 table {
     width: 100%;
-    text-align: center;
-
-    .changed {
-        color: mat-color($primary);
-    }
 }
 
 th,
 td {
     padding: 8px 16px;
     border: 1px solid grey;
+}
+
+.mat-icon-button {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+
+    mat-icon {
+        font-size: 18px;
+    }
+}
+
+::ng-deep .mat-menu-panel {
+    max-width: none;
+}
+
+.popup {
+    color: #eee;
 }

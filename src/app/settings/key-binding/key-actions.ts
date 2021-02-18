@@ -1,77 +1,256 @@
 export const enum KeyActions {
-    FocusChat = 'Focus chat',
-    ToggleEscMenu = 'Toggle escape menu',
-    OpenLobby = 'Open lobby menu',
-    OpenSettings = 'Open settings',
-    OpenInventory = 'Open inventory',
-    OpenProfile = 'Open profile',
-    LeaveLobby = 'Leave lobby',
-    Logout = 'Logout',
+    Noop = -1,
+    // Global
+    FocusChat,
+    ToggleEscMenu,
+    OpenLobby,
+    OpenSettings,
+    OpenInventory,
+    OpenProfile,
+    LeaveLobby,
+    Logout,
 
-    Save = 'Save',
-    Undo = 'Undo',
-    Redo = 'Redo',
-    OpenMenu = 'Open menu',
+    // Map editor
+    Save = 100,
+    Undo,
+    Redo,
+    OpenMenu,
 
-    ShowStats = 'Show stats',
-    Forward = 'Forward',
-    Left = 'Left',
-    Right = 'Right',
-    Blank = 'Blank',
-    NextSlot = 'Next slot',
-    PrevSlot = 'Previous slot',
-    Back = 'Back',
-    BombLeft = 'Bomb left',
-    BombRight = 'Bomb right',
-    Token = 'Token',
-    Ready = 'Ready',
+    // Cadegoose
+    CShowStats = 200,
+    CForward,
+    CLeft,
+    CRight,
+    CBlank,
+    CNextSlot,
+    CPrevSlot,
+    CBack,
+    CBombLeft,
+    CBombRight,
+    CBombLeftStrict,
+    CBombRightStrict,
+
+    // Sea battle
+    SBShowStats = 300,
+    SBForward,
+    SBLeft,
+    SBRight,
+    SBBlank,
+    SBNextSlot,
+    SBPrevSlot,
+    SBBack,
+    SBBombLeft,
+    SBBombRight,
+    SBBombLeftStrict,
+    SBBombRightStrict,
+    SBToken,
+    SBReady,
+
+    // Quacken
+    QForward = 400,
+    QLeft,
+    QRight,
+    QBlank,
+    QNextSlot,
+    QPrevSlot,
+    QBack,
+    QBombLeft,
+    QBombRight,
+    QBombLeftStrict,
+    QBombRightStrict,
+    QToken,
+    QReady,
 }
+
+export const NotActive = 'n/a';
 
 export interface KeyBinding {
-    action: KeyActions;
-    primary: string;
-    secondary: string;
-    primaryChanged?: boolean;
-    secondaryChanged?: boolean;
+    readonly action: KeyActions;
+    readonly title: string;
+    bindings: [string, string];
+    readonly linkGroup?: LinkGroups;
 }
 
-export interface KeyBindings {
-    general: KeyBinding[];
-    moves: KeyBinding[];
-    editor: KeyBinding[];
+export class KeyBindings {
+    'Global': KeyBinding[] = [];
+    'Cadegoose': KeyBinding[] = [];
+    'Sea battle': KeyBinding[] = [];
+    'Quacken': KeyBinding[] = [];
+    'Map editor': KeyBinding[] = [];
 }
 
 type DeepReadonly<T> = { readonly [K in keyof T]: DeepReadonly<T[K]> };
 export type StaticKeyBindings = DeepReadonly<KeyBindings>;
 
+export const enum LinkGroups {
+    Forward, Left, Right, Blank,
+    NextSlot, PrevSlot, Back,
+    BombLeft, BombRight, BombLeftStrict, BombRightStrict,
+    ShowStats,
+}
+
 export const DefaultBindings: StaticKeyBindings = {
-    general: [
-        { action: KeyActions.ToggleEscMenu, primary: 'Escape', secondary: 'n/a' },
-        { action: KeyActions.OpenLobby, primary: 'l', secondary: 'n/a' },
-        { action: KeyActions.OpenSettings, primary: 'o', secondary: 'n/a' },
-        { action: KeyActions.OpenInventory, primary: 'i', secondary: 'n/a' },
-        { action: KeyActions.OpenProfile, primary: 'p', secondary: 'n/a' },
-        { action: KeyActions.FocusChat, primary: 't', secondary: 'Enter' },
-        { action: KeyActions.LeaveLobby, primary: 'Ctrl + b', secondary: 'n/a' },
-        { action: KeyActions.Logout, primary: 'Ctrl + l', secondary: 'n/a' },
-        { action: KeyActions.ShowStats, primary: 'Tab', secondary: 'n/a' },
+    'Global': [
+        { action: KeyActions.ToggleEscMenu, title: 'Toggle escape menu', bindings: ['Escape', NotActive] },
+        { action: KeyActions.OpenLobby, title: 'Open lobby menu', bindings: ['l', NotActive] },
+        { action: KeyActions.OpenSettings, title: 'Open settings', bindings: ['o', NotActive] },
+        { action: KeyActions.OpenInventory, title: 'Open inventory', bindings: ['i', NotActive] },
+        { action: KeyActions.OpenProfile, title: 'Open profile', bindings: ['p', NotActive] },
+        { action: KeyActions.FocusChat, title: 'Focus chat', bindings: ['t', 'Enter'] },
+        { action: KeyActions.LeaveLobby, title: 'Leave lobby', bindings: ['Ctrl + b', NotActive] },
+        { action: KeyActions.Logout, title: 'Log out', bindings: ['Ctrl + l', NotActive] },
     ],
-    moves: [
-        { action: KeyActions.Left, primary: 'a', secondary: 'ArrowLeft' },
-        { action: KeyActions.Forward, primary: 'w', secondary: 'ArrowUp' },
-        { action: KeyActions.Right, primary: 'd', secondary: 'ArrowRight' },
-        { action: KeyActions.Blank, primary: 's', secondary: 'ArrowDown' },
-        { action: KeyActions.NextSlot, primary: 'Shift + S', secondary: 'Shift + ArrowDown' },
-        { action: KeyActions.PrevSlot, primary: 'Shift + W', secondary: 'Shift + ArrowUp' },
-        { action: KeyActions.Back, primary: 'Backspace', secondary: 'Ctrl + z' },
-        { action: KeyActions.BombLeft, primary: 'q', secondary: 'Shift + ArrowLeft' },
-        { action: KeyActions.BombRight, primary: 'e', secondary: 'Shift + ArrowRight' },
-        { action: KeyActions.Token, primary: 'x', secondary: 'n/a' },
-        { action: KeyActions.Ready, primary: 'Space', secondary: 'n/a' },
+    'Cadegoose': [
+        {
+            action: KeyActions.CShowStats, title: 'Show stats', bindings: ['Tab', NotActive],
+            linkGroup: LinkGroups.ShowStats,
+        },
+        {
+            action: KeyActions.CLeft, title: 'Left', bindings: ['a', 'ArrowLeft'],
+            linkGroup: LinkGroups.Left,
+        },
+        {
+            action: KeyActions.CForward, title: 'Forward', bindings: ['w', 'ArrowUp'],
+            linkGroup: LinkGroups.Forward,
+        },
+        {
+            action: KeyActions.CRight, title: 'Right', bindings: ['d', 'ArrowRight'],
+            linkGroup: LinkGroups.Right,
+        },
+        {
+            action: KeyActions.CBlank, title: 'Blank', bindings: ['s', 'ArrowDown'],
+            linkGroup: LinkGroups.Blank,
+        },
+        {
+            action: KeyActions.CNextSlot, title: 'Next slot', bindings: ['Shift + S', 'Shift + ArrowDown'],
+            linkGroup: LinkGroups.NextSlot,
+        },
+        {
+            action: KeyActions.CPrevSlot, title: 'Previous slot', bindings: ['Shift + W', 'Shift + ArrowUp'],
+            linkGroup: LinkGroups.PrevSlot,
+        },
+        {
+            action: KeyActions.CBack, title: 'Back', bindings: ['Backspace', 'Ctrl + z'],
+            linkGroup: LinkGroups.Back,
+        },
+        {
+            action: KeyActions.CBombLeft, title: 'Bomb left', bindings: ['q', 'Shift + ArrowLeft'],
+            linkGroup: LinkGroups.BombLeft,
+        },
+        {
+            action: KeyActions.CBombRight, title: 'Bomb right', bindings: ['e', 'Shift + ArrowRight'],
+            linkGroup: LinkGroups.BombRight,
+        },
+        {
+            action: KeyActions.CBombLeftStrict, title: 'Bomb left strict', bindings: ['Shift + A', 'Shift + Q'],
+            linkGroup: LinkGroups.BombLeftStrict,
+        },
+        {
+            action: KeyActions.CBombRightStrict, title: 'Bomb right strict', bindings: ['Shift + D', 'Shift + E'],
+            linkGroup: LinkGroups.BombRightStrict,
+        },
     ],
-    editor: [
-        { action: KeyActions.Save, primary: 'Ctrl + s', secondary: 'n/a' },
-        { action: KeyActions.Undo, primary: 'Ctrl + z', secondary: 'n/a' },
-        { action: KeyActions.Redo, primary: 'Ctrl + y', secondary: 'n/a' },
+    'Sea battle': [
+        {
+            action: KeyActions.SBShowStats, title: 'Show stats', bindings: ['Tab', NotActive],
+            linkGroup: LinkGroups.ShowStats,
+        },
+        {
+            action: KeyActions.SBLeft, title: 'Left', bindings: ['a', 'ArrowLeft'],
+            linkGroup: LinkGroups.Left,
+        },
+        {
+            action: KeyActions.SBForward, title: 'Forward', bindings: ['w', 'ArrowUp'],
+            linkGroup: LinkGroups.Forward,
+        },
+        {
+            action: KeyActions.SBRight, title: 'Right', bindings: ['d', 'ArrowRight'],
+            linkGroup: LinkGroups.Right,
+        },
+        {
+            action: KeyActions.SBBlank, title: 'Blank', bindings: ['s', 'ArrowDown'],
+            linkGroup: LinkGroups.Blank,
+        },
+        {
+            action: KeyActions.SBNextSlot, title: 'Next slot', bindings: ['Shift + S', 'Shift + ArrowDown'],
+            linkGroup: LinkGroups.NextSlot,
+        },
+        {
+            action: KeyActions.SBPrevSlot, title: 'Previous slot', bindings: ['Shift + W', 'Shift + ArrowUp'],
+            linkGroup: LinkGroups.PrevSlot,
+        },
+        {
+            action: KeyActions.SBBack, title: 'Back', bindings: ['Backspace', 'Ctrl + z'],
+            linkGroup: LinkGroups.Back,
+        },
+        {
+            action: KeyActions.SBBombLeft, title: 'Bomb left', bindings: ['q', 'Shift + ArrowLeft'],
+            linkGroup: LinkGroups.BombLeft,
+        },
+        {
+            action: KeyActions.SBBombRight, title: 'Bomb right', bindings: ['e', 'Shift + ArrowRight'],
+            linkGroup: LinkGroups.BombRight,
+        },
+        {
+            action: KeyActions.SBBombLeftStrict, title: 'Bomb left strict', bindings: ['Shift + A', 'Shift + Q'],
+            linkGroup: LinkGroups.BombLeftStrict,
+        },
+        {
+            action: KeyActions.SBBombRightStrict, title: 'Bomb right strict', bindings: ['Shift + D', 'Shift + E'],
+            linkGroup: LinkGroups.BombRightStrict,
+        },
+    ],
+    'Quacken': [
+        {
+            action: KeyActions.QLeft, title: 'Left', bindings: ['a', 'ArrowLeft'],
+            linkGroup: LinkGroups.Left,
+        },
+        {
+            action: KeyActions.QForward, title: 'Forward', bindings: ['w', 'ArrowUp'],
+            linkGroup: LinkGroups.Forward,
+        },
+        {
+            action: KeyActions.QRight, title: 'Right', bindings: ['d', 'ArrowRight'],
+            linkGroup: LinkGroups.Right,
+        },
+        {
+            action: KeyActions.QBlank, title: 'Blank', bindings: ['s', 'ArrowDown'],
+            linkGroup: LinkGroups.Blank,
+        },
+        {
+            action: KeyActions.QNextSlot, title: 'Next slot', bindings: ['Shift + S', 'Shift + ArrowDown'],
+            linkGroup: LinkGroups.NextSlot,
+        },
+        {
+            action: KeyActions.QPrevSlot, title: 'Previous slot', bindings: ['Shift + W', 'Shift + ArrowUp'],
+            linkGroup: LinkGroups.PrevSlot,
+        },
+        {
+            action: KeyActions.QBack, title: 'Back', bindings: ['Backspace', 'Ctrl + z'],
+            linkGroup: LinkGroups.Back,
+        },
+        {
+            action: KeyActions.QBombLeft, title: 'Bomb left', bindings: ['q', 'Shift + ArrowLeft'],
+            linkGroup: LinkGroups.BombLeft,
+        },
+        {
+            action: KeyActions.QBombRight, title: 'Bomb right', bindings: ['e', 'Shift + ArrowRight'],
+            linkGroup: LinkGroups.BombRight,
+        },
+        {
+            action: KeyActions.QBombLeftStrict, title: 'Bomb left strict', bindings: ['Shift + A', 'Shift + Q'],
+            linkGroup: LinkGroups.BombLeftStrict,
+        },
+        {
+            action: KeyActions.QBombRightStrict, title: 'Bomb right strict', bindings: ['Shift + D', 'Shift + E'],
+            linkGroup: LinkGroups.BombRightStrict,
+        },
+        { action: KeyActions.QToken, title: 'Token', bindings: ['x', NotActive] },
+        { action: KeyActions.QReady, title: 'Ready', bindings: ['Space', NotActive] },
+    ],
+    'Map editor': [
+        { action: KeyActions.Save, title: 'Save', bindings: ['Ctrl + s', NotActive] },
+        { action: KeyActions.Undo, title: 'Undo', bindings: ['Ctrl + z', NotActive] },
+        { action: KeyActions.Redo, title: 'Redo', bindings: ['Ctrl + y', NotActive] },
     ],
 };

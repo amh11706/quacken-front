@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { BufferGeometry, Line, LineBasicMaterial, Object3D, Vector3 } from 'three';
 import { BoatService } from '../cadegoose/boat.service';
 import { CadegooseComponent, GRID_DEPTH } from '../cadegoose/cadegoose.component';
@@ -17,6 +18,23 @@ export class SeabattleComponent extends CadegooseComponent {
   protected mapHeight = 25;
   protected mapWidth = 25;
   protected joinMessage = SbDesc;
+  protected statAction = KeyActions.SBShowStats;
+  moveKeys = {
+    0: KeyActions.SBBlank,
+    1: KeyActions.SBLeft,
+    2: KeyActions.SBForward,
+    3: KeyActions.SBRight,
+  } as const;
+  actions = {
+    bombLeft: KeyActions.SBBombLeft,
+    bombRight: KeyActions.SBBombRight,
+    BombLeftStrict: KeyActions.SBBombLeftStrict,
+    BombRightStrict: KeyActions.SBBombRightStrict,
+    prevSlot: KeyActions.SBPrevSlot,
+    nextSlot: KeyActions.SBNextSlot,
+    ready: KeyActions.Noop,
+    back: KeyActions.SBBack,
+  };
 
   protected buildGrid() {
     const grid = new Object3D();

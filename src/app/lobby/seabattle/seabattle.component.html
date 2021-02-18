@@ -12,4 +12,6 @@
                    (mouseleave)="statOpacity = 0"></q-sb-entry-status>
 <q-sb-stats [style.opacity]="statOpacity"
             [stats]="lobby?.stats"></q-sb-stats>
-<q-cade-hud></q-cade-hud>
+<q-cade-hud [moveKeys]="moveKeys"
+            [actions]="actions"
+            [kbControls]="controlSettings.kbControls.value"></q-cade-hud>

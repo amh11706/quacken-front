@@ -22,6 +22,7 @@ import { KeyBindingComponent } from './key-binding/key-binding.component';
 import { BinderComponent } from './key-binding/binder/binder.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ExitPromptComponent } from './key-binding/exit-prompt/exit-prompt.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ExitPromptComponent } from './key-binding/exit-prompt/exit-prompt.compo
     MatCardModule,
     MatExpansionModule,
     MatDialogModule,
+    MatMenuModule,
   ],
   exports: [SettingComponent, SettingsComponent]
 })

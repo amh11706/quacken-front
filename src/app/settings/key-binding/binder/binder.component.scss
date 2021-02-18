@@ -1,5 +1,19 @@
+@import "../../../../styles/colors.scss";
+
 button.full {
     width: 100%;
+}
+
+button:not(.changed) {
+    color: #eee !important;
+}
+
+.changed {
+    color: mat-color($primary) !important;
+}
+
+.notdefault {
+    border: 1px solid grey;
 }
 
 .key-display {
@@ -11,4 +25,8 @@ button.full {
     mat-icon {
         font-size: 16px;
     }
+}
+
+.warning {
+    color: mat-color($primary);
 }

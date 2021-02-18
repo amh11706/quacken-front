@@ -109,4 +109,7 @@ export const Settings = {
   watchers: {
     admin: true, id: 17, group: 'l/spades', type: 'checkbox', label: 'Allow Watchers'
   },
+  updateLinked: {
+    id: 33, group: 'controls', type: 'checkbox', label: 'Update linked settings'
+  },
 };

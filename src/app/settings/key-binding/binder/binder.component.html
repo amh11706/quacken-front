@@ -1,5 +1,9 @@
 <button class="full"
         mat-button
+        [disabled]="disabled"
+        [class.changed]="changed"
+        [class.notdefault]="notDefault"
+        [title]="title"
         (click)="openDialog(popup)">{{key}}</button>
 
 <ng-template #popup>
@@ -9,10 +13,13 @@
             <div>{{newKey}}</div>
             <button mat-icon-button
                     tabindex="-1"
-                    (click)="newKey='n/a'">
+                    (click)="newKey=NotActive">
                 <mat-icon>clear</mat-icon>
             </button>
         </div>
+
+        <p *ngIf="conflict"
+           class="warning">Warning! This will unset '{{conflict.title}}' from group '{{conflict.group}}'.</p>
     </mat-dialog-content>
     <mat-dialog-actions>
         <button mat-raised-button

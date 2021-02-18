@@ -29,12 +29,22 @@ export interface BoatTick {
 })
 export class HudComponent implements OnInit, OnDestroy {
   @Input() kbControls = 1;
-  keys: { [key: string]: number } = {
-    [KeyActions.Left]: 1,
-    [KeyActions.Forward]: 2,
-    [KeyActions.Right]: 3,
-    [KeyActions.Blank]: 0,
-    [KeyActions.Token]: 4,
+  @Input() protected moveKeys: Record<number, KeyActions> = {
+    0: KeyActions.QBlank,
+    1: KeyActions.QLeft,
+    2: KeyActions.QForward,
+    3: KeyActions.QRight,
+    4: KeyActions.QToken,
+  } as const;
+  @Input() protected actions = {
+    bombLeft: KeyActions.QBombLeft,
+    bombRight: KeyActions.QBombRight,
+    BombLeftStrict: KeyActions.QBombLeftStrict,
+    BombRightStrict: KeyActions.QBombRightStrict,
+    prevSlot: KeyActions.QPrevSlot,
+    nextSlot: KeyActions.QNextSlot,
+    ready: KeyActions.QReady,
+    back: KeyActions.QBack,
   };
   tokens = [
     '', '', '', '', '', '', '', '', '', '',
@@ -129,11 +139,11 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   private handleKeys() {
-    this.subs.add(this.kbs.subscribe(KeyActions.Ready, v => {
+    if (this.actions.ready) this.subs.add(this.kbs.subscribe(this.actions.ready, v => {
       if (v && this.kbControls) this.imReady();
     }));
 
-    this.subs.add(this.kbs.subscribe(KeyActions.Back, v => {
+    this.subs.add(this.kbs.subscribe(this.actions.back, v => {
       if (this.locked || !v || !this.kbControls) return;
 
       if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
@@ -147,7 +157,15 @@ export class HudComponent implements OnInit, OnDestroy {
       this.sendMoves();
     }));
 
-    this.subs.add(this.kbs.subscribe(KeyActions.BombLeft, v => {
+    this.subs.add(this.kbs.subscribe(this.actions.BombLeftStrict, v => {
+      if (!this.locked && v && this.kbControls) this.setBomb(this.selected + 1, true);
+    }));
+
+    this.subs.add(this.kbs.subscribe(this.actions.BombRightStrict, v => {
+      if (!this.locked && v && this.kbControls) this.setBomb(this.selected + 5, true);
+    }));
+
+    this.subs.add(this.kbs.subscribe(this.actions.bombLeft, v => {
       if (this.locked || !v || !this.kbControls) return;
 
       if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
@@ -156,7 +174,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.setBomb(this.selected + 1);
     }));
 
-    this.subs.add(this.kbs.subscribe(KeyActions.BombRight, v => {
+    this.subs.add(this.kbs.subscribe(this.actions.bombRight, v => {
       if (this.locked || !v || !this.kbControls) return;
 
       if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
@@ -165,14 +183,12 @@ export class HudComponent implements OnInit, OnDestroy {
       this.setBomb(this.selected + 5);
     }));
 
-    this.subs.add(this.kbs.subscribe(KeyActions.Left, v => { if (v) this.placeMove(this.keys[KeyActions.Left]); }));
-    this.subs.add(this.kbs.subscribe(KeyActions.Forward, v => { if (v) this.placeMove(this.keys[KeyActions.Forward]); }));
-    this.subs.add(this.kbs.subscribe(KeyActions.Right, v => { if (v) this.placeMove(this.keys[KeyActions.Right]); }));
-    this.subs.add(this.kbs.subscribe(KeyActions.Blank, v => { if (v) this.placeMove(this.keys[KeyActions.Blank]); }));
-    this.subs.add(this.kbs.subscribe(KeyActions.Token, v => { if (v) this.placeMove(this.keys[KeyActions.Token]); }));
+    for (const [key, value] of Object.entries(this.moveKeys)) {
+      this.subs.add(this.kbs.subscribe(value, v => { if (v) this.placeMove(+key); }));
+    }
 
-    this.subs.add(this.kbs.subscribe(KeyActions.NextSlot, v => { if (v && this.selected < 3 && this.kbControls) this.selected++; }));
-    this.subs.add(this.kbs.subscribe(KeyActions.PrevSlot, v => { if (v && this.selected > 0 && this.kbControls) this.selected--; }));
+    this.subs.add(this.kbs.subscribe(this.actions.nextSlot, v => { if (v && this.selected < 3 && this.kbControls) this.selected++; }));
+    this.subs.add(this.kbs.subscribe(this.actions.prevSlot, v => { if (v && this.selected > 0 && this.kbControls) this.selected--; }));
   }
 
   private placeMove(move: number) {
@@ -206,7 +222,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (moveCount === 4) this.getMoves()[3] = 0;
   }
 
-  setBomb(i: number) {
+  setBomb(i: number, strict = false) {
     if (this.locked || !this.weapons[this.myBoat.type] || this.myBoat.tokenPoints < 2) return;
     if (this.myBoat.bomb === i) this.myBoat.bomb = 0;
     else this.myBoat.bomb = i;
