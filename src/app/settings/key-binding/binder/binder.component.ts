@@ -29,7 +29,7 @@ export class BinderComponent implements OnInit, OnDestroy {
   }
   @Input() index = 0;
   @Input() disabled = false;
-  @Input() takenKeys?: Map<string, KeyBindingEditMode>;
+  @Input() takenKeys?: Map<string, KeyBindingEditMode[]>;
   @Output() keyChange = new EventEmitter<void>();
   NotActive = NotActive;
 
@@ -38,7 +38,7 @@ export class BinderComponent implements OnInit, OnDestroy {
   changed = false;
   notDefault = false;
   newKey = '';
-  conflict?: KeyBindingEditMode;
+  conflict?: KeyBindingEditMode[];
   private sub?: Subscription;
 
   constructor(private dialog: MatDialog, private kbs: KeyBindingService) { }
@@ -55,7 +55,7 @@ export class BinderComponent implements OnInit, OnDestroy {
     const sub = this.kbs.bindSubscribe(e => {
       this.newKey = e;
       this.conflict = this.takenKeys?.get(e);
-      if (this.conflict === this._binding) delete this.conflict;
+      if (this.conflict?.[0] === this._binding) delete this.conflict;
     });
 
     const dialog = this.dialog.open(ref, { disableClose: true, width: '300px', maxWidth: '100%' });
@@ -65,16 +65,18 @@ export class BinderComponent implements OnInit, OnDestroy {
     dialog.afterClosed().subscribe(async (key: string) => {
       if (key && this._binding) {
         if (this.conflict) {
-          this.conflict.bindings = this.conflict.bindings.map(el => el === key ? NotActive : el) as [string, string];
-          delete this.conflict;
+          for (const binding of this.conflict) {
+            binding.bindings = binding.bindings.map(el => el === key ? NotActive : el) as [string, string];
+          }
         }
         this.takenKeys?.delete(this.key);
-        this.takenKeys?.set(key, this._binding);
+        this.takenKeys?.set(key, [this._binding]);
 
         this._binding.bindings[this.index] = key;
         this.binding = this._binding;
         this.keyChange.emit();
       }
+      delete this.conflict;
       sub.unsubscribe();
     });
   }

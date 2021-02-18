@@ -5,6 +5,7 @@ import { KeyBindingService } from './key-binding.service';
 import { ExitPromptComponent } from './exit-prompt/exit-prompt.component';
 import { KeyBindings, KeyBinding, DefaultBindings, KeyActions, LinkGroups, NotActive } from './key-actions';
 import { Subject } from 'rxjs';
+import { MessageComponent } from '../account/message/message.component';
 
 export interface KeyBindingEditMode extends KeyBinding {
   activeBindings: Readonly<[string, string]>;
@@ -28,7 +29,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
   group: keyof KeyBindings = 'Global';
   changed = false;
   notDefault = false;
-  takenKeys = new Map<string, KeyBindingEditMode>();
+  takenKeys = new Map<string, KeyBindingEditMode[]>();
 
   constructor(
     private kbs: KeyBindingService,
@@ -84,7 +85,12 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
 
     for (const group of groups) {
       for (const binding of this.actions[group]) {
-        for (const key of binding.bindings) if (key !== NotActive) this.takenKeys.set(key, binding);
+        for (const key of binding.bindings) {
+          if (key === NotActive) continue;
+          const taken = this.takenKeys.get(key) || [];
+          taken.push(binding);
+          this.takenKeys.set(key, taken);
+        }
       }
     }
   }
@@ -160,33 +166,27 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
   }
 
   setDefaults() {
-    let anyChanged = false;
-    do {
-      anyChanged = false;
-      for (const k in this.actions) {
-        if (!this.actions.hasOwnProperty(k)) continue;
-        for (const binding of this.actions[k as keyof KeyBindings]) {
-          let changed = false;
-          const toSet = k === this.group ? binding.defaultBindings : binding.activeBindings;
-          for (let i = 0; i < binding.bindings.length; i++) {
-            if (toSet[i] === binding.bindings[i]) continue;
-            const conflict = this.takenKeys.get(toSet[i]);
-            if (!conflict || conflict === binding) {
-              this.takenKeys.delete(binding.bindings[i]);
-              binding.bindings[i] = toSet[i];
-              this.takenKeys.set(binding.bindings[i], binding);
-              changed = true;
-            }
-          }
-          if (changed) {
-            binding.update.next();
-            anyChanged = true;
-          }
+    if (this.changed) this.cancel();
+    for (const binding of this.actions[this.group]) {
+      let changed = false;
+      for (let i = 0; i < binding.bindings.length; i++) {
+        if (binding.defaultBindings[i] === binding.bindings[i]) continue;
+        const conflict = this.takenKeys.get(binding.defaultBindings[i]);
+        if (!conflict || conflict[0].group === binding.group) {
+          this.takenKeys.delete(binding.bindings[i]);
+          binding.bindings[i] = binding.defaultBindings[i];
+          this.takenKeys.set(binding.bindings[i], [binding]);
+          changed = true;
         }
       }
-    } while (anyChanged);
+      if (changed) binding.update.next();
+    }
 
     this.updateChanged();
+
+    setTimeout(() => {
+      if (this.notDefault) this.dialog.open(MessageComponent, { data: 'Some defaults could not be set due to conflicting bindings.' });
+    });
   }
 
 }
