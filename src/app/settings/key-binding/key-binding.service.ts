@@ -7,11 +7,25 @@ import { DefaultBindings, KeyActions, KeyBindings, NotActive, StaticKeyBindings 
 const IgnoreKeys = ['Control', 'Shift', 'Alt'];
 
 function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBindings {
+  const keyMap = new Map<string, true>();
+  for (const k in input) {
+    if (!input.hasOwnProperty(k)) continue;
+    keyMap.set(input[+k as KeyActions][0], true);
+    keyMap.set(input[+k as KeyActions][1], true);
+  }
+
   const merged = new KeyBindings();
   for (const k in DefaultBindings) {
     if (!DefaultBindings.hasOwnProperty(k)) continue;
     for (const binding of DefaultBindings[k as keyof KeyBindings]) {
-      merged[k as keyof KeyBindings].push({ ...binding, bindings: input[binding.action] || binding.bindings });
+      const newBinding = { ...binding, bindings: input[binding.action] };
+      if (!newBinding.bindings) {
+        newBinding.bindings = [
+          keyMap.get(binding.bindings[0]) ? NotActive : binding.bindings[0],
+          keyMap.get(binding.bindings[1]) ? NotActive : binding.bindings[1],
+        ];
+      }
+      merged[k as keyof KeyBindings].push(newBinding);
     }
   }
   return merged;
