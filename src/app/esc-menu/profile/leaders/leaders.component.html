@@ -17,7 +17,7 @@
                 (valueChange)="stat.openLeaders($event)"
                 placeholder="Statistic">
       <mat-option *ngFor="let s of stats"
-                  [value]="s.statId">{{s.name}}</mat-option>
+                  [value]="s.id">{{s.name}}</mat-option>
     </mat-select>
   </mat-form-field>
   <div id="selection">

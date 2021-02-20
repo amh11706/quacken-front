@@ -5,14 +5,14 @@ import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { SettingsComponent } from '../settings/settings.component';
 import { WsService } from '../ws.service';
 import { InventoryComponent } from './inventory/inventory.component';
-import { ProfileComponent } from './profile/profile.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EscMenuService {
   open = false;
-  activeComponent: any = ProfileComponent;
+  defaultComponent: any;
+  activeComponent: any;
   lobbyComponent: any;
   lobbyContext: any;
 
@@ -38,7 +38,7 @@ export class EscMenuService {
       if (v) this.openTab(InventoryComponent);
     });
     kbs.subscribe(KeyActions.OpenProfile, v => {
-      if (v) this.openTab(ProfileComponent);
+      if (v) this.openTab(this.defaultComponent);
     });
     kbs.subscribe(KeyActions.LeaveLobby, v => {
       if (v && (this.lobbyComponent || this.lobbyContext)) this.leave();
@@ -59,7 +59,7 @@ export class EscMenuService {
   }
 
   setLobby(component?: any, context?: any) {
-    if (this.activeComponent === this.lobbyComponent) this.activeComponent = ProfileComponent;
+    if (this.activeComponent === this.lobbyComponent) this.activeComponent = this.defaultComponent;
     else if (component) {
       this.activeComponent = component;
     }

@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   showLeaders(s: Stat) {
-    this.stat.openLeaders(s.statId);
+    this.stat.openLeaders(s.id);
     this.stat.profileTab = 2;
   }
 

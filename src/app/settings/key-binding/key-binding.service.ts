@@ -61,7 +61,11 @@ export class KeyBindingService {
     return modifiers + key;
   }
 
-  private emitAction(e: KeyboardEvent, key: string, value = true) {
+  emitAction(action: KeyActions, value = true) {
+    this.subMap.get(action)?.next(value);
+  }
+
+  private emitKey(e: KeyboardEvent, key: string, value = true) {
     const actions = this.bindings.get(key);
     if (!actions) return;
 
@@ -84,7 +88,7 @@ export class KeyBindingService {
       return;
     }
 
-    this.emitAction(e, key);
+    this.emitKey(e, key);
   }
 
   private handleKeyUp = (e: KeyboardEvent) => {
@@ -92,7 +96,7 @@ export class KeyBindingService {
     if (this.bindSub || document.activeElement?.tagName === 'INPUT' || IgnoreKeys.includes(e.key)) return;
     const key = this.getKey(e);
 
-    this.emitAction(e, key, false);
+    this.emitKey(e, key, false);
   }
 
   private addAction(key: string, action: KeyActions) {

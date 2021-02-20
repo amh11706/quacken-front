@@ -4,9 +4,12 @@ import { WsService } from 'src/app/ws.service';
 import { OutCmd } from 'src/app/ws-messages';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { Message } from 'src/app/chat/chat.service';
+import { EscMenuService } from '../esc-menu.service';
+import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
+import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 
 export interface Stat {
-  statId: number;
+  id: number;
   name: string;
   value: number;
   suffix?: number;
@@ -46,11 +49,16 @@ export class StatService {
   constructor(
     private ws: WsService,
     private fs: FriendsService,
+    private es: EscMenuService,
+    private kbs: KeyBindingService,
   ) { }
 
   openUser(name: string) {
     this.target = name;
     this.refresh();
+    this.kbs.emitAction(KeyActions.OpenProfile);
+    this.es.open = true;
+    this.profileTab = 0;
   }
 
   openLeaders(id: number) {
@@ -65,6 +73,7 @@ export class StatService {
 
   async refreshLeaders() {
     this.leaders = [];
+    if (!this.id) return;
     const leaders = await this.ws.request(OutCmd.StatsTop, this.id);
     this.leaders = leaders;
     if (!leaders || !leaders.length) return;

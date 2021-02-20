@@ -5,7 +5,6 @@ import { WsService } from 'src/app/ws.service';
 import { FriendsService } from '../friends/friends.service';
 import { OutCmd } from 'src/app/ws-messages';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
-import { ProfileComponent } from 'src/app/esc-menu/profile/profile.component';
 import { StatService } from 'src/app/esc-menu/profile/stat.service';
 
 @Component({
@@ -36,9 +35,6 @@ export class NameComponent implements OnInit {
 
   openProfile() {
     this.stat.openUser(this.message.from);
-    this.stat.profileTab = 0;
-    this.es.activeComponent = ProfileComponent;
-    this.es.open = true;
   }
 
   sendTell() {

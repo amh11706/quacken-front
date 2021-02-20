@@ -21,7 +21,10 @@ export class EscMenuComponent implements OnInit {
     public es: EscMenuService,
     public ws: WsService,
     private dialog: MatDialog,
-  ) { }
+  ) {
+    this.es.defaultComponent = ProfileComponent;
+    this.es.activeComponent = ProfileComponent;
+  }
 
   ngOnInit(): void {
   }
