@@ -30,6 +30,8 @@ export const enum OutCmd {
 
     StatsUser,
     StatsTop,
+    RanksUser,
+    RanksTop,
 
     ChangeEmail,
     ChangePass,

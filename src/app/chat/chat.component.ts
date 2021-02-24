@@ -45,8 +45,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     const output = this.output;
     this.messages$.next(this.chat.messages);
     setTimeout(() => {
-      output.scrollToIndex(this.chat.messages.length * 2);
-    });
+      output.scrollToIndex(this.chat.messages.length + 20);
+    }, 50);
 
     this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {
       if (v && !this.disabled) this.input?.nativeElement.focus();
@@ -110,7 +110,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     const scrolled = output.elementRef.nativeElement;
     this.messages$.next(this.chat.messages);
     if (output.measureScrollOffset() + 100 >= scrolled.scrollHeight - scrolled.clientHeight) {
-      setTimeout(() => output.scrollToIndex(this.chat.messages.length + 10));
+      setTimeout(() => output.scrollToIndex(this.chat.messages.length + 20));
     }
   }
 

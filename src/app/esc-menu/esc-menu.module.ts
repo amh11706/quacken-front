@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FormsModule } from '@angular/forms';
 import { LeadersComponent } from './profile/leaders/leaders.component';
 import { NameModule } from '../chat/name/name.module';
@@ -33,6 +34,7 @@ import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.componen
     MatTabsModule,
     MatSelectModule,
     MatInputModule,
+    MatProgressBarModule,
     ChatModule,
     InventoryModule,
     NameModule,

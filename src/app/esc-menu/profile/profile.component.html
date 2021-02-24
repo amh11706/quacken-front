@@ -11,41 +11,40 @@
                 <input matInput
                        [value]="stat.target"
                        (blur)="searchUser($event)"
-                       (focus)="stat.stats = []">
+                       (focus)="stat.groupStats = undefined">
             </mat-form-field>
             <div id="selection">
                 <div class="badges">
-                    <div>
-                        <div class="badge gold"
-                             title="Lvl 40 gold tier">
-                            40
+                    <div *ngFor="let rank of stat.userRanks"
+                         (click)="showRankLeaders(rank)">
+                        <div class="badge {{tierTitles[rank.tier]}}"
+                             title="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
+                            {{rank.level}}
                         </div>
-                        <div class="badgetitle">Quacken</div>
-                    </div>
-                    <div>
-                        <div class="badge bronze"
-                             title="Lvl 15 bronze tier">
-                            15
-                        </div>
-                        <div class="badgetitle">Cadegoose</div>
+                        <div class="badgetitle">{{rank.name}}</div>
+                        <mat-progress-bar mode="determinate"
+                                          color="accent"
+                                          [title]="rank.title"
+                                          [value]="rank.progress">
+                        </mat-progress-bar>
                     </div>
                 </div>
 
                 <mat-form-field>
-                    <mat-select [value]="'q'"
-                                disabled
+                    <mat-select [(value)]="stat.group"
                                 placeholder="Category">
-                        <mat-option value="q">Quacken</mat-option>
-                        <mat-option value="c">Cadegoose</mat-option>
+                        <mat-option [value]="0">Quacken</mat-option>
+                        <mat-option [value]="1">Cadegoose</mat-option>
+                        <mat-option [value]="2">Sea Battle</mat-option>
                     </mat-select>
                 </mat-form-field>
 
-                <table>
-                    <tr *ngFor="let s of stat.stats"
+                <table *ngIf="stat.groupStats">
+                    <tr *ngFor="let s of stat.groupStats[stat.group]"
                         class="stat"
                         (click)="showLeaders(s)">
                         <td>{{s.name}}</td>
-                        <td>{{s.value}}<span *ngIf="s.suffix"> {{s.suffix}}</span></td>
+                        <td>{{s.value || '-'}}<span *ngIf="s.suffix && s.value"> {{s.suffix}}</span></td>
                     </tr>
                 </table>
             </div>

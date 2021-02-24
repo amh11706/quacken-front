@@ -5,23 +5,26 @@
     <mat-icon>refresh</mat-icon>
   </button>
   <mat-form-field>
-    <mat-select [value]="'q'"
-                disabled
+    <mat-select [(value)]="stat.group"
+                (valueChange)="stat.changeGroup()"
                 placeholder="Category">
-      <mat-option value="q">Quacken</mat-option>
-      <mat-option value="c">Cadegoose</mat-option>
+      <mat-option [value]="0">Quacken</mat-option>
+      <mat-option [value]="1">Cadegoose</mat-option>
+      <mat-option [value]="2">Sea Battle</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field>
+  <mat-form-field *ngIf="stat.groupStats">
     <mat-select [(value)]="stat.id"
                 (valueChange)="stat.openLeaders($event)"
                 placeholder="Statistic">
-      <mat-option *ngFor="let s of stats"
+      <mat-option [value]="stat.group*100 + 99">Rank Leaders</mat-option>
+      <mat-option *ngFor="let s of stat.groupStats[stat.group]"
                   [value]="s.id">{{s.name}}</mat-option>
     </mat-select>
   </mat-form-field>
+
   <div id="selection">
-    <table>
+    <table *ngIf="!stat.rankLeaders">
       <tr>
         <th>Position</th>
         <th>Name</th>
@@ -37,5 +40,43 @@
         <td *ngFor="let c of stat.columns">{{row[c.property]}}</td>
       </tr>
     </table>
+
+    <ng-container *ngIf="stat.rankLeaders">
+      <h4>Top Tier</h4>
+      <table>
+        <tr>
+          <th>Position</th>
+          <th>Name</th>
+          <th>Level</th>
+          <th>Tier</th>
+        </tr>
+        <tr *ngFor="let row of stat.rankLeaders.tier; let i = index">
+          <td>{{i+1}}</td>
+          <td>
+            <q-name [message]="row"></q-name>
+          </td>
+          <td>{{row.level}}</td>
+          <td>{{tierTitles[row.tier]}}</td>
+        </tr>
+      </table>
+
+      <h4>Top Experience</h4>
+      <table>
+        <tr>
+          <th>Position</th>
+          <th>Name</th>
+          <th>Level</th>
+          <th>Tier</th>
+        </tr>
+        <tr *ngFor="let row of stat.rankLeaders.xp; let i = index">
+          <td>{{i+1}}</td>
+          <td>
+            <q-name [message]="row"></q-name>
+          </td>
+          <td>{{row.level}}</td>
+          <td>{{tierTitles[row.tier]}}</td>
+        </tr>
+      </table>
+    </ng-container>
   </div>
 </div>

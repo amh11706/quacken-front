@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { StatService, Stat } from './stat.service';
+import { StatService, Stat, UserRank } from './stat.service';
 import { WsService } from 'src/app/ws.service';
 import { Subscription } from 'rxjs';
 
@@ -11,6 +11,13 @@ import { Subscription } from 'rxjs';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
+
+  tierTitles = [
+    'no',
+    'bronze',
+    'silver',
+    'gold',
+  ];
 
   constructor(
     public stat: StatService,
@@ -30,6 +37,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   showLeaders(s: Stat) {
     this.stat.openLeaders(s.id);
+    this.stat.profileTab = 2;
+  }
+
+  showRankLeaders(rank: UserRank) {
+    this.stat.openLeaders(rank.rankArea * 100 - 1);
     this.stat.profileTab = 2;
   }
 
