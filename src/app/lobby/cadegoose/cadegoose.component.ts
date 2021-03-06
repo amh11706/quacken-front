@@ -266,6 +266,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     BoatRender.speed = this.bs.speed;
     const time = new Date().valueOf();
     TWEEN.update(time);
+    BoatRender.tweens.update(time);
 
     this.controls.mouseButtons.RIGHT = this.graphicSettings.lockAngle ? MOUSE.PAN : MOUSE.ROTATE;
     if (time - this.lastFrame > 50 && this.slowFrames < 50) this.slowFrames++;

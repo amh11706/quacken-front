@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { InCmd, OutCmd } from '../ws-messages';
+import { InCmd, Internal, OutCmd } from '../ws-messages';
 
 import { WsService } from '../ws.service';
 import { Settings } from './setting/settings';
@@ -45,6 +45,10 @@ export class SettingsService {
       if (!v) return;
       this.settings.clear();
     });
+  }
+
+  setFakeSettings(group: string, settings: SettingMap) {
+    this.settings.set(group, settings);
   }
 
   setLobbySettings(adminNames: SettingList) {

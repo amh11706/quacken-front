@@ -1,0 +1,32 @@
+#matches {
+    text-align: center;
+}
+
+#selection {
+    position: relative;
+    overflow-y: auto;
+    padding-bottom: 24px;
+    padding-top: 8px;
+}
+
+table {
+    border-collapse: collapse;
+    margin: auto;
+}
+
+th {
+    position: sticky;
+    top: -12px;
+}
+
+td,
+th {
+    word-wrap: break-word;
+    max-width: 148px;
+    padding: 4px 8px;
+    border: 1px solid grey;
+}
+
+mat-form-field {
+    margin: 8px 16px;
+}

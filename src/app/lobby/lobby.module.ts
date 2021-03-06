@@ -11,7 +11,6 @@ import { LobbyRoutingModule } from './lobby-routing.module';
 @NgModule({
   declarations: [
     LobbyComponent,
-    LobbyComponent,
   ],
   imports: [
     CommonModule,
@@ -21,6 +20,6 @@ import { LobbyRoutingModule } from './lobby-routing.module';
     CadegooseModule,
     SeabattleModule,
   ],
-  exports: []
+  exports: [LobbyComponent]
 })
 export class LobbyModule { }

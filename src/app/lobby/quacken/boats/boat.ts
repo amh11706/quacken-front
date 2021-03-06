@@ -1,3 +1,5 @@
+import { BoatRender } from '../../cadegoose/boat-render';
+
 export class Boat {
   treasure = 0;
   damage = 0;
@@ -26,7 +28,7 @@ export class Boat {
   offsetY = 0;
   moveLock = 0;
   spinDeg = 90;
-  rendered = false;
+  render?: BoatRender;
   crunchDir = -1;
 
   constructor(

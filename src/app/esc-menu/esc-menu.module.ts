@@ -17,6 +17,7 @@ import { LeadersComponent } from './profile/leaders/leaders.component';
 import { NameModule } from '../chat/name/name.module';
 import { SettingsModule } from '../settings/settings.module';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
+import { MatchesComponent } from './profile/matches/matches.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.componen
     LeadersComponent,
     ProfileComponent,
     LogoutConfirmComponent,
+    MatchesComponent,
   ],
   imports: [
     CommonModule,

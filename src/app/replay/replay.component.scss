@@ -1,0 +1,19 @@
+#replayControl {
+  position: absolute;
+  bottom: 1%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 95%;
+  max-width: 900px;
+  min-width: 320px;
+  padding: 5px;
+  text-align: center;
+  white-space: nowrap;
+  overflow-x: auto;
+  background-color: rgba(66, 66, 66, 0.85);
+  color: #eee;
+
+  mat-slider {
+    width: calc(100% - 120px);
+  }
+}

@@ -3,7 +3,7 @@ import { ReplaySubject, Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
 import { ChatService, Message } from './chat.service';
-import { InCmd, OutCmd } from '../ws-messages';
+import { InCmd, Internal, OutCmd } from '../ws-messages';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
@@ -42,6 +42,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (!this.output) return;
     this.subs.add(this.ws.subscribe(InCmd.ChatMessage, () => this.addMessage()));
+    this.subs.add(this.ws.subscribe(Internal.RefreshChat, () => this.addMessage()));
     const output = this.output;
     this.messages$.next(this.chat.messages);
     setTimeout(() => {

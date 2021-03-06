@@ -8,6 +8,7 @@ import { weapons } from '../hud/hud.component';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { StatRow } from '../../cadegoose/stats/stats.component';
 import TWEEN from '@tweenjs/tween.js';
+import { BoatRender } from '../../cadegoose/boat-render';
 
 export interface Clutter {
   t: number;
@@ -88,6 +89,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
   _boats: { [k: number]: Boat } = {};
   protected subs = new Subscription();
   protected animateTimeout?: number;
+  protected animateTimeout2?: number;
+  protected animateTimeout3?: number;
   private blurred = false;
   protected step = -1;
   protected turn?: Turn;
@@ -126,12 +129,15 @@ export class BoatsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
+    this.subs.add(this.ws.subscribe(Internal.ResetBoats, () => this.resetBoats()));
     this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       if (!m.boats) return;
       clearTimeout(this.animateTimeout);
+      clearTimeout(this.animateTimeout2);
+      clearTimeout(this.animateTimeout3);
+      delete this.animateTimeout;
       delete this.turn;
       this.myBoat.isMe = this._boats[this.myBoat.id] === this.myBoat;
-      this.boats = [];
       this.setBoats(Object.values(m.boats));
       this.clutter = m.clutter || this.clutter;
     }));
@@ -152,6 +158,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     clearTimeout(this.animateTimeout);
+    clearTimeout(this.animateTimeout2);
+    clearTimeout(this.animateTimeout3);
+    delete this.animateTimeout;
     document.removeEventListener('visibilitychange', this.visibilityChange);
     this.subs.unsubscribe();
   }
@@ -168,6 +177,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.myBoat.isMe = false;
     }
     if (this.turn) return;
+    this._boats[id]?.render?.dispose();
     delete this._boats[id];
     this.boats = Object.values(this._boats);
   }
@@ -182,7 +192,11 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (this.blurred) {
       if (!this.turn) return;
       clearTimeout(this.animateTimeout);
+      clearTimeout(this.animateTimeout2);
+      clearTimeout(this.animateTimeout3);
+      delete this.animateTimeout;
       TWEEN.update(Infinity);
+      BoatRender.tweens.update(Infinity);
       if (this.step >= 0 || this.turn) {
         for (const boat of this.boats) {
           boat.moves = [0, 0, 0, 0];
@@ -197,7 +211,16 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected handleTurn(turn: Turn) {
+  protected async handleTurn(turn: Turn) {
+    if (this.turn) {
+      console.log('got turn while in turn');
+      return;
+    }
+    BoatRender.tweens.update(Infinity);
+    clearTimeout(this.animateTimeout);
+    clearTimeout(this.animateTimeout2);
+    clearTimeout(this.animateTimeout3);
+    delete this.animateTimeout;
     // first turn is only for starting the entry
     if (turn.turn === 1) {
       setTimeout(() => {
@@ -209,7 +232,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     this.turn = turn;
     this.step = 0;
-    clearTimeout(this.animateTimeout);
 
     let moveFound = false;
     for (const step of turn.steps) if (step) moveFound = true;
@@ -217,12 +239,12 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     if (!moveFound || this.blurred) {
       this.resetBoats();
-      setTimeout(() => this.ws.send(OutCmd.Sync), 1000);
+      this.animateTimeout = setTimeout(() => this.ws.send(OutCmd.Sync), 1000);
       return;
     }
 
     for (const boat of this.boats) boat.ready = true;
-    this.playTurn();
+    this.animateTimeout = setTimeout(this.playTurn.bind(this), 100);
   }
 
   protected resetBoats(): void {
@@ -236,7 +258,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   protected playTurn() {
     const clutterPart = this.turn?.cSteps[this.step] || [];
-    setTimeout(() => this.handleUpdate(clutterPart), 10000 / this.speed);
+    this.animateTimeout2 = setTimeout(() => this.handleUpdate(clutterPart), 10000 / this.speed);
     const turnPart = this.turn?.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
@@ -254,7 +276,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         boat.face += boat.spinDeg * u.s;
         if (u.s > -2) {
           boat.rotateTransition = 4;
-          setTimeout(() => { if (u.tm) boat.rotateByMove(u.tm).rotateTransition = 1; }, 300);
+          this.animateTimeout3 = setTimeout(() => { if (u.tm) boat.rotateByMove(u.tm).rotateTransition = 1; }, 300);
         } else {
           boat.rotateByMove(u.tm).rotateTransition = 3;
         }
@@ -273,16 +295,20 @@ export class BoatsComponent implements OnInit, OnDestroy {
     return b.id;
   }
 
-  private syncBoats = (sync: Sync) => {
-    if (!sync || !this.turn) return;
+  private syncBoats = async (sync: Sync) => {
+    if (!sync) return;
+    clearTimeout(this.animateTimeout);
+    clearTimeout(this.animateTimeout2);
+    clearTimeout(this.animateTimeout3);
+    delete this.animateTimeout;
     delete this.turn;
     this.step = -1;
 
-    setTimeout(() => {
+    this.animateTimeout2 = setTimeout(() => {
       this.clutter = sync.cSync || [];
     }, 1000);
     if (sync.sync) {
-      this.setBoats(sync.sync);
+      await this.setBoats(sync.sync);
     }
   }
 
@@ -294,10 +320,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
     });
   }
 
-  protected setBoats(boats: BoatSync[], reset = true) {
+  protected async setBoats(boats: BoatSync[], reset = true) {
     const newBoats: Record<number, Boat> = {};
     if (!reset) Object.assign(newBoats, this._boats);
-    if (this.turn && boats.length > 1) return;
+    if (this.turn && boats.length > 1) return console.log('skipped boat set');
     for (const sBoat of boats) {
       if (sBoat.oId) delete this._boats[sBoat.oId];
       let boat = this._boats[-sBoat.id] || this._boats[sBoat.id];

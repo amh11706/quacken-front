@@ -33,7 +33,6 @@ const shipModels: any = {
 
 @Injectable()
 export class BoatService extends BoatsComponent implements OnDestroy {
-  private boatRenders: BoatRender[] = [];
   private scene?: Scene;
   private camera?: Camera;
   private controls?: OrbitControls;
@@ -96,37 +95,44 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     this.controls = con;
     con.addEventListener('change', () => {
       if (!this.camera) return;
-      for (const br of this.boatRenders) {
-        br.scaleHeader(this.camera);
+      for (const boat of this.boats) {
+        boat.render?.scaleHeader(this.camera);
       }
     });
   }
 
-  protected setBoats(b: BoatSync[], reset = true) {
+  protected async setBoats(b: BoatSync[], reset = true) {
+    const boats = this.boats;
     super.setBoats(b, reset);
-    for (const boat of this.boats) boat.checkSZ = checkSZ;
-    this.updateRender(!this.turn);
+    await this.updateRender(false);
+    for (const boat of boats) {
+      if (!(this._boats[-boat.id]?.render === boat.render || this._boats[boat.id]?.render === boat.render)) {
+        boat.render?.dispose();
+        delete boat.render;
+        continue;
+      }
+      boat.checkSZ = checkSZ;
+    }
   }
 
   protected deleteBoat(id: number) {
     super.deleteBoat(id);
-    this.updateRender(!this.turn);
+    if (!this.turn) this.updateRender();
   }
 
   protected handleMoves(s: { t: number, m: number[] }) {
     const boat = this._boats[-s.t] || this._boats[s.t];
     if (!boat) return;
     boat.moves = s.m;
-    const br = this.boatRenders.find(r => r.boat === boat);
-    if (br) br.updateMoves();
+    boat.render?.updateMoves();
   }
 
   protected resetBoats(): void {
     super.resetBoats();
-    for (const br of this.boatRenders) br.updateMoves();
+    for (const boat of this.boats) boat.render?.updateMoves();
   }
 
-  protected handleTurn(turn: Turn) {
+  protected async handleTurn(turn: Turn) {
     this.flagData = turn.flags;
     this.setHeaderFlags();
     super.handleTurn(turn);
@@ -135,24 +141,21 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   private setHeaderFlags() {
     if (!this.flags) return;
 
-    const brs: Record<number, BoatRender> = {};
-    for (const br of this.boatRenders) {
-      br.flags = [];
-      brs[br.boat.id] = br;
-    }
+    for (const boat of this.boats) if (boat.render) boat.render.flags = [];
     for (let i = 0; i < this.flags.length; i++) {
       const f = this.flagData[i];
       if (!f) continue;
       this.flags[i].material = flagMats[f.t as keyof typeof flagMats];
-      if (f.cs) for (const id of f.cs) brs[id]?.flags.push({ p: f.p, t: f.t });
+      if (f.cs) for (const id of f.cs) this._boats[id]?.render?.flags.push({ p: f.p, t: f.t });
     }
-    for (const br of this.boatRenders) {
-      br.flags.sort((a, b) => {
+    for (const boat of this.boats) {
+      if (!boat.render) continue;
+      boat.render.flags.sort((a, b) => {
         if (a.p > b.p) return -1;
         if (a.p < b.p) return 1;
         return b.t - a.t;
       });
-      br.rebuildHeader();
+      boat.render.rebuildHeader();
     }
   }
 
@@ -173,9 +176,10 @@ export class BoatService extends BoatsComponent implements OnDestroy {
 
     if (this.step === 4) this.resetBoats();
 
+    const turn = this.turn;
+    if (this.turn?.steps[this.step]?.length) await this.updateRender();
+    if (turn !== this.turn) return;
     this.step++;
-    if (this.turn?.steps[this.step - 1]?.length) await this.updateRender();
-    if (!this.turn) return;
     if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, 350 * 20 / this.speed);
     else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 750 * 20 / this.speed);
     this.handleUpdate(clutterPart);
@@ -207,63 +211,70 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   showInfluence(ray: Ray, team: number) {
     if (!this.camera) return;
     const cam = this.camera;
-    this.boatRenders.sort((a, b) => a.obj.position.distanceToSquared(cam.position) - b.obj.position.distanceToSquared(cam.position));
+    this.boats.sort((a, b) => {
+      if (!a.render) return -1;
+      if (!b.render) return 1;
+      return a.render.obj.position.distanceToSquared(cam.position) - b.render.obj.position.distanceToSquared(cam.position);
+    });
     const box = new Box3();
 
     if (team >= 0) {
-      for (const br of this.boatRenders) br.showInfluence(br.team === team);
+      for (const boat of this.boats) boat.render?.showInfluence(boat.render.team === team);
       return;
     }
 
     let hovered = 0;
-    for (const br of this.boatRenders) {
-      if (!br.hitbox) continue;
-      box.setFromObject(br.hitbox);
+    for (const boat of this.boats) {
+      if (!boat.render?.hitbox) continue;
+      box.setFromObject(boat.render.hitbox);
       if (ray.intersectsBox(box)) {
-        hovered = br.boat.id;
+        hovered = boat.render.boat.id;
         break;
       }
     }
-    for (const br of this.boatRenders) br.showInfluence(br.boat.id === hovered);
+    for (const boat of this.boats) boat.render?.showInfluence(boat.render?.boat.id === hovered);
   }
 
-  private updateRender(doDelete = false) {
+  private async updateRender(animate = true) {
+    BoatRender.tweens.update(1000000);
     if (this.blockRender) return;
-    BoatRender.tweens.update(Infinity);
-    const startTime = new Date().valueOf();
-    for (const b of this.boats) b.rendered = false;
+    const startTime = animate ? new Date().valueOf() : 0;
+    this.blockRender = true;
+    await Promise.all(this.boats.map(b => b.render?.animation));
+    this.blockRender = false;
 
-    const animations: Promise<any>[] = [];
-    const newRenders: BoatRender[] = [];
-    for (const br of this.boatRenders) {
-      if ((br.boat === this._boats[br.boat.id] || !doDelete)) {
-        const animation = br.update(startTime);
-        if (animation) {
-          newRenders.push(br);
-          animations.push(animation);
-        } else br.dispose();
-      } else br.dispose();
+    const animations: Promise<void[]>[] = [];
+    for (const boat of this.boats) {
+      if (!boat.render) continue;
+      const animation = boat.render.update(startTime);
+      if (animation) {
+        animations.push(animation);
+        continue;
+      }
+      boat.render?.dispose();
+      delete boat.render;
     }
-    this.boatRenders = newRenders;
 
-    this.checkNewShips();
-    return Promise.all(animations);
+    animations.push(this.checkNewShips());
+    return Promise.all(animations).then(() => {
+      this.controls?.dispatchEvent({ type: 'change', target: null });
+    });
   }
 
   private checkNewShips() {
+    const boatUpdates: Promise<void>[] = [];
     for (const boat of this.boats) {
-      if (!boat.rendered) {
-        boat.rendered = true;
-        const prom = this.ships[boat.type] || this.ships[24];
-        prom?.then(gltf => {
-          if (!this.camera) return;
-          const br = new BoatRender(boat, gltf).scaleHeader(this.camera);
-          this.scene?.add(br.obj);
-          this.boatRenders.push(br);
-          // this.setHeaderFlags();
-        });
-      }
+      if (boat.render) continue;
+      const prom = this.ships[boat.type] || this.ships[24];
+      boatUpdates.push(prom?.then(gltf => {
+        let newBoat = this._boats[boat.id];
+        if (newBoat.render && boat.render !== newBoat.render) newBoat = this._boats[-boat.id];
+        if (!this.camera || !newBoat || newBoat.render) return;
+        boat.render = new BoatRender(boat, gltf).scaleHeader(this.camera);
+        this.scene?.add(boat.render.obj);
+      }));
     }
+    return Promise.all(boatUpdates);
   }
 
 }

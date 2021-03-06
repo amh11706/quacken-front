@@ -21,12 +21,13 @@
                              title="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
                             {{rank.level}}
                         </div>
-                        <div class="badgetitle">{{rank.name}}</div>
-                        <mat-progress-bar mode="determinate"
-                                          color="accent"
-                                          [title]="rank.title"
-                                          [value]="rank.progress">
-                        </mat-progress-bar>
+                        <div [title]="rank.title">
+                            <div class="badgetitle">{{rank.name}}</div>
+                            <mat-progress-bar mode="determinate"
+                                              color="accent"
+                                              [value]="rank.progress">
+                            </mat-progress-bar>
+                        </div>
                     </div>
                 </div>
 
@@ -50,7 +51,12 @@
             </div>
         </div>
     </mat-tab>
+
     <mat-tab label="Leaderboards">
         <q-leaders></q-leaders>
+    </mat-tab>
+
+    <mat-tab label="Matches">
+        <q-matches></q-matches>
     </mat-tab>
 </mat-tab-group>

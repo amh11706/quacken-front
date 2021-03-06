@@ -6,7 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { InCmd, Internal, OutCmd } from './ws-messages';
 import { environment } from 'src/environments/environment';
 
-interface Message {
+export interface Message {
   cmd: InCmd | Internal;
   id?: number;
   data?: any;
@@ -32,6 +32,7 @@ export class WsService {
   user?: TokenUser;
   connected = false;
   connected$ = new ReplaySubject<boolean>(1);
+  outMessages$ = new Subject<{ cmd: OutCmd, data: any, id?: number }>();
 
   reason?: string;
   sId?: number;
@@ -117,11 +118,15 @@ export class WsService {
   }
 
   send(cmd: OutCmd, data?: any, force = false) {
-    if (this.connected || force) this.sendRaw(JSON.stringify({ cmd, data }));
+    const message = { cmd, data };
+    this.outMessages$.next(message);
+    if (this.connected || force) this.sendRaw(JSON.stringify(message));
   }
 
   request(cmd: OutCmd, data?: any): Promise<any> {
-    this.sendRaw(JSON.stringify({ cmd, id: this.nextId, data }));
+    const message = { cmd, id: this.nextId, data };
+    this.outMessages$.next(message);
+    this.sendRaw(JSON.stringify(message));
     return new Promise((resolve) => {
       this.requests.set(this.nextId, resolve);
       this.nextId++;
