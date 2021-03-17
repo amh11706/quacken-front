@@ -1,62 +1,78 @@
 <mat-tab-group [(selectedIndex)]="stat.profileTab"
                mat-align-tabs="center">
-    <mat-tab label="Profile">
-        <div id="stats">
-            <button mat-icon-button
-                    class="refresh"
-                    (click)="reset()">
-                <mat-icon>refresh</mat-icon>
-            </button>
-            <mat-form-field>
-                <input matInput
-                       [value]="stat.target"
-                       (blur)="searchUser($event)"
-                       (focus)="stat.groupStats = undefined">
-            </mat-form-field>
-            <div id="selection">
-                <div class="badges">
-                    <div *ngFor="let rank of stat.userRanks"
-                         (click)="showRankLeaders(rank)">
-                        <div class="badge {{tierTitles[rank.tier]}}"
-                             title="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
-                            {{rank.level}}
-                        </div>
-                        <div [title]="rank.title">
-                            <div class="badgetitle">{{rank.name}}</div>
-                            <mat-progress-bar mode="determinate"
-                                              color="accent"
-                                              [value]="rank.progress">
-                            </mat-progress-bar>
-                        </div>
-                    </div>
-                </div>
+  <mat-tab label="Profile">
+    <div id="stats">
+      <button mat-icon-button
+              class="refresh"
+              (click)="reset()">
+        <mat-icon>refresh</mat-icon>
+      </button>
 
-                <mat-form-field>
-                    <mat-select [(value)]="stat.group"
-                                placeholder="Category">
-                        <mat-option [value]="0">Quacken</mat-option>
-                        <mat-option [value]="1">Cadegoose</mat-option>
-                        <mat-option [value]="2">Sea Battle</mat-option>
-                    </mat-select>
-                </mat-form-field>
+      <form>
+        <mat-form-field floatLabel="never">
+          <input #name
+                 matInput
+                 [placeholder]="stat.target"
+                 (focus)="myControl.setValue('')"
+                 [formControl]="myControl"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete"
+                            (optionSelected)="showUser($event.option.value); name.blur()"
+                            [autoActiveFirstOption]="true">
+            <mat-option *ngFor="let option of searchedNames | async"
+                        [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
 
-                <table *ngIf="stat.groupStats">
-                    <tr *ngFor="let s of stat.groupStats[stat.group]"
-                        class="stat"
-                        (click)="showLeaders(s)">
-                        <td>{{s.name}}</td>
-                        <td>{{s.value || '-'}}<span *ngIf="s.suffix && s.value"> {{s.suffix}}</span></td>
-                    </tr>
-                </table>
+      <div id="selection">
+        <div class="badges">
+          <div *ngFor="let rank of stat.userRanks"
+               (click)="showRankLeaders(rank)">
+            <div class="badge {{tierTitles[rank.tier]}}"
+                 title="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
+              {{rank.level}}
             </div>
+            <div [title]="rank.title">
+              <div class="badgetitle">{{rank.name}}</div>
+              <mat-progress-bar mode="determinate"
+                                color="accent"
+                                [value]="rank.progress">
+              </mat-progress-bar>
+            </div>
+          </div>
         </div>
-    </mat-tab>
 
-    <mat-tab label="Leaderboards">
-        <q-leaders></q-leaders>
-    </mat-tab>
+        <mat-form-field>
+          <mat-select [(value)]="stat.group"
+                      placeholder="Category">
+            <mat-option [value]="0">Quacken</mat-option>
+            <mat-option [value]="1">Cadegoose</mat-option>
+            <mat-option [value]="2">Sea Battle</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    <mat-tab label="Matches">
-        <q-matches></q-matches>
-    </mat-tab>
+        <table *ngIf="stat.groupStats">
+          <tr *ngFor="let s of stat.groupStats[stat.group]"
+              class="stat"
+              (click)="showLeaders(s)">
+            <td>{{s.name}}</td>
+            <td>{{s.value || '-'}}<span *ngIf="s.suffix && s.value"> {{s.suffix}}</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Leaderboards">
+    <q-leaders></q-leaders>
+  </mat-tab>
+
+  <mat-tab label="Matches">
+    <ng-template matTabContent>
+      <q-matches></q-matches>
+    </ng-template>
+  </mat-tab>
 </mat-tab-group>

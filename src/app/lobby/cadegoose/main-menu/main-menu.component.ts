@@ -37,6 +37,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   statsOpen = false;
   private roundGoing = false;
   private subs = new Subscription();
+  private firstJoin = true;
 
   constructor(
     private ws: WsService,
@@ -48,8 +49,11 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
       this.roundGoing = m.turn && m.turn <= 75 || false;
       if (!m.players) return;
-      this.es.open = true;
-      this.es.activeComponent = this.es.lobbyComponent;
+      if (this.firstJoin) {
+        this.firstJoin = false;
+        this.es.open = true;
+        this.es.activeComponent = this.es.lobbyComponent;
+      }
       this.teams = m.players;
       this.admin = m.owner || this.admin;
       this.ready = false;
@@ -93,7 +97,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       for (const p of Object.values(this.teams)) p.r = false;
       this.roundGoing = t.turn <= 75;
       if (this.roundGoing) return;
-      this.statsOpen = !!(this.es.lobbyContext?.stats && Object.keys(this.es.lobbyContext.stats).length);
+      this.es.lobbyContext.stats = t.stats;
+      this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat = new Boat('');
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {

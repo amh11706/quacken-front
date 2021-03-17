@@ -34,14 +34,14 @@ export class SettingComponent {
   }
 
   save() {
+    const newSetting = this.group[this.setting.name];
     if (typeof this.setting.max === 'number') {
-      if (this.group[this.setting.name] > this.setting.max) this.group[this.setting.name] = this.setting.max;
-      else if (this.group[this.setting.name] < this.setting.min) this.group[this.setting.name] = this.setting.min;
+      if (newSetting.value > this.setting.max) newSetting.value = this.setting.max;
+      else if (newSetting.value < this.setting.min) newSetting.value = this.setting.min;
     }
 
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
-      const newSetting = this.group[this.setting.name];
       this.change.emit(+newSetting.value);
       this.ss.save({
         id: this.setting.id,

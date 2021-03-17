@@ -7,12 +7,13 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import { BoatsComponent, BoatSync, Clutter, Turn } from '../quacken/boats/boats.component';
+import { BoatsComponent, BoatStatus, BoatSync, Clutter, Turn } from '../quacken/boats/boats.component';
 import { ObstacleConfig } from './cadegoose.component';
 import { WsService } from 'src/app/ws.service';
 import { OutCmd } from 'src/app/ws-messages';
 import { Cannonball } from './clutter/cannonball';
 import { BoatRender } from './boat-render';
+import { JobQueue } from './job-queue';
 
 export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
@@ -40,6 +41,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   private blockRender = true;
   flags: Mesh[] = [];
   private flagData: { x: number, y: number, t: number, p: number, cs: number[] }[] = [];
+  private worker = new JobQueue();
 
   constructor(ws: WsService) {
     super(ws);
@@ -88,7 +90,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
 
       this.blockRender = false;
     }
-    this.updateRender();
+    this.renderSync();
   }
 
   setControls(con: OrbitControls) {
@@ -101,30 +103,49 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     });
   }
 
-  protected async setBoats(b: BoatSync[], reset = true) {
-    const boats = this.boats;
-    super.setBoats(b, reset);
-    await this.updateRender(false);
-    for (const boat of boats) {
-      if (!(this._boats[-boat.id]?.render === boat.render || this._boats[boat.id]?.render === boat.render)) {
-        boat.render?.dispose();
-        delete boat.render;
-        continue;
-      }
-      boat.checkSZ = checkSZ;
+  protected setBoats(b: BoatSync[], reset = true) {
+    const supSet = super.setBoats.bind(this);
+    if (reset) {
+      this.worker.clearJobs();
     }
+    this.worker.addJob(async () => {
+      const boats = this.boats;
+      supSet(b, reset);
+      if (reset) await this.renderSync();
+      else await Promise.all(this.checkNewShips());
+
+      for (const boat of boats) {
+        if (!(this._boats[-boat.id]?.render === boat.render || this._boats[boat.id]?.render === boat.render)) {
+          boat.render?.dispose();
+          delete boat.render;
+          continue;
+        }
+        boat.checkSZ = checkSZ;
+      }
+    });
   }
 
   protected deleteBoat(id: number) {
-    super.deleteBoat(id);
-    if (!this.turn) this.updateRender();
+    const supDelete = super.deleteBoat.bind(this);
+    this.worker.addJob(() => {
+      const boat = this._boats[id];
+      if (boat?.render) {
+        const render = boat.render;
+        render.dispose().then(() => {
+          if (boat.render === render) delete boat.render;
+        });
+      }
+      supDelete(id);
+    }, false);
   }
 
   protected handleMoves(s: { t: number, m: number[] }) {
     const boat = this._boats[-s.t] || this._boats[s.t];
     if (!boat) return;
     boat.moves = s.m;
-    boat.render?.updateMoves();
+    this.worker.addJob(() => {
+      boat.render?.updateMoves();
+    });
   }
 
   protected resetBoats(): void {
@@ -159,30 +180,49 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }
   }
 
-  protected playTurn = async () => {
-    const clutterPart = this.turn?.cSteps[this.step] || [];
-    const turnPart = this.turn?.steps[this.step] || [];
-    for (const u of turnPart) {
-      const boat = this._boats[u.id];
-      if (!boat) continue;
-      if (u.c) boat.addDamage(u.c - 1, u.cd || 0);
+  protected playTurn() {
+    for (let step = 0; step < 8; step++) {
+      this.worker.addJob(() => {
+        return this._playTurn(step);
+      });
+    }
+    this.worker.addJob(() => {
+      delete this.turn;
+      this.step = -1;
+      this.ws.send(OutCmd.Sync);
+    });
+  }
 
+  private _playTurn(step: number) {
+    if (!this.turn) return;
+    setTimeout(() => this.handleUpdate(this.turn?.cSteps[step] || []), 12500 / this.speed);
+    if (step === 4) this.resetBoats();
+    const turnPart = this.turn.steps[step] || [];
+    if (!turnPart.length) return new Promise<void>(resolve => {
+      setTimeout(resolve, 12500 / this.speed);
+    });
+
+    const promises: Promise<any>[] = [];
+    const updates = new Map<number, BoatStatus>();
+    for (const u of turnPart) updates.set(u.id, u);
+
+    for (const boat of this.boats) {
+      if (!boat.render) continue;
+      const u = updates.get(boat.id);
+      boat.crunchDir = -1;
+      boat.imageOpacity = 1;
+      if (!u) continue;
+      if (u.c) boat.addDamage(u.c - 1, u.cd || 0);
       if (u.tm === undefined || u.tf === undefined) continue;
       if (boat.rotateTransition === 0) boat.rotateTransition = 1;
       boat.setPos(u.x, u.y)
         .setTransition(u.tf, u.tm)
         .rotateByMove(u.tm);
+
+      const p = boat.render.update(true);
+      if (p && boat.damage < 100) promises.push(p);
     }
-
-    if (this.step === 4) this.resetBoats();
-
-    const turn = this.turn;
-    if (this.turn?.steps[this.step]?.length) await this.updateRender();
-    if (turn !== this.turn) return;
-    this.step++;
-    if (this.step < 8) this.animateTimeout = window.setTimeout(this.playTurn, 350 * 20 / this.speed);
-    else this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 750 * 20 / this.speed);
-    this.handleUpdate(clutterPart);
+    return Promise.all(promises);
   }
 
   protected handleUpdate(updates: Clutter[]) {
@@ -235,28 +275,16 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (const boat of this.boats) boat.render?.showInfluence(boat.render?.boat.id === hovered);
   }
 
-  private async updateRender(animate = true) {
-    BoatRender.tweens.update(1000000);
+  private async renderSync() {
     if (this.blockRender) return;
-    const startTime = animate ? new Date().valueOf() : 0;
-    this.blockRender = true;
-    await Promise.all(this.boats.map(b => b.render?.animation));
-    this.blockRender = false;
 
-    const animations: Promise<void[]>[] = [];
     for (const boat of this.boats) {
       if (!boat.render) continue;
-      const animation = boat.render.update(startTime);
-      if (animation) {
-        animations.push(animation);
-        continue;
-      }
-      boat.render?.dispose();
+      if (boat.render.update(false)) continue;
+      boat.render.dispose();
       delete boat.render;
     }
-
-    animations.push(this.checkNewShips());
-    return Promise.all(animations).then(() => {
+    return Promise.all(this.checkNewShips()).then(() => {
       this.controls?.dispatchEvent({ type: 'change', target: null });
     });
   }
@@ -266,7 +294,8 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (const boat of this.boats) {
       if (boat.render) continue;
       const prom = this.ships[boat.type] || this.ships[24];
-      boatUpdates.push(prom?.then(gltf => {
+      if (!prom) continue;
+      boatUpdates.push(prom.then(gltf => {
         let newBoat = this._boats[boat.id];
         if (newBoat.render && boat.render !== newBoat.render) newBoat = this._boats[-boat.id];
         if (!this.camera || !newBoat || newBoat.render) return;
@@ -274,7 +303,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
         this.scene?.add(boat.render.obj);
       }));
     }
-    return Promise.all(boatUpdates);
+    return boatUpdates;
   }
 
 }

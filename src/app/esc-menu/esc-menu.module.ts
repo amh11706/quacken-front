@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ChatModule } from '../chat/chat.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { EscMenuComponent } from './esc-menu.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -12,7 +13,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LeadersComponent } from './profile/leaders/leaders.component';
 import { NameModule } from '../chat/name/name.module';
 import { SettingsModule } from '../settings/settings.module';
@@ -30,6 +31,7 @@ import { MatchesComponent } from './profile/matches/matches.component';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatDialogModule,
     MatIconModule,
@@ -37,6 +39,7 @@ import { MatchesComponent } from './profile/matches/matches.component';
     MatSelectModule,
     MatInputModule,
     MatProgressBarModule,
+    MatAutocompleteModule,
     ChatModule,
     InventoryModule,
     NameModule,

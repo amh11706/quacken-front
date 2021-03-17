@@ -36,7 +36,7 @@ interface Sync {
   cSync: Clutter[];
 }
 
-interface BoatStatus {
+export interface BoatStatus {
   id: number;
   x: number;
   y: number;
@@ -177,7 +177,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.myBoat.isMe = false;
     }
     if (this.turn) return;
-    this._boats[id]?.render?.dispose();
     delete this._boats[id];
     this.boats = Object.values(this._boats);
   }
@@ -295,7 +294,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     return b.id;
   }
 
-  private syncBoats = async (sync: Sync) => {
+  private syncBoats = (sync: Sync) => {
     if (!sync) return;
     clearTimeout(this.animateTimeout);
     clearTimeout(this.animateTimeout2);
@@ -308,7 +307,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.clutter = sync.cSync || [];
     }, 1000);
     if (sync.sync) {
-      await this.setBoats(sync.sync);
+      this.setBoats(sync.sync);
     }
   }
 
@@ -320,10 +319,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
     });
   }
 
-  protected async setBoats(boats: BoatSync[], reset = true) {
+  protected setBoats(boats: BoatSync[], reset = true) {
     const newBoats: Record<number, Boat> = {};
     if (!reset) Object.assign(newBoats, this._boats);
-    if (this.turn && boats.length > 1) return console.log('skipped boat set');
+    // if (this.turn && boats.length > 1) return console.log('skipped boat set');
     for (const sBoat of boats) {
       if (sBoat.oId) delete this._boats[sBoat.oId];
       let boat = this._boats[-sBoat.id] || this._boats[sBoat.id];

@@ -2,6 +2,7 @@ import TWEEN from '@tweenjs/tween.js';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Boat } from '../quacken/boats/boat';
+import { JobQueue } from './job-queue';
 
 function headerColor(boat: Boat): string {
   if (boat.isMe) {
@@ -58,7 +59,7 @@ export class BoatRender {
   private influenceTween: any;
   private tweenTarget = 0;
   private nameTimeout = 0;
-  animation: Promise<void[]> = Promise.resolve([]);
+  private worker = new JobQueue();
 
   constructor(public boat: Boat, gltf: GLTF) {
     if (!BoatRender.circle) {
@@ -103,13 +104,15 @@ export class BoatRender {
   }
 
   dispose() {
-    this.obj.parent?.remove(this.obj);
-    this.influence.material.dispose();
-    if (this.title) {
-      this.title.geometry.dispose();
-      this.title.material.dispose();
-      this.title.material.map?.dispose();
-    }
+    return this.worker.addJob(() => {
+      this.obj.parent?.remove(this.obj);
+      this.influence.material.dispose();
+      if (this.title) {
+        this.title.geometry.dispose();
+        this.title.material.dispose();
+        this.title.material.map?.dispose();
+      }
+    }, false);
   }
 
   showInfluence(v = true): void {
@@ -148,31 +151,41 @@ export class BoatRender {
     return this;
   }
 
-  update(startTime: number) {
+  update(animate = true, trigger?: () => void) {
+    if (!animate) this.worker.clearJobs();
+    const boat = { ...this.boat } as Boat;
+    const job = this.worker.addJob(() => {
+      trigger?.();
+      return this._update(animate, boat);
+    });
     if (this.boat.type !== this.type) {
       return;
     }
+    return job;
+  }
+
+  private _update(animate: boolean, boat: Boat) {
+    const startTime = animate ? new Date().valueOf() : 0;
     const promises: Promise<void>[] = [];
 
-    if (!startTime || this.boat.pos.x !== this.pos.x || this.boat.pos.y !== this.pos.y || this.boat.crunchDir !== -1) {
-      promises.push(...this.updateBoatPos(startTime));
+    if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y || boat.crunchDir !== -1) {
+      promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
     }
 
-    if (!startTime || this.boat.face !== this.rotateDeg || this.boat.imageOpacity === 0) {
-      promises.push(...this.updateBoatRot(startTime));
+    if (!startTime || boat.face !== this.rotateDeg || boat.imageOpacity === 0) {
+      promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, boat.imageOpacity));
     }
 
-    if (this.team !== this.boat.team) {
+    if (this.team !== boat.team) {
       this.influence.material.dispose();
-      this.influence.material = (this.boat.team ? red : green).clone();
+      this.influence.material = (boat.team ? red : green).clone();
       this.rebuildHeader();
     }
 
-    if (this.name !== this.boat.name) {
+    if (this.name !== boat.name) {
       this.rebuildHeader();
     }
-    this.animation = Promise.all(promises);
-    return this.animation;
+    return Promise.all(promises);
   }
 
   rebuildHeader() {
@@ -245,60 +258,62 @@ export class BoatRender {
     return this;
   }
 
-  private updateBoatPos(startTime: number) {
-    if (!this.obj.position.x || !this.obj.position.z) console.log(this.boat.pos, this.obj.position, this.boat.name);
+  private updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]) {
+    if (!this.obj.position.x || !this.obj.position.z) console.log(x, y, this.obj.position, this.boat.name);
     let t: any;
     const decodeX = [0, 0.4, 0, -0.4];
     const decodeY = [-0.4, 0, 0.4, 0];
 
     const p = [
       new Promise<void>(resolve => {
-        const offsetX = decodeX[this.boat.crunchDir];
+        const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
           new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
-            .to({ x: this.boat.pos.x + offsetX + 0.5 }, 3000 / BoatRender.speed)
-            .delay(4000 / BoatRender.speed)
+            .to({ x: x + offsetX + 0.5 }, 5000 / BoatRender.speed)
+            .delay(7500 / BoatRender.speed)
             .repeatDelay(500 / BoatRender.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
             .onComplete(resolve);
 
-        } else if (startTime && this.boat.moveTransition[0]) {
+        } else if (startTime && transitions[0]) {
           t = new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
-            .easing(moveEase[this.boat.moveTransition[0]])
-            .to({ x: this.boat.pos.x + 0.5 }, 10000 / BoatRender.speed)
+            .easing(moveEase[transitions[0]])
+            .to({ x: x + 0.5 }, 10000 / BoatRender.speed)
+            .delay(5000 / BoatRender.speed)
             .start(startTime)
             .onComplete(resolve);
         } else {
           resolve();
         }
       }).then(() => {
-        this.pos.x = this.boat.pos.x;
+        this.pos.x = x;
         this.obj.position.setX(this.pos.x + 0.5);
       }),
 
       new Promise<void>(resolve => {
-        const offsetY = decodeY[this.boat.crunchDir];
+        const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
           new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
-            .to({ z: this.boat.pos.y + offsetY + 0.5 }, 3000 / BoatRender.speed)
-            .delay(4000 / BoatRender.speed)
+            .to({ z: y + offsetY + 0.5 }, 5000 / BoatRender.speed)
+            .delay(7500 / BoatRender.speed)
             .repeatDelay(500 / BoatRender.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
             .onComplete(resolve);
 
-        } else if (startTime && this.boat.moveTransition[1]) {
+        } else if (startTime && transitions[1]) {
           t = new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
-            .easing(moveEase[this.boat.moveTransition[1]])
-            .to({ z: this.boat.pos.y + 0.5 }, 10000 / BoatRender.speed)
+            .easing(moveEase[transitions[1]])
+            .to({ z: y + 0.5 }, 10000 / BoatRender.speed)
+            .delay(5000 / BoatRender.speed)
             .start(startTime)
             .onComplete(resolve);
         } else {
           resolve();
         }
       }).then(() => {
-        this.pos.y = this.boat.pos.y;
+        this.pos.y = y;
         this.obj.position.setZ(this.pos.y + 0.5);
       }),
     ];
@@ -308,48 +323,49 @@ export class BoatRender {
       t.onUpdate(() => BoatRender.updateCam(this));
     }
 
-    this.boat.crunchDir = -1;
     return p;
   }
 
-  private updateBoatRot(startTime: number) {
+  private updateBoatRot(startTime: number, face: number, transition: number, opacity: number) {
     const promises: Promise<void>[] = [];
 
-    if (startTime && this.boat.rotateTransition) {
+    if (startTime && (transition || !opacity)) {
       promises.push(new Promise(resolve => {
-        if (this.boat.rotateTransition === 1) {
+        if (transition === 1) {
           new TWEEN.Tween(this.obj.rotation as any, BoatRender.tweens)
-            .to({ y: -this.boat.face * Math.PI / 180 }, 9000 / BoatRender.speed)
+            .to({ y: -face * Math.PI / 180 }, 9000 / BoatRender.speed)
+            .delay(5000 / BoatRender.speed)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .start(startTime + 1000 / BoatRender.speed)
             .onComplete(resolve);
         } else {
           new TWEEN.Tween(this.obj.rotation as any, BoatRender.tweens)
-            .to({ y: -this.boat.face * Math.PI / 180 }, 30000 / BoatRender.speed)
+            .to({ y: -face * Math.PI / 180 }, 50000 / BoatRender.speed)
+            .delay(30000 / BoatRender.speed)
             .easing(TWEEN.Easing.Quadratic.In)
             .delay(500)
             .start(startTime)
             .onComplete(resolve);
         }
       }));
-    } else this.obj.rotation.y = -this.boat.face * Math.PI / 180;
+    } else this.obj.rotation.y = -face * Math.PI / 180;
 
-    if (startTime && this.boat.rotateTransition > 1) {
+    if (startTime && transition > 1) {
       promises.push(new Promise(resolve => {
         new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
-          .to({ y: -5 }, 20000 / BoatRender.speed)
-          .delay(2000)
+          .to({ y: -5 }, 40000 / BoatRender.speed)
+          .delay(30000 / BoatRender.speed)
           .easing(TWEEN.Easing.Quadratic.In)
           .start(startTime)
           .onComplete(resolve);
         new TWEEN.Tween(this.obj.scale as any, BoatRender.tweens)
-          .to({ x: 0, y: 0, z: 0 }, 20000 / BoatRender.speed)
+          .to({ x: 0, y: 0, z: 0 }, 40000 / BoatRender.speed)
+          .delay(35000 / BoatRender.speed)
           .start(startTime);
       }));
-
-      this.boat.imageOpacity = 1;
     }
-    this.rotateDeg = this.boat.face;
+
+    this.rotateDeg = face;
     return promises;
   }
 }

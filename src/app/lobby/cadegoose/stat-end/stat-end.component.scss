@@ -1,24 +1,25 @@
 @import "../stats/stats.component.scss";
 
 #statFrame {
-    height: 300px;
-    overflow-y: auto;
+  height: 300px;
+  overflow-y: auto;
 }
 
 table {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+  user-select: all;
 }
 
 .defender {
-    color: lime;
+  color: lime;
 }
 
 .attacker {
-    color: red;
+  color: red;
 }
 
 table {
-    width: auto;
-    margin: auto;
-    margin-bottom: 20px;
+  width: auto;
+  margin: auto;
+  margin-bottom: 20px;
 }

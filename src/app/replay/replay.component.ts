@@ -17,7 +17,7 @@ export class ReplayComponent implements OnInit {
   messages: Message[][] = [];
   private sub = new Subscription();
 
-  private graphicSettings: SettingMap = { turnTime: { value: 30 } };
+  private graphicSettings?: SettingMap;
   // TODO: keep this boat list up to date as the turn slider goes.
   private boats: BoatSync[] = [];
   tick = 0;
@@ -37,8 +37,12 @@ export class ReplayComponent implements OnInit {
     const settings = parsed.data.settings;
     for (const group in settings) {
       if (!settings.hasOwnProperty(group)) continue;
-      this.ss.setFakeSettings(group, settings[group]);
-      if (!this.graphicSettings) this.graphicSettings = settings[group];
+      const settingGroup = settings[group];
+      if (!this.graphicSettings) {
+        this.graphicSettings = settingGroup;
+        if (!settings[group].turnTime.value) settingGroup.turnTime.value = 10;
+      }
+      this.ss.setFakeSettings(group, settingGroup);
     }
 
     this.sub.add(this.ws.outMessages$.subscribe(m => {
@@ -88,7 +92,7 @@ export class ReplayComponent implements OnInit {
       if (this.tick + 1 === this.messages.length) return this.togglePlay();
       this.tick++;
       this.fakeMessages();
-    }, 10000 / this.graphicSettings.turnTime.value);
+    }, (this.graphicSettings?.turnTime.value || 10) * 1000 / 30);
   }
 
   nextTurn() {

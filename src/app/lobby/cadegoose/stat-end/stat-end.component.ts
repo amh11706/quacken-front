@@ -37,7 +37,9 @@ export class StatEndComponent implements OnChanges {
       }
     }
 
-    this.scores = Object.values(this.stats).sort((a, b) => b.score - a.score);
+    this.scores = Object.values(this.stats).sort((a, b) => b.score - a.score).map(el => {
+      return { ...el };
+    });
     for (const row of this.scores) {
       const s = row.stats;
       if (s[Stat.ShotsFired]) s[Stat.ShotsHit] += ` (${Math.round(+s[Stat.ShotsHit] / +s[Stat.ShotsFired] * 100)}%)`;

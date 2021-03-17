@@ -17,8 +17,8 @@ export class FriendsService {
   allowInvite = false;
 
   lobby: Message[] = [];
-  friends: String[] = [];
-  offline: String[] = [];
+  friends: string[] = [];
+  offline: string[] = [];
   blocked: string[] = [];
   invites: Invite[] = [];
 
@@ -64,7 +64,7 @@ export class FriendsService {
       this.lobby.push(m);
       this.ws.dispatchMessage({
         cmd: InCmd.ChatMessage, data: {
-          type: 1, message: `${m.from}(${m.copy}) has joined the lobby.`,
+          type: 1, message: `${m.from} has joined the lobby.`,
         }
       });
     });
@@ -72,7 +72,7 @@ export class FriendsService {
       this.lobby = this.lobby.filter(n => m.from !== n.from || m.copy !== n.copy);
       this.ws.dispatchMessage({
         cmd: InCmd.ChatMessage, data: {
-          type: 1, message: `${m.from}(${m.copy}) has left the lobby.`,
+          type: 1, message: `${m.from} has left the lobby.`,
         }
       });
     });

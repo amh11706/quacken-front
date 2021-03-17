@@ -40,6 +40,7 @@ export const enum OutCmd {
   ChangeEmail,
   ChangePass,
   ChangeName,
+  SearchNames,
 
   LobbyCreate = 101,
   LobbyApply,
@@ -115,6 +116,7 @@ export const enum InCmd {
   Bomb,
   Ready,
   BoatTick,
+  BoatTicks,
 
   Bidding,
   Playing,
