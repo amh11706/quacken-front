@@ -84,7 +84,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    private socket: WsService,
+    private ws: WsService,
     private es: EscMenuService,
     private kbs: KeyBindingService,
   ) {
@@ -95,7 +95,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const session = localStorage.getItem(this.socket.user?.id + '-editor');
+    const session = localStorage.getItem(this.ws.user?.id + '-editor');
     if (session) {
       const s = JSON.parse(session);
       if (s.selectedTile) {
@@ -107,8 +107,8 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     window.addEventListener('beforeunload', this.saveSession);
     this.handleKeys();
 
-    this.sub.add(this.socket.connected$.subscribe(v => {
-      if (v) this.socket.send(OutCmd.EditorJoin);
+    this.sub.add(this.ws.connected$.subscribe(v => {
+      if (v) this.ws.send(OutCmd.EditorJoin);
     }));
 
     this.es.setLobby(GuideComponent);
@@ -122,7 +122,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   private saveSession = () => {
-    localStorage.setItem(this.socket.user?.id + '-editor', JSON.stringify(
+    localStorage.setItem(this.ws.user?.id + '-editor', JSON.stringify(
       this.map
     ));
   }
@@ -173,8 +173,8 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
     const newTile: any = {};
     Object.assign(newTile, tile);
-    await this.socket.request(OutCmd.MapSave, newTile);
-    this.socket.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Saved.' } });
+    await this.ws.request(OutCmd.MapSave, newTile);
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Saved.' } });
     tile.unsaved = false;
   }
 
