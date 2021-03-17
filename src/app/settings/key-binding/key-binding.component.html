@@ -1,83 +1,84 @@
 <h2 mat-card-title>Key Bindings</h2>
 <mat-card-actions>
-    <button mat-raised-button
-            color="accent"
-            (click)="save()"
-            [disabled]="!changed">Save changes</button>
-    <button mat-raised-button
-            (click)="cancel()"
-            [disabled]="!changed">Cancel</button>
-    <button mat-raised-button
-            id="defaults"
-            (click)="setDefaults()"
-            [disabled]="!notDefault">Set defaults</button>
+  <button mat-raised-button
+          color="accent"
+          (click)="save()"
+          [disabled]="!changed">Save changes</button>
+  <button mat-raised-button
+          (click)="cancel()"
+          [disabled]="!changed">Cancel</button>
+  <button mat-raised-button
+          id="defaults"
+          (click)="setDefaults()"
+          [disabled]="!notDefault">Set defaults</button>
 </mat-card-actions>
 
 <div>
-    <q-setting name="updateLinked"></q-setting>
-    <mat-form-field id="bindingGroup">
-        <mat-select [(value)]="group"
-                    (valueChange)="changeGroup()"
-                    placeholder="Setting group">
-            <mat-option value="Global">Global</mat-option>
-            <mat-option value="Cadegoose">Cadegoose</mat-option>
-            <mat-option value="Sea battle">Seabattle</mat-option>
-            <mat-option value="Quacken">Quacken</mat-option>
-            <mat-option value="Map editor">Map editor</mat-option>
-        </mat-select>
-    </mat-form-field>
+  <q-setting name="updateLinked"></q-setting>
+  <mat-form-field id="bindingGroup">
+    <mat-select [(value)]="group"
+                (valueChange)="changeGroup()"
+                placeholder="Setting group">
+      <mat-option value="Global">Global</mat-option>
+      <mat-option value="Cadegoose">Cadegoose</mat-option>
+      <mat-option value="Sea battle">Seabattle</mat-option>
+      <mat-option value="Quacken">Quacken</mat-option>
+      <mat-option value="Map editor">Map editor</mat-option>
+      <mat-option value="Match replay">Match replay</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
 <mat-menu #appMenu="matMenu">
-    <ng-template matMenuContent
-                 let-links="links">
-        <table class="popup">
-            <tr>
-                <th>Group</th>
-                <th>Primary</th>
-                <th>Secondary</th>
-            </tr>
-            <tr *ngFor="let action of links">
-                <td>{{action.group}}</td>
-                <td>
-                    <q-binder [binding]="action"
-                              [disabled]="true"
-                              (keyChange)="updateChanged()"></q-binder>
-                </td>
-                <td>
-                    <q-binder [index]="1"
-                              [binding]="action"
-                              [disabled]="true"
-                              (keyChange)="updateChanged()"></q-binder>
-                </td>
-            </tr>
-        </table>
-    </ng-template>
+  <ng-template matMenuContent
+               let-links="links">
+    <table class="popup">
+      <tr>
+        <th>Group</th>
+        <th>Primary</th>
+        <th>Secondary</th>
+      </tr>
+      <tr *ngFor="let action of links">
+        <td>{{action.group}}</td>
+        <td>
+          <q-binder [binding]="action"
+                    [disabled]="true"
+                    (keyChange)="updateChanged()"></q-binder>
+        </td>
+        <td>
+          <q-binder [index]="1"
+                    [binding]="action"
+                    [disabled]="true"
+                    (keyChange)="updateChanged()"></q-binder>
+        </td>
+      </tr>
+    </table>
+  </ng-template>
 </mat-menu>
 
 <table>
-    <tr>
-        <th>Action</th>
-        <th>Primary</th>
-        <th>Secondary</th>
-    </tr>
-    <tr *ngFor="let action of actions[group]">
-        <td>{{action.title}} <button *ngIf="action.links"
-                    mat-icon-button
-                    [matMenuTriggerFor]="appMenu"
-                    [matMenuTriggerData]="{ links: action.links }">
-                <mat-icon>link</mat-icon>
-            </button></td>
-        <td>
-            <q-binder [binding]="action"
-                      [takenKeys]="takenKeys"
-                      (keyChange)="updateChanged()"></q-binder>
-        </td>
-        <td>
-            <q-binder [index]="1"
-                      [binding]="action"
-                      [takenKeys]="takenKeys"
-                      (keyChange)="updateChanged()"></q-binder>
-        </td>
-    </tr>
+  <tr>
+    <th>Action</th>
+    <th>Primary</th>
+    <th>Secondary</th>
+  </tr>
+  <tr *ngFor="let action of actions[group]">
+    <td>{{action.title}} <button *ngIf="action.links"
+              mat-icon-button
+              [matMenuTriggerFor]="appMenu"
+              [matMenuTriggerData]="{ links: action.links }">
+        <mat-icon>link</mat-icon>
+      </button></td>
+    <td>
+      <q-binder [binding]="action"
+                [takenKeys]="takenKeys"
+                (keyChange)="updateChanged()"></q-binder>
+    </td>
+    <td>
+      <q-binder [index]="1"
+                [binding]="action"
+                [takenKeys]="takenKeys"
+                (keyChange)="updateChanged()"></q-binder>
+    </td>
+  </tr>
 </table>
