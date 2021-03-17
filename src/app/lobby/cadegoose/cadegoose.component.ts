@@ -26,18 +26,14 @@ import {
   PerspectiveCamera,
   MeshStandardMaterial,
   MeshBasicMaterial,
-  LineBasicMaterial,
   ShaderMaterial,
   TextureLoader,
   RepeatWrapping,
-  Geometry,
   PlaneBufferGeometry,
-  PlaneGeometry,
   BufferGeometry,
   Vector2,
   Vector3,
   Box3,
-  Line,
   Group,
   Mesh,
   Raycaster, MOUSE, Material
@@ -123,7 +119,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private slowFrames = 0;
   private water?: Water;
 
-  private tileGeometry?: Geometry;
+  private tileGeometry?: BufferGeometry;
   private tiles = new Map<number, MeshBasicMaterial>();
   private tileObjects = new Map<number, Promise<GLTF>>();
   private mapObjects: Object3D[] = [];
@@ -307,7 +303,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   private buildWater() {
     const waterGeometry = new PlaneBufferGeometry(10000, 10000);
-    const floorGeo = new PlaneGeometry(10000, 10000);
+    const floorGeo = new PlaneBufferGeometry(10000, 10000);
     const loader = new TextureLoader();
     const floorTex = loader.load('assets/images/kingwall.png');
     floorTex.wrapS = floorTex.wrapT = RepeatWrapping;
@@ -384,38 +380,33 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected buildGrid() {
     const grid = new Object3D();
     grid.position.y = GRID_DEPTH;
-    let points: Vector3[] = [];
-    for (let i = 0; i <= this.map[0].length; i++) {
-      points.push(new Vector3(i, 0, 0));
-    }
-    let geometry = new BufferGeometry().setFromPoints(points);
-    const material = new LineBasicMaterial({ color: '#aaa', fog: false });
-    let line = new Line(geometry, material);
+    let geometry = new PlaneBufferGeometry(this.map[0].length + 0.025, 0.025, this.map[0].length, 1);
+    const material = new MeshBasicMaterial({ color: '#999', fog: false });
+    let line = new Mesh(geometry, material).rotateX(-Math.PI / 2);
+    line.position.x = this.map[0].length / 2;
     for (let i = 0; i <= this.map.length; i++) {
       grid.add(line);
       line = line.clone();
       line.position.z++;
     }
 
-    points = [];
-    for (let i = 0; i <= this.map.length; i++) {
-      points.push(new Vector3(0, 0, i));
-    }
-    geometry = new BufferGeometry().setFromPoints(points);
-    line = new Line(geometry, material);
+    geometry = new PlaneBufferGeometry(0.025, this.map.length, 1, this.map.length);
+    line = new Mesh(geometry, material).rotateX(-Math.PI / 2);
+    line.position.z = this.map.length / 2;
     for (let i = 0; i <= this.map[0].length; i++) {
       grid.add(line);
       line = line.clone();
       line.position.x++;
     }
 
-    const szGeo = new PlaneGeometry(20, 3);
+    const szGeo = new PlaneBufferGeometry(20, 3);
     const szMat = new MeshBasicMaterial({ color: 'cyan', opacity: 0.3, transparent: true });
     let sz = new Mesh(szGeo, szMat);
     sz.renderOrder = 2;
     sz.rotateX(-Math.PI / 2);
     sz.position.x = 10;
     sz.position.z = 1.5;
+    sz.position.y = -0.01;
     grid.add(sz);
     sz = sz.clone();
     sz.position.z += 33;
@@ -433,7 +424,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     for (const o of this.mapObjects) o.parent?.remove(o);
     this.mapObjects = [];
 
-    const geometry = this.tileGeometry || new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+    const geometry = this.tileGeometry || new PlaneBufferGeometry(1, 1).rotateX(-Math.PI / 2);
     this.tileGeometry = geometry;
     const loader = new TextureLoader();
     let square = new Mesh(geometry, new MeshBasicMaterial({ transparent: true, fog: false }));
