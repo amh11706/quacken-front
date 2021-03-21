@@ -46,12 +46,7 @@ export class MatchesComponent implements OnInit {
   }
 
   async openMatch(m: Match) {
-    const matchData = await this.ws.request(OutCmd.MatchData, m.matchId);
-    const settings = matchData.data.settings;
-    settings.graphics = await this.ss.getGroup('graphics');
-    settings.controls = await this.ss.getGroup('controls');
-    localStorage.setItem('matchData', JSON.stringify(matchData));
-    window.open('/#/replay', '_blank');
+    window.open('/#/replay/' + m.matchId, '_blank');
   }
 
 }

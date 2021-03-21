@@ -20,7 +20,7 @@ export class SbEntryStatusComponent extends EntryStatusComponent {
   ngOnInit() {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.updatePoints(t.stats)));
-    this.subs.add(this.ws.subscribe(Internal.Boats, (l: Lobby) => l.stats && this.updatePoints(l.stats)));
+    this.subs.add(this.ws.subscribe(Internal.Lobby, (l: Lobby) => l.stats && this.updatePoints(l.stats)));
   }
 
   private updatePoints(stats: Record<number, StatRow>) {

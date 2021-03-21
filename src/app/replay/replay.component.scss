@@ -1,6 +1,6 @@
 #replayControl {
   position: absolute;
-  bottom: 1%;
+  bottom: calc(1% + 167px);
   left: 50%;
   transform: translate(-50%, 0);
   width: 95%;
@@ -16,4 +16,26 @@
   mat-slider {
     width: calc(100% - 120px);
   }
+}
+
+#replayMenu {
+  position: absolute;
+  left: 10px;
+  top: calc(50% - 220px);
+  width: 200px;
+  height: 400px;
+  padding: 0;
+  padding-top: 24px;
+  text-align: center;
+  background-color: rgba(66, 66, 66, 0.85);
+  color: #eee;
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  cursor: grab;
 }

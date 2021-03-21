@@ -127,6 +127,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private cameraTween: any;
   private controlTween: any;
   private mouse = new Vector2(0, 0);
+  private mouseMoved = false;
   private rayCaster = new Raycaster();
 
   constructor(
@@ -161,9 +162,10 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
     this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby(this.menuComponent, this.lobby);
-    this.es.open = true;
+    // this.es.open = true;
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
+    this.sub.add(this.ws.subscribe(Internal.CenterOnBoat, this.centerOnBoat.bind(this)));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));
     this.sub.add(this.kbs.subscribe(this.statAction, v => this.statOpacity = v ? 1 : 0));
 
@@ -172,23 +174,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngAfterViewInit() {
     this.frame?.nativeElement.appendChild(this.renderer.domElement);
-    this.frame?.nativeElement.addEventListener('dblclick', () => {
-      if (!this.myBoat.isMe || this.cameraTween) return;
-      const time = new Date().valueOf();
-      const pos = this.myBoat.pos;
-      this.cameraTween = new TWEEN.Tween(this.camera.position as any)
-        .to({ x: pos.x - 2.5, y: 9, z: pos.y + 3.5 }, 1000)
-        .easing(TWEEN.Easing.Quadratic.Out)
-        .onComplete(() => delete this.cameraTween)
-        .start(time);
-
-      if (!this.controls || this.controlTween) return;
-      this.controlTween = new TWEEN.Tween(this.controls.target as any)
-        .to({ x: pos.x + 0.5, z: pos.y + 0.5 }, 1000)
-        .easing(TWEEN.Easing.Quadratic.Out)
-        .onComplete(() => delete this.controlTween)
-        .start(time);
-    });
+    this.frame?.nativeElement.addEventListener('dblclick', this.centerOnBoat.bind(this));
     this.bs.map = this.frame?.nativeElement;
 
     this.camera.position.set(5, 15, 38);
@@ -212,6 +198,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.frameRequested = false;
     this.requestRender();
     this.frame?.nativeElement.addEventListener('mousemove', this.mouseMove, false);
+    this.frame?.nativeElement.addEventListener('click', this.click, false);
   }
 
   ngOnDestroy() {
@@ -225,15 +212,39 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.alive = false;
   }
 
+  private centerOnBoat() {
+    if (!this.myBoat.name || this.cameraTween) return;
+    const time = new Date().valueOf();
+    const pos = this.myBoat.pos;
+    this.cameraTween = new TWEEN.Tween(this.camera.position as any)
+      .to({ x: pos.x - 2.5, y: 9, z: pos.y + 3.5 }, 1000)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onComplete(() => delete this.cameraTween)
+      .start(time);
+
+    if (!this.controls || this.controlTween) return;
+    this.controlTween = new TWEEN.Tween(this.controls.target as any)
+      .to({ x: pos.x + 0.5, z: pos.y + 0.5 }, 1000)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onComplete(() => delete this.controlTween)
+      .start(time);
+  }
+
   private mouseMove = (event: MouseEvent) => {
-    // event.preventDefault();
     this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    this.mouseMoved = true;
+  }
+
+  private click = (event: MouseEvent) => {
+    this.bs.findClick(this.rayCaster.ray);
   }
 
   protected updateIntersects() {
+    if (!this.mouseMoved) return;
     this.rayCaster.setFromCamera(this.mouse, this.camera);
     this.bs.showInfluence(this.rayCaster.ray, this.hoveredTeam);
+    this.mouseMoved = false;
   }
 
   private animate = () => {

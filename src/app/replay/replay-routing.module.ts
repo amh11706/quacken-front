@@ -8,12 +8,6 @@ const routes: Routes = [
   {
     path: '',
     component: ReplayComponent,
-    children: [
-      {
-        component: LobbyComponent,
-        path: '',
-      },
-    ],
   },
 ];
 

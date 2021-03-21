@@ -1,4 +1,14 @@
-<router-outlet></router-outlet>
+<q-lobby-wrapper></q-lobby-wrapper>
+<div id="replayMenu"
+     class="container"
+     [qDrag]="handle"
+     [bindToWindow]="true">
+  <div #handle
+       class="handle"></div>
+  <q-replay-cadegoose [messages]="messages"
+                      [tick]="tick"
+                      (playTo)="playTo($event)"></q-replay-cadegoose>
+</div>
 
 <div id="replayControl"
      class="container">

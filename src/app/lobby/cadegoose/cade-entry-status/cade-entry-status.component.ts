@@ -18,6 +18,6 @@ export class CadeEntryStatusComponent extends EntryStatusComponent {
   ngOnInit() {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.points = t.points));
-    this.subs.add(this.ws.subscribe(Internal.Boats, (l: Lobby) => this.points = l.points));
+    this.subs.add(this.ws.subscribe(Internal.Lobby, (l: Lobby) => this.points = l.points));
   }
 }

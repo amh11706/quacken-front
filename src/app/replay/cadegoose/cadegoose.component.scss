@@ -1,0 +1,64 @@
+::ng-deep div.mat-tab-label {
+  min-width: 20px;
+  padding: 0 12px;
+}
+
+mat-tab-group {
+  height: 100%;
+}
+
+.boat,
+.turn {
+  width: 100%;
+  line-height: 16px;
+  padding: 4px;
+}
+
+.turn {
+  .points {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+
+    .defender {
+      position: absolute;
+      right: 50px;
+      height: 5px;
+      background-color: green;
+    }
+    .attacker {
+      position: absolute;
+      left: 50px;
+      height: 5px;
+      background-color: red;
+    }
+  }
+
+  .sinks {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+
+    mat-icon {
+      font-size: 12px;
+      height: 12px;
+    }
+
+    div {
+      display: inline-block;
+      width: 45%;
+    }
+
+    div.right {
+      text-align: right;
+    }
+  }
+}
+
+.boat.team0 {
+  border-left: 3px solid green;
+}
+
+.boat.team1 {
+  border-left: 3px solid red;
+}

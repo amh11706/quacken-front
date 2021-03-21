@@ -40,18 +40,20 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   private firstJoin = true;
 
   constructor(
-    private ws: WsService,
+    public ws: WsService,
     private fs: FriendsService,
     public es: EscMenuService,
   ) { }
 
-  ngOnInit(): void {
-    this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
+  async ngOnInit() {
+    if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
+    if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
+    this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
       this.roundGoing = m.turn && m.turn <= 75 || false;
       if (!m.players) return;
       if (this.firstJoin) {
         this.firstJoin = false;
-        this.es.open = true;
+        // this.es.open = true;
         this.es.activeComponent = this.es.lobbyComponent;
       }
       this.teams = m.players;
@@ -80,14 +82,14 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (m.sId) this.removeUser(m.sId);
     }));
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
-      if (!this.roundGoing) {
+      if (!this.roundGoing && this.ws.connected) {
         this.myBoat.isMe = false;
         this.es.open = true;
         this.es.activeComponent = this.es.lobbyComponent;
         return;
       }
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
-      else if (!b.isMe) {
+      else if (!b.isMe && this.ws.connected) {
         this.es.open = true;
         this.es.activeComponent = this.es.lobbyComponent;
       }
@@ -96,13 +98,14 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
       this.roundGoing = t.turn <= 75;
+      this.statsOpen = false;
       if (this.roundGoing) return;
       this.es.lobbyContext.stats = t.stats;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat = new Boat('');
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
-      if (!this.roundGoing) {
+      if (!this.roundGoing && this.ws.connected) {
         this.es.open = true;
         this.es.activeComponent = this.es.lobbyComponent;
       }

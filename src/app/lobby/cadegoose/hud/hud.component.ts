@@ -8,6 +8,11 @@ import { WsService } from 'src/app/ws.service';
 import { Boat } from '../../quacken/boats/boat';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
+export interface MoveMessage {
+  moves: number[];
+  shots: number[];
+}
+
 @Component({
   selector: 'q-cade-hud',
   templateUrl: './hud.component.html',
@@ -53,6 +58,14 @@ export class CadeHudComponent extends HudComponent {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (boat: Boat) => {
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
+    }));
+    this.subs.add(this.ws.subscribe(Internal.MyMoves, (moves: MoveMessage) => {
+      this.moves = [...moves.moves];
+      this.usingMoves = [0, 0, 0];
+      for (const m of this.moves) if (m) this.usingMoves[m - 1]++;
+      if (!moves.shots) return;
+      this.shots = [...moves.shots];
+      this.usingCannons = this.shots.reduce((acc, cur) => acc + cur, 0);
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, () => {
       this.newTurn = true;

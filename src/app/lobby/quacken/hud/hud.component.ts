@@ -82,7 +82,7 @@ export class HudComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.handleKeys();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
-      if (this.turn > 0) this.locked = false;
+      if (this.turn > 0 && this.ws.connected) this.locked = false;
       this.myBoat = b;
       this.checkMaxMoves();
       if (!b.isMe) {
@@ -91,7 +91,7 @@ export class HudComponent implements OnInit, OnDestroy {
       }
     }));
     this.subs.add(this.ws.subscribe(Internal.UnlockMoves, () => {
-      if (!this.locked || !this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
+      if (!this.ws.connected || !this.locked || !this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
       this.resetMoves();
       this.locked = false;
       this.myBoat.ready = false;
@@ -101,9 +101,9 @@ export class HudComponent implements OnInit, OnDestroy {
       this.myBoat.damage = t.d;
     }));
 
-    this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
       this.turn = m.turn ?? this.turn;
-      if (this.turn > 0 && this.myBoat.isMe) this.locked = false;
+      if (this.turn > 0 && this.myBoat.isMe && this.ws.connected) this.locked = false;
       else {
         this.myBoat.ready = false;
         this.locked = true;

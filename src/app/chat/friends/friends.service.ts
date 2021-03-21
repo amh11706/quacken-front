@@ -15,6 +15,7 @@ export interface Invite {
 })
 export class FriendsService {
   allowInvite = false;
+  fakeFs?: FriendsService;
 
   lobby: Message[] = [];
   friends: string[] = [];

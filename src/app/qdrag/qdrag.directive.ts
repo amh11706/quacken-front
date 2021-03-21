@@ -58,8 +58,8 @@ export class QdragDirective implements OnInit, OnDestroy {
     } else if (!skipRight && box.left > window.innerWidth - 30) {
       this.offsetX += window.innerWidth - 30 - box.left;
     }
-    if (box.bottom < 80) {
-      this.offsetY += 80 - box.bottom;
+    if (box.bottom < 45) {
+      this.offsetY += 45 - box.bottom;
     } else if (box.top > window.innerHeight - 30) {
       this.offsetY += window.innerHeight - 30 - box.top;
     }

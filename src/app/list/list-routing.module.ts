@@ -26,6 +26,10 @@ const routes: Routes = [
         loadChildren: () => import('../map-editor/map-editor.module').then(m => m.MapEditorModule),
       },
       {
+        path: 'replay/:id',
+        loadChildren: () => import('../replay/replay.module').then(m => m.ReplayModule),
+      },
+      {
         path: '**',
         redirectTo: 'list',
       },

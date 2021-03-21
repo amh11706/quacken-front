@@ -46,7 +46,7 @@ export class BnavMapComponent implements OnInit, OnDestroy {
   }
 
   private updateBoats = () => {
-    this.ws.dispatchMessage({ cmd: Internal.Boats, data: { boats: this.boats } });
+    this.ws.dispatchMessage({ cmd: Internal.Lobby, data: { boats: this.boats } });
     const b = this.theirBoat;
     const ob = this.ourBoat;
     const relativeFace = (b.f - ob.f + 4) % 4;

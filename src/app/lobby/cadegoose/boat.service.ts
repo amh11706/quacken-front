@@ -10,7 +10,7 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { BoatsComponent, BoatStatus, BoatSync, Clutter, Turn } from '../quacken/boats/boats.component';
 import { ObstacleConfig } from './cadegoose.component';
 import { WsService } from 'src/app/ws.service';
-import { OutCmd } from 'src/app/ws-messages';
+import { OutCmd, Internal } from 'src/app/ws-messages';
 import { Cannonball } from './clutter/cannonball';
 import { BoatRender } from './boat-render';
 import { JobQueue } from './job-queue';
@@ -139,10 +139,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }, false);
   }
 
-  protected handleMoves(s: { t: number, m: number[] }) {
+  protected handleMoves(s: { t: number, m: number[], s: number[] }) {
     const boat = this._boats[-s.t] || this._boats[s.t];
     if (!boat) return;
     boat.moves = s.m;
+    boat.shots = s.s || [];
     this.worker.addJob(() => {
       boat.render?.updateMoves();
     });
@@ -273,6 +274,26 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       }
     }
     for (const boat of this.boats) boat.render?.showInfluence(boat.render?.boat.id === hovered);
+  }
+
+  findClick(ray: Ray) {
+    if (!this.camera) return;
+    const cam = this.camera;
+    this.boats.sort((a, b) => {
+      if (!a.render) return -1;
+      if (!b.render) return 1;
+      return a.render.obj.position.distanceToSquared(cam.position) - b.render.obj.position.distanceToSquared(cam.position);
+    });
+    const box = new Box3();
+
+    for (const boat of this.boats) {
+      if (!boat.render?.hitbox) continue;
+      box.setFromObject(boat.render.hitbox);
+      if (ray.intersectsBox(box)) {
+        this.ws.dispatchMessage({ cmd: Internal.BoatClicked, data: boat });
+        return;
+      }
+    }
   }
 
   private async renderSync() {

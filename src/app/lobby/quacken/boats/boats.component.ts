@@ -130,7 +130,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
     this.subs.add(this.ws.subscribe(Internal.ResetBoats, () => this.resetBoats()));
-    this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
       if (!m.boats) return;
       clearTimeout(this.animateTimeout);
       clearTimeout(this.animateTimeout2);
@@ -165,9 +165,12 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  protected handleMoves(s: { t: number, m: number[] }) {
+  protected handleMoves(s: { t: number, m: number[], s?: number[] }) {
     const boat = this._boats[s.t];
-    if (boat) boat.moves = s.m;
+    if (boat) {
+      boat.moves = s.m;
+      boat.shots = s.s || [];
+    }
   }
 
   protected deleteBoat(id: number) {
@@ -350,7 +353,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.maxShots = sBoat.dShot;
       boat.type = sBoat.ty;
 
-      if (boat.isMe) {
+      if (boat.isMe && this.ws.connected) {
         if (boat === this.myBoat) {
           if (boat.oId !== this.myBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
           if (this.myBoat.damage >= this.myBoat.maxDamage) {
@@ -373,6 +376,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
     this._boats = newBoats;
     this.boats = Object.values(this._boats);
+    if (!this.ws.connected) this.ws.dispatchMessage({ cmd: Internal.Boats, data: this.boats });
     this.sortBoats();
 
     const sId = this.ws.sId || 0;

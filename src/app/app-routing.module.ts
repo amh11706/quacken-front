@@ -10,10 +10,6 @@ const routes: Routes = [
     component: RecordComponent,
   },
   {
-    path: 'replay',
-    loadChildren: () => import('./replay/replay.module').then(m => m.ReplayModule),
-  },
-  {
     path: 'auth',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule),
   },

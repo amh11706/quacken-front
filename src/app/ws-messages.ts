@@ -1,10 +1,14 @@
 export const enum Internal {
-  Boats = -100,
+  Lobby = -100,
   MyBoat,
   UnlockMoves,
   Time,
   RefreshChat,
   ResetBoats,
+  Boats,
+  MyMoves,
+  CenterOnBoat,
+  BoatClicked,
 }
 
 export const enum OutCmd {
