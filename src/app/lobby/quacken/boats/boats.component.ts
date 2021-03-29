@@ -3,11 +3,12 @@ import { Subscription } from 'rxjs';
 
 import { WsService } from '../../../ws.service';
 import { Boat } from './boat';
+import { BoatStatus, BoatSync, syncToBoat } from './convert';
 import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { StatRow } from '../../cadegoose/stats/stats.component';
-import TWEEN from '@tweenjs/tween.js';
+import * as TWEEN from '@tweenjs/tween.js';
 import { BoatRender } from '../../cadegoose/boat-render';
 
 export interface Clutter {
@@ -34,34 +35,6 @@ export interface Turn {
 interface Sync {
   sync: BoatSync[];
   cSync: Clutter[];
-}
-
-export interface BoatStatus {
-  id: number;
-  x: number;
-  y: number;
-  t: number;
-  tf?: number;
-  tm?: number;
-  s?: number;
-  c?: number;
-  cd?: number;
-}
-
-export interface BoatSync extends BoatStatus {
-  oId?: number;
-  team?: number;
-  n: string;
-  ti?: string;
-  f: number;
-  b: number;
-  tp: number;
-  ty: number;
-  ml: number;
-  mDamage: number;
-  mMoves: number;
-  inSq: number;
-  dShot?: number;
 }
 
 @Component({
@@ -332,47 +305,27 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (!boat || boat.name !== sBoat.n) boat = new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId);
       const id = this.turn ? -sBoat.id : sBoat.id;
       newBoats[id] = boat;
-      boat.setPos(sBoat.x, sBoat.y)
-        .setTreasure(sBoat.t)
-        .draw();
-      if (sBoat.ti) boat.title = sBoat.ti;
-      boat.rotateTransition = 0;
-      boat.imageOpacity = 1;
-      boat.opacity = 1;
-      boat.moveTransition = [0, 0];
-      boat.face = sBoat.f * boat.spinDeg;
-      boat.moveLock = sBoat.ml;
-      boat.tokenPoints = sBoat.tp;
-      boat.bomb = sBoat.b;
-      boat.id = sBoat.id;
-      boat.oId = sBoat.oId;
-      boat.team = sBoat.team;
-      boat.maxDamage = sBoat.mDamage;
-      boat.maxMoves = sBoat.mMoves;
-      boat.influence = Math.sqrt(sBoat.inSq) * 2 || 1;
-      boat.maxShots = sBoat.dShot;
-      boat.type = sBoat.ty;
+      syncToBoat(boat, sBoat);
 
-      if (boat.isMe && this.ws.connected) {
-        if (boat === this.myBoat) {
-          if (boat.oId !== this.myBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
-          if (this.myBoat.damage >= this.myBoat.maxDamage) {
-            this.myBoat.damage = 0;
-            setTimeout(() => {
-              console.log('sunk boat refresh');
-              this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
-              this.map?.dispatchEvent(new Event('dblclick'));
-            });
-          }
-        } else {
+      if (!boat.isMe || !this.ws.connected) continue;
+      if (boat === this.myBoat) {
+        if (boat.oId !== this.myBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
+        if (this.myBoat.damage >= this.myBoat.maxDamage) {
+          this.myBoat.damage = 0;
           setTimeout(() => {
-            this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
-            console.log('new boat refresh');
+            console.log('sunk boat refresh');
+            this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
             this.map?.dispatchEvent(new Event('dblclick'));
           });
         }
-        this.myBoat = boat;
+        continue;
       }
+      setTimeout(() => {
+        this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
+        console.log('new boat refresh');
+        this.map?.dispatchEvent(new Event('dblclick'));
+      });
+      this.myBoat = boat;
     }
     this._boats = newBoats;
     this.boats = Object.values(this._boats);

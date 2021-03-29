@@ -1,8 +1,9 @@
-import TWEEN from '@tweenjs/tween.js';
+import * as TWEEN from '@tweenjs/tween.js';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Boat } from '../quacken/boats/boat';
 import { JobQueue } from './job-queue';
+import { Vector3, Euler } from 'three';
 
 function headerColor(boat: Boat): string {
   if (boat.isMe) {
@@ -134,7 +135,7 @@ export class BoatRender {
       }
       if (v) this.influence.visible = true;
 
-      this.influenceTween = new TWEEN.Tween(this.influence.material as any)
+      this.influenceTween = new TWEEN.Tween(this.influence.material)
         .to({ opacity: this.tweenTarget }, 200)
         .start(new Date().valueOf())
         .onComplete(() => this.influence.visible = v);
@@ -166,7 +167,7 @@ export class BoatRender {
 
   private _update(animate: boolean, boat: Boat) {
     const startTime = animate ? new Date().valueOf() : 0;
-    const promises: Promise<void>[] = [];
+    const promises: Promise<any>[] = [];
 
     if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y || boat.crunchDir !== -1) {
       promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
@@ -265,10 +266,10 @@ export class BoatRender {
     const decodeY = [-0.4, 0, 0.4, 0];
 
     const p = [
-      new Promise<void>(resolve => {
+      new Promise<Vector3>(resolve => {
         const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
-          new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
+          new TWEEN.Tween(this.obj.position, BoatRender.tweens)
             .to({ x: x + offsetX + 0.5 }, 5000 / BoatRender.speed)
             .delay(7500 / BoatRender.speed)
             .repeatDelay(500 / BoatRender.speed)
@@ -277,7 +278,7 @@ export class BoatRender {
             .onComplete(resolve);
 
         } else if (startTime && transitions[0]) {
-          t = new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
+          t = new TWEEN.Tween(this.obj.position, BoatRender.tweens)
             .easing(moveEase[transitions[0]])
             .to({ x: x + 0.5 }, 10000 / BoatRender.speed)
             .delay(5000 / BoatRender.speed)
@@ -291,10 +292,10 @@ export class BoatRender {
         this.obj.position.setX(this.pos.x + 0.5);
       }),
 
-      new Promise<void>(resolve => {
+      new Promise<Vector3>(resolve => {
         const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
-          new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
+          new TWEEN.Tween(this.obj.position, BoatRender.tweens)
             .to({ z: y + offsetY + 0.5 }, 5000 / BoatRender.speed)
             .delay(7500 / BoatRender.speed)
             .repeatDelay(500 / BoatRender.speed)
@@ -303,7 +304,7 @@ export class BoatRender {
             .onComplete(resolve);
 
         } else if (startTime && transitions[1]) {
-          t = new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
+          t = new TWEEN.Tween(this.obj.position, BoatRender.tweens)
             .easing(moveEase[transitions[1]])
             .to({ z: y + 0.5 }, 10000 / BoatRender.speed)
             .delay(5000 / BoatRender.speed)
@@ -327,19 +328,19 @@ export class BoatRender {
   }
 
   private updateBoatRot(startTime: number, face: number, transition: number, opacity: number) {
-    const promises: Promise<void>[] = [];
+    const promises: Promise<Euler | Vector3>[] = [];
 
     if (startTime && (transition || !opacity)) {
       promises.push(new Promise(resolve => {
         if (transition === 1) {
-          new TWEEN.Tween(this.obj.rotation as any, BoatRender.tweens)
+          new TWEEN.Tween(this.obj.rotation, BoatRender.tweens)
             .to({ y: -face * Math.PI / 180 }, 9000 / BoatRender.speed)
             .delay(5000 / BoatRender.speed)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .start(startTime + 1000 / BoatRender.speed)
             .onComplete(resolve);
         } else {
-          new TWEEN.Tween(this.obj.rotation as any, BoatRender.tweens)
+          new TWEEN.Tween(this.obj.rotation, BoatRender.tweens)
             .to({ y: -face * Math.PI / 180 }, 50000 / BoatRender.speed)
             .delay(30000 / BoatRender.speed)
             .easing(TWEEN.Easing.Quadratic.In)
@@ -352,13 +353,13 @@ export class BoatRender {
 
     if (startTime && transition > 1) {
       promises.push(new Promise(resolve => {
-        new TWEEN.Tween(this.obj.position as any, BoatRender.tweens)
+        new TWEEN.Tween(this.obj.position, BoatRender.tweens)
           .to({ y: -5 }, 40000 / BoatRender.speed)
           .delay(30000 / BoatRender.speed)
           .easing(TWEEN.Easing.Quadratic.In)
           .start(startTime)
           .onComplete(resolve);
-        new TWEEN.Tween(this.obj.scale as any, BoatRender.tweens)
+        new TWEEN.Tween(this.obj.scale, BoatRender.tweens)
           .to({ x: 0, y: 0, z: 0 }, 40000 / BoatRender.speed)
           .delay(35000 / BoatRender.speed)
           .start(startTime);

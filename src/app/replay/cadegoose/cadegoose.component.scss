@@ -62,3 +62,61 @@ mat-tab-group {
 .boat.team1 {
   border-left: 3px solid red;
 }
+
+.damage,
+.bilge {
+  position: relative;
+  display: inline-block;
+  margin: 4px;
+  width: 50px;
+  height: 5px;
+  background-color: #aaaaaa;
+  overflow: hidden;
+}
+
+.damagebar,
+.bilgebar {
+  position: relative;
+  background: red;
+  height: 100%;
+  left: -100%;
+  transition: 0.3s linear;
+  pointer-events: none;
+}
+
+.bilgebar {
+  background: blue;
+}
+
+#aiTab {
+  p {
+    margin: 8px 0;
+  }
+
+  mat-button-toggle-group {
+    font-size: 14px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+p {
+  font-size: 12px;
+  margin: 0;
+}
+
+button.margin {
+  margin: 8px 0;
+}
+
+#boatSettings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0;
+  
+  * {
+    max-width: 50%;
+  }
+}

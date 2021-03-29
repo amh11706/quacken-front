@@ -7,13 +7,14 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import { BoatsComponent, BoatStatus, BoatSync, Clutter, Turn } from '../quacken/boats/boats.component';
+import { BoatsComponent, Clutter, Turn } from '../quacken/boats/boats.component';
 import { ObstacleConfig } from './cadegoose.component';
 import { WsService } from 'src/app/ws.service';
 import { OutCmd, Internal } from 'src/app/ws-messages';
 import { Cannonball } from './clutter/cannonball';
 import { BoatRender } from './boat-render';
 import { JobQueue } from './job-queue';
+import { BoatSync, BoatStatus } from '../quacken/boats/convert';
 
 export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),

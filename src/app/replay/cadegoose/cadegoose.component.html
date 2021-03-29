@@ -1,4 +1,5 @@
-<mat-tab-group [(selectedIndex)]="tabIndex">
+<mat-tab-group [(selectedIndex)]="tabIndex"
+               (selectedIndexChange)="tabChange()">
   <mat-tab>
     <ng-template mat-tab-label>
       Turns
@@ -47,6 +48,19 @@
             (mouseleave)="hoverBoat(boat, false)">
       {{boat.name}}<br>
       ({{boat.title}})
+      <ng-container *ngIf="boatTicks[boat.id]">
+        <br>
+        <div class="damage"
+             title="{{boatTicks[boat.id].d}}%">
+          <div class="damagebar"
+               [style.transform]="'translateX(' + boatTicks[boat.id].d / 2 + 'px)'"></div>
+        </div>
+        <div class="bilge"
+             title="{{boatTicks[boat.id].b || 0}}%">
+          <div class="bilgebar"
+               [style.transform]="'translateX(' + boatTicks[boat.id].b / 2 + 'px)'"></div>
+        </div>
+      </ng-container>
     </button>
   </mat-tab>
 
@@ -55,6 +69,164 @@
       AI
     </ng-template>
 
-    tab test
+    <div id="aiTab">
+      <mat-button-toggle-group name="team"
+                               [(ngModel)]="aiTeam"
+                               (change)="aiData = undefined; selectAiBoat()">
+        <mat-button-toggle [value]="0">Defenders</mat-button-toggle>
+        <mat-button-toggle [value]="1">Attackers</mat-button-toggle>
+      </mat-button-toggle-group>
+      <button *ngIf="!aiData"
+              mat-raised-button
+              color="accent"
+              (click)="getMatchAi()">Get AI Data</button>
+      <br>
+
+      <ng-container *ngIf="aiData">
+        <button *ngFor="let boat of aiData.boats"
+                mat-icon-button
+                [color]="boat === activeAiBoat ? 'primary' : undefined"
+                [title]="boat.boat?.name"
+                (click)="selectAiBoat(boat)">
+          <mat-icon>sailing</mat-icon>
+        </button><br>
+
+        <ng-container *ngIf="activeAiBoat">
+          <p>Layer</p>
+          <mat-button-toggle-group name="metric"
+                                   [(ngModel)]="aiMetric"
+                                   (change)="setAiMetric()">
+            <mat-button-toggle value="Shoot">Shoot</mat-button-toggle>
+            <mat-button-toggle value="GetShot">GetShot</mat-button-toggle>
+            <mat-button-toggle value="Total">Total</mat-button-toggle>
+            <mat-button-toggle value="BoatAt">BoatAt</mat-button-toggle>
+            <mat-button-toggle value="Flags">Flags</mat-button-toggle>
+            <mat-button-toggle value="Claims">Claims</mat-button-toggle>
+            <mat-button-toggle value="EndBonus">EndBonus</mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <ng-container *ngIf="['Flags', 'Claims'].includes(aiMetric)">
+            <p>Radius</p>
+            <mat-button-toggle-group name="radius"
+                                     [(ngModel)]="aiRadius"
+                                     (change)="setAiRadius()">
+              <mat-button-toggle [value]="1">1</mat-button-toggle>
+              <mat-button-toggle [value]="2">2</mat-button-toggle>
+              <mat-button-toggle [value]="3">3</mat-button-toggle>
+              <mat-button-toggle [value]="4">4</mat-button-toggle>
+              <mat-button-toggle [value]="5">5</mat-button-toggle>
+            </mat-button-toggle-group>
+          </ng-container>
+
+          <ng-container *ngIf="['Shoot', 'GetShot', 'Total', 'BoatAt'].includes(aiMetric)">
+            <p>Step</p>
+            <mat-button-toggle-group name="step"
+                                     [(ngModel)]="aiStep"
+                                     (change)="setAiStep()">
+              <ng-container *ngIf="aiMetric !== 'BoatAt'">
+                <mat-button-toggle [value]="0">0</mat-button-toggle>
+                <mat-button-toggle [value]="1">1</mat-button-toggle>
+                <mat-button-toggle [value]="2">2</mat-button-toggle>
+                <mat-button-toggle [value]="3">3</mat-button-toggle>
+              </ng-container>
+              <ng-container *ngIf="aiMetric === 'BoatAt'">
+                <mat-button-toggle [value]="0">0.0</mat-button-toggle>
+                <mat-button-toggle [value]="1">0.1</mat-button-toggle>
+                <mat-button-toggle [value]="2">0.2</mat-button-toggle>
+                <mat-button-toggle [value]="3">0.3</mat-button-toggle>
+                <mat-button-toggle [value]="4">1.0</mat-button-toggle>
+                <mat-button-toggle [value]="5">1.1</mat-button-toggle>
+                <mat-button-toggle [value]="6">1.2</mat-button-toggle>
+                <mat-button-toggle [value]="7">1.3</mat-button-toggle>
+                <mat-button-toggle [value]="8">2.0</mat-button-toggle>
+                <mat-button-toggle [value]="9">2.1</mat-button-toggle>
+                <mat-button-toggle [value]="10">2.2</mat-button-toggle>
+                <mat-button-toggle [value]="11">2.3</mat-button-toggle>
+                <mat-button-toggle [value]="12">3.0</mat-button-toggle>
+                <mat-button-toggle [value]="13">3.1</mat-button-toggle>
+                <mat-button-toggle [value]="14">3.2</mat-button-toggle>
+                <mat-button-toggle [value]="15">3.3</mat-button-toggle>
+              </ng-container>
+            </mat-button-toggle-group>
+          </ng-container>
+
+          <p>moves</p>
+          {{activeAiBoat.shots}}
+          <p *ngFor="let moves of activeAiBoat.moveOptions">
+            {{moves.join('')}}
+          </p>
+
+        </ng-container>
+      </ng-container>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      Claims
+    </ng-template>
+
+    <ng-container *ngIf="!aiData">
+      <button class="margin"
+              mat-raised-button
+              color="accent"
+              (click)="getClaims()">Get AI Data</button>
+      <br>
+    </ng-container>
+    <ng-container *ngIf="aiData && aiData.boats">
+      <button *ngFor="let boat of aiData.boats; let i=index"
+              mat-icon-button
+              [color]="boat === activeAiBoat ? 'primary' : undefined"
+              [title]="selectedShips[i]?.label + ' Claim ' + (i+1)"
+              (click)="selectAiBoat(boat)">
+        <mat-icon>sailing</mat-icon>
+      </button><br>
+    </ng-container>
+
+    <mat-form-field>
+      <mat-label>Ships</mat-label>
+      <mat-chip-list #chipList
+                     aria-label="Ship selection">
+        <mat-chip *ngFor="let ship of selectedShips"
+                  [removable]="true"
+                  (removed)="remove(ship)">
+          {{ship.label}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="New ship..."
+               #shipInput
+               [formControl]="shipCtrl"
+               [matAutocomplete]="auto"
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete"
+                        (optionSelected)="selected($event)">
+        <mat-option *ngFor="let ship of filteredShips | async"
+                    [value]="ship.label">
+          {{ship.label}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <p>Rock Value ({{claimOptions[ClaimOption.RockValue]}}%)</p>
+    <mat-slider [value]="claimOptions[ClaimOption.RockValue]"
+                (input)="claimOptions[ClaimOption.RockValue]=$event.value || 0; getClaims()"
+                step="5"></mat-slider>
+    <p>Wind Value ({{claimOptions[ClaimOption.WindValue]}}%)</p>
+    <mat-slider [value]="claimOptions[ClaimOption.WindValue]"
+                (input)="claimOptions[ClaimOption.WindValue]=$event.value || 0; getClaims()"
+                step="5"></mat-slider>
+    <p>Min Points ({{claimOptions[ClaimOption.MinPoints]}}% influence radius)</p>
+    <mat-slider [value]="claimOptions[ClaimOption.MinPoints]"
+                (input)="claimOptions[ClaimOption.MinPoints]=$event.value || 0; getClaims()"
+                step=5></mat-slider>
+    <p>Duplicate Deterence ({{claimOptions[ClaimOption.DuplicateDeterence]}}%)</p>
+    <mat-slider [value]="claimOptions[ClaimOption.DuplicateDeterence]"
+                (input)="claimOptions[ClaimOption.DuplicateDeterence]=$event.value || 0; getClaims()"
+                step="5"></mat-slider>
+    <button mat-raised-button
+            (click)="getClaims(false)">Random Map</button><br><br>
   </mat-tab>
 </mat-tab-group>

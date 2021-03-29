@@ -1,5 +1,5 @@
 import { Mesh, MeshPhongMaterial, Scene, SphereGeometry, Vector3 } from 'three';
-import TWEEN from '@tweenjs/tween.js';
+import * as TWEEN from '@tweenjs/tween.js';
 import { Clutter } from '../../quacken/boats/boats.component';
 
 const decodeX = [0, 1, 0, -1];
@@ -30,17 +30,17 @@ export class Cannonball {
         if (!hit) obj.dis = 3;
         const p = this.cb.position;
         const time = new Date().valueOf() + delay;
-        this.group.add(new TWEEN.Tween(p as any)
+        this.group.add(new TWEEN.Tween(p)
             .to({ x: p.x + decodeX[obj.dir] * obj.dis, z: p.z + decodeY[obj.dir] * obj.dis }, 3000 / Cannonball.speed * obj.dis)
             .start(time)
             .onComplete(() => {
                 this.remove();
             })
         );
-        this.group.add(new TWEEN.Tween(p as any)
+        this.group.add(new TWEEN.Tween(p)
             .to({ y: 0.2 }, 1500 / Cannonball.speed * 3)
             .easing(TWEEN.Easing.Quadratic.Out)
-            .start(time).chain(new TWEEN.Tween(p as any)
+            .start(time).chain(new TWEEN.Tween(p)
                 .to({ y: 0.1 }, 1500 / Cannonball.speed * 3)
                 .easing(TWEEN.Easing.Quadratic.In)
             )

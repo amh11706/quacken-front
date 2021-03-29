@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { BoatSync } from 'src/app/lobby/quacken/boats/boats.component';
 import { WsService } from 'src/app/ws.service';
 import { Subscription } from 'rxjs';
 import { Internal } from 'src/app/ws-messages';
+import { BoatSync } from 'src/app/lobby/quacken/boats/convert';
 
 @Component({
   selector: 'q-bnav-map',

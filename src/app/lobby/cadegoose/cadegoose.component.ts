@@ -4,7 +4,7 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import Stats from 'three/examples/jsm/libs/stats.module.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import { Water } from 'three/examples/jsm/objects/Water2.js';
-import TWEEN from '@tweenjs/tween.js';
+import * as TWEEN from '@tweenjs/tween.js';
 
 import { Boat } from '../quacken/boats/boat';
 import { Settings } from 'src/app/settings/setting/settings';
@@ -124,8 +124,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private tileObjects = new Map<number, Promise<GLTF>>();
   private mapObjects: Object3D[] = [];
   private stats?: Stats;
-  private cameraTween: any;
-  private controlTween: any;
+  private cameraTween?: TWEEN.Tween<Vector3>;
+  private controlTween?: TWEEN.Tween<Vector3>;
   private mouse = new Vector2(0, 0);
   private mouseMoved = false;
   private rayCaster = new Raycaster();
@@ -156,6 +156,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
     window.addEventListener('resize', this.onWindowResize, false);
     this.ss.getGroup('l/cade', true);
+    this.ws.dispatchMessage({cmd: Internal.Scene, data: this.mapScene});
   }
 
   ngOnInit() {
@@ -213,17 +214,19 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   private centerOnBoat() {
-    if (!this.myBoat.name || this.cameraTween) return;
+    if (!this.myBoat.name) return;
+    this.cameraTween?.end();
+    this.controlTween?.end();
     const time = new Date().valueOf();
     const pos = this.myBoat.pos;
-    this.cameraTween = new TWEEN.Tween(this.camera.position as any)
+    this.cameraTween = new TWEEN.Tween(this.camera.position)
       .to({ x: pos.x - 2.5, y: 9, z: pos.y + 3.5 }, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onComplete(() => delete this.cameraTween)
       .start(time);
 
     if (!this.controls || this.controlTween) return;
-    this.controlTween = new TWEEN.Tween(this.controls.target as any)
+    this.controlTween = new TWEEN.Tween(this.controls.target)
       .to({ x: pos.x + 0.5, z: pos.y + 0.5 }, 1000)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onComplete(() => delete this.controlTween)

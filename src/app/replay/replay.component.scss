@@ -1,20 +1,26 @@
 #replayControl {
   position: absolute;
-  bottom: calc(1% + 167px);
+  bottom: 1%;
   left: 50%;
   transform: translate(-50%, 0);
   width: 95%;
   max-width: 900px;
   min-width: 320px;
-  padding: 5px;
+  padding: 0;
   text-align: center;
   white-space: nowrap;
   overflow-x: auto;
   background-color: rgba(66, 66, 66, 0.85);
   color: #eee;
+  opacity: 0.5;
+  transition: opacity 0.5s;
 
   mat-slider {
     width: calc(100% - 120px);
+  }
+
+  &:hover {
+    opacity: 1;
   }
 }
 
@@ -22,7 +28,7 @@
   position: absolute;
   left: 10px;
   top: calc(50% - 220px);
-  width: 200px;
+  width: 230px;
   height: 400px;
   padding: 0;
   padding-top: 24px;

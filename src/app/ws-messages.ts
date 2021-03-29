@@ -9,6 +9,7 @@ export const enum Internal {
   MyMoves,
   CenterOnBoat,
   BoatClicked,
+  Scene,
 }
 
 export const enum OutCmd {
@@ -40,6 +41,7 @@ export const enum OutCmd {
   RanksTop,
   MatchesUser,
   MatchData,
+  MatchAi,
 
   ChangeEmail,
   ChangePass,

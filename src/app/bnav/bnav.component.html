@@ -13,7 +13,7 @@
      class="container noselect"
      id="submitNew">
     <p>Submit New Moves</p>
-    <mat-form-field class="example-full-width">
+    <mat-form-field>
         <mat-label>Their Moves</mat-label>
         <input #moveInput="ngModel"
                matInput
@@ -21,7 +21,7 @@
                title="LFRX style"
                [(ngModel)]="newMove.moves">
     </mat-form-field>
-    <mat-form-field class="example-full-width">
+    <mat-form-field>
         <mat-label>Shots</mat-label>
         <input #shots="ngModel"
                matInput
@@ -29,7 +29,7 @@
                title="LBRX style lowercase for grapples, B for both"
                [(ngModel)]="newMove.shots">
     </mat-form-field>
-    <mat-form-field class="example-full-width">
+    <mat-form-field>
         <mat-label>AI Pathing</mat-label>
         <mat-select [(value)]="newMove.shipType">
             <mat-option value=""></mat-option>
@@ -38,7 +38,7 @@
             <mat-option value="at">Ahead of us</mat-option>
         </mat-select>
     </mat-form-field>
-    <mat-form-field class="example-full-width">
+    <mat-form-field>
         <mat-label>Notes</mat-label>
         <input #notes="ngModel"
                matInput

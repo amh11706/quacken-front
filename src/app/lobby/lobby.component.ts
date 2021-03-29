@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { WsService } from '../ws.service';
 import { SettingsService } from '../settings/settings.service';
 import { FriendsService } from '../chat/friends/friends.service';
-import { Clutter, BoatSync } from './quacken/boats/boats.component';
+import { Clutter } from './quacken/boats/boats.component';
 import { InCmd, OutCmd } from '../ws-messages';
 import { StatRow } from './cadegoose/stats/stats.component';
+import { BoatSync } from './quacken/boats/convert';
 
 export interface Lobby {
   owner: boolean;

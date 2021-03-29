@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ChatService } from '../chat/chat.service';
-import { BoatSync } from '../lobby/quacken/boats/boats.component';
 import { SettingMap, SettingsService } from '../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../ws-messages';
 import { WsService, InMessage } from '../ws.service';
@@ -10,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FriendsService } from '../chat/friends/friends.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
+import { BoatSync } from '../lobby/quacken/boats/convert';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
@@ -44,7 +44,10 @@ export class ReplayComponent implements OnInit {
       this.fakeChat = this.lobbyWrapper.chat;
       this.fakeWs = this.lobbyWrapper.ws;
       this.ws.fakeWs = this.fakeWs;
+      this.fakeWs.user = this.ws.user;
       this.fs.fakeFs = this.lobbyWrapper.fs;
+      this.fs.fakeFs.isFriend = this.fs.isFriend.bind(this.fs);
+      this.fs.fakeFs.isBlocked = this.fs.isBlocked.bind(this.fs);
     }
     this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id' || 0))));
 
@@ -120,6 +123,11 @@ export class ReplayComponent implements OnInit {
     }
   }
 
+  pause() {
+    clearInterval(this.tickInterval);
+    this.tickInterval = 0;
+  }
+
   togglePlay() {
     if (this.tickInterval) {
       clearInterval(this.tickInterval);
@@ -142,7 +150,7 @@ export class ReplayComponent implements OnInit {
       this.togglePlay();
       this.togglePlay();
     }
-    setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));
+    // setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));
     for (let target = this.tick + 3; target < this.messages.length; target++) {
       if (this.messages[target].find(el => el.cmd === InCmd.Turn)) {
         this.playTo(target - 2);
@@ -157,7 +165,7 @@ export class ReplayComponent implements OnInit {
       this.togglePlay();
       this.togglePlay();
     }
-    setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));
+    // setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));
     for (let target = this.tick - 1; target > 0; target--) {
       if (this.messages[target].find(el => el.cmd === InCmd.Turn)) {
         this.playTo(target - 2);

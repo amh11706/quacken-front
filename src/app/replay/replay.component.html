@@ -7,11 +7,12 @@
        class="handle"></div>
   <q-replay-cadegoose [messages]="messages"
                       [tick]="tick"
+                      (pause)="pause()"
                       (playTo)="playTo($event)"></q-replay-cadegoose>
 </div>
 
 <div id="replayControl"
-     class="container">
+     class="">
   <button mat-icon-button
           (click)="prevTurn()"
           title="Previous turn">

@@ -120,6 +120,7 @@ export class FriendsService {
 
   isFriend(name: string): boolean {
     for (const n of this.friends) if (n === name) return true;
+    for (const n of this.offline) if (n === name) return true;
     return false;
   }
 
