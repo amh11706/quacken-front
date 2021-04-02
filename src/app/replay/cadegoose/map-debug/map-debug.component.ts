@@ -1,0 +1,50 @@
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'q-map-debug',
+  templateUrl: './map-debug.component.html',
+  styleUrls: ['./map-debug.component.scss']
+})
+export class MapDebugComponent implements OnInit {
+  private _seed = '';
+  @Input() set seed(value: string) {
+    this._seed = value;
+    this.seedParts = [];
+    while (value.length) {
+      this.seedParts.push(parseInt(value.substr(0, 2), 16));
+      value = value.substr(2);
+    }
+  }
+  get seed() { return this._seed; }
+  @Output() seedChange = new EventEmitter<string>();
+  seedParts: number[] = [];
+  seedPartEdit = [
+    'Whirl density', 'Wind density', 'Rock density', 'Flag density',
+    'Whirl scramble 1', 'Whirl scramble 2',
+    'Wind scramble 1', 'Wind scramble 2',
+    'Rock scramble 1', 'Rock scramble 2',
+    'Flag scramble 1', 'Flag scramble 2',
+  ];
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  randomSeed() {
+    this.seedParts = [];
+    for (let i = 0; i < 32; i++) {
+      this.seedParts.push(Math.floor(Math.random() * 256));
+    }
+    this.setStringSeed();
+  }
+
+  setStringSeed() {
+    this._seed = '';
+    for (const part of this.seedParts) {
+      this._seed += part.toString(16).padStart(2, '0');
+    }
+    this.seedChange.emit(this._seed);
+  }
+
+}

@@ -42,6 +42,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;
   @Output() playTo = new EventEmitter<number>();
   @Output() pause = new EventEmitter<void>();
+  @Input() seed = '';
   private _tick = 0;
   @Input() set tick(value: number) {
     const i = Math.floor((value + 2) / 30) - 1;
@@ -266,6 +267,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       boats: this.boats.map(boatToSync),
       ticks: this.boatTicks,
       map: sendMap ? this.randomMap || this.lobby?.map : undefined,
+      seed: this.seed,
       claimOptions: this.claimOptions,
       claimsOnly,
       moves,
@@ -311,13 +313,13 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (!this.selectedShips.length) return;
     const boats = this.boats;
     this.boats = [];
-    for (const ship of this.selectedShips) {
-      const boat = new Boat('', ship.value);
-      boat.team = this.aiTeam;
-      boat.id = 10000001;
-      boat.pos.y = 30;
-      this.boats.push(boat);
-    }
+    // for (const ship of this.selectedShips) {
+    //   const boat = new Boat(ship.label, ship.value);
+    //   boat.team = this.aiTeam;
+    //   boat.id = 10000001;
+    //   boat.pos.y = 30;
+    //   this.boats.push(boat);
+    // }
     this.getMatchAi(true, sendMap);
     this.boats = boats;
   }

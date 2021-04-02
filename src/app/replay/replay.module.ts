@@ -17,10 +17,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MapDebugComponent } from './cadegoose/map-debug/map-debug.component';
 
 
 @NgModule({
-  declarations: [ReplayComponent, LobbyWrapperComponent, CadegooseComponent],
+  declarations: [ReplayComponent, LobbyWrapperComponent, CadegooseComponent, MapDebugComponent],
   imports: [
     CommonModule,
     FormsModule,

@@ -5,6 +5,7 @@ import { SettingsService } from '../settings.service';
 import { DefaultBindings, KeyActions, KeyBindings, NotActive, StaticKeyBindings } from './key-actions';
 
 const IgnoreKeys = ['Control', 'Shift', 'Alt'];
+const IgnoreTags = ['INPUT', 'MAT-SLIDER'];
 
 function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBindings {
   const merged = new KeyBindings();
@@ -96,7 +97,7 @@ export class KeyBindingService {
 
   private handleKeyDown = (e: KeyboardEvent) => {
     if (!this.ws.connected) return;
-    if (document.activeElement?.tagName === 'INPUT' || IgnoreKeys.includes(e.key)) return;
+    if (IgnoreTags.includes(document.activeElement?.tagName || '') || IgnoreKeys.includes(e.key)) return;
     const key = this.getKey(e);
 
     if (this.bindSub) {

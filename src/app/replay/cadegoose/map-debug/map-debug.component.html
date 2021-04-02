@@ -1,0 +1,17 @@
+<mat-form-field>
+  <mat-label>Seed</mat-label>
+  <input matInput
+         readonly
+         [value]="seed">
+</mat-form-field>
+
+<button mat-raised-button
+        (click)="randomSeed()">Random Seed</button>
+<br><br>
+
+<ng-container *ngFor="let name of seedPartEdit; let i=index">
+  <p>{{name}} ({{seedParts[i]}})</p>
+  <mat-slider [value]="seedParts[i]"
+              (input)="seedParts[i]=$event.value || 0; setStringSeed()"
+              max="255"></mat-slider>
+</ng-container>

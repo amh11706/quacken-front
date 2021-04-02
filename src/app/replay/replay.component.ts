@@ -29,6 +29,7 @@ export class ReplayComponent implements OnInit {
   private graphicSettings?: SettingMap;
   private boats: BoatSync[] = [];
   tick = 0;
+  seed = '';
 
   constructor(
     private ws: WsService,
@@ -81,6 +82,7 @@ export class ReplayComponent implements OnInit {
     const match = await this.ws.request(OutCmd.MatchData, +id);
     if (!match) return;
     this.messages = match.data.messages;
+    this.seed = match.data.seed;
 
     const settings = match.data.settings;
     for (const group in settings) {
