@@ -51,9 +51,9 @@
       <ng-container *ngIf="boatTicks[boat.id]">
         <br>
         <div class="damage"
-             title="{{boatTicks[boat.id].d}}%">
+             title="{{boat.getDamage()}}%">
           <div class="damagebar"
-               [style.transform]="'translateX(' + boatTicks[boat.id].d / 2 + 'px)'"></div>
+               [style.transform]="'translateX(' + boat.getDamage() / 2 + 'px)'"></div>
         </div>
         <div class="bilge"
              title="{{boatTicks[boat.id].b || 0}}%">

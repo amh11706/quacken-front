@@ -193,6 +193,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, (ticks: Record<number, BoatTick>) => {
       this.boatTicks = ticks;
+      for (const boat of this.boats) boat.damage = ticks[boat.id].d;
       this.updateBoat();
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.Moves, moves => {

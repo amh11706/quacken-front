@@ -52,15 +52,15 @@ export class AiRender {
   constructor() {
     this.ctx = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
     this.ctx.canvas.height = 50 * 36;
-    this.ctx.canvas.width = 50 * 20;
+    this.ctx.canvas.width = 50 * 25;
     this.tex = new CanvasTexture(this.ctx.canvas);
-    const mapObject = new Mesh(new PlaneBufferGeometry(20, 36), new MeshBasicMaterial({
+    const mapObject = new Mesh(new PlaneBufferGeometry(25, 36), new MeshBasicMaterial({
       map: this.tex,
       transparent: true,
       depthWrite: false,
     }));
     mapObject.rotateX(-Math.PI / 2);
-    mapObject.position.set(10, -0.04, 18);
+    mapObject.position.set(12.5, -0.04, 18);
     this.object.add(mapObject);
   }
 
