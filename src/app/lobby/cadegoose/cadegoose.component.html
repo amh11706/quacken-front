@@ -1,12 +1,5 @@
-<div #frame
-     class="noselect"
-     id="background"
-     oncontextmenu="event.preventDefault();">
-     <!-- three.js canvas goes here -->
-</div>
-<div #fps
-     [hidden]="!graphicSettings.showFps.value"
-     id="fps"></div>
+<q-threed-render [hoveredTeam]="hoveredTeam"
+                 [graphicSettings]="graphicSettings"></q-threed-render>
 
 <q-cade-entry-status (mouseover)="statOpacity = 1"
                      (mouseleave)="statOpacity = 0"

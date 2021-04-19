@@ -16,9 +16,10 @@ import { MainMenuComponent } from './main-menu/main-menu.component';
 import { NameModule } from 'src/app/chat/name/name.module';
 import { StatsComponent } from './stats/stats.component';
 import { StatEndComponent } from './stat-end/stat-end.component';
+import { ThreedRenderComponent } from './threed-render/threed-render.component';
 
 @NgModule({
-  declarations: [CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent, MainMenuComponent, StatsComponent, StatEndComponent],
+  declarations: [CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent, MainMenuComponent, StatsComponent, StatEndComponent, ThreedRenderComponent],
   imports: [
     CommonModule,
     FormsModule,

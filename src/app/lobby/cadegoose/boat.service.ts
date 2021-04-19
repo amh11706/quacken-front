@@ -8,13 +8,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 import { BoatsComponent, Clutter, Turn } from '../quacken/boats/boats.component';
-import { ObstacleConfig } from './cadegoose.component';
 import { WsService } from 'src/app/ws.service';
 import { OutCmd, Internal } from 'src/app/ws-messages';
 import { Cannonball } from './clutter/cannonball';
 import { BoatRender } from './boat-render';
 import { JobQueue } from './job-queue';
 import { BoatSync, BoatStatus } from '../quacken/boats/convert';
+import { ObstacleConfig } from './threed-render/threed-render.component';
 
 export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
@@ -270,11 +270,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       if (!boat.render?.hitbox) continue;
       box.setFromObject(boat.render.hitbox);
       if (ray.intersectsBox(box)) {
-        hovered = boat.render.boat.id;
+        hovered = boat.team || 0;
         break;
       }
     }
-    for (const boat of this.boats) boat.render?.showInfluence(boat.render?.boat.id === hovered);
+    for (const boat of this.boats) boat.render?.showInfluence(boat.team === hovered);
   }
 
   findClick(ray: Ray) {

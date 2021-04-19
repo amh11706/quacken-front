@@ -1,0 +1,9 @@
+<div #frame
+     class="noselect"
+     id="background"
+     oncontextmenu="event.preventDefault();">
+     <!-- three.js canvas goes here -->
+</div>
+<div #fps
+     [hidden]="!graphicSettings.showFps.value"
+     id="fps"></div>
