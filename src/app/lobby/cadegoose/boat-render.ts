@@ -47,22 +47,33 @@ export class BoatRender {
   hitbox?: THREE.LineSegments<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
   flags: { p: number, t: number }[] = [];
 
-  private influence: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>;
+  private influence?: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>;
   private header = new THREE.Group();
-  private title: THREE.Sprite;
-  private headerTex: THREE.CanvasTexture;
-  private headerCtx: CanvasRenderingContext2D;
+  private title?: THREE.Sprite;
+  private headerTex?: THREE.CanvasTexture;
+  private headerCtx?: CanvasRenderingContext2D;
   private type: number;
-  private pos: { x: number, y: number };
-  private rotateDeg: number;
+  pos: { x: number, y: number };
+  protected rotateDeg: number;
   private name: string;
   private moves: number[];
   private influenceTween: any;
   private tweenTarget = 0;
   private nameTimeout = 0;
-  private worker = new JobQueue();
+  protected worker = new JobQueue();
 
   constructor(public boat: Boat, gltf: GLTF) {
+    this.type = boat.type;
+    this.pos = { ...boat.pos };
+    this.rotateDeg = boat.face;
+    this.name = boat.name;
+    this.team = boat.team || 0;
+    this.moves = [...boat.moves];
+
+    this.init(boat, gltf);
+  }
+
+  protected init(boat: Boat, gltf: GLTF) {
     if (!BoatRender.circle) {
       const circle = new THREE.EllipseCurve(0, 0, 0.5, 0.5, 0, 2 * Math.PI, false, 0);
       const circleGeo = new THREE.BufferGeometry().setFromPoints(circle.getPoints(50));
@@ -95,19 +106,13 @@ export class BoatRender {
     this.title.scale.y = 0.06;
     this.makeHeader();
 
-    this.type = boat.type;
-    this.pos = { ...boat.pos };
-    this.rotateDeg = boat.face;
-    this.name = boat.name;
-    this.team = boat.team || 0;
-    this.moves = [...boat.moves];
     this.hitbox = this.obj.getObjectByName('hitbox') as any;
   }
 
   dispose() {
     return this.worker.addJob(() => {
       this.obj.parent?.remove(this.obj);
-      this.influence.material.dispose();
+      this.influence?.material.dispose();
       if (this.title) {
         this.title.geometry.dispose();
         this.title.material.dispose();
@@ -123,6 +128,7 @@ export class BoatRender {
 
     if (this.nameTimeout) clearTimeout(this.nameTimeout);
     this.nameTimeout = setTimeout(() => {
+      if (!this.influence) return;
       if (this.name !== this.boat.renderName) this.rebuildHeader();
 
       if (this.influenceTween) {
@@ -138,7 +144,9 @@ export class BoatRender {
       this.influenceTween = new TWEEN.Tween(this.influence.material)
         .to({ opacity: this.tweenTarget }, 200)
         .start(new Date().valueOf())
-        .onComplete(() => this.influence.visible = v);
+        .onComplete(() => {
+          if (this.influence) this.influence.visible = v;
+        });
     }, 200);
   }
 
@@ -165,7 +173,7 @@ export class BoatRender {
     return job;
   }
 
-  private _update(animate: boolean, boat: Boat) {
+  protected _update(animate: boolean, boat: Boat) {
     const startTime = animate ? new Date().valueOf() : 0;
     const promises: Promise<any>[] = [];
 
@@ -177,7 +185,7 @@ export class BoatRender {
       promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, boat.imageOpacity));
     }
 
-    if (this.team !== boat.team) {
+    if (this.team !== boat.team && this.influence) {
       this.influence.material.dispose();
       this.influence.material = (boat.team ? red : green).clone();
       this.rebuildHeader();
@@ -210,6 +218,7 @@ export class BoatRender {
 
   private makeHeader(size = 36): BoatRender {
     const ctx = this.headerCtx;
+    if (!ctx) return this;
     ctx.restore();
     const font = `${size}px bold sans-serif`;
     ctx.font = font;
@@ -252,14 +261,14 @@ export class BoatRender {
       }
     }
 
-    this.headerTex.needsUpdate = true;
-
+    if (this.headerTex) this.headerTex.needsUpdate = true;
+    if (!this.title) return this;
     this.title.scale.x = 0.08 / height * width;
     this.header.add(this.title);
     return this;
   }
 
-  private updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]) {
+  protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]) {
     if (!this.obj.position.x || !this.obj.position.z) console.log(x, y, this.obj.position, this.boat.name);
     let t: any;
     const decodeX = [0, 0.4, 0, -0.4];
@@ -327,7 +336,7 @@ export class BoatRender {
     return p;
   }
 
-  private updateBoatRot(startTime: number, face: number, transition: number, opacity: number) {
+  protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number) {
     const promises: Promise<Euler | Vector3>[] = [];
 
     if (startTime && (transition || !opacity)) {

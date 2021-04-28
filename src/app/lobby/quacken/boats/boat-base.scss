@@ -1,85 +1,81 @@
 .front {
-    z-index: 100;
+  z-index: 100;
 }
 
 .boat,
 .clutter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: visible;
-    z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  z-index: 1;
 }
 
 .boatheader {
-    position: absolute;
-    text-align: center;
-    line-height: 1;
-    top: -20px;
-    left: -23px;
-    width: 150px;
-    height: auto;
-    transform: rotate(45deg) scaleY(1.2);
-}
-
-.boatheader.hex {
-    transform: rotate(60deg) translateX(13px) scaleY(1.2);
+  position: absolute;
+  text-align: center;
+  line-height: 1;
+  top: -20px;
+  left: -23px;
+  width: 150px;
+  height: auto;
+  transform: rotate(45deg) scaleY(1.2);
 }
 
 .boatheader img {
-    width: 15px;
-    height: 15px;
-    margin-left: 4px;
+  width: 15px;
+  height: 15px;
+  margin-left: 4px;
 }
 
 .boattitle {
-    position: relative;
-    padding-bottom: 5px;
-    z-index: 10000;
+  position: relative;
+  padding-bottom: 5px;
+  z-index: 10000;
 }
 
 .movebar {
-    box-sizing: content-box;
-    width: 48px;
-    height: 8px;
-    margin: auto;
-    margin-top: 5px;
-    border: 1px solid black;
-    transition: 0.5s;
+  box-sizing: content-box;
+  width: 48px;
+  height: 8px;
+  margin: auto;
+  margin-top: 5px;
+  border: 1px solid black;
+  transition: 0.5s;
 }
 
 .movebarslice {
-    float: left;
-    width: 25%;
-    height: 8px;
-    background-color: grey;
+  float: left;
+  width: 25%;
+  height: 8px;
+  background-color: grey;
 }
 
 .left {
-    background-color: #b9cef1;
+  background-color: #b9cef1;
 }
 .forward {
-    background-color: #97c469;
+  background-color: #97c469;
 }
 .right {
-    background-color: #ff9d55;
+  background-color: #ff9d55;
 }
 .obscured {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 .overmove {
-    background-color: red;
+  background-color: red;
 }
 
 .sunk {
-    opacity: 0;
-    transform: scale(0.5);
+  opacity: 0;
+  transform: scale(0.5);
 }
 
 .ready {
-    border: 1px solid lime;
+  border: 1px solid lime;
 }
 
 .boatimage {
-    height: 50px;
+  height: 50px;
 }
