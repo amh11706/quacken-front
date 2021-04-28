@@ -8,6 +8,7 @@ import { OutCmd } from 'src/app/ws-messages';
 import { FormControl } from '@angular/forms';
 import { mergeMap, startWith, debounceTime } from 'rxjs/operators';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
+import { ChatService } from 'src/app/chat/chat.service';
 
 @Component({
   selector: 'q-profile',
@@ -24,7 +25,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     public stat: StatService,
     public ws: WsService,
-    private friends: FriendsService,
+    public fs: FriendsService,
+    private chat: ChatService,
   ) { }
 
   ngOnInit() {
@@ -63,12 +65,33 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.stat.openUser(name || this.ws.user?.name || '');
   }
 
+  sendTell(friend: string) {
+    this.chat.setTell(friend);
+    document.getElementById('textinput')?.focus();
+  }
+
+  remove(friend: string) {
+    this.ws.send(OutCmd.FriendRemove, friend);
+  }
+
+  unblock(blocked: string) {
+    this.ws.send(OutCmd.Unblock, blocked);
+  }
+
+  // decline(inv: Invite) {
+  //   this.fs.invites = this.fs.invites.filter(i => i !== inv);
+  //   this.ws.send(OutCmd.FriendDecline, inv);
+  // }
+
+  invite(friend: string) {
+    this.ws.send(OutCmd.ChatCommand, '/invite ' + friend);
+  }
   private searchName(search: string): Promise<string[]> {
     if (search.length < 2) {
       const names = new Map([
-        ...this.friends.lobby.map(m => m.from),
-        ...this.friends.friends,
-        ...this.friends.offline,
+        ...this.fs.lobby.map(m => m.from),
+        ...this.fs.friends,
+        ...this.fs.offline,
       ].map(n => [n, undefined]));
 
       return Promise.resolve(Array.from(names.keys()));
