@@ -1,12 +1,12 @@
 <div id="background">
     <div id="frame">
-        <h2>Welcome {{ws.user?.name}}! Select an option below to play:</h2>
+        <h2 class="welcome">Welcome {{ws.user?.name}}! Select an option below to play:</h2>
 
         <div id="cards">
             <button mat-button
                     class="card"
                     (click)="openNews()">
-                <h3>{{note.title}}</h3>
+                <h3 class="cardTitle">{{note.title}}</h3>
                 <p>{{note.points[0]}}</p>
                 <p>...</p>
             </button>
@@ -14,14 +14,14 @@
             <button mat-button
                     class="card"
                     (click)="openEditor()">
-                <h3>Enter Map Editor</h3>
+                <h3 class="cardTitle">Enter Map Editor</h3>
                 <p>Make maps for you and other players to use!</p>
             </button>
 
             <button mat-button
                     class="card"
                     (click)="createLobby()">
-                <h3>Create Lobby</h3>
+                <h3 class="cardTitle">Create Lobby</h3>
                 <mat-icon id="addLobby">add</mat-icon>
             </button>
 

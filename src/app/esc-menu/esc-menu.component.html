@@ -8,66 +8,62 @@
      [class.open]="es.open">
     <div id="background">
         <div id="side-menu">
-            <button mat-button
+            <div id="menuButtons">
+                <button mat-button
+                    matTooltip="Back to game"
                     [disabled]="!es.open"
                     class="action"
                     (click)="es.open = false">
-                Back to Game
-            </button>
-            <button mat-button
-                    [disabled]="!es.open"
-                    *ngIf="es.lobbyComponent"
-                    [class.selected]="es.activeComponent === es.lobbyComponent"
-                    (click)="es.activeComponent = es.lobbyComponent">
-                Lobby
-            </button>
-            <button mat-button
-                    [disabled]="!es.open"
-                    [class.selected]="es.activeComponent === SettingsComponent"
-                    (click)="es.activeComponent = SettingsComponent">
-                Settings
-            </button>
-            <button mat-button
-                    *ngIf="ws.user?.id"
-                    [disabled]="!es.open"
-                    [class.selected]="es.activeComponent === InventoryComponent"
-                    (click)="es.activeComponent = InventoryComponent">
-                Inventory
-            </button>
-            <button mat-button
-                    [disabled]="!es.open"
-                    [class.selected]="es.activeComponent === ProfileComponent"
-                    (click)="es.activeComponent = ProfileComponent">
-                Profile
-            </button>
-            <button mat-button
+                    <mat-icon>arrow_back</mat-icon>
+                </button>
+                <button mat-button
+                    id="lobbyButton"
+                    matTooltip="Return to Lobby"
                     [disabled]="!es.open"
                     *ngIf="es.lobbyContext || es.lobbyComponent"
                     class="action"
-                    (click)="es.leave()">
-                Leave Lobby
-            </button>
-            <button mat-button
+                    (click)="leave()">
+                    <mat-icon>cancel</mat-icon>
+                </button>
+                <button mat-button 
+                    id="logoutButton"
+                    matTooltip="Logout"
                     [disabled]="!es.open"
                     class="action"
                     (click)="logout()">
-                Logout
-            </button>
-        </div>
-
-        <!-- keep lobby component alive to preserve context -->
-        <div id="content">
-            <div [hidden]="es.activeComponent !== es.lobbyComponent">
-                <ng-container *ngComponentOutlet="es.lobbyComponent"></ng-container>
+                    <mat-icon>power_settings_new</mat-icon>
+                </button>
             </div>
-            <ng-container *ngIf="es.open && es.activeComponent !== es.lobbyComponent">
-                <ng-container *ngComponentOutlet="es.activeComponent"></ng-container>
-            </ng-container>
-        </div>
-
-        <div id="chatframe"
-             *ngIf="es.open">
-            <q-chat [disabled]="!es.open"></q-chat>
+            <mat-tab-group id="main-tab" (selectedTabChange)="onClick($event)">
+                <mat-tab label="PROFILE"
+                [disabled]="!es.open">
+                <ng-container *ngTemplateOutlet="tabContent"></ng-container>
+                </mat-tab>
+                <mat-tab label="INVENTORY"
+                    *ngIf="ws.user?.id"
+                    [disabled]="!es.open">
+                    <ng-container *ngTemplateOutlet="tabContent"></ng-container>
+                </mat-tab>
+                <mat-tab label="SETTINGS"
+                    [disabled]="!es.open">
+                    <ng-container *ngTemplateOutlet="tabContent"></ng-container>
+                </mat-tab>
+            </mat-tab-group>
+            <div id="chatframe"
+                *ngIf="es.open">
+                <q-chat [disabled]="!es.open"></q-chat>
+            </div>
         </div>
     </div>
 </div>
+
+<ng-template #tabContent >
+    <div id="content">
+        <div [hidden]="es.activeComponent !== es.lobbyComponent">
+            <ng-container *ngComponentOutlet="es.lobbyComponent"></ng-container>
+        </div>
+        <ng-container *ngIf="es.open && es.activeComponent !== es.lobbyComponent">
+            <ng-container *ngComponentOutlet="es.activeComponent"></ng-container>
+        </ng-container>
+    </div>
+</ng-template>

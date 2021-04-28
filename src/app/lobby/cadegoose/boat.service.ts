@@ -39,7 +39,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   private camera?: Camera;
   private controls?: OrbitControls;
   private ships: Record<number, Promise<GLTF>> = {};
-  private blockRender = true;
+  protected blockRender = true;
   flags: Mesh[] = [];
   private flagData: { x: number, y: number, t: number, p: number, cs: number[] }[] = [];
   private worker = new JobQueue();
@@ -311,7 +311,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     });
   }
 
-  private checkNewShips() {
+  protected checkNewShips() {
     const boatUpdates: Promise<void>[] = [];
     for (const boat of this.boats) {
       if (boat.render) continue;

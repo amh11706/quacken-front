@@ -2,18 +2,24 @@
 
 #backgroundframe {
     position: absolute;
-    height: 40px;
-    width: 40px;
-    overflow: hidden;
+    width: 0%;
+    overflow: auto;
     z-index: 10;
-    opacity: 0.3;
-    transition: 0.2s ease-out, opacity 0.4s linear;
+    opacity: 1;
+    
 
     &.open {
-        height: 100vh;
-        width: 100vw;
-        opacity: 1;
-        transition: none;
+        height: 100%;
+        width: 100%;
+        opacity:1;
+        padding: 0.5% 0.5% 0.5% 0.5%;
+        -webkit-animation: fadeIn 5s;
+        animation: fadeIn 5s;
+        // -webkit-transform: translate2d(-100%, 0px, 0px);
+        // transform: translate2d(-100%, 0px, 0px);
+        // visibility: visible;
+        // transition: all 0.2s ease 0s;
+        // -webkit-transition: all 0.2s ease 0s;
     }
 }
 
@@ -21,68 +27,76 @@
     position: absolute;
     color: #eee;
     font-size: 24px;
-    z-index: 11;
+    z-index: 5;
 }
 
 #background {
     display: grid;
-    grid-template-columns: 250px auto;
-    grid-template-rows: calc(100vh - 150px) 150px;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(7, 7, 48, 0.9);
+    border: 1px solid black; // try border-left and border-right
+    width: 100%;
+    height: 100%;
+    background-color: rgba(37, 36, 36, 0.9);
+    border-radius: 15px;
     color: #eee;
 }
 
+#side-menu{
+    display: grid;
+    grid-template-columns: 50px minmax(100px, 1fr);
+    grid-template-rows: calc( 100vh - 220px ) 1fr;
+    row-gap: 1%;
+    column-gap: 2%;
+    padding: 2% 2% 2% 2%;
+    min-height: 100%;
+    border-radius: 15px;
+    background-color: rgba(66, 66, 66, 0.9);
+}
+
+#menuButtons{
+    padding-top: calc(100vh - (100vh * 0.5) - 120px);
+    .button{
+        display: block;
+        width: 200px;
+    }
+    .mat-button{
+        margin-bottom:30px;
+    }
+    .mat-button:hover{
+        background-color: rgba(235, 66, 66, 0.9);
+    }
+    .mat-icon{
+        font-size: 20px;
+    }
+}
+
+::ng-deep .mat-tab-label:hover {
+    background-color: rgba(235, 66, 66, 0.9);
+}
+
 #content {
-    position: relative;
-    height: 100%;
+    grid-column-start: 2;
+    height: auto;
 }
 
-#side-menu {
-    display: flex;
-    grid-row: 1 / 3;
-    flex-direction: column;
-    justify-content: center;
-    background: linear-gradient(90deg, rgba(0, 0, 90, 1) 0%, rgba(9, 9, 121, 1) 99%, rgba(0, 146, 255, 1) 100%);
-    border-right: 2px solid black;
+@media screen and (max-width:400px){
 
-    button {
-        border-bottom: 1px solid grey;
-        transition: 0.2s;
-        font-size: 18px;
-        padding: 8px;
+    ::ng-deep .mat-tab-header-pagination {
+        display: none !important;
     }
 
-    button:last-child {
-        border-bottom: none;
+    ::ng-deep .mat-tab-header {
+      overflow-x: scroll !important;
     }
-
-    button.selected {
-        color: mat-color($primary);
-        background-color: rgba(255, 255, 255, 0.08);
-    }
-
-    button:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .action {
-        background-color: rgba(0, 0, 0, 0.1);
-    }
-
-    .action:hover {
-        background-color: rgba(0, 0, 0, 0.15);
+    
+    ::ng-deep .mat-tab-label-container { 
+      overflow: hidden !important;
     }
 }
-
 #chatframe {
-    background: linear-gradient(0, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 85%, rgba(0, 146, 255, 1) 100%);
-    text-align: center;
-
+    grid-column-start: 2;
+    grid-column-end: 3;
     q-chat {
-        display: inline-block;
         width: 100%;
-        max-width: 750px;
+        height: 100%;
     }
 }

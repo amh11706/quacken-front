@@ -1,7 +1,8 @@
 import { Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 
 @Directive({
-  selector: '[qDrag]'
+  selector: '[qDrag]',
+  exportAs: 'qDrag',
 })
 export class QdragDirective implements OnInit, OnDestroy {
   @Input() qDrag?: HTMLElement;
@@ -9,6 +10,7 @@ export class QdragDirective implements OnInit, OnDestroy {
   @Input() offsetX = 0;
   @Input() offsetY = 0;
   @Input() transform = '';
+  @Input() scale = 1;
 
   private rightGap?: number;
   private startX = 0;
@@ -92,8 +94,8 @@ export class QdragDirective implements OnInit, OnDestroy {
   }
 
   private onMove = (event: MouseEvent) => {
-    this.offsetX += event.clientX - this.startX;
-    this.offsetY += event.clientY - this.startY;
+    this.offsetX += (event.clientX - this.startX) / this.scale;
+    this.offsetY += (event.clientY - this.startY) / this.scale;
     this.startX = event.clientX;
     this.startY = event.clientY;
     this.updateTransform();
@@ -101,8 +103,8 @@ export class QdragDirective implements OnInit, OnDestroy {
 
   private touchMove = (event: TouchEvent) => {
     const touch = event.touches[0];
-    this.offsetX += touch.clientX - this.startX;
-    this.offsetY += touch.clientY - this.startY;
+    this.offsetX += (touch.clientX - this.startX) / this.scale;
+    this.offsetY += (touch.clientY - this.startY) / this.scale;
     this.startX = touch.clientX;
     this.startY = touch.clientY;
     this.updateTransform();

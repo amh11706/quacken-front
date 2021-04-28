@@ -3,7 +3,7 @@ import { BoatRender } from '../../cadegoose/boat-render';
 export class Boat {
   treasure = 0;
   damage = 0;
-  pos = { x: 12, y: 49 };
+  pos = { x: 10, y: 10 };
   moves = [0, 0, 0, 0];
   shots?: number[];
   id = 0;
@@ -19,6 +19,7 @@ export class Boat {
   bomb = 0;
   tokenPoints = 0;
   moveTransition = [0, 0];
+  tryFace = 0;
   face = 0;
   rotateTransition = 0;
   opacity = 1;
@@ -59,6 +60,7 @@ export class Boat {
   }
 
   setTransition(transition: number, move: number) {
+    this.tryFace = transition;
     if (move === 2) this.moveTransition = [1, 1];
     else if (transition % 2) this.moveTransition = [2, 3];
     else this.moveTransition = [3, 2];

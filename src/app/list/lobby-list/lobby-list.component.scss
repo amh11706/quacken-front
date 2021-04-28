@@ -9,7 +9,7 @@
 
 #background {
     height: 100vh;
-    padding: 40px 2% 0 2%;
+    padding: 4% 2% 0 2%;
     background: center/cover url("/assets/background.jpg");
     overflow: auto;
 }
@@ -17,15 +17,23 @@
 #cards {
     position: relative;
     min-height: 100px;
-    height: calc(100vh - 328px);
+    height: calc(100vh - 348px);
     padding: 12px 0;
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
-    border-top: 1px solid darkgrey;
+    border-top: 1px solid rgb(15, 15, 15);
     column-gap: 12px;
     row-gap: 12px;
+}
+
+.cardTitle{
+    color: rgb(219, 216, 13) !important;
+}
+
+.welcome{
+    color: rgb(219, 216, 13) !important;
 }
 
 .card {
@@ -33,8 +41,21 @@
     width: 150px;
     overflow: hidden;
     padding: 8px 16px;
-    background-color: rgba(112, 123, 124, 0.8);
-    border: 1px solid darkgrey;
+    background-color: rgba(198, 198, 204, 0.5);
+    border: 1px solid black;
+    border-radius: 16px;
+    white-space: normal;
+    line-height: inherit;
+    transition: 0.3s;
+}
+
+.card:hover {
+    height: 200px;
+    width: 150px;
+    overflow: hidden;
+    padding: 8px 16px;
+    background-color: rgba(64, 64, 66, 0.5);
+    border: 1px solid black;
     border-radius: 16px;
     white-space: normal;
     line-height: inherit;
@@ -42,18 +63,20 @@
 }
 
 #frame {
+    display:grid;
     position: relative;
     max-width: 900px;
     max-height: calc(100vh - 60px);
     min-height: 360px;
     margin: auto;
     padding: 16px;
-    background-color: rgba(112, 123, 124, 0.8);
+    background-color: rgba(66, 66, 66, 0.85);
     color: #eee;
-    border: 2px solid grey;
+    border: 1px solid black;
     border-radius: 8px;
     user-select: none;
     text-align: center;
+    row-gap: 1%;
 }
 
 #addLobby {
