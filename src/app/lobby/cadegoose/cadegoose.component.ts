@@ -12,7 +12,7 @@ import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
-import { ThreedRenderComponent } from './threed-render/threed-render.component';
+import { TwodRenderComponent } from './twod-render/twod-render.component';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'jobberQuality', 'cadeTurnTime', 'cadePublicMode', 'cadeHotEntry',
@@ -27,7 +27,7 @@ export const CadeDesc = 'CadeGoose: Use your ship to contest flags and sink enem
   styleUrls: ['./cadegoose.component.scss'],
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(ThreedRenderComponent) renderer?: ThreedRenderComponent;
+  @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;
   protected menuComponent = MainMenuComponent;
   graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
   controlSettings: SettingMap = { lockAngle: { value: 0 } };

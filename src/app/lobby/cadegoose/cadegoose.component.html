@@ -1,5 +1,7 @@
-<q-threed-render [hoveredTeam]="hoveredTeam"
-                 [graphicSettings]="graphicSettings"></q-threed-render>
+<q-twod-render [hoveredTeam]="hoveredTeam"
+               [speed]="graphicSettings.speed.value"
+               [mapScale]="graphicSettings.mapScale.value"
+               [myBoat]="myBoat"></q-twod-render>
 
 <q-cade-entry-status (mouseover)="statOpacity = 1"
                      (mouseleave)="statOpacity = 0"

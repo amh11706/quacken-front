@@ -17,9 +17,16 @@ import { NameModule } from 'src/app/chat/name/name.module';
 import { StatsComponent } from './stats/stats.component';
 import { StatEndComponent } from './stat-end/stat-end.component';
 import { ThreedRenderComponent } from './threed-render/threed-render.component';
+import { TwodRenderComponent } from './twod-render/twod-render.component';
+import { GuBoatsComponent } from './twod-render/gu-boats/gu-boats.component';
+import { GuBoatImgComponent } from './twod-render/gu-boats/gu-boat-img/gu-boat-img.component';
 
 @NgModule({
-  declarations: [CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent, MainMenuComponent, StatsComponent, StatEndComponent, ThreedRenderComponent],
+  declarations: [
+    CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent,
+    MainMenuComponent, StatsComponent, StatEndComponent,
+    ThreedRenderComponent, TwodRenderComponent, GuBoatsComponent, GuBoatImgComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,
