@@ -25,8 +25,8 @@ export class EscMenuComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
   ) {
-    this.es.defaultComponent = ProfileComponent;
-    this.es.activeComponent = ProfileComponent;
+    this.es.defaultComponent = this.es.lobbyComponent;
+    this.es.activeComponent = this.es.lobbyComponent;
   }
 
   ngOnInit(): void {
@@ -39,24 +39,6 @@ export class EscMenuComponent implements OnInit {
   leave() {
     this.router.navigateByUrl('/list');
     this.es.open = false;
-  }
-
-  onClick(event: MatTabChangeEvent){
-
-    switch(event.tab.textLabel){
-      case "SETTINGS": {
-        this.es.activeComponent = SettingsComponent;
-        break
-      }
-      case "INVENTORY": {
-        this.es.activeComponent = InventoryComponent;
-        break
-      }
-      case "PROFILE": {
-        this.es.activeComponent = ProfileComponent;
-        break
-      }
-    }
   }
 
 }

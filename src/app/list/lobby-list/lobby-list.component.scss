@@ -26,6 +26,7 @@
     border-top: 1px solid rgb(15, 15, 15);
     column-gap: 12px;
     row-gap: 12px;
+    margin-bottom: 10px;
 }
 
 .cardTitle{
@@ -63,7 +64,6 @@
 }
 
 #frame {
-    display:grid;
     position: relative;
     max-width: 900px;
     max-height: calc(100vh - 60px);
@@ -76,7 +76,6 @@
     border-radius: 8px;
     user-select: none;
     text-align: center;
-    row-gap: 1%;
 }
 
 #addLobby {

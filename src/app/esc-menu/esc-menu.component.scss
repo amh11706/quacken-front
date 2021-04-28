@@ -54,10 +54,6 @@
 
 #menuButtons{
     padding-top: calc(100vh - (100vh * 0.5) - 120px);
-    .button{
-        display: block;
-        width: 200px;
-    }
     .mat-button{
         margin-bottom:30px;
     }
@@ -71,11 +67,6 @@
 
 ::ng-deep .mat-tab-label:hover {
     background-color: rgba(235, 66, 66, 0.9);
-}
-
-#content {
-    grid-column-start: 2;
-    height: auto;
 }
 
 @media screen and (max-width:400px){

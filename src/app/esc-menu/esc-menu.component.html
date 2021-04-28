@@ -34,19 +34,24 @@
                     <mat-icon>power_settings_new</mat-icon>
                 </button>
             </div>
-            <mat-tab-group id="main-tab" (selectedTabChange)="onClick($event)">
+            <mat-tab-group id="main-tab">
+                <mat-tab label="LOBBY"
+                    *ngIf="es.lobbyComponent"
+                    [disabled]="!es.open">
+                    <ng-container *ngComponentOutlet="es.lobbyComponent"></ng-container>
+                </mat-tab>
                 <mat-tab label="PROFILE"
-                [disabled]="!es.open">
-                <ng-container *ngTemplateOutlet="tabContent"></ng-container>
+                    [disabled]="!es.open">
+                    <ng-container *ngComponentOutlet="ProfileComponent"></ng-container> 
                 </mat-tab>
                 <mat-tab label="INVENTORY"
                     *ngIf="ws.user?.id"
                     [disabled]="!es.open">
-                    <ng-container *ngTemplateOutlet="tabContent"></ng-container>
+                    <ng-container *ngComponentOutlet="InventoryComponent"></ng-container> 
                 </mat-tab>
                 <mat-tab label="SETTINGS"
                     [disabled]="!es.open">
-                    <ng-container *ngTemplateOutlet="tabContent"></ng-container>
+                    <ng-container *ngComponentOutlet="SettingsComponent"></ng-container> 
                 </mat-tab>
             </mat-tab-group>
             <div id="chatframe"
@@ -56,14 +61,3 @@
         </div>
     </div>
 </div>
-
-<ng-template #tabContent >
-    <div id="content">
-        <div [hidden]="es.activeComponent !== es.lobbyComponent">
-            <ng-container *ngComponentOutlet="es.lobbyComponent"></ng-container>
-        </div>
-        <ng-container *ngIf="es.open && es.activeComponent !== es.lobbyComponent">
-            <ng-container *ngComponentOutlet="es.activeComponent"></ng-container>
-        </ng-container>
-    </div>
-</ng-template>
