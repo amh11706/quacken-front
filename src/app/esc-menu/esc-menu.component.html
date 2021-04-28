@@ -2,7 +2,9 @@
         id="toggleesc"
         (click)="es.open = !es.open"
         title="Menu (esc)">
-    <mat-icon>menu</mat-icon>
+    <mat-icon
+        [ngStyle]="{'color':'red'}"
+    >menu</mat-icon>
 </button>
 <div id="backgroundframe"
      [class.open]="es.open">
@@ -14,7 +16,9 @@
                     [disabled]="!es.open"
                     class="action"
                     (click)="es.open = false">
-                    <mat-icon>arrow_back</mat-icon>
+                    <mat-icon
+                        [ngStyle]="{'color':'green'}"
+                    >arrow_back</mat-icon>
                 </button>
                 <button mat-button
                     id="lobbyButton"
@@ -31,7 +35,9 @@
                     [disabled]="!es.open"
                     class="action"
                     (click)="logout()">
-                    <mat-icon>power_settings_new</mat-icon>
+                    <mat-icon
+                        [ngStyle]="{'color':'red'}"
+                    >power_settings_new</mat-icon>
                 </button>
             </div>
             <mat-tab-group id="main-tab">

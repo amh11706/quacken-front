@@ -1,22 +1,10 @@
-#shade {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-}
 
 #menu {
-    position: absolute;
-    top: calc(50% - 50px);
-    left: 50%;
-    width: 75%;
-    max-height: 60vh;
-    max-width: 800px;
-    padding: 0 20px 20px 20px;
+    position: relative;
+    margin: 10px auto 10px auto;
+    max-width: 600px;
+    padding: 0 10px 10px 10px;
     color: #efefef;
-    transform: translate(-50%, -50%);
     text-align: center;
 }
 
@@ -24,11 +12,22 @@
     display: flex;
     flex-wrap: wrap;
     column-gap: 12px;
-    row-gap: 8px;
+    row-gap: 2px;
     justify-content: center;
-    overflow-y: auto;
-    height: 420px;
-    max-height: calc(60vh - 80px);
+    overflow-y: hidden;
+    height: auto;
+}
+
+@media screen and (max-width:400px){
+    #flexmenu {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 12px;
+        row-gap: 2px;
+        justify-content: center;
+        overflow-y: hidden;
+        height: 1030px !important;
+    }
 }
 
 .teamwrap {
@@ -41,7 +40,7 @@
     margin-top: 8px;
     padding-top: 4px;
     min-width: 200px;
-    height: 250px;
+    height: 200px;
     border: 1px solid green;
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.3);

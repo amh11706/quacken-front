@@ -1,12 +1,11 @@
-<div id="shade">
-  <div id="menu"
+<div id="menu"
        class="container noselect">
     <div *ngIf="statsOpen; else teams">
       <q-stat-end [stats]="es.lobbyContext?.stats"
                   (close)="statsOpen = false"></q-stat-end>
     </div>
     <ng-template #teams>
-      <h2>Team Selection</h2>
+      <h2 style="font-size: 20px;">Team Selection</h2>
       <div id="flexmenu">
         <div class="teamwrap">
           <button mat-raised-button
@@ -62,4 +61,3 @@
       </div>
     </ng-template>
   </div>
-</div>
