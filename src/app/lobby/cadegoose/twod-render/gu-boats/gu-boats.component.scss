@@ -1,0 +1,12 @@
+@import "../../../quacken/boats/boat-base.scss";
+
+.boatheader {
+  left: 32px;
+  top: -48px;
+  transform: translateX(-50%);
+}
+
+.boat {
+  width: 64px;
+  height: 48px;
+}

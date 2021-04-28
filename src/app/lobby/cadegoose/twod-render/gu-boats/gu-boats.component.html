@@ -1,0 +1,48 @@
+<div *ngFor="let obj of clutter; trackBy: trackBy"
+     class="clutter"
+     [class.front]="obj.p && obj.t === 0"
+     [style.transform]="getObj(obj)">
+
+  <div>
+    <img *ngIf="myBoat.type < 10 || obj.t > 0"
+         [title]="clutterTypes[obj.t]"
+         class="clutterimage clutter{{obj.t}}{{obj.p ? ' sunk' : ''}}"
+         src="./assets/images/{{clutterTypes[obj.t]}}.png">
+    <div *ngIf="obj.d === 1 && obj.t === 4"
+         class="wave"
+         [style.top]="'50px'"
+         [style.left]="'50px'">
+    </div>
+    <div *ngIf="obj.p && obj.t === 0"
+         class="deadBomb"
+         [style.top]="'25px'"
+         [style.left]="'25px'">
+    </div>
+  </div>
+</div>
+
+<div *ngFor="let boat of boats; trackBy: trackBoatBy"
+     class="boat"
+     [style.opacity]="boat.opacity"
+     [style.transition]="moveTransition(boat.moveTransition[0])"
+     [style.transform]="'translate(' + render(boat).coords?.x + 'px, ' + render(boat).coords?.y  + 'px)'">
+  <div class="boatheader"
+       [class.hex]="hex"
+       *ngIf="boat.name || boat.isMe">
+    <span class="boattitle"
+          [title]="boat.title + titles[boat.treasure]"
+          [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
+      {{boat.name}}
+    </span>
+
+    <div class="movebar"
+         [class.ready]="boat.ready">
+      <div *ngFor="let move of boat.moves; let i=index"
+           class="movebarslice {{moveNames[move]}}">
+      </div>
+    </div>
+  </div>
+
+  <q-gu-boat-img [render]="render(boat)"
+                 [opacity]="boat.imageOpacity"></q-gu-boat-img>
+</div>

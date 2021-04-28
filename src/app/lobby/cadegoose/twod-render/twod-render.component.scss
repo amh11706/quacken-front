@@ -1,0 +1,21 @@
+#background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("/assets/images/sea1.png");
+  overflow: hidden;
+}
+
+#mapcenter {
+  position: absolute;
+  transform-origin: center center;
+  transform: translate(50vw, 50vh) translate(-50%, -50%);
+}
+
+#flagMapCanvas, q-gu-boats {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

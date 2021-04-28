@@ -1,0 +1,33 @@
+<div #frame
+     class="noselect"
+     id="background"
+     (wheel)="scroll($event)"
+     oncontextmenu="event.preventDefault();"
+     [style.backgroundSize]="mapScale*64 + 'px'"
+     [style.backgroundPosition]="'calc(50vw + ' + (drag.offsetX*mapScale) + 'px) calc(50vh + ' + (drag.offsetY*mapScale) + 'px)'">
+  <!-- mapframe receives the offset transform, map receives the rotate transform.
+ 	This allows them to be altered independent of each other -->
+  <div id="mapcenter">
+    <div [style.transform]="'scale(' + mapScale + ')'">
+      <div #drag="qDrag"
+           [qDrag]="frame"
+           [scale]="mapScale">
+        <div [style.transform]="'translate(' + -getXOff(myBoat.pos) + 'px, ' + -getYOff(myBoat.pos) + 'px)'"
+             [style.transition]="moveTransition(myBoat.moveTransition[0])">
+          <canvas id="mapCanvas"
+                  [width]="getWidth()"
+                  [height]="getHeight()"
+                  #canvas></canvas>
+          <canvas id="flagMapCanvas"
+                  [width]="getWidth()"
+                  [height]="getHeight()"
+                  #flagCanvas></canvas>
+
+          <q-gu-boats [getX]="getX"
+                      [getY]="getY">
+          </q-gu-boats>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
