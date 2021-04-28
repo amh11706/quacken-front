@@ -16,6 +16,7 @@ mat-card {
   padding: 16px 32px;
   margin: 16px auto;
   overflow-x: auto;
+  background-color: rgb(94, 92, 92);
 }
 
 .settings {
@@ -31,4 +32,3 @@ mat-card {
   padding: 8px 16px;
   margin-bottom: 8px;
 }
-
