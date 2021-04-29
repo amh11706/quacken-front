@@ -57,7 +57,7 @@ mat-checkbox {
 #movesource div {
   display: inline-block;
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
   color: #eee;
 }
 
@@ -216,6 +216,30 @@ mat-checkbox {
 
 .blocked {
   background-color: #999;
+}
+
+.move1 {
+  background-image: url("../../../../assets/images/arrow1empty.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.move2 {
+  background-image: url("../../../../assets/images/arrow2empty.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.move3 {
+  background-image: url("../../../../assets/images/arrow3empty.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+.moveblocked {
+  background-image: url("../../../../assets/images/blocked.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 .bombmove {

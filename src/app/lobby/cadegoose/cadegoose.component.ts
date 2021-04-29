@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input } from '@angular/core';
 
 import { Boat } from '../quacken/boats/boat';
 import { Settings } from 'src/app/settings/setting/settings';
@@ -37,6 +37,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   mapWidth = 20;
   protected joinMessage = CadeDesc;
   protected statAction = KeyActions.CShowStats;
+  @Input() myTeam?: number =-1;
 
   constructor(
     ws: WsService,

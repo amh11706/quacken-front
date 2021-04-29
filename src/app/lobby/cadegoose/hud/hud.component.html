@@ -32,7 +32,8 @@
                     </div>
 
                     <div class="move"
-                         [class.blocked]="maxMoves || locked"
+                         [class.moveblocked]="maxMoves"
+                         [class.blocked]="locked"
                          [class.selected]="kbControls && selected == i && !locked"
                          (drop)="drop($event, i)"
                          (mouseup)="clickTile($event, i)"
@@ -73,7 +74,7 @@
                          <mat-radio-button [value]="1"
                                            [disabled]="auto"></mat-radio-button>
                          <br>
-                         <div class="move blocked"
+                         <div class="move move1"
                               [title]="tokenStrings[0]">
                               <img [style.opacity]="haveMoves[0] > usingMoves[0] ? 1 : 0"
                                    name="left"
@@ -88,7 +89,7 @@
                          <mat-radio-button [value]="2"
                                            [disabled]="auto"></mat-radio-button>
                          <br>
-                         <div class="move blocked"
+                         <div class="move move2"
                               [title]="tokenStrings[1]">
                               <img [style.opacity]="haveMoves[1] > usingMoves[1] ? 1 : 0"
                                    name="forward"
@@ -103,7 +104,7 @@
                          <mat-radio-button [value]="3"
                                            [disabled]="auto"></mat-radio-button>
                          <br>
-                         <div class="move blocked"
+                         <div class="move move3"
                               [title]="tokenStrings[2]">
                               <img [style.opacity]="haveMoves[2] > usingMoves[2] ? 1 : 0"
                                    name="right"

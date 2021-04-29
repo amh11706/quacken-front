@@ -3,7 +3,12 @@
         (click)="es.open = !es.open"
         title="Menu (esc)">
     <mat-icon
-        [ngStyle]="{'color':'red'}"
+        [ngStyle]="{
+            'border':'1px solid black', 
+            'color':'white', 
+            'background-color':'rgb(67, 67, 67)',
+            'width':'30px'
+        }"
     >menu</mat-icon>
 </button>
 <div id="backgroundframe"
