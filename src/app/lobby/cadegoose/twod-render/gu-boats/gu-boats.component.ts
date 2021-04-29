@@ -3,6 +3,15 @@ import { BoatService } from '../../boat.service';
 import { GuBoat } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
 import { Boat } from 'src/app/lobby/quacken/boats/boat';
+import { Turn } from 'src/app/lobby/quacken/boats/boats.component';
+
+const FlagColorOffsets: Record<number, number> = {
+  0: 3,
+  1: 6,
+  98: 0,
+  99: 9,
+  100: 12,
+};
 
 @Component({
   selector: 'q-gu-boats',
@@ -10,6 +19,7 @@ import { Boat } from 'src/app/lobby/quacken/boats/boat';
   styleUrls: ['./gu-boats.component.scss'],
 })
 export class GuBoatsComponent extends BoatService {
+  @Input() hoveredTeam = -1;
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
   moveTransition = (transition: number): string => {
@@ -30,6 +40,26 @@ export class GuBoatsComponent extends BoatService {
 
   render(boat: Boat): GuBoat {
     return (boat.render || { orientation: {} }) as GuBoat;
+  }
+
+  protected setHeaderFlags(flags: Turn['flags']) {
+    for (const boat of this.boats) if (boat.render) boat.render.flags = [];
+    for (const f of flags) {
+      if (f.cs) for (const id of f.cs) {
+        const team = f.t === this.myBoat.team ? 98 : f.t;
+        this._boats[id]?.render?.flags.push({
+          p: f.p, t: f.t, offset: 160 - (FlagColorOffsets[team] + f.p) * 10 + 'px',
+        } as any);
+      }
+    }
+    for (const boat of this.boats) {
+      if (!boat.render) continue;
+      boat.render.flags.sort((a, b) => {
+        if (a.p > b.p) return -1;
+        if (a.p < b.p) return 1;
+        return b.t - a.t;
+      });
+    }
   }
 
   protected checkNewShips() {

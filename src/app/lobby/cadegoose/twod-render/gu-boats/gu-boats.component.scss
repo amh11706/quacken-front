@@ -2,11 +2,62 @@
 
 .boatheader {
   left: 32px;
-  top: -48px;
+  top: -70px;
   transform: translateX(-50%);
+}
+
+.flags div {
+  display: inline-block;
+  height: 13px;
+  width: 10px;
+  background: url("/assets/images/buoy_symbols.png");
 }
 
 .boat {
   width: 64px;
   height: 48px;
+}
+
+.influence {
+  box-sizing: content-box;
+  position: absolute;
+  top: 22px;
+  left: 32px;
+  min-width: 50px;
+  min-height: 50px;
+  padding: 4px;
+  border: 1px solid lime;
+  border-radius: 50%;
+  transition: 0.3s;
+  transform: translate(-50%, -50%) scaleY(0.75);
+  pointer-events: none;
+}
+
+.team1 .influence {
+  border-color: red;
+}
+
+.sameteam .influence {
+  border-color: lightblue;
+}
+
+.boattitle {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  white-space: nowrap;
+}
+
+.team0 {
+  color: green;
+}
+
+.team1 {
+  color: crimson;
+}
+
+.sameteam {
+  color: lightblue;
+}
+
+.isme {
+  color: aquamarine;
 }
