@@ -70,7 +70,6 @@ export class GuBoat extends BoatRender {
   static widthOffset = 19;
   coords?: Point;
   private spriteData?: SpriteData;
-  private orientationIndex = 2;
   orientation?: Orientation;
   img?: string;
   imgPosition?: string;
@@ -83,11 +82,9 @@ export class GuBoat extends BoatRender {
   init(boat: Boat) {
     this.coords = new Point().fromPosition(boat.pos);
     this.spriteData = Boats[boat.type as BoatTypes];
-    this.orientation = this.spriteData?.orientations[(faceTranslate[boat.face / 90] * 4 + 2) % 16] || {} as Orientation;
     if (!this.spriteData) return;
+    this.updateImage();
     this.img = 'url("/assets/boats/' + this.spriteData.name + '/sail.png")';
-    this.imgPosition = this.orientation.x + 'px ' + this.orientation.y + 'px';
-    this.rotateDeg = boat.face;
   }
 
   dispose() {
@@ -196,8 +193,7 @@ export class GuBoat extends BoatRender {
   }
 
   private updateImage(index = (faceTranslate[this.boat.face / 90] * 4 + 2) % 16) {
-    this.orientationIndex = index;
-    this.orientation = this.spriteData?.orientations[this.orientationIndex] || {} as Orientation;
+    this.orientation = this.spriteData?.orientations[index] || {} as Orientation;
     this.imgPosition = this.orientation.x + 'px ' + this.orientation.y + 'px';
   }
 
@@ -210,9 +206,10 @@ export class GuBoat extends BoatRender {
           const delay = 2000 / BoatRender.speed;
           const delayOffset = 5000 / BoatRender.speed;
           const offset = this.rotateDeg + 90 === face ? 15 : 1;
+          const f = faceTranslate[this.rotateDeg / 90] * 4 + 2;
           for (let i = 1; i < 5; i++) {
             setTimeout(() => {
-              this.updateImage((this.orientationIndex + offset) % 16);
+              this.updateImage((f + offset * i) % 16);
             }, delayOffset + delay * i);
           }
           setTimeout(resolve, 10000 / BoatRender.speed);
@@ -220,7 +217,7 @@ export class GuBoat extends BoatRender {
           this.updateImage();
           setTimeout(resolve, 10000 / BoatRender.speed);
         }
-      }));
+      }).then(() => this.rotateDeg = face));
     } else {
       this.updateImage();
     }
@@ -231,7 +228,6 @@ export class GuBoat extends BoatRender {
       }));
     }
 
-    this.rotateDeg = face;
     return promises;
   }
 }
