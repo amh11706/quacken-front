@@ -1,4 +1,4 @@
-import { BoatRender } from '../../boat-render';
+import { BoatRender, moveEase } from '../../boat-render';
 import { Boat } from 'src/app/lobby/quacken/boats/boat';
 import { BoatTypes } from 'src/app/lobby/quacken/boats/boat-types';
 import { SpriteData, Orientation } from '../sprite';
@@ -16,6 +16,7 @@ import { XebecData } from './objects/xebec';
 import { MerchBrigData } from './objects/merchbrig';
 import { MerchGalData } from './objects/merchgal';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import * as TWEEN from '@tweenjs/tween.js';
 
 // pixel coordinates relative to top left of canvas
 export class Point {
@@ -86,6 +87,7 @@ export class GuBoat extends BoatRender {
     if (!this.spriteData) return;
     this.img = 'url("/assets/boats/' + this.spriteData.name + '/sail.png")';
     this.imgPosition = this.orientation.x + 'px ' + this.orientation.y + 'px';
+    this.rotateDeg = boat.face;
   }
 
   dispose() {
@@ -127,43 +129,66 @@ export class GuBoat extends BoatRender {
   }
 
   protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]) {
-    const decodeX = [0, 1, 0, -1];
-    const decodeY = [-1, 0, 1, 0];
+    let t: any;
+    const decodeX = [0, 0.4, 0, -0.4];
+    const decodeY = [-0.4, 0, 0.4, 0];
 
     const p = [
-      new Promise<void>(resolve => {
-        if (!startTime || !transitions[0]) return resolve();
-        const isTurning = this.boat.moveTransition.indexOf(3) !== -1;
-        if (isTurning) {
-          // set mid position in case turning
-          this.coords = new Point().fromPosition({
-            x: this.boat.moveTransition[0] === 3 ? x : this.pos.x,
-            y: this.boat.moveTransition[1] === 3 ? y : this.pos.y,
-          });
-          setTimeout(() => {
-            // set real position
-            this.coords = new Point().fromPosition({ x, y });
-          }, 4500 / BoatRender.speed);
-        } else {
-          this.coords = new Point().fromPosition({ x, y });
-        }
-        setTimeout(resolve, 10000 / BoatRender.speed);
-
+      new Promise<any>(resolve => {
         const offsetX = decodeX[crunchDir];
-        const offsetY = decodeY[crunchDir];
-        if (!offsetX && !offsetY) return;
+        if (startTime && offsetX) {
+          new TWEEN.Tween(this.pos, BoatRender.tweens)
+            .to({ x: x + offsetX }, 5000 / BoatRender.speed)
+            .delay(7500 / BoatRender.speed)
+            .repeatDelay(500 / BoatRender.speed)
+            .repeat(1).yoyo(true)
+            .start(startTime)
+            .onUpdate(() => this.coords?.fromPosition(this.pos))
+            .onComplete(resolve);
 
-        setTimeout(() => {
-          // crunch
-          this.coords = new Point().fromPosition({ x: x + offsetX, y: y + offsetY });
-          setTimeout(() => {
-            // uncrunch
-            this.coords = new Point().fromPosition({ x, y });
-          }, 2000 / BoatRender.speed);
-        }, 5500 / BoatRender.speed);
+        } else if (startTime && transitions[0]) {
+          t = new TWEEN.Tween(this.pos, BoatRender.tweens)
+            .easing(moveEase[transitions[0]])
+            .to({ x }, 10000 / BoatRender.speed)
+            .delay(5000 / BoatRender.speed)
+            .start(startTime)
+            .onUpdate(() => this.coords?.fromPosition(this.pos))
+            .onComplete(resolve);
+        } else {
+          resolve();
+        }
       }).then(() => {
-        this.coords = new Point().fromPosition({ x, y });
         this.pos = { x, y };
+        this.coords?.fromPosition(this.pos);
+      }),
+
+      new Promise<any>(resolve => {
+        const offsetY = decodeY[crunchDir];
+        if (startTime && offsetY) {
+          new TWEEN.Tween(this.pos, BoatRender.tweens)
+            .to({ y: y + offsetY }, 5000 / BoatRender.speed)
+            .delay(7500 / BoatRender.speed)
+            .repeatDelay(500 / BoatRender.speed)
+            .repeat(1).yoyo(true)
+            .start(startTime)
+            .onUpdate(() => this.coords?.fromPosition(this.pos))
+            .onUpdate(() => console.log)
+            .onComplete(resolve);
+
+        } else if (startTime && transitions[1]) {
+          t = new TWEEN.Tween(this.pos, BoatRender.tweens)
+            .easing(moveEase[transitions[1]])
+            .to({ y }, 10000 / BoatRender.speed)
+            .delay(5000 / BoatRender.speed)
+            .start(startTime)
+            .onUpdate(() => this.coords?.fromPosition(this.pos))
+            .onComplete(resolve);
+        } else {
+          resolve();
+        }
+      }).then(() => {
+        this.pos = { x, y };
+        this.coords?.fromPosition(this.pos);
       }),
     ];
 
@@ -183,11 +208,12 @@ export class GuBoat extends BoatRender {
       promises.push(new Promise(resolve => {
         if (transition === 1) {
           const delay = 2000 / BoatRender.speed;
+          const delayOffset = 5000 / BoatRender.speed;
           const offset = this.rotateDeg + 90 === face ? 15 : 1;
           for (let i = 1; i < 5; i++) {
             setTimeout(() => {
               this.updateImage((this.orientationIndex + offset) % 16);
-            }, delay * i);
+            }, delayOffset + delay * i);
           }
           setTimeout(resolve, 10000 / BoatRender.speed);
         } else {

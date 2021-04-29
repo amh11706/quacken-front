@@ -1,6 +1,7 @@
 <q-twod-render [hoveredTeam]="hoveredTeam"
                [speed]="graphicSettings.speed.value"
                [mapScale]="graphicSettings.mapScale.value"
+               [graphicSettings]="graphicSettings"
                [myBoat]="myBoat"></q-twod-render>
 
 <q-cade-entry-status (mouseover)="statOpacity = 1"

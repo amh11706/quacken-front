@@ -28,7 +28,7 @@ const flagColor = { 0: 'lime', 1: 'red', 100: '#666' };
 const red = new THREE.LineBasicMaterial({ color: 'red', transparent: true, opacity: 0 });
 const green = new THREE.LineBasicMaterial({ color: 'lime', transparent: true, opacity: 0 });
 
-const moveEase: any[] = [,
+export const moveEase: any[] = [,
   TWEEN.Easing.Linear.None,
   TWEEN.Easing.Quadratic.In,
   TWEEN.Easing.Quadratic.Out,

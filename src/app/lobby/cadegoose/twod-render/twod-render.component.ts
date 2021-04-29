@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { Boat } from '../../quacken/boats/boat';
 import { Subscription } from 'rxjs';
-import { SettingsService } from 'src/app/settings/settings.service';
+import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
 import { Sprite, JsonSprite, getTileImage } from './sprite';
 import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
 import { InCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
+import { GuBoat } from './gu-boats/gu-boat';
+import { BoatRender } from '../boat-render';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 0,
@@ -19,7 +21,7 @@ const FlagColorOffsets: Record<number, number> = {
 @Component({
   selector: 'q-twod-render',
   templateUrl: './twod-render.component.html',
-  styleUrls: ['./twod-render.component.scss']
+  styleUrls: ['./twod-render.component.scss'],
 })
 export class TwodRenderComponent implements OnInit {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
@@ -37,6 +39,11 @@ export class TwodRenderComponent implements OnInit {
   }
   get mapScale() { return this._mapScale; }
 
+  @Input() graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
+  private frameRequested = true;
+  private frameTarget = 0;
+  private alive = true;
+
   private wheelDebounce?: number;
   private sub = new Subscription();
   private canvas?: CanvasRenderingContext2D | null;
@@ -52,8 +59,8 @@ export class TwodRenderComponent implements OnInit {
 
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
-  getXOff = (p: { x: number, y: number }): number => (1 + p.x + p.y - (this.mapWidth + this.mapHeight) / 2) * 32;
-  getYOff = (p: { x: number, y: number }): number => (p.y - p.x - (this.mapHeight - this.mapWidth) / 2) * 24;
+  getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x || 0;
+  getYOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.y || 0;
 
   moveTransition = (transition: number): string => {
     switch (transition) {
@@ -69,6 +76,7 @@ export class TwodRenderComponent implements OnInit {
   constructor(
     private ss: SettingsService,
     private ws: WsService,
+    private ngZone: NgZone,
   ) {
   }
 
@@ -79,10 +87,33 @@ export class TwodRenderComponent implements OnInit {
       }
       this.drawFlags();
     }));
+    this.frameRequested = false;
+    this.ngZone.runOutsideAngular(this.requestRender.bind(this));
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+    this.alive = false;
+  }
+
+  private animate = () => {
+    const t = new Date().valueOf();
+    if (t < this.frameTarget) {
+      this.frameRequested = false;
+      setTimeout(() => this.requestRender(), this.frameTarget - t);
+      return;
+    }
+    if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
+
+    if (BoatRender.tweens.getAll().length) this.ngZone.run(() => BoatRender.tweens.update(t));
+    this.frameRequested = false;
+    this.requestRender();
+  }
+
+  private requestRender = () => {
+    if (!this.alive || this.frameRequested) return;
+    this.frameRequested = true;
+    requestAnimationFrame(this.animate);
   }
 
   getHeight() {
