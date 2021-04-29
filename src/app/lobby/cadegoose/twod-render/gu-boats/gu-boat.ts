@@ -53,6 +53,7 @@ export class GuBoat extends BoatRender {
   orientation?: Orientation;
   img?: string;
   imgPosition?: string;
+  flags: { p: number, t: number, offset: string }[] = [];
 
   constructor(boat: Boat, gltf: GLTF) {
     super(boat, gltf);

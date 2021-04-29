@@ -18,14 +18,15 @@
                   [width]="getWidth()"
                   [height]="getHeight()"
                   #canvas></canvas>
+
+          <q-gu-boats [hoveredTeam]="hoveredTeam"
+                      [getX]="getX"
+                      [getY]="getY">
+          </q-gu-boats>
           <canvas id="flagMapCanvas"
                   [width]="getWidth()"
                   [height]="getHeight()"
                   #flagCanvas></canvas>
-
-          <q-gu-boats [getX]="getX"
-                      [getY]="getY">
-          </q-gu-boats>
         </div>
       </div>
     </div>

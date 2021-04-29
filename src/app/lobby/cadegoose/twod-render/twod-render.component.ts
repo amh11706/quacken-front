@@ -5,6 +5,16 @@ import { SettingsService } from 'src/app/settings/settings.service';
 import { Sprite, JsonSprite, getTileImage } from './sprite';
 import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
+import { InCmd } from 'src/app/ws-messages';
+import { WsService } from 'src/app/ws.service';
+
+const FlagColorOffsets: Record<number, number> = {
+  0: 0,
+  1: 3,
+  98: 6,
+  99: 9,
+  100: 12,
+};
 
 @Component({
   selector: 'q-twod-render',
@@ -31,6 +41,14 @@ export class TwodRenderComponent implements OnInit {
   private sub = new Subscription();
   private canvas?: CanvasRenderingContext2D | null;
   private flagCanvas?: CanvasRenderingContext2D | null;
+  private flags: { x: number, y: number, t: number, points: number, cs: number[] }[] = [];
+  private flag = new Sprite('buoy', 50, 69, [
+    [50, 0], [50, 69], [50, 138],
+    [100, 0], [100, 69], [100, 138],
+    [0, 0], [0, 69], [0, 138],
+    [250, 0], [250, 69], [250, 138],
+    [200, 0], [200, 69], [200, 138],
+  ]);
 
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
@@ -50,10 +68,17 @@ export class TwodRenderComponent implements OnInit {
 
   constructor(
     private ss: SettingsService,
+    private ws: WsService,
   ) {
   }
 
   ngOnInit(): void {
+    this.sub.add(this.ws.subscribe(InCmd.Turn, (t) => {
+      for (let i = 0; i < this.flags.length; i++) {
+        this.flags[i].t = t.flags[i].t;
+      }
+      this.drawFlags();
+    }));
   }
 
   ngOnDestroy() {
@@ -66,6 +91,21 @@ export class TwodRenderComponent implements OnInit {
 
   getWidth() {
     return (this.mapWidth + this.mapHeight) * 32;
+  }
+
+  private async drawFlags() {
+    if (!this.flagCanvas || this.flags.length === 0) return;
+    await this.flag.prom;
+    this.flagCanvas.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
+
+    for (const f of this.flags) {
+      if (f.t === undefined) return;
+      const team = f.t === this.myBoat.team ? 98 : f.t;
+      const offset = FlagColorOffsets[team];
+      const x = (f.x + f.y) * 32;
+      const y = (-f.x + f.y) * 24;
+      this.flag.draw(this.flagCanvas, f.points + offset, x + 7, y - 33);
+    }
   }
 
   async fillMap(map: number[][], flags: any[]) {
@@ -85,6 +125,7 @@ export class TwodRenderComponent implements OnInit {
       ctx.translate(0, this.mapWidth * 24 - 24);
       this.flagCanvas.translate(0, this.mapWidth * 24 - 24);
     }
+    this.flags = [];
     getTileImage('alkaid_island').then(img => ctx.drawImage(img, -150, -650));
 
     const tiles: { x: number, y: number, tile: number }[] = [];
@@ -96,7 +137,8 @@ export class TwodRenderComponent implements OnInit {
         else water.draw(ctx, 0);
         ctx.translate(32, -24);
         const tile = map[y][x];
-        if (tile) tiles.push({ x, y, tile });
+        if (tile >= 21 && tile <= 23) this.flags.push({ x, y, points: tile - 21, ...flags.shift() });
+        else if (tile) tiles.push({ x, y, tile });
         i++;
       }
       ctx.translate(32 - this.mapWidth * 32, 24 + 24 * this.mapWidth);
@@ -105,10 +147,9 @@ export class TwodRenderComponent implements OnInit {
 
     const wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
     const whirl = new Sprite('whirl', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0]]);
-    const flag = new Sprite('buoy', 50, 69, [[250, 0], [250, 69], [250, 138]]);
     const rocks = new JsonSprite(BigRockData);
     const smallRocks = new JsonSprite(SmallRockData);
-    await Promise.all([wind.prom, whirl.prom, flag.prom, rocks.prom, smallRocks.prom]);
+    await Promise.all([wind.prom, whirl.prom, rocks.prom, smallRocks.prom]);
 
     tiles.sort((a, b) => {
       if (a.tile >= 20 && b.tile < 20) return 1;
@@ -122,12 +163,11 @@ export class TwodRenderComponent implements OnInit {
       const y = (-t.x + t.y) * 24;
       if (tile === 51) smallRocks.draw(ctx, Math.floor(Math.random() * 4), x, y);
       else if (tile === 50) rocks.draw(ctx, Math.floor(Math.random() * 4), x, y);
-      else if (tile > 20) {
-        flag.draw(this.flagCanvas, tile - 21, x + 7, y - 33);
-
-      } else if (tile > 8) whirl.draw(ctx, (tile - 1) % 4, x, y);
+      else if (tile > 8) whirl.draw(ctx, (tile - 1) % 4, x, y);
       else if (tile > 4) wind.draw(ctx, (tile - 1) % 4, x, y);
     }
+
+    this.drawFlags();
   }
 
   scroll(e: WheelEvent) {

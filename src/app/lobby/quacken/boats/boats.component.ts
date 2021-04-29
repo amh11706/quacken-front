@@ -127,6 +127,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t) => this.handleTurn(t)));
     this.subs.add(this.ws.subscribe(InCmd.Sync, this.syncBoats));
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
   }
 
   ngOnDestroy() {

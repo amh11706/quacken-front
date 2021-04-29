@@ -22,7 +22,8 @@
 </div>
 
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"
-     class="boat"
+     class="boat team{{boat.team}}"
+     [class.sameteam]="boat.team === myBoat.team"
      [style.opacity]="boat.opacity"
      [style.transition]="moveTransition(boat.moveTransition[0])"
      [style.transform]="'translate(' + render(boat).coords?.x + 'px, ' + render(boat).coords?.y  + 'px)'">
@@ -31,18 +32,30 @@
        *ngIf="boat.name || boat.isMe">
     <span class="boattitle"
           [title]="boat.title + titles[boat.treasure]"
-          [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
+          [class.isme]="boat.isMe">
       {{boat.name}}
     </span>
 
     <div class="movebar"
          [class.ready]="boat.ready">
-      <div *ngFor="let move of boat.moves; let i=index"
+      <div *ngFor="let move of boat.moves"
            class="movebarslice {{moveNames[move]}}">
       </div>
     </div>
+
+    <div class="flags">
+      <div *ngFor="let flag of render(boat).flags"
+           [style.backgroundPositionX]="flag.offset"></div>
+    </div>
   </div>
 
+  <div [style.opacity]="hoveredTeam === boat.team ? 1 : 0"
+       [style.width]="boat.influence*50 + 'px'"
+       [style.height]="boat.influence*50 + 'px'"
+       class="influence"></div>
+
   <q-gu-boat-img [render]="render(boat)"
+                 (mouseenter)="hoveredTeam = boat.team || 0"
+                 (mouseleave)="hoveredTeam = -1"
                  [opacity]="boat.imageOpacity"></q-gu-boat-img>
 </div>
