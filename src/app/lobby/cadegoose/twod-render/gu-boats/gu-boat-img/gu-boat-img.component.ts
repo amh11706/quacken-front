@@ -8,5 +8,4 @@ import { GuBoat } from '../gu-boat';
 })
 export class GuBoatImgComponent {
   @Input() render = {} as GuBoat;
-  @Input() opacity = 1;
 }

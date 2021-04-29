@@ -197,7 +197,30 @@ export class GuBoat extends BoatRender {
 
     if (startTime && transition > 1) {
       promises.push(new Promise(resolve => {
+        const delay = 2000 / BoatRender.speed;
+        const delayOffset = 5000 / BoatRender.speed;
+        const f = faceTranslate[this.rotateDeg / 90 % 4] * 4 + 2;
+        // spin left to straight down to line up with first frame of the sink
+        for (let i = 1; i < 17; i++) {
+          const index = (f + i) % 16;
+          if (index === 8) {
+            // swap to sink sprites when facing down
+            setTimeout(() => {
+              this.spriteData = Boats[this.boat.type as BoatTypes]?.sink;
+              if (!this.spriteData) return resolve();
+              this.img = 'url("/assets/boats/' + this.spriteData.name + '/sink.png")';
+              for (let i2 = 0; i2 < 49; i2++) {
+                setTimeout(() => {
+                  this.updateImage(49 - i2);
+                  if (i2 === 48) resolve();
+                }, delay / 2 * i2);
+              }
+            }, delayOffset + delay * i + 1);
+            break;
+          }
 
+          setTimeout(() => this.updateImage(index), delayOffset + delay * i);
+        }
       }));
     }
 

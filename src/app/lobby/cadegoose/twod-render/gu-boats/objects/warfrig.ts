@@ -133,7 +133,7 @@ export const WarFrigData = {
 };
 
 export const WarFrigSinkData = {
-  'name': 'warfrig_sinking',
+  'name': 'warfrig',
   'orientations': {
     '23': {
       'x': 1610,

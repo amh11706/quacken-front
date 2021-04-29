@@ -35,7 +35,7 @@ export class JobQueue {
       const job = await this.getJob();
       await Promise.race([
         job.f(),
-        new Promise<void>(resolve => setTimeout(resolve, this.jobTimeout)),
+        // new Promise<void>(resolve => setTimeout(resolve, this.jobTimeout)),
       ]);
       if (!this.jobs.length) {
         this._done?.();

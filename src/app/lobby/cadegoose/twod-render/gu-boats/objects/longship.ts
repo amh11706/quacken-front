@@ -134,7 +134,7 @@ export const LongshipData = {
 
 
 export const LongshipSinkData = {
-  'name': 'longship_sinking',
+  'name': 'longship',
   'orientations': {
     '23': {
       'x': 1127,
