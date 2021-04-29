@@ -31,7 +31,6 @@
           [style.transform]="'translateY(' + (getY(boat.pos)+boat.offsetY) + 'px)'"
           [style.transition]="moveTransition(boat.moveTransition[1])">
           <div class="boatheader"
-               [class.hex]="hex"
                *ngIf="boat.name || boat.isMe">
                <span class="boattitle"
                      [title]="boat.title + titles[boat.treasure]"

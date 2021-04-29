@@ -59,7 +59,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.shown = this.map.selectedTile;
     if (!this.map.tileSettings) {
       this.shown = this.map.tileSet || this.map.structureSet || this.map.tmapSet || this.shown;
-      this.map.hex = this.shown.hex;
     }
     this.shown = { ...this.shown };
     this.selected = this.shown.id || 'new';
@@ -189,7 +188,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     tile.undos = map.undos || [];
     tile.redos = map.redos || [];
     this.map.selectedTile = tile;
-    this.map.hex = tile.hex;
     this.map.settingsOpen = false;
   }
 
@@ -270,13 +268,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     delete this.map.tmaps;
     const tile = this.shown || this.map.selectedTile;
     tile.unsaved = false;
-    tile.hex = false;
 
     const selected = this.options.find(option => option.id === +this.selected) || {
       id: null, name: '', undos: [], redos: [],
     };
     Object.assign(tile, selected);
-    this.map.hex = tile.hex;
   }
 
   updateOptions() {
@@ -363,11 +359,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     this.pending = true;
-    this.map.hex = false;
     const tile = this.shown || this.map.selectedTile;
     switch (tile.group) {
       case 'tile_sets':
-        this.map.hex = tile.hex;
         if (!this.map.tiles || this.map.tileSet?.id !== tile.id) {
           this.handleTileSet(await this.socket.request(OutCmd.TileSetGet, tile.id));
         } else this.map.settingsOpen = false;
@@ -383,7 +377,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         } else this.map.settingsOpen = false;
         return;
       default:
-        this.map.hex = tile.hex;
         this.gotMap(await this.socket.request(OutCmd.MapGet, { group: tile.group, tile: tile.id }));
     }
   }

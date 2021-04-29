@@ -70,7 +70,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   @Input() speed = 10;
   @Input() map?: HTMLElement;
-  @Input() hex = false;
   @Input() getX = (p: { x: number, y: number }): number => (p.x) * 50;
   @Input() getY = (p: { x: number, y: number }): number => (p.y) * 50;
   getObj = (o: Clutter): string => `translate(${this.getX(o)}px,${this.getY(o)}px)`;

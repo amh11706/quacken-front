@@ -31,7 +31,6 @@ export interface DBTile {
   redos: MapTile[][];
   activeFeature?: StructureData;
   activeGroup?: number;
-  hex?: boolean;
   settings?: any;
   error?: string;
 }
@@ -57,7 +56,6 @@ export interface MapEditor {
   structures?: DBTile[];
   settingsOpen: boolean;
   tileSettings?: boolean;
-  hex?: boolean;
 }
 
 @Component({

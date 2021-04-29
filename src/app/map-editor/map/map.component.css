@@ -6,12 +6,6 @@
   white-space: nowrap;
 }
 
-#hexMap {
-  position: absolute;
-  transform: translate(50vw, 50vh) translate(-50%, -50%) rotateX(45deg) rotateZ(-60deg);
-  white-space: nowrap;
-}
-
 #map .tile {
   position: relative;
   display: inline-block;
@@ -23,24 +17,6 @@
 
 #map .sztile {
   background: #064886;
-}
-
-#hexMap .tile {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  margin: 0 -7.5px;
-  height: 52px;
-}
-
-#hexMap .tile svg {
-  overflow: visible;
-  height: 100%;
-  width: 100%;
-}
-
-#hexMap .tile:nth-child(odd) {
-  top: -26px;
 }
 
 polygon {

@@ -8,20 +8,21 @@
   transform: rotateX(45deg) rotateZ(-45deg);
 }
 
-#selected.hex div {
-  transform: rotateX(60deg) rotateZ(-45deg);
-}
-
 #selected img {
   height: 25px;
   width: 25px;
 }
 
-.img1, .img2, .img3, .img50 {
+.img1,
+.img2,
+.img3,
+.img50 {
   transform: rotate(45deg);
 }
 
-.hex .img1, .hex .img2, .hex .img3, .hex .img50, .img21, .img22, .img23 {
+.img21,
+.img22,
+.img23 {
   transform: rotate(60deg) scale(0.7);
 }
 

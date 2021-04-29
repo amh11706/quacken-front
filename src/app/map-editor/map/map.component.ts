@@ -8,19 +8,12 @@ const MAX_UNDOS = 100;
 export class Pos {
   static dx = [0, 1, 0, -1];
   static dy = [-1, 0, 1, 0];
-  static hdx = [0, 1, 1, 0, -1, -1];
-  static hdy = [[-1, -1, 0, 1, 0, -1], [-1, 0, 1, 1, 1, 0]];
 
-  constructor(public x: number, public y: number, public hex = false) { }
+  constructor(public x: number, public y: number) { }
 
   move(dir: number) {
-    if (this.hex) {
-      this.y += Pos.hdy[this.x & 1][dir];
-      this.x += Pos.hdx[dir];
-    } else {
-      this.x += Pos.dx[dir];
-      this.y += Pos.dy[dir];
-    }
+    this.x += Pos.dx[dir];
+    this.y += Pos.dy[dir];
   }
 }
 
@@ -68,7 +61,7 @@ export class MapComponent implements OnInit {
     }
 
     tile.redos = [];
-    const sides = this.map.hex ? 6 : 4;
+    const sides = 4;
     if (newValue < 5 + sides * 3 && newValue > 4 + sides) this.finishWhirl(x, y, [change]);
     else tile.undos.push([change]);
     if (tile.undos.length > MAX_UNDOS) tile.undos = tile.undos.slice(-MAX_UNDOS);
@@ -93,10 +86,10 @@ export class MapComponent implements OnInit {
   private finishWhirl(x: number, y: number, changes: MapTile[]) {
     if (!this.setTile || !this.map) return;
     this.painting = false;
-    const sides = this.map.hex ? 6 : 4;
+    const sides = 4;
     let tile = (this.map.selected - 5) % sides;
     const inverted = this.map.selected > 4 + 2 * sides ? sides : 0;
-    const p = new Pos(x, y, this.map.hex);
+    const p = new Pos(x, y);
 
     const sTile = this.map.selectedTile;
     if (!sTile.data) return;
@@ -107,14 +100,6 @@ export class MapComponent implements OnInit {
 
       if (sTile.data[p.y] && sTile.data[p.y][p.x] === 0) {
         const change = this.setTile(p.x, p.y, tile + 5 + sides + inverted);
-        if (change) changes.push(change);
-      }
-    }
-
-    if (this.map.hex) {
-      p.move((tile + 1) % 6);
-      if (sTile.data[p.y] && sTile.data[p.y][p.x] === 0) {
-        const change = this.setTile(p.x, p.y, 35);
         if (change) changes.push(change);
       }
     }
