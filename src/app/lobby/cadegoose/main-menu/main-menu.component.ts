@@ -154,9 +154,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   private setTeam(id: number, team: number) {
     this.resetUser(id);
     if (team === 99) return;
-    const user = this.fs.lobby.find((m) => m.sId === id);
+    let user = this.fs.lobby.find((m) => m.sId === id);
     if (!user) return;
 
+    user = { ...user };
     user.message = this.teams[id];
     if (team === 0) this.defenders.push(user);
     else this.attackers.push(user);
