@@ -1,4 +1,4 @@
-{
+export const BlackShipData = {
     "name": "blackship",
     "orientations": {
         "11": {
@@ -130,4 +130,4 @@
             "offsety": 27
         }
     }
-}
+};

@@ -5,11 +5,20 @@ import { WsService } from 'src/app/ws.service';
 
 import { Settings } from './settings';
 
+export const links : Record<number,string>  = {
+  14 : 'smsloop/smsloop', 15 : 'lgsloop/lgsloop', 16 : 'dhow/dhow',
+  17 : 'fanchuan/fanchuan', 18 : 'longship/longship', 19 : 'baghlah/baghlah',
+  20 : 'merchbrig/merchbrig', 21 : 'junk/junk', 22 : 'warbrig/warbrig',
+  23 : 'merchgal/merchgal', 24 : 'xebec/xebec', 25 : 'wargal/wargal',
+  26 : 'warfrig/warfrig', 27 : 'grandfrig/grandfrig', 28 : 'blackship/blackship',
+}
+
 @Component({
   selector: 'q-setting',
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.css']
 })
+
 export class SettingComponent {
   @Input() set name(value: keyof typeof Settings) {
     this.setting = Settings[value] || {};
@@ -20,6 +29,7 @@ export class SettingComponent {
 
   setting: any = {};
   group: SettingMap = {};
+  links = links;
   private debounce?: number;
 
   constructor(public ss: SettingsService, private ws: WsService) { }

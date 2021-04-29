@@ -76,7 +76,7 @@ mat-checkbox {
 #damagebar,
 #bilgebar {
   position: relative;
-  background: red;
+  background: rgb(136,4,4);
   height: 15px;
   left: -100%;
   transition: 0.3s linear;
@@ -84,7 +84,7 @@ mat-checkbox {
 }
 
 #bilgebar {
-  background: blue;
+  background: rgb(37, 150, 190);
 }
 
 #time {
@@ -101,7 +101,7 @@ mat-checkbox {
   position: relative;
   height: 76px;
   top: 100%;
-  background-color: khaki;
+  background-color: #cec48a;
   transition: 0.9s linear;
 }
 
@@ -119,7 +119,7 @@ mat-checkbox {
   width: 35px;
   height: 35px;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 1px;
 }
 
 .move img {

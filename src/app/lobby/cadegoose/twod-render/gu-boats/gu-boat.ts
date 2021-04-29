@@ -5,6 +5,16 @@ import { SpriteData, Orientation } from '../sprite';
 import { WarFrigData } from './objects/warfrig';
 import { WarBrigData } from './objects/warbrig';
 import { LongshipData } from './objects/longship';
+import { BaghlahData } from './objects/baghlah';
+import { DhowData } from './objects/dhow';
+import { FanchuanData } from './objects/fanchuan';
+import { GrandFrigData } from './objects/grandfrig';
+import { JunkData } from './objects/junk';
+import { LGSloopData } from './objects/lgsloop';
+import { SMSloopData } from './objects/smsloop';
+import { XebecData } from './objects/xebec';
+import { MerchBrigData } from './objects/merchbrig';
+import { MerchGalData } from './objects/merchgal';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
 // pixel coordinates relative to top left of canvas
@@ -41,6 +51,16 @@ const Boats: Partial<Record<BoatTypes, SpriteData>> = {
   [BoatTypes.WarFrig]: WarFrigData,
   [BoatTypes.WarBrig]: WarBrigData,
   [BoatTypes.Longship]: LongshipData,
+  [BoatTypes.Baghlah]: BaghlahData,
+  [BoatTypes.Dhow]: DhowData,
+  [BoatTypes.Fanchuan]: FanchuanData,
+  [BoatTypes.GrandFrig]: GrandFrigData,
+  [BoatTypes.Junk]: JunkData,
+  [BoatTypes.Cutter]: LGSloopData,
+  [BoatTypes.Sloop]: SMSloopData,
+  [BoatTypes.MerchBrig]: MerchBrigData,
+  [BoatTypes.MerchGal]: MerchGalData,
+  [BoatTypes.Xebec]: XebecData,
 };
 
 const faceTranslate = [0, 3, 2, 1];
@@ -110,7 +130,7 @@ export class GuBoat extends BoatRender {
     const decodeY = [-1, 0, 1, 0];
 
     const p = [
-      new Promise(resolve => {
+      new Promise<void>(resolve => {
         if (!startTime || !transitions[0]) return resolve();
         const isTurning = this.boat.moveTransition.indexOf(3) !== -1;
         if (isTurning) {

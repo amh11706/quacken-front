@@ -8,6 +8,7 @@ import { Turn } from '../../quacken/boats/boats.component';
 import { Boat } from '../../quacken/boats/boat';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
+import { links} from 'src/app/settings/setting/setting.component';
 
 interface TeamMessage {
   id: number;
@@ -27,6 +28,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     , , , , , , , , , , , , , , 'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
     'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate'
   ];
+  links = links;
   defenders: Message[] = [];
   attackers: Message[] = [];
   teams: { [key: number]: TeamMessage } = {};

@@ -17,9 +17,9 @@
                  class="lobbyPlayer"
                  [class.ready]="m.message.r">
               <q-name [message]="m"></q-name>
-              <img src="./assets/boats/boat{{m.message.b}}.png"
+              <img src="./assets/boats/{{links[m.message.b]}}.png"
                    [title]="boatTitles[m.message.b]">
-              <span [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' :
+              <span id="spawn" [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' :
                 'I'}}</span>
             </div>
           </div>
@@ -34,9 +34,9 @@
                  class="lobbyPlayer"
                  [class.ready]="m.message.r">
               <q-name [message]="m"></q-name>
-              <img src="./assets/boats/boat{{m.message.b}}.png"
+              <img src="./assets/boats/{{links[m.message.b]}}.png"
                    [title]="boatTitles[m.message.b]">
-              <span [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' :
+              <span id="spawn" [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' :
                 'I'}}</span>
             </div>
           </div>
