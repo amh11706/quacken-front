@@ -2,19 +2,7 @@ import { BoatRender, moveEase } from '../../boat-render';
 import { Boat } from 'src/app/lobby/quacken/boats/boat';
 import { BoatTypes } from 'src/app/lobby/quacken/boats/boat-types';
 import { SpriteData, Orientation } from '../sprite';
-import { WarFrigData } from './objects/warfrig';
-import { WarBrigData } from './objects/warbrig';
-import { LongshipData } from './objects/longship';
-import { BaghlahData } from './objects/baghlah';
-import { DhowData } from './objects/dhow';
-import { FanchuanData } from './objects/fanchuan';
-import { GrandFrigData } from './objects/grandfrig';
-import { JunkData } from './objects/junk';
-import { LGSloopData } from './objects/lgsloop';
-import { SMSloopData } from './objects/smsloop';
-import { XebecData } from './objects/xebec';
-import { MerchBrigData } from './objects/merchbrig';
-import { MerchGalData } from './objects/merchgal';
+import { Boats } from './objects';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as TWEEN from '@tweenjs/tween.js';
 
@@ -48,22 +36,6 @@ export class Position {
   }
 }
 
-const Boats: Partial<Record<BoatTypes, SpriteData>> = {
-  [BoatTypes.WarFrig]: WarFrigData,
-  [BoatTypes.WarBrig]: WarBrigData,
-  [BoatTypes.Longship]: LongshipData,
-  [BoatTypes.Baghlah]: BaghlahData,
-  [BoatTypes.Dhow]: DhowData,
-  [BoatTypes.Fanchuan]: FanchuanData,
-  [BoatTypes.GrandFrig]: GrandFrigData,
-  [BoatTypes.Junk]: JunkData,
-  [BoatTypes.Cutter]: LGSloopData,
-  [BoatTypes.Sloop]: SMSloopData,
-  [BoatTypes.MerchBrig]: MerchBrigData,
-  [BoatTypes.MerchGal]: MerchGalData,
-  [BoatTypes.Xebec]: XebecData,
-};
-
 const faceTranslate = [0, 3, 2, 1];
 
 export class GuBoat extends BoatRender {
@@ -81,7 +53,7 @@ export class GuBoat extends BoatRender {
 
   init(boat: Boat) {
     this.coords = new Point().fromPosition(boat.pos);
-    this.spriteData = Boats[boat.type as BoatTypes];
+    this.spriteData = Boats[boat.type as BoatTypes]?.sail;
     if (!this.spriteData) return;
     this.updateImage();
     this.img = 'url("/assets/boats/' + this.spriteData.name + '/sail.png")';
@@ -206,10 +178,11 @@ export class GuBoat extends BoatRender {
           const delay = 2000 / BoatRender.speed;
           const delayOffset = 5000 / BoatRender.speed;
           const offset = this.rotateDeg + 90 === face ? 15 : 1;
-          const f = faceTranslate[this.rotateDeg / 90] * 4 + 2;
+          const f = faceTranslate[this.rotateDeg / 90 % 4] * 4 + 2;
           for (let i = 1; i < 5; i++) {
+            const index = (f + offset * i) % 16;
             setTimeout(() => {
-              this.updateImage((f + offset * i) % 16);
+              this.updateImage(index);
             }, delayOffset + delay * i);
           }
           setTimeout(resolve, 10000 / BoatRender.speed);
