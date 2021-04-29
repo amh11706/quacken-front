@@ -25,7 +25,6 @@
      class="boat team{{boat.team}}"
      [class.sameteam]="boat.team === myBoat.team"
      [style.opacity]="boat.opacity"
-     [style.transition]="moveTransition(boat.moveTransition[0])"
      [style.transform]="'translate(' + render(boat).coords?.x + 'px, ' + render(boat).coords?.y  + 'px)'">
   <div class="boatheader"
        [class.hex]="hex"
