@@ -63,8 +63,8 @@
                              title="Auto"
                              (change)="changeWantMove()"></mat-checkbox>
                <div id="cannons">
-                    <div class="bombslot"
-                         [class.bomb]="lastTick.tp - usingCannons > 0"></div><br>
+                    <div class="bombempty"
+                         [class.bombmove]="lastTick.tp - usingCannons > 0"></div><br>
                     {{lastTick.tp - usingCannons}}X
                </div>
                <mat-radio-group [(ngModel)]="wantMove"
