@@ -36,8 +36,6 @@ export class Position {
   }
 }
 
-const faceTranslate = [0, 3, 2, 1];
-
 export class GuBoat extends BoatRender {
   static widthOffset = 19;
   coords?: Point;
@@ -164,9 +162,9 @@ export class GuBoat extends BoatRender {
     return p;
   }
 
-  private updateImage(index = (faceTranslate[this.boat.face / 90] * 4 + 2) % 16) {
+  private updateImage(index = (this.boat.face / 90 * 4 + 14) % 16) {
     this.orientation = this.spriteData?.orientations[index] || {} as Orientation;
-    this.imgPosition = this.orientation.x + 'px ' + this.orientation.y + 'px';
+    this.imgPosition = (-this.orientation.x) + 'px ' + (-this.orientation.y) + 'px';
   }
 
   protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number) {
@@ -177,8 +175,8 @@ export class GuBoat extends BoatRender {
         if (transition === 1) {
           const delay = 2000 / BoatRender.speed;
           const delayOffset = 5000 / BoatRender.speed;
-          const offset = this.rotateDeg + 90 === face ? 15 : 1;
-          const f = faceTranslate[this.rotateDeg / 90 % 4] * 4 + 2;
+          const offset = this.rotateDeg + 90 === face ? 1 : 15;
+          const f = this.rotateDeg / 90 * 4 + 14;
           for (let i = 1; i < 5; i++) {
             const index = (f + offset * i) % 16;
             setTimeout(() => {
@@ -192,6 +190,7 @@ export class GuBoat extends BoatRender {
         }
       }).then(() => this.rotateDeg = face));
     } else {
+      this.rotateDeg = face % 360;
       this.updateImage();
     }
 
@@ -199,20 +198,20 @@ export class GuBoat extends BoatRender {
       promises.push(new Promise(resolve => {
         const delay = 2000 / BoatRender.speed;
         const delayOffset = 5000 / BoatRender.speed;
-        const f = faceTranslate[this.rotateDeg / 90 % 4] * 4 + 2;
+        const f = this.rotateDeg / 90 * 4 + 14;
         // spin left to straight down to line up with first frame of the sink
         for (let i = 1; i < 17; i++) {
-          const index = (f + i) % 16;
+          const index = (f + 15 * i) % 16;
           if (index === 8) {
             // swap to sink sprites when facing down
             setTimeout(() => {
               this.spriteData = Boats[this.boat.type as BoatTypes]?.sink;
               if (!this.spriteData) return resolve();
               this.img = 'url("/assets/boats/' + this.spriteData.name + '/sink.png")';
-              for (let i2 = 0; i2 < 49; i2++) {
+              for (let i2 = 0; i2 < 50; i2++) {
                 setTimeout(() => {
-                  this.updateImage(49 - i2);
-                  if (i2 === 48) resolve();
+                  this.updateImage(i2);
+                  if (i2 === 49) resolve();
                 }, delay / 2 * i2);
               }
             }, delayOffset + delay * i + 1);
