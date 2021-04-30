@@ -20,6 +20,7 @@ const FlagColorOffsets: Record<number, number> = {
 })
 export class GuBoatsComponent extends BoatService {
   @Input() hoveredTeam = -1;
+  @Input() map?: HTMLElement;
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
   moveTransition = (transition: number): string => {
