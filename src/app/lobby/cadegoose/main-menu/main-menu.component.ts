@@ -8,7 +8,7 @@ import { Turn } from '../../quacken/boats/boats.component';
 import { Boat } from '../../quacken/boats/boat';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
-import { links} from 'src/app/settings/setting/setting.component';
+import { links } from 'src/app/settings/setting/setting.component';
 
 interface TeamMessage {
   id: number;
@@ -56,7 +56,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (this.firstJoin) {
         this.firstJoin = false;
         // this.es.open = true;
-        this.es.activeComponent = this.es.lobbyComponent;
+        this.es.activeTab = 0;
       }
       this.teams = m.players;
       this.admin = m.owner || this.admin;
@@ -87,13 +87,13 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (!this.roundGoing && this.ws.connected) {
         this.myBoat.isMe = false;
         this.es.open = true;
-        this.es.activeComponent = this.es.lobbyComponent;
+        this.es.activeTab = 0;
         return;
       }
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
       else if (!b.isMe && this.ws.connected) {
         this.es.open = true;
-        this.es.activeComponent = this.es.lobbyComponent;
+        this.es.activeTab = 0;
       }
       this.myBoat = b;
     }));
@@ -109,7 +109,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       if (!this.roundGoing && this.ws.connected) {
         this.es.open = true;
-        this.es.activeComponent = this.es.lobbyComponent;
+        this.es.activeTab = 0;
       }
     }));
   }

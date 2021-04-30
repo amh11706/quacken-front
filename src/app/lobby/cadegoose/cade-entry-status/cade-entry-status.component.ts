@@ -14,13 +14,12 @@ export class CadeEntryStatusComponent extends EntryStatusComponent {
   points = [0, 0];
   teams = ['Defender', 'Attacker'];
   time = '45:00';
-  @Input() myTeam?:number;
+  @Input() myTeam?: number;
   @Output() hoveredTeam = new EventEmitter<number>();
 
   ngOnInit() {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.points = t.points));
     this.subs.add(this.ws.subscribe(Internal.Lobby, (l: Lobby) => this.points = l.points));
-    console.log(this.myTeam);
   }
 }

@@ -37,7 +37,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   mapWidth = 20;
   protected joinMessage = CadeDesc;
   protected statAction = KeyActions.CShowStats;
-  @Input() myTeam?: number =-1;
 
   constructor(
     ws: WsService,
@@ -55,7 +54,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
     this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby(this.menuComponent, this.lobby);
-    // this.es.open = true;
+    this.es.open = true;
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));

@@ -25,8 +25,7 @@ export class EscMenuComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
   ) {
-    this.es.defaultComponent = this.es.lobbyComponent;
-    this.es.activeComponent = this.es.lobbyComponent;
+    this.es.activeTab = 0;
   }
 
   ngOnInit(): void {

@@ -1,102 +1,101 @@
-
 #menu {
-    position: relative;
-    margin: 10px auto 10px auto;
-    max-width: 600px;
-    padding: 0 10px 10px 10px;
-    color: #efefef;
-    text-align: center;
+  position: relative;
+  margin: 10px auto 10px auto;
+  max-width: 800px;
+  padding: 0 10px 10px 10px;
+  color: #efefef;
+  text-align: center;
 }
 
 #flexmenu {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 12px;
+  row-gap: 2px;
+  justify-content: center;
+  overflow-y: hidden;
+  height: auto;
+}
+
+@media screen and (max-width: 400px) {
+  #flexmenu {
     display: flex;
     flex-wrap: wrap;
     column-gap: 12px;
     row-gap: 2px;
     justify-content: center;
     overflow-y: hidden;
-    height: auto;
-}
-
-@media screen and (max-width:400px){
-    #flexmenu {
-        display: flex;
-        flex-wrap: wrap;
-        column-gap: 12px;
-        row-gap: 2px;
-        justify-content: center;
-        overflow-y: hidden;
-        height: 1030px !important;
-    }
+    height: 1030px !important;
+  }
 }
 
 .teamwrap {
-    display: inline-block;
+  display: inline-block;
 }
 
 #defenders,
 #attackers {
-    display: inline-block;
-    margin-top: 8px;
-    padding-top: 4px;
-    min-width: 200px;
-    height: 200px;
-    border: 1px solid green;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, 0.3);
-    overflow: hidden;
+  display: inline-block;
+  margin-top: 8px;
+  padding-top: 4px;
+  min-width: 200px;
+  height: 200px;
+  border: 1px solid green;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
 }
 
 #attackers {
-    border-color: red;
+  border-color: red;
 }
 
 .lobbyPlayer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 18px;
-    padding: 4px;
-    margin: 4px 8px;
-    border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+  padding: 4px;
+  margin: 4px 8px;
+  border: 1px solid black;
 
-    img {
-        height: 30px;
-    }
+  img {
+    height: 30px;
+  }
 }
 
 .lobbyPlayer.ready {
-    border-color: lime;
+  border-color: lime;
 }
 
 #buttons {
-    width: 100%;
+  width: 100%;
 
-    q-setting {
-        position: relative;
-        top: 4px;
-        margin-left: 12px;
-    }
+  q-setting {
+    position: relative;
+    top: 4px;
+    margin-left: 12px;
+  }
 }
 
 #ready {
-    margin-bottom: 4px;
+  margin-bottom: 4px;
 }
 
 #ready.cancel {
-    background: maroon;
+  background: maroon;
 }
 
 #start {
-    display: inline-block;
-    top: 0 !important;
+  display: inline-block;
+  top: 0 !important;
 }
 
-q-name{
-    padding-right: 8px;
+q-name {
+  padding-right: 8px;
 }
 
-#spawn{
-    padding-left: 8px;
+#spawn {
+  padding-left: 8px;
 }

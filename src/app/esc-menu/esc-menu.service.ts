@@ -11,9 +11,8 @@ import { InventoryComponent } from './inventory/inventory.component';
 })
 export class EscMenuService {
   open = false;
-  defaultComponent: any;
-  activeComponent: any;
   lobbyComponent: any;
+  activeTab = 1;
   lobbyContext: any;
 
   constructor(
@@ -32,13 +31,13 @@ export class EscMenuService {
       if (v) this.openTab(this.lobbyComponent);
     });
     kbs.subscribe(KeyActions.OpenSettings, v => {
-      if (v) this.openTab(SettingsComponent);
+      if (v) this.openTab(3);
     });
     kbs.subscribe(KeyActions.OpenInventory, v => {
-      if (v) this.openTab(InventoryComponent);
+      if (v) this.openTab(2);
     });
     kbs.subscribe(KeyActions.OpenProfile, v => {
-      if (v) this.openTab(this.defaultComponent);
+      if (v) this.openTab(1);
     });
     kbs.subscribe(KeyActions.LeaveLobby, v => {
       if (v && (this.lobbyComponent || this.lobbyContext)) this.leave();
@@ -48,21 +47,18 @@ export class EscMenuService {
     });
   }
 
-  private openTab(component: any) {
-    if (!component) return;
-    if (this.open && this.activeComponent === component) {
+  private openTab(tab: number) {
+    if (!this.lobbyComponent) tab--;
+    if (this.open && this.activeTab === tab) {
       this.open = false;
       return;
     }
     this.open = true;
-    this.activeComponent = component;
+    this.activeTab = tab;
   }
 
   setLobby(component?: any, context?: any) {
-    if (this.activeComponent === this.lobbyComponent) this.activeComponent = this.defaultComponent;
-    else if (component) {
-      this.activeComponent = component;
-    }
+    this.activeTab = -1;
     this.lobbyComponent = component;
     this.lobbyContext = context;
   }

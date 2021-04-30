@@ -45,7 +45,7 @@
                     >power_settings_new</mat-icon>
                 </button>
             </div>
-            <mat-tab-group id="main-tab">
+            <mat-tab-group id="main-tab" [(selectedIndex)]="es.activeTab">
                 <mat-tab label="LOBBY"
                     *ngIf="es.lobbyComponent"
                     [disabled]="!es.open">
