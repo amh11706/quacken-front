@@ -50,3 +50,8 @@ td, th {
 mat-form-field {
   margin: 8px 16px;
 }
+
+.nameRow{
+  background-color: red;
+
+}

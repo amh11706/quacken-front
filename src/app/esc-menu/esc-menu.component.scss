@@ -60,8 +60,21 @@
     }
 }
 
-::ng-deep .mat-tab-label:hover {
-    background-color: rgba(235, 66, 66, 0.9);
+::ng-deep {
+    .mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+        background: rgba(235, 66, 66, 0.9);
+        color: white;
+    }
+    .mat-option {
+        color: white;
+        background: rgba(67, 67, 67, 0.8);
+    }
+    .mat-option:hover:not(.mat-option-disabled){
+        background-color: rgba(190, 62, 62, 0.9);
+    }
+    .mat-tab-label:hover {
+        background-color: rgba(235, 66, 66, 0.9);
+    }
 }
 
 @media screen and (max-width:350px){

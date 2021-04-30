@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { StatService } from '../stat.service';
 
 export const TierTitles = [
@@ -17,6 +17,7 @@ export const TierTitles = [
   styleUrls: ['./leaders.component.css']
 })
 export class LeadersComponent implements OnInit {
+  @Input() name?: string;
   tierTitles = TierTitles;
 
   constructor(
