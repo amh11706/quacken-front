@@ -202,7 +202,6 @@ export class TwodRenderComponent implements OnInit {
   }
 
   scroll(e: WheelEvent) {
-    if (!e.ctrlKey) return;
     if (e.deltaY < 0) {
       this._mapScaleRaw *= 21 / 20;
       if (this._mapScaleRaw > 100) this._mapScaleRaw = 100;
