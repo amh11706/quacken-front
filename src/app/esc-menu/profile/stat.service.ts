@@ -81,11 +81,13 @@ export class StatService {
     private kbs: KeyBindingService,
   ) { }
 
-  openUser(name: string) {
+  openUser(name: string, open = true) {
     this.target = name;
     this.refresh();
-    this.kbs.emitAction(KeyActions.OpenProfile);
-    this.es.open = true;
+    if (open) {
+      this.kbs.emitAction(KeyActions.OpenProfile);
+      this.es.open = true;
+    }
     this.profileTab = 0;
   }
 

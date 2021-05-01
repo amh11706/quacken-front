@@ -4,6 +4,8 @@ import { InCmd } from '../ws-messages';
 moment.locale('en-GB');
 
 import { WsService } from '../ws.service';
+import { KeyBindingService } from '../settings/key-binding/key-binding.service';
+import { KeyActions } from '../settings/key-binding/key-actions';
 
 export interface Message {
   type: number;
@@ -27,7 +29,7 @@ export class ChatService {
   saveText = '';
   historyIndex = -1;
 
-  constructor(private socket: WsService) {
+  constructor(private socket: WsService, private kbs: KeyBindingService) {
     this.socket.subscribe(InCmd.ChatMessage, (message: Message) => {
       this.messages.push(message);
       if (message.type === 5) {
@@ -65,11 +67,12 @@ export class ChatService {
   setTell(name: string) {
     if (this.value) this.commandHistory.push(this.value);
     this.value = '/tell ' + name + ' ';
+    this.kbs.emitAction(KeyActions.FocusChat);
   }
 
   sendTell(friend: string) {
     this.setTell(friend);
-    document.getElementById('textinput')?.focus();
+    this.kbs.emitAction(KeyActions.FocusChat);
   }
 
 }

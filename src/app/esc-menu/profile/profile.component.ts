@@ -30,10 +30,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // this.sub.add(this.ws.connected$.subscribe(v => {
-    //   if (!v || !this.ws.user || this.stat.target) return;
-    // this.stat.openUser(this.ws.user?.name);
-    // }));
+    this.sub.add(this.ws.connected$.subscribe(v => {
+      if (!v || !this.ws.user || this.stat.target) return;
+      this.stat.openUser(this.ws.user?.name, false);
+    }));
 
     this.searchedNames = this.myControl.valueChanges
       .pipe(
@@ -67,7 +67,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   sendTell(friend: string) {
     this.chat.setTell(friend);
-    document.getElementById('textinput')?.focus();
   }
 
   remove(friend: string) {

@@ -119,7 +119,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (c.params) {
       if (this.chat.value) this.chat.commandHistory.push(this.chat.value);
       this.chat.value = c.base + ' ';
-      this.input?.nativeElement.focus();
+      this.kbs.emitAction(KeyActions.FocusChat);
       return;
     }
 

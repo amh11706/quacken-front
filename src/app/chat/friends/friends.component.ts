@@ -6,6 +6,8 @@ import { ChatService } from '../chat.service';
 import { Router } from '@angular/router';
 import { OutCmd } from 'src/app/ws-messages';
 import { StatService } from 'src/app/esc-menu/profile/stat.service';
+import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
+import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 
 @Component({
   selector: 'q-friends',
@@ -25,6 +27,7 @@ export class FriendsComponent implements OnInit {
     public stat: StatService,
     private chat: ChatService,
     private router: Router,
+    private kbs: KeyBindingService,
   ) { }
 
   ngOnInit() {
@@ -32,7 +35,6 @@ export class FriendsComponent implements OnInit {
 
   sendTell(friend: string) {
     this.chat.setTell(friend);
-    document.getElementById('textinput')?.focus();
   }
 
   remove(friend: string) {
