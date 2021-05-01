@@ -65,12 +65,12 @@
 
 
 @keyframes explode {
-  1% { background: url("/assets/clutter/hit.png") 0; }
-  to { background: url("/assets/clutter/hit.png") -560px; }
+  1% { background: url("/assets/clutter/hit.png") 0 no-repeat; }
+  to { background: url("/assets/clutter/hit.png") -640px no-repeat; }
 }
 @keyframes splash {
-  1% { background: url("/assets/clutter/splash_large.png") 0; }
-  to { background: url("/assets/clutter/splash_large.png") -480px; }
+  1% { background: url("/assets/clutter/splash_large.png") 0 no-repeat; }
+  to { background: url("/assets/clutter/splash_large.png") -520px no-repeat; }
 }
 @keyframes move { 
   to { transform: translate(var(--tranX,0), var(--tranY,0)); }
@@ -93,27 +93,26 @@
   left: 12px;
   height: 30px;
   width: 40px;
+  background-repeat: no-repeat;
 }
 .shot {
   background-position: center;
-  background-size: initial;
-  background-repeat: no-repeat;
   animation-duration: calc(var(--speed) * var(--movetime)), calc(var(--speed) * .5s);
   animation-delay: var(--delay, 0s), calc(var(--movetime) * var(--speed) + var(--delay, 0s));
   animation-fill-mode: both;
   animation-name: move, explode;
-  animation-timing-function: ease-out, steps(14);
+  animation-timing-function: linear, steps(16);
 }
 
 .size2 .shot { background-image: url("/assets/clutter/cannonball_small.png"); }
 .size3 .shot { background-image: url("/assets/clutter/cannonball_medium.png"); }
 .size4 .shot { background-image: url("/assets/clutter/cannonball_large.png"); }
-.shot.dis4 { animation-name: move, splash !important; animation-timing-function: ease-out, steps(12); }
+.shot.dis4 { animation-name: move, splash !important; animation-timing-function: linear, steps(13); }
 
-.smoke { animation: smoke calc(var(--speed) * 1s) steps(17) both; }
-.size2 .smoke { --endX: -680px; background-image: url("/assets/clutter/explode_small.png"); }
-.size3 .smoke { --endX: -680px; background-image: url("/assets/clutter/explode_medium.png"); }
-.size4 .smoke { --endX: -920px; animation-timing-function: steps(23); background-image: url("/assets/clutter/explode_large.png"); }
+.smoke { animation: smoke calc(var(--speed) * 1s) steps(18) both; }
+.size2 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
+.size3 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }
+.size4 .smoke { --endX: -960px; animation-timing-function: steps(24); background-image: url("/assets/clutter/explode_large.png"); }
 
 .shot.dir0, .shot.dir1 { --tranY: calc(0px - var(--distance) * 24px) }
 .shot.dir2, .shot.dir3 { --tranY: calc(var(--distance) * 24px) }

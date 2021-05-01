@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Boat } from '../../quacken/boats/boat';
 import { Subscription } from 'rxjs';
 import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
@@ -81,8 +81,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
     private ss: SettingsService,
     private ws: WsService,
     private ngZone: NgZone,
-  ) {
-  }
+    private cd: ChangeDetectorRef,
+  ) { }
 
   ngOnInit(): void {
     GuBoat.widthOffset = this.mapWidth - 1;
@@ -116,7 +116,10 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
     }
     if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
 
-    if (BoatRender.tweens.getAll().length) this.ngZone.run(() => BoatRender.tweens.update(t));
+    if (BoatRender.tweens.getAll().length) {
+      BoatRender.tweens.update(t);
+      this.cd.detectChanges();
+    }
     this.stats?.update();
     this.frameRequested = false;
     this.requestRender();

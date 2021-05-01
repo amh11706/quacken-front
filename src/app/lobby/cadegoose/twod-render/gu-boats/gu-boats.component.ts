@@ -52,7 +52,7 @@ export class GuBoatsComponent extends BoatService implements OnInit {
       const p = new Point().fromPosition(u);
       u.transform = `translate(${p.x}px, ${p.y}px)`;
     }
-    this.clutter = updates;
+    this.clutter.push(...updates);
   }
 
   protected setHeaderFlags(flags: Turn['flags']) {
