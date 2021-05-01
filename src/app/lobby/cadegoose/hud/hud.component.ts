@@ -145,6 +145,7 @@ export class CadeHudComponent extends HudComponent {
     if (this.locked) return;
     const moves = this.getMoves();
     const move = moves[slot];
+    if (move === 0 && this.maxMoves) return;
     let wantMove = (ev.button + 1 + move) % 4;
     while (wantMove !== 0 && this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0) {
       wantMove = (ev.button + 1 + wantMove) % 4;

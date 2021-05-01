@@ -33,7 +33,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
   @Input() mapWidth = 20;
   @Input() safeZone = true;
   @Input() myBoat = new Boat('');
-  @Input() speed = 10;
+  @Input() speed = 15;
   private _mapScale = 1;
   private _mapScaleRaw = 50;
   @Input() set mapScale(v: number) {
@@ -116,6 +116,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
     }
     if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
 
+    BoatRender.speed = this.speed;
     if (BoatRender.tweens.getAll().length) {
       BoatRender.tweens.update(t);
       this.cd.detectChanges();

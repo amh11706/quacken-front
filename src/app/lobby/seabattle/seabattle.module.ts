@@ -14,6 +14,7 @@ import { QdragModule } from 'src/app/qdrag/qdrag.module';
 import { SettingsModule } from 'src/app/settings/settings.module';
 import { QuackenModule } from '../quacken/quacken.module';
 import { TwodRenderModule } from '../cadegoose/twod-render/twod-render.module';
+import { MatCardModule } from '@angular/material/card';
 
 
 
@@ -26,6 +27,7 @@ import { TwodRenderModule } from '../cadegoose/twod-render/twod-render.module';
     MatButtonModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatCardModule,
     QdragModule,
     ChatModule,
     SettingsModule,

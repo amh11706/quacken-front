@@ -32,14 +32,13 @@
                     </div>
 
                     <div class="move"
-                         [class.moveblocked]="maxMoves"
                          [class.blocked]="locked"
                          [class.selected]="kbControls && selected == i && !locked"
                          (drop)="drop($event, i)"
                          (mouseup)="clickTile($event, i)"
                          (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
                          (dragover)="$event.preventDefault()">
-                         <img *ngIf="move"
+                         <img *ngIf="move || maxMoves"
                               src="./assets/images/arrow{{move}}.png"
                               (dragstart)="drag(move, i)"
                               (dragend)="dragEnd()">

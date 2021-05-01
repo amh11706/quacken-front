@@ -20,6 +20,7 @@ const FlagColorOffsets: Record<number, number> = {
 })
 export class GuBoatsComponent extends BoatService implements OnInit {
   @Input() showIsland = false;
+  @Input() speed = 15;
   @Input() hoveredTeam = -1;
   @Input() map?: HTMLElement;
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
@@ -80,7 +81,7 @@ export class GuBoatsComponent extends BoatService implements OnInit {
     for (const boat of this.boats) {
       if (boat.render) continue;
       let newBoat = this._boats[boat.id];
-      if (newBoat.render && boat.render !== newBoat.render) newBoat = this._boats[-boat.id];
+      if (!newBoat || newBoat.render && boat.render !== newBoat.render) newBoat = this._boats[-boat.id];
       if (!newBoat || newBoat.render) continue;
       boat.render = new GuBoat(boat, undefined as any);
     }

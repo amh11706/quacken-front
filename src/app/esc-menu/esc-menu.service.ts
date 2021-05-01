@@ -50,7 +50,7 @@ export class EscMenuService {
       this.open = false;
       return;
     }
-    this.open = false;
+    this.open = true;
     this.activeTab = tab;
   }
 
