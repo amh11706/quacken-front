@@ -222,7 +222,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
         .rotateByMove(u.tm);
 
       const p = boat.render.update(true);
-      if (p && boat.damage < 100) promises.push(p);
+      if (p) promises.push(p);
     }
     return Promise.all(promises);
   }
