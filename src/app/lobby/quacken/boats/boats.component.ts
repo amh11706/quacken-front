@@ -20,6 +20,7 @@ export interface Clutter {
   dir?: number;
   dis?: number;
   dbl?: number;
+  transform?: string;
 }
 
 export interface Turn {
@@ -188,7 +189,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   protected async handleTurn(turn: Turn) {
     if (this.turn) {
-      console.log('got turn while in turn');
+      console.log('got turn while in turn', this.turn);
       return;
     }
     BoatRender.tweens.update(Infinity);
@@ -215,6 +216,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (!moveFound || this.blurred) {
       this.resetBoats();
       this.animateTimeout = setTimeout(() => this.ws.send(OutCmd.Sync), 1000);
+      delete this.turn;
       return;
     }
 

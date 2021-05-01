@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, Input, NgZone } from '@angular/core';
 import { WsService } from 'src/app/ws.service';
 import { BoatService, flagMats } from '../boat.service';
 import {
@@ -96,6 +96,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private bs: BoatService,
     private ws: WsService,
+    private ngZone: NgZone,
   ) {
     bs.setScene(this.scene, this.loadObj, this.camera);
 
@@ -216,7 +217,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private requestRender = () => {
     if (!this.alive || this.frameRequested) return;
     this.frameRequested = true;
-    requestAnimationFrame(this.animate);
+    this.ngZone.runOutsideAngular(() => requestAnimationFrame(this.animate));
   }
 
   private render = () => {

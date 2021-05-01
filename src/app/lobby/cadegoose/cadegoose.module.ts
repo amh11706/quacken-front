@@ -38,6 +38,14 @@ import { ThreedRenderComponent } from './threed-render/threed-render.component';
     NameModule,
     TwodRenderModule,
   ],
-  exports: [CadegooseComponent, CadeHudComponent, StatsComponent, MainMenuComponent, CadeEntryStatusComponent, StatEndComponent],
+  exports: [
+    CadegooseComponent,
+    CadeHudComponent,
+    StatsComponent,
+    MainMenuComponent,
+    CadeEntryStatusComponent,
+    StatEndComponent,
+    TwodRenderComponent,
+  ],
 })
 export class CadegooseModule { }

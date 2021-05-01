@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BoatService } from '../../boat.service';
-import { GuBoat } from './gu-boat';
+import { GuBoat, Point } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
 import { Boat } from 'src/app/lobby/quacken/boats/boat';
-import { Turn } from 'src/app/lobby/quacken/boats/boats.component';
+import { Turn, Clutter } from 'src/app/lobby/quacken/boats/boats.component';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 3,
@@ -18,7 +18,7 @@ const FlagColorOffsets: Record<number, number> = {
   templateUrl: './gu-boats.component.html',
   styleUrls: ['./gu-boats.component.scss'],
 })
-export class GuBoatsComponent extends BoatService {
+export class GuBoatsComponent extends BoatService implements OnInit {
   @Input() hoveredTeam = -1;
   @Input() map?: HTMLElement;
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
@@ -39,8 +39,20 @@ export class GuBoatsComponent extends BoatService {
     this.blockRender = false;
   }
 
+  ngOnInit() {
+    // empty to prevent double init thanks to extended class not being a component
+  }
+
   render(boat: Boat): GuBoat {
     return (boat.render || { orientation: {} }) as GuBoat;
+  }
+
+  protected handleUpdate(updates: Clutter[]) {
+    for (const u of updates) {
+      const p = new Point().fromPosition(u);
+      u.transform = `translate(${p.x}px, ${p.y}px)`;
+    }
+    this.clutter = updates;
   }
 
   protected setHeaderFlags(flags: Turn['flags']) {

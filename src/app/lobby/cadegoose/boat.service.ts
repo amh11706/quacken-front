@@ -188,9 +188,10 @@ export class BoatService extends BoatsComponent implements OnDestroy {
         return this._playTurn(step);
       });
     }
-    this.worker.addJob(() => {
+    this.worker.addJob(async () => {
       delete this.turn;
       this.step = -1;
+      await new Promise(resolve => setTimeout(resolve, 3000));
       this.ws.send(OutCmd.Sync);
     });
   }
@@ -222,7 +223,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
         .rotateByMove(u.tm);
 
       const p = boat.render.update(true);
-      if (p && boat.damage < 100) promises.push(p);
+      if (p) promises.push(p);
     }
     return Promise.all(promises);
   }

@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  api: '/',
-  ws: 'wss://' + location.hostname + '/ws'
+  api: 'https://superquacken.com/',
+  ws: 'wss://superquacken.com/ws',
 };

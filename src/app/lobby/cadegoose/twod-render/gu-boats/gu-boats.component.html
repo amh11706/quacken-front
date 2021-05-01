@@ -1,23 +1,15 @@
-<div *ngFor="let obj of clutter; trackBy: trackBy"
+<div *ngFor="let obj of clutter"
      class="clutter"
-     [class.front]="obj.p && obj.t === 0"
-     [style.transform]="getObj(obj)">
+     [style.transform]="obj.transform">
 
-  <div>
-    <img *ngIf="myBoat.type < 10 || obj.t > 0"
-         [title]="clutterTypes[obj.t]"
-         class="clutterimage clutter{{obj.t}}{{obj.p ? ' sunk' : ''}}"
-         src="./assets/images/{{clutterTypes[obj.t]}}.png">
-    <div *ngIf="obj.d === 1 && obj.t === 4"
-         class="wave"
-         [style.top]="'50px'"
-         [style.left]="'50px'">
-    </div>
-    <div *ngIf="obj.p && obj.t === 0"
-         class="deadBomb"
-         [style.top]="'25px'"
-         [style.left]="'25px'">
-    </div>
+  <div class="size{{obj.t}}"
+       style="--speed: {{10/speed}};">
+    <div class="shot"
+         class="dir{{obj.dir}} dis{{obj.dis}}"></div>
+    <div *ngIf="obj.dbl"
+         class="dir{{obj.dir}} dis{{obj.dis}}"
+         class="shot double"></div>
+    <div class="smoke"></div>
   </div>
 </div>
 
