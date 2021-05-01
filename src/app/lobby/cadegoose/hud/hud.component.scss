@@ -78,7 +78,7 @@ mat-checkbox {
 #damagebar,
 #bilgebar {
   position: relative;
-  background: rgb(136,4,4);
+  background: rgb(136, 4, 4);
   height: 15px;
   left: -100%;
   transition: 0.3s linear;
@@ -149,17 +149,11 @@ mat-checkbox {
 
 .bombmove {
   background-color: rgba(95, 94, 94, 0.8);
-  width: 24px;
-  height: 24px;
   margin: -1px;
-  border: 1px solid black;
-  border-radius: 16px;
 }
 
 .bombempty {
-  background-image: url("../../../../assets/images/cannonempty.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background: url("/assets/images/cannonempty.png") 100% no-repeat;
   width: 24px;
   height: 24px;
   border: 1px solid black;
@@ -174,7 +168,6 @@ mat-checkbox {
   border: 1px solid black;
   border-radius: 8px;
 }
-
 
 #cannons {
   position: relative;
@@ -219,39 +212,27 @@ mat-checkbox {
 }
 
 .move1 {
-  background-image: url("../../../../assets/images/arrow1empty.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background: url("/assets/images/arrow1empty.png") center/cover;
 }
 
 .move2 {
-  background-image: url("../../../../assets/images/arrow2empty.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background: url("/assets/images/arrow2empty.png") center/cover;
 }
 
 .move3 {
-  background-image: url("../../../../assets/images/arrow3empty.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background: url("/assets/images/arrow3empty.png") center/cover;
 }
 
 .moveblocked {
-  background-image: url("../../../../assets/images/blocked.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background: url("/assets/images/blocked.png") center/cover;
 }
 
 .bombmove {
-  background-image: url("../../../../assets/images/cannon.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background: url("/assets/images/cannon.png") center/cover;
 }
 
 .bomb {
-  background-image: url("../../../../assets/images/cannon1.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background: url("/assets/images/cannon1.png") center/cover;
   background-position-x: 1px;
 }
 
@@ -259,25 +240,26 @@ mat-checkbox {
   border: 2px solid mat-color($primary);
 }
 
-::ng-deep{
-  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
-    border-color:rgb(146, 244, 66) ;
-  }
-  
-  .mat-radio-button.mat-accent .mat-radio-inner-circle{
-    color:rgb(146, 244, 66) ;
-    background-color:rgb(146, 244, 66) ;
+::ng-deep {
+  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: rgb(146, 244, 66);
   }
 
-  .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element{
+  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    color: rgb(146, 244, 66);
+    background-color: rgb(146, 244, 66);
+  }
+
+  .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
     background-color: rgba(235, 66, 66, 0.9);
   }
 
-  .mat-checkbox-checked.mat-accent .mat-checkbox-background,.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
     background-color: rgba(235, 66, 66, 0.9);
   }
 }
 
-#moveCheck{
-  margin-left:1px;
+#moveCheck {
+  margin-left: 1px;
 }
