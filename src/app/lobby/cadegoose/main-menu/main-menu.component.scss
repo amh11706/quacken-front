@@ -1,10 +1,8 @@
 #menu {
-  position: relative;
   margin: 10px auto 10px auto;
   max-width: 800px;
-  padding: 0 10px 10px 10px;
-  color: #efefef;
   text-align: center;
+  background-color: rgb(94, 92, 92);
 }
 
 #flexmenu {
@@ -15,18 +13,6 @@
   justify-content: center;
   overflow-y: hidden;
   height: auto;
-}
-
-@media screen and (max-width: 400px) {
-  #flexmenu {
-    display: flex;
-    flex-wrap: wrap;
-    column-gap: 12px;
-    row-gap: 2px;
-    justify-content: center;
-    overflow-y: hidden;
-    height: 1030px !important;
-  }
 }
 
 .teamwrap {

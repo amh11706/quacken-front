@@ -11,19 +11,22 @@ import { QdragModule } from '../../qdrag/qdrag.module';
 import { FriendsComponent } from './friends.component';
 import { NameModule } from '../name/name.module';
 import { MatTabsModule } from '@angular/material/tabs';
+import { PlayerListComponent } from './player-list/player-list.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
-  declarations: [FriendsComponent],
+  declarations: [FriendsComponent, PlayerListComponent],
   imports: [
     CommonModule,
     MatIconModule,
     MatExpansionModule,
     MatMenuModule,
     MatButtonModule,
+    MatCardModule,
     MatTabsModule,
     QdragModule,
     NameModule,
   ],
-  exports: [FriendsComponent]
+  exports: [FriendsComponent, PlayerListComponent],
 })
 export class FriendsModule { }

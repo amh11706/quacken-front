@@ -5,6 +5,7 @@ import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { SettingsComponent } from '../settings/settings.component';
 import { WsService } from '../ws.service';
 import { InventoryComponent } from './inventory/inventory.component';
+import { PlayerListComponent } from '../chat/friends/player-list/player-list.component';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +49,6 @@ export class EscMenuService {
   }
 
   private openTab(tab: number) {
-    if (!this.lobbyComponent) tab--;
     if (this.open && this.activeTab === tab) {
       this.open = false;
       return;

@@ -22,6 +22,7 @@ import { NameModule } from '../chat/name/name.module';
 import { SettingsModule } from '../settings/settings.module';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
 import { MatchesComponent } from './profile/matches/matches.component';
+import { FriendsModule } from '../chat/friends/friends.module';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MatchesComponent } from './profile/matches/matches.component';
     InventoryModule,
     NameModule,
     SettingsModule,
+    FriendsModule,
   ],
   exports: [EscMenuComponent],
 })

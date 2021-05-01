@@ -18,6 +18,7 @@ import { NameModule } from 'src/app/chat/name/name.module';
 import { StatsComponent } from './stats/stats.component';
 import { StatEndComponent } from './stat-end/stat-end.component';
 import { ThreedRenderComponent } from './threed-render/threed-render.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ThreedRenderComponent } from './threed-render/threed-render.component';
     MatButtonModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatCardModule,
     QdragModule,
     ChatModule,
     SettingsModule,

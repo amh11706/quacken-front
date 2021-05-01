@@ -1,5 +1,4 @@
-<div id="menu"
-     class="container noselect">
+<mat-card id="menu">
   <div *ngIf="statsOpen; else teams">
     <q-stat-end [stats]="es.lobbyContext?.stats"
                 (close)="statsOpen = false"></q-stat-end>
@@ -61,4 +60,4 @@
       </div>
     </div>
   </ng-template>
-</div>
+</mat-card>

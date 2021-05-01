@@ -2,74 +2,60 @@
         id="toggleesc"
         (click)="es.open = !es.open"
         title="Menu (esc)">
-    <mat-icon
-        [ngStyle]="{
+  <mat-icon [ngStyle]="{
             'border':'1px solid black',
             'border-radius':'4px',
             'color':'white', 
             'background-color':'rgb(67, 67, 67)',
             'width':'30px'
-        }"
-    >menu</mat-icon>
+        }">menu</mat-icon>
 </button>
 <div id="backgroundframe"
      [class.open]="es.open">
-    <div id="background">
-        <div id="side-menu">
-            <div id="menuButtons">
-                <button mat-button
-                    matTooltip="Back to game"
-                    [disabled]="!es.open"
-                    class="action"
-                    (click)="es.open = false">
-                    <mat-icon
-                        [ngStyle]="{'color':'green'}"
-                    >arrow_back</mat-icon>
-                </button>
-                <button mat-button
-                    id="lobbyButton"
-                    matTooltip="Return to Lobby"
-                    [disabled]="!es.open"
-                    *ngIf="es.lobbyContext || es.lobbyComponent"
-                    class="action"
-                    (click)="leave()">
-                    <mat-icon>cancel</mat-icon>
-                </button>
-                <button mat-button 
-                    id="logoutButton"
-                    matTooltip="Logout"
-                    [disabled]="!es.open"
-                    class="action"
-                    (click)="logout()">
-                    <mat-icon
-                        [ngStyle]="{'color':'red'}"
-                    >power_settings_new</mat-icon>
-                </button>
-            </div>
-            <mat-tab-group id="main-tab" [(selectedIndex)]="es.activeTab">
-                <mat-tab label="LOBBY"
-                    *ngIf="es.lobbyComponent"
-                    [disabled]="!es.open">
-                    <ng-container *ngComponentOutlet="es.lobbyComponent"></ng-container>
-                </mat-tab>
-                <mat-tab label="PROFILE"
-                    [disabled]="!es.open">
-                    <ng-container *ngComponentOutlet="ProfileComponent"></ng-container> 
-                </mat-tab>
-                <mat-tab label="INVENTORY"
-                    *ngIf="ws.user?.id"
-                    [disabled]="!es.open">
-                    <ng-container *ngComponentOutlet="InventoryComponent"></ng-container> 
-                </mat-tab>
-                <mat-tab label="SETTINGS"
-                    [disabled]="!es.open">
-                    <ng-container *ngComponentOutlet="SettingsComponent"></ng-container> 
-                </mat-tab>
-            </mat-tab-group>
-            <div id="chatframe"
-                *ngIf="es.open">
-                <q-chat [disabled]="!es.open"></q-chat>
-            </div>
-        </div>
+  <div id="side-menu">
+    <div id="menuButtons">
+      <button mat-button
+              id="lobbyButton"
+              matTooltip="Return to Lobby"
+              [disabled]="!es.open"
+              *ngIf="es.lobbyContext || es.lobbyComponent"
+              class="action"
+              (click)="leave()">
+        <mat-icon>cancel</mat-icon>
+      </button>
+      <button mat-button
+              id="logoutButton"
+              matTooltip="Logout"
+              [disabled]="!es.open"
+              class="action"
+              (click)="logout()">
+        <mat-icon [ngStyle]="{'color':'red'}">power_settings_new</mat-icon>
+      </button>
     </div>
+    <mat-tab-group id="main-tab"
+                   [(selectedIndex)]="es.activeTab">
+      <mat-tab label="LOBBY"
+               [disabled]="!es.open">
+        <q-player-list></q-player-list>
+        <ng-container *ngComponentOutlet="es.lobbyComponent"></ng-container>
+      </mat-tab>
+      <mat-tab label="PROFILE"
+               [disabled]="!es.open">
+        <ng-container *ngComponentOutlet="ProfileComponent"></ng-container>
+      </mat-tab>
+      <mat-tab label="INVENTORY"
+               *ngIf="ws.user?.id"
+               [disabled]="!es.open">
+        <ng-container *ngComponentOutlet="InventoryComponent"></ng-container>
+      </mat-tab>
+      <mat-tab label="SETTINGS"
+               [disabled]="!es.open">
+        <ng-container *ngComponentOutlet="SettingsComponent"></ng-container>
+      </mat-tab>
+    </mat-tab-group>
+    <div id="chatframe"
+         *ngIf="es.open">
+      <q-chat [disabled]="!es.open"></q-chat>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,13 @@
+<mat-card>
+  <p *ngIf="fs.lobby.length > 1; else alone"
+     class="empty">
+    There are {{fs.lobby.length}} players in this lobby:
+  </p>
+  <ng-template #alone>
+    <p class="empty">You are alone here.</p>
+  </ng-template>
+  <div *ngFor="let m of fs.lobby"
+       class="lobbyPlayer">
+    <q-name [message]="m"></q-name>
+  </div>
+</mat-card>

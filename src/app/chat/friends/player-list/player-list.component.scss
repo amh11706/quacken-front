@@ -1,0 +1,27 @@
+mat-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 800px;
+  margin: auto;
+  margin-top: 16px;
+  background-color: rgb(94, 92, 92);
+}
+
+.lobbyPlayer {
+  width: 175px;
+  text-align: center;
+  font-size: 18px;
+  padding: 4px;
+  margin: 4px 8px;
+  border: 1px solid black;
+  color: #eee;
+}
+
+.empty {
+  width: 100%;
+  text-align: center;
+  color: #bbb;
+  padding: 8px 16px;
+  margin-bottom: 8px;
+}
