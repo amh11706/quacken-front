@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectionStrategy, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectionStrategy, NgZone, AfterViewInit } from '@angular/core';
 import { Boat } from '../../quacken/boats/boat';
 import { Subscription } from 'rxjs';
 import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
@@ -9,6 +9,7 @@ import { InCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { GuBoat } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
+import Stats from 'three/examples/jsm/libs/stats.module';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 0,
@@ -23,9 +24,10 @@ const FlagColorOffsets: Record<number, number> = {
   templateUrl: './twod-render.component.html',
   styleUrls: ['./twod-render.component.scss'],
 })
-export class TwodRenderComponent implements OnInit {
+export class TwodRenderComponent implements OnInit, AfterViewInit {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('flagCanvas', { static: true }) flagCanvasElement?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('fps') fps?: ElementRef<HTMLElement>;
   @Input() hoveredTeam = -1;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
@@ -44,6 +46,7 @@ export class TwodRenderComponent implements OnInit {
   private frameRequested = true;
   private frameTarget = 0;
   private alive = true;
+  private stats?: Stats;
 
   private wheelDebounce?: number;
   private sub = new Subscription();
@@ -93,6 +96,12 @@ export class TwodRenderComponent implements OnInit {
     this.ngZone.runOutsideAngular(this.requestRender.bind(this));
   }
 
+  ngAfterViewInit() {
+    this.stats = Stats();
+    this.fps?.nativeElement.appendChild(this.stats.dom);
+    this.stats.dom.style.position = 'relative';
+  }
+
   ngOnDestroy() {
     this.sub.unsubscribe();
     this.alive = false;
@@ -108,6 +117,7 @@ export class TwodRenderComponent implements OnInit {
     if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
 
     if (BoatRender.tweens.getAll().length) this.ngZone.run(() => BoatRender.tweens.update(t));
+    this.stats?.update();
     this.frameRequested = false;
     this.requestRender();
   }
