@@ -1,5 +1,9 @@
 @import "../../../quacken/boats/boat-base.scss";
 
+#island {
+  transform: translate(-40%, -50%);
+}
+
 .boatheader {
   left: 32px;
   top: -70px;

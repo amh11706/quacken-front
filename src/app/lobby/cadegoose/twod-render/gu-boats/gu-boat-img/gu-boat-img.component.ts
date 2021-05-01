@@ -7,5 +7,5 @@ import { GuBoat } from '../gu-boat';
   styleUrls: ['./gu-boat-img.component.scss']
 })
 export class GuBoatImgComponent {
-  @Input() render = {} as any;
+  @Input() render = {} as GuBoat;
 }
