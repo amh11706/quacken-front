@@ -90,7 +90,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       }
     }
   }
-  tabIndex = 3;
+  tabIndex = 0;
   turns: ParsedTurn[] = [];
   maxScore = 0;
   activeTurn?: ParsedTurn;
