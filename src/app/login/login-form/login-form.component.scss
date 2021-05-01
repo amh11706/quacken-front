@@ -10,16 +10,6 @@
     // background: center/cover url("/assets/background.jpg");
 }
 
-h1 {
-    color: mat-color($primary);
-    font-size: 3em;
-    text-align: center;
-    text-shadow: 4px 4px rgba(0, 0, 64, 2);
-    padding: 8px 64px;
-    margin-bottom: 32px;
-    background: radial-gradient(rgba(0, 0, 0, 0.3), transparent 80%);
-}
-
 button {
     border-bottom: 1px solid grey;
     transition: 0.2s;
@@ -62,6 +52,7 @@ p {
     left: 50%;
     max-height: 100vh;
     overflow-y: auto;
+    text-align: center;
     transform: translate(-50%, -50%);
 }
 
