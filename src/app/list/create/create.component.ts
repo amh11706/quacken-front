@@ -15,7 +15,7 @@ export const Descriptions = {
   SeaBattle: SbDesc,
 };
 
-const groups = ['quacken', 'spades', 'cade', 'sb'];
+const groups = ['quacken', 'spades', 'cade', 'cade'];
 
 @Component({
   selector: 'q-create',
