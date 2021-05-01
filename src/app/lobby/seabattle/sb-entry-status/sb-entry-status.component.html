@@ -1,7 +1,7 @@
 <div class="container noselect"
      id="timer">
     <p id="turncount">{{time}}</p>
-    <p class="team team0"
+    <p class="team team0 sameteam"
        (mouseover)="hoveredTeam.emit(0)"
        (mouseleave)="hoveredTeam.emit(-1)">
         {{points[0]}}

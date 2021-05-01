@@ -29,6 +29,7 @@ export class TwodRenderComponent implements OnInit {
   @Input() hoveredTeam = -1;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
+  @Input() safeZone = true;
   @Input() myBoat = new Boat('');
   @Input() speed = 10;
   private _mapScale = 1;
@@ -81,6 +82,7 @@ export class TwodRenderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    GuBoat.widthOffset = this.mapWidth - 1;
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t) => {
       for (let i = 0; i < this.flags.length; i++) {
         this.flags[i].t = t.flags[i].t;
@@ -151,20 +153,19 @@ export class TwodRenderComponent implements OnInit {
     await Promise.all([water.prom, sz.prom]);
     const ctx = this.canvas;
     if (wasLoaded) {
-      ctx.clearRect(0, 0, this.getWidth(), this.getHeight());
+      ctx.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
     } else {
       ctx.translate(0, this.mapWidth * 24 - 24);
       this.flagCanvas.translate(0, this.mapWidth * 24 - 24);
     }
     this.flags = [];
-    getTileImage('alkaid_island').then(img => ctx.drawImage(img, -150, -650));
 
     const tiles: { x: number, y: number, tile: number }[] = [];
     ctx.save();
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
-        if (y > 32 || y < 3) sz.draw(ctx, 0);
+        if (this.safeZone && (y > 32 || y < 3)) sz.draw(ctx, 0);
         else water.draw(ctx, 0);
         ctx.translate(32, -24);
         const tile = map[y][x];

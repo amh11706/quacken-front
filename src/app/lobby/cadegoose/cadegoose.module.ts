@@ -39,6 +39,14 @@ import { GuBoatImgComponent } from './twod-render/gu-boats/gu-boat-img/gu-boat-i
     QuackenModule,
     NameModule,
   ],
-  exports: [CadegooseComponent, CadeHudComponent, StatsComponent, MainMenuComponent, CadeEntryStatusComponent, StatEndComponent],
+  exports: [
+    CadegooseComponent,
+    CadeHudComponent,
+    StatsComponent,
+    MainMenuComponent,
+    CadeEntryStatusComponent,
+    StatEndComponent,
+    TwodRenderComponent,
+  ],
 })
 export class CadegooseModule { }
