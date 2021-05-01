@@ -45,7 +45,6 @@ import { ThreedRenderComponent } from './threed-render/threed-render.component';
     MainMenuComponent,
     CadeEntryStatusComponent,
     StatEndComponent,
-    TwodRenderComponent,
   ],
 })
 export class CadegooseModule { }

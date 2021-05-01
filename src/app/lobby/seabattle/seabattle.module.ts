@@ -13,6 +13,7 @@ import { NameModule } from 'src/app/chat/name/name.module';
 import { QdragModule } from 'src/app/qdrag/qdrag.module';
 import { SettingsModule } from 'src/app/settings/settings.module';
 import { QuackenModule } from '../quacken/quacken.module';
+import { TwodRenderModule } from '../cadegoose/twod-render/twod-render.module';
 
 
 
@@ -21,6 +22,7 @@ import { QuackenModule } from '../quacken/quacken.module';
   imports: [
     CommonModule,
     CadegooseModule,
+    TwodRenderModule,
     MatButtonModule,
     MatRadioModule,
     MatCheckboxModule,

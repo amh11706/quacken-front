@@ -6,11 +6,11 @@ import { TwodRenderComponent } from './twod-render.component';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [TwodRenderComponent, GuBoatsComponent,GuBoatImgComponent],
+  declarations: [TwodRenderComponent, GuBoatsComponent, GuBoatImgComponent],
   imports: [
     QdragModule,
     CommonModule,
   ],
-  exports: [TwodRenderComponent, GuBoatsComponent,GuBoatImgComponent],
+  exports: [TwodRenderComponent, GuBoatsComponent, GuBoatImgComponent],
 })
 export class TwodRenderModule { }

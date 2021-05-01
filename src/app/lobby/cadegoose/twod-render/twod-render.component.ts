@@ -111,7 +111,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
     const t = new Date().valueOf();
     if (t < this.frameTarget) {
       this.frameRequested = false;
-      setTimeout(() => this.requestRender(), this.frameTarget - t);
+      this.requestRender();
       return;
     }
     if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
