@@ -13,7 +13,8 @@
   </div>
 </div>
 
-<img id="island"
+<img *ngIf="showIsland"
+     id="island"
      src="/assets/images/alkaid_island.png">
 
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"

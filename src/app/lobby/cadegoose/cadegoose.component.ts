@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Input } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { Boat } from '../quacken/boats/boat';
 import { Settings } from 'src/app/settings/setting/settings';

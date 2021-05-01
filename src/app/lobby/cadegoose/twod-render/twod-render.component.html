@@ -12,13 +12,15 @@
       <div #drag="qDrag"
            [qDrag]="frame"
            [scale]="mapScale">
-        <div [style.transform]="'translate(50%, 50%) translate(' + -getXOff(myBoat) + 'px, ' + -getYOff(myBoat) + 'px)'">
+        <div
+             [style.transform]="'translate(50%, 50%) translate(' + -getXOff(myBoat) + 'px, ' + -getYOff(myBoat) + 'px)'">
           <canvas id="mapCanvas"
                   [width]="getWidth()"
                   [height]="getHeight()"
                   #canvas></canvas>
 
-          <q-gu-boats [hoveredTeam]="hoveredTeam"
+          <q-gu-boats [showIsland]="safeZone"
+                      [hoveredTeam]="hoveredTeam"
                       [map]="frame"
                       [getX]="getX"
                       [getY]="getY">

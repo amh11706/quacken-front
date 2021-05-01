@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
-import { SettingsComponent } from '../settings/settings.component';
 import { WsService } from '../ws.service';
-import { InventoryComponent } from './inventory/inventory.component';
-import { PlayerListComponent } from '../chat/friends/player-list/player-list.component';
 
 @Injectable({
   providedIn: 'root'
@@ -53,7 +50,7 @@ export class EscMenuService {
       this.open = false;
       return;
     }
-    this.open = true;
+    this.open = false;
     this.activeTab = tab;
   }
 
@@ -61,6 +58,7 @@ export class EscMenuService {
     this.activeTab = -1;
     this.lobbyComponent = component;
     this.lobbyContext = context;
+    if (!this.lobbyComponent) this.open = false;
   }
 
   private logout() {

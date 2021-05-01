@@ -6,7 +6,6 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 
 @Component({

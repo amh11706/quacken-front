@@ -19,6 +19,7 @@ const FlagColorOffsets: Record<number, number> = {
   styleUrls: ['./gu-boats.component.scss'],
 })
 export class GuBoatsComponent extends BoatService implements OnInit {
+  @Input() showIsland = false;
   @Input() hoveredTeam = -1;
   @Input() map?: HTMLElement;
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
