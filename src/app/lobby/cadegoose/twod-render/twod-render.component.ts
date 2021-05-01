@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectionStrategy, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit } from '@angular/core';
 import { Boat } from '../../quacken/boats/boat';
 import { Subscription } from 'rxjs';
 import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
-import { Sprite, JsonSprite, getTileImage } from './sprite';
+import { Sprite, JsonSprite } from './sprite';
 import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
 import { InCmd } from 'src/app/ws-messages';
