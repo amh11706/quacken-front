@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
+import { TwodRenderModule } from './twod-render/twod-render.module';
 
 import { CadegooseComponent } from './cadegoose.component';
 import { QdragModule } from 'src/app/qdrag/qdrag.module';
@@ -17,15 +18,12 @@ import { NameModule } from 'src/app/chat/name/name.module';
 import { StatsComponent } from './stats/stats.component';
 import { StatEndComponent } from './stat-end/stat-end.component';
 import { ThreedRenderComponent } from './threed-render/threed-render.component';
-import { TwodRenderComponent } from './twod-render/twod-render.component';
-import { GuBoatsComponent } from './twod-render/gu-boats/gu-boats.component';
-import { GuBoatImgComponent } from './twod-render/gu-boats/gu-boat-img/gu-boat-img.component';
 
 @NgModule({
   declarations: [
     CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent,
     MainMenuComponent, StatsComponent, StatEndComponent,
-    ThreedRenderComponent, TwodRenderComponent, GuBoatsComponent, GuBoatImgComponent,
+    ThreedRenderComponent,
   ],
   imports: [
     CommonModule,
@@ -38,6 +36,7 @@ import { GuBoatImgComponent } from './twod-render/gu-boats/gu-boat-img/gu-boat-i
     SettingsModule,
     QuackenModule,
     NameModule,
+    TwodRenderModule,
   ],
   exports: [CadegooseComponent, CadeHudComponent, StatsComponent, MainMenuComponent, CadeEntryStatusComponent, StatEndComponent],
 })
