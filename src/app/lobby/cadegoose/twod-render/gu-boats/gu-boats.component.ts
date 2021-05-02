@@ -4,6 +4,7 @@ import { GuBoat, Point } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
 import { Boat } from 'src/app/lobby/quacken/boats/boat';
 import { Turn, Clutter } from 'src/app/lobby/quacken/boats/boats.component';
+import { Internal } from 'src/app/ws-messages';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 3,
@@ -21,7 +22,11 @@ const FlagColorOffsets: Record<number, number> = {
 export class GuBoatsComponent extends BoatService implements OnInit {
   @Input() showIsland = false;
   @Input() speed = 15;
-  @Input() hoveredTeam = -1;
+  @Input() set hoveredTeam(v: number) {
+    for (const boat of this.boats) {
+      boat.render?.showInfluence(boat.team === v);
+    }
+  }
   @Input() map?: HTMLElement;
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
@@ -42,7 +47,14 @@ export class GuBoatsComponent extends BoatService implements OnInit {
   }
 
   ngOnInit() {
-    // empty to prevent double init thanks to extended class not being a component
+    // no super to prevent double init thanks to extended class not being a component
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
+      if (!b.render) b.render = new GuBoat(b, undefined as any);
+    }));
+  }
+
+  clickBoat(boat: Boat) {
+    this.ws.dispatchMessage({ cmd: Internal.BoatClicked, data: boat });
   }
 
   render(boat: Boat): GuBoat {

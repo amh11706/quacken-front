@@ -64,7 +64,7 @@ export class GuBoat extends BoatRender {
   }
 
   showInfluence(v = true): void {
-
+    this.boat.renderName = v ? this.boat.title : this.boat.name;
   }
 
   updateMoves(): BoatRender {
@@ -162,7 +162,7 @@ export class GuBoat extends BoatRender {
     return p;
   }
 
-  private updateImage(index = (this.boat.face / 90 * 4 + 14) % 16) {
+  private updateImage(index = (this.boat.face / 90 * 4 + 46) % 16) {
     this.orientation = this.spriteData?.orientations[index] || {} as Orientation;
     this.imgPosition = (-this.orientation.x) + 'px ' + (-this.orientation.y) + 'px';
   }
@@ -175,7 +175,7 @@ export class GuBoat extends BoatRender {
         if (transition === 1) {
           const delay = 2000 / BoatRender.speed;
           const delayOffset = 5000 / BoatRender.speed;
-          const offset = this.rotateDeg + 90 === face ? 1 : 15;
+          const offset = this.rotateDeg < face ? 1 : 15;
           const f = this.rotateDeg / 90 * 4 + 14;
           for (let i = 1; i < 5; i++) {
             const index = (f + offset * i) % 16;

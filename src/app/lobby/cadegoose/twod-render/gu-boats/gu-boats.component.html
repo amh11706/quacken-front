@@ -25,9 +25,8 @@
   <div class="boatheader"
        *ngIf="boat.name || boat.isMe">
     <span class="boattitle"
-          [title]="boat.title + titles[boat.treasure]"
           [class.isme]="boat.isMe">
-      {{boat.name}}
+      {{boat.renderName}}
     </span>
 
     <div class="movebar"
@@ -43,12 +42,12 @@
     </div>
   </div>
 
-  <div [style.opacity]="hoveredTeam === boat.team ? 1 : 0"
+  <div [style.opacity]="boat.renderName === boat.title ? 1 : 0"
        [style.width]="boat.influence*50 + 'px'"
        [style.height]="boat.influence*50 + 'px'"
        class="influence"></div>
 
-  <q-gu-boat-img [render]="render(boat)"
+  <q-gu-boat-img [render]="render(boat)" (click)="clickBoat(boat)"
                  (mouseenter)="hoveredTeam = boat.team || 0"
                  (mouseleave)="hoveredTeam = -1"></q-gu-boat-img>
 </div>

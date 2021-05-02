@@ -193,7 +193,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, (ticks: Record<number, BoatTick>) => {
       this.boatTicks = ticks;
-      for (const boat of this.boats) boat.damage = ticks[boat.id].d;
+      for (const boat of this.boats) boat.damage = ticks[boat.id]?.d;
       this.updateBoat();
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.Moves, moves => {
@@ -250,7 +250,10 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     boat.isMe = true;
     boat.render?.rebuildHeader();
     this.activeBoat = boat;
-    this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
+    if (this.ws.fakeWs) {
+      this.ws.fakeWs.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
+      this.ws.fakeWs.sId = boat.id;
+    }
     if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat });
     if (this.boatTicks[boat.id]) this.updateBoat();
   }

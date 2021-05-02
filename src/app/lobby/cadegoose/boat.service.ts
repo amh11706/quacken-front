@@ -225,6 +225,8 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       const p = boat.render.update(true);
       if (p) promises.push(p);
     }
+
+    this.sortBoats();
     return Promise.all(promises);
   }
 

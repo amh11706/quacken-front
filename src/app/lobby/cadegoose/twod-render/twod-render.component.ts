@@ -5,7 +5,7 @@ import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
 import { Sprite, JsonSprite } from './sprite';
 import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
-import { InCmd } from 'src/app/ws-messages';
+import { InCmd, Internal } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { GuBoat } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
@@ -28,6 +28,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('flagCanvas', { static: true }) flagCanvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
+  @ViewChild('frame') frame?: ElementRef<HTMLElement>;
   @Input() hoveredTeam = -1;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
@@ -92,6 +93,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
       }
       this.drawFlags();
     }));
+    this.sub.add(this.ws.subscribe(Internal.CenterOnBoat, () => {
+      if (!this.myBoat.name) return;
+      this.frame?.nativeElement.dispatchEvent(new Event('dblclick'));
+    }));
+
     this.frameRequested = false;
     this.ngZone.runOutsideAngular(this.requestRender.bind(this));
   }
