@@ -10,7 +10,8 @@
 #background {
     height: 100vh;
     padding: 4% 2% 0 2%;
-    background: center/cover url("/assets/background.jpg");
+    background: url("/assets/background.jpg");
+    background-size: cover;
     overflow: auto;
 }
 

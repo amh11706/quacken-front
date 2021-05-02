@@ -5,7 +5,7 @@
   height: 100vh;
   width: 100vw;
   padding: 40px 2% 0 2%;
-  background: center/cover url('/assets/background.jpg');
+  background: 0/cover url('/assets/background.jpg');
   overflow: auto;
 }
 
