@@ -19,7 +19,7 @@ const ownerSettings: (keyof typeof Settings)[] = [
   'cadeMaxPlayers', 'cadeMap',
 ];
 
-export const CadeDesc = 'CadeGoose: Use your ship to contest flags and sink enemy ships in a battle for points.';
+export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy ships in a battle for points.';
 
 @Component({
   selector: 'q-cadegoose',

@@ -23,7 +23,7 @@ export const flagMats = {
   100: new MeshStandardMaterial({ color: '#333', side: DoubleSide }),
 };
 
-const checkSZ = (pos: { x: number, y: number }) => {
+export const checkSZ = (pos: { x: number, y: number }) => {
   return pos.y > 32 || pos.y < 3;
 };
 
@@ -43,6 +43,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   flags: Mesh[] = [];
   private flagData: { x: number, y: number, t: number, p: number, cs: number[] }[] = [];
   private worker = new JobQueue();
+  protected checkSZ = checkSZ;
 
   constructor(ws: WsService) {
     super(ws);
@@ -121,7 +122,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
           delete boat.render;
           continue;
         }
-        boat.checkSZ = checkSZ;
+        boat.checkSZ = this.checkSZ;
       }
     });
   }

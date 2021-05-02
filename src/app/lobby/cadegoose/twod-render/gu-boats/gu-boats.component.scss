@@ -20,6 +20,7 @@
 .boat {
   width: 64px;
   height: 48px;
+  transition: opacity calc(var(--speed) * 1s) linear;
 }
 
 .influence {
@@ -80,9 +81,9 @@
   to { background-position-x: var(--endX); }
 }
 
-.shot.dis1 { --movetime: .5s; --distance: 1; }
-.shot.dis2 { --movetime: .8s; --distance: 2; }
-.shot.dis3, .shot.dis4 { --movetime: 1s; --distance: 3; }
+.shot.dis1 { --movetime: .3s; --distance: 1; }
+.shot.dis2 { --movetime: .5s; --distance: 2; }
+.shot.dis3, .shot.dis4 { --movetime: 0.7s; --distance: 3; }
 
 // speed set from html
 .shot.double { top: 10px; --delay: calc(var(--speed) * .2s) }

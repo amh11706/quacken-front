@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BoatService } from '../../boat.service';
+import { BoatService, checkSZ } from '../../boat.service';
 import { GuBoat, Point } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
 import { Boat } from 'src/app/lobby/quacken/boats/boat';
@@ -28,6 +28,10 @@ export class GuBoatsComponent extends BoatService implements OnInit {
     }
   }
   @Input() map?: HTMLElement;
+  protected checkSZ = (pos: { x: number, y: number }) => {
+    if (!this.showIsland) return false;
+    return checkSZ(pos);
+  }
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
   moveTransition = (transition: number): string => {

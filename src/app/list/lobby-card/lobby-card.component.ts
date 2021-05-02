@@ -11,6 +11,7 @@ export class LobbyCardComponent implements OnInit {
   @Input() lobby = {} as Lobby;
   publicModes = ['Public', 'Public Invitation'];
   descriptions = Descriptions;
+  titles = { CadeGoose: 'Cadesim' } as any;
 
   constructor() { }
 

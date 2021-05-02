@@ -45,7 +45,7 @@
 </ng-template>
 
 <h3 class="cardTitle"
-    [title]="descriptions[lobby.type]">{{lobby.type}}</h3>
+    [title]="descriptions[lobby.type]">{{titles[lobby.type] || lobby.type}}</h3>
 <h4>{{lobby.name}}</h4>
 <p>{{lobby.players}} / {{lobby.group.maxPlayers?.value}}</p>
 <p class="settingsView">
