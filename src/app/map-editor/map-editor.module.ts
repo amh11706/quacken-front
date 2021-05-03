@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { QdragModule } from '../qdrag/qdrag.module';
 import { ChatModule } from '../chat/chat.module';
+import { TwodRenderModule } from '../lobby/cadegoose/twod-render/twod-render.module';
 
 import { MapEditorComponent } from './map-editor.component';
 import { TileSetComponent } from './tile-set/tile-set.component';
@@ -52,6 +53,7 @@ import { WinConditionsComponent } from './entity-editor/win-conditions/win-condi
     MatSelectModule,
     MatFormFieldModule,
     MatExpansionModule,
+    TwodRenderModule,
   ],
   exports: [MapEditorComponent]
 })

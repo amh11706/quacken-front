@@ -10,6 +10,8 @@ import { WsService } from 'src/app/ws.service';
 import { GuBoat } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
 import Stats from 'three/examples/jsm/libs/stats.module';
+import { MapComponent } from '../../../map-editor/map/map.component';
+import { MapEditor } from 'src/app/map-editor/map-editor.component';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 0,
@@ -35,6 +37,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
   @Input() safeZone = true;
   @Input() myBoat = new Boat('');
   @Input() speed = 15;
+  @Input() set map(map: number[][]) { this.fillMap(map, []); }
+  private mapUtil = new MapComponent();
+  @Input() set editor(e: MapEditor) { this.mapUtil.map = e; }
+  @Input() set undo(u: any) { this.mapUtil.undo = u; }
+  @Input() set setTile(s: any) { this.mapUtil.setTile = s; }
   private _mapScale = 1;
   private _mapScaleRaw = 50;
   @Input() set mapScale(v: number) {
@@ -42,7 +49,6 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
     this._mapScaleRaw = +v;
   }
   get mapScale() { return this._mapScale; }
-
   @Input() graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
   private frameRequested = true;
   private frameTarget = 0;
@@ -154,7 +160,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
     for (const f of this.flags) {
       if (f.t === undefined) return;
       const team = f.t === this.myBoat.team ? 98 : f.t;
-      const offset = FlagColorOffsets[team];
+      const offset = FlagColorOffsets[team] ?? FlagColorOffsets[100];
       const x = (f.x + f.y) * 32;
       const y = (-f.x + f.y) * 24;
       this.flag.draw(this.flagCanvas, f.points + offset, x + 7, y - 33);
@@ -235,6 +241,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
     e.preventDefault();
     this.saveScale();
   }
+  
 
   private saveScale() {
     clearTimeout(this.wheelDebounce);

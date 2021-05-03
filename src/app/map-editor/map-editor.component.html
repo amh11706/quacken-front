@@ -1,33 +1,42 @@
+
 <div #background
      class="noselect"
      id="background"
      oncontextmenu="event.preventDefault()">
-  <div [qDrag]="background"
+  <q-twod-render *ngIf="editor.selectedTile.group === 'cgmaps' && editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length"
+      [map]="editor.selectedTile.data"
+      [editor]="editor"
+      [undo]="undo"
+      [setTile]="setTile">
+  </q-twod-render>
+
+  <div *ngIf="editor.selectedTile.group !== 'cgmaps'" 
+      [qDrag]="background"
        id="mapframe">
-    <q-map *ngIf="map.selectedTile.data && map.selectedTile.data[0] && map.selectedTile.data[0].length"
-           [map]="map"
+    <q-map *ngIf="editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length"
+           [map]="editor"
            [undo]="undo"
            [setTile]="setTile">
     </q-map>
-    <q-structure-map *ngIf="map.structures"
-                     [map]="map"></q-structure-map>
+    <q-structure-map *ngIf="editor.structures"
+                     [map]="editor"></q-structure-map>
   </div>
 </div>
 
-<q-obstacles *ngIf="!map.structures"
-             [map]="map"
+<q-obstacles *ngIf="!editor.structures"
+             [map]="editor"
              [background]="background">
 </q-obstacles>
-<q-tile-set *ngIf="map.tiles"
-            [map]="map"></q-tile-set>
-<q-structure-set *ngIf="map.structures"
-                 [map]="map"></q-structure-set>
-<q-tmap-set *ngIf="map.tmaps"
-            [map]="map"></q-tmap-set>
-<q-entity-editor *ngIf="map.selectedTile.settings"
-                 [map]="map"></q-entity-editor>
-<q-settings *ngIf="map.settingsOpen"
-            [map]="map"></q-settings>
+<q-tile-set *ngIf="editor.tiles"
+            [map]="editor"></q-tile-set>
+<q-structure-set *ngIf="editor.structures"
+                 [map]="editor"></q-structure-set>
+<q-tmap-set *ngIf="editor.tmaps"
+            [map]="editor"></q-tmap-set>
+<q-entity-editor *ngIf="editor.selectedTile.settings"
+                 [map]="editor"></q-entity-editor>
+<q-settings *ngIf="editor.settingsOpen"
+            [map]="editor"></q-settings>
 
 <div class="container noselect"
      id="hud">
@@ -35,22 +44,22 @@
     <q-chat></q-chat>
   </div>
   <div id="buttons">
-    <ng-container *ngIf="map.selectedTile.data">
+    <ng-container *ngIf="editor.selectedTile.data">
       <button mat-icon-button
-              [disabled]="map.settingsOpen || !map.selectedTile.undos.length"
-              (click)="undo(map.selectedTile.undos, map.selectedTile.redos)"
+              [disabled]="editor.settingsOpen || !editor.selectedTile.undos.length"
+              (click)="undo(editor.selectedTile.undos, editor.selectedTile.redos)"
               title="Undo - ctrl + z">
         <mat-icon>undo</mat-icon>
       </button>
       <button mat-icon-button
-              [disabled]="map.settingsOpen || !map.selectedTile.redos.length"
-              (click)="undo(map.selectedTile.redos, map.selectedTile.undos)"
+              [disabled]="editor.settingsOpen || !editor.selectedTile.redos.length"
+              (click)="undo(editor.selectedTile.redos, editor.selectedTile.undos)"
               title="Redo - ctrl + y">
         <mat-icon>redo</mat-icon>
       </button>
     </ng-container>
     <button mat-icon-button
-            [disabled]="map.settingsOpen"
+            [disabled]="editor.settingsOpen"
             (click)="save()"
             title="Save - ctrl + s">
       <mat-icon>save</mat-icon>
@@ -61,7 +70,7 @@
       <mat-icon>help_outline</mat-icon>
     </button>
     <button mat-raised-button
-            [disabled]="map.settingsOpen"
+            [disabled]="editor.settingsOpen"
             id="editorSettings"
             (click)="openSettings()"
             title="Settings - ctrl + e">Editor Settings</button>

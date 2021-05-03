@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
@@ -7,6 +7,7 @@ import { InCmd, OutCmd } from '../ws-messages';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
+import { TwodRenderComponent } from '../lobby/cadegoose/twod-render/twod-render.component';
 
 export interface MapTile {
   x: number; y: number; v: number;
@@ -64,9 +65,10 @@ export interface MapEditor {
   styleUrls: ['./map-editor.component.css']
 })
 export class MapEditorComponent implements OnInit, OnDestroy {
+  @Input()
   private sub = new Subscription();
 
-  map: MapEditor = {
+  editor: MapEditor = {
     selected: 50,
     selectedTile: {
       undos: [],
@@ -86,7 +88,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     private es: EscMenuService,
     private kbs: KeyBindingService,
   ) {
-    const tile = this.map.selectedTile;
+    const tile = this.editor.selectedTile;
     for (let i = 0; i < 8; i++) {
       tile.data?.push([0, 0, 0, 0, 0, 0, 0, 0]);
     }
@@ -99,7 +101,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
       if (s.selectedTile) {
         s.selectedTile.undos = s.selectedTile.undos || [];
         s.selectedTile.redos = s.selectedTile.redos || [];
-        Object.assign(this.map, s);
+        Object.assign(this.editor, s);
       }
     }
     window.addEventListener('beforeunload', this.saveSession);
@@ -121,7 +123,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
 
   private saveSession = () => {
     localStorage.setItem(this.ws.user?.id + '-editor', JSON.stringify(
-      this.map
+      this.editor
     ));
   }
 
@@ -131,43 +133,43 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   resetUndos = () => {
-    this.map.selectedTile.undos = [];
-    this.map.selectedTile.redos = [];
+    this.editor.selectedTile.undos = [];
+    this.editor.selectedTile.redos = [];
   }
 
   private handleKeys() {
     this.sub.add(this.kbs.subscribe(KeyActions.Save, v => {
-      if (this.map.settingsOpen) return;
+      if (this.editor.settingsOpen) return;
       if (v) this.save();
     }));
     this.sub.add(this.kbs.subscribe(KeyActions.Redo, v => {
-      if (this.map.settingsOpen) return;
-      const tile = this.map.selectedTile;
+      if (this.editor.settingsOpen) return;
+      const tile = this.editor.selectedTile;
       if (v && tile.redos.length) this.undo(tile.redos, tile.undos);
     }));
     this.sub.add(this.kbs.subscribe(KeyActions.Undo, v => {
-      if (this.map.settingsOpen) return;
-      const tile = this.map.selectedTile;
+      if (this.editor.settingsOpen) return;
+      const tile = this.editor.selectedTile;
       if (v && tile.undos.length) this.undo(tile.undos, tile.redos);
     }));
     this.sub.add(this.kbs.subscribe(KeyActions.OpenMenu, v => {
-      if (this.map.settingsOpen) return;
+      if (this.editor.settingsOpen) return;
       if (v) this.openSettings();
     }));
   }
 
   async save() {
-    const tile = this.map.selectedTile;
+    const tile = this.editor.selectedTile;
     if (!tile.unsaved) return;
-    if (this.map.tileSet) {
+    if (this.editor.tileSet) {
       tile.group = 'tiles';
-      tile.tile_set = this.map.tileSet.id;
-    } else if (this.map.structureSet) {
+      tile.tile_set = this.editor.tileSet.id;
+    } else if (this.editor.structureSet) {
       tile.group = 'structures';
-      tile.structure_set = this.map.structureSet.id;
-    } else if (this.map.tmapSet) {
+      tile.structure_set = this.editor.structureSet.id;
+    } else if (this.editor.tmapSet) {
       tile.group = 'tmaps';
-      tile.tmap_set = this.map.tmapSet.id;
+      tile.tmap_set = this.editor.tmapSet.id;
     }
     const newTile: any = {};
     Object.assign(newTile, tile);
@@ -189,7 +191,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   setTile = (x: number, y: number, v: number) => {
-    const tile = this.map.selectedTile;
+    const tile = this.editor.selectedTile;
     if (!tile.data || v === tile.data[y][x]) return;
     tile.unsaved = true;
 
@@ -199,6 +201,6 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   openSettings() {
-    this.map.settingsOpen = true;
+    this.editor.settingsOpen = true;
   }
 }
