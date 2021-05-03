@@ -7,6 +7,8 @@ import { InCmd, Internal, OutCmd } from '../ws-messages';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
+import { Invite } from './friends/friends.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'q-chat',
@@ -26,7 +28,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     '#1A5276', // recieved tell
     '#873600', // command list
     '#873600', // last seen message
-    ,
+    '#873600', // invitiation
     'maroon', // alert/broadcast
   ];
   messages$ = new ReplaySubject<Message[]>(1);
@@ -37,6 +39,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private ws: WsService,
     public chat: ChatService,
     private kbs: KeyBindingService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -56,6 +59,17 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  accept(inv: Invite) {
+    inv.resolved = true;
+    if (inv.ty === 0) this.ws.send(OutCmd.FriendAdd, inv.f);
+    else this.router.navigate(['lobby', inv.tg]);
+  }
+
+  decline(inv: Invite) {
+    inv.resolved = true;
+    this.ws.send(OutCmd.FriendDecline, inv);
   }
 
   handleKey(e: KeyboardEvent) {

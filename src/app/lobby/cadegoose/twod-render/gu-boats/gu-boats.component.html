@@ -47,7 +47,8 @@
        [style.height]="boat.influence*92 + 'px'"
        class="influence"></div>
 
-  <q-gu-boat-img [render]="render(boat)" (click)="clickBoat(boat)"
+  <q-gu-boat-img [render]="render(boat)"
+                 (click)="clickBoat(boat)"
                  (mouseenter)="hoveredTeam = boat.team || 0"
                  (mouseleave)="hoveredTeam = -1"></q-gu-boat-img>
 </div>

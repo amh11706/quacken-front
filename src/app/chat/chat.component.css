@@ -20,6 +20,13 @@
   width: 100%;
 }
 
+.invite {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 8px;
+}
+
 ::ng-deep .cdk-virtual-scroll-content-wrapper {
   display: flex;
   flex-direction: column;
@@ -35,7 +42,7 @@
   padding: 3px 5px;
   background-color: #aaa;
   border: 1px solid black;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .textinput:focus {

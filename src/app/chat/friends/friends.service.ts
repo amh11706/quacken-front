@@ -8,6 +8,7 @@ export interface Invite {
   f: string;
   ty: number;
   tg: number;
+  resolved: boolean;
 }
 
 @Injectable({
@@ -42,12 +43,12 @@ export class FriendsService {
     this.ws.subscribe(InCmd.BlockUser, (m: string) => {
       this.blocked.push(m);
       for (const n of this.lobby) if (n.from === m) n.blocked = true;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: m + ' has been blocked.' } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been blocked.' } });
     });
     this.ws.subscribe(InCmd.UnblockUser, (m: string) => {
       this.blocked = this.blocked.filter(n => m !== n);
       for (const n of this.lobby) if (n.from === m) n.blocked = false;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: m + ' has been unblocked.' } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been unblocked.' } });
     });
   }
 
@@ -78,10 +79,10 @@ export class FriendsService {
   private handleInvites() {
     this.ws.subscribe(InCmd.InviteAdd, (u: Invite) => {
       this.invites.push(u);
-      let message = u.f;
-      if (u.ty === 0) message += ' has requested to add you as a friend.';
-      else message += ' has invited you to join their lobby.';
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message } });
+      // let message = u.f;
+      // if (u.ty === 0) message += ' has requested to add you as a friend.';
+      // else message += ' has invited you to join their lobby.';
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 8, message: u, from: u.f } });
     });
     this.ws.subscribe(InCmd.InviteRemove, (u: Invite) => {
       this.invites = this.invites.filter(i => i.tg !== u.tg || i.ty !== u.ty);
@@ -97,24 +98,24 @@ export class FriendsService {
     this.ws.subscribe(InCmd.FriendOnline, (u: string) => {
       this.friends.push(u);
       this.offline = this.offline.filter(f => f !== u);
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: u + ' has logged on.' } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: u, message: 'has logged on.' } });
     });
     this.ws.subscribe(InCmd.FriendOffline, (u: string) => {
       this.offline.push(u);
       this.friends = this.friends.filter(f => f !== u);
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: u + ' has logged off.' } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: u, message: 'has logged off.' } });
     });
     this.ws.subscribe(InCmd.FriendAdd, (u: string) => {
       this.friends.push(u);
       this.invites = this.invites.filter(i => i.ty !== 0 || i.f !== u);
       for (const n of this.lobby) if (n.from === u) n.friend = true;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: u + ' has been added to your friend list.' } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: u, message: 'has been added to your friend list.' } });
     });
     this.ws.subscribe(InCmd.FriendRemove, (u: string) => {
       this.friends = this.friends.filter(f => f !== u);
       this.offline = this.offline.filter(f => f !== u);
       for (const n of this.lobby) if (n.from === u) n.friend = false;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: u + ' has been removed from your friend list.' } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: u, message: 'has been removed from your friend list.' } });
     });
   }
 
