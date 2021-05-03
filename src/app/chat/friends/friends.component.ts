@@ -27,7 +27,6 @@ export class FriendsComponent implements OnInit {
     public stat: StatService,
     private chat: ChatService,
     private router: Router,
-    private kbs: KeyBindingService,
   ) { }
 
   ngOnInit() {

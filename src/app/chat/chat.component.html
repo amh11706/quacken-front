@@ -73,6 +73,31 @@
                       [offline]="true"></q-name> was last seen
               {{m.ago}} ({{m.time}}).
             </span>
+
+            <span *ngSwitchCase="8"
+                  class="invite">
+              <span *ngIf="m.message.ty === 0; else lobby">
+                <q-name [message]="m"></q-name> has requested to add you as a friend.
+              </span>
+              <ng-template #lobby>
+                <span>
+                  <q-name [message]="m"></q-name> has invited you to join their lobby.
+                </span>
+              </ng-template>
+              <ng-container *ngIf="!m.message.resolved">
+                <button mat-raised-button
+                        color="accent"
+                        class="accept"
+                        (click)="accept(m.message)">Accept</button>
+                <button mat-raised-button
+                        (click)="decline(m.message)">Decline</button>
+              </ng-container>
+            </span>
+
+            <span *ngSwitchCase="9">
+              <q-name [message]="m"></q-name>
+              broadcasts "{{m.message}}"
+            </span>
           </ng-container>
         </p>
       </ng-container>
