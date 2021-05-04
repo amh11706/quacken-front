@@ -50,6 +50,6 @@
 <p>{{lobby.players}} / {{lobby.group.maxPlayers?.value}}</p>
 <p class="settingsView">
   <ng-container
-                *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView}[lobby.type]; context: {settings: lobby.group}">
+                *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView, SeaBattle: cadeView}[lobby.type]; context: {settings: lobby.group}">
   </ng-container>
 </p>
