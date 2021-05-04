@@ -59,15 +59,18 @@ export interface MapEditor {
   tileSettings?: boolean;
 }
 
+
+
 @Component({
   selector: 'q-map-editor',
   templateUrl: './map-editor.component.html',
   styleUrls: ['./map-editor.component.css']
 })
 export class MapEditorComponent implements OnInit, OnDestroy {
+  @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;
   @Input()
   private sub = new Subscription();
-
+  private twod : any;
   editor: MapEditor = {
     selected: 50,
     selectedTile: {
@@ -197,6 +200,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
 
     const oldTile = { x, y, v: tile.data[y][x] };
     tile.data[y][x] = v;
+    this.renderer?.redraw(this.editor.selectedTile.data! , [])
     return oldTile;
   }
 

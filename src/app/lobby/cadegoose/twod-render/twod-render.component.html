@@ -17,6 +17,9 @@
           <canvas id="mapCanvas"
                   [width]="getWidth()"
                   [height]="getHeight()"
+                  (mousedown)="mousedown($event)"
+                  (mouseup)="mouseup($event)"
+                  (mousemove)="mousemove($event)"
                   #canvas></canvas>
 
           <q-gu-boats [showIsland]="safeZone"
