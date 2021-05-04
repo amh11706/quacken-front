@@ -80,7 +80,7 @@ q-gu-boat-img {
 }
 @keyframes splash {
   1% { background: url("/assets/clutter/splash_large.png") 0 no-repeat; }
-  to { background: url("/assets/clutter/splash_large.png") -320px no-repeat; }
+  to { background: url("/assets/clutter/splash_large.png") -520px no-repeat; }
 }
 @keyframes move { 
   to { transform: translate(var(--tranX,0), var(--tranY,0)); }

@@ -109,7 +109,12 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     const supSet = super.setBoats.bind(this);
     if (reset) {
       this.worker.clearJobs();
+    } else {
+      super.setBoats(b, reset);
+      this.checkNewShips();
+      return;
     }
+
     this.worker.addJob(async () => {
       const boats = this.boats;
       supSet(b, reset);
