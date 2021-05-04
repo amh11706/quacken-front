@@ -1,5 +1,10 @@
 @import "../../../quacken/boats/boat-base.scss";
 
+:host {
+  width: 0;
+  height: 0;
+}
+
 #island {
   transform: translate(-40%, -50%);
 }
