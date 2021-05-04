@@ -58,7 +58,7 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
   }
 
   private handleScroll = (e: WheelEvent) => {
-    if (!this.map) return;
+    if (!this.map || e.ctrlKey) return;
     e.preventDefault();
     const scroll = this.map.selectedTile.group === 'cgmaps' ? this.cadeScrollOrder : this.scrollOrder;
     const current = scroll.indexOf(this.map.selected);
