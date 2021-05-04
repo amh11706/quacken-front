@@ -46,7 +46,7 @@ export class CadeHudComponent extends HudComponent {
   lastTick: BoatTick = { tp: 0 } as BoatTick;
   usingCannons = 0;
   newTurn = false;
-
+  blockedPosition = 3;
   wantMove = 2;
   auto = true;
 
