@@ -35,7 +35,7 @@
               {{rank.level}}
             </div>
             <div [title]="rank.title">
-              <div class="badgetitle">{{rank.name}}</div>
+              <div class="badgetitle">{{titles[rank.name] || rank.name}}</div>
               <mat-progress-bar mode="determinate"
                                 color="accent"
                                 [value]="rank.progress">

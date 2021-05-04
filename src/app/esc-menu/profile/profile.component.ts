@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   tierTitles = TierTitles;
   myControl = new FormControl();
   searchedNames?: Observable<string[]>;
-
+  titles = { Cadegoose: 'Cadesim' } as any;
   constructor(
     public stat: StatService,
     public ws: WsService,

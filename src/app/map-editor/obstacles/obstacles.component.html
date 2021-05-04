@@ -15,11 +15,20 @@
      id="tiles">
   <div #handle
        id="handle"></div>
-  <img *ngFor="let obstacle of obstacles; let i = index"
-       [title]="titles[i]"
-       draggable="false"
-       src="./assets/images/obstacle{{obstacle}}.png"
-       (click)="map.selected = obstacle">
+     <div *ngIf="map.selectedTile.group === 'cgmaps'">
+          <img *ngFor="let obstacle of cadeObstacles; let i = index"
+          [title]="cadeTitles[i]"
+          draggable="false"
+          src="./assets/images/obstacle{{obstacle}}.png"
+          (click)="map.selected = obstacle"> 
+     </div>
+     <div *ngIf="map.selectedTile.group !== 'cgmaps'">
+          <img *ngFor="let obstacle of obstacles; let i = index"
+          [title]="titles[i]"
+          draggable="false"
+          src="./assets/images/obstacle{{obstacle}}.png"
+          (click)="map.selected = obstacle"> 
+     </div>
   <ng-container *ngIf="map.selectedTile.group === 'cgmaps'">
     <img *ngFor="let flag of [21, 22, 23]"
          title="Flag"

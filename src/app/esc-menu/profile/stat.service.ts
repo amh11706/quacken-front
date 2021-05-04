@@ -73,7 +73,6 @@ export class StatService {
 
   groupStats?: { [key: number]: Stat[] };
   userRanks: UserRank[] = [];
-
   constructor(
     private ws: WsService,
     private fs: FriendsService,
