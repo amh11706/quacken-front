@@ -75,11 +75,11 @@ q-gu-boat-img {
 
 
 @keyframes explode {
-  1% { background: url("/assets/clutter/hit.png") 0 no-repeat; }
+  from { background: url("/assets/clutter/hit.png") 0 no-repeat; }
   to { background: url("/assets/clutter/hit.png") -640px no-repeat; }
 }
 @keyframes splash {
-  1% { background: url("/assets/clutter/splash_large.png") 0 no-repeat; }
+  from { background: url("/assets/clutter/splash_large.png") 0 no-repeat; }
   to { background: url("/assets/clutter/splash_large.png") -520px no-repeat; }
 }
 @keyframes move { 
@@ -109,7 +109,7 @@ q-gu-boat-img {
   background-position: center;
   animation-duration: calc(var(--speed) * var(--movetime)), calc(var(--speed) * .5s);
   animation-delay: var(--delay, 0s), calc(var(--movetime) * var(--speed) + var(--delay, 0s));
-  animation-fill-mode: both;
+  animation-fill-mode: forwards;
   animation-name: move, explode;
   animation-timing-function: linear, steps(16);
 }

@@ -75,7 +75,9 @@ export class GuBoat extends BoatRender {
     const startTime = animate ? new Date().valueOf() : 0;
     const promises: Promise<any>[] = [];
 
-    promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
+    if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y || boat.crunchDir !== -1) {
+      promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
+    }
 
     if (!startTime || boat.face !== this.rotateDeg || boat.imageOpacity === 0) {
       promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, boat.imageOpacity));
