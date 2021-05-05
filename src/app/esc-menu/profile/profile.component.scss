@@ -121,6 +121,8 @@ mat-expansion-panel {
 
 .online,
 .offline {
+  max-width: 400px;
+  margin: auto;
   text-align: center;
   font-size: 18px;
   border: 1px solid black;
