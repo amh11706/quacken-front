@@ -60,8 +60,8 @@ export class LobbyListComponent implements OnInit {
     this.stat.openUserMatches();
   }
 
-  join(l: Lobby) {
-    if (!l.group.publicMode?.value) this.router.navigate(['lobby', l.id]);
+  join(l: Lobby, e: MouseEvent) {
+    if (e.ctrlKey || !l.group.publicMode?.value) this.router.navigate(['lobby', l.id]);
     else this.ws.send(OutCmd.LobbyApply, l.id);
   }
 

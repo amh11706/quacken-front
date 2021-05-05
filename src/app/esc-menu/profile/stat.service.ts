@@ -107,13 +107,13 @@ export class StatService {
   async refresh() {
     this.userRanks = [];
     this.userRanks = await this.ws.request(OutCmd.RanksUser, this.target);
-    if(this.userRanks !== undefined){
+    if (this.userRanks !== undefined) {
       for (const rank of this.userRanks) {
         rank.progress = (rank.xp - (rank.prevXp || 0)) * 100 / (rank.nextXp - (rank.prevXp || 0));
         rank.title = rank.xp?.toLocaleString() + ' xp, next level in: ' + (rank.nextXp - rank.xp)?.toLocaleString() + ' xp';
       }
       const stats = await this.ws.request(OutCmd.StatsUser, this.target);
-  
+
       this.fillGroupStats(stats);
     }
   }
