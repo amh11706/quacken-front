@@ -25,7 +25,7 @@
 
 #side-menu {
   display: grid;
-  grid-template-columns: 50px minmax(100px, 1fr);
+  grid-template-columns: 55px minmax(100px, 1fr);
   grid-template-rows: calc(100vh - 145px - 10%) 145px;
   row-gap: 1%;
   column-gap: 2%;
@@ -45,11 +45,22 @@
   justify-content: center;
 
   .mat-button:hover {
-    background-color: rgba(235, 66, 66, 0.9);
+    background-color:none;
   }
   .mat-icon {
-    font-size: 20px;
+    font-size: 32px;
   }
+}
+.discord{
+  background-image: url('../../assets/images/discord.png') !important;
+  background-size: cover; //or cover
+  background-repeat: no-repeat;
+  border: none;
+  background: none;
+  width: 50px;
+  height: 50px;
+  margin-left: 15px;
+  margin-bottom: 100px;
 }
 
 ::ng-deep {

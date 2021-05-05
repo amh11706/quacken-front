@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ChatService } from '../chat/chat.service';
 import { SettingMap, SettingsService } from '../settings/settings.service';
@@ -10,6 +11,9 @@ import { FriendsService } from '../chat/friends/friends.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { BoatSync } from '../lobby/quacken/boats/convert';
+import { UrlResolver } from '@angular/compiler';
+import { ɵangular_packages_forms_forms_a } from '@angular/forms';
+import { EscMenuService } from '../esc-menu/esc-menu.service';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
@@ -25,13 +29,15 @@ export class ReplayComponent implements OnInit {
   private sub = new Subscription();
   private fakeWs: WsService = {} as any;
   private fakeChat: ChatService = {} as any;
-
   private graphicSettings?: SettingMap;
   private boats: BoatSync[] = [];
+  private id: number = 0;
   tick = 0;
   seed = '';
 
   constructor(
+    private location: Location,
+    private esc: EscMenuService,
     private ws: WsService,
     private ss: SettingsService,
     private fs: FriendsService,
@@ -51,7 +57,6 @@ export class ReplayComponent implements OnInit {
       this.fs.fakeFs.isBlocked = this.fs.isBlocked.bind(this.fs);
     }
     this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id' || 0))));
-
     this.sub.add(this.fakeWs.outMessages$.subscribe(m => {
       if (m.cmd === OutCmd.Sync) this.sendSync();
     }));
@@ -77,6 +82,7 @@ export class ReplayComponent implements OnInit {
 
   private async getMatch(id: number) {
     this.tick = 0;
+    this.id = id;
     clearInterval(this.tickInterval);
     this.tickInterval = 0;
     const match = await this.ws.request(OutCmd.MatchData, +id);
@@ -94,7 +100,7 @@ export class ReplayComponent implements OnInit {
       }
       this.ss.setFakeSettings(group, settingGroup);
     }
-
+    
     setTimeout(() => {
       this.fakeMessages();
       const join = this.messages[0][0];
@@ -102,6 +108,12 @@ export class ReplayComponent implements OnInit {
       const firstSync = { cmd: InCmd.Sync, data: { sync: Object.values(join.data?.boats), flags: join.data.flags } };
       this.messages[0].push(firstSync);
       this.checkMessage(firstSync);
+      setTimeout(() => {
+        this.esc.open = false;
+      });
+      setTimeout(() => { //temporary fix for starting replay
+        this.playTo(Number(this.route.snapshot.queryParams["tick"]));
+      },500);
     });
   }
 
@@ -202,6 +214,7 @@ export class ReplayComponent implements OnInit {
       this.tick++;
       this.fakeMessages(true);
     }
+    this.location.replaceState("/replay/" + this.id + "?tick=" + this.tick);
   }
 
   private fakeMessages(skipTurn = false) {
