@@ -9,7 +9,7 @@ import { Lobby } from '../../lobby/lobby.component';
 })
 export class LobbyCardComponent implements OnInit {
   @Input() lobby = {} as Lobby;
-  publicModes = ['Public', 'Public Invitation'];
+  publicModes = ['Public', 'Public Invitation', 'Private'];
   descriptions = Descriptions;
   titles = { CadeGoose: 'Cadesim' } as any;
 
