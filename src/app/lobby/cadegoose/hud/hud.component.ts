@@ -141,7 +141,7 @@ export class CadeHudComponent extends HudComponent {
   }
 
   clickTile(ev: MouseEvent, slot: number) {
-    if (this.locked || slot === this.blockedPosition && this.myBoat.maxMoves === 3) return;
+    if (this.locked || slot === this.blockedPosition) return;
     const moves = this.getMoves();
     const move = moves[slot];
     if (move === 0 && this.maxMoves) return;
@@ -186,7 +186,6 @@ export class CadeHudComponent extends HudComponent {
     this.usingMoves = [0, 0, 0];
     this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     this.usingCannons = 0;
-    this.blockedPosition = 3;
   }
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {

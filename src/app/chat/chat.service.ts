@@ -23,14 +23,19 @@ export interface Message {
   providedIn: 'root'
 })
 export class ChatService {
+  commandsComponent: any;
   commandHistory: string[] = [];
   messages: Message[] = [];
   value = '';
   saveText = '';
   historyIndex = -1;
 
-  constructor(private socket: WsService, private kbs: KeyBindingService) {
+  constructor(
+    private socket: WsService,
+    private kbs: KeyBindingService,
+  ) {
     this.socket.subscribe(InCmd.ChatMessage, (message: Message) => {
+      if (message.type === 6) return;
       this.messages.push(message);
       if (message.type === 5) {
         let command = '/tell ' + message.from;

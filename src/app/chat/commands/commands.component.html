@@ -1,0 +1,34 @@
+The following commands are available everywhere:<br>
+<ng-container *ngIf="message">
+  <span *ngFor="let c of message.message.global"
+        class="command"
+        (click)="clickCommand(c)"
+        title="Send Command">
+    {{c.base}}
+    <ng-container *ngIf="c.params"> {{c.params}}</ng-container> -
+    {{c.help}}<br>
+  </span>
+  <span *ngIf="message.message.lobby || message.message.lobbyAdmin">
+    <br>The following commands are available only in this lobby:<br>
+  </span>
+  <ng-container *ngIf="message.message.lobby?.length">
+    <span *ngFor="let c of message.message.lobby"
+          class="command"
+          (click)="clickCommand(c)"
+          title="Send Command">
+      {{c.base}}
+      <ng-container *ngIf="c.params"> {{c.params}}</ng-container> -
+      {{c.help}}<br>
+    </span>
+  </ng-container>
+  <ng-container *ngIf="message.message.lobbyAdmin?.length">
+    <span *ngFor="let c of message.message.lobbyAdmin"
+          class="command"
+          (click)="clickCommand(c)"
+          title="Send Command">
+      {{c.base}}
+      <ng-container *ngIf="c.params"> {{c.params}}</ng-container> -
+      {{c.help}}<br>
+    </span>
+  </ng-container>
+</ng-container>

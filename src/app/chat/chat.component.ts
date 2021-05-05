@@ -9,6 +9,8 @@ import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { Invite } from './friends/friends.service';
 import { Router } from '@angular/router';
+import { CommandsComponent } from './commands/commands.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'q-chat',
@@ -40,11 +42,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     public chat: ChatService,
     private kbs: KeyBindingService,
     private router: Router,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
     if (!this.output) return;
-    this.subs.add(this.ws.subscribe(InCmd.ChatMessage, () => this.addMessage()));
+    this.subs.add(this.ws.subscribe(InCmd.ChatMessage, (m) => this.addMessage(m)));
     this.subs.add(this.ws.subscribe(Internal.RefreshChat, () => this.addMessage()));
     const output = this.output;
     this.messages$.next(this.chat.messages);
@@ -117,7 +120,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.chat.commandHistory.push(command);
   }
 
-  addMessage(): void {
+  addMessage(message?: Message): void {
+    if (message?.type === 6) {
+      this.dialog.open(CommandsComponent, { data: message });
+      return;
+    }
     if (!this.output) return;
     const output = this.output;
     const scrolled = output.elementRef.nativeElement;
@@ -127,16 +134,4 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  clickCommand(c: any) {
-    if (c.params) {
-      if (this.chat.value) this.chat.commandHistory.push(this.chat.value);
-      this.chat.value = c.base + ' ';
-      this.kbs.emitAction(KeyActions.FocusChat);
-      return;
-    }
-
-    this.ws.send(OutCmd.ChatCommand, c.base);
-    this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== c.base);
-    this.chat.commandHistory.push(c.base);
-  }
 }

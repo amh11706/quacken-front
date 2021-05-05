@@ -84,8 +84,8 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (this.turn > 0 && this.ws.connected) this.locked = false;
       this.myBoat = b;
+      this.resetMoves();
       if (!b.isMe) {
-        this.resetMoves();
         this.locked = true;
       }
     }));
@@ -182,7 +182,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     for (const [key, value] of Object.entries(this.moveKeys)) {
-      this.subs.add(this.kbs.subscribe(value, v => {  if (this.move === 0) this.blockedPosition = this.selected; if (v) this.placeMove(+key); }));
+      this.subs.add(this.kbs.subscribe(value, v => { if (v) this.placeMove(+key); }));
     }
 
     this.subs.add(this.kbs.subscribe(this.actions.nextSlot, v => { if (v && this.selected < 3 && this.kbControls) this.selected++; }));
@@ -199,7 +199,9 @@ export class HudComponent implements OnInit, OnDestroy {
       return;
     }
     moves[this.selected] = move;
+    if (move === 0) this.blockedPosition = this.selected;
     if (this.selected < 3) this.selected += 1;
+    this.checkMaxMoves();
     this.sendMoves();
   }
 
@@ -207,7 +209,7 @@ export class HudComponent implements OnInit, OnDestroy {
     const moves = this.getMoves();
     for (const i in moves) moves[i] = 0;
     this.maxMoves = false;
-    this.blockedPosition = 3;
+    this.blockedPosition = this.myBoat.maxMoves === 4 ? 4 : 3;
   }
 
   checkMaxMoves() {
@@ -270,13 +272,12 @@ export class HudComponent implements OnInit, OnDestroy {
   drop(ev: DragEvent, slot: number) {
     ev.preventDefault();
     if (this.locked) return;
-    const boat = this.myBoat;
     const moves = this.getMoves();
     const move = moves[slot];
-    if(this.move === 0) this.blockedPosition = slot;
-    if (boat.type !== 0 && this.maxMoves && this.source > 3 &&
-      (move === 0 || move === 4) && this.move < 4) return;
+    if (this.move === 0) this.blockedPosition = slot;
+    else if (this.source < 4 && this.blockedPosition === slot) this.blockedPosition = this.source;
 
+    if (this.maxMoves && this.source > 3 && (move === 0 || move === 4) && this.move < 4) return;
     if (this.source < 4) moves[this.source] = moves[slot];
     moves[slot] = this.move;
     this.sendMoves();
