@@ -10,9 +10,11 @@ import { QdragModule } from '../qdrag/qdrag.module';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CommandsComponent } from './commands/commands.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [ChatComponent],
+  declarations: [ChatComponent, CommandsComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,6 +22,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatIconModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatDialogModule,
     NameModule,
     QdragModule,
     ScrollingModule,

@@ -34,38 +34,7 @@
             </span>
 
             <span *ngSwitchCase="6">
-              The following commands are available everywhere:<br>
-              <span *ngFor="let c of m.message.global"
-                    class="command"
-                    (click)="clickCommand(c)"
-                    title="Send Command">
-                {{c.base}}
-                <ng-container *ngIf="c.params"> {{c.params}}</ng-container> -
-                {{c.help}}<br>
-              </span>
-              <span *ngIf="m.message.lobby || m.message.lobbyAdmin">
-                <br>The following commands are available only in this lobby:<br>
-              </span>
-              <ng-container *ngIf="m.message.lobby?.length">
-                <span *ngFor="let c of m.message.lobby"
-                      class="command"
-                      (click)="clickCommand(c)"
-                      title="Send Command">
-                  {{c.base}}
-                  <ng-container *ngIf="c.params"> {{c.params}}</ng-container> -
-                  {{c.help}}<br>
-                </span>
-              </ng-container>
-              <ng-container *ngIf="m.message.lobbyAdmin?.length">
-                <span *ngFor="let c of m.message.lobbyAdmin"
-                      class="command"
-                      (click)="clickCommand(c)"
-                      title="Send Command">
-                  {{c.base}}
-                  <ng-container *ngIf="c.params"> {{c.params}}</ng-container> -
-                  {{c.help}}<br>
-                </span>
-              </ng-container>
+              <!-- command list now in command.component -->
             </span>
 
             <span *ngSwitchCase="7">

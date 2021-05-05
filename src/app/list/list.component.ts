@@ -12,6 +12,6 @@ export class ListComponent {
   constructor(ws: WsService) {
     const token = localStorage.getItem('token');
     if (!ws.connected && token) ws.connect(token);
-
+    if (token === 'guest') window.addEventListener('beforeunload', () => localStorage.removeItem('token'));
   }
 }
