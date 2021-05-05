@@ -46,7 +46,6 @@ export class CadeHudComponent extends HudComponent {
   lastTick: BoatTick = { tp: 0 } as BoatTick;
   usingCannons = 0;
   newTurn = false;
-  blockedPosition = 3;
   wantMove = 2;
   auto = true;
 
@@ -142,7 +141,7 @@ export class CadeHudComponent extends HudComponent {
   }
 
   clickTile(ev: MouseEvent, slot: number) {
-    if (this.locked) return;
+    if (this.locked || slot === this.blockedPosition) return;
     const moves = this.getMoves();
     const move = moves[slot];
     if (move === 0 && this.maxMoves) return;
@@ -151,7 +150,6 @@ export class CadeHudComponent extends HudComponent {
       wantMove = (ev.button + 1 + wantMove) % 4;
     }
     moves[slot] = wantMove;
-    this.checkMaxMoves();
     this.sendMoves();
   }
 
@@ -188,6 +186,7 @@ export class CadeHudComponent extends HudComponent {
     this.usingMoves = [0, 0, 0];
     this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     this.usingCannons = 0;
+    this.blockedPosition = 3;
   }
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {

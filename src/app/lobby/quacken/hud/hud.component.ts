@@ -70,7 +70,7 @@ export class HudComponent implements OnInit, OnDestroy {
   protected turnSeconds = 0;
   protected secondsPerTurn = 20;
   protected maxTurn = 90;
-
+  public blockedPosition = 3;
   seconds$ = new BehaviorSubject<number>(76);
 
   constructor(
@@ -84,7 +84,6 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (this.turn > 0 && this.ws.connected) this.locked = false;
       this.myBoat = b;
-      this.checkMaxMoves();
       if (!b.isMe) {
         this.resetMoves();
         this.locked = true;
@@ -153,7 +152,6 @@ export class HudComponent implements OnInit, OnDestroy {
         this.resetMoves();
       }
       this.eraseSlot(this.selected);
-      this.checkMaxMoves();
       this.sendMoves();
     }));
 
@@ -202,7 +200,6 @@ export class HudComponent implements OnInit, OnDestroy {
     }
     moves[this.selected] = move;
     if (this.selected < 3) this.selected += 1;
-    this.checkMaxMoves();
     this.sendMoves();
   }
 
@@ -210,6 +207,7 @@ export class HudComponent implements OnInit, OnDestroy {
     const moves = this.getMoves();
     for (const i in moves) moves[i] = 0;
     this.maxMoves = false;
+    this.blockedPosition = 3;
   }
 
   checkMaxMoves() {
@@ -261,7 +259,6 @@ export class HudComponent implements OnInit, OnDestroy {
     const move = moves[slot];
     if (boat.type !== 0 && this.maxMoves && (move === 0 || move === 4)) return;
     moves[slot] = (ev.button + 1 + move) % 4;
-    this.checkMaxMoves();
     this.sendMoves();
   }
 
@@ -276,12 +273,12 @@ export class HudComponent implements OnInit, OnDestroy {
     const boat = this.myBoat;
     const moves = this.getMoves();
     const move = moves[slot];
+    if(this.move === 0) this.blockedPosition = slot;
     if (boat.type !== 0 && this.maxMoves && this.source > 3 &&
       (move === 0 || move === 4) && this.move < 4) return;
 
     if (this.source < 4) moves[this.source] = moves[slot];
     moves[slot] = this.move;
-    this.checkMaxMoves();
     this.sendMoves();
     this.source = 4;
   }
@@ -290,7 +287,6 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.locked || this.source > 3) return;
 
     this.getMoves()[this.source] = 0;
-    this.checkMaxMoves();
     this.sendMoves();
   }
 
