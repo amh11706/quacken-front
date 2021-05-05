@@ -103,8 +103,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   sendInput(e: Event) {
     e.preventDefault();
     const text = this.chat.value;
-    this.input?.nativeElement.blur();
-    if (!text) return;
+    if (!text) return this.input?.nativeElement.blur();
     this.chat.value = '';
     this.chat.historyIndex = -1;
 
@@ -116,7 +115,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     const command = secondSpace > 0 ? text.substr(0, secondSpace + 1) : text;
     this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== command);
     this.chat.commandHistory.push(command);
-    this.input?.nativeElement.blur();
   }
 
   addMessage(): void {
