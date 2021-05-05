@@ -38,7 +38,7 @@
                          (mouseup)="clickTile($event, i)"
                          (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
                          (dragover)="$event.preventDefault()">
-                         <img *ngIf="move || i === blockedPosition"
+                         <img *ngIf="move || i === blockedPosition && myBoat.maxMoves === 3"
                               src="./assets/images/arrow{{move}}.png"
                               (dragstart)="drag(move, i)"
                               (dragend)="dragEnd()">

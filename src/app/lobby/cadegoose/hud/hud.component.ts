@@ -141,7 +141,7 @@ export class CadeHudComponent extends HudComponent {
   }
 
   clickTile(ev: MouseEvent, slot: number) {
-    if (this.locked || slot === this.blockedPosition) return;
+    if (this.locked || slot === this.blockedPosition && this.myBoat.maxMoves === 3) return;
     const moves = this.getMoves();
     const move = moves[slot];
     if (move === 0 && this.maxMoves) return;
