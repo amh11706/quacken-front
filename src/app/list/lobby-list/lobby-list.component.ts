@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Message } from 'src/app/chat/chat.service';
+import { StatService } from 'src/app/esc-menu/profile/stat.service';
 import { Lobby } from 'src/app/lobby/lobby.component';
 import { InCmd, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
@@ -19,8 +21,9 @@ export class LobbyListComponent implements OnInit {
   lobbies: Lobby[] = [];
   note = Notes[0];
   private sub = new Subscription();
-
+  @Input() message: Message = {} as Message;
   constructor(
+    public stat: StatService,
     public ws: WsService,
     private dialog: MatDialog,
     private router: Router,
@@ -51,6 +54,10 @@ export class LobbyListComponent implements OnInit {
 
   ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+
+  openUserMatches() {
+    this.stat.openUserMatches();
   }
 
   join(l: Lobby) {

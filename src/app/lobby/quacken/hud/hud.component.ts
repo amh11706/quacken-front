@@ -182,7 +182,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     for (const [key, value] of Object.entries(this.moveKeys)) {
-      this.subs.add(this.kbs.subscribe(value, v => { if (v) this.placeMove(+key); }));
+      this.subs.add(this.kbs.subscribe(value, v => {  if (this.move === 0) this.blockedPosition = this.selected; if (v) this.placeMove(+key); }));
     }
 
     this.subs.add(this.kbs.subscribe(this.actions.nextSlot, v => { if (v && this.selected < 3 && this.kbControls) this.selected++; }));
