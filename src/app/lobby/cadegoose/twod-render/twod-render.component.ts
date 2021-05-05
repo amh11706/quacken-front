@@ -12,7 +12,6 @@ import { BoatRender } from '../boat-render';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { MapEditor } from 'src/app/map-editor/map-editor.component';
-import { X } from '@angular/cdk/keycodes';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 0,
@@ -79,8 +78,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit {
 
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
-  getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x || 0;
-  getYOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.y || 0;
+  getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x || this.getWidth() / 2;
+  getYOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.y || this.getHeight() / 2;
 
   moveTransition = (transition: number): string => {
     switch (transition) {
