@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, ComponentRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Lobby } from '../lobby.component';
@@ -10,6 +10,7 @@ import { WsService } from 'src/app/ws.service';
 import { TimerComponent } from './timer/timer.component';
 import { Settings } from 'src/app/settings/setting/settings';
 import { InCmd, OutCmd } from 'src/app/ws-messages';
+import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'watchers', 'turnTime', 'playTo'
@@ -68,9 +69,11 @@ export class SpadesComponent implements OnInit, OnDestroy {
     private ss: SettingsService,
     private fs: FriendsService,
     public ws: WsService,
+    private es: EscMenuService,
   ) { }
 
   async ngOnInit() {
+    this.es.setLobby(1);
     this.ss.setLobbySettings(ownerSettings);
 
     this.sub.add(this.ws.subscribe(InCmd.Cards, (c: number[]) => {
@@ -163,6 +166,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.es.setLobby();
     this.sub.unsubscribe();
 
     this.ss.setLobbySettings([]);

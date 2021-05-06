@@ -17,8 +17,6 @@
 
 #cards {
     position: relative;
-    min-height: 100px;
-    height: calc(100vh - 348px);
     padding: 12px 0;
     overflow-y: auto;
     display: flex;
@@ -63,9 +61,12 @@
 
 #frame {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     max-width: 900px;
     max-height: calc(100vh - 60px);
-    min-height: 360px;
+    min-height: 80vh;
     margin: auto;
     padding: 16px;
     background-color: rgba(66, 66, 66, 0.85);

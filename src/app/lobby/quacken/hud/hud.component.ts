@@ -201,7 +201,6 @@ export class HudComponent implements OnInit, OnDestroy {
     moves[this.selected] = move;
     if (move === 0) this.blockedPosition = this.selected;
     if (this.selected < 3) this.selected += 1;
-    this.checkMaxMoves();
     this.sendMoves();
   }
 
@@ -241,6 +240,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   protected sendMoves() {
+    this.checkMaxMoves();
     this.ws.send(OutCmd.Moves, this.getMoves());
   }
 

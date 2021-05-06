@@ -39,7 +39,7 @@ export class EscMenuComponent implements OnInit {
     this.es.open = false;
   }
 
-  openDiscord(){
-    window.open('https://discord.gg/SDFPXp2Cmq', "_blank");
+  openDiscord() {
+    window.open('https://discord.gg/SDFPXp2Cmq', '_blank');
   }
 }
