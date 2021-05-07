@@ -48,8 +48,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   success = '';
   pending = false;
   shown?: DBTile;
+  showFileUpload: Boolean = false;
 
-  constructor(private socket: WsService) { }
+  constructor(protected socket: WsService) { }
 
   ngOnInit() {
     this.sub.add(this.socket.connected$.subscribe(v => {
@@ -349,6 +350,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
         break;
       default:
     }
+  }
+
+  import(files: FileList){
+    console.log(files.item(0));
   }
 
   async edit() {

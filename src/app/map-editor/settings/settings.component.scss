@@ -17,7 +17,7 @@
   top: calc(50vh - 100px);
   left: 50vw;
   width: 50%;
-  min-width: 320px;
+  min-width: 380px;
   max-width: 640px;
   padding: 12px;
   color: #ddd;
@@ -53,8 +53,11 @@
 }
 
 .center {
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 20px;
+  width: 100%;
   padding-top: 12px;
-  text-align: center;
 }
 
 .setting p {

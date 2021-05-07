@@ -25,6 +25,7 @@ import { TmapSetComponent } from './tmap-set/tmap-set.component';
 import { EntityEditorComponent } from './entity-editor/entity-editor.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { WinConditionsComponent } from './entity-editor/win-conditions/win-conditions.component';
+import { FileImportModule } from './file-import/file-import.module';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { WinConditionsComponent } from './entity-editor/win-conditions/win-condi
     MatFormFieldModule,
     MatExpansionModule,
     TwodRenderModule,
+    FileImportModule,
   ],
   exports: [MapEditorComponent]
 })
