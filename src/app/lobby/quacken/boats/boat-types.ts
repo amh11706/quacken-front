@@ -28,4 +28,5 @@ export const enum BoatTypes {
   WarGal,
   WarFrig,
   GrandFrig,
+  BlackShip,
 }
