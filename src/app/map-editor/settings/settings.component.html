@@ -100,4 +100,6 @@
   </div>
 </div>
 
-<q-file-import *ngIf="showFileUpload"></q-file-import>
+<q-file-import *ngIf="showFileUpload"
+  [(showFileUpload)]="showFileUpload"
+  [mapData]="mapData"></q-file-import>

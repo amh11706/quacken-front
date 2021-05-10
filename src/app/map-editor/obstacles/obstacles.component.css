@@ -9,8 +9,8 @@
 }
 
 #selected img {
-  height: 25px;
-  width: 25px;
+  height: 40px;
+  width: 40px;
 }
 
 .img1,
@@ -23,7 +23,7 @@
 .img21,
 .img22,
 .img23 {
-  transform: rotate(60deg) scale(0.7);
+  transform: rotate(45deg) scale(1.2);
 }
 
 #handle {

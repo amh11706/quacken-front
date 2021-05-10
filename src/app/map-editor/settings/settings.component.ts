@@ -42,13 +42,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
   selected: string | number = 'new';
   options: DBTile[] = [];
   private sub = new Subscription();
-  private mapData: { [key: string]: DBTile[] } = {};
+  public mapData: { [key: string]: DBTile[] } = {};
 
   error = '';
   success = '';
   pending = false;
   shown?: DBTile;
-  showFileUpload: Boolean = false;
+  showFileUpload: boolean = false;
 
   constructor(protected socket: WsService) { }
 

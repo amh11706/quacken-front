@@ -1,11 +1,13 @@
 import { JsonpClientBackend } from '@angular/common/http';
 import { TokenizeResult } from '@angular/compiler/src/ml_parser/lexer';
+import { EventEmitter } from '@angular/core';
 import { Component, Input, OnInit, Output} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { SettingsComponent } from '../settings/settings.component';
+import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
 
 const mapConversion: { [key: number]: number } = {
   0: 0, //empty
@@ -29,19 +31,23 @@ const mapConversion: { [key: number]: number } = {
   templateUrl: './file-import.component.html',
   styleUrls: ['./file-import.component.scss']
 })
-export class FileImportComponent extends SettingsComponent implements OnInit {
+export class FileImportComponent implements OnInit {
+  @Input() mapData : { [key: string]: DBTile[] } = {};
+  @Input() showFileUpload : boolean = false;
+  @Output() showFileUploadChange = new EventEmitter<boolean>();
+
   reader!: FileReader;
   uploader: FileUploader = new FileUploader({});
-  open = false;
+  mapErrors: string[] = [];
 
-  constructor(public ws: WsService) {
-    super(ws);
+  constructor(private socket: WsService) {
   }
 
   ngOnInit(): void {
   }
 
   async process() {
+    this.mapErrors = [];
     for (var i = 0; i < this.uploader.queue.length; i++) {
       let fileItem = this.uploader.queue[i]._file;
       if (fileItem.size > 10000) {
@@ -60,6 +66,13 @@ export class FileImportComponent extends SettingsComponent implements OnInit {
         group: "cgmaps"
       }
        const prom = await this.socket.request(OutCmd.MapCreate, map);
+       if(prom.error){
+          this.mapErrors.push(prom.error); // do something with errors
+       }else{
+        if (this.mapData[prom.group]){
+          this.mapData[prom.group].push(prom);
+        }
+      }
     }
     this.uploader.clearQueue();
   }
@@ -85,6 +98,7 @@ export class FileImportComponent extends SettingsComponent implements OnInit {
   }
 
   close() {
-
+    this.showFileUploadChange.emit(false);
+    this.uploader.clearQueue();
   }
 }
