@@ -75,22 +75,22 @@
   .mat-tab-label:hover {
     background-color: rgba(235, 66, 66, 0.9);
   }
+
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+    background-color: rgba(190, 62, 62, 0.9);
+    white-space: normal;
+    line-height: auto;
+  }
+
+  .ng-option-selected .ng-option-label {
+    color: white !important;
+  }
+
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+    background: rgba(235, 66, 66, 0.9);
+    color: white;
+  }
 }
-
-// @media screen and (max-width:350px){
-
-//     ::ng-deep .mat-tab-header-pagination {
-//         display: none !important;
-//     }
-
-//     ::ng-deep .mat-tab-header {
-//       overflow-x: scroll !important;
-//     }
-
-//     ::ng-deep .mat-tab-label-container {
-//       overflow: hidden !important;
-//     }
-// }
 
 #chatframe {
   grid-column-start: 2;

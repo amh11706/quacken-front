@@ -101,4 +101,9 @@ export class FileImportComponent implements OnInit {
     this.showFileUploadChange.emit(false);
     this.uploader.clearQueue();
   }
+
+  clear() {
+    this.uploader.clearQueue();
+  }
+
 }
