@@ -49,6 +49,15 @@ export const Settings = {
   cadeTurnTime: {
     admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 35, step: 5
   },
+  cadeTurns: {
+    admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5
+  },
+  enableBots: {
+    admin: true, id: 35, group: 'l/cade', name: 'bots', type: 'checkbox', label: 'Enable bots'
+  },
+  botDifficulty: {
+    admin: true, id: 36, group: 'l/cade', name: 'botDifficulty', type: 'slider', label: 'Bot difficulty', min: 5, max: 100, step: 5
+  },
   cadePublicMode: {
     admin: true, id: 25, group: 'l/cade', name: 'publicMode', type: 'option', label: 'Lobby Privacy', options: [
       'Public', 'Public Application', 'Invite Only'

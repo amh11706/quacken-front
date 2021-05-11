@@ -15,8 +15,11 @@ import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { TwodRenderComponent } from './twod-render/twod-render.component';
 
 const ownerSettings: (keyof typeof Settings)[] = [
-  'jobberQuality', 'cadeTurnTime', 'cadePublicMode', 'cadeHotEntry',
-  'cadeMaxPlayers', 'cadeMap',
+  'cadeMaxPlayers', 'jobberQuality',
+  'cadeTurnTime', 'cadeTurns',
+  'enableBots', 'botDifficulty',
+  'cadeHotEntry', 'cadePublicMode',
+  'cadeMap',
 ];
 
 export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy ships in a battle for points.';

@@ -1,10 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { FriendsService } from 'src/app/chat/friends/friends.service';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
-import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
-import { SettingsService } from 'src/app/settings/settings.service';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
 import { Boat } from '../../quacken/boats/boat';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
@@ -36,8 +32,6 @@ export class CadeHudComponent extends HudComponent {
     ready: KeyActions.Noop,
     back: KeyActions.CBack,
   };
-  protected secondsPerTurn = 30;
-  protected maxTurn = 75;
   shots = [0, 0, 0, 0, 0, 0, 0, 0];
   moves = [0, 0, 0, 0];
   haveMoves = [2, 4, 2];
@@ -48,10 +42,6 @@ export class CadeHudComponent extends HudComponent {
   newTurn = false;
   wantMove = 2;
   auto = true;
-
-  constructor(ws: WsService, fs: FriendsService, private ss: SettingsService, kbs: KeyBindingService) {
-    super(ws, fs, kbs);
-  }
 
   ngOnInit() {
     super.ngOnInit();
@@ -190,7 +180,7 @@ export class CadeHudComponent extends HudComponent {
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
     const old = this.secondsPerTurn;
-    this.secondsPerTurn = (await this.ss.get('l/cade', 'turnTime')).value;
+    this.lobbySettings.turnSeconds.value = (await this.ss.get('l/cade', 'turnTime')).value;
     super.setTurn(turn, sec + this.secondsPerTurn - old);
   }
 }
