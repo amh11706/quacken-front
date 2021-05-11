@@ -14,11 +14,13 @@ import { CadeHudComponent } from './hud/hud.component';
 import { CadeEntryStatusComponent } from './cade-entry-status/cade-entry-status.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { MatTooltipModule, TooltipComponent } from '@angular/material/tooltip';
 import { NameModule } from 'src/app/chat/name/name.module';
 import { StatsComponent } from './stats/stats.component';
 import { StatEndComponent } from './stat-end/stat-end.component';
 import { ThreedRenderComponent } from './threed-render/threed-render.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { MatCardModule } from '@angular/material/card';
     MatRadioModule,
     MatCheckboxModule,
     MatCardModule,
+    MatIconModule,
+    MatTooltipModule,
     QdragModule,
     ChatModule,
     SettingsModule,

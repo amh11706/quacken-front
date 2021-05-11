@@ -48,6 +48,7 @@ export class CadeHudComponent extends HudComponent {
   newTurn = false;
   wantMove = 2;
   auto = true;
+  inSafeZone = true;
 
   constructor(ws: WsService, fs: FriendsService, private ss: SettingsService, kbs: KeyBindingService) {
     super(ws, fs, kbs);
@@ -84,7 +85,6 @@ export class CadeHudComponent extends HudComponent {
           for (const count of t.t[i]) this.haveMoves[i] += count;
         }
       }
-
       if (this.auto && (this.haveMoves[0] !== hadMoves[0] || this.haveMoves[1] !== hadMoves[1] || this.haveMoves[2] !== hadMoves[2])) {
         this.setAutoWant();
       }
@@ -192,5 +192,9 @@ export class CadeHudComponent extends HudComponent {
     const old = this.secondsPerTurn;
     this.secondsPerTurn = (await this.ss.get('l/cade', 'turnTime')).value;
     super.setTurn(turn, sec + this.secondsPerTurn - old);
+  }
+
+  disengage(){
+    if(this.myBoat.type != 0) this.ws.send(OutCmd.NextBoat, this.myBoat.type);
   }
 }

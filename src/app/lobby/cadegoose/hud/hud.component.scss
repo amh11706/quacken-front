@@ -6,13 +6,31 @@
   height: 148px;
 }
 
-q-chat {
-  display: inline-block;
+#source{
+  grid-column: left;
+}
+
+#chat{
+  grid-column: right;
+}
+
+#disengage{
+  grid-column: middle;
+  margin-top: 50px;
+  padding: 5px;
+}
+
+q-chat{
+  // display: inline-block;
   width: calc(99% - 285px);
   min-width: 150px;
+  margin-left: 0px;
 }
 
 #hud {
+  display: grid;
+  grid-template-columns: [left]277px [middle]0.05fr [right]1fr;
+  grid-template-rows: 1fr;
   background-color: rgba(67, 67, 67, 0.8);
   position: absolute;
   bottom: 1%;
@@ -33,6 +51,7 @@ q-chat {
 }
 
 #movesource {
+  grid-column: 1;
   position: relative;
   float: left;
   width: 150px;

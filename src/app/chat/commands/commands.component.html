@@ -5,7 +5,7 @@
         (click)="clickCommand(c)"
         title="Send Command">
     <span id="base">{{c.base}}</span>
-    <ng-container *ngIf="c.params"> <span id="params" >{{c.params}}</span></ng-container> -
+    <ng-container *ngIf="c.params"> <span id="params" > {{c.params}}</span></ng-container> -
     <span id="help">{{c.help}}</span><br>
   </span>
   <span *ngIf="message.message.lobby || message.message.lobbyAdmin">
@@ -17,7 +17,7 @@
           (click)="clickCommand(c)"
           title="Send Command">
           <span id="base">{{c.base}}</span>
-      <ng-container *ngIf="c.params"> <span id="params">{{c.params}}</span></ng-container> -
+      <ng-container *ngIf="c.params"> <span id="params"> {{c.params}}</span></ng-container> -
       <span id="help">{{c.help}}</span><br>
     </span>
   </ng-container>
@@ -27,7 +27,7 @@
           (click)="clickCommand(c)"
           title="Send Command">
           <span id="base">{{c.base}}</span>
-      <ng-container *ngIf="c.params"> <span id="params">{{c.params}}</span></ng-container> -
+      <ng-container *ngIf="c.params"> <span id="params"> {{c.params}}</span></ng-container> -
       <span id="help">{{c.help}}</span><br>
     </span>
   </ng-container>
