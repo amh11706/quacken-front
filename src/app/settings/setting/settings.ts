@@ -24,7 +24,7 @@ export const Settings = {
     id: 2, group: 'graphics', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1
   },
   speed: {
-    id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 5
+    id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 1
   },
   lockAngle: {
     id: 22, group: 'controls', name: 'lockAngle', type: 'checkbox', label: 'Lock camera rotation'
@@ -56,7 +56,7 @@ export const Settings = {
     admin: true, id: 35, group: 'l/cade', name: 'bots', type: 'checkbox', label: 'Enable bots'
   },
   botDifficulty: {
-    admin: true, id: 36, group: 'l/cade', name: 'botDifficulty', type: 'slider', label: 'Bot difficulty', min: 5, max: 100, step: 5
+    admin: true, id: 36, group: 'l/cade', name: 'botDifficulty', type: 'slider', label: 'Bot difficulty', min: 25, max: 100, step: 25
   },
   cadePublicMode: {
     admin: true, id: 25, group: 'l/cade', name: 'publicMode', type: 'option', label: 'Lobby Privacy', options: [
