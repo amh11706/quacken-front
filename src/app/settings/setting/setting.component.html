@@ -1,4 +1,4 @@
-<ng-container [ngSwitch]="setting.type">
+<ng-container *ngIf="group[setting.name]" [ngSwitch]="setting.type">
   <div *ngSwitchCase="'boat'"
        class="setting boat">
     <mat-select *ngIf="group[setting.name]"

@@ -18,8 +18,7 @@
           </div>
         </div>
         <br>
-        <button *ngIf="myTeam === 0 || defenders.length === 0"
-                mat-raised-button
+        <button mat-raised-button
                 [disabled]="!es.open"
                 (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
       </div>
@@ -35,10 +34,9 @@
           </div>
         </div>
         <br>
-        <button *ngIf="myTeam === 1 || attackers.length === 0"
-                mat-raised-button
+        <button mat-raised-button
                 [disabled]="!es.open"
-                (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
+                (click)="joinTeam(1)">{{myTeam === 1 ? 'Leave' : 'Join'}}</button>
       </div>
 
       <div id="buttons">

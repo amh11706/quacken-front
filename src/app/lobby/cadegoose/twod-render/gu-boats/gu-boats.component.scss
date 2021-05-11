@@ -96,7 +96,7 @@ q-gu-boat-img {
 
 // speed set from html
 .shot.double { top: 10px; --delay: calc(var(--speed) * .2s) }
-// .clutter { z-index: 1000; }
+.clutter { z-index: 1000; }
 .shot, .smoke {
   position: absolute;
   top: 9px;
