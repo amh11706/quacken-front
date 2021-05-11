@@ -65,12 +65,14 @@ export class GuBoatsComponent extends BoatService implements OnInit {
     return (boat.render || { orientation: {} }) as GuBoat;
   }
 
-  protected handleUpdate(updates: Clutter[]) {
+  protected handleUpdate(updates: Clutter[]): Promise<void> {
+    if (!updates.length) return Promise.resolve();
     for (const u of updates) {
       const p = new Point().fromPosition(u);
       u.transform = `translate(${p.x}px, ${p.y}px)`;
     }
     this.clutter.push(...updates);
+    return new Promise(resolve => setTimeout(resolve, 7000 / this.speed));
   }
 
   protected setHeaderFlags(flags: Turn['flags']) {

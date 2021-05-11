@@ -108,7 +108,7 @@ export class GuBoat extends BoatRender {
         if (startTime && offsetX) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
             .to({ x: x + offsetX }, 5000 / BoatRender.speed)
-            .delay(7500 / BoatRender.speed)
+            .delay(3500 / BoatRender.speed)
             .repeatDelay(500 / BoatRender.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
@@ -119,7 +119,7 @@ export class GuBoat extends BoatRender {
           t = new TWEEN.Tween(this.pos, BoatRender.tweens)
             .easing(moveEase[transitions[0]])
             .to({ x }, 10000 / BoatRender.speed)
-            .delay(7000 / BoatRender.speed)
+            .delay(3000 / BoatRender.speed)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
             .onComplete(resolve);
@@ -136,7 +136,7 @@ export class GuBoat extends BoatRender {
         if (startTime && offsetY) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
             .to({ y: y + offsetY }, 5000 / BoatRender.speed)
-            .delay(7500 / BoatRender.speed)
+            .delay(3500 / BoatRender.speed)
             .repeatDelay(500 / BoatRender.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
@@ -148,7 +148,7 @@ export class GuBoat extends BoatRender {
           t = new TWEEN.Tween(this.pos, BoatRender.tweens)
             .easing(moveEase[transitions[1]])
             .to({ y }, 10000 / BoatRender.speed)
-            .delay(7000 / BoatRender.speed)
+            .delay(3000 / BoatRender.speed)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
             .onComplete(resolve);
@@ -176,7 +176,7 @@ export class GuBoat extends BoatRender {
       promises.push(new Promise(resolve => {
         if (transition === 1) {
           const delay = 2000 / BoatRender.speed;
-          const delayOffset = 7000 / BoatRender.speed;
+          const delayOffset = 3000 / BoatRender.speed;
           const offset = this.rotateDeg < face ? 1 : 15;
           const f = this.rotateDeg / 90 * 4 + 14;
           for (let i = 1; i < 5; i++) {

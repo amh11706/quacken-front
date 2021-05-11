@@ -190,8 +190,9 @@ export class BoatService extends BoatsComponent implements OnDestroy {
 
   protected playTurn() {
     for (let step = 0; step < 8; step++) {
-      this.worker.addJob(() => {
-        return this._playTurn(step);
+      this.worker.addJob(async () => {
+        await this._playTurn(step);
+        return this.handleUpdate(this.turn?.cSteps[step] || []);
       });
     }
     this.worker.addJob(async () => {
@@ -204,11 +205,10 @@ export class BoatService extends BoatsComponent implements OnDestroy {
 
   private _playTurn(step: number) {
     if (!this.turn) return;
-    setTimeout(() => this.handleUpdate(this.turn?.cSteps[step] || []), 12500 / this.speed);
     if (step === 4) this.resetBoats();
     const turnPart = this.turn.steps[step] || [];
     if (!turnPart.length) return new Promise<void>(resolve => {
-      setTimeout(resolve, 12500 / this.speed);
+      setTimeout(resolve, 2500 / this.speed);
     });
 
     const promises: Promise<any>[] = [];
