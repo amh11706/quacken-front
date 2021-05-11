@@ -42,6 +42,7 @@ export class CadeHudComponent extends HudComponent {
   newTurn = false;
   wantMove = 2;
   auto = true;
+  protected group = 'l/cade';
 
   ngOnInit() {
     super.ngOnInit();
@@ -180,7 +181,7 @@ export class CadeHudComponent extends HudComponent {
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
     const old = this.secondsPerTurn;
-    this.lobbySettings.turnSeconds.value = (await this.ss.get('l/cade', 'turnTime')).value;
+    await this.ss.get('l/cade', 'turnTime');
     super.setTurn(turn, sec + this.secondsPerTurn - old);
   }
 }
