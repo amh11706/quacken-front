@@ -79,7 +79,7 @@
                </div>
           </div>
      </div>
-     <div *ngIf="myBoat.checkSZ()" id="disengage">
+     <div *ngIf="myBoat.inSZ" id="disengage">
           <button mat-button
                matTooltip="Disengage"
                (click)="disengage()">

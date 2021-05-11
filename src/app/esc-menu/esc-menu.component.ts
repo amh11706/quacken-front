@@ -7,6 +7,7 @@ import { SettingsComponent } from '../settings/settings.component';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'q-esc-menu',
@@ -20,6 +21,7 @@ export class EscMenuComponent implements OnInit {
 
   constructor(
     public es: EscMenuService,
+    public ss: SettingsService,
     public ws: WsService,
     private dialog: MatDialog,
     private router: Router,

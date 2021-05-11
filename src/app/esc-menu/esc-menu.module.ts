@@ -15,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTooltipModule, TooltipComponent } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LeadersComponent } from './profile/leaders/leaders.component';
@@ -47,6 +48,7 @@ import { FriendsModule } from '../chat/friends/friends.module';
     MatAutocompleteModule,
     MatTooltipModule,
     MatExpansionModule,
+    MatCardModule,
     ChatModule,
     InventoryModule,
     NameModule,

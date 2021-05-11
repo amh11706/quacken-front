@@ -1,15 +1,5 @@
 <mat-tab-group [(selectedIndex)]="ss.tabIndex"
                mat-align-tabs="center">
-  <mat-tab label="Lobby"
-           *ngIf="ss.lAdminSettings.length">
-    <mat-card>
-      <h4>Lobby Owner Settings</h4>
-      <div class="settings">
-        <q-setting *ngFor="let s of ss.lAdminSettings"
-                   [name]="s"></q-setting>
-      </div>
-    </mat-card>
-  </mat-tab>
 
   <mat-tab label="Graphics">
     <mat-card>

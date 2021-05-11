@@ -96,3 +96,19 @@
   grid-column-start: 2;
   grid-column-end: 3;
 }
+
+mat-card {
+  max-width: 600px;
+  padding: 16px 32px;
+  margin: 16px auto;
+  overflow-x: auto;
+  background-color: rgb(94, 92, 92);
+}
+
+.settings {
+  display: flex;
+  margin: auto;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
