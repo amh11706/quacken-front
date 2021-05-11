@@ -1,14 +1,16 @@
 <div class="container noselect"
      id="timer">
-    <p id="turncount">{{time}}</p>
-    <p class="team team0 sameteam"
-       (mouseover)="hoveredTeam.emit(0)"
-       (mouseleave)="hoveredTeam.emit(-1)">
-        {{points[0]}}
-    </p> -
-    <p class="team team1"
-       (mouseover)="hoveredTeam.emit(1)"
-       (mouseleave)="hoveredTeam.emit(-1)">
-        {{points[1]}}
-    </p>
+  <p id="turncount">{{time}}</p>
+  <p class="team team0"
+     [class.sameteam]="myTeam === 0"
+     (mouseover)="hoveredTeam.emit(0)"
+     (mouseleave)="hoveredTeam.emit(-1)">
+    {{points[0]}}
+  </p> -
+  <p class="team team1"
+     [class.sameteam]="myTeam === 1"
+     (mouseover)="hoveredTeam.emit(1)"
+     (mouseleave)="hoveredTeam.emit(-1)">
+    {{points[1]}}
+  </p>
 </div>

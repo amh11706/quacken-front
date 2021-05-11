@@ -1,21 +1,16 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { InCmd, Internal } from 'src/app/ws-messages';
-import { Object3DIdCount } from 'three';
 import { Stat, StatRow } from '../../cadegoose/stats/stats.component';
 import { Lobby } from '../../lobby.component';
 import { Turn } from '../../quacken/boats/boats.component';
-import { EntryStatusComponent } from '../../quacken/entry-status/entry-status.component';
+import { CadeEntryStatusComponent } from '../../cadegoose/cade-entry-status/cade-entry-status.component';
 
 @Component({
   selector: 'q-sb-entry-status',
   templateUrl: './sb-entry-status.component.html',
   styleUrls: ['./sb-entry-status.component.scss']
 })
-export class SbEntryStatusComponent extends EntryStatusComponent {
-  points = [0, 0];
-  teams = ['Defender', 'Attacker'];
-  time = '45:00';
-  @Output() hoveredTeam = new EventEmitter<number>();
+export class SbEntryStatusComponent extends CadeEntryStatusComponent {
 
   ngOnInit() {
     super.ngOnInit();

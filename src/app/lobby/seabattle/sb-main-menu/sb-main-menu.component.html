@@ -13,12 +13,8 @@
                class="lobbyPlayer"
                [class.ready]="m.message.r">
             <q-name [message]="m"></q-name>
-            <q-setting *ngIf="myTeam === 0; else viewBoat"
-                       name="nextCadeBoat"></q-setting>
-            <ng-template #viewBoat>
-              <img src="./assets/boats/{{links[m.message.b]}}.png"
-                   [title]="boatTitles[m.message.b]">
-            </ng-template>
+            <img src="./assets/boats/{{links[m.message.b]}}.png"
+                 [title]="boatTitles[m.message.b]">
           </div>
         </div>
         <br>
@@ -27,6 +23,7 @@
                 [disabled]="!es.open"
                 (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
       </div>
+
       <div class="teamwrap">
         <div id="attackers">
           <div *ngFor="let m of attackers"
@@ -37,6 +34,11 @@
                  [title]="boatTitles[m.message.b]">
           </div>
         </div>
+        <br>
+        <button *ngIf="myTeam === 1 || attackers.length === 0"
+                mat-raised-button
+                [disabled]="!es.open"
+                (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
       </div>
 
       <div id="buttons">
@@ -50,6 +52,7 @@
         <q-setting *ngIf="admin"
                    name="startNew"
                    id="start"></q-setting>
+        <q-setting name="nextCadeBoat"></q-setting>
       </div>
     </div>
   </ng-template>

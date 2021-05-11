@@ -15,6 +15,7 @@ export interface BoatStatus {
 export interface BoatSync extends BoatStatus {
   oId?: number;
   team?: number;
+  inSZ: boolean;
   n: string;
   ti?: string;
   f: number;
@@ -45,6 +46,7 @@ export function boatToSync(boat: Boat): BoatSync {
     inSq: 0,
     mDamage: 0,
     mMoves: 0,
+    inSZ: boat.inSZ,
   };
 }
 
@@ -64,6 +66,7 @@ export function syncToBoat(boat: Boat, sBoat: BoatSync) {
   boat.id = sBoat.id;
   boat.oId = sBoat.oId;
   boat.team = sBoat.team ?? boat.team;
+  boat.inSZ = sBoat.inSZ;
   boat.maxDamage = sBoat.mDamage;
   boat.maxMoves = sBoat.mMoves;
   boat.influence = sBoat.inSq !== undefined ? Math.sqrt(sBoat.inSq) : boat.influence;

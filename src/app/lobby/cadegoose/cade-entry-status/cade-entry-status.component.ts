@@ -3,7 +3,6 @@ import { EntryStatusComponent } from '../../quacken/entry-status/entry-status.co
 import { Turn } from '../../quacken/boats/boats.component';
 import { InCmd, Internal } from 'src/app/ws-messages';
 import { Lobby } from '../../lobby.component';
-import { Boat } from '../../quacken/boats/boat';
 
 @Component({
   selector: 'q-cade-entry-status',

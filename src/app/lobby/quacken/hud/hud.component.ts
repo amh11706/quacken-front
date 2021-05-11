@@ -9,6 +9,7 @@ import { Lobby } from '../../lobby.component';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
+import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -63,13 +64,15 @@ export class HudComponent implements OnInit, OnDestroy {
   private source = 4;
   private move = 0;
   protected subs = new Subscription();
+  protected group = 'l/quacken';
+  protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
+  protected get maxTurn() { return this.lobbySettings.turns?.value || 90; }
+  protected get secondsPerTurn() { return this.lobbySettings.turnTime?.value || 30; }
 
   private timeInterval?: number;
   private minutes = 0;
   private seconds = 0;
   protected turnSeconds = 0;
-  protected secondsPerTurn = 20;
-  protected maxTurn = 90;
   public blockedPosition = 3;
   seconds$ = new BehaviorSubject<number>(76);
 
@@ -77,9 +80,11 @@ export class HudComponent implements OnInit, OnDestroy {
     protected ws: WsService,
     public fs: FriendsService,
     protected kbs: KeyBindingService,
+    protected ss: SettingsService,
   ) { }
 
   ngOnInit() {
+    this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
     this.handleKeys();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (this.turn > 0 && this.ws.connected) this.locked = false;
