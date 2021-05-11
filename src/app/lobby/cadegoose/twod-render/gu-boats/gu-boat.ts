@@ -55,6 +55,9 @@ export class GuBoat extends BoatRender {
     if (!this.spriteData) return;
     this.updateImage();
     this.img = 'url("/assets/boats/' + this.spriteData.name + '/sail.png")';
+    if (!Boats[boat.type as BoatTypes]?.sink) return;
+    const preload = new Image();
+    preload.src = '/assets/boats/' + this.spriteData.name + '/sink.png';
   }
 
   dispose() {
