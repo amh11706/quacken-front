@@ -39,7 +39,7 @@
                     </mat-checkbox>
                     <div id="cannons">
                          <div class="bombempty" [class.bombmove]="lastTick.tp - usingCannons > 0"></div><br>
-                         {{lastTick.tp - usingCannons}}X
+                         <span id="cannontext">{{lastTick.tp - usingCannons}}X</span>
                     </div>
                     <mat-radio-group [(ngModel)]="wantMove" (change)="changeWantMove()">
                          <div id="moveRadio">
