@@ -9,6 +9,7 @@ import { Boat } from '../../quacken/boats/boat';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 import { links } from 'src/app/settings/setting/setting.component';
+import { SettingsService } from 'src/app/settings/settings.service';
 
 interface TeamMessage {
   id: number;
@@ -45,13 +46,14 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     public ws: WsService,
     private fs: FriendsService,
     public es: EscMenuService,
+    private ss: SettingsService,
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
-    this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
-      this.roundGoing = m.turn && m.turn <= 75 || false;
+    this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
+      this.roundGoing = m.turn && m.turn <= (await this.ss.get('l/cade', 'turns')).value || false;
       if (!m.players) return;
       if (this.firstJoin) {
         this.firstJoin = false;
@@ -97,9 +99,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       this.myBoat = b;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, async (t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
-      this.roundGoing = t.turn <= 75;
+      this.roundGoing = t.turn <= (await this.ss.get('l/cade', 'turns')).value;
       this.statsOpen = false;
       if (this.roundGoing) return;
       this.es.lobbyContext.stats = t.stats;
