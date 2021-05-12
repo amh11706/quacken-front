@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { BoatService, checkSZ } from '../../boat.service';
 import { GuBoat, Point } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
@@ -19,7 +19,7 @@ const FlagColorOffsets: Record<number, number> = {
   templateUrl: './gu-boats.component.html',
   styleUrls: ['./gu-boats.component.scss'],
 })
-export class GuBoatsComponent extends BoatService implements OnInit {
+export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   @Input() showIsland = false;
   @Input() speed = 15;
   @Input() set hoveredTeam(v: number) {
@@ -54,7 +54,13 @@ export class GuBoatsComponent extends BoatService implements OnInit {
     // no super to prevent double init thanks to extended class not being a component
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
+      GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
     }));
+  }
+
+  async ngOnDestroy() {
+    super.ngOnDestroy();
+    for (const url of GuBoat.teamImages.values()) URL.revokeObjectURL(await url);
   }
 
   clickBoat(boat: Boat) {

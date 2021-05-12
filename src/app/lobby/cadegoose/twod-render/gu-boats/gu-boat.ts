@@ -36,8 +36,12 @@ export class Position {
   }
 }
 
+const teamColors = [[146, 236, 30], [236, 30, 30]];
+
 export class GuBoat extends BoatRender {
   static widthOffset = 19;
+  static myTeam = 99;
+  static teamImages = new Map<string, Promise<string>>();
   coords?: Point;
   private spriteData?: SpriteData;
   orientation?: Orientation;
@@ -54,10 +58,7 @@ export class GuBoat extends BoatRender {
     this.spriteData = Boats[boat.type as BoatTypes]?.sail;
     if (!this.spriteData) return;
     this.updateImage();
-    this.img = 'url("/assets/boats/' + this.spriteData.name + '/sail.png")';
-    if (!Boats[boat.type as BoatTypes]?.sink) return;
-    const preload = new Image();
-    preload.src = '/assets/boats/' + this.spriteData.name + '/sink.png';
+    this.updateTeam(boat);
   }
 
   dispose() {
@@ -86,15 +87,51 @@ export class GuBoat extends BoatRender {
       promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, boat.imageOpacity));
     }
 
-    if (this.team !== boat.team) {
+    if (!startTime) {
+      this.updateTeam(boat);
     }
 
     return Promise.all(promises);
   }
 
-  rebuildHeader() {
+  private getTeamImage(team: number, which = 'sail'): Promise<string> {
+    if (!this.spriteData) return Promise.resolve('');
+    let prom = GuBoat.teamImages.get(which + team);
+    if (prom) return prom;
+    const sail = new Image();
+    sail.src = '/assets/boats/' + this.spriteData.name + '/' + which + '.png';
+    if (team > 1) return Promise.resolve(sail.src);
 
+    prom = new Promise(resolve => {
+      sail.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = sail.width;
+        canvas.height = sail.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve('');
+        ctx.drawImage(sail, 0, 0);
+        const data = ctx.getImageData(0, 0, sail.width, sail.height);
+        const bytes = data.data;
+        for (let i = 0; i < bytes.length; i += 4) {
+          if (bytes[i] === 90 && bytes[i + 1] === 172 && bytes[i + 2] === 222) {
+            [bytes[i], bytes[i + 1], bytes[i + 2]] = teamColors[team];
+          }
+        }
+        ctx.putImageData(data, 0, 0);
+        canvas.toBlob(blob => resolve(URL.createObjectURL(blob)));
+      };
+    });
+    GuBoat.teamImages.set(which + team, prom);
+    return prom;
   }
+
+  private async updateTeam(boat: Boat) {
+    const team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;
+    this.img = 'url(' + await this.getTeamImage(team) + ')';
+    if (Boats[boat.type as BoatTypes]?.sink) this.getTeamImage(team, 'sink');
+  }
+
+  rebuildHeader() { }
 
   scaleHeader(): BoatRender {
     return this;
@@ -208,15 +245,16 @@ export class GuBoat extends BoatRender {
         for (let i = 1; i < 17; i++) {
           const index = (f + 15 * i) % 16;
           if (index === 8) {
+            resolve();
             // swap to sink sprites when facing down
-            setTimeout(() => {
+            setTimeout(async () => {
               this.spriteData = Boats[this.boat.type as BoatTypes]?.sink;
-              if (!this.spriteData) return resolve();
-              this.img = 'url("/assets/boats/' + this.spriteData.name + '/sink.png")';
+              if (!this.spriteData) return;
+              const team = this.team === GuBoat.myTeam ? 99 : this.team;
+              this.img = 'url(' + await this.getTeamImage(team, 'sink') + ')';
               for (let i2 = 0; i2 < 50; i2++) {
                 setTimeout(() => {
                   this.updateImage(i2);
-                  if (i2 === 49) resolve();
                 }, delay / 2 * i2);
               }
             }, delayOffset + delay * i + 1);
