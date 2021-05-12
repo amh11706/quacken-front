@@ -10,6 +10,7 @@ import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
+import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -81,6 +82,7 @@ export class HudComponent implements OnInit, OnDestroy {
     public fs: FriendsService,
     protected kbs: KeyBindingService,
     protected ss: SettingsService,
+    public es: EscMenuService,
   ) { }
 
   ngOnInit() {

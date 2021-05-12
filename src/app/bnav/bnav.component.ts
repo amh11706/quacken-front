@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InCmd, OutCmd } from '../ws-messages';
 import { WsService } from '../ws.service';
+import { EscMenuService } from '../esc-menu/esc-menu.service';
 
 interface DBMove {
   count: number;
@@ -24,7 +25,7 @@ export class BnavComponent implements OnInit, OnDestroy {
   moves: DBMove[] = [];
   newMove = {} as DBMove;
 
-  constructor(private ws: WsService) { }
+  constructor(private ws: WsService, public es: EscMenuService) { }
 
   ngOnInit(): void {
     this.sub.add(this.ws.connected$.subscribe(v => {

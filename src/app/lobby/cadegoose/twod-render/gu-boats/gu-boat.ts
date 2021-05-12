@@ -99,7 +99,11 @@ export class GuBoat extends BoatRender {
     if (prom) return prom;
     const sail = new Image();
     sail.src = '/assets/boats/' + which + '.png';
-    if (team > 1) return Promise.resolve(sail.src);
+    if (team > 1) {
+      prom = Promise.resolve(sail.src);
+      GuBoat.teamImages.set(which + team, prom);
+      return prom;
+    }
 
     prom = new Promise(resolve => {
       sail.onload = () => {

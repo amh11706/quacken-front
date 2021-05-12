@@ -11,6 +11,7 @@ import { CreateComponent } from '../create/create.component';
 import { EditorErrorComponent } from '../editor-error/editor-error.component';
 import { NewsComponent } from '../news/news.component';
 import { Notes } from '../news/notes';
+import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 @Component({
   selector: 'q-lobby-list',
@@ -27,6 +28,7 @@ export class LobbyListComponent implements OnInit {
     public ws: WsService,
     private dialog: MatDialog,
     private router: Router,
+    public es: EscMenuService,
   ) { }
 
   ngOnInit() {

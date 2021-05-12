@@ -4,9 +4,9 @@
         class="command"
         (click)="clickCommand(c)"
         title="Send Command">
-    <span id="base">{{c.base}}</span>
-    <ng-container *ngIf="c.params"> <span id="params" > {{c.params}}</span></ng-container> -
-    <span id="help">{{c.help}}</span><br>
+    <span class="base">{{c.base}}</span>
+    <ng-container *ngIf="c.params"> <span class="params" > {{c.params}}</span></ng-container> -
+    <span class="help">{{c.help}}</span><br>
   </span>
   <span *ngIf="message.message.lobby || message.message.lobbyAdmin">
     <h3>The following commands are available only in this lobby:</h3>
@@ -16,9 +16,9 @@
           class="command"
           (click)="clickCommand(c)"
           title="Send Command">
-          <span id="base">{{c.base}}</span>
-      <ng-container *ngIf="c.params"> <span id="params"> {{c.params}}</span></ng-container> -
-      <span id="help">{{c.help}}</span><br>
+          <span class="base">{{c.base}}</span>
+      <ng-container *ngIf="c.params"> <span class="params"> {{c.params}}</span></ng-container> -
+      <span class="help">{{c.help}}</span><br>
     </span>
   </ng-container>
   <ng-container *ngIf="message.message.lobbyAdmin?.length">
@@ -26,9 +26,9 @@
           class="command"
           (click)="clickCommand(c)"
           title="Send Command">
-          <span id="base">{{c.base}}</span>
-      <ng-container *ngIf="c.params"> <span id="params"> {{c.params}}</span></ng-container> -
-      <span id="help">{{c.help}}</span><br>
+          <span class="base">{{c.base}}</span>
+      <ng-container *ngIf="c.params"> <span class="params"> {{c.params}}</span></ng-container> -
+      <span class="help">{{c.help}}</span><br>
     </span>
   </ng-container>
 </ng-container>

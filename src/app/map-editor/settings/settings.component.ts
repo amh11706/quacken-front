@@ -48,7 +48,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   success = '';
   pending = false;
   shown?: DBTile;
-  showFileUpload: boolean = false;
+  showFileUpload = false;
 
   constructor(protected socket: WsService) { }
 
@@ -352,7 +352,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  import(files: FileList){
+  import(files: FileList) {
     console.log(files.item(0));
   }
 

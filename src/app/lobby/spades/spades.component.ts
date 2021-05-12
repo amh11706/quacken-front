@@ -69,7 +69,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     private ss: SettingsService,
     private fs: FriendsService,
     public ws: WsService,
-    private es: EscMenuService,
+    public es: EscMenuService,
   ) { }
 
   async ngOnInit() {

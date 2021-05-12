@@ -185,7 +185,7 @@ export class CadeHudComponent extends HudComponent {
     super.setTurn(turn, sec + this.secondsPerTurn - old);
   }
 
-  disengage(){ 
-    if(this.myBoat.type != 0) this.ws.send(OutCmd.NextBoat, this.myBoat.type);
+  disengage() {
+    if (this.myBoat.type !== 0) this.ws.send(OutCmd.NextBoat, this.myBoat.type);
   }
 }
