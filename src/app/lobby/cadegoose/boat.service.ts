@@ -208,7 +208,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     if (step === 4) this.resetBoats();
     const turnPart = this.turn.steps[step] || [];
     if (!turnPart.length) return new Promise<void>(resolve => {
-      setTimeout(resolve, 2500 / this.speed);
+      setTimeout(resolve, 5000 / this.speed);
     });
 
     const promises: Promise<any>[] = [];

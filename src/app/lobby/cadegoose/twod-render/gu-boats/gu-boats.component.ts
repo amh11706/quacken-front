@@ -67,6 +67,7 @@ export class GuBoatsComponent extends BoatService implements OnInit {
   }
 
   protected handleUpdate(updates: Clutter[], step: number): Promise<void> {
+    if (updates.length === 0) return Promise.resolve();
     for (const u of updates) {
       const p = new Point().fromPosition(u);
       u.transform = `translate(${p.x}px, ${p.y}px)`;

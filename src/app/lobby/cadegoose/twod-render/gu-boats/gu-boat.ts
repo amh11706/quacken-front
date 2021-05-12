@@ -79,7 +79,7 @@ export class GuBoat extends BoatRender {
     const startTime = animate ? new Date().valueOf() : 0;
     const promises: Promise<any>[] = [];
 
-    if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y || boat.crunchDir !== -1) {
+    if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y || (boat.crunchDir !== -1 && boat.crunchDir < 4)) {
       promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
     }
 
@@ -126,6 +126,7 @@ export class GuBoat extends BoatRender {
 
   private async updateTeam(boat: Boat) {
     if (!this.spriteData) return;
+    await new Promise(resolve => setTimeout(resolve));
     const team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;
     this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sail') + ')';
     if (Boats[boat.type as BoatTypes]?.sink) this.getTeamImage(team, this.spriteData.name + '/sink');
