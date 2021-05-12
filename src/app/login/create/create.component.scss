@@ -6,17 +6,21 @@
   left: 0;
   bottom: 0;
   right: 0;
-  background: 0/cover url('/assets/background.jpg');
+  background-color: rgba(66, 66, 66, 0.85);
+  // background: center/cover url("/assets/background.jpg");
 }
 
-h1 {
-  color: mat-color($primary);
-  font-size: 3em;
-  text-align: center;
-	text-shadow: 4px 4px rgba(0, 0, 64, 2);
-  padding: 8px 64px;
-  margin-bottom: 32px;
-  background: radial-gradient(rgba(0, 0, 0, .3), transparent 80%);
+button {
+  border-bottom: 1px solid grey;
+  transition: 0.2s;
+  font-size: 18px;
+  padding: 8px;
+  color:black !important;
+  background-color: rgba(224, 37, 37, 0.6);
+}
+
+button:hover {
+  background-color: rgba(224, 37, 37, 0.6);
 }
 
 input {
@@ -26,8 +30,10 @@ input {
 p {
   color: silver;
   padding: 4px 16px;
-  background: rgba(0, 0, 0, .15);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 8px;
+  width: 500px;
+  margin: 10px auto;
 }
 
 .link {
@@ -48,6 +54,8 @@ p {
   left: 50%;
   max-height: 100vh;
   overflow-y: auto;
+  width: 100%;
+  text-align: center;
   transform: translate(-50%, -50%);
 }
 
@@ -55,7 +63,9 @@ p {
   display: flex;
   flex-direction: column;
   padding: 32px 16px;
-  background: rgba(27, 94, 32, .3);
+  width: 500px;
+  margin: 0 auto;
+  background: rgba(98, 100, 98, 0.3);
   border-radius: 16px;
 }
 
