@@ -94,12 +94,11 @@ export class GuBoat extends BoatRender {
     return Promise.all(promises);
   }
 
-  private getTeamImage(team: number, which = 'sail'): Promise<string> {
-    if (!this.spriteData) return Promise.resolve('');
+  private getTeamImage(team: number, which: string): Promise<string> {
     let prom = GuBoat.teamImages.get(which + team);
     if (prom) return prom;
     const sail = new Image();
-    sail.src = '/assets/boats/' + this.spriteData.name + '/' + which + '.png';
+    sail.src = '/assets/boats/' + which + '.png';
     if (team > 1) return Promise.resolve(sail.src);
 
     prom = new Promise(resolve => {
@@ -126,9 +125,10 @@ export class GuBoat extends BoatRender {
   }
 
   private async updateTeam(boat: Boat) {
+    if (!this.spriteData) return;
     const team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;
-    this.img = 'url(' + await this.getTeamImage(team) + ')';
-    if (Boats[boat.type as BoatTypes]?.sink) this.getTeamImage(team, 'sink');
+    this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sail') + ')';
+    if (Boats[boat.type as BoatTypes]?.sink) this.getTeamImage(team, this.spriteData.name + '/sink');
   }
 
   rebuildHeader() { }
@@ -251,7 +251,7 @@ export class GuBoat extends BoatRender {
               this.spriteData = Boats[this.boat.type as BoatTypes]?.sink;
               if (!this.spriteData) return;
               const team = this.team === GuBoat.myTeam ? 99 : this.team;
-              this.img = 'url(' + await this.getTeamImage(team, 'sink') + ')';
+              this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sink') + ')';
               for (let i2 = 0; i2 < 50; i2++) {
                 setTimeout(() => {
                   this.updateImage(i2);

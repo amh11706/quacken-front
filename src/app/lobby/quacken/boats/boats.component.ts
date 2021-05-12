@@ -235,7 +235,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   protected playTurn() {
     const clutterPart = this.turn?.cSteps[this.step] || [];
-    this.animateTimeout2 = setTimeout(() => this.handleUpdate(clutterPart), 10000 / this.speed);
+    this.animateTimeout2 = setTimeout(() => this.handleUpdate(clutterPart, this.step), 10000 / this.speed);
     const turnPart = this.turn?.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
@@ -341,7 +341,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected handleUpdate(updates: Clutter[]) {
+  protected handleUpdate(updates: Clutter[], _: number) {
     for (const u of updates) {
       if (u.dis) {
         this.clutter.push(u);

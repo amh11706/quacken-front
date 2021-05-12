@@ -192,7 +192,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (let step = 0; step < 8; step++) {
       this.worker.addJob(async () => {
         await this._playTurn(step);
-        return this.handleUpdate(this.turn?.cSteps[step] || []);
+        return this.handleUpdate(this.turn?.cSteps[step] || [], step);
       });
     }
     this.worker.addJob(async () => {
@@ -236,7 +236,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     return Promise.all(promises);
   }
 
-  protected handleUpdate(updates: Clutter[]) {
+  protected handleUpdate(updates: Clutter[], _: number) {
     if (!this.scene) return;
     Cannonball.speed = this.speed;
     for (const u of updates) {

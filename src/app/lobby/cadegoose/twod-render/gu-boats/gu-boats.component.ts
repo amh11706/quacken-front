@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BoatService, checkSZ } from '../../boat.service';
 import { GuBoat, Point } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
@@ -19,7 +19,7 @@ const FlagColorOffsets: Record<number, number> = {
   templateUrl: './gu-boats.component.html',
   styleUrls: ['./gu-boats.component.scss'],
 })
-export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
+export class GuBoatsComponent extends BoatService implements OnInit {
   @Input() showIsland = false;
   @Input() speed = 15;
   @Input() set hoveredTeam(v: number) {
@@ -58,11 +58,6 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     }));
   }
 
-  async ngOnDestroy() {
-    super.ngOnDestroy();
-    for (const url of GuBoat.teamImages.values()) URL.revokeObjectURL(await url);
-  }
-
   clickBoat(boat: Boat) {
     this.ws.dispatchMessage({ cmd: Internal.BoatClicked, data: boat });
   }
@@ -71,14 +66,13 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     return (boat.render || { orientation: {} }) as GuBoat;
   }
 
-  protected handleUpdate(updates: Clutter[]): Promise<void> {
-    if (!updates.length) return Promise.resolve();
+  protected handleUpdate(updates: Clutter[], step: number): Promise<void> {
     for (const u of updates) {
       const p = new Point().fromPosition(u);
       u.transform = `translate(${p.x}px, ${p.y}px)`;
     }
     this.clutter.push(...updates);
-    return new Promise(resolve => setTimeout(resolve, 7000 / this.speed));
+    return new Promise(resolve => setTimeout(resolve, step % 2 === 1 ? 7000 / this.speed : 0));
   }
 
   protected setHeaderFlags(flags: Turn['flags']) {
