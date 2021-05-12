@@ -148,7 +148,7 @@ export class GuBoat extends BoatRender {
     const decodeY = [-0.4, 0, 0.4, 0];
 
     const p = [
-      new Promise<any>(resolve => {
+      new Promise<void | Object>(resolve => {
         const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
@@ -176,7 +176,7 @@ export class GuBoat extends BoatRender {
         this.coords?.fromPosition(this.pos);
       }),
 
-      new Promise<any>(resolve => {
+      new Promise<void | Object>(resolve => {
         const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
@@ -242,7 +242,7 @@ export class GuBoat extends BoatRender {
     }
 
     if (startTime && transition > 1) {
-      promises.push(new Promise(resolve => {
+      promises.push(new Promise<void>(resolve => {
         const delay = 2000 / BoatRender.speed;
         const delayOffset = 5000 / BoatRender.speed;
         const f = this.rotateDeg / 90 * 4 + 46;

@@ -11,7 +11,7 @@ import { WsService } from 'src/app/ws.service';
 export class CustomMapComponent implements OnInit {
   @Input() group?: SettingMap;
   @Input() setting: any;
-  @Input() disabled?: boolean;
+  @Input() disabled = false;
   @Output() save = new EventEmitter();
 
   data: { id: number, name: string, label: string, username: string }[] = [];

@@ -127,7 +127,7 @@ export class BoatRender {
     this.boat.renderName = v ? this.boat.title : this.boat.name;
 
     if (this.nameTimeout) clearTimeout(this.nameTimeout);
-    this.nameTimeout = setTimeout(() => {
+    this.nameTimeout = window.setTimeout(() => {
       if (!this.influence) return;
       if (this.name !== this.boat.renderName) this.rebuildHeader();
 
@@ -275,7 +275,7 @@ export class BoatRender {
     const decodeY = [-0.4, 0, 0.4, 0];
 
     const p = [
-      new Promise<Vector3>(resolve => {
+      new Promise<Vector3 | void>(resolve => {
         const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
           new TWEEN.Tween(this.obj.position, BoatRender.tweens)
@@ -301,7 +301,7 @@ export class BoatRender {
         this.obj.position.setX(this.pos.x + 0.5);
       }),
 
-      new Promise<Vector3>(resolve => {
+      new Promise<Vector3 | void>(resolve => {
         const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
           new TWEEN.Tween(this.obj.position, BoatRender.tweens)
