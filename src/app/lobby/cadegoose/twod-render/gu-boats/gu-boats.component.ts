@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { BoatService, checkSZ } from '../../boat.service';
 import { GuBoat, Point } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
@@ -19,7 +19,7 @@ const FlagColorOffsets: Record<number, number> = {
   templateUrl: './gu-boats.component.html',
   styleUrls: ['./gu-boats.component.scss'],
 })
-export class GuBoatsComponent extends BoatService implements OnInit {
+export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   @Input() showIsland = false;
   @Input() speed = 15;
   @Input() set hoveredTeam(v: number) {
@@ -56,6 +56,11 @@ export class GuBoatsComponent extends BoatService implements OnInit {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
       GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
     }));
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    GuBoat.myTeam = 99;
   }
 
   clickBoat(boat: Boat) {
