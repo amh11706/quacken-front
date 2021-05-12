@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './restore.component.html',
   styleUrls: ['./restore.component.scss']
 })
-export class RestoreComponent implements OnInit {
+export class RestoreComponent implements OnInit, OnDestroy {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
   private path = environment.api;
   private sub = new Subscription();

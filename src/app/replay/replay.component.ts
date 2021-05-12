@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ChatService } from '../chat/chat.service';
@@ -11,8 +11,6 @@ import { FriendsService } from '../chat/friends/friends.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { BoatSync } from '../lobby/quacken/boats/convert';
-import { UrlResolver } from '@angular/compiler';
-import { ɵangular_packages_forms_forms_a } from '@angular/forms';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
@@ -22,7 +20,7 @@ const joinMessage = 'Match replay: Use the replay controls to see a previous mat
   templateUrl: './replay.component.html',
   styleUrls: ['./replay.component.scss']
 })
-export class ReplayComponent implements OnInit {
+export class ReplayComponent implements OnInit, OnDestroy {
   @ViewChild(LobbyWrapperComponent, { static: true }) private lobbyWrapper?: LobbyWrapperComponent;
   tickInterval = 0;
   messages: InMessage[][] = [];

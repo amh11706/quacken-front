@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.scss']
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
   err = '';
 
@@ -34,9 +34,6 @@ export class CreateComponent implements OnInit {
     if (token) {
       router.navigate(['list']);
     }
-  }
-
-  ngOnInit() {
   }
 
   create() {

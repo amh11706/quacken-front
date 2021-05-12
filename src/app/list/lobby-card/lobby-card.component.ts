@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Descriptions } from '../create/create.component';
 import { Lobby } from '../../lobby/lobby.component';
 
@@ -7,15 +7,12 @@ import { Lobby } from '../../lobby/lobby.component';
   templateUrl: './lobby-card.component.html',
   styleUrls: ['./lobby-card.component.scss']
 })
-export class LobbyCardComponent implements OnInit {
+export class LobbyCardComponent {
   @Input() lobby = {} as Lobby;
   publicModes = ['Public', 'Public Invitation', 'Private'];
   descriptions = Descriptions;
   titles = { CadeGoose: 'Cadesim' } as any;
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

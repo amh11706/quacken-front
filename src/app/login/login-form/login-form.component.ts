@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthGuard } from 'src/app/auth.guard';
@@ -12,7 +12,7 @@ import { TermsComponent } from '../terms/terms.component';
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss']
 })
-export class LoginFormComponent implements OnInit {
+export class LoginFormComponent {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
 
   user = {
@@ -34,9 +34,6 @@ export class LoginFormComponent implements OnInit {
     if (token) {
       router.navigate(['list']);
     }
-  }
-
-  ngOnInit() {
   }
 
   login() {

@@ -1,11 +1,11 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'q-timer',
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.css']
 })
-export class TimerComponent implements OnInit {
+export class TimerComponent {
   @Output() expire = new EventEmitter();
 
   percent = 0;
@@ -13,9 +13,6 @@ export class TimerComponent implements OnInit {
   private timer?: number;
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   go(seconds: number) {
     clearTimeout(this.timer);

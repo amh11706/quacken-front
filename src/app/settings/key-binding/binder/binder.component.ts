@@ -1,7 +1,7 @@
-import { Component, Input, OnInit, Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { KeyBinding, NotActive } from '../key-actions';
+import { NotActive } from '../key-actions';
 import { KeyBindingEditMode } from '../key-binding.component';
 import { KeyBindingService } from '../key-binding.service';
 
@@ -10,7 +10,7 @@ import { KeyBindingService } from '../key-binding.service';
   templateUrl: './binder.component.html',
   styleUrls: ['./binder.component.scss']
 })
-export class BinderComponent implements OnInit, OnDestroy {
+export class BinderComponent implements OnDestroy {
   private _binding?: KeyBindingEditMode;
   @Input() set binding(b: KeyBindingEditMode) {
     this._binding = b;
@@ -42,9 +42,6 @@ export class BinderComponent implements OnInit, OnDestroy {
   private sub?: Subscription;
 
   constructor(private dialog: MatDialog, private kbs: KeyBindingService) { }
-
-  ngOnInit(): void {
-  }
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();

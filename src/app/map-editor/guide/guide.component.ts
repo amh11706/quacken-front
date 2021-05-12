@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 @Component({
@@ -6,11 +6,8 @@ import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
   templateUrl: './guide.component.html',
   styleUrls: ['./guide.component.scss']
 })
-export class GuideComponent implements OnInit {
+export class GuideComponent {
 
   constructor(public es: EscMenuService) { }
-
-  ngOnInit() {
-  }
 
 }

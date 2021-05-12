@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 
 export interface StatRow {
   user: string; team: number; stats: (string | number)[]; score: number;
@@ -20,7 +20,7 @@ export const enum Stat {
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.scss']
 })
-export class StatsComponent implements OnInit, OnChanges {
+export class StatsComponent implements OnChanges {
   @Input() stats?: Record<number, StatRow>;
   defenders: StatRow[] = [];
   attackers: StatRow[] = [];
@@ -37,9 +37,6 @@ export class StatsComponent implements OnInit, OnChanges {
   ];
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   ngOnChanges() {
     if (!this.stats) return;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { EntryStatusComponent } from '../../quacken/entry-status/entry-status.component';
 import { Turn } from '../../quacken/boats/boats.component';
 import { InCmd, Internal } from 'src/app/ws-messages';
@@ -9,7 +9,7 @@ import { Lobby } from '../../lobby.component';
   templateUrl: './cade-entry-status.component.html',
   styleUrls: ['./cade-entry-status.component.scss']
 })
-export class CadeEntryStatusComponent extends EntryStatusComponent {
+export class CadeEntryStatusComponent extends EntryStatusComponent implements OnInit {
   points = [0, 0];
   teams = ['Defender', 'Attacker'];
   time = '45:00';

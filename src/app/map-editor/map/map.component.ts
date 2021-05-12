@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Titles } from '../obstacles/obstacles.component';
 import { MapEditor, MapTile } from '../map-editor.component';
@@ -22,7 +22,7 @@ export class Pos {
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit {
+export class MapComponent {
   @Input() map?: MapEditor;
   @Input() undo?: (source: MapTile[][], target: MapTile[][]) => void;
   @Input() setTile?: (x: number, y: number, v: number) => MapTile | undefined;
@@ -33,9 +33,6 @@ export class MapComponent implements OnInit {
   private clickY?: number;
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   clickTile(e: MouseEvent, x: number, y: number) {
     if (!this.map || !this.setTile) return;

@@ -2,7 +2,7 @@
   <div *ngIf="statsOpen; else teams">
     <q-stat-end [stats]="es.lobbyContext?.stats"
                 [columns]="SB_STATS"
-                (close)="statsOpen = false"></q-stat-end>
+                (closeStats)="statsOpen = false"></q-stat-end>
   </div>
   <ng-template #teams>
     <h2>Match Settings</h2>

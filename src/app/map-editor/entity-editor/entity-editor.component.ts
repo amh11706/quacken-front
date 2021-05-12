@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MapEditor } from '../map-editor.component';
 
 @Component({
@@ -6,12 +6,9 @@ import { MapEditor } from '../map-editor.component';
   templateUrl: './entity-editor.component.html',
   styleUrls: ['./entity-editor.component.scss']
 })
-export class EntityEditorComponent implements OnInit {
+export class EntityEditorComponent {
   @Input() map?: MapEditor;
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsService } from '../../../settings/settings.service';
 import { Boat } from '../boats/boat';
@@ -10,7 +10,7 @@ export const RotatedTiles = [1, 2, 3, 50, 51];
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, OnDestroy {
+export class MapComponent implements OnDestroy {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @Input() myBoat = new Boat('');
   @Input() speed = 10;
@@ -42,11 +42,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(
     private ss: SettingsService,
-  ) {
-  }
-
-  ngOnInit(): void {
-  }
+  ) { }
 
   ngOnDestroy() {
     this.sub.unsubscribe();

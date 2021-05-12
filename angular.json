@@ -100,14 +100,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
           }
         },
@@ -128,6 +125,7 @@
   },
   "defaultProject": "quacken2",
   "cli": {
-    "analytics": "6fc2264c-7903-4c05-9cf3-01f7567309a5"
+    "analytics": "6fc2264c-7903-4c05-9cf3-01f7567309a5",
+    "defaultCollection": "@angular-eslint/schematics"
   }
 }

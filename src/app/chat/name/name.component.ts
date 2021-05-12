@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { ChatService, Message } from '../chat.service';
 import { WsService } from 'src/app/ws.service';
@@ -12,7 +12,7 @@ import { StatService } from 'src/app/esc-menu/profile/stat.service';
   templateUrl: './name.component.html',
   styleUrls: ['./name.component.css']
 })
-export class NameComponent implements OnInit {
+export class NameComponent {
   @Input() message: Message = {} as Message;
   @Input() offline = false;
 
@@ -23,9 +23,6 @@ export class NameComponent implements OnInit {
     public fs: FriendsService,
     private es: EscMenuService,
   ) { }
-
-  ngOnInit() {
-  }
 
   private getName(): string {
     let name = this.message.from;

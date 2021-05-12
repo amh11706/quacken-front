@@ -25,7 +25,7 @@ export class SettingComponent {
     this.setting.name = this.setting.name || value;
     this.fetch();
   }
-  @Output() change = new EventEmitter<number>();
+  @Output() valueChange = new EventEmitter<number>();
 
   setting: any = {};
   group: SettingMap = {};
@@ -52,7 +52,7 @@ export class SettingComponent {
 
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
-      this.change.emit(+newSetting.value);
+      this.valueChange.emit(+newSetting.value);
       this.ss.save({
         id: this.setting.id,
         name: this.setting.name,

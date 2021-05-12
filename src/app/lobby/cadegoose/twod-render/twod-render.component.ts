@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Boat } from '../../quacken/boats/boat';
 import { Subscription } from 'rxjs';
 import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
@@ -26,7 +26,7 @@ const FlagColorOffsets: Record<number, number> = {
   templateUrl: './twod-render.component.html',
   styleUrls: ['./twod-render.component.scss'],
 })
-export class TwodRenderComponent implements OnInit, AfterViewInit {
+export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('flagCanvas', { static: true }) flagCanvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { OutCmd } from 'src/app/ws-messages';
 import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
@@ -11,7 +11,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './commands.component.html',
   styleUrls: ['./commands.component.scss']
 })
-export class CommandsComponent implements OnInit {
+export class CommandsComponent {
 
   constructor(
     private ws: WsService,
@@ -20,9 +20,6 @@ export class CommandsComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public message: Message,
     private ref: MatDialogRef<CommandsComponent>,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   clickCommand(c: any) {
     if (c.params) {

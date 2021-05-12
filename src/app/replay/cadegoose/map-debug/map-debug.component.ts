@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'q-map-debug',
   templateUrl: './map-debug.component.html',
   styleUrls: ['./map-debug.component.scss']
 })
-export class MapDebugComponent implements OnInit {
+export class MapDebugComponent {
   private _seed = '';
   @Input() set seed(value: string) {
     this._seed = value;
@@ -27,9 +27,6 @@ export class MapDebugComponent implements OnInit {
   ];
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   randomSeed() {
     this.seedParts = [];

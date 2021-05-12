@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { CadeDesc } from 'src/app/lobby/cadegoose/cadegoose.component';
@@ -22,7 +22,7 @@ const groups = ['quacken', 'spades', 'cade', 'cade'];
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.scss']
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnInit, OnDestroy {
   created = false;
   settings: SettingMap = {};
   createGroup: SettingMap = {};

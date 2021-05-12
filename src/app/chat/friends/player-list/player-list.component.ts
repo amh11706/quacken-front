@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FriendsService } from '../friends.service';
 
 @Component({
@@ -6,11 +6,8 @@ import { FriendsService } from '../friends.service';
   templateUrl: './player-list.component.html',
   styleUrls: ['./player-list.component.scss']
 })
-export class PlayerListComponent implements OnInit {
+export class PlayerListComponent {
 
   constructor(public fs: FriendsService) { }
-
-  ngOnInit(): void {
-  }
 
 }

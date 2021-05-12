@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { WsService } from 'src/app/ws.service';
 import { ChatService } from 'src/app/chat/chat.service';
 import { FriendsService } from 'src/app/chat/friends/friends.service';
@@ -9,11 +9,8 @@ import { FriendsService } from 'src/app/chat/friends/friends.service';
   styleUrls: ['./lobby-wrapper.component.scss'],
   providers: [WsService, ChatService, FriendsService],
 })
-export class LobbyWrapperComponent implements OnInit {
+export class LobbyWrapperComponent {
 
   constructor(public ws: WsService, public chat: ChatService, public fs: FriendsService) { }
-
-  ngOnInit(): void {
-  }
 
 }

@@ -41,7 +41,7 @@ enum ClaimOption {
 export class CadegooseComponent implements OnInit, OnDestroy {
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;
   @Output() playTo = new EventEmitter<number>();
-  @Output() pause = new EventEmitter<void>();
+  @Output() pauseMatch = new EventEmitter<void>();
   @Input() seed = '';
   private _tick = 0;
   @Input() set tick(value: number) {
@@ -259,7 +259,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   }
 
   async getMatchAi(claimsOnly = false, sendMap = true) {
-    this.pause.emit();
+    this.pauseMatch.emit();
     if (!claimsOnly) {
       this.playTo.emit((this.activeTurn?.index || this.turns[0].index) - 2);
       await new Promise(resolve => setTimeout(resolve, 10));

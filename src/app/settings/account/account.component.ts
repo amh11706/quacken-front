@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss']
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent {
   pending = false;
 
   constructor(
@@ -18,9 +18,6 @@ export class AccountComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
   ) { }
-
-  ngOnInit(): void {
-  }
 
   async changePass(newPass: string, password: string) {
     this.pending = true;

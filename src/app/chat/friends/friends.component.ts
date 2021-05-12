@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { FriendsService, Invite } from './friends.service';
 import { WsService } from '../../ws.service';
@@ -6,15 +6,13 @@ import { ChatService } from '../chat.service';
 import { Router } from '@angular/router';
 import { OutCmd } from 'src/app/ws-messages';
 import { StatService } from 'src/app/esc-menu/profile/stat.service';
-import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
-import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 
 @Component({
   selector: 'q-friends',
   templateUrl: './friends.component.html',
   styleUrls: ['./friends.component.scss']
 })
-export class FriendsComponent implements OnInit {
+export class FriendsComponent {
   links = [
     { title: 'Players in lobby', icon: 'group', path: 'lobby' },
     { title: 'Friends', icon: 'mood', path: 'friend' },
@@ -28,9 +26,6 @@ export class FriendsComponent implements OnInit {
     private chat: ChatService,
     private router: Router,
   ) { }
-
-  ngOnInit() {
-  }
 
   sendTell(friend: string) {
     this.chat.setTell(friend);

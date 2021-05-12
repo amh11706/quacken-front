@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { WsService } from '../ws.service';
 import { EscMenuService } from './esc-menu.service';
 import { ProfileComponent } from './profile/profile.component';
@@ -14,7 +14,7 @@ import { SettingsService } from '../settings/settings.service';
   templateUrl: './esc-menu.component.html',
   styleUrls: ['./esc-menu.component.scss']
 })
-export class EscMenuComponent implements OnInit {
+export class EscMenuComponent {
   ProfileComponent = ProfileComponent;
   InventoryComponent = InventoryComponent;
   SettingsComponent = SettingsComponent;
@@ -27,9 +27,6 @@ export class EscMenuComponent implements OnInit {
     private router: Router,
   ) {
     this.es.activeTab = 0;
-  }
-
-  ngOnInit(): void {
   }
 
   logout() {

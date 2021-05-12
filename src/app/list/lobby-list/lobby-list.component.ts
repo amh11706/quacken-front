@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -18,7 +18,7 @@ import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
   templateUrl: './lobby-list.component.html',
   styleUrls: ['./lobby-list.component.scss']
 })
-export class LobbyListComponent implements OnInit {
+export class LobbyListComponent implements OnInit, OnDestroy {
   lobbies: Lobby[] = [];
   note = Notes[0];
   private sub = new Subscription();

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { StatService } from '../stat.service';
 
 export const TierTitles = [
@@ -16,15 +16,12 @@ export const TierTitles = [
   templateUrl: './leaders.component.html',
   styleUrls: ['./leaders.component.css']
 })
-export class LeadersComponent implements OnInit {
+export class LeadersComponent {
   @Input() name?: string;
   tierTitles = TierTitles;
 
   constructor(
     public stat: StatService,
   ) { }
-
-  ngOnInit() {
-  }
 
 }

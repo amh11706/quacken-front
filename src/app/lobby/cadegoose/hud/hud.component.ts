@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { Boat } from '../../quacken/boats/boat';
@@ -14,7 +14,7 @@ export interface MoveMessage {
   templateUrl: './hud.component.html',
   styleUrls: ['./hud.component.scss']
 })
-export class CadeHudComponent extends HudComponent {
+export class CadeHudComponent extends HudComponent implements OnInit {
   @Input() kbControls = 0;
   @Input() protected moveKeys: Record<number, KeyActions> = {
     0: KeyActions.CBlank,

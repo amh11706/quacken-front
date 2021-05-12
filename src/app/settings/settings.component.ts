@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { SettingsService } from './settings.service';
 import { WsService } from '../ws.service';
@@ -9,7 +9,7 @@ import { KeyBindingService } from './key-binding/key-binding.service';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent {
   links = [
     { title: 'Lobby Settings', icon: 'settings', path: 'lobby' },
     { title: 'Global Settings', icon: 'languages', path: 'global' },
@@ -20,8 +20,5 @@ export class SettingsComponent implements OnInit {
     public ws: WsService,
     public kbs: KeyBindingService,
   ) { }
-
-  ngOnInit() {
-  }
 
 }

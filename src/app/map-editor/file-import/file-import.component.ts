@@ -1,13 +1,9 @@
-import { JsonpClientBackend } from '@angular/common/http';
-import { TokenizeResult } from '@angular/compiler/src/ml_parser/lexer';
 import { EventEmitter } from '@angular/core';
-import { Component, Input, OnInit, Output} from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, Output} from '@angular/core';
 import { FileItem, FileUploader } from 'ng2-file-upload';
-import { OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
-import { SettingsComponent } from '../settings/settings.component';
-import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
+import { DBTile } from '../map-editor.component';
+import { WsService } from '../../ws.service';
+import { OutCmd } from '../../ws-messages';
 
 const mapConversion: { [key: number]: number } = {
   0: 0, // empty
@@ -31,7 +27,7 @@ const mapConversion: { [key: number]: number } = {
   templateUrl: './file-import.component.html',
   styleUrls: ['./file-import.component.scss']
 })
-export class FileImportComponent implements OnInit {
+export class FileImportComponent {
   @Input() mapData: { [key: string]: DBTile[] } = {};
   @Input() showFileUpload = false;
   @Output() showFileUploadChange = new EventEmitter<boolean>();
@@ -40,11 +36,7 @@ export class FileImportComponent implements OnInit {
   uploader: FileUploader = new FileUploader({});
   mapErrors: string[] = [];
 
-  constructor(private socket: WsService) {
-  }
-
-  ngOnInit(): void {
-  }
+  constructor(private socket: WsService) { }
 
   async process() {
     this.mapErrors = [];
