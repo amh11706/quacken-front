@@ -31,7 +31,7 @@ export class ReplayComponent implements OnInit {
   private fakeChat: ChatService = {} as any;
   private graphicSettings?: SettingMap;
   private boats: BoatSync[] = [];
-  private id: number = 0;
+  private id = 0;
   tick = 0;
   seed = '';
 
@@ -77,6 +77,7 @@ export class ReplayComponent implements OnInit {
 
   ngOnDestroy() {
     delete this.ws.fakeWs;
+    delete this.fs.fakeFs;
     this.sub.unsubscribe();
   }
 
@@ -100,7 +101,7 @@ export class ReplayComponent implements OnInit {
       }
       this.ss.setFakeSettings(group, settingGroup);
     }
-    
+
     setTimeout(() => {
       this.fakeMessages();
       const join = this.messages[0][0];
@@ -111,9 +112,9 @@ export class ReplayComponent implements OnInit {
       setTimeout(() => {
         this.esc.open = false;
       });
-      setTimeout(() => { //temporary fix for starting replay
-        this.playTo(Number(this.route.snapshot.queryParams["tick"]));
-      },500);
+      setTimeout(() => { // temporary fix for starting replay
+        this.playTo(Number(this.route.snapshot.queryParams['tick']));
+      }, 500);
     });
   }
 
@@ -214,7 +215,7 @@ export class ReplayComponent implements OnInit {
       this.tick++;
       this.fakeMessages(true);
     }
-    this.location.replaceState("/replay/" + this.id + "?tick=" + this.tick);
+    this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
   }
 
   private fakeMessages(skipTurn = false) {
