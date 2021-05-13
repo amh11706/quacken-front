@@ -193,7 +193,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   setTile = (x: number, y: number, v: number) => {
-    if (x < 0 && x > 20 || y < 3 && y < 32) return;
+    if (x < 0 || x > 20 || y < 3 || y > 32) return;
     const tile = this.editor.selectedTile;
     if (!tile.data || v === tile.data[y][x]) return;
     tile.unsaved = true;
