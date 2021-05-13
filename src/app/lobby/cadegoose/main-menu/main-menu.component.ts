@@ -53,7 +53,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
-      this.roundGoing = m.turn && m.turn <= (await this.ss.get('l/cade', 'turns')).value || false;
+      this.roundGoing = m.turn && m.turn <= (await this.ss.get('l/cade', 'turns'))?.value || false;
       if (!m.players) return;
       if (this.firstJoin) {
         this.firstJoin = false;

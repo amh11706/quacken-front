@@ -153,6 +153,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     }
     this.tickInterval = window.setInterval(() => {
       if (this.tick + 1 === this.messages.length) return this.togglePlay();
+      if (this.tick % 30 === 28) this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
       this.tick++;
       this.fakeMessages();
     }, (this.graphicSettings?.turnTime.value || 10) * 1000 / 30);
