@@ -243,8 +243,8 @@ export class GuBoat extends BoatRender {
 
     if (startTime && transition > 1) {
       promises.push(new Promise<void>(resolve => {
-        const delay = 9000 / BoatRender.speed;
-        const delayOffset = 5000 / BoatRender.speed;
+        const delay = 2000 / BoatRender.speed;
+        const delayOffset = 10000 / BoatRender.speed;
         const f = this.rotateDeg / 90 * 4 + 46;
         // spin left to straight down to line up with first frame of the sink
         for (let i = 1; i < 17; i++) {
