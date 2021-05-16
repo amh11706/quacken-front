@@ -58,6 +58,12 @@ export const Settings = {
   botDifficulty: {
     admin: true, id: 36, group: 'l/cade', name: 'botDifficulty', type: 'slider', label: 'Bot difficulty', min: 25, max: 100, step: 25
   },
+
+  soundMaster: { id: 37, group: 'sounds', name: 'master', type: 'slider', label: 'Master Volume', min: 0, max: 100, step: 5 },
+  soundNotify: { id: 38, group: 'sounds', name: 'notification', type: 'slider', label: 'Notifications', min: 0, max: 100, step: 5 },
+  soundShip: { id: 39, group: 'sounds', name: 'ship', type: 'slider', label: 'Ship Sounds', min: 0, max: 100, step: 5 },
+  soundAlert: { id: 40, group: 'sounds', name: 'alert', type: 'slider', label: 'Alerts', min: 0, max: 100, step: 5 },
+
   cadePublicMode: {
     admin: true, id: 25, group: 'l/cade', name: 'publicMode', type: 'option', label: 'Lobby Privacy', options: [
       'Public', 'Public Application', 'Invite Only'

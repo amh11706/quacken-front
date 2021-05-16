@@ -1,6 +1,19 @@
 <mat-tab-group [(selectedIndex)]="ss.tabIndex"
                mat-align-tabs="center">
 
+  <mat-tab label="Sounds">
+    <mat-card>
+      <div class="settings">
+        <q-setting name="soundMaster"></q-setting>
+        <q-setting name="soundNotify"></q-setting>
+        <q-setting name="soundShip"
+                   (valueChange)="sound.play(Sounds.CannonFireLarge)"></q-setting>
+        <q-setting name="soundAlert"
+                   (valueChange)="sound.play(Sounds.BattleStart)"></q-setting>
+      </div>
+    </mat-card>
+  </mat-tab>
+
   <mat-tab label="Graphics">
     <mat-card>
       <div class="settings">

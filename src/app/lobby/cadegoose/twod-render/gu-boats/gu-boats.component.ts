@@ -5,6 +5,7 @@ import { WsService } from 'src/app/ws.service';
 import { Boat } from 'src/app/lobby/quacken/boats/boat';
 import { Turn, Clutter } from 'src/app/lobby/quacken/boats/boats.component';
 import { Internal } from 'src/app/ws-messages';
+import { Sounds, SoundService } from 'src/app/sound.service';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 3,
@@ -45,7 +46,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     }
   }
 
-  constructor(ws: WsService) {
+  constructor(ws: WsService, private sound: SoundService) {
     super(ws);
     this.blockRender = false;
   }
@@ -56,6 +57,11 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
       GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
     }));
+    this.sound.load(Sounds.CannonFireBig);
+    this.sound.load(Sounds.CannonFireMedium);
+    this.sound.load(Sounds.CannonFireSmall);
+    this.sound.load(Sounds.CannonHit);
+    this.sound.load(Sounds.CannonSplash);
   }
 
   ngOnDestroy() {
@@ -76,6 +82,13 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     for (const u of updates) {
       const p = new Point().fromPosition(u);
       u.transform = `translate(${p.x}px, ${p.y}px)`;
+      if (!u.dis) continue;
+      this.sound.play(Sounds.CannonFireMedium);
+      if (u.dis < 4) {
+        setTimeout(() => this.sound.play(Sounds.CannonHit), 2500*u.dis / this.speed);
+      } else {
+        setTimeout(() => this.sound.play(Sounds.CannonSplash), 7500 / this.speed);
+      }
     }
     this.clutter.push(...updates);
     return new Promise(resolve => setTimeout(resolve, step % 2 === 1 ? 7000 / this.speed : 0));

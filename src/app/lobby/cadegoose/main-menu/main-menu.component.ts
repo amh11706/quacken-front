@@ -10,6 +10,7 @@ import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 import { links } from 'src/app/settings/setting/setting.component';
 import { SettingsService } from 'src/app/settings/settings.service';
+import { Sounds, SoundService } from 'src/app/sound.service';
 
 interface TeamMessage {
   id: number;
@@ -47,12 +48,14 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     private fs: FriendsService,
     public es: EscMenuService,
     private ss: SettingsService,
+    private sound: SoundService,
   ) { }
 
   ngOnInit() {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
+      if (m.turn === 1) this.sound.play(Sounds.BattleStart);
       this.roundGoing = m.turn && m.turn <= (await this.ss.get('l/cade', 'turns'))?.value || false;
       if (!m.players) return;
       if (this.firstJoin) {
