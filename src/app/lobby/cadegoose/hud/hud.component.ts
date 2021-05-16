@@ -47,6 +47,8 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   ngOnInit() {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (boat: Boat) => {
+      this.wantMove = 2;
+      this.auto = true;
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     }));
     this.subs.add(this.ws.subscribe(Internal.MyMoves, (moves: MoveMessage) => {
