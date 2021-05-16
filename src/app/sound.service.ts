@@ -29,7 +29,7 @@ interface SoundFile {
 }
 
 const SoundFiles: Record<Sounds, SoundFile> = {
-  [Sounds.BattleStart]: { file: 'battle_starting.ogg', group: SoundGroups.Alert, minDelay: 10000 },
+  [Sounds.BattleStart]: { file: 'battle_starting.ogg', group: SoundGroups.Alert, minDelay: 1500 },
   [Sounds.CannonFireBig]: { file: 'cannon_fire_big.ogg', group: SoundGroups.ship, minDelay: 50, volume: 0.4 },
   [Sounds.CannonFireMedium]: { file: 'cannon_fire_medium.ogg', group: SoundGroups.ship, minDelay: 50, volume: 0.4 },
   [Sounds.CannonFireSmall]: { file: 'cannon_fire_small.ogg', group: SoundGroups.ship, minDelay: 5, volume: 0.4 },
@@ -74,7 +74,7 @@ export class SoundService {
 
     const audio = new Audio();
     audio.src = await this.load(sound)
-    audio.volume = (file.volume || 1) * groupVolume * masterVolume;
+    audio.volume = (file.volume || 1) * groupVolume * masterVolume / 10000;
     audio.play();
   }
 }
