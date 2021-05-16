@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "./colors.scss";
 
 .ng-select {
@@ -33,17 +34,17 @@
 }
 
 .ng-select.ng-select-focused .ng-select-container:after {
-  border-color: mat-color($primary);
+  border-color: mat.get-color-from-palette($primary);
   border-width: 2px;
 }
 
 .ng-select.ng-select-focused .ng-select-container .ng-value-container .ng-placeholder {
   transform: translateY(-1.28125em) scale(0.75) perspective(100px) translateZ(0.001px);
-  color: mat-color($primary);
+  color: mat.get-color-from-palette($primary);
 }
 
 .ng-select.ng-select-focused .ng-select-container .ng-arrow-wrapper .ng-arrow {
-  color: mat-color($primary);
+  color: mat.get-color-from-palette($primary);
 }
 
 .ng-select .ng-has-value .ng-placeholder,
@@ -105,7 +106,7 @@
 }
 
 .ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
-  background-color: mat-color($primary);
+  background-color: mat.get-color-from-palette($primary);
   border-radius: 2px;
   color: #fff;
   padding: 2px 5px;
@@ -235,7 +236,7 @@
 }
 
 .ng-option-selected .ng-option-label {
-  color: mat-color($primary);
+  color: mat.get-color-from-palette($primary);
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-optgroup.ng-option-disabled {
@@ -265,11 +266,11 @@
 
 /* .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
   background: rgb(88, 88, 88);
-  color: mat-color($primary)
+  color: mat.get-color-from-palette($primary)
 } */
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
   background: rgb(88, 88, 88);
-  color: mat-color($primary);
+  color: mat.get-color-from-palette($primary);
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {

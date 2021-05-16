@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "../../../styles/colors.scss";
 
 #shade {
@@ -28,7 +29,7 @@
 #success {
   float: left;
   width: 100%;
-  color: mat-color($primary);
+  color: mat.get-color-from-palette($primary);
   text-align: center;
 }
 

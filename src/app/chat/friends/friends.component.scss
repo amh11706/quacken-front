@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "../../../styles/colors.scss";
 
 #friends {
@@ -18,7 +19,7 @@ mat-tab-group {
 }
 
 .highlight {
-  color: mat-color($primary);
+  color: mat.get-color-from-palette($primary);
 }
 
 .empty {

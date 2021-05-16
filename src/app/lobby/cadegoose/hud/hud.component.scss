@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import "../../../../styles/colors.scss";
 
 #boatcontrol {
@@ -257,7 +258,7 @@ mat-checkbox {
 }
 
 .selected {
-  border: 2px solid mat-color($primary);
+  border: 2px solid mat.get-color-from-palette($primary);
 }
 
 ::ng-deep {
