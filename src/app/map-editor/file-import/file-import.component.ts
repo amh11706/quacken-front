@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { Component, Input, Output} from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { DBTile } from '../map-editor.component';
 import { WsService } from '../../ws.service';
@@ -57,10 +57,10 @@ export class FileImportComponent {
         description: 'imported map',
         group: 'cgmaps'
       };
-       const prom = await this.socket.request(OutCmd.MapCreate, map);
-       if (prom.error) {
-          this.mapErrors.push(prom.error); // do something with errors
-       } else {
+      const prom = await this.socket.request(OutCmd.MapCreate, map);
+      if (prom.error) {
+        this.mapErrors.push(prom.error); // do something with errors
+      } else {
         if (this.mapData[prom.group]) {
           this.mapData[prom.group].push(prom);
         }
@@ -70,7 +70,9 @@ export class FileImportComponent {
   }
 
   convert(mapData: string) {
-    return  mapData.split('\n').slice(0, 36).map(function(x) {return x.split(',').map(v => mapConversion[+v]); });
+    const rows = mapData.split('\n').slice(0, 36).map(function (x) { return x.split(',').map(v => mapConversion[+v]); });
+    while (rows.length > 36) rows.pop();
+    return rows;
   }
 
   read(file_list: FileItem[]) {
