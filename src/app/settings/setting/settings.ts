@@ -104,6 +104,9 @@ export const Settings = {
   kbControls: {
     id: 11, group: 'controls', type: 'checkbox', label: 'Enable keyboard<br>move entry'
   },
+  alwaysChat: {
+    id: 41, group: 'controls', type: 'checkbox', label: 'Always focus chat'
+  },
   customMap: {
     admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: OutCmd.MapList
   },

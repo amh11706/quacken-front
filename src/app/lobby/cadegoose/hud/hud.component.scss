@@ -17,9 +17,12 @@
 
 #disengage {
   grid-column: middle;
-  margin-top: 50px;
   padding: 5px;
+  margin-bottom: 12px;
   color: #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 q-chat {

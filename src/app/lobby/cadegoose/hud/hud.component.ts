@@ -187,7 +187,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     super.setTurn(turn, sec + this.secondsPerTurn - old);
   }
 
-  disengage() {
-    if (this.myBoat.type !== 0) this.ws.send(OutCmd.NextBoat, this.myBoat.type);
+  disengage(side = 0) {
+    this.ws.send(OutCmd.SpawnSide, side);
   }
 }

@@ -59,7 +59,7 @@ export class KeyBindingService {
   private _activeBindings?: StaticKeyBindings;
   get activeBindings() { return this._activeBindings; }
 
-  constructor(ss: SettingsService, private ws: WsService) {
+  constructor(private ss: SettingsService, private ws: WsService) {
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     ws.connected$.subscribe(v => {
@@ -95,10 +95,14 @@ export class KeyBindingService {
     }
   }
 
-  private handleKeyDown = (e: KeyboardEvent) => {
+  private handleKeyDown = async (e: KeyboardEvent) => {
     if (!this.ws.connected) return;
     if (IgnoreTags.includes(document.activeElement?.tagName || '') || IgnoreKeys.includes(e.key)) return;
     const key = this.getKey(e);
+    if (key !== 'Escape' && (await this.ss.get('controls', 'alwaysChat')).value) {
+      this.emitAction(KeyActions.FocusChat);
+      return;
+    }
 
     if (this.bindSub) {
       e.preventDefault();

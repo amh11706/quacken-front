@@ -38,7 +38,7 @@ export class ChatService {
   ) {
     this.socket.subscribe(InCmd.ChatMessage, (message: Message) => {
       if (message.type === 6) return;
-      if (document.hidden && [5, 8, 9].includes(message.type)) sound.play(Sounds.Notification);
+      if (document.hidden && message.type === 5 || [8, 9].includes(message.type)) sound.play(Sounds.Notification);
       this.messages.push(message);
       if (message.type === 5) {
         let command = '/tell ' + message.from;

@@ -77,6 +77,6 @@ export class SoundService {
     audio.src = await this.load(sound)
     audio.volume = (file.volume || 1) * groupVolume * masterVolume / 10000;
     if (!delay) audio.play();
-    else setTimeout(audio.play, delay);
+    else setTimeout(() => audio.play(), delay);
   }
 }

@@ -132,8 +132,15 @@
   <div *ngIf="myBoat.inSZ"
        id="disengage">
     <button mat-icon-button
-            matTooltip="Disengage"
-            (click)="disengage()">
+            [style.color]="'lime'"
+            matTooltip="Respawn Island"
+            (click)="disengage(0)">
+      <mat-icon>rowing</mat-icon>
+    </button>
+    <button mat-icon-button
+            [style.color]="'red'"
+            matTooltip="Respawn Ocean"
+            (click)="disengage(1)">
       <mat-icon>rowing</mat-icon>
     </button>
   </div>
