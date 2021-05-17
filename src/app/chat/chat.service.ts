@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { InCmd } from '../ws-messages';
 moment.locale('en-GB');
 
 import { WsService } from '../ws.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
+import { Sounds, SoundService } from '../sound.service';
 
 export interface Message {
   type: number;
@@ -33,9 +34,11 @@ export class ChatService {
   constructor(
     private socket: WsService,
     private kbs: KeyBindingService,
+    sound: SoundService,
   ) {
     this.socket.subscribe(InCmd.ChatMessage, (message: Message) => {
       if (message.type === 6) return;
+      if (document.hidden && [5, 8, 9].includes(message.type)) sound.play(Sounds.Notification);
       this.messages.push(message);
       if (message.type === 5) {
         let command = '/tell ' + message.from;

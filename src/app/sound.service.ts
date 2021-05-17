@@ -11,13 +11,13 @@ export enum Sounds {
   CannonSplash2,
   RockDamage,
   Sink,
-  // Notification,
+  Notification,
 }
 
 const enum SoundGroups {
   Notification = 'notification',
   Alert = 'alert',
-  ship = 'ship',
+  Ship = 'ship',
 }
 
 interface SoundFile {
@@ -30,14 +30,15 @@ interface SoundFile {
 
 const SoundFiles: Record<Sounds, SoundFile> = {
   [Sounds.BattleStart]: { file: 'battle_starting.ogg', group: SoundGroups.Alert, minDelay: 1500 },
-  [Sounds.CannonFireBig]: { file: 'cannon_fire_big.ogg', group: SoundGroups.ship, minDelay: 50, volume: 0.4 },
-  [Sounds.CannonFireMedium]: { file: 'cannon_fire_medium.ogg', group: SoundGroups.ship, minDelay: 50, volume: 0.4 },
-  [Sounds.CannonFireSmall]: { file: 'cannon_fire_small.ogg', group: SoundGroups.ship, minDelay: 5, volume: 0.4 },
-  [Sounds.CannonHit]: { file: 'cannonball_hit.ogg', group: SoundGroups.ship, minDelay: 50 },
-  [Sounds.CannonSplash]: { file: 'cannonball_splash.ogg', group: SoundGroups.ship, minDelay: 100, volume: 0.7 },
-  [Sounds.CannonSplash2]: { file: 'cannonball_splash2.ogg', group: SoundGroups.ship, minDelay: 100, volume: 0.7 },
-  [Sounds.RockDamage]: { file: 'rock_damage.ogg', group: SoundGroups.ship, minDelay: 100 },
-  [Sounds.Sink]: { file: 'ship_sunk.ogg', group: SoundGroups.ship, minDelay: 500 },
+  [Sounds.CannonFireBig]: { file: 'cannon_fire_big.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.4 },
+  [Sounds.CannonFireMedium]: { file: 'cannon_fire_medium.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.4 },
+  [Sounds.CannonFireSmall]: { file: 'cannon_fire_small.ogg', group: SoundGroups.Ship, minDelay: 5, volume: 0.4 },
+  [Sounds.CannonHit]: { file: 'cannonball_hit.ogg', group: SoundGroups.Ship, minDelay: 50 },
+  [Sounds.CannonSplash]: { file: 'cannonball_splash.ogg', group: SoundGroups.Ship, minDelay: 100, volume: 0.7 },
+  [Sounds.CannonSplash2]: { file: 'cannonball_splash2.ogg', group: SoundGroups.Ship, minDelay: 100, volume: 0.7 },
+  [Sounds.RockDamage]: { file: 'rock_damage.ogg', group: SoundGroups.Ship, minDelay: 100 },
+  [Sounds.Sink]: { file: 'ship_sunk.ogg', group: SoundGroups.Ship, minDelay: 500 },
+  [Sounds.Notification]: { file: 'notification.mp3', group: SoundGroups.Notification, minDelay: 1500 },
 }
 
 @Injectable({
@@ -61,7 +62,7 @@ export class SoundService {
     return p;
   }
 
-  async play(sound: Sounds, fallback?: Sounds): Promise<void> {
+  async play(sound: Sounds, delay = 0, fallback?: Sounds): Promise<void> {
     const masterVolume = this.settings.master?.value;
     if (!masterVolume) return;
     const file = SoundFiles[sound];
@@ -70,11 +71,12 @@ export class SoundService {
     file.lastPlayed = now;
 
     const groupVolume = (this.settings[file.group]?.value ?? 50);
-    if (!groupVolume && fallback) return this.play(fallback);
+    if (!groupVolume && fallback) return this.play(fallback, delay);
 
     const audio = new Audio();
     audio.src = await this.load(sound)
     audio.volume = (file.volume || 1) * groupVolume * masterVolume / 10000;
-    audio.play();
+    if (!delay) audio.play();
+    else setTimeout(audio.play, delay);
   }
 }

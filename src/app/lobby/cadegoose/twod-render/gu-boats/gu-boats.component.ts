@@ -15,6 +15,12 @@ const FlagColorOffsets: Record<number, number> = {
   100: 12,
 };
 
+const CannonSounds: Record<number, Sounds> = {
+  0: Sounds.CannonFireSmall,
+  1: Sounds.CannonFireMedium,
+  2: Sounds.CannonFireBig,
+}
+
 @Component({
   selector: 'q-gu-boats',
   templateUrl: './gu-boats.component.html',
@@ -46,8 +52,8 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     }
   }
 
-  constructor(ws: WsService, private sound: SoundService) {
-    super(ws);
+  constructor(ws: WsService, sound: SoundService) {
+    super(ws, sound);
     this.blockRender = false;
   }
 
@@ -62,6 +68,8 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     this.sound.load(Sounds.CannonFireSmall);
     this.sound.load(Sounds.CannonHit);
     this.sound.load(Sounds.CannonSplash);
+    this.sound.load(Sounds.Sink);
+    this.sound.load(Sounds.RockDamage);
   }
 
   ngOnDestroy() {
@@ -83,11 +91,15 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       const p = new Point().fromPosition(u);
       u.transform = `translate(${p.x}px, ${p.y}px)`;
       if (!u.dis) continue;
-      this.sound.play(Sounds.CannonFireMedium);
+      const fireSound = CannonSounds[u.t];
+      this.sound.play(fireSound);
+      if (u.dbl) this.sound.play(fireSound, 1000 / this.speed);
       if (u.dis < 4) {
-        setTimeout(() => this.sound.play(Sounds.CannonHit), 2500*u.dis / this.speed);
+        this.sound.play(Sounds.CannonHit, 2500 * u.dis / this.speed);
+        if (u.dbl) this.sound.play(Sounds.CannonHit, (2500 * u.dis + 1000) / this.speed);
       } else {
-        setTimeout(() => this.sound.play(Sounds.CannonSplash), 7500 / this.speed);
+        this.sound.play(Sounds.CannonSplash, 7500 / this.speed);
+        if (u.dbl) this.sound.play(Sounds.CannonSplash2, 8500 / this.speed);
       }
     }
     this.clutter.push(...updates);

@@ -215,13 +215,13 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     if (!moveFound || this.blurred) {
       this.resetBoats();
-      this.animateTimeout = setTimeout(() => this.ws.send(OutCmd.Sync), 1000);
+      this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 1000);
       delete this.turn;
       return;
     }
 
     for (const boat of this.boats) boat.ready = true;
-    this.animateTimeout = setTimeout(this.playTurn.bind(this), 100);
+    this.animateTimeout = window.setTimeout(this.playTurn.bind(this), 100);
   }
 
   protected resetBoats(): void {
@@ -235,7 +235,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   protected playTurn() {
     const clutterPart = this.turn?.cSteps[this.step] || [];
-    this.animateTimeout2 = setTimeout(() => this.handleUpdate(clutterPart, this.step), 10000 / this.speed);
+    this.animateTimeout2 = window.setTimeout(() => this.handleUpdate(clutterPart, this.step), 10000 / this.speed);
     const turnPart = this.turn?.steps[this.step] || [];
     for (const u of turnPart) {
       const boat = this._boats[u.id];
@@ -253,7 +253,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         boat.face += boat.spinDeg * u.s;
         if (u.s > -2) {
           boat.rotateTransition = 4;
-          this.animateTimeout3 = setTimeout(() => { if (u.tm) boat.rotateByMove(u.tm).rotateTransition = 1; }, 300);
+          this.animateTimeout3 = window.setTimeout(() => { if (u.tm) boat.rotateByMove(u.tm).rotateTransition = 1; }, 300);
         } else {
           boat.rotateByMove(u.tm).rotateTransition = 3;
         }
@@ -281,7 +281,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     delete this.turn;
     this.step = -1;
 
-    this.animateTimeout2 = setTimeout(() => {
+    this.animateTimeout2 = window.setTimeout(() => {
       this.clutter = sync.cSync || [];
     }, 1000);
     if (sync.sync) {

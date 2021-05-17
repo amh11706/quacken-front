@@ -15,6 +15,7 @@ import { BoatRender } from './boat-render';
 import { JobQueue } from './job-queue';
 import { BoatSync, BoatStatus } from '../quacken/boats/convert';
 import { ObstacleConfig } from './threed-render/threed-render.component';
+import { Sounds, SoundService } from 'src/app/sound.service';
 
 export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
@@ -45,7 +46,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   private worker = new JobQueue();
   protected checkSZ = checkSZ;
 
-  constructor(ws: WsService) {
+  constructor(ws: WsService, protected sound: SoundService) {
     super(ws);
     super.ngOnInit();
     BoatRender.updateCam = (br) => this.updateCam(br);
@@ -78,6 +79,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   ngOnDestroy() {
     super.ngOnDestroy();
 
+    this.worker.clearJobs();
     for (const p of Object.values(this.ships)) p.then(s => BoatService.dispose(s.scene));
   }
 
@@ -189,16 +191,17 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   }
 
   protected playTurn() {
+    this.worker.clearJobs();
     for (let step = 0; step < 8; step++) {
-      this.worker.addJob(async () => {
-        await this._playTurn(step);
-        return this.handleUpdate(this.turn?.cSteps[step] || [], step);
-      });
+      this.worker.addJob(() => this._playTurn(step));
+      this.worker.addJob(() => this.handleUpdate(this.turn?.cSteps[step] || [], step));
     }
-    this.worker.addJob(async () => {
+    this.worker.addJob(() => {
       delete this.turn;
       this.step = -1;
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      return new Promise(resolve => setTimeout(resolve, 30000 / this.speed));
+    });
+    this.worker.addJob(() => {
       this.ws.send(OutCmd.Sync);
     });
   }
@@ -221,7 +224,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       boat.crunchDir = -1;
       boat.imageOpacity = 1;
       if (!u) continue;
-      if (u.c) boat.addDamage(u.c - 1, u.cd || 0);
+      if (u.c) {
+        boat.addDamage(u.c - 1, u.cd || 0);
+        if (u.cd === 100) this.sound.play(Sounds.Sink, 10000 / this.speed);
+        if (u.c < 5) this.sound.play(Sounds.RockDamage, 3500 / this.speed);
+      }
       if (u.tm === undefined || u.tf === undefined) continue;
       if (boat.rotateTransition === 0) boat.rotateTransition = 1;
       boat.setPos(u.x, u.y)

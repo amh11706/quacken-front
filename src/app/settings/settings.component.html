@@ -5,7 +5,8 @@
     <mat-card>
       <div class="settings">
         <q-setting name="soundMaster"></q-setting>
-        <q-setting name="soundNotify"></q-setting>
+        <q-setting name="soundNotify"
+                   (valueChange)="sound.play(Sounds.Notification)"></q-setting>
         <q-setting name="soundShip"
                    (valueChange)="sound.play(Sounds.CannonFireBig)"></q-setting>
         <q-setting name="soundAlert"
