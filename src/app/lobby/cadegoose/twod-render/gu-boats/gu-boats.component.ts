@@ -96,11 +96,11 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       this.sound.play(fireSound);
       if (u.dbl) this.sound.play(fireSound, 1000 / this.speed);
       if (u.dis < 4) {
-        this.sound.play(Sounds.CannonHit, 2500 * u.dis / this.speed);
-        if (u.dbl) this.sound.play(Sounds.CannonHit, (2500 * u.dis + 1000) / this.speed);
+        this.sound.play(Sounds.CannonHit, (2500 * u.dis + 1500) / this.speed);
+        if (u.dbl) this.sound.play(Sounds.CannonHit, (2500 * u.dis + 2500) / this.speed);
       } else {
-        this.sound.play(Sounds.CannonSplash, 7500 / this.speed);
-        if (u.dbl) this.sound.play(Sounds.CannonSplash2, 8500 / this.speed);
+        this.sound.play(Sounds.CannonSplash, 9000 / this.speed);
+        if (u.dbl) this.sound.play(Sounds.CannonSplash2, 10000 / this.speed);
       }
     }
     this.clutter.push(...updates);
