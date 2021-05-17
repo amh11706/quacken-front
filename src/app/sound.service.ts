@@ -66,6 +66,11 @@ export class SoundService {
     const masterVolume = this.settings.master?.value;
     if (!masterVolume) return;
     const file = SoundFiles[sound];
+    if (!file) throw new Error('Sound not found: ' + sound)
+    if (delay) {
+      setTimeout(() => this.play(sound, 0, fallback));
+      return;
+    }
     const now = new Date().valueOf();
     if (file.lastPlayed && file.lastPlayed + file.minDelay > now) return;
     file.lastPlayed = now;
@@ -76,7 +81,6 @@ export class SoundService {
     const audio = new Audio();
     audio.src = await this.load(sound)
     audio.volume = (file.volume || 1) * groupVolume * masterVolume / 10000;
-    if (!delay) audio.play();
-    else setTimeout(() => audio.play(), delay);
+    audio.play();
   }
 }
