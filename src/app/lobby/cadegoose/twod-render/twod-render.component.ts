@@ -2,12 +2,13 @@ import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit,
 import { Boat } from '../../quacken/boats/boat';
 import { Subscription } from 'rxjs';
 import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
-import { Sprite, JsonSprite } from './sprite';
+import { Sprite, JsonSprite, SpriteData, Orientation, SpriteImage } from './sprite';
 import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
+import { FlagData } from './objects/flags';
 import { InCmd, Internal } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
-import { GuBoat, Position } from './gu-boats/gu-boat';
+import { GuBoat, Point, Position } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import { MapComponent } from '../../../map-editor/map/map.component';
@@ -21,6 +22,8 @@ const FlagColorOffsets: Record<number, number> = {
   100: 12,
 };
 
+type flagIndex = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"|"11"|"12"|"13"|"14";
+type index = "0"|"1"|"2"|"3";
 @Component({
   selector: 'q-twod-render',
   templateUrl: './twod-render.component.html',
@@ -28,7 +31,6 @@ const FlagColorOffsets: Record<number, number> = {
 })
 export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
-  @ViewChild('flagCanvas', { static: true }) flagCanvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
   @ViewChild('frame') frame?: ElementRef<HTMLElement>;
   @Input() hoveredTeam = -1;
@@ -60,21 +62,12 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private sz = new Sprite('safezone', 64, 48, [[128, 0]]);
   private wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
   private whirl = new Sprite('whirl', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0]]);
-  private rocks = new JsonSprite(BigRockData);
-  private smallRocks = new JsonSprite(SmallRockData);
 
   private wheelDebounce?: number;
   private sub = new Subscription();
   private canvas?: CanvasRenderingContext2D | null;
-  private flagCanvas?: CanvasRenderingContext2D | null;
-  private flags: { x: number, y: number, t: number, points: number, cs: number[] }[] = [];
-  private flag = new Sprite('buoy', 50, 69, [
-    [50, 0], [50, 69], [50, 138],
-    [100, 0], [100, 69], [100, 138],
-    [0, 0], [0, 69], [0, 138],
-    [250, 0], [250, 69], [250, 138],
-    [200, 0], [200, 69], [200, 138],
-  ]);
+
+  obstacles: { t: number, points?: number, cs?: number[], sprite: SpriteImage}[] = [];
 
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
@@ -102,10 +95,10 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     GuBoat.widthOffset = this.mapWidth - 1;
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t) => {
-      for (let i = 0; i < this.flags.length; i++) {
-        this.flags[i].t = t.flags[i].t;
+      for (let i = 0; i < this.obstacles.length; i++) {
+        // this.obstacles[i].t = t.flags[i].t;
       }
-      this.drawFlags();
+      this.colorFlags();
     }));
     this.sub.add(this.ws.subscribe(Internal.CenterOnBoat, () => {
       if (!this.myBoat.name) return;
@@ -160,71 +153,82 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     return (this.mapWidth + this.mapHeight) * 32;
   }
 
-  private async drawFlags() {
-    if (!this.flagCanvas || this.flags.length === 0) return;
-    await this.flag.prom;
-    this.flagCanvas.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
-
-    for (const f of this.flags) {
-      const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
-      const offset = FlagColorOffsets[team] ?? FlagColorOffsets[99];
-      const x = (f.x + f.y) * 32;
-      const y = (-f.x + f.y) * 24;
-      this.flag.draw(this.flagCanvas, f.points + offset, x + 7, y - 33);
+  private async colorFlags() {
+    if (this.obstacles.length === 0 ) return;
+    for (const f of this.obstacles) {
+      if(f.t >= 21 && f.t <= 23){
+        const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
+        const offset = FlagColorOffsets[team] ?? FlagColorOffsets[99];
+        const pixel = FlagData.orientations[(f.points! + offset).toString() as flagIndex];
+        f.sprite.imgPosition = `-${pixel.x}px -${pixel.y}px`;
+        f.sprite.orientation = pixel;
+      }
     }
   }
 
-  async fillMap(map: number[][], flags: any[]) {
-    await Promise.all([this.wind.prom, this.whirl.prom, this.rocks.prom, this.smallRocks.prom, this.water.prom, this.sz.prom]);
+  private addObstacles(x: number, y: number, tile: number, flags: any) {
+    const obstacle = new Point().fromPosition({x, y});
+    const pOffsetX = obstacle.x;
+    const pOffsetY = obstacle.y;
+    const rand = this.ctrlZoom ? 0 : Math.floor(Math.random() * 4);
+
+    if (tile >= 21 && tile <= 23){
+      const flag = new SpriteImage(FlagData);
+      flag.pOffsetX = pOffsetX + 2;
+      flag.pOffsetY = pOffsetY - 23;
+      this.obstacles.push({t:tile, points: tile - 21, ...flags, sprite : flag});
+    }
+    else if(tile === 50){
+      const bigRock = new SpriteImage(BigRockData);
+      bigRock.pOffsetX = pOffsetX;
+      bigRock.pOffsetY = pOffsetY;
+      bigRock.orientation = BigRockData.orientations[rand.toString() as index];
+      bigRock.imgPosition = `-${bigRock.orientation.x}px -${bigRock.orientation.y}px`;
+      this.obstacles.push({t:tile, sprite : bigRock});
+    }
+    else if(tile === 51){
+      const smallRock = new SpriteImage(SmallRockData);
+      smallRock.pOffsetX = pOffsetX;
+      smallRock.pOffsetY = pOffsetY;
+      smallRock.orientation = SmallRockData.orientations[rand.toString() as index];
+      smallRock.imgPosition = `-${smallRock.orientation.x}px -${smallRock.orientation.y}px`;
+      this.obstacles.push({t:tile, sprite : smallRock});
+    }
+  }
+
+  async fillMap(map: number[][], ...flags: any[]) {
+    await Promise.all([this.wind.prom, this.whirl.prom, this.water.prom, this.sz.prom]);
     const wasLoaded = !!this.canvas;
     if (!this.canvas) {
       this.canvas = this.canvasElement?.nativeElement.getContext('2d');
-      this.flagCanvas = this.flagCanvasElement?.nativeElement.getContext('2d');
     }
-    if (!this.canvas || !this.flagCanvas) return;
+    if (!this.canvas) return;
     const ctx = this.canvas;
     if (wasLoaded) {
       ctx.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
     } else {
       ctx.translate(0, this.mapWidth * 24 - 24);
-      this.flagCanvas.translate(0, this.mapWidth * 24 - 24);
     }
-    this.flags = [];
+    this.obstacles = [];
 
-    const tiles: { x: number, y: number, tile: number }[] = [];
     ctx.save();
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
-        if (this.safeZone && (y > 32 || y < 3)) this.sz.draw(ctx, 0);
-        else this.water.draw(ctx, 0);
-        ctx.translate(32, -24);
+        const xOffset = (x + y) * 32;
+        const yOffset = (-x + y) * 24;
+        if (this.safeZone && (y > 32 || y < 3)) this.sz.draw(ctx, 0, xOffset, yOffset);
+        else this.water.draw(ctx, 0, xOffset, yOffset);
         const tile = map[y][x];
-        if (tile >= 21 && tile <= 23) this.flags.push({ x, y, points: tile - 21, ...flags.shift() });
-        else if (tile) tiles.push({ x, y, tile });
+        if(!tile) continue;
+        else if (tile >= 21 && tile <= 23 || tile === 50 || tile === 51) this.addObstacles(x, y, tile, flags.shift());
+        else if (tile > 8 ) this.whirl.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
+        else if (tile > 4) this.wind.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
         i++;
       }
-      ctx.translate(32 - this.mapWidth * 32, 24 + 24 * this.mapWidth);
     }
     ctx.restore();
-
-    tiles.sort((a, b) => {
-      if (a.tile >= 20 && b.tile < 20) return 1;
-      if (b.tile >= 20 && a.tile < 20) return -1;
-      if (a.y < b.y) return -1;
-      return b.x - a.x;
-    });
-    for (const t of tiles) {
-      const tile = t.tile;
-      const x = (t.x + t.y) * 32;
-      const y = (-t.x + t.y) * 24;
-      if (tile === 51) this.smallRocks.draw(ctx, this.ctrlZoom ? 0 : Math.floor(Math.random() * 4), x, y);
-      else if (tile === 50) this.rocks.draw(ctx, this.ctrlZoom ? 0 : Math.floor(Math.random() * 4), x, y);
-      else if (tile > 8) this.whirl.draw(ctx, (tile - 1) % 4, x, y);
-      else if (tile > 4) this.wind.draw(ctx, (tile - 1) % 4, x, y);
-    }
-
-    this.drawFlags();
+    this.colorFlags();
   }
 
   scroll(e: WheelEvent) {

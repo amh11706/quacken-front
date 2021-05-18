@@ -29,10 +29,14 @@
                       [getX]="getX"
                       [getY]="getY">
           </q-gu-boats>
-          <canvas id="flagMapCanvas"
-                  [width]="getWidth()"
-                  [height]="getHeight()"
-                  #flagCanvas></canvas>
+          <ng-container *ngFor="let obstacle of obstacles;">
+            <q-sprite-img class="obstacle"
+                [render]="obstacle.sprite"
+                [style.transform]= "'translate(-50%, -50%)'"
+                [style.top]="obstacle.sprite.pOffsetY + 'px'"
+                [style.left]="obstacle.sprite.pOffsetX + 'px'"></q-sprite-img>
+          </ng-container>
+
         </div>
       </div>
     </div>

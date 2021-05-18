@@ -14,14 +14,14 @@
   transform: translate(50vw, 50vh) translate(-50%, -50%);
 }
 
-#flagMapCanvas, q-gu-boats {
+.obstacle{
+  position: absolute;
+}
+
+q-gu-boats {
   position: absolute;
   top: 0;
   left: 0;
-}
-
-#flagMapCanvas {
-  pointer-events: none;
 }
 
 #fps {
