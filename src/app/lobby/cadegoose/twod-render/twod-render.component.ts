@@ -172,8 +172,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (tile >= 21 && tile <= 23){
       const flag = new SpriteImage(FlagData);
-      flag.pOffsetX = pOffsetX + 6;
-      flag.pOffsetY = pOffsetY - 23;
+      flag.pOffsetX = pOffsetX + 2;
+      flag.pOffsetY = pOffsetY - 24;
       const flagObj = {points: tile - 21, ...flags, sprite : flag};
       this.obstacles.push(flagObj);
       this.flags.push(flagObj);

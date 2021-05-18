@@ -75,7 +75,7 @@ export const FlagData = {
     '8': {
       'x': 0,
       'y': 138,
-      'width': 58,
+      'width': 50,
       'height': 69,
       'offsetx': 0,
       'offsety': 0
@@ -84,7 +84,7 @@ export const FlagData = {
     '9': {
       'x': 250,
       'y': 0,
-      'width': 58,
+      'width': 50,
       'height': 69,
       'offsetx': 0,
       'offsety': 0
@@ -92,7 +92,7 @@ export const FlagData = {
     '10': {
       'x': 250,
       'y': 69,
-      'width': 58,
+      'width': 50,
       'height': 69,
       'offsetx': 0,
       'offsety': 0
@@ -100,7 +100,7 @@ export const FlagData = {
     '11': {
       'x': 250,
       'y': 138,
-      'width': 58,
+      'width': 50,
       'height': 69,
       'offsetx': 0,
       'offsety': 0
@@ -108,7 +108,7 @@ export const FlagData = {
     '12': {
       'x': 200,
       'y': 0,
-      'width': 58,
+      'width': 50,
       'height': 69,
       'offsetx': 0,
       'offsety': 0
@@ -116,7 +116,7 @@ export const FlagData = {
     '13': {
       'x': 200,
       'y': 69,
-      'width': 58,
+      'width': 50,
       'height': 69,
       'offsetx': 0,
       'offsety': 0
@@ -124,7 +124,7 @@ export const FlagData = {
     '14': {
       'x': 200,
       'y': 138,
-      'width': 58,
+      'width': 50,
       'height': 69,
       'offsetx': 0,
       'offsety': 0
