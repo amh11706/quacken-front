@@ -34,6 +34,7 @@
           <div class="move"
                [class.blocked]="locked"
                [class.selected]="kbControls && selected == i && !locked"
+               [class.unconfirmed]="serverMoves !== undefined && getMoves()[i] !== serverMoves[i]"
                (drop)="drop($event, i)"
                (mouseup)="clickTile($event, i)"
                (mousedown)="$event.which === 2 ? $event.preventDefault() : null"

@@ -141,6 +141,7 @@ mat-checkbox {
 }
 
 .move {
+  position:relative;
   background-color: rgba(95, 94, 94, 0.8);
   width: 35px;
   height: 35px;
@@ -203,6 +204,16 @@ mat-checkbox {
     top: -6px;
     left: 0;
   }
+}
+
+.unconfirmedShots::after{
+  // content:"";
+  // position: absolute;
+  // width: 16px;
+  // height: 16px;
+  // margin: -1px;
+  // border-radius: 8px;
+  // background: rgba(0, 0, 0, 0.3);
 }
 
 #cannontext {
@@ -286,4 +297,14 @@ mat-checkbox {
 
 #moveCheck {
   margin-left: 1px;
+}
+
+.unconfirmed::after{
+  content:"";
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0, 0, 0, 0.3);
 }

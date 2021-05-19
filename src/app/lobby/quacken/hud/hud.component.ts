@@ -61,7 +61,7 @@ export class HudComponent implements OnInit, OnDestroy {
   maxMoves = false;
   selected = 0;
   turn = 0;
-
+  serverMoves: any;
   private source = 4;
   private move = 0;
   protected subs = new Subscription();
@@ -232,7 +232,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.locked || !this.weapons[this.myBoat.type] || this.myBoat.tokenPoints < 2) return;
     if (this.myBoat.bomb === i) this.myBoat.bomb = 0;
     else this.myBoat.bomb = i;
-    this.ws.send(OutCmd.Bomb, this.myBoat.bomb);
+    this.ws.request(OutCmd.Bomb, this.myBoat.bomb);
   }
 
   imReady() {
@@ -246,12 +246,12 @@ export class HudComponent implements OnInit, OnDestroy {
     this.ws.send(OutCmd.ChatCommand, '/start');
   }
 
-  protected sendMoves() {
+  protected async sendMoves() {
     this.checkMaxMoves();
-    this.ws.send(OutCmd.Moves, this.getMoves());
+    this.serverMoves = await this.ws.request(OutCmd.Moves, this.getMoves());
   }
 
-  protected getMoves(): number[] {
+  public getMoves(): number[] {
     return this.myBoat.moves || [];
   }
 
