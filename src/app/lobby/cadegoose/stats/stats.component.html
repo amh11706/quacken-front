@@ -1,5 +1,6 @@
 <div class="container">
-    <div class="defenders">
+    <div class="defenders"
+        [class.sameteam]="myTeam === 0">
         <table>
             <tr>
                 <th>Defenders</th>
@@ -12,7 +13,8 @@
         </table>
     </div>
 
-    <div class="attackers">
+    <div class="attackers"
+        [class.sameteam]="myTeam === 1">
         <table>
             <tr>
                 <th>Attackers</th>

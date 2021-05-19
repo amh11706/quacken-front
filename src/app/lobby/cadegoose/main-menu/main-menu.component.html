@@ -8,6 +8,8 @@
     <div id="flexmenu">
       <div class="teamwrap">
         <button mat-raised-button
+                matTooltip="Defender"
+                [matTooltipPosition]="'left'"
                 [disabled]="!es.open || !ws.connected"
                 (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
         <br>
@@ -25,6 +27,8 @@
       </div>
       <div class="teamwrap">
         <button mat-raised-button
+                [matTooltipPosition]="'right'"
+                matTooltip="Attacker"
                 [disabled]="!es.open || !ws.connected"
                 (click)="joinTeam(1)">{{myTeam === 1 ? 'Leave' : 'Join'}}</button>
         <br>

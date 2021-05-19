@@ -11,7 +11,7 @@
         <div *ngFor="let move of moves; let i=index"
              class="moverow">
           <div class="leftbombs"
-               (click)="addShot(i*2)">
+               (mousedown)="addShot(i*2)">
             <div class="bombslot"
                  [class.blocked]="locked"
                  [class.bomb]="shots[i*2] > 0"></div>
@@ -21,7 +21,7 @@
                  [class.bomb]="shots[i*2] > 1"></div>
           </div>
           <div class="rightbombs"
-               (click)="addShot(i*2+1)">
+               (mousedown)="addShot(i*2+1)">
             <div class="bombslot"
                  [class.blocked]="locked"
                  [class.bomb]="shots[i*2+1] > 0"></div>
