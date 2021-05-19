@@ -30,8 +30,8 @@ interface SoundFile {
 
 const SoundFiles: Record<Sounds, SoundFile> = {
   [Sounds.BattleStart]: { file: 'battle_starting.ogg', group: SoundGroups.Alert, minDelay: 1500 },
-  [Sounds.CannonFireBig]: { file: 'cannon_fire_big.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.4 },
-  [Sounds.CannonFireMedium]: { file: 'cannon_fire_medium.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.4 },
+  [Sounds.CannonFireBig]: { file: 'cannon_fire_big.ogg', group: SoundGroups.Ship, minDelay: 50 },
+  [Sounds.CannonFireMedium]: { file: 'cannon_fire_medium.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.7 },
   [Sounds.CannonFireSmall]: { file: 'cannon_fire_small.ogg', group: SoundGroups.Ship, minDelay: 5, volume: 0.4 },
   [Sounds.CannonHit]: { file: 'cannonball_hit.ogg', group: SoundGroups.Ship, minDelay: 50 },
   [Sounds.CannonSplash]: { file: 'cannonball_splash.ogg', group: SoundGroups.Ship, minDelay: 100, volume: 0.7 },
