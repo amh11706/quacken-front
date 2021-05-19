@@ -68,7 +68,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private canvas?: CanvasRenderingContext2D | null;
 
   obstacles: { t: number, points?: number, cs?: number[], sprite: SpriteImage}[] = [];
-
+  flags: { t: number, points?: number, cs?: number[], sprite: SpriteImage}[] = [];
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
   getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x || this.getWidth() / 2;
@@ -95,8 +95,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     GuBoat.widthOffset = this.mapWidth - 1;
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t) => {
-      for (let i = 0; i < this.obstacles.length; i++) {
-        // this.obstacles[i].t = t.flags[i].t;
+      for (let i = 0; i < this.flags.length; i++) {
+        this.flags[i].t = t.flags[i].t;
       }
       this.colorFlags();
     }));
@@ -154,15 +154,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private async colorFlags() {
-    if (this.obstacles.length === 0 ) return;
-    for (const f of this.obstacles) {
-      if(f.t >= 21 && f.t <= 23){
-        const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
-        const offset = FlagColorOffsets[team] ?? FlagColorOffsets[99];
-        const pixel = FlagData.orientations[(f.points! + offset).toString() as flagIndex];
-        f.sprite.imgPosition = `-${pixel.x}px -${pixel.y}px`;
-        f.sprite.orientation = pixel;
-      }
+    if (this.flags.length === 0 ) return;
+    for (const f of this.flags) {
+      const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
+      const offset = FlagColorOffsets[team] ?? FlagColorOffsets[99];
+      const pixel = FlagData.orientations[(f.points! + offset).toString() as flagIndex];
+      f.sprite.imgPosition = `-${pixel.x}px -${pixel.y}px`;
+      f.sprite.orientation = pixel;
     }
   }
 
@@ -174,9 +172,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (tile >= 21 && tile <= 23){
       const flag = new SpriteImage(FlagData);
-      flag.pOffsetX = pOffsetX + 2;
-      flag.pOffsetY = pOffsetY - 23;
-      this.obstacles.push({t:tile, points: tile - 21, ...flags, sprite : flag});
+      flag.pOffsetX = pOffsetX;
+      flag.pOffsetY = pOffsetY;
+      const flagObj = {points: tile - 21, ...flags, sprite : flag};
+      this.obstacles.push(flagObj);
+      this.flags.push(flagObj);
     }
     else if(tile === 50){
       const bigRock = new SpriteImage(BigRockData);
@@ -210,7 +210,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       ctx.translate(0, this.mapWidth * 24 - 24);
     }
     this.obstacles = [];
-
+    this.flags = [];
     ctx.save();
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {

@@ -20,6 +20,7 @@
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"
      class="boat team{{boat.team}}"
      [class.sameteam]="boat.team === myBoat.team"
+     [style.zIndex]="render(boat).coords?.y"
      [style.opacity]="boat.opacity"
      [style.transform]="'translate(' + render(boat).coords?.x + 'px, ' + render(boat).coords?.y  + 'px)'">
   <div class="boatheader"
@@ -48,7 +49,7 @@
        class="influence"></div>
 
   <q-sprite-img [render]="render(boat)"
-                 (click)="clickBoat(boat)"
-                 (mouseenter)="hoveredTeam = boat.team || 0"
-                 (mouseleave)="hoveredTeam = -1"></q-sprite-img>
+               (click)="clickBoat(boat)"
+               (mouseenter)="hoveredTeam = boat.team || 0"
+               (mouseleave)="hoveredTeam = -1"></q-sprite-img>
 </div>
