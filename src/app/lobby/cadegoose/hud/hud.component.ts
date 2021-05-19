@@ -43,7 +43,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   wantMove = 2;
   auto = true;
   protected group = 'l/cade';
-  serverShots:any;
+  serverShots: any;
 
   ngOnInit() {
     super.ngOnInit();
@@ -180,6 +180,8 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.usingMoves = [0, 0, 0];
     this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     this.usingCannons = 0;
+    this.serverMoves = [...this.getMoves()];
+    this.serverShots = [...this.shots];
   }
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
