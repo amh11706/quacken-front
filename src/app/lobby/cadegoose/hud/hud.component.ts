@@ -43,7 +43,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   wantMove = 2;
   auto = true;
   protected group = 'l/cade';
-  serverShots: any;
+  serverShots = [0, 0, 0, 0, 0, 0, 0, 0];
 
   ngOnInit() {
     super.ngOnInit();
@@ -85,14 +85,14 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     }));
   }
 
-  protected eraseSlot(slot: number) {
+  protected async eraseSlot(slot: number) {
     super.eraseSlot(slot);
     const usedCannons = this.usingCannons;
     this.usingCannons -= this.shots[slot * 2] + this.shots[slot * 2 + 1];
     if (usedCannons > this.usingCannons) {
       this.shots[slot * 2] = 0;
       this.shots[slot * 2 + 1] = 0;
-      this.serverShots = this.ws.request(OutCmd.Shots, this.shots);
+      this.serverShots = await this.ws.request(OutCmd.Shots, this.shots);
     }
   }
 
@@ -100,7 +100,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     if (i === 0) {
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
       this.usingCannons = 0;
-      this.serverShots = this.ws.request(OutCmd.Shots, this.shots);
+      this.serverShots = await this.ws.request(OutCmd.Shots, this.shots);
       return;
     }
 
@@ -158,7 +158,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     super.checkMaxMoves();
   }
 
-  addShot(i: number) {
+  async addShot(i: number) {
     if (this.locked) return;
     const oldShots = this.shots[i];
     this.shots[i] = (oldShots + 1) % ((this.myBoat.maxShots || 1) + 1);
@@ -167,7 +167,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
       this.usingCannons -= this.shots[i];
       this.shots[i] = 0;
     }
-    this.serverShots = this.ws.request(OutCmd.Shots, this.shots);
+    this.serverShots = await this.ws.request(OutCmd.Shots, this.shots);
   }
 
   public getMoves(): number[] {
