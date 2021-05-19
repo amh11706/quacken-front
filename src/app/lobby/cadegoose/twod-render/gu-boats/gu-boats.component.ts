@@ -62,6 +62,9 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
       GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
+      for(const boat of this.boats){
+        this.render(boat).updateTeam(boat);
+      }
     }));
     this.sound.load(Sounds.CannonFireBig);
     this.sound.load(Sounds.CannonFireMedium);

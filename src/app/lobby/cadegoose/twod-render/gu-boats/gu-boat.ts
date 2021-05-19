@@ -128,7 +128,7 @@ export class GuBoat extends BoatRender {
     return prom;
   }
 
-  private async updateTeam(boat: Boat) {
+  public async updateTeam(boat: Boat) {
     if (!this.spriteData) return;
     await new Promise(resolve => setTimeout(resolve));
     const team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;

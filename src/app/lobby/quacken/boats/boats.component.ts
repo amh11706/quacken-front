@@ -307,6 +307,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (!boat || boat.name !== sBoat.n) boat = new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId);
       const id = this.turn ? -sBoat.id : sBoat.id;
       newBoats[id] = boat;
+      if(this.myBoat.isMe && sBoat.team !== this.myBoat.team){
+        this.myBoat = new Boat('');
+      }
       syncToBoat(boat, sBoat);
 
       if (!boat.isMe || !this.ws.connected) continue;
