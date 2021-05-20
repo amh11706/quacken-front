@@ -15,6 +15,7 @@
   <div id="side-menu">
     <div id="menuButtons">
       <button mat-button
+              [disabled]="!es.open"
               class="discord"
               (click)="openDiscord()"
               matTooltip="Open Discord Server"></button>
@@ -76,7 +77,7 @@
         <ng-container *ngComponentOutlet="SettingsComponent"></ng-container>
       </mat-tab>
     </mat-tab-group>
-    
+
     <div id="chatframe"
          *ngIf="es.open">
       <q-chat [disabled]="!es.open"></q-chat>
