@@ -207,13 +207,14 @@ mat-checkbox {
 }
 
 .unconfirmedShots::after{
-  // content:"";
-  // position: absolute;
-  // width: 16px;
-  // height: 16px;
-  // margin: -1px;
-  // border-radius: 8px;
-  // background: rgba(0, 0, 0, 0.3);
+  content:"";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: -1px;
+  margin-left:-7px !important;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.7);
 }
 
 #cannontext {
@@ -306,5 +307,5 @@ mat-checkbox {
   left:0;
   width:100%;
   height:100%;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.7);
 }
