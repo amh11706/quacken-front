@@ -67,8 +67,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private sub = new Subscription();
   private canvas?: CanvasRenderingContext2D | null;
 
-  obstacles: { t: number, points?: number, cs?: number[], sprite: SpriteImage}[] = [];
-  flags: { t: number, points?: number, cs?: number[], sprite: SpriteImage}[] = [];
+  obstacles: { t: number, points?: number, cs?: number[], zIndex: number, sprite: SpriteImage}[] = [];
+  flags: { t: number, points?: number, cs?: number[], zIndex: number, sprite: SpriteImage}[] = [];
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
   getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x || this.getWidth() / 2;
@@ -174,7 +174,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       const flag = new SpriteImage(FlagData);
       flag.pOffsetX = pOffsetX;
       flag.pOffsetY = pOffsetY;
-      const flagObj = {points: tile - 21, ...flags, sprite : flag};
+      const flagObj = {points: tile - 21, ...flags, zIndex: (pOffsetY - 30), sprite : flag};
       this.obstacles.push(flagObj);
       this.flags.push(flagObj);
     }
@@ -184,7 +184,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       bigRock.pOffsetY = pOffsetY;
       bigRock.orientation = BigRockData.orientations[rand.toString() as index];
       bigRock.imgPosition = `-${bigRock.orientation.x}px -${bigRock.orientation.y}px`;
-      this.obstacles.push({t:tile, sprite : bigRock});
+      this.obstacles.push({t:tile, zIndex: (pOffsetY - 10), sprite : bigRock});
     }
     else if(tile === 51){
       const smallRock = new SpriteImage(SmallRockData);
@@ -192,7 +192,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       smallRock.pOffsetY = pOffsetY;
       smallRock.orientation = SmallRockData.orientations[rand.toString() as index];
       smallRock.imgPosition = `-${smallRock.orientation.x}px -${smallRock.orientation.y}px`;
-      this.obstacles.push({t:tile, sprite : smallRock});
+      this.obstacles.push({t:tile, zIndex: (pOffsetY - 10), sprite : smallRock});
     }
   }
 

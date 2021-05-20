@@ -25,7 +25,7 @@
           <ng-container *ngFor="let obstacle of obstacles;">
             <q-sprite-img class="obstacle"
                 [render]="obstacle.sprite"
-                [style.zIndex]="obstacle.sprite.pOffsetY! - 30"
+                [style.zIndex]="obstacle.zIndex"
                 [style.transform]= "'translate(-50%, -50%)'"
                 [style.top]="obstacle.sprite.pOffsetY + 'px'"
                 [style.left]="obstacle.sprite.pOffsetX + 'px'"></q-sprite-img>
