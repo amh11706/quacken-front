@@ -13,12 +13,12 @@
           <div class="leftbombs"
                (mousedown)="addShot(i*2)">
             <div class="bombslot"
-                 [class.unconfirmedShots]="serverShots[i*2] === 0 && shots[i*2] > 0 && shots[i*2] !== serverShots[i*2]"
+                 [class.unconfirmedShots]="!serverShots[i*2] !== !shots[i*2]"
                  [class.blocked]="locked"
                  [class.bomb]="shots[i*2] > 0"></div>
             <div *ngIf="myBoat.maxShots === 2"
                  class="bombslot"
-                 [class.unconfirmedShots]="serverShots[i*2] < 2 && shots[i*2] === 2 && shots[i*2] !== serverShots[i*2]"
+                 [class.unconfirmedShots]="!(2-serverShots[i*2]) !== !(2-shots[i*2])"
                  [class.blocked]="locked"
                  [class.bomb]="shots[i*2] > 1"></div>
           </div>
@@ -26,12 +26,12 @@
                (mousedown)="addShot(i*2+1)">
             <div class="bombslot"
                  [class.blocked]="locked"
-                 [class.unconfirmedShots]="serverShots[i*2+1] === 0 && shots[i*2+1] > 0 && shots[i*2+1] !== serverShots[i*2+1]"
+                 [class.unconfirmedShots]="!serverShots[i*2+1] !== !shots[i*2+1]"
                  [class.bomb]="shots[i*2+1] > 0"></div>
             <div *ngIf="myBoat.maxShots === 2"
                  class="bombslot"
                  [class.blocked]="locked"
-                 [class.unconfirmedShots]="serverShots[i*2+1] < 2 && shots[i*2+1] === 2 && shots[i*2+1] !== serverShots[i*2+1]"
+                 [class.unconfirmedShots]="!(2-serverShots[i*2+1]) !== !(2-shots[i*2+1])"
                  [class.bomb]="shots[i*2+1] > 1"></div>
           </div>
 
