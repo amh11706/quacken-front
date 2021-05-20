@@ -61,7 +61,7 @@ export class HudComponent implements OnInit, OnDestroy {
   maxMoves = false;
   selected = 0;
   turn = 0;
-  serverMoves: any;
+  serverMoves = [0, 0, 0, 0];
   private source = 4;
   private move = 0;
   protected subs = new Subscription();
