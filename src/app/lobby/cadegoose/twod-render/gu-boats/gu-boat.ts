@@ -236,8 +236,9 @@ export class GuBoat extends BoatRender {
           setTimeout(resolve, 10000 / BoatRender.speed);
         }
       }).then(() => this.rotateDeg = face));
+    }
 
-    } else if (startTime && transition > 1) {
+    if (startTime && transition > 1) {
       promises.push(new Promise<void>(resolve => {
         const delay = 2000 / BoatRender.speed;
         const delayOffset = 10000 / BoatRender.speed;
@@ -265,8 +266,9 @@ export class GuBoat extends BoatRender {
           setTimeout(() => this.updateImage(index), delayOffset + delay * i);
         }
       }));
-      
-    } else {
+    }
+
+    if (!startTime) {
       this.rotateDeg = face % 360;
       this.updateImage();
     }
