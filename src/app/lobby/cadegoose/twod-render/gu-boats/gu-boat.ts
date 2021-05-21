@@ -15,8 +15,8 @@ export class Point {
   }
 
   fromPosition(p: { x: number, y: number }): Point {
-    this.x = (p.y + p.x) * 32;
-    this.y = (p.y - p.x + GuBoat.widthOffset) * 24;
+    this.x = Math.round(p.y + p.x) * 32;
+    this.y = Math.round(p.y - p.x + GuBoat.widthOffset) * 24;
     return this;
   }
 }
