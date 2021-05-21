@@ -33,7 +33,7 @@ export const WarFrigData = {
       'height': 72
     },
     '2': {
-      'offsetx': 4,
+      'offsetx': -4,
       'y': 0,
       'x': 700,
       'offsety': 17,
@@ -57,7 +57,7 @@ export const WarFrigData = {
       'height': 72
     },
     '6': {
-      'offsetx': 4,
+      'offsetx': -4,
       'y': 0,
       'x': 980,
       'offsety': 17,
