@@ -24,6 +24,7 @@ export class StatsComponent implements OnChanges {
   @Input() stats?: Record<number, StatRow>;
   @Input() myTeam?: number;
   @Input() hoveredTeam?: number;
+  @Input() statOpacity?: number;
   defenders: StatRow[] = [];
   attackers: StatRow[] = [];
 
