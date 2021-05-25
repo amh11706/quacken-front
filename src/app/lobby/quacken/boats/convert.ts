@@ -69,6 +69,7 @@ export function syncToBoat(boat: Boat, sBoat: BoatSync) {
   boat.inSZ = sBoat.inSZ;
   boat.maxDamage = sBoat.mDamage;
   boat.maxMoves = sBoat.mMoves;
+  boat.renderName = boat.title;
   boat.influence = sBoat.inSq !== undefined ? Math.sqrt(sBoat.inSq) : boat.influence;
   boat.maxShots = sBoat.dShot;
   boat.type = sBoat.ty;

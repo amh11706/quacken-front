@@ -1,3 +1,4 @@
+import { WsService } from 'src/app/ws.service';
 import { BoatRender } from '../../cadegoose/boat-render';
 
 export class Boat {
@@ -9,7 +10,7 @@ export class Boat {
   id = 0;
   oId?: number;
   team?: number;
-  title: string;
+  title: string = "";
   renderName: string;
   maxDamage = 3;
   maxMoves = 4;
@@ -39,7 +40,6 @@ export class Boat {
     public type = 0,
     public isMe = false,
   ) {
-    this.title = this.name;
     this.renderName = this.name;
   }
 
