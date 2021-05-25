@@ -1,13 +1,12 @@
 @import "../../../styles/colors.scss";
-
 :host {
+  --loginWidth: 500px;
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
   background-color: rgba(66, 66, 66, 0.85);
-  // background: center/cover url("/assets/background.jpg");
 }
 
 button {
@@ -63,10 +62,14 @@ p {
   display: flex;
   flex-direction: column;
   padding: 32px 16px;
-  width: 500px;
+  width: var(--loginWidth);
   margin: 0 auto;
   background: rgba(98, 100, 98, 0.3);
   border-radius: 16px;
+}
+
+#logo{
+  min-width: var(--loginWidth);
 }
 
 @-webkit-keyframes autofill {
