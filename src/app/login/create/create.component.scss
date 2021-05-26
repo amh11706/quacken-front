@@ -1,6 +1,8 @@
 @import "../../../styles/colors.scss";
+
+$loginWidth: 500px;
+
 :host {
-  --loginWidth: 500px;
   position: absolute;
   top: 0;
   left: 0;
@@ -62,14 +64,14 @@ p {
   display: flex;
   flex-direction: column;
   padding: 32px 16px;
-  width: var(--loginWidth);
+  width: $loginWidth;
   margin: 0 auto;
   background: rgba(98, 100, 98, 0.3);
   border-radius: 16px;
 }
 
 #logo{
-  min-width: var(--loginWidth);
+  min-width: $loginWidth;
 }
 
 @-webkit-keyframes autofill {
