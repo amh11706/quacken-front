@@ -4,11 +4,13 @@
                [graphicSettings]="graphicSettings"
                [myBoat]="myBoat"></q-twod-render>
 
-<q-cade-entry-status (mouseover)="statOpacity = 1"
-                     (mouseleave)="statOpacity = 0"
+<q-cade-entry-status (keydown.Tab)="statOpacity = 1" 
                      (hoveredTeam)="hoveredTeam = $event"
                      [myTeam]="myBoat.team"></q-cade-entry-status>
-<q-stats [style.opacity]="statOpacity"
+
+<q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
+         [hoveredTeam]="hoveredTeam"
+         [statOpacity]="statOpacity"
          [stats]="lobby?.stats"
          [myTeam]="myBoat.team"></q-stats>
 <q-cade-hud [kbControls]="controlSettings.kbControls?.value || 0"></q-cade-hud>

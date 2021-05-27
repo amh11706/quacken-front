@@ -1,6 +1,8 @@
 <div class="container">
     <div class="defenders"
-        [class.sameteam]="myTeam === 0">
+        [class.sameteam]="myTeam === 0"
+        [class.hoveredteam]="hoveredTeam === 1 || hoveredTeam === -1"
+        [class.showteams]="statOpacity && hoveredTeam">
         <table>
             <tr>
                 <th>Defenders</th>
@@ -14,7 +16,9 @@
     </div>
 
     <div class="attackers"
-        [class.sameteam]="myTeam === 1">
+        [class.sameteam]="myTeam === 1"
+        [class.hoveredteam]="hoveredTeam! <= 0"
+        [class.showteams]="statOpacity && hoveredTeam">
         <table>
             <tr>
                 <th>Attackers</th>

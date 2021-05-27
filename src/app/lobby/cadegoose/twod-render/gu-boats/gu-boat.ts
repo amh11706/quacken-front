@@ -68,7 +68,7 @@ export class GuBoat extends BoatRender {
   }
 
   showInfluence(v = true): void {
-    this.boat.renderName = v ? this.boat.title : this.boat.name;
+    this.boat.renderName = v ? this.boat.name : this.boat.title;
   }
 
   updateMoves(): BoatRender {
