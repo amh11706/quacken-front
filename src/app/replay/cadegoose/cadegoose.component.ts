@@ -264,8 +264,8 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       this.playTo.emit((this.activeTurn?.index || this.turns[0].index) - 2);
       await new Promise(resolve => setTimeout(resolve, 10));
     }
-    const moves: Record<number, number[]> = {};
-    for (const boat of this.boats) moves[boat.id] = boat.moves;
+    const moves: Record<number, { moves: number[], shots?: number[] }> = {};
+    for (const boat of this.boats) moves[boat.id] = { moves: boat.moves, shots: boat.shots };
     this.aiData = await this.ws.request(OutCmd.MatchAi, {
       team: this.aiTeam,
       boats: this.boats.map(boatToSync),

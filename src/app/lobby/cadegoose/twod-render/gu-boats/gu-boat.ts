@@ -143,7 +143,6 @@ export class GuBoat extends BoatRender {
   }
 
   protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]) {
-    let t: any;
     const decodeX = [0, 0.4, 0, -0.4];
     const decodeY = [-0.4, 0, 0.4, 0];
 
@@ -161,7 +160,7 @@ export class GuBoat extends BoatRender {
             .onComplete(resolve);
 
         } else if (startTime && transitions[0]) {
-          t = new TWEEN.Tween(this.pos, BoatRender.tweens)
+          new TWEEN.Tween(this.pos, BoatRender.tweens)
             .easing(moveEase[transitions[0]])
             .to({ x }, 10000 / BoatRender.speed)
             .delay(3000 / BoatRender.speed)
@@ -190,7 +189,7 @@ export class GuBoat extends BoatRender {
             .onComplete(resolve);
 
         } else if (startTime && transitions[1]) {
-          t = new TWEEN.Tween(this.pos, BoatRender.tweens)
+          new TWEEN.Tween(this.pos, BoatRender.tweens)
             .easing(moveEase[transitions[1]])
             .to({ y }, 10000 / BoatRender.speed)
             .delay(3000 / BoatRender.speed)
