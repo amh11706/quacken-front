@@ -254,6 +254,7 @@ export class GuBoat extends BoatRender {
               for (let i2 = 0; i2 < 50; i2++) {
                 setTimeout(() => {
                   this.updateImage(i2);
+                  if (i2 === 49) this.spriteData = Boats[this.boat.type as BoatTypes]?.sail;
                 }, delay / 2 * i2);
               }
             }, delayOffset + delay * i + 1);
