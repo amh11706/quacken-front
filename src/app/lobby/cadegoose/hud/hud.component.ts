@@ -192,5 +192,6 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   disengage(side = 0) {
     this.ws.send(OutCmd.SpawnSide, side);
+    this.ss.getGroup('boats').then(settings => settings.spawnSide.value = side);
   }
 }

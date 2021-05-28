@@ -32,6 +32,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     '#873600', // last seen message
     '#873600', // invitiation
     'maroon', // alert/broadcast
+    '#5d7563', // team chat
   ];
   messages$ = new ReplaySubject<Message[]>(1);
 
