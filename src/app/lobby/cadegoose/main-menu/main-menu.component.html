@@ -13,6 +13,7 @@
                 [disabled]="!es.open || !ws.connected"
                 (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
         <br>
+        <p class="teamcount">Defenders: {{plural(attackers.length)}}</p>
         <div id="defenders">
           <div *ngFor="let m of defenders"
                class="lobbyPlayer"
@@ -31,7 +32,7 @@
                 matTooltip="Attacker"
                 [disabled]="!es.open || !ws.connected"
                 (click)="joinTeam(1)">{{myTeam === 1 ? 'Leave' : 'Join'}}</button>
-        <br>
+        <p class="teamcount">Attackers: {{plural(attackers.length)}}</p>
         <div id="attackers">
           <div *ngFor="let m of attackers"
                class="lobbyPlayer"

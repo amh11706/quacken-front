@@ -176,4 +176,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     return;
   }
 
+  public plural(length:number) : string{
+    if(length === 1) return length + " player";
+    else return length + " players";
+  }
+
 }
