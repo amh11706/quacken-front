@@ -7,14 +7,17 @@
      (mouseleave)="hoveredTeam.emit(-1)">
     <span *ngIf="myTeam === 0; else defend0">
       <img src="../../../../assets/images/team_defend1.png">
-    </span> {{points[0]}}
+    </span>
+    {{points[0]}}
   </p> -
   <p class="team team1"
      [class.sameteam]="myTeam === 1"
      (mouseover)="hoveredTeam.emit(1)"
      (mouseleave)="hoveredTeam.emit(-1)">
-    {{points[1]}} <span *ngIf="myTeam === 1; else attack0">
-      <img src="../../../../assets/images/team_attack1.png"></span>
+    {{points[1]}} 
+    <span *ngIf="myTeam === 1; else attack0">
+      <img src="../../../../assets/images/team_attack1.png">
+    </span>
   </p>
 </div>
 
