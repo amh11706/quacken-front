@@ -19,6 +19,7 @@ export interface Message {
   blocked?: boolean;
   time?: number | string;
   ago?: string;
+  admin: number;
 }
 
 @Injectable({
