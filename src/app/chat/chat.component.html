@@ -67,6 +67,11 @@
               <q-name [message]="m"></q-name>
               broadcasts "{{m.message}}"
             </span>
+
+            <span *ngSwitchCase="10">
+              <q-name [message]="m"></q-name>
+              team chats "{{m.message}}"
+            </span>
           </ng-container>
         </p>
       </ng-container>
