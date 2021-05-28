@@ -11,6 +11,7 @@ import { Sounds, SoundService } from '../sound.service';
 export interface Message {
   type: number;
   message?: any;
+  team?: number;
   from: string;
   copy?: number;
   sId?: number;

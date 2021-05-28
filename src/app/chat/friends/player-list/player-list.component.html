@@ -6,8 +6,21 @@
   <ng-template #alone>
     <p class="empty">You are alone here.</p>
   </ng-template>
-  <div *ngFor="let m of fs.lobby"
-       class="lobbyPlayer">
-    <q-name [message]="m"></q-name>
-  </div>
+  <ng-container *ngFor="let m of fs.lobby">
+    <ng-template #team>
+      <ng-container [ngSwitch]="true">
+        <ng-container *ngSwitchCase="m.team === 0">
+          <img class="team" title="Defender" src="../../../../assets/images/team_defend1.png">
+        </ng-container>
+        <ng-container *ngSwitchCase="m.team === 1">
+          <img class="team" title="Attacker" src="../../../../assets/images/team_attack0.png">
+        </ng-container>
+      </ng-container>
+    </ng-template>
+    <div class="lobbyPlayer">
+      <span *ngIf="m.team === 99 || m.team === undefined; else team">
+        <img title="Watcher" src="../../../../assets/images/watcher.png">
+      </span>  <q-name [message]="m"></q-name>
+    </div>
+  </ng-container>
 </mat-card>

@@ -60,7 +60,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (!m.players) return;
       if (this.firstJoin) {
         this.firstJoin = false;
-        // this.es.open = true;
         this.es.activeTab = 0;
       }
       this.teams = m.players;
@@ -75,6 +74,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
           this.ready = p.r;
           this.myTeam = p.t;
         }
+        let user = this.fs.lobby.find((mes) => mes.sId === +id);
+        if (!user) return;
+        user.team = p.t;
       }
     }));
     this.subs.add(this.ws.subscribe(InCmd.Team, (m: TeamMessage) => {
@@ -84,6 +86,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.ready = m.r;
       }
       this.setTeam(m.id, m.t);
+      let user = this.fs.lobby.find((mes) => mes.sId === m.id);
+      if (!user) return;
+      user.team = m.t;
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, (m: Message) => {
       if (m.sId) this.removeUser(m.sId);
