@@ -15,7 +15,7 @@ span {
 }
 
 .admin {
-  text-shadow: -1px -1px 0 goldenrod, 1px -1px 0 goldenrod, -1px 1px 0 goldenrod, 1px 1px 0 goldenrod;
+  text-shadow: -0.5px -0.5px 0 goldenrod, 0.5px -0.5px 0 goldenrod, -0.5px 0.5px 0 goldenrod, 0.5px 0.5px 0 goldenrod;
 }
 
 p {
