@@ -47,9 +47,20 @@
 <h3 class="cardTitle"
     [title]="descriptions[lobby.type]">{{titles[lobby.type] || lobby.type}}</h3>
 <h4>{{lobby.name}}</h4>
-<p>{{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}</p>
+<p class="playerlist">{{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}</p>
+<div class="box">
+  <ng-container *ngFor="let p of lobby.players">
+    <q-name [message]=p></q-name>,
+  </ng-container>
+</div>
 <p class="settingsView">
   <ng-container
                 *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView, SeaBattle: cadeView}[lobby.type]; context: {settings: lobby.group}">
   </ng-container>
 </p>
+
+<!-- <p>
+  <ng-container *ngFor="let p of lobby.players">
+    <q-name [message]="p"></q-name>
+  </ng-container>
+</p> -->

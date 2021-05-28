@@ -17,6 +17,7 @@ import { EditorErrorComponent } from './editor-error/editor-error.component';
 import { LobbyListComponent } from './lobby-list/lobby-list.component';
 import { FriendsModule } from '../chat/friends/friends.module';
 import { EscMenuModule } from '../esc-menu/esc-menu.module';
+import { NameModule } from '../chat/name/name.module';
 
 @NgModule({
   declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent, EditorErrorComponent, LobbyListComponent],
@@ -31,6 +32,7 @@ import { EscMenuModule } from '../esc-menu/esc-menu.module';
     SettingsModule,
     FriendsModule,
     EscMenuModule,
+    NameModule,
   ],
   exports: [ListComponent],
 })
