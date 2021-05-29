@@ -14,14 +14,14 @@
 }
 
 .box {
-  display:none;
+  display: none;
   position: absolute;
-  background: rgba(67,67,67,1);
+  background: rgba(67, 67, 67, 1);
   max-width: 300px;
   padding: 5px;
   border: 1px solid black;
 }
 
 .playerlist:hover + .box {
-  display:inline-block;
+  display: inline-block;
 }

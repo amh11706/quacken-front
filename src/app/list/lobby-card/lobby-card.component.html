@@ -48,10 +48,10 @@
     [title]="descriptions[lobby.type]">{{titles[lobby.type] || lobby.type}}</h3>
 <h4>{{lobby.name}}</h4>
 <p class="playerlist">{{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}</p>
-<div class="box">
-  <ng-container *ngFor="let p of lobby.players">
-    <q-name [message]=p></q-name>,
-  </ng-container>
+<div *ngIf="lobby.players.length"
+     class="box">
+  <q-name *ngFor="let p of lobby.players"
+          [message]=p></q-name>
 </div>
 <p class="settingsView">
   <ng-container
