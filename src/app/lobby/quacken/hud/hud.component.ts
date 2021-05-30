@@ -89,7 +89,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
     this.handleKeys();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
-      if (this.turn > 0 && this.ws.connected) this.locked = false;
+      if (this.turn > 0 && this.ws.connected) this.locked = b.moveLock !== 0;
       this.myBoat = b;
       this.resetMoves();
       if (!b.isMe) {
@@ -99,7 +99,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.UnlockMoves, () => {
       if (!this.ws.connected || !this.locked || !this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
       this.resetMoves();
-      this.locked = false;
+      this.locked = this.myBoat.moveLock !== 0;
       this.myBoat.ready = false;
       this.selected = 0;
     }));
@@ -109,7 +109,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
     this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
       this.turn = m.turn ?? this.turn;
-      if (this.turn > 0 && this.myBoat.isMe && this.ws.connected) this.locked = false;
+      if (this.turn > 0 && this.myBoat.isMe && this.ws.connected) this.locked = this.myBoat.moveLock !== 0;
       else {
         this.myBoat.ready = false;
         this.locked = true;
@@ -132,6 +132,23 @@ export class HudComponent implements OnInit, OnDestroy {
       }
       if (turn.turn !== 1) this.locked = true;
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
+    }));
+    this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
+      setTimeout(() => {
+        if (this.myBoat.moveLock > 1) {
+          this.ws.dispatchMessage({
+            cmd: InCmd.ChatMessage,
+            data: { type: 1, message: 'Unlocking moves in ' + this.myBoat.moveLock + ' turns.' },
+          });
+        } else if (this.myBoat.moveLock === 1) {
+          this.ws.dispatchMessage({
+            cmd: InCmd.ChatMessage,
+            data: { type: 1, message: 'Unlocking moves next turn.' },
+          });
+        } else {
+          this.locked = !this.myBoat.isMe;
+        }
+      });
     }));
   }
 

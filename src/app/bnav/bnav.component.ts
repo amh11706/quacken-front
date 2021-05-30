@@ -47,7 +47,7 @@ export class BnavComponent implements OnInit, OnDestroy {
     this.newMove.position = position;
     this.moves = [];
     clearTimeout(this.debounce);
-    this.debounce = setTimeout(() => this.ws.request(OutCmd.BnavGetPositions, { position }).then((m: DBMove[]) => {
+    this.debounce = window.setTimeout(() => this.ws.request(OutCmd.BnavGetPositions, { position }).then((m: DBMove[]) => {
       this.moves = m;
       this.setPercents();
     }), 500);

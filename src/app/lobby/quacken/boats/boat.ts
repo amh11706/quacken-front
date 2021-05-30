@@ -105,6 +105,7 @@ export class Boat {
     this.rotateTransition = 2;
     this.face += 720;
     this.imageOpacity = 0;
+    this.moveLock = 1;
   }
 
   checkSZ = (pos: { x: number, y: number }) => {

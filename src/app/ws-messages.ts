@@ -81,6 +81,8 @@ export const enum OutCmd {
   Bid,
   Card,
   DeclineBlind,
+
+  ShuffleTeams,
 }
 
 export const enum InCmd {

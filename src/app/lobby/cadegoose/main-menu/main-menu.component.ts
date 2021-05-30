@@ -39,7 +39,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   ready = false;
   admin = false;
   statsOpen = false;
-  private roundGoing = false;
+  roundGoing = false;
   private subs = new Subscription();
   private firstJoin = true;
 
@@ -153,6 +153,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.ready = false;
   }
 
+  shuffleTeams() {
+    this.ws.send(OutCmd.ShuffleTeams);
+  }
+
   private removeUser(id: number) {
     this.resetUser(id);
     delete this.teams[id];
@@ -176,8 +180,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     return;
   }
 
-  public plural(length:number) : string{
-    if(length === 1) return length + " player";
+  public plural(length: number): string {
+    if (length === 1) return length + " player";
     else return length + " players";
   }
 

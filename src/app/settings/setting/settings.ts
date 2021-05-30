@@ -72,6 +72,9 @@ export const Settings = {
   cadeMaxPlayers: {
     admin: true, id: 24, group: 'l/cade', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40
   },
+  cadeSpawnDelay: {
+    admin: true, id: 42, group: 'l/cade', name: 'spawnDelay', type: 'slider', label: 'Respawn Delay', min: 0, max: 5
+  },
   cadeHotEntry: {
     admin: true, id: 26, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an<br>entry is in progress'
   },

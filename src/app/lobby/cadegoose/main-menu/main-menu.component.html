@@ -48,13 +48,17 @@
       </div>
 
       <div id="buttons">
+        <button *ngIf="admin && !roundGoing"
+                mat-raised-button
+                (click)="shuffleTeams()">Shuffle Teams</button>
+        <br>
         <button mat-raised-button
                 [disabled]="!es.open"
                 color="accent"
                 id="ready"
                 [class.cancel]="ready"
-                (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not
-          Ready' : 'Ready'}}</button>
+                (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
+          'Ready'}}</button>
         <ng-container *ngIf="es.open && ws.connected">
           <q-setting *ngIf="admin"
                      name="startNew"
