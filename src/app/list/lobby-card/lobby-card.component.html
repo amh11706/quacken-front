@@ -47,12 +47,25 @@
 <h3 class="cardTitle"
     [title]="descriptions[lobby.type]">{{titles[lobby.type] || lobby.type}}</h3>
 <h4>{{lobby.name}}</h4>
-<p class="playerlist">{{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}</p>
-<div *ngIf="lobby.players.length"
-     class="box">
-  <q-name *ngFor="let p of lobby.players"
-          [message]=p></q-name>
-</div>
+<p #playerListTrigger="matMenuTrigger"
+   class="playerlist"
+   [matMenuTriggerFor]="playerList"
+   (mouseover)="lobby.players.length && playerListTrigger.openMenu()"
+   (mouseleave)="playerListTrigger.closeMenu()">
+  {{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}</p>
+
+<mat-menu #playerList="matMenu"
+          [hasBackdrop]="false">
+  <ng-template *ngIf="lobby.players.length"
+               matMenuContent
+               let-links="links">
+    <div *ngFor="let p of lobby.players"
+         class="playerName">
+      <q-name [message]=p></q-name>
+    </div>
+  </ng-template>
+</mat-menu>
+
 <p class="settingsView">
   <ng-container
                 *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView, SeaBattle: cadeView}[lobby.type]; context: {settings: lobby.group}">

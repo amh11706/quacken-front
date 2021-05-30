@@ -18,6 +18,7 @@ import { LobbyListComponent } from './lobby-list/lobby-list.component';
 import { FriendsModule } from '../chat/friends/friends.module';
 import { EscMenuModule } from '../esc-menu/esc-menu.module';
 import { NameModule } from '../chat/name/name.module';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent, EditorErrorComponent, LobbyListComponent],
@@ -28,6 +29,7 @@ import { NameModule } from '../chat/name/name.module';
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
+    MatMenuModule,
     ChatModule,
     SettingsModule,
     FriendsModule,
