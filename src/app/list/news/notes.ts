@@ -5,6 +5,21 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 30 May 2021',
+    points: [
+      'Feedback fueled fancy fixes.',
+      'New setting for respawn delay!',
+      '"Shuffle teams" button added for lobby owners.',
+      '/team chat added.',
+      'Player names will now show by default, as opposed to ship names.',
+      'New match replays will update the damage immediately after a turn.',
+      'Team icons in the player list to easier spot who is not yet on a team.',
+      'Boats should no longer be able to face backwards after sinking.',
+      'Hovering player counts on the lobby card now shows player names.',
+      'Numerous other bug fixes and stability improvements.'
+    ],
+  },
+  {
     title: 'Release 20 May 2021',
     points: [
       'Added sound effects!',
