@@ -101,10 +101,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         return;
       }
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
-      else if (!b.isMe && this.ws.connected) {
-        this.es.open = true;
-        this.es.activeTab = 0;
-      }
       this.myBoat = b;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, async (t: Turn) => {
