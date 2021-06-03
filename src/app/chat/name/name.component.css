@@ -18,6 +18,10 @@ span {
   text-shadow: -0.5px -0.5px 0 goldenrod, 0.5px -0.5px 0 goldenrod, -0.5px 0.5px 0 goldenrod, 0.5px 0.5px 0 goldenrod;
 }
 
+.bot {
+  color: rgb(248, 122, 38);
+}
+
 p {
   color: #ddd;
   padding: 0 8px;
