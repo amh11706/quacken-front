@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { BoatService, checkSZ } from '../../boat.service';
 import { GuBoat, Point } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
@@ -34,6 +34,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       boat.render?.showInfluence(boat.team === v);
     }
   }
+  hoverTeam: number = -1;
   @Input() map?: HTMLElement;
   protected checkSZ = (pos: { x: number, y: number }) => {
     if (!this.showIsland) return false;
@@ -83,6 +84,14 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   clickBoat(boat: Boat) {
     this.ws.dispatchMessage({ cmd: Internal.BoatClicked, data: boat });
+  }
+
+  hover(boat: Boat){
+    this.hoverTeam = boat.team || 0;
+  }
+
+  hoverLeave(boat: Boat){
+    this.hoverTeam = -1; 
   }
 
   render(boat: Boat): GuBoat {

@@ -48,6 +48,7 @@ export class GuBoat extends BoatRender {
   img?: string;
   imgPosition?: string;
   flags: { p: number, t: number, offset: string }[] = [];
+  static hovering: number = 0;
 
   constructor(boat: Boat, gltf: GLTF) {
     super(boat, gltf);
@@ -68,7 +69,7 @@ export class GuBoat extends BoatRender {
   }
 
   showInfluence(v = true): void {
-    this.boat.renderName = v ? this.boat.name : this.boat.title;
+    this.boat.renderName = this.boat.title;
   }
 
   updateMoves(): BoatRender {
