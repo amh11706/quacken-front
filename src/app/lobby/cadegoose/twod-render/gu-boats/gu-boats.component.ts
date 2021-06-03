@@ -30,11 +30,15 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   @Input() showIsland = false;
   @Input() speed = 15;
   @Input() set hoveredTeam(v: number) {
+    this._hoveredTeam = v;
     for (const boat of this.boats) {
       boat.render?.showInfluence(boat.team === v);
     }
   }
-  hoverTeam: number = -1;
+  get hoveredTeam () {
+    return this._hoveredTeam;
+  }
+  private _hoveredTeam: number = -1;
   @Input() map?: HTMLElement;
   protected checkSZ = (pos: { x: number, y: number }) => {
     if (!this.showIsland) return false;
@@ -84,14 +88,6 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   clickBoat(boat: Boat) {
     this.ws.dispatchMessage({ cmd: Internal.BoatClicked, data: boat });
-  }
-
-  hover(boat: Boat){
-    this.hoverTeam = boat.team || 0;
-  }
-
-  hoverLeave(boat: Boat){
-    this.hoverTeam = -1; 
   }
 
   render(boat: Boat): GuBoat {
