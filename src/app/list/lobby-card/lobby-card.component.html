@@ -45,6 +45,7 @@
 </ng-template>
 
 <h3 class="cardTitle"
+    [class.inProgress]="lobby.inProgress"
     [title]="descriptions[lobby.type]">{{titles[lobby.type] || lobby.type}}</h3>
 <h4>{{lobby.name}}</h4>
 <p #playerListTrigger="matMenuTrigger"

@@ -1,84 +1,84 @@
 :host {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: #222222;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #222222;
 }
 
 #background {
-    height: 100vh;
-    padding: 4% 2% 0 2%;
-    background: url("/assets/background.jpg");
-    background-size: cover;
-    overflow: auto;
+  height: 100vh;
+  padding: 4% 2% 0 2%;
+  background: url("/assets/background.jpg");
+  background-size: cover;
+  overflow: auto;
 }
 
 #cards {
-    position: relative;
-    padding: 12px 0;
-    overflow-y: auto;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    column-gap: 12px;
-    row-gap: 12px;
+  position: relative;
+  padding: 12px 0;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  column-gap: 12px;
+  row-gap: 12px;
 }
 
-.cardTitle{
-    color: rgb(219, 216, 13) !important;
+.cardTitle {
+  color: rgb(219, 216, 13) !important;
 }
 
-.welcome{
-    color: rgb(219, 216, 13) !important;
+.welcome {
+  color: rgb(219, 216, 13) !important;
 }
 
 .card {
-    height: 200px;
-    width: 150px;
-    overflow: hidden;
-    background-color: rgba(198, 198, 204, 0.5);
-    border: 1px solid black;
-    border-radius: 16px;
-    white-space: normal;
-    line-height: inherit;
-    transition: 0.3s;
+  height: 200px;
+  width: 150px;
+  overflow: hidden;
+  background-color: rgba(198, 198, 204, 0.5);
+  border: 1px solid black;
+  border-radius: 16px;
+  white-space: normal;
+  line-height: inherit;
+  transition: 0.3s;
 }
 
 .card:hover {
-    height: 200px;
-    width: 150px;
-    overflow: hidden;
-    padding: 8px 16px;
-    background-color: rgba(64, 64, 66, 0.5);
-    border: 1px solid black;
-    border-radius: 16px;
-    white-space: normal;
-    line-height: inherit;
-    transition: 0.3s;
+  height: 200px;
+  width: 150px;
+  overflow: hidden;
+  padding: 8px 16px;
+  background-color: rgba(64, 64, 66, 0.5);
+  border: 1px solid black;
+  border-radius: 16px;
+  white-space: normal;
+  line-height: inherit;
+  transition: 0.3s;
 }
 
 #frame {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    max-width: 900px;
-    max-height: calc(100vh - 60px);
-    min-height: 80vh;
-    margin: auto;
-    padding: 16px;
-    background-color: rgba(66, 66, 66, 0.85);
-    color: #eee;
-    border: 1px solid black;
-    border-radius: 8px;
-    user-select: none;
-    text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 900px;
+  max-height: calc(100vh - 60px);
+  min-height: 80vh;
+  margin: auto;
+  padding: 16px;
+  background-color: rgba(66, 66, 66, 0.85);
+  color: #eee;
+  border: 1px solid black;
+  border-radius: 8px;
+  user-select: none;
+  text-align: center;
 }
 
 #addLobby {
-    height: 60px;
-    width: 60px;
-    font-size: 60px;
+  height: 60px;
+  width: 60px;
+  font-size: 60px;
 }
