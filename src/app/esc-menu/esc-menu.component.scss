@@ -92,6 +92,20 @@
   }
 }
 
+@media only screen and (max-width: 500px) {
+  ::ng-deep .mat-tab-header {
+    overflow-x: scroll !important;
+  }
+  
+  ::ng-deep .mat-tab-label-container { 
+    overflow: visible !important;
+  }
+
+  ::ng-deep .mat-tab-header-pagination {
+    display: none !important;
+  }
+}
+
 #chatframe {
   grid-column-start: 2;
   grid-column-end: 3;

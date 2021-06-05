@@ -46,8 +46,7 @@
             (click)="clickBoat(boat)"
             (mouseover)="hoverBoat(boat)"
             (mouseleave)="hoverBoat(boat, false)">
-      {{boat.name}}<br>
-      ({{boat.title}})
+      {{boat.title}}
       <ng-container *ngIf="boatTicks[boat.id]">
         <br>
         <div class="damage"

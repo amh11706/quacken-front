@@ -124,7 +124,7 @@ export class BoatRender {
   showInfluence(v = true): void {
     if (this.tweenTarget === +v) return;
     this.tweenTarget = +v;
-    this.boat.renderName = v ? this.boat.name : this.boat.title;
+    this.boat.renderName = this.boat.title;
 
     if (this.nameTimeout) clearTimeout(this.nameTimeout);
     this.nameTimeout = window.setTimeout(() => {

@@ -13,6 +13,7 @@ import { BoatRender } from '../boat-render';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { MapEditor } from 'src/app/map-editor/map-editor.component';
+import { Lobby } from '../../lobby.component';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 0,
@@ -33,6 +34,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
   @ViewChild('frame') frame?: ElementRef<HTMLElement>;
+  @Input() lobby:Lobby | undefined ;
   @Input() hoveredTeam = -1;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
@@ -153,7 +155,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     return (this.mapWidth + this.mapHeight) * 32;
   }
 
-  private async colorFlags() {
+  async colorFlags() {
     if (this.flags.length === 0) return;
     for (const f of this.flags) {
       const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
@@ -164,17 +166,16 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private addObstacles(x: number, y: number, tile: number, flags: any) {
+  public addObstacles(x: number, y: number, tile: number, flags: any) {
     const obstacle = new Point().fromPosition({ x, y });
     const pOffsetX = obstacle.x;
     const pOffsetY = obstacle.y;
     const rand = this.ctrlZoom ? 0 : Math.floor(Math.random() * 4);
-
     if (tile >= 21 && tile <= 23) {
       const flag = new SpriteImage(FlagData);
       flag.pOffsetX = pOffsetX;
       flag.pOffsetY = pOffsetY;
-      const flagObj = { points: tile - 21, ...flags, zIndex: (pOffsetY - 23), sprite: flag };
+      const flagObj = {t:flags?.shift().t, points: tile - 21, ...flags, zIndex: (pOffsetY - 23), sprite: flag};
       this.obstacles.push(flagObj);
       this.flags.push(flagObj);
     }
@@ -196,7 +197,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  async fillMap(map: number[][], ...flags: any[]) {
+  async fillMap(map: number[][], flags: any[]) {
     await Promise.all([this.wind.prom, this.whirl.prom, this.water.prom, this.sz.prom]);
     const wasLoaded = !!this.canvas;
     if (!this.canvas) {
@@ -221,7 +222,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         else this.water.draw(ctx, 0, xOffset, yOffset);
         const tile = map[y][x];
         if (!tile) continue;
-        else if (tile >= 21 && tile <= 23 || tile === 50 || tile === 51) this.addObstacles(x, y, tile, flags.shift());
+        else if (tile >= 21 && tile <= 23 || tile === 50 || tile === 51) this.addObstacles(x, y, tile, flags);
         else if (tile > 8) this.whirl.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
         else if (tile > 4) this.wind.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
         i++;

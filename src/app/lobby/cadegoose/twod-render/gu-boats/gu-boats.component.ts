@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { BoatService, checkSZ } from '../../boat.service';
 import { GuBoat, Point } from './gu-boat';
 import { WsService } from 'src/app/ws.service';
@@ -30,10 +30,15 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   @Input() showIsland = false;
   @Input() speed = 15;
   @Input() set hoveredTeam(v: number) {
+    this._hoveredTeam = v;
     for (const boat of this.boats) {
       boat.render?.showInfluence(boat.team === v);
     }
   }
+  get hoveredTeam () {
+    return this._hoveredTeam;
+  }
+  private _hoveredTeam: number = -1;
   @Input() map?: HTMLElement;
   protected checkSZ = (pos: { x: number, y: number }) => {
     if (!this.showIsland) return false;
