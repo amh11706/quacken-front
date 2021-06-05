@@ -230,7 +230,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.bomb = 0;
       boat.ready = false;
     }
-    this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
+    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.UnlockMoves }));
   }
 
   protected playTurn() {
