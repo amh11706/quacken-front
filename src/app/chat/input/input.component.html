@@ -1,6 +1,7 @@
 <div *ngIf="!disabled"
      class="col{{chat.selectedCommand.params.length + 1}}">
   <ng-select [(ngModel)]="chat.selectedCommand"
+             (change)="focusChat()"
              appendTo="body"
              [items]="chat.commands"
              [clearable]="false"
