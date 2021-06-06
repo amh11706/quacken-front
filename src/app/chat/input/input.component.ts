@@ -68,14 +68,16 @@ export class InputComponent implements OnInit, OnDestroy {
     for (const param of this.chat.selectedCommand.params) {
       if (!param.name) continue;
       const value = param.value;
-      if (param.name === 'message') param.value = '';
+      if (param.name === 'message') {
+        if (!value) return document.getElementById('message')?.blur();
+        param.value = '';
+      }
       if (value[0] === '/') {
         text = value;
         break;
       }
       text += ' ' + value;
     }
-    if (!text) return document.getElementById('message')?.blur();
     this.chat.historyIndex = -1;
 
     if (text[0] !== '/') return this.ws.send(OutCmd.ChatMessage, text);
