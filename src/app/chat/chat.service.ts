@@ -7,6 +7,7 @@ import { WsService } from '../ws.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { Sounds, SoundService } from '../sound.service';
+import { P } from '@angular/cdk/keycodes';
 
 export interface Message {
   type: number;
@@ -29,16 +30,33 @@ export class ChatService {
   commandsComponent: any;
   commandHistory: string[] = [];
   messages: Message[] = [];
-  value = '';
   saveText = '';
   historyIndex = -1;
+  commands: this['selectedCommand'][] = [];
+  selectedCommand: { base: string, params: { name: string, value: string }[], help: string } = { params: [] } as any;
 
   constructor(
-    private socket: WsService,
+    private ws: WsService,
     private kbs: KeyBindingService,
     sound: SoundService,
   ) {
-    this.socket.subscribe(InCmd.ChatMessage, (message: Message) => {
+    this.ws.subscribe(InCmd.ChatCommands, commands => {
+      this.commands = commands.lobby;
+      this.commands.push(...commands.global);
+      if (commands.lobbyAdmin) this.commands.push(...commands.lobbyAdmin);
+      for (const cmd of this.commands) {
+        const params = cmd.params as any as string;
+        let messageFound = false;
+        cmd.params = params.replace(/[\[\]<>]/g, '').split(' ').map(p => {
+          if (p === 'message') messageFound = true;
+          return { name: p, value: p === 'new' ? p : '' };
+        });
+        if (!messageFound && cmd.params.length < 2 && params.length) cmd.params.push({ name: '', value: '' });
+      }
+      this.selectedCommand = this.commands[0];
+    });
+
+    this.ws.subscribe(InCmd.ChatMessage, (message: Message) => {
       if (message.type === 6) return;
       if (document.hidden && message.type === 5 || [8, 9].includes(message.type)) sound.play(Sounds.Notification);
       this.messages.push(message);
@@ -55,28 +73,30 @@ export class ChatService {
         message.ago = time.fromNow();
       }
     });
-    this.socket.connected$.subscribe(value => {
+    this.ws.connected$.subscribe(value => {
       if (!value) this.messages = [];
     });
 
-    this.socket.subscribe(InCmd.FriendAdd, (u: string) => {
+    this.ws.subscribe(InCmd.FriendAdd, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.friend = true;
     });
-    this.socket.subscribe(InCmd.FriendRemove, (u: string) => {
+    this.ws.subscribe(InCmd.FriendRemove, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.friend = false;
     });
 
-    this.socket.subscribe(InCmd.BlockUser, (u: string) => {
+    this.ws.subscribe(InCmd.BlockUser, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.blocked = true;
     });
-    this.socket.subscribe(InCmd.UnblockUser, (u: string) => {
+    this.ws.subscribe(InCmd.UnblockUser, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.blocked = false;
     });
   }
 
   setTell(name: string) {
-    if (this.value) this.commandHistory.push(this.value);
-    this.value = '/tell ' + name + ' ';
+      const param = this.selectedCommand.params.find(p => p.name === 'message');
+    if (param?.value) this.commandHistory.push(param.value);
+    this.selectedCommand = this.commands.find(cmd => cmd.base === '/tell') || this.selectedCommand;
+    this.selectedCommand.params[0].value = name;
     this.kbs.emitAction(KeyActions.FocusChat);
   }
 

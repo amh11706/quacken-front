@@ -8,22 +8,10 @@
       </button>
 
       <form>
-        <mat-form-field floatLabel="never">
-          <input #name
-                 matInput
-                 [placeholder]="stat.target"
-                 (focus)="myControl.setValue('')"
-                 [formControl]="myControl"
-                 [matAutocomplete]="auto">
-          <mat-autocomplete #auto="matAutocomplete"
-                            (optionSelected)="showUser($event.option.value); name.blur()"
-                            [autoActiveFirstOption]="true">
-            <mat-option *ngFor="let option of searchedNames | async"
-                        [value]="option">
-              {{option}}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+        <!-- <mat-form-field floatLabel="never"> -->
+          <q-name-search [value]="stat.target"
+                         (valueChange)="showUser($event)"></q-name-search>
+        <!-- </mat-form-field> -->
       </form>
 
       <div id="selection">

@@ -23,8 +23,9 @@ export class CommandsComponent {
 
   clickCommand(c: any) {
     if (c.params) {
-      if (this.chat.value) this.chat.commandHistory.push(this.chat.value);
-      this.chat.value = c.base + ' ';
+      const param = this.chat.selectedCommand.params.find(p => p.name === 'message');
+      if (param?.value) this.chat.commandHistory.push(param.value);
+      this.chat.selectedCommand = this.chat.commands.find(cmd => cmd.base === c.base) || this.chat.selectedCommand;
       this.kbs.emitAction(KeyActions.FocusChat);
       this.ref.close();
       return;

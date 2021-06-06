@@ -1,0 +1,29 @@
+<div *ngIf="!disabled"
+     class="col{{chat.selectedCommand.params.length + 1}}">
+  <mat-select [(value)]="chat.selectedCommand">
+    <mat-option *ngFor="let cmd of chat.commands"
+                [value]="cmd">{{cmd.base}}</mat-option>
+  </mat-select>
+
+  <ng-container *ngFor="let param of chat.selectedCommand.params">
+    <ng-container [ngSwitch]="param.name">
+      <q-name-search *ngSwitchCase="'name'"
+                     [(value)]="param.value"></q-name-search>
+
+      <span *ngSwitchCase="'new'">new</span>
+
+      <input *ngSwitchDefault
+             [id]="param.name || 'message'"
+             class="textinput"
+             autocomplete="off"
+             maxlength="200"
+             name="value"
+             [placeholder]="param.name"
+             (keyup)="handleKey($event)"
+             [(ngModel)]="param.value">
+    </ng-container>
+  </ng-container>
+
+  <button mat-button
+          (click)="sendInput($event)">Send</button>
+</div>

@@ -1,0 +1,15 @@
+<input #name
+       matInput
+       [placeholder]="value"
+       (focus)="myControl.setValue('')"
+       [formControl]="myControl"
+       [matAutocomplete]="auto">
+<mat-autocomplete #auto="matAutocomplete"
+                  [panelWidth]="'200px'"
+                  (optionSelected)="valueChange.emit($event.option.value); name.blur()"
+                  [autoActiveFirstOption]="true">
+  <mat-option *ngFor="let option of searchedNames | async"
+              [value]="option">
+    {{option}}
+  </mat-option>
+</mat-autocomplete>

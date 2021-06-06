@@ -38,18 +38,6 @@
   min-height: 100%;
 }
 
-.textinput {
-  width: 100%;
-  padding: 3px 5px;
-  background-color: #aaa;
-  border: 1px solid black;
-  transition: 0.3s;
-}
-
-.textinput:focus {
-  background-color: #eee;
-}
-
 .textbox p {
   user-select: text;
   word-wrap: break-word;

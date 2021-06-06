@@ -1,0 +1,46 @@
+div {
+  display: grid;
+  grid-template-columns: 84px auto 64px;
+  column-gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+div.col3 {
+  grid-template-columns: 84px 100px auto 64px;
+}
+
+div.col4 {
+  grid-template-columns: 84px 100px 100px auto 64px;
+}
+
+.textinput {
+  width: 100%;
+  padding: 3px 5px;
+  background-color: #aaa;
+  border: 1px solid black;
+  transition: 0.3s;
+}
+
+::ng-deep input {
+  background-color: #eee;
+}
+
+q-name-search {
+  width: 100px;
+}
+
+span {
+  position: relative;
+  top: -2px;
+}
+
+button {
+  padding: 0;
+  line-height: 23px;
+  color: #eee;
+}
+
+.textinput:focus {
+  background-color: #eee;
+}

@@ -107,6 +107,8 @@ export const enum InCmd {
   InventoryCoin,
   InventoryUpdate,
 
+	ChatCommands,
+
   LobbyUpdate = 101,
   LobbyList,
   LobbyRemove,

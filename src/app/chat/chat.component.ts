@@ -18,7 +18,6 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./chat.component.css'],
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  @ViewChild('inputEl', { static: true }) input?: ElementRef<HTMLElement>;
   @ViewChild(CdkVirtualScrollViewport, { static: true }) output?: CdkVirtualScrollViewport;
   @Input() disabled = false;
   colors = [
@@ -41,7 +40,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     private ws: WsService,
     public chat: ChatService,
-    private kbs: KeyBindingService,
     private router: Router,
     private dialog: MatDialog,
   ) { }
@@ -53,12 +51,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     const output = this.output;
     this.messages$.next(this.chat.messages);
     setTimeout(() => {
-      output.scrollToIndex(this.chat.messages.length + 20);
+      output.scrollToIndex(this.chat.messages.length + 50);
     }, 50);
-
-    this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {
-      if (v && !this.disabled) this.input?.nativeElement.focus();
-    }));
   }
 
   ngOnDestroy() {
@@ -74,51 +68,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   decline(inv: Invite) {
     inv.resolved = true;
     this.ws.send(OutCmd.FriendDecline, inv);
-  }
-
-  handleKey(e: KeyboardEvent) {
-    if (e.key === 'ArrowUp') {
-      const history = this.chat.commandHistory;
-      if (this.chat.historyIndex === 0 || history.length === 0) return;
-
-      if (this.chat.historyIndex > 0) this.chat.historyIndex--;
-      else {
-        this.chat.historyIndex = history.length - 1;
-        this.chat.saveText = this.chat.value;
-      }
-      this.chat.value = history[this.chat.historyIndex];
-
-    } else if (e.key === 'ArrowDown') {
-      if (this.chat.historyIndex === -1) return;
-      const history = this.chat.commandHistory;
-      if (this.chat.historyIndex === history.length - 1) {
-        this.chat.historyIndex = -1;
-        this.chat.value = this.chat.saveText;
-        return;
-      }
-
-      this.chat.historyIndex++;
-      this.chat.value = history[this.chat.historyIndex];
-    } else if (e.key === 'Escape') {
-      this.input?.nativeElement.blur();
-    }
-  }
-
-  sendInput(e: Event) {
-    e.preventDefault();
-    const text = this.chat.value;
-    if (!text) return this.input?.nativeElement.blur();
-    this.chat.value = '';
-    this.chat.historyIndex = -1;
-
-    if (text[0] !== '/') return this.ws.send(OutCmd.ChatMessage, text);
-    this.ws.send(OutCmd.ChatCommand, text);
-
-    const firstSpace = text.indexOf(' ');
-    const secondSpace = text.indexOf(' ', firstSpace + 1);
-    const command = secondSpace > 0 ? text.substr(0, secondSpace + 1) : text;
-    this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== command);
-    this.chat.commandHistory.push(command);
   }
 
   addMessage(message?: Message): void {

@@ -19,9 +19,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
 
   tierTitles = TierTitles;
-  myControl = new FormControl();
-  searchedNames?: Observable<string[]>;
   titles = { Cadegoose: 'Cadesim' } as any;
+
   constructor(
     public stat: StatService,
     public ws: WsService,
@@ -34,13 +33,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (!v || !this.ws.user || this.stat.target) return;
       this.stat.openUser(this.ws.user?.name, false);
     }));
-
-    this.searchedNames = this.myControl.valueChanges
-      .pipe(
-        startWith(''),
-        debounceTime(300),
-        mergeMap(value => this.searchName(value)),
-      );
   }
 
   ngOnDestroy() {
@@ -84,18 +76,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   invite(friend: string) {
     this.ws.send(OutCmd.ChatCommand, '/invite ' + friend);
-  }
-  private searchName(search: string): Promise<string[]> {
-    if (search.length < 2) {
-      const names = new Map([
-        ...this.fs.lobby.map(m => m.from),
-        ...this.fs.friends,
-        ...this.fs.offline,
-      ].map(n => [n, undefined]));
-
-      return Promise.resolve(Array.from(names.keys()));
-    }
-    return this.ws.request(OutCmd.SearchNames, search);
   }
 
 }
