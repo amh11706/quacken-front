@@ -34,7 +34,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
   @ViewChild('frame') frame?: ElementRef<HTMLElement>;
-  @Input() lobby:Lobby | undefined ;
+  @Input() lobby: Lobby | undefined;
   @Input() hoveredTeam = -1;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
@@ -175,7 +175,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       const flag = new SpriteImage(FlagData);
       flag.pOffsetX = pOffsetX;
       flag.pOffsetY = pOffsetY;
-      const flagObj = {t:flags?.shift().t, points: tile - 21, ...flags, zIndex: (pOffsetY - 23), sprite: flag};
+      const flagObj = { t: flags?.shift()?.t || 99, points: tile - 21, ...flags, zIndex: (pOffsetY - 23), sprite: flag };
       this.obstacles.push(flagObj);
       this.flags.push(flagObj);
     }
