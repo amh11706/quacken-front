@@ -47,6 +47,7 @@ export const enum OutCmd {
   ChangePass,
   ChangeName,
   SearchNames,
+  SearchNamesOnline,
 
   LobbyCreate = 101,
   LobbyApply,

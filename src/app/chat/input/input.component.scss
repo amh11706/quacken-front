@@ -26,6 +26,16 @@ div.col4 {
   background-color: #eee;
 }
 
+ng-select {
+  position: relative;
+  top: -27px;
+  height: 23px;
+}
+
+::ng-deep .ng-select .ng-value-container {
+  margin: auto;
+}
+
 q-name-search {
   width: 100px;
 }

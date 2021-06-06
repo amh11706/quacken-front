@@ -14,6 +14,7 @@ import { FriendsService } from '../friends/friends.service';
 export class NameSearchComponent implements OnInit {
   @Input() value = '';
   @Output() valueChange = new EventEmitter<string>();
+  @Input() onlineOnly = false;
   searchedNames?: Observable<string[]>;
   myControl = new FormControl();
 
@@ -33,15 +34,13 @@ export class NameSearchComponent implements OnInit {
 
   private searchName(search: string): Promise<string[]> {
     if (search.length < 2) {
-      const names = new Map([
-        ...this.fs.lobby.map(m => m.from),
-        ...this.fs.friends,
-        ...this.fs.offline,
-      ].map(n => [n, undefined]));
+      const nameTemp = [...this.fs.lobby.map(m => m.from), ...this.fs.friends];
+      if (!this.onlineOnly) nameTemp.push(...this.fs.offline);
+      const names = new Map(nameTemp.map(n => [n, undefined]));
 
       return Promise.resolve(Array.from(names.keys()));
     }
-    return this.ws.request(OutCmd.SearchNames, search);
+    return this.ws.request(this.onlineOnly ? OutCmd.SearchNamesOnline : OutCmd.SearchNames, search);
   }
 
 }

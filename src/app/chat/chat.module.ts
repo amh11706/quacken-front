@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { InputComponent } from './input/input.component';
 import { NameSearchComponent } from './name-search/name-search.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [ChatComponent, CommandsComponent, InputComponent, NameSearchComponent],
@@ -28,6 +29,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatFormFieldModule,
     MatDialogModule,
     MatAutocompleteModule,
+    NgSelectModule,
     NameModule,
     QdragModule,
     ScrollingModule,
