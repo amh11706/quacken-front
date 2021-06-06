@@ -22,6 +22,10 @@ div.col4 {
   transition: 0.3s;
 }
 
+::ng-deep .ng-dropdown-panel {
+  width: auto !important;
+}
+
 ::ng-deep input {
   background-color: #eee;
 }
