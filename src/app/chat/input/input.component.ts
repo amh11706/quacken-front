@@ -1,8 +1,8 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
+import { OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { ChatService } from '../chat.service';
 
@@ -23,7 +23,7 @@ export class InputComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {
-      if (v && !this.disabled) this.focusChat();
+      if (!v && !this.disabled) this.focusChat();
     }));
   }
 
@@ -58,12 +58,16 @@ export class InputComponent implements OnInit, OnDestroy {
       this.chat.historyIndex++;
       param.value = history[this.chat.historyIndex];
     } else if (e.key === 'Escape') {
-      document.getElementById('message')?.blur();
+      this.blurChat();
     }
   }
 
   focusChat() {
     setTimeout(() => document.getElementById('message')?.focus());
+  }
+
+  blurChat() {
+    setTimeout(() => document.getElementById('message')?.blur());
   }
 
   sendInput(e: Event) {
@@ -73,7 +77,7 @@ export class InputComponent implements OnInit, OnDestroy {
       if (!param.name) continue;
       const value = param.value;
       if (param.name === 'message') {
-        if (!value) return document.getElementById('message')?.blur();
+        if (!value) return this.blurChat();
         param.value = '';
       }
       if (value[0] === '/') {
