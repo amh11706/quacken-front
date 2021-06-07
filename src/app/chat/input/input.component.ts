@@ -98,8 +98,4 @@ export class InputComponent implements OnInit, OnDestroy {
     this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== command);
     this.chat.commandHistory.push(command);
   }
-
-  sendHelp(){
-    this.ws.send(OutCmd.ChatCommand, "/help");
-  }
 }
