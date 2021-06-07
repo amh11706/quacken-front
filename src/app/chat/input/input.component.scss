@@ -1,6 +1,6 @@
 div {
   display: grid;
-  grid-template-columns: 84px auto 64px;
+  grid-template-columns: 84px auto 20px 64px;
   column-gap: 4px;
   align-items: center;
   text-align: center;
@@ -8,11 +8,11 @@ div {
 }
 
 div.col3 {
-  grid-template-columns: 84px 100px auto 64px;
+  grid-template-columns: 84px 100px auto 20px 64px;
 }
 
 div.col4 {
-  grid-template-columns: 84px 100px 100px auto 64px;
+  grid-template-columns: 84px 100px 100px auto 20px 64px;
 }
 
 .textinput {
@@ -39,6 +39,7 @@ ng-select {
 
 ::ng-deep .ng-select .ng-value-container {
   margin: auto;
+  text-transform: capitalize !important;
 }
 
 q-name-search {
@@ -50,7 +51,7 @@ span {
   top: -2px;
 }
 
-button {
+button{
   padding: 0;
   line-height: 23px;
   color: #eee;
@@ -58,4 +59,16 @@ button {
 
 .textinput:focus {
   background-color: #eee;
+}
+
+#help{
+  min-width:25px !important;
+  .mat-icon {
+    font-size: 21px;
+    color:yellow;
+  }
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  text-transform: capitalize !important;
 }

@@ -33,7 +33,7 @@ export class ChatService {
   saveText = '';
   historyIndex = -1;
   commands: this['selectedCommand'][] = [];
-  selectedCommand: { base: string, params: { name: string, value: string }[], help: string } = { params: [] } as any;
+  selectedCommand: { base: string, title: string, params: { name: string, value: string }[], help: string } = { params: [] } as any;
 
   constructor(
     private ws: WsService,
@@ -44,6 +44,10 @@ export class ChatService {
       this.commands = commands.lobby;
       this.commands.push(...commands.global);
       if (commands.lobbyAdmin) this.commands.push(...commands.lobbyAdmin);
+      this.commands = this.commands.filter(command => command.base !== "/help"); //remove /help from commands
+      for (const cmd of this.commands) {
+        cmd.title = cmd.base.substring(1);
+      }
       for (const cmd of this.commands) {
         const params = cmd.params as any as string;
         let messageFound = false;

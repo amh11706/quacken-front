@@ -5,7 +5,7 @@
              appendTo="body"
              [items]="chat.commands"
              [clearable]="false"
-             bindLabel="base">
+             bindLabel="title">
   </ng-select>
 
   <ng-container *ngFor="let param of chat.selectedCommand.params">
@@ -27,7 +27,10 @@
              [(ngModel)]="param.value">
     </ng-container>
   </ng-container>
-
-  <button mat-button
+  <button mat-button id="help"
+    (click)="sendHelp()">
+    <mat-icon>help</mat-icon>
+  </button>
+  <button mat-button id="send"
           (click)="sendInput($event)">Send</button>
 </div>
