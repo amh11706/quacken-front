@@ -14,6 +14,7 @@ import { CadeHudComponent } from './hud/hud.component';
 import { CadeEntryStatusComponent } from './cade-entry-status/cade-entry-status.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule, TooltipComponent } from '@angular/material/tooltip';
 import { NameModule } from 'src/app/chat/name/name.module';
 import { StatsComponent } from './stats/stats.component';
@@ -37,6 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     MatIconModule,
     MatTooltipModule,
+    MatExpansionModule,
     QdragModule,
     ChatModule,
     SettingsModule,

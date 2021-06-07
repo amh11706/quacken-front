@@ -12,9 +12,16 @@
 }
 
 p {
+	display:block;
 	text-align: center;
-	margin: 4px 0;
+	margin: 2px 0;
 	line-height: 45px;
+}
+
+@media only screen and (max-height: 350px) {
+	p {
+		display:inline-block;
+	}
 }
 
 #turncount {
