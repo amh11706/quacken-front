@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { BoatService } from '../cadegoose/boat.service';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';

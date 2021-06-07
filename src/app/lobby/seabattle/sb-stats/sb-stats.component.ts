@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Stat, StatsComponent } from '../../cadegoose/stats/stats.component';
 
 export const SB_STATS = [
@@ -14,5 +14,7 @@ export const SB_STATS = [
 })
 export class SbStatsComponent extends StatsComponent {
   columns = SB_STATS;
-
+  @Input() myTeam?: number;
+  @Input() hoveredTeam?: number;
+  @Input() statOpacity?: number;
 }

@@ -4,13 +4,19 @@
                [speed]="graphicSettings.speed.value"
                [mapScale]="graphicSettings.mapScale.value"
                [graphicSettings]="graphicSettings"
-               [myBoat]="myBoat"></q-twod-render>
+               [myBoat]="myBoat"
+               [hoveredTeam]="hoveredTeam"></q-twod-render>
 
-<q-sb-entry-status (mouseover)="statOpacity = 1"
-                   (mouseleave)="statOpacity = 0"
-                   [myTeam]="myBoat.team"></q-sb-entry-status>
-<q-sb-stats [style.opacity]="statOpacity"
+<q-sb-entry-status (keydown.Tab)="statOpacity = 1" 
+            (hoveredTeam)="hoveredTeam = $event"
+            [myTeam]="myBoat.team"></q-sb-entry-status>
+
+<q-sb-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
+            [hoveredTeam]="hoveredTeam"
+            [statOpacity]="statOpacity"
+            [myTeam]="myBoat.team"
             [stats]="lobby?.stats"></q-sb-stats>
+            
 <q-cade-hud [moveKeys]="moveKeys"
             [actions]="actions"
             [kbControls]="controlSettings.kbControls?.value || 0"></q-cade-hud>
