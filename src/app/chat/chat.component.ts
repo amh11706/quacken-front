@@ -72,7 +72,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   addMessage(message?: Message): void {
     if (message?.type === 6 && !this.disabled) {
-      this.dialog.open(CommandsComponent, { data: message });
+      this.dialog.open(CommandsComponent, { data: message , height:"50vh"});
       return;
     }
     if (!this.output) return;
