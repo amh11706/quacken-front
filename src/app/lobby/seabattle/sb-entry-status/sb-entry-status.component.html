@@ -1,6 +1,7 @@
 <div class="container noselect"
      id="timer">
   <p id="turncount">{{time}}</p>
+  <span id="separator">|</span>
   <p class="team team0"
      [class.sameteam]="myTeam === 0"
      (mouseover)="hoveredTeam.emit(0)"

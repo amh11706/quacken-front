@@ -16,6 +16,7 @@ import { InputComponent } from './input/input.component';
 import { NameSearchComponent } from './name-search/name-search.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [ChatComponent, CommandsComponent, InputComponent, NameSearchComponent],
@@ -29,6 +30,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     MatFormFieldModule,
     MatDialogModule,
     MatAutocompleteModule,
+    MatTooltipModule,
     NgSelectModule,
     NameModule,
     QdragModule,

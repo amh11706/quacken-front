@@ -1,6 +1,6 @@
 div {
   display: grid;
-  grid-template-columns: 84px auto 20px 64px;
+  grid-template-columns: 84px auto 64px;
   column-gap: 4px;
   align-items: center;
   text-align: center;
@@ -8,11 +8,11 @@ div {
 }
 
 div.col3 {
-  grid-template-columns: 84px 100px auto 20px 64px;
+  grid-template-columns: 84px 100px auto 64px;
 }
 
 div.col4 {
-  grid-template-columns: 84px 100px 100px auto 20px 64px;
+  grid-template-columns: 84px 100px 100px auto 64px;
 }
 
 .textinput {
@@ -67,6 +67,10 @@ button{
     font-size: 21px;
     color:yellow;
   }
+}
+
+#options{
+  line-height:15px;
 }
 
 ::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {

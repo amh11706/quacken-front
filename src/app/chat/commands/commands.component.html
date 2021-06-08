@@ -1,34 +1,37 @@
-<h3>The following commands are available everywhere:</h3>
-<ng-container *ngIf="message">
-  <span *ngFor="let c of message.message.global"
-        class="command"
-        (click)="clickCommand(c)"
-        title="Send Command">
-    <span class="base">{{c.base}}</span>
-    <ng-container *ngIf="c.params"> <span class="params" > {{c.params}}</span></ng-container> -
-    <span class="help">{{c.help}}</span><br>
-  </span>
-  <span *ngIf="message.message.lobby || message.message.lobbyAdmin">
-    <h3>The following commands are available only in this lobby:</h3>
-  </span>
-  <ng-container *ngIf="message.message.lobby?.length">
-    <span *ngFor="let c of message.message.lobby"
+<div id="helpContainer">
+  <h3>The following commands are available everywhere:</h3>
+  <ng-container *ngIf="message">
+    <span *ngFor="let c of message.message.global"
           class="command"
           (click)="clickCommand(c)"
           title="Send Command">
-          <span class="base">{{c.base}}</span>
-      <ng-container *ngIf="c.params"> <span class="params"> {{c.params}}</span></ng-container> -
+      <span class="base">{{c.base}}</span>
+      <ng-container *ngIf="c.params"> <span class="params" > {{c.params}}</span></ng-container> -
       <span class="help">{{c.help}}</span><br>
     </span>
-  </ng-container>
-  <ng-container *ngIf="message.message.lobbyAdmin?.length">
-    <span *ngFor="let c of message.message.lobbyAdmin"
-          class="command"
-          (click)="clickCommand(c)"
-          title="Send Command">
-          <span class="base">{{c.base}}</span>
-      <ng-container *ngIf="c.params"> <span class="params"> {{c.params}}</span></ng-container> -
-      <span class="help">{{c.help}}</span><br>
+    <span *ngIf="message.message.lobby || message.message.lobbyAdmin">
+      <h3>The following commands are available only in this lobby:</h3>
     </span>
+    <ng-container *ngIf="message.message.lobby?.length">
+      <span *ngFor="let c of message.message.lobby"
+            class="command"
+            (click)="clickCommand(c)"
+            title="Send Command">
+            <span class="base">{{c.base}}</span>
+        <ng-container *ngIf="c.params"> <span class="params"> {{c.params}}</span></ng-container> -
+        <span class="help">{{c.help}}</span><br>
+      </span>
+    </ng-container>
+    <ng-container *ngIf="message.message.lobbyAdmin?.length">
+      <span *ngFor="let c of message.message.lobbyAdmin"
+            class="command"
+            (click)="clickCommand(c)"
+            title="Send Command">
+            <span class="base">{{c.base}}</span>
+        <ng-container *ngIf="c.params"> <span class="params"> {{c.params}}</span></ng-container> -
+        <span class="help">{{c.help}}</span><br>
+      </span>
+    </ng-container>
   </ng-container>
-</ng-container>
+  
+</div>

@@ -18,10 +18,8 @@ p {
 	line-height: 45px;
 }
 
-@media only screen and (max-height: 350px) {
-	p {
-		display:inline-block;
-	}
+#separator{
+	display: none;
 }
 
 #turncount {
@@ -53,4 +51,17 @@ p {
 
 img{
 	margin-bottom: -0.1em;
+}
+
+@media only screen and (max-height: 350px) {
+	p {
+		display:inline-block;
+	}
+	#separator{
+		display: inline;
+		font-size: 20px;
+		padding-left: 15px;
+		padding-right: 5px;
+		color:grey;
+	}
 }

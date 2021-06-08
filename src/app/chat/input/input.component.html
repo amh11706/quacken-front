@@ -6,6 +6,9 @@
              [items]="chat.commands"
              [clearable]="false"
              bindLabel="title">
+             <ng-template ng-option-tmp let-item="item">
+              <p id="options" title="{{item.help}}">{{item.title}}</p>
+             </ng-template>
   </ng-select>
 
   <ng-container *ngFor="let param of chat.selectedCommand.params">
