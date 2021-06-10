@@ -1,0 +1,15 @@
+<div id="container">
+    <div class="item">
+        Search Map: <input>
+    </div>
+    <div class="item">
+        <button mat-raised-button>Random User Map</button>
+        <button mat-raised-button>Generated Map</button>
+    </div>
+    
+    <cdk-virtual-scroll-viewport id="maps" itemSize="50">
+        <ng-container *cdkVirtualFor="let m of maplist">
+            <q-map-card class="card" [map]="m"></q-map-card>
+        </ng-container>
+    </cdk-virtual-scroll-viewport>
+</div>

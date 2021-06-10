@@ -1,0 +1,49 @@
+q-canvas {
+  pointer-events: none;
+}
+
+mat-card {
+  padding-left: 20px;
+  max-width: 850px;
+  width: 70vw;
+  min-height: 200px;
+  margin: auto;
+  margin-top: 10px !important;
+  background-color: rgb(94, 92, 92);
+}
+
+button {
+  width: 100%;
+  background: rgb(199, 33, 33);
+}
+
+.flex-container {
+  list-style: none;
+  -ms-box-orient: horizontal;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.wrap    { 
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.flex-item {
+  padding: 1px;
+  align-self: center;
+}
+
+.flex-item-grow{
+  padding-left: 15px;
+  flex-grow: 1;
+}
+
+.action{
+  text-align: center;
+  margin-left:5px;
+}

@@ -1,0 +1,15 @@
+<mat-card class="flex-container wrap">
+    <div class="flex-item">
+        <q-canvas [map]="map.data"></q-canvas>
+    </div>
+    <div class="flex-item header flex-item-grow">
+        <mat-card-title>{{map.name}}</mat-card-title>
+        <mat-card-subtitle>Designed by: {{map.username}}</mat-card-subtitle>
+        <mat-card-content>Description:<p>{{map.description}}</p></mat-card-content>
+    </div>
+    <mat-card-actions class="flex-item action">
+        <button mat-raised-button
+                color="accent"
+                (click)="selectMap(map.id)">Select</button>
+    </mat-card-actions>
+</mat-card>

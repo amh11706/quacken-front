@@ -58,6 +58,10 @@
               </div>
             </mat-card>
           </mat-tab>
+          <mat-tab label="Map Selection"
+                  *ngIf="ss.lAdminSettings.length">
+                <q-map-list></q-map-list>
+        </mat-tab>
         </mat-tab-group>
       </mat-tab>
 

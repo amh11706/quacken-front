@@ -24,6 +24,7 @@ import { SettingsModule } from '../settings/settings.module';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
 import { MatchesComponent } from './profile/matches/matches.component';
 import { FriendsModule } from '../chat/friends/friends.module';
+import { MapListModule } from '../settings/map-list/map-list.module';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { FriendsModule } from '../chat/friends/friends.module';
     NameModule,
     SettingsModule,
     FriendsModule,
+    MapListModule,
   ],
   exports: [EscMenuComponent],
 })

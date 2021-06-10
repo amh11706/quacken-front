@@ -52,6 +52,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatDialogModule,
     MatMenuModule,
   ],
-  exports: [SettingComponent, SettingsComponent]
+  exports: [SettingComponent, SettingsComponent, CustomMapComponent]
 })
 export class SettingsModule { }
