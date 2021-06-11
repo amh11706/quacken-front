@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { SettingsService } from '../../settings.service';
 
 @Component({
   selector: 'q-map-card',
@@ -7,10 +8,17 @@ import { Component, Input } from '@angular/core';
 })
 export class MapCardComponent {
   @Input() map: any;
-  constructor() { }
+  @Input() setting: any;
 
-  selectMap(id:number){
-    console.log(this.map);
-    console.log(id);
+  constructor(public ss : SettingsService) { }
+
+  selectMap(id:number, name: any){
+    this.ss.save({
+      id: this.setting.id,
+      name: this.setting.name,
+      value: id,
+      group: this.setting.group,
+      data: name,
+    });
   }
 }

@@ -1,5 +1,4 @@
 .item{
-    margin:auto;
     margin-top:10px;
     width:100%;
     text-align: center;
@@ -20,7 +19,19 @@ button{
 }
 
 #maps{
+    display: flex;
     margin:auto;
-    height: 800px;
+    height: 100vh;
     width: 100%;
+}
+
+::ng-deep q-map-list .cdk-virtual-scroll-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    max-width: 100% !important;
+
+    q-map-card{
+        margin-top: 1px !important;
+        margin-bottom: 1px !important;
+    }
 }

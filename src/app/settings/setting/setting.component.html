@@ -72,13 +72,4 @@
            [max]="setting.max"
            [disabled]="setting.admin && !ss.admin">
   </mat-form-field>
-
-  <div *ngSwitchDefault
-       class="setting">
-    <q-custom-map [group]="group"
-                  (save)="save()"
-                  [setting]="setting"
-                  [disabled]="setting.admin && !ss.admin">
-    </q-custom-map>
-  </div>
 </ng-container>

@@ -30,7 +30,7 @@
   row-gap: 8px;
 }
 
-::ng-deep .cdk-virtual-scroll-content-wrapper {
+::ng-deep q-chat .cdk-virtual-scroll-content-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;

@@ -1,8 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { TwodRenderComponent } from 'src/app/lobby/cadegoose/twod-render/twod-render.component';
+import { Component, OnInit } from '@angular/core';
 import { OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
-import { SettingComponent } from '../setting/setting.component';
+import { SettingsService } from '../settings.service';
 
 @Component({
   selector: 'q-map-list',
@@ -11,9 +10,23 @@ import { SettingComponent } from '../setting/setting.component';
 })
 export class MapListComponent implements OnInit {
   maplist: any;
-  constructor(public ws: WsService){}
+  setting = {
+    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList
+  }
+  constructor(public ws: WsService, public ss: SettingsService){}
 
   async ngOnInit() {
     this.maplist = await this.ws.request(OutCmd.CgMapList);
+  }
+
+  selectMap(id:number){
+    let rand = Math.floor(Math.random() * this.maplist.length);
+    this.ss.save({
+      id: this.setting.id,
+      name: this.setting.name,
+      value: id < 0 ? this.maplist[rand].id : +"null",
+      group: this.setting.group,
+      data: id < 0 ? this.maplist[rand].name : "Generated",
+    });
   }
 }

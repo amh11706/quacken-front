@@ -29,11 +29,6 @@ export class CanvasComponent {
   @Input() mapWidth = 20;
   @Input() safeZone = true;
   @Input() set map(map: number[][]) {this.fillMap(map, []); }
-  private _mapScale = 1;
-  @Input() set mapScale(v: number) {
-    this._mapScale = +v / 50;
-  }
-  get mapScale() { return this._mapScale; }
 
   private canvas?: CanvasRenderingContext2D | null;
   private flags: { x: number, y: number, t: number, points: number, cs: number[] }[] = [];
@@ -62,10 +57,9 @@ export class CanvasComponent {
   private async drawFlags() {
     if (!this.canvas || this.flags.length === 0) return;
     await this.flag.prom;
-
     for (const f of this.flags) {
-      if (f.t === undefined) return;
-      const offset = FlagColorOffsets[100];
+      if (f.t === undefined) f.t = 0;
+      const offset = FlagColorOffsets[99];
       const x = (f.x + f.y) * 32;
       const y = (-f.x + f.y) * 24;
       this.flag.draw(this.canvas, f.points + offset, x + 7, y - 33);
@@ -82,13 +76,12 @@ export class CanvasComponent {
     const sz = new Sprite('safezone', 64, 48, [[128, 0]]);
     await Promise.all([water.prom, sz.prom]);
     const ctx = this.canvas;
-    ctx.scale(0.2,0.2);
-    ctx.translate(0,-200);
     if (wasLoaded) {
       ctx.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
     } else {
-      ctx.translate(0, this.mapWidth * 24 - 24);
-      this.canvas.translate(0, this.mapWidth * 24 - 24);
+      ctx.scale(0.2, 0.2);
+      ctx.translate(-150, 400);
+      // ctx.translate(0, this.mapWidth * 24 - 24);
     }
     this.flags = [];
 

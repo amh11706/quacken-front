@@ -14,7 +14,6 @@ import { MatCardModule } from '@angular/material/card';
 
 import { SettingComponent } from './setting/setting.component';
 import { SettingsComponent } from './settings.component';
-import { CustomMapComponent } from './custom-map/custom-map.component';
 import { AccountComponent } from './account/account.component';
 import { MessageComponent } from './account/message/message.component';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -28,7 +27,6 @@ import { MatMenuModule } from '@angular/material/menu';
   declarations: [
     SettingComponent,
     SettingsComponent,
-    CustomMapComponent,
     AccountComponent,
     MessageComponent,
     KeyBindingComponent,
@@ -52,6 +50,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatDialogModule,
     MatMenuModule,
   ],
-  exports: [SettingComponent, SettingsComponent, CustomMapComponent]
+  exports: [SettingComponent, SettingsComponent]
 })
 export class SettingsModule { }

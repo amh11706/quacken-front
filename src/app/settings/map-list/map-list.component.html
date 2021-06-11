@@ -3,13 +3,19 @@
         Search Map: <input>
     </div>
     <div class="item">
-        <button mat-raised-button>Random User Map</button>
-        <button mat-raised-button>Generated Map</button>
+        <button mat-raised-button 
+            (click)="selectMap(-1)"
+            matTooltip="Random User Map">Random</button>
+        <button mat-raised-button 
+            (click)="selectMap(0)"
+            matTooltip="Generated Map">Generated</button>
     </div>
     
-    <cdk-virtual-scroll-viewport id="maps" itemSize="50">
+    <cdk-virtual-scroll-viewport id="maps" itemSize="300">
         <ng-container *cdkVirtualFor="let m of maplist">
-            <q-map-card class="card" [map]="m"></q-map-card>
+            <q-map-card class="card" 
+                [map]="m" 
+                [setting]="setting"></q-map-card>
         </ng-container>
     </cdk-virtual-scroll-viewport>
 </div>

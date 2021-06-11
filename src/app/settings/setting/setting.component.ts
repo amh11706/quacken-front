@@ -53,6 +53,8 @@ export class SettingComponent {
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
       this.valueChange.emit(+newSetting.value);
+      console.log(+newSetting.value);
+      console.log(newSetting);
       this.ss.save({
         id: this.setting.id,
         name: this.setting.name,
@@ -60,7 +62,10 @@ export class SettingComponent {
         group: this.setting.group,
         data: newSetting.data,
       });
-      if (this.setting.trigger) this.ws.send(this.setting.trigger, +newSetting.value);
+      if (this.setting.trigger) {
+        this.ws.send(this.setting.trigger, +newSetting.value);
+        console.log(this.setting.trigger, +newSetting.value);
+      }
     }, 750);
   }
 

@@ -9,6 +9,7 @@ import { MapCardComponent } from './map-card/map-card.component';
 import { CanvasModule } from 'src/app/lobby/cadegoose/canvas/canvas.module';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatSelectModule,
     MatCardModule,    
     MatButtonModule,
+    MatTooltipModule,
     SettingsModule,
     CanvasModule,
     ScrollingModule,

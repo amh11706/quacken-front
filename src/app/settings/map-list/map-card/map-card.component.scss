@@ -3,10 +3,9 @@ q-canvas {
 }
 
 mat-card {
-  padding-left: 20px;
-  max-width: 850px;
-  width: 70vw;
-  min-height: 200px;
+  width: 80vw;
+  max-width: 800px;
+  min-height: 300px;
   margin: auto;
   margin-top: 10px !important;
   background-color: rgb(94, 92, 92);
@@ -18,32 +17,46 @@ button {
 }
 
 .flex-container {
-  list-style: none;
-  -ms-box-orient: horizontal;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: flex;
+  display: grid;
+  grid-template-columns: 315px 1fr;
+  grid-template-rows: 1fr 0.5fr 50px;
 }
 
-.wrap    { 
-  -webkit-flex-wrap: wrap;
-  flex-wrap: wrap;
+.grid-1{
+  grid-column: 1;
+  grid-row: 1 / span 3;
 }
 
-.flex-item {
-  padding: 1px;
-  align-self: center;
+.grid-2{
+  grid-column-start: 2;
+  padding-top: 8px;
+  padding-left: 10px;
 }
 
-.flex-item-grow{
-  padding-left: 15px;
-  flex-grow: 1;
+.grid-3{
+  grid-row-start: 2;
+  grid-column: 2;
+}
+
+#title{
+  font-weight: bold;
+  color: rgb(199, 33, 33);
+}
+
+#subtitle{
+  font-style: italic;
+}
+
+#description{
+  font-style: italic;
 }
 
 .action{
-  text-align: center;
-  margin-left:5px;
+  position: absolute;
+  width: 98%;
+  bottom: 31px;
+}
+
+mat-card-actions{
+  margin-left: 0px !important;
 }
