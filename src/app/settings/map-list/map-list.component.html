@@ -1,6 +1,8 @@
 <div id="container">
     <div class="item">
-        Search Map: <input>
+        <q-map-input-search (data)="filter($event)"
+            (backspace)="filterBackSpace($event)"></q-map-input-search>
+        <q-map-tag-search></q-map-tag-search>
     </div>
     <div class="item">
         <button mat-raised-button 
