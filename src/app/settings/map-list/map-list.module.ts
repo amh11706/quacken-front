@@ -10,6 +10,8 @@ import { CanvasModule } from 'src/app/lobby/cadegoose/canvas/canvas.module';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatCardModule,    
     MatButtonModule,
     MatTooltipModule,
+    MatIconModule,
+    MatChipsModule,
     SettingsModule,
     CanvasModule,
     ScrollingModule,

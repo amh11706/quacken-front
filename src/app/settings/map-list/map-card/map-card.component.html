@@ -7,9 +7,26 @@
         <mat-card-subtitle id="subtitle">Designed by: {{map.username}}</mat-card-subtitle>
         <mat-card-content id="description">Description:<p>{{map.description || "N/A"}}</p></mat-card-content>
     </div>
-    <mat-card-actions class="grid-3 action">
+    <div class="grid-3">
+        <ng-container *ngFor="let i of rating">
+            <ng-container *ngIf="i === 0; else filled">
+                <mat-icon>star_border</mat-icon>
+            </ng-container>
+        </ng-container>
+        <div id="subitem">
+            <mat-chip-list>
+                <mat-chip #chipList *ngFor="let option of list" 
+                    [removable]="false">{{option}}</mat-chip>
+            </mat-chip-list>
+        </div>
+    </div>
+    <mat-card-actions class="grid-4 action">
         <button mat-raised-button
                 color="accent"
                 (click)="selectMap(map.id, map.name)">Select</button>
     </mat-card-actions>
 </mat-card>
+
+<ng-template #filled>
+    <mat-icon>star</mat-icon>
+</ng-template>
