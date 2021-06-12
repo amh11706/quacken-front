@@ -1,23 +1,22 @@
-<div id="container">
-    <div class="item">
-        <q-map-input-search (data)="filter($event)"
-            (backspace)="filterBackSpace($event)"></q-map-input-search>
-        <q-map-tag-search></q-map-tag-search>
-    </div>
-    <div class="item">
-        <button mat-raised-button 
-            (click)="selectMap(-1)"
-            matTooltip="Random User Map">Random</button>
-        <button mat-raised-button 
-            (click)="selectMap(0)"
-            matTooltip="Generated Map">Generated</button>
-    </div>
-    
-    <cdk-virtual-scroll-viewport id="maps" itemSize="300">
-        <ng-container *cdkVirtualFor="let m of maplist">
-            <q-map-card class="card" 
-                [map]="m" 
-                [setting]="setting"></q-map-card>
-        </ng-container>
-    </cdk-virtual-scroll-viewport>
+<div class="item">
+  <q-map-input-search (data)="filter($event)"
+                      (backspace)="filter($event)"></q-map-input-search>
+  <q-map-tag-search></q-map-tag-search>
 </div>
+<div class="item">
+  <button mat-raised-button
+          (click)="selectMap(-1)"
+          matTooltip="Random User Map">Random</button>
+  <button mat-raised-button
+          (click)="selectMap(0)"
+          matTooltip="Generated Map">Generated</button>
+</div>
+
+<cdk-virtual-scroll-viewport id="maps"
+                             [itemSize]="300"
+                             [minBufferPx]="400"
+                             [maxBufferPx]="600">
+  <q-map-card *cdkVirtualFor="let m of maplist"
+              [map]="m"
+              [setting]="setting"></q-map-card>
+</cdk-virtual-scroll-viewport>

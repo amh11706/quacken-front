@@ -1,7 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { SettingsService } from '../settings.service';
+
+interface MapOption {
+  id: number
+  description: string,
+  name: string,
+  released: boolean
+  userId: number
+  username: string,
+}
 
 @Component({
   selector: 'q-map-list',
@@ -11,40 +21,36 @@ import { SettingsService } from '../settings.service';
 
 export class MapListComponent implements OnInit {
   @Input() data: string = "";
-  servermapList: any;
-  maplist: any;
+  servermapList: MapOption[] = [];
+  maplist = new BehaviorSubject<MapOption[]>([]);
   setting = {
     admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList
   }
 
-  constructor(public ws: WsService, public ss: SettingsService){}
+  constructor(public ws: WsService, public ss: SettingsService) { }
 
   async ngOnInit() {
     this.servermapList = await this.ws.request(OutCmd.CgMapList);
-    this.maplist = this.servermapList;
+    this.maplist.next(this.servermapList);
   }
 
-  selectMap(id: number){
-    let rand = Math.floor(Math.random() * this.maplist.length);
+  async selectMap(id: number) {
+    const maps = await this.maplist.toPromise();
+    let rand = Math.floor(Math.random() * maps.length);
     this.ss.save({
       id: this.setting.id,
       name: this.setting.name,
-      value: id < 0 ? this.maplist[rand].id : +"null",
+      value: id < 0 ? maps[rand].id : id,
       group: this.setting.group,
-      data: id < 0 ? this.maplist[rand].name : "Generated",
+      data: id < 0 ? maps[rand].name : "Generated",
     });
   }
 
-  filterBackSpace(data: any){
-    this.maplist = this.servermapList;
-    this.filter(data);
-  }
-
-  filter(data: any){
-    if (data === "" || undefined) this.maplist = this.servermapList;
-    this.maplist =  this.maplist.filter((map: any) => {
+  filter(data: string) {
+    if (data === "" || undefined) return this.maplist.next(this.servermapList);
+    this.maplist.next(this.servermapList.filter(map => {
       const search = new RegExp(data, 'i')
       return search.test(map.name) || search.test(map.username);
-    });
+    }));
   }
 }
