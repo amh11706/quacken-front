@@ -35,9 +35,7 @@ export class MapListComponent implements OnInit {
   }
 
   async selectMap(id: number) {
-    console.log('select map', id)
     const maps = this.servermapList;
-    console.log('selected map', id)
     const rand = Math.floor(Math.random() * maps.length);
     this.ss.save({
       id: this.setting.id,
