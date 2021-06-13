@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { SettingsService } from '../settings.service';
@@ -22,7 +22,7 @@ interface MapOption {
 export class MapListComponent implements OnInit {
   @Input() data: string = "";
   servermapList: MapOption[] = [];
-  maplist = new BehaviorSubject<MapOption[]>([]);
+  maplist = new ReplaySubject<MapOption[]>(1);
   setting = {
     admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList
   }
@@ -35,8 +35,10 @@ export class MapListComponent implements OnInit {
   }
 
   async selectMap(id: number) {
-    const maps = await this.maplist.toPromise();
-    let rand = Math.floor(Math.random() * maps.length);
+    console.log('select map', id)
+    const maps = this.servermapList;
+    console.log('selected map', id)
+    const rand = Math.floor(Math.random() * maps.length);
     this.ss.save({
       id: this.setting.id,
       name: this.setting.name,
