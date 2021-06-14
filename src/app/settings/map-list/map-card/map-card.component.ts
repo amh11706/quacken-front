@@ -11,7 +11,6 @@ export class MapCardComponent {
   @Input() setting: any;
   @Output() generate: EventEmitter<number> = new EventEmitter();
   
-  list: string[] = ["1v1", "Flags", "Cade"]
   generated: string = "Generated";
   constructor(public ss : SettingsService) { }
 
