@@ -13,13 +13,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MapTagSearchComponent } from './map-tag-search/map-tag-search.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MapInputSearchComponent } from './map-input-search/map-input-search.component';
+import { StarRatingComponent } from './star-rating/star-rating.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MapFilterComponent } from './map-filter/map-filter.component';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 @NgModule({
   declarations: [
-    MapListComponent, MapCardComponent, MapTagSearchComponent, MapInputSearchComponent,
+    MapListComponent, MapCardComponent, 
+    MapInputSearchComponent, StarRatingComponent, MapFilterComponent,
   ],
   imports: [
     CommonModule,
@@ -33,6 +37,8 @@ import { MapInputSearchComponent } from './map-input-search/map-input-search.com
     MatIconModule,
     MatChipsModule,
     MatFormFieldModule,
+    MatDialogModule,
+    MatBottomSheetModule,
     SettingsModule,
     CanvasModule,
     ScrollingModule,

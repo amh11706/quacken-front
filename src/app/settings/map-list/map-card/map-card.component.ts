@@ -6,22 +6,14 @@ import { SettingsService } from '../../settings.service';
   templateUrl: './map-card.component.html',
   styleUrls: ['./map-card.component.scss']
 })
-export class MapCardComponent implements OnInit{
+export class MapCardComponent {
   @Input() map: any;
   @Input() setting: any;
-  defaultRating: number[] = [0,0,0,0,0]
-  rating: number[] = [0,0,0,0,0]
+  @Output() generate: EventEmitter<number> = new EventEmitter();
+  
   list: string[] = ["1v1", "Flags", "Cade"]
+  generated: string = "Generated";
   constructor(public ss : SettingsService) { }
-
-  ngOnInit(): void {
-    this.rating = this.defaultRating;
-    if (this.map?.rating && this.map?.rating > 0) {
-      for( let i = 0; i < this.map?.rating; i++){
-        this.rating[i] = 1;
-      }
-    }
-  }
 
   selectMap(id:number, name: any){
     this.ss.save({

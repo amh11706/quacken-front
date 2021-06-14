@@ -1,15 +1,30 @@
+<div class="flex">
+  <q-map-input-search class="flex-item" 
+                      (data)="filter($event)"></q-map-input-search>
+    <button mat-raised-button (click)="openFilter()">Filter</button>
+    <mat-form-field style="margin-top: 15px;">
+      <mat-label>Sort by:</mat-label>
+      <mat-select [(value)]="selectedSortOption"
+                  (selectionChange)="sort($event.value)">
+        <mat-option *ngFor="let option of sortList" [value]="option">{{option}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+</div>
 <div class="item">
-  <q-map-input-search (data)="filter($event)"
-                      (backspace)="filter($event)"></q-map-input-search>
-  <q-map-tag-search></q-map-tag-search>
+  <mat-chip-list>
+    <mat-chip *ngFor="let tag of selectedFilters"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="removeTag(tag)">
+              {{tag}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
 </div>
 <div class="item">
   <button mat-raised-button
           (click)="selectMap(-1)"
           matTooltip="Random User Map">Random</button>
-  <button mat-raised-button
-          (click)="selectMap(0)"
-          matTooltip="Generated Map">Generated</button>
 </div>
 
 <cdk-virtual-scroll-viewport id="maps"
@@ -18,5 +33,6 @@
                              [maxBufferPx]="600">
   <q-map-card *cdkVirtualFor="let m of maplist"
               [map]="m"
-              [setting]="setting"></q-map-card>
+              [setting]="setting"
+              (generate)="selectMap($event)"></q-map-card>
 </cdk-virtual-scroll-viewport>
