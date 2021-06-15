@@ -1,3 +1,14 @@
 ::ng-deep .mat-snack-bar-container {
     background-color: rgba(67, 67, 67, 0.8) !important;
 }
+
+.dismiss {
+    display:flex;
+    justify-content: flex-end;
+    color: rgb(199, 33, 33);
+}
+
+.star mat-icon {
+    color: gold;
+    font-size: 16px;
+}

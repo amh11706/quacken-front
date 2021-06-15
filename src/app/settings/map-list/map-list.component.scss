@@ -30,5 +30,10 @@ q-map-card {
 }
 
 ::ng-deep .mat-chip-list-wrapper{
-  display:block !important;
+  margin: 5px !important;
+}
+
+.star mat-icon {
+  color: gold;
+  font-size: 16px;
 }

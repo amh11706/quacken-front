@@ -19,6 +19,7 @@ import { StarRatingComponent } from './star-rating/star-rating.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatFormFieldModule,
     MatDialogModule,
     MatBottomSheetModule,
+    MatListModule,
     SettingsModule,
     CanvasModule,
     ScrollingModule,

@@ -3,16 +3,25 @@
         <button mat-icon-button (click)="filterRef.dismiss()">
             <mat-icon>close</mat-icon>
           </button>
-      </div>
-    <div>
-        Tags:
-        <mat-chip-list>
-            <mat-chip #chipList *ngFor="let tag of data.tagList" 
-                [removable]="false"
-                (click)="onClick(tag)">{{tag}}</mat-chip>
-        </mat-chip-list>
     </div>
     <div>
+        Ratings:
+        <mat-chip-list class="star">
+            <mat-chip #chipList *ngFor="let rating of [5,4,3,2,1]" 
+                [removable]="false"
+                (click)="onClick(rating.toString())">
+                <div *ngFor="let i of [].constructor(rating)"><mat-icon inline="true">star</mat-icon></div>
+            </mat-chip>
+        </mat-chip-list>
+        <mat-divider></mat-divider>
+            Tags:
+            <mat-chip-list>
+                <mat-chip #chipList *ngFor="let tag of data.tagList" 
+                    [removable]="false"
+                    (click)="onClick(tag)">{{tag}}</mat-chip>
+            </mat-chip-list>
+        <mat-divider></mat-divider>
+    
         Users:
         <mat-chip-list>
             <mat-chip #chipList *ngFor="let name of data.userList"
