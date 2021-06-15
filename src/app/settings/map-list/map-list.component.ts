@@ -88,11 +88,11 @@ export class MapListComponent implements OnInit {
   }
 
   filter(data: string) { // need to fix filter for tags & input being used together as well as only tags
-    if (data === "" || data === undefined) this.maplist.next(this.servermapList);
+    if (data === "" || data === undefined || this.selectedFilters.length === 0) this.maplist.next(this.servermapList);
     this.maplist.next(this.servermapList.filter(map => {
       const search = new RegExp(data, 'i');
-      if (this.selectedFilters.length > 0){
-        return map.tags.find(a =>search.test(a)); 
+      if (this.selectedFilters.length > 0) { // search tag if there is some
+        return map.tags.find(a =>search.test(a)) || map.tags.find(a => search.test(map.username));; 
       }
       return search.test(map.name) || search.test(map.username) || map.tags.find(a =>search.test(a));;
     }));
@@ -104,7 +104,6 @@ export class MapListComponent implements OnInit {
     if (index >= 0) {
       this.selectedFilters.splice(index, 1);
     }
-    this.maplist.next(this.servermapList);
     this.filter(tag);
   }
 
