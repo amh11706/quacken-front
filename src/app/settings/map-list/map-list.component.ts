@@ -5,7 +5,6 @@ import { WsService } from 'src/app/ws.service';
 import { SettingsService } from '../settings.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MapFilterComponent } from './map-filter/map-filter.component';
-import { MatSelectChange } from '@angular/material/select';
 
 interface MapOption {
   id: number
@@ -14,7 +13,7 @@ interface MapOption {
   released: boolean
   userId: number
   username: string,
-  tags?: string[],
+  tags: string[],
   ratingAverage?: number;
 }
 
@@ -29,12 +28,15 @@ export class MapListComponent implements OnInit {
   servermapList: MapOption[] = [];
   maplist = new ReplaySubject<MapOption[]>(1);
 
-  selectedFilters: string [] = [];
-  visible = true;
-  selectable = true;
-  removable = true;
-  sortList: string[] = ["Avg. Rating", "User", "Map Name"];
-  selectedSortOption = 'Avg. Rating';
+  selectedFilters: string[] = [];
+  visible: boolean = true;
+  selectable: boolean = true;
+  removable: boolean = true;
+  sortList: string[] = ["Ascending Avg. Rating","Descending Avg. Rating", "Ascending User", 
+                        "Descending User", "Ascending Map Name", "Descending Map Name"];
+  selectedSortOption: string = this.sortList[0];
+  tagList: string[] = [];
+  userList: string[] = [];
   setting = {
     admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList
   }
@@ -44,8 +46,8 @@ export class MapListComponent implements OnInit {
   openFilter() {
     this.bottomSheet.open(MapFilterComponent, {
       data: {
-        tagList: ["1v1", "2v2", "3v3", "4v4", "Flags", "Cade"],
-        userList: ["Fatigue","CaptainVampi"],
+        tagList: this.tagList,
+        userList: this.userList,
         addTag: this.addTag.bind(this),
       },
     });
@@ -61,6 +63,16 @@ export class MapListComponent implements OnInit {
     //   userId: 0,
     //   username: "",
     // });
+    this.servermapList.forEach((map)=> {
+      if(map.tags){
+        for (let tag of map.tags){
+          const search = new RegExp(tag, 'i')
+          if (!this.tagList.find(a =>search.test(a))) this.tagList.push(tag);
+        }
+      }
+      const search = new RegExp(map.username, 'i')
+      if (!this.userList.find(a =>search.test(a))) this.userList.push(map.username);
+    });
     this.maplist.next(this.servermapList);
   }
 
@@ -77,10 +89,13 @@ export class MapListComponent implements OnInit {
   }
 
   filter(data: string) {
-    if (data === "" || undefined) return this.maplist.next(this.servermapList);
+    if (data === "" || data === undefined) this.maplist.next(this.servermapList);
     this.maplist.next(this.servermapList.filter(map => {
-      const search = new RegExp(data, 'i')
-      return search.test(map.name) || search.test(map.username);
+      const search = new RegExp(data, 'i');
+      if (this.selectedFilters.length > 0){
+        return map.tags.find(a =>search.test(a));
+      }
+      return search.test(map.name) || search.test(map.username) || map.tags.find(a =>search.test(a));;
     }));
   }
 
@@ -90,44 +105,27 @@ export class MapListComponent implements OnInit {
     if (index >= 0) {
       this.selectedFilters.splice(index, 1);
     }
+    this.maplist.next(this.servermapList);
+    this.filter(tag);
   }
 
   addTag(tag: string): void {
-    if(this.selectedFilters.includes(tag)) return;
+    const searchTags = new RegExp(tag, 'i');
+    if (this.selectedFilters.find(a =>searchTags.test(a))) return;
     this.selectedFilters.push(tag);
     this.filter(tag);
   }
 
   sort(value: string){
-    // if(value === this.sortList[0]){
-    //   this.maplist.next(this.servermapList.sort((n1,n2) => n1.ratingAverage! - n2.ratingAverage!));
-    // };
-    if(value === this.sortList[1]) {
-      this.maplist.next(this.servermapList.sort((n1,n2) => {
-        if (n1.username > n2.username) {
-            return 1;
-        }
-    
-        if (n1.username < n2.username) {
-            return -1;
-        }
-    
-        return 0;;
-      }));
-    };
-    if(value === this.sortList[2]){
-      this.maplist.next(this.servermapList.sort((n1,n2) => {
-        if (n1.name > n2.name) {
-            return 1;
-        }
-    
-        if (n1.name < n2.name) {
-            return -1;
-        }
-    
-        return 0;;
-      }));
-    };
+    switch(value){
+      case this.sortList[0]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.ratingAverage! > n2.ratingAverage! ? 1 : -1)); break;
+      case this.sortList[1]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.ratingAverage! > n2.ratingAverage! ? -1 : 1)); break;
+      case this.sortList[2]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.username > n2.username ? 1 : -1)); break;
+      case this.sortList[3]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.username > n2.username ? -1 : 1)); break;
+      case this.sortList[4]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.name > n2.name ? 1 : -1)); break;
+      case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.name > n2.name ? -1 : 1)); break;
+      default: this.maplist.next(this.servermapList);
+    }
   }
   
 }

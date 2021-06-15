@@ -21,7 +21,7 @@
                 [count] = "map?.ratingCount"></q-star-rating>
             <div id="subitem">
                 <mat-chip-list>
-                    <mat-chip #chipList *ngFor="let option of map.tags || list" 
+                    <mat-chip #chipList *ngFor="let option of map.tags" 
                         [removable]="false">{{option}}</mat-chip>
                 </mat-chip-list>
             </div>

@@ -23,8 +23,5 @@ export class MapFilterComponent implements OnDestroy{
     if (filterOption in this.selected) return;
     this.data.addTag(filterOption);
   }
-
-  close(){
-    this.filterRef.dismiss(this.selected);
-  }
+  
 }
