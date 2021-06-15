@@ -12,3 +12,8 @@
     color: gold;
     font-size: 16px;
 }
+
+.mat-chip-list .mat-chip {
+    width: auto;
+    min-width: 0;
+  }

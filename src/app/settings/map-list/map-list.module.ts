@@ -14,7 +14,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MapInputSearchComponent } from './map-input-search/map-input-search.component';
 import { StarRatingComponent } from './star-rating/star-rating.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MapFilterComponent } from './map-filter/map-filter.component';
@@ -23,8 +22,7 @@ import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
-    MapListComponent, MapCardComponent, 
-    MapInputSearchComponent, StarRatingComponent, MapFilterComponent,
+    MapListComponent, MapCardComponent, StarRatingComponent, MapFilterComponent,
   ],
   imports: [
     CommonModule,

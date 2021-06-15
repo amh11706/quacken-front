@@ -1,6 +1,4 @@
-<div class="flex">
-  <q-map-input-search class="flex-item" 
-                      (data)="filter($event)"></q-map-input-search>
+<div class="flex">             
     <button mat-raised-button (click)="openFilter()">Filter</button>
     <mat-form-field style="margin-top: 15px;">
       <mat-label>Sort by:</mat-label>
@@ -10,13 +8,20 @@
       </mat-select>
     </mat-form-field>
 </div>
+<div class="flex-item">
+  <span id="searchLabel">Search Map: </span>
+  <input type="text" 
+          placeholder="search by map name, user or tags..."
+          [(ngModel)]="data">
+  <button mat-raised-button (click)="filter()">Search</button>  
+</div>   
 <div class="item">
   <mat-chip-list>
     <mat-chip *ngFor="let tag of selectedFilters"
               [selectable]="selectable"
               [removable]="removable"
               (removed)="removeTag(tag)">
-              <span class="star" *ngIf="[5,4,3,2,1].includes(+tag) else string">
+              <span class="star" *ngIf="[4,3,2,1].includes(+tag) else string">
                 <span *ngFor="let i of [].constructor(+tag)"><mat-icon [inline]="true">star</mat-icon></span>
               </span>
               <ng-template #string>{{tag}}</ng-template>

@@ -1,6 +1,7 @@
 button {
   margin-right: 10px;
   margin-top: 2px;
+  margin-left: 10px;
   background: rgb(199, 33, 33);
 }
 
@@ -16,12 +17,19 @@ q-map-card {
 .flex {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   flex-wrap: wrap;
 }
 
 .flex-item{
-  margin-top: 10px;
-  flex:1
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.flex-item .button{
+  margin-left: 20px;
 }
 
 .item{
@@ -36,4 +44,12 @@ q-map-card {
 .star mat-icon {
   color: gold;
   font-size: 16px;
+}
+
+#searchLabel {
+  margin-right: 5px;
+}
+
+input {
+  min-width: 220px;
 }

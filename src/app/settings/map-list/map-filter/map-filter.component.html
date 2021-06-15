@@ -6,11 +6,11 @@
     </div>
     <div>
         Ratings:
-        <mat-chip-list class="star">
-            <mat-chip #chipList *ngFor="let rating of [5,4,3,2,1]" 
+        <mat-chip-list class="star mat-chip-list-stacked">
+            <mat-chip #chipList *ngFor="let rating of [4,3,2,1]" 
                 [removable]="false"
                 (click)="onClick(rating.toString())">
-                <div *ngFor="let i of [].constructor(rating)"><mat-icon inline="true">star</mat-icon></div>
+                <div *ngFor="let i of [].constructor(rating)"><mat-icon inline="true">star</mat-icon></div>& Up
             </mat-chip>
         </mat-chip-list>
         <mat-divider></mat-divider>
@@ -22,7 +22,7 @@
             </mat-chip-list>
         <mat-divider></mat-divider>
     
-        Users:
+        Creators:
         <mat-chip-list>
             <mat-chip #chipList *ngFor="let name of data.userList"
                 [removable]="false"

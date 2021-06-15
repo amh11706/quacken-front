@@ -25,7 +25,7 @@ interface MapOption {
 })
 
 export class MapListComponent implements OnInit {
-  @Input() data: string = "";
+  data: string = '';
   servermapList: MapOption[] = [];
   maplist = new ReplaySubject<MapOption[]>(1);
 
@@ -87,14 +87,16 @@ export class MapListComponent implements OnInit {
     });
   }
 
-  filter(data: string) { // need to fix filter for tags & input being used together as well as only tags
-    if (data === "" || data === undefined || this.selectedFilters.length === 0) this.maplist.next(this.servermapList);
+  filter() {
+    if (this.data === "" || this.data === undefined) this.maplist.next(this.servermapList);
     this.maplist.next(this.servermapList.filter(map => {
-      const search = new RegExp(data, 'i');
-      if (this.selectedFilters.length > 0) { // search tag if there is some
-        return map.tags.find(a =>search.test(a)) || map.tags.find(a => search.test(map.username));; 
+      const search = new RegExp(this.data, 'i');
+      const tag = map.tags.some(tag => search.test(tag));
+      if (this.selectedFilters.length > 0){
+        const selectedTags = this.selectedFilters.filter(element => map.tags.includes(element) || (element === map.username && search.test(map.name))).length > 0;
+        return search.test(map.name) && selectedTags || search.test(map.username) && selectedTags || tag && selectedTags;
       }
-      return search.test(map.name) || search.test(map.username) || map.tags.find(a =>search.test(a));;
+      return search.test(map.name) || search.test(map.username) || tag;
     }));
   }
 
@@ -104,24 +106,25 @@ export class MapListComponent implements OnInit {
     if (index >= 0) {
       this.selectedFilters.splice(index, 1);
     }
-    this.filter(tag);
+    this.maplist.next(this.servermapList);
+    this.filter();
   }
 
   addTag(tag: string): void {
     const searchTags = new RegExp(tag, 'i');
     if (this.selectedFilters.find(a =>searchTags.test(a))) return;
     this.selectedFilters.push(tag);
-    this.filter(tag);
+    this.filter();
   }
 
   sort(value: string){
     switch(value){
       case this.sortList[0]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.ratingAverage > n2.ratingAverage ? 1 : -1)); break;
       case this.sortList[1]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.ratingAverage > n2.ratingAverage ? -1 : 1)); break;
-      case this.sortList[2]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.username > n2.username ? 1 : -1)); break;
-      case this.sortList[3]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.username > n2.username ? -1 : 1)); break;
-      case this.sortList[4]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.name > n2.name ? 1 : -1)); break;
-      case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.name > n2.name ? -1 : 1)); break;
+      case this.sortList[2]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.username.toLowerCase() > n2.username.toLowerCase() ? 1 : -1)); break;
+      case this.sortList[3]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.username.toLowerCase() > n2.username.toLowerCase() ? -1 : 1)); break;
+      case this.sortList[4]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.name.toLowerCase() > n2.name.toLowerCase() ? 1 : -1)); break;
+      case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.name.toLowerCase() > n2.name.toLowerCase() ? -1 : 1)); break;
       default: this.maplist.next(this.servermapList);
     }
   }
