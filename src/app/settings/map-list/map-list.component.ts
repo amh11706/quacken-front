@@ -67,7 +67,7 @@ export class MapListComponent implements OnInit {
       tags: [""],
       ratingAverage: 0,
       ratingCount: 0,
-      data: this.createEmptyMap(36, 20),
+      data: this.createEmptyMap(36, 20), // empty map until user generates
     });
     this.servermapList.forEach((map)=> {
       for (let tag of map.tags){
@@ -77,7 +77,6 @@ export class MapListComponent implements OnInit {
       const search = new RegExp(map.username, 'i')
       if (!this.userList.find(a =>search.test(a))) this.userList.push(map.username);
     });
-    this.servermapList[0].ratingAverage = 3.7;
     this.maplist.next(this.servermapList);
   }
 
