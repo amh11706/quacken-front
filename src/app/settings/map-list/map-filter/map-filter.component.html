@@ -6,7 +6,7 @@
     </div>
     <div>
         Ratings:
-        <mat-chip-list class="star mat-chip-list-stacked">
+        <mat-chip-list class="star">
             <mat-chip #chipList *ngFor="let rating of [4,3,2,1]" 
                 [removable]="false"
                 (click)="onClick(rating.toString())">

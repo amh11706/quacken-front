@@ -12,13 +12,16 @@ span.stars span.star-i {
 .rating {
     position: relative;
     top: -15px;
-    left: 85px;
-    color: rgb(67,67,67);
+    left: 90px;
+    color: #ffc107;
 }
 
 .background {
+    display: inline-block;
     background-color: grey;
     height: 20px;
     border-radius: 16px;
     padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 18px;
 }

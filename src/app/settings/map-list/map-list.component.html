@@ -22,7 +22,8 @@
               [removable]="removable"
               (removed)="removeTag(tag)">
               <span class="star" *ngIf="[4,3,2,1].includes(+tag) else string">
-                <span *ngFor="let i of [].constructor(+tag)"><mat-icon [inline]="true">star</mat-icon></span>
+                <span *ngFor="let i of [].constructor(+tag)"><mat-icon [inline]="true">star</mat-icon></span> 
+                <span class="up"> & Up</span>
               </span>
               <ng-template #string>{{tag}}</ng-template>
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>

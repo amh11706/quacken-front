@@ -16,6 +16,7 @@ interface MapOption {
   tags: string[],
   ratingAverage: number;
   ratingCount: number;
+  data?: number[][];
 }
 
 @Component({
@@ -56,23 +57,37 @@ export class MapListComponent implements OnInit {
 
   async ngOnInit() {
     this.servermapList = await this.ws.request(OutCmd.CgMapList);
-    // this.servermapList.unshift({ // generated map card
-    //   id: 0,
-    //   description: "",
-    //   name: "Generated",
-    //   released: false,
-    //   userId: 0,
-    //   username: "",
-    // });
+    this.servermapList.unshift({
+      id: 0,
+      description: "",
+      name: "Generated",
+      released: false,
+      userId: 0,
+      username: "",
+      tags: [""],
+      ratingAverage: 0,
+      ratingCount: 0,
+      data: this.createEmptyMap(36, 20),
+    });
     this.servermapList.forEach((map)=> {
       for (let tag of map.tags){
         const search = new RegExp(tag, 'i')
-        if (!this.tagList.find(a =>search.test(a))) this.tagList.push(tag);
+        if ((!this.tagList.find(a =>search.test(a))) && tag !== "") this.tagList.push(tag);
       }
       const search = new RegExp(map.username, 'i')
       if (!this.userList.find(a =>search.test(a))) this.userList.push(map.username);
     });
+    this.servermapList[0].ratingAverage = 3.7;
     this.maplist.next(this.servermapList);
+  }
+
+  createEmptyMap(height: number, width: number): number[][]{
+    const map = new Array(height);
+
+    for (let i = 0; i < height; i++) {
+      map[i] = new Array(width);
+    }
+    return map;
   }
 
   async selectMap(id: number) {
@@ -93,7 +108,8 @@ export class MapListComponent implements OnInit {
       const search = new RegExp(this.data, 'i');
       const tag = map.tags.some(tag => search.test(tag));
       if (this.selectedFilters.length > 0){
-        const selectedTags = this.selectedFilters.filter(element => map.tags.includes(element) || (element === map.username && search.test(map.name))).length > 0;
+        const selectedTags = this.selectedFilters.filter(element => map.tags.includes(element) || (element === map.username && search.test(map.name) ||  
+                              +element <= map.ratingAverage)).length > 0;
         return search.test(map.name) && selectedTags || search.test(map.username) && selectedTags || tag && selectedTags;
       }
       return search.test(map.name) || search.test(map.username) || tag;
@@ -106,7 +122,6 @@ export class MapListComponent implements OnInit {
     if (index >= 0) {
       this.selectedFilters.splice(index, 1);
     }
-    this.maplist.next(this.servermapList);
     this.filter();
   }
 

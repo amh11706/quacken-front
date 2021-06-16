@@ -3,7 +3,7 @@ q-canvas {
 }
 
 mat-card {
-  width: 80vw;
+  min-width: 90vh;
   max-width: 800px;
   margin: auto;
   margin-top: 10px !important;
@@ -18,7 +18,7 @@ button {
 .flex-container {
   display: grid;
   grid-template-columns: 315px 1fr;
-  grid-template-rows: 1fr 0.5fr 50px;
+  grid-template-rows: 1fr 0.5fr 0.3fr;
 }
 
 .grid-1 {
@@ -70,4 +70,8 @@ button {
 
 mat-card-actions {
   margin-left: 0px !important;
+}
+
+.mat-chip.mat-standard-chip.mat-chip-disabled {
+  opacity: 1;
 }

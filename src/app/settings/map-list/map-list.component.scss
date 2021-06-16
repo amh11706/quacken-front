@@ -6,7 +6,8 @@ button {
 }
 
 #maps {
-  height: calc(100vh - 400px);
+  height: calc(100vh - 485px);
+  min-height: 25vh;
 }
 
 q-map-card {
@@ -26,6 +27,7 @@ q-map-card {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: -10px;
 }
 
 .flex-item .button{
@@ -33,7 +35,6 @@ q-map-card {
 }
 
 .item{
-  margin-top: 10px;
   text-align: center;
 }
 
@@ -44,6 +45,7 @@ q-map-card {
 .star mat-icon {
   color: gold;
   font-size: 16px;
+  align-items: center;
 }
 
 #searchLabel {
@@ -52,4 +54,9 @@ q-map-card {
 
 input {
   min-width: 220px;
+}
+
+.up {
+  position: relative;
+  bottom: 2px;
 }
