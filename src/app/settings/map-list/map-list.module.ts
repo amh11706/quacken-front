@@ -18,7 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
-import { RatingModule } from 'src/app/lobby/rating/rating.module';
+import { RatingModule } from 'src/app/settings/rating/rating.module';
 
 @NgModule({
   declarations: [

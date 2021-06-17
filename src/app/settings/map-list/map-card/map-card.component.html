@@ -17,7 +17,7 @@
     <div class="grid-3">
         <ng-container *ngIf="map.name !== generated">
             <q-rating [isPecentage] = "true"
-                      [average] = "map.ratingAverage"
+                      [rating] = "map.ratingAverage"
                       [count] = "map.ratingCount"></q-rating>
             <div id="subitem">
                 <mat-chip-list>

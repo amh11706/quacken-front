@@ -22,7 +22,7 @@ import { StatEndComponent } from './stat-end/stat-end.component';
 import { ThreedRenderComponent } from './threed-render/threed-render.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { RatingModule } from '../rating/rating.module';
+import { RatingModule } from '../../settings/rating/rating.module';
 
 @NgModule({
   declarations: [

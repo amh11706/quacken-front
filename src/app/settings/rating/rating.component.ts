@@ -9,9 +9,8 @@ export class RatingComponent implements OnInit {
 
   @Output() ratingUpdated = new EventEmitter<number>();
   @Input() rating: number = 0;
-  @Input() isPecentage: boolean = false;
+  @Input() isPecentage: boolean = false; //determines when to use specific template
   @Input() forTags: boolean = false;
-  @Input() average: number = 0;
   @Input() count: number = 0;
   starCount: number = 5;
   default_rating: number = 5;
@@ -28,7 +27,7 @@ export class RatingComponent implements OnInit {
     }
   }
 
-  getStars(rating: number) {
+  getStars(rating: number): string {
     const size = rating / this.default_rating * 100;
     return size + '%';
   }
@@ -39,7 +38,7 @@ export class RatingComponent implements OnInit {
     return false;
   }
 
-  showIcon(index:number) {
+  showIcon(index:number): string {
     if (this.rating >= index + 1) {
       return 'star';
     } else {
