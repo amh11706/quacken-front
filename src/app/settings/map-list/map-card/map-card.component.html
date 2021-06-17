@@ -5,7 +5,7 @@
     <div class="grid-2">
         <mat-card-title id="title">{{map.name}}</mat-card-title>
         <div *ngIf="map.name === generated">
-            Seed: <input>
+            Seed: <input type="text" [(ngModel)]="generatedSeed">
             <button mat-raised-button
              (click)="generate.emit(0)">Randomize</button>
         </div>

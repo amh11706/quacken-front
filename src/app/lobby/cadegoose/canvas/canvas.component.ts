@@ -28,7 +28,7 @@ export class CanvasComponent {
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
   @Input() safeZone = true;
-  @Input() set map(map: number[][]) {this.fillMap(map, []); }
+  @Input() set map(map: number[][]) { console.log("here"); this.fillMap(map, []); }
 
   private canvas?: CanvasRenderingContext2D | null;
   private flags: { x: number, y: number, t: number, points: number, cs: number[] }[] = [];

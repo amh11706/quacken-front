@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { OutCmd } from 'src/app/ws-messages';
+import { InCmd, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { SettingsService } from '../settings.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -27,9 +27,13 @@ interface MapOption {
 
 export class MapListComponent implements OnInit {
   data: string = '';
+  generatedSeed: string = '';
+  generatedMap: number[][] = [];
+  selectedMap?: any;
   servermapList: MapOption[] = [];
+  mapHeight: number = 36;
+  mapWidth: number = 20;
   maplist = new ReplaySubject<MapOption[]>(1);
-
   selectedFilters: string[] = [];
   visible: boolean = true;
   selectable: boolean = true;
@@ -45,18 +49,22 @@ export class MapListComponent implements OnInit {
 
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
-  openFilter() {
-    this.bottomSheet.open(MapFilterComponent, {
-      data: {
-        tagList: this.tagList,
-        userList: this.userList,
-        addTag: this.addTag.bind(this),
-      },
+  async ngOnInit() {
+    this.servermapList = await this.ws.request(OutCmd.CgMapList);
+    this.initGenerated();
+    this.initFilters();
+    this.maplist.next(this.servermapList);
+    this.ws.subscribe(InCmd.LobbyJoin, l => {
+      if (this.selectedMap.value > 1) return
+      if (l.map) {
+        this.setMapB64(l.map);
+        this.servermapList[0].data = this.generatedMap;
+        this.generatedSeed = l.seed;
+      }
     });
   }
 
-  async ngOnInit() {
-    this.servermapList = await this.ws.request(OutCmd.CgMapList);
+  initGenerated() {
     this.servermapList.unshift({
       id: 0,
       description: "",
@@ -67,8 +75,11 @@ export class MapListComponent implements OnInit {
       tags: [""],
       ratingAverage: 0,
       ratingCount: 0,
-      data: this.createEmptyMap(36, 20), // empty map until user generates
+      data: this.initMap(),
     });
+  }
+
+  initFilters(){
     this.servermapList.forEach((map)=> {
       for (let tag of map.tags){
         const search = new RegExp(tag, 'i')
@@ -77,16 +88,39 @@ export class MapListComponent implements OnInit {
       const search = new RegExp(map.username, 'i')
       if (!this.userList.find(a =>search.test(a)) && map.username !== "") this.userList.push(map.username);
     });
-    this.maplist.next(this.servermapList);
   }
 
-  createEmptyMap(height: number, width: number): number[][]{
-    const map = new Array(height);
+  openFilterWindow() {
+    this.bottomSheet.open(MapFilterComponent, {
+      data: {
+        tagList: this.tagList,
+        userList: this.userList,
+        addTag: this.addTag.bind(this),
+      },
+    });
+  }
 
-    for (let i = 0; i < height; i++) {
-      map[i] = new Array(width);
+  initMap() {
+    for (let y = 0; y < this.mapHeight; y++) {
+      const row = [];
+      for (let x = 0; x < this.mapWidth; x++) {
+        row.push(0);
+      }
+      this.generatedMap.push(row);
     }
-    return map;
+    return this.generatedMap;
+  }
+
+  setMapB64(map: string) {
+    if (!this.generatedMap.length) this.initMap();
+    const bString = atob(map);
+    let i = 0;
+    for (let y = 0; y < this.mapHeight; y++) {
+      for (let x = 0; x < this.mapWidth; x++) {
+        this.generatedMap[y][x] = bString.charCodeAt(i);
+        i++;
+      }
+    }
   }
 
   async selectMap(id: number) {
@@ -99,6 +133,7 @@ export class MapListComponent implements OnInit {
       group: this.setting.group,
       data: id < 0 ? maps[rand].name : "Generated",
     });
+    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name);
   }
 
   filter() {
