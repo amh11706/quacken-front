@@ -42,7 +42,7 @@ q-map-card {
   margin: 5px !important;
 }
 
-.star mat-icon {
+.star {
   color: gold;
   font-size: 16px;
   align-items: center;
@@ -58,5 +58,7 @@ input {
 
 .up {
   position: relative;
-  bottom: 2px;
+  bottom: 4px;
+  left: 8px;
+  font-size: 10px;
 }

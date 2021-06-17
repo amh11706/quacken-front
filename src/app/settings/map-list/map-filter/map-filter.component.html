@@ -10,7 +10,8 @@
             <mat-chip #chipList *ngFor="let rating of [4,3,2,1]" 
                 [removable]="false"
                 (click)="onClick(rating.toString())">
-                <div *ngFor="let i of [].constructor(rating)"><mat-icon inline="true">star</mat-icon></div>& Up
+                <q-rating [rating]="rating"
+                          [forTags]="true"></q-rating>
             </mat-chip>
         </mat-chip-list>
         <mat-divider></mat-divider>

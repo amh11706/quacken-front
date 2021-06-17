@@ -1,14 +1,38 @@
-<div class="map-rating">
-    <div class="title">
-        Rate the current map:
+<div *ngIf="isPecentage else standard">
+    <div class="background">
+        <span class="stars">
+            <span class="star-i" [ngStyle]="{ 'width': getStars(average || 0) }"></span>
+        </span>
+        <span class="percent-rating">{{average || 0}} ({{count || 0}})</span>
     </div>
-    <button class="star" 
-            mat-icon-button
-            *ngFor="let ratingId of ratingArr;index as i" 
-            [id]="'star_'+i" (click)="onClick(i+1)" 
-            [matTooltip]="ratingId+1 + ' star'" matTooltipPosition="above">
-        <mat-icon>
-          {{showIcon(i)}}
-        </mat-icon>
-    </button>
 </div>
+
+<ng-template #standard>
+    <ng-container *ngIf="!forTags else tag">
+        <div class="map-rating">
+            <div class="title">
+                Rate the current map:
+            </div>
+            <button class="star" 
+                    mat-icon-button
+                    *ngFor="let ratingId of ratingArr;index as i" 
+                    [id]="'star_'+i" (click)="onClick(i+1)" 
+                    [matTooltip]="ratingId+1 + ' star'" matTooltipPosition="above">
+                <mat-icon>
+                  {{showIcon(i)}}
+                </mat-icon>
+            </button>
+        </div>
+    </ng-container>
+</ng-template>
+
+<ng-template #tag>
+    <span *ngFor="let ratingId of ratingArr;index as i" >
+        <span class="star">
+            <mat-icon>
+                {{showIcon(i)}}
+            </mat-icon>
+        </span>
+    </span>
+    <span class="description">&Up</span>
+</ng-template>

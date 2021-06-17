@@ -1,5 +1,15 @@
-.star {
-    color:yellow;
+.star mat-icon{
+    color:#DBC900;
+    font-size:16px;
+    display: inline-flex;
+    align-items: center;
+    margin-right: -7px;
+}
+
+.description {
+    position: relative;
+    bottom: 2px;
+    margin-left: 2px;
 }
 
 .map-rating {
@@ -10,4 +20,33 @@
 .title {
     font-size: 20px;
     font-weight: bold;
+}
+
+// percentage based css
+span.stars, span.stars span.star-i {
+    display: block;
+    background: url('/assets/images/stars.png') 0 -16px repeat-x;
+    width: 80px;
+    height: 16px;
+}
+
+span.stars span.star-i {
+    background-position: 0 0;
+}
+
+.percent-rating {
+    position: relative;
+    top: -15px;
+    left: 95px;
+    color: #ffc107;
+}
+
+.background {
+    display: inline-block;
+    background-color: grey;
+    height: 20px;
+    border-radius: 16px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 18px;
 }

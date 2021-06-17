@@ -12,6 +12,7 @@
   <span id="searchLabel">Search Map: </span>
   <input type="text" 
           placeholder="search by map name, user or tags..."
+          (keyup.enter) = "filter()"
           [(ngModel)]="data">
   <button mat-raised-button (click)="filter()">Search</button>  
 </div>   
@@ -21,10 +22,10 @@
               [selectable]="selectable"
               [removable]="removable"
               (removed)="removeTag(tag)">
-              <span class="star" *ngIf="[4,3,2,1].includes(+tag) else string">
-                <span *ngFor="let i of [].constructor(+tag)"><mat-icon [inline]="true">star</mat-icon></span> 
-                <span class="up"> & Up</span>
-              </span>
+              <ng-container *ngIf="+tag else string">
+                <q-rating [rating]="+tag"
+                          [forTags]="true"></q-rating>
+              </ng-container>
               <ng-template #string>{{tag}}</ng-template>
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
     </mat-chip>

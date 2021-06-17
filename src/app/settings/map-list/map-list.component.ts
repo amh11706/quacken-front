@@ -75,7 +75,7 @@ export class MapListComponent implements OnInit {
         if ((!this.tagList.find(a =>search.test(a))) && tag !== "") this.tagList.push(tag);
       }
       const search = new RegExp(map.username, 'i')
-      if (!this.userList.find(a =>search.test(a))) this.userList.push(map.username);
+      if (!this.userList.find(a =>search.test(a)) && map.username !== "") this.userList.push(map.username);
     });
     this.maplist.next(this.servermapList);
   }

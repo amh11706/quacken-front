@@ -14,15 +14,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { StarRatingComponent } from './star-rating/star-rating.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
+import { RatingModule } from 'src/app/lobby/rating/rating.module';
 
 @NgModule({
   declarations: [
-    MapListComponent, MapCardComponent, StarRatingComponent, MapFilterComponent,
+    MapListComponent, MapCardComponent, MapFilterComponent,
   ],
   imports: [
     CommonModule,
@@ -42,6 +42,7 @@ import { MatListModule } from '@angular/material/list';
     SettingsModule,
     CanvasModule,
     ScrollingModule,
+    RatingModule,
   ],
   exports: [MapListComponent]
 })

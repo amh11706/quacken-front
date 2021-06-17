@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'q-rating',
@@ -7,19 +7,32 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class RatingComponent implements OnInit {
 
-  @Output() private ratingUpdated = new EventEmitter<number>();
-  rating: number = 0;
+  @Output() ratingUpdated = new EventEmitter<number>();
+  @Input() rating: number = 0;
+  @Input() isPecentage: boolean = false;
+  @Input() forTags: boolean = false;
+  @Input() average: number = 0;
+  @Input() count: number = 0;
   starCount: number = 5;
+  default_rating: number = 5;
   ratingArr: number[] = [];
 
   constructor() {
   }
 
   ngOnInit() {
-    for (let index = 0; index < this.starCount; index++) {
-      this.ratingArr.push(index);
+    if(!this.isPecentage){
+      for (let index = 0; index < this.starCount; index++) {
+        this.ratingArr.push(index);
+      }
     }
   }
+
+  getStars(rating: number) {
+    const size = rating / this.default_rating * 100;
+    return size + '%';
+  }
+
   onClick(rating:number) {
     this.rating = rating;
     this.ratingUpdated.emit(rating);
