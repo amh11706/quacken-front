@@ -11,6 +11,7 @@ export class StatEndComponent implements OnChanges {
   Number = Number;
   @Input() stats?: Record<number, StatRow>;
   @Output() closeStats = new EventEmitter<void>();
+  mapRating: number = 0;
   scores: StatRow[] = [];
   myScore?: StatRow;
   pointValues = [50, 25, 0, 10, 0, 0, 10, 20];
@@ -45,6 +46,11 @@ export class StatEndComponent implements OnChanges {
       const s = row.stats;
       if (s[Stat.ShotsFired]) s[Stat.ShotsHit] += ` (${Math.round(+s[Stat.ShotsHit] / +s[Stat.ShotsFired] * 100)}%)`;
     }
+  }
+
+  close() {
+    //do something with this.mapRating
+    this.closeStats.emit()
   }
 
 }

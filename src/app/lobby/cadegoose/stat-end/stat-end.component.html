@@ -1,3 +1,5 @@
+<q-rating (ratingUpdated)="mapRating=$event"></q-rating>
+
 <h2 class="title">Round Summary</h2>
 
 <div id="statFrame">
@@ -34,5 +36,5 @@
 <div id="buttons">
     <button mat-raised-button
             id="ready"
-            (click)="closeStats.emit()">Continue</button>
+            (click)="close()">Continue</button>
 </div>
