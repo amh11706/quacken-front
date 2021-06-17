@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InCmd, OutCmd } from 'src/app/ws-messages';
 
 import { WsService } from 'src/app/ws.service';
 import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
+import { TagsComponent } from '../tags/tags.component';
 
 @Component({
   selector: 'q-settings',
@@ -11,6 +12,7 @@ import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  @ViewChild(TagsComponent) tags!: TagsComponent;
   @Input() map: MapEditor = {
     selected: 50,
     selectedTile: {
@@ -21,6 +23,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       name: '',
       group: 'tile_sets',
       data: [],
+      tags: [],
     },
     settingsOpen: true,
   };
@@ -100,6 +103,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       default:
     }
     if (unsaved) this.error = 'Unsaved changes! They will be discarded if you select a different map without saving.';
+    //this.tags.addAll(this.shown.tags);
   }
 
   ngOnDestroy() {
@@ -108,6 +112,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   private gotList(list: { [key: string]: DBTile[] }) {
     this.mapData = list;
+    console.log(list);
     const tile = this.shown;
     this.options = list[tile?.group ?? 'maps'];
     if (tile && this.options) for (const o of this.options) {
@@ -134,7 +139,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       else tiles[t.type].push(t);
     }
     this.map.selectedTile = tileSet[0] || {
-      id: null, name: '', undos: [], redos: [],
+      id: null, name: '', undos: [], redos: [], tags: [],
     };
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
@@ -151,7 +156,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.structureSet = this.shown || this.map.selectedTile;
     this.map.structureSet.data = [[]];
     this.map.selectedTile = structureSet[0] || {
-      id: null, name: '', undos: [], redos: [],
+      id: null, name: '', undos: [], redos: [], tags: []
     };
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
@@ -168,7 +173,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.tmapSet = this.shown || this.map.selectedTile;
     this.map.tmapSet.data = [[]];
     this.map.selectedTile = tmaps[0] || {
-      id: null, name: '', undos: [], redos: [],
+      id: null, name: '', undos: [], redos: [], tags: []
     };
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
@@ -269,11 +274,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     delete this.map.tmaps;
     const tile = this.shown || this.map.selectedTile;
     tile.unsaved = false;
-
+    
     const selected = this.options.find(option => option.id === +this.selected) || {
-      id: null, name: '', undos: [], redos: [],
+      id: null, name: '', undos: [], redos: [], tags: []
     };
     Object.assign(tile, selected);
+    this.tags.addAll(tile.tags);
   }
 
   updateOptions() {
@@ -311,6 +317,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   save(tile = this.shown || this.map.selectedTile) {
     this.success = '';
     this.error = tile.name ? '' : 'Name is required.';
+    tile.tags = this.tags.tags || [];
     if (this.error) return;
 
     if (this.selected === 'new') {
@@ -350,10 +357,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         break;
       default:
     }
-  }
-
-  import(files: FileList) {
-    console.log(files.item(0));
   }
 
   async edit() {

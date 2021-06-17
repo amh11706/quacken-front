@@ -34,6 +34,7 @@ export interface DBTile {
   activeGroup?: number;
   settings?: any;
   error?: string;
+  tags: string[];
 }
 
 export interface StructureData {
@@ -80,6 +81,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
       name: '',
       group: 'tile_sets',
       data: [],
+      tags: [],
     },
     settingsOpen: true,
   };

@@ -53,7 +53,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.map.tiles[msg.type] = this.map.tiles[msg.type].filter((tile: DBTile) => {
       return tile.id !== msg.id;
     });
-    this.map.selectedTile = { id: 0, group: 'maps', type: 0, name: '', undos: [], redos: [] };
+    this.map.selectedTile = { id: 0, group: 'maps', type: 0, name: '', undos: [], redos: [], tags: []};
   }
 
   select(tile: DBTile) {
@@ -68,7 +68,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     if (!this.map) return;
     this.map.selectedTile = {
       id: 0, name: '', group: 'maps',
-      undos: [], redos: [],
+      undos: [], redos: [], tags: [],
       type: this.map.selectedTile.type || 0,
       structure_set: this.map.structureSet?.id,
       tile_set: this.map.tileSet?.id,

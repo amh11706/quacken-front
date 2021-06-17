@@ -3,6 +3,7 @@
   <div id="settings"
        class="container noselect">
     <h2>Editor Settings</h2>
+  <div class="settings-container">
     <ng-container *ngIf="!map?.tileSettings">
       <mat-form-field class="setting">
         <mat-label>Type</mat-label>
@@ -72,6 +73,9 @@
              (change)="shown.unsaved = true">
     </mat-form-field>
 
+    <q-tags (chipChange) = "shown.unsaved=$event"
+    (change)="shown.unsaved = true"></q-tags>
+    </div>
     <div class="setting center">
       <button mat-raised-button
           [disabled]="pending || (!error && !shown.unsaved) || !shown.name"

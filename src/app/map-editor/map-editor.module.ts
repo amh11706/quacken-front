@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -26,6 +26,9 @@ import { EntityEditorComponent } from './entity-editor/entity-editor.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { WinConditionsComponent } from './entity-editor/win-conditions/win-conditions.component';
 import { FileImportModule } from './file-import/file-import.module';
+import { TagsComponent } from './tags/tags.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,7 @@ import { FileImportModule } from './file-import/file-import.module';
     TmapSetComponent,
     EntityEditorComponent,
     WinConditionsComponent,
+    TagsComponent,
   ],
   imports: [
     CommonModule,
@@ -54,9 +58,12 @@ import { FileImportModule } from './file-import/file-import.module';
     MatSelectModule,
     MatFormFieldModule,
     MatExpansionModule,
+    MatAutocompleteModule,
+    MatChipsModule,
     TwodRenderModule,
     FileImportModule,
   ],
+  providers:[TitleCasePipe],
   exports: [MapEditorComponent]
 })
 export class MapEditorModule { }
