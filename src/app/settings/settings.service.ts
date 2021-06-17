@@ -38,7 +38,7 @@ export class SettingsService {
   constructor(private ws: WsService) {
     ws.subscribe(InCmd.SettingSet, (s: Setting) => {
       const group = this.settings.get(s.group);
-      if (group) group[s.name] = { value: s.value };
+      if (group && group[s.name]) group[s.name].value = s.value;
     });
 
     ws.connected$.subscribe(v => {
