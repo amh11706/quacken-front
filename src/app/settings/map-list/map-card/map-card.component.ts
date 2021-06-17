@@ -9,18 +9,13 @@ import { SettingsService } from '../../settings.service';
 export class MapCardComponent {
   @Input() map: any;
   @Input() setting: any;
-  @Output() generate: EventEmitter<number> = new EventEmitter();
   @Input() generatedSeed: string = '';
+  @Output() generate: EventEmitter<number> = new EventEmitter();
+  @Output() selectedMap: EventEmitter<number> = new EventEmitter();
   generated: string = 'Generated';
   constructor(public ss : SettingsService) { }
 
-  selectMap(id:number, name: any){
-    this.ss.save({
-      id: this.setting.id,
-      name: this.setting.name,
-      value: id,
-      group: this.setting.group,
-      data: name,
-    });
+  selectMap(id: number){
+    this.selectedMap.emit(id);
   }
 }
