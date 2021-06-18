@@ -6,7 +6,7 @@ button {
 }
 
 #maps {
-  height: calc(100vh - 462px);
+  height: calc(100vh - 435px);
   min-height: 25vh;
 }
 
@@ -27,7 +27,7 @@ q-map-card {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: -10px;
+  margin-top: 1px;
 }
 
 .flex-item .button{

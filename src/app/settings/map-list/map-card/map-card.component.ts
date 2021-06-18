@@ -24,7 +24,6 @@ export interface MapOption {
 export class MapCardComponent {
   @Input() map?: MapOption;
   @Input() setting?: typeof Settings['cadeMap'];
-  @Output() generate = new EventEmitter<number>();
   @Output() selectedMap = new EventEmitter<number>();
   generated = 'Generated';
   constructor(public ss : SettingsService) { }
