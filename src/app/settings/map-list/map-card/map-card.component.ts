@@ -10,7 +10,6 @@ export class MapCardComponent {
   @Input() map: any;
   @Input() setting: any;
   @Input() generatedSeed: string = '';
-  @Output() generate: EventEmitter<number> = new EventEmitter();
   @Output() selectedMap: EventEmitter<number> = new EventEmitter();
   generated: string = 'Generated';
   constructor(public ss : SettingsService) { }

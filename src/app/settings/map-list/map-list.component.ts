@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { InCmd, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
