@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
+import { Component, ViewChild, ElementRef, Input, ChangeDetectorRef } from '@angular/core';
+import { SettingsService } from 'src/app/settings/settings.service';
 import { WsService } from 'src/app/ws.service';
-import { MapComponent } from '../../../map-editor/map/map.component';
-import { MapEditor } from 'src/app/map-editor/map-editor.component';
 import { JsonSprite, Sprite } from '../twod-render/sprite';
 import { BigRockData } from '../twod-render/objects/big_rock';
 import { SmallRockData } from '../twod-render/objects/small_rock';
@@ -40,12 +37,6 @@ export class CanvasComponent {
     [200, 0], [200, 69], [200, 138],
   ]);
 
-  constructor(
-    private ss: SettingsService,
-    private ws: WsService,
-    private cd: ChangeDetectorRef,
-  ) { }
-
   getHeight() {
     return (this.mapHeight + this.mapWidth) * 24;
   }
@@ -77,12 +68,12 @@ export class CanvasComponent {
     await Promise.all([water.prom, sz.prom]);
     const ctx = this.canvas;
     if (wasLoaded) {
-      ctx.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
     } else {
       ctx.scale(0.2, 0.2);
       ctx.translate(-150, 400);
       // ctx.translate(0, this.mapWidth * 24 - 24);
     }
+    ctx.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
     this.flags = [];
 
     const tiles: { x: number, y: number, tile: number }[] = [];

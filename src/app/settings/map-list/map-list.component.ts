@@ -1,23 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { InCmd, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { SettingsService } from '../settings.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MapFilterComponent } from './map-filter/map-filter.component';
-
-interface MapOption {
-  id: number
-  description: string,
-  name: string,
-  released: boolean
-  userId: number
-  username: string,
-  tags: string[],
-  ratingAverage: number;
-  ratingCount: number;
-  data?: number[][];
-}
+import { Settings } from '../setting/settings';
+import { MapOption } from './map-card/map-card.component';
 
 @Component({
   selector: 'q-map-list',
@@ -28,7 +17,6 @@ interface MapOption {
 export class MapListComponent implements OnInit {
   data: string = '';
   generatedSeed: string = '';
-  generatedMap: number[][] = [];
   selectedMap?: any;
   servermapList: MapOption[] = [];
   mapHeight: number = 36;
@@ -38,14 +26,15 @@ export class MapListComponent implements OnInit {
   visible: boolean = true;
   selectable: boolean = true;
   removable: boolean = true;
-  sortList: string[] = ["Ascending Avg. Rating","Descending Avg. Rating", "Ascending User", 
-                        "Descending User", "Ascending Map Name", "Descending Map Name"];
+  sortList: string[] = [
+    "Ascending Avg. Rating", "Descending Avg. Rating",
+    "Ascending User", "Descending User",
+    "Ascending Map Name", "Descending Map Name",
+  ];
   selectedSortOption: string = this.sortList[0];
   tagList: string[] = [];
   userList: string[] = [];
-  setting = {
-    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList
-  }
+  setting = Settings['cadeMap'];
 
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
@@ -55,12 +44,10 @@ export class MapListComponent implements OnInit {
     this.initFilters();
     this.maplist.next(this.servermapList);
     this.ws.subscribe(InCmd.LobbyJoin, l => {
-      if (this.selectedMap.value > 1) return
-      if (l.map) {
-        this.setMapB64(l.map);
-        this.servermapList[0].data = this.generatedMap;
-        this.generatedSeed = l.seed;
-      }
+      if (this.selectedMap.value > 1 || !l.map) return
+      const generatedMap = this.servermapList[0];
+      generatedMap.data = this.b64ToArray(l.map);
+      generatedMap.description = l.seed;
     });
   }
 
@@ -79,14 +66,14 @@ export class MapListComponent implements OnInit {
     });
   }
 
-  initFilters(){
-    this.servermapList.forEach((map)=> {
-      for (let tag of map.tags){
+  initFilters() {
+    this.servermapList.forEach((map) => {
+      for (let tag of map.tags) {
         const search = new RegExp(tag, 'i')
-        if ((!this.tagList.find(a =>search.test(a))) && tag !== "") this.tagList.push(tag);
+        if ((!this.tagList.find(a => search.test(a))) && tag !== "") this.tagList.push(tag);
       }
       const search = new RegExp(map.username, 'i')
-      if (!this.userList.find(a =>search.test(a)) && map.username !== "") this.userList.push(map.username);
+      if (!this.userList.find(a => search.test(a)) && map.username !== "") this.userList.push(map.username);
     });
   }
 
@@ -101,26 +88,28 @@ export class MapListComponent implements OnInit {
   }
 
   initMap() {
+    const map = [];
     for (let y = 0; y < this.mapHeight; y++) {
       const row = [];
       for (let x = 0; x < this.mapWidth; x++) {
         row.push(0);
       }
-      this.generatedMap.push(row);
+      map.push(row);
     }
-    return this.generatedMap;
+    return map;
   }
 
-  setMapB64(map: string) {
-    if (!this.generatedMap.length) this.initMap();
+  b64ToArray(map: string): number[][] {
+    const data = this.initMap();
     const bString = atob(map);
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
-        this.generatedMap[y][x] = bString.charCodeAt(i);
+        data[y][x] = bString.charCodeAt(i);
         i++;
       }
     }
+    return data;
   }
 
   async selectMap(id: number) {
@@ -141,9 +130,9 @@ export class MapListComponent implements OnInit {
     this.maplist.next(this.servermapList.filter(map => {
       const search = new RegExp(this.data, 'i');
       const tag = map.tags.some(tag => search.test(tag));
-      if (this.selectedFilters.length > 0){
-        const selectedTags = this.selectedFilters.filter(element => map.tags.includes(element) || (element === map.username && search.test(map.name) ||  
-                              +element <= map.ratingAverage)).length > 0;
+      if (this.selectedFilters.length > 0) {
+        const selectedTags = this.selectedFilters.filter(element => map.tags.includes(element) || (element === map.username && search.test(map.name) ||
+          +element <= map.ratingAverage)).length > 0;
         return search.test(map.name) && selectedTags || search.test(map.username) && selectedTags || tag && selectedTags;
       }
       return search.test(map.name) || search.test(map.username) || tag;
@@ -161,21 +150,21 @@ export class MapListComponent implements OnInit {
 
   addTag(tag: string): void {
     const searchTags = new RegExp(tag, 'i');
-    if (this.selectedFilters.find(a =>searchTags.test(a))) return;
+    if (this.selectedFilters.find(a => searchTags.test(a))) return;
     this.selectedFilters.push(tag);
     this.filter();
   }
 
-  sort(value: string){
-    switch(value){
-      case this.sortList[0]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.ratingAverage > n2.ratingAverage ? 1 : -1)); break;
-      case this.sortList[1]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.ratingAverage > n2.ratingAverage ? -1 : 1)); break;
-      case this.sortList[2]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.username.toLowerCase() > n2.username.toLowerCase() ? 1 : -1)); break;
-      case this.sortList[3]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.username.toLowerCase() > n2.username.toLowerCase() ? -1 : 1)); break;
-      case this.sortList[4]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.name.toLowerCase() > n2.name.toLowerCase() ? 1 : -1)); break;
-      case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1,n2) => n1.name.toLowerCase() > n2.name.toLowerCase() ? -1 : 1)); break;
+  sort(value: string) {
+    switch (value) {
+      case this.sortList[0]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.ratingAverage > n2.ratingAverage ? 1 : -1)); break;
+      case this.sortList[1]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.ratingAverage > n2.ratingAverage ? -1 : 1)); break;
+      case this.sortList[2]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.username.toLowerCase() > n2.username.toLowerCase() ? 1 : -1)); break;
+      case this.sortList[3]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.username.toLowerCase() > n2.username.toLowerCase() ? -1 : 1)); break;
+      case this.sortList[4]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.name.toLowerCase() > n2.name.toLowerCase() ? 1 : -1)); break;
+      case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.name.toLowerCase() > n2.name.toLowerCase() ? -1 : 1)); break;
       default: this.maplist.next(this.servermapList);
     }
   }
-  
+
 }

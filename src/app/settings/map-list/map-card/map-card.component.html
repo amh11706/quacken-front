@@ -1,47 +1,50 @@
-<mat-card class="flex-container">
-    <div class="grid-1">
-        <q-canvas [map]="map.data"></q-canvas>
+<mat-card *ngIf="map && map.data"
+          class="flex-container">
+  <div class="grid-1">
+    <q-canvas [map]="map.data"></q-canvas>
+  </div>
+  <ng-container *ngIf="map.id > 1 else generatedTemp">
+    <div class="grid-2">
+      <mat-card-title id="title">{{map.name}}</mat-card-title>
+      <mat-card-subtitle id="subtitle">
+        Designed by: {{map.username}}
+      </mat-card-subtitle>
+      <mat-card-content id="description">
+        Description:<p>{{map.description || "N/A"}}</p>
+      </mat-card-content>
     </div>
-    <ng-container *ngIf="map.name !== generated else generatedTemp">
-        <div class="grid-2">
-            <mat-card-title id="title">{{map.name}}</mat-card-title>
-            <mat-card-subtitle id="subtitle">
-                Designed by: {{map.username}}
-            </mat-card-subtitle>
-            <mat-card-content id="description">
-                Description:<p>{{map.description || "N/A"}}</p>
-            </mat-card-content>
-        </div>
-        <div class="grid-3">
-            <q-rating [isPecentage] = "true"
-                        [rating] = "map.ratingAverage"
-                        [count] = "map.ratingCount"></q-rating>
-            <div id="subitem">
-                <mat-chip-list>
-                    <mat-chip #chipList 
-                                *ngFor="let option of map.tags" 
-                                [disabled]="true"
-                                [removable]="false">{{option}}</mat-chip>
-                </mat-chip-list>
-            </div>
-        </div>
-        <mat-card-actions class="grid-4 action">
-            <button mat-raised-button
-                    color="accent"
-                    (click)="selectMap(map.id)">Select</button>
-        </mat-card-actions>
-    </ng-container>
+    <div class="grid-3">
+      <q-rating [isPecentage]="true"
+                [rating]="map.ratingAverage"
+                [count]="map.ratingCount"></q-rating>
+      <div id="subitem">
+        <mat-chip-list>
+          <mat-chip #chipList
+                    *ngFor="let option of map.tags"
+                    [disabled]="true"
+                    [removable]="false">{{option}}</mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+    <mat-card-actions class="grid-4 action">
+      <button mat-raised-button
+              color="accent"
+              (click)="selectMap(map.id)">Select</button>
+    </mat-card-actions>
+  </ng-container>
 </mat-card>
 
 <ng-template #generatedTemp>
-    <div class="grid-2">
-        <mat-card-title id="title">{{map.name}}</mat-card-title>
-        <div>
-            Seed: <input type="text" [(ngModel)]="generatedSeed">
-        </div>
+  <div class="grid-2"
+       *ngIf="map">
+    <mat-card-title id="title">{{generated}}</mat-card-title>
+    <div>
+      Seed: <input type="text"
+             [(ngModel)]="map.description">
     </div>
-    <mat-card-actions class="grid-4 action">
-        <button mat-raised-button
-                (click)="generate.emit(0)">Randomize</button>
-    </mat-card-actions>
+  </div>
+  <mat-card-actions class="grid-4 action">
+    <button mat-raised-button
+            (click)="generate.emit(0)">Randomize</button>
+  </mat-card-actions>
 </ng-template>

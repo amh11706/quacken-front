@@ -1,5 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SettingsService } from '../../settings.service';
+import { Settings } from '../../setting/settings';
+import { DBTile } from 'src/app/map-editor/map-editor.component';
+
+export interface MapOption {
+  id: number
+  description: string,
+  name: string,
+  released: boolean
+  userId: number
+  username: string,
+  tags: string[],
+  ratingAverage: number;
+  ratingCount: number;
+  data?: number[][];
+}
 
 @Component({
   selector: 'q-map-card',
@@ -7,12 +22,11 @@ import { SettingsService } from '../../settings.service';
   styleUrls: ['./map-card.component.scss']
 })
 export class MapCardComponent {
-  @Input() map: any;
-  @Input() setting: any;
-  @Input() generatedSeed: string = '';
-  @Output() generate: EventEmitter<number> = new EventEmitter();
-  @Output() selectedMap: EventEmitter<number> = new EventEmitter();
-  generated: string = 'Generated';
+  @Input() map?: MapOption;
+  @Input() setting?: typeof Settings['cadeMap'];
+  @Output() generate = new EventEmitter<number>();
+  @Output() selectedMap = new EventEmitter<number>();
+  generated = 'Generated';
   constructor(public ss : SettingsService) { }
 
   selectMap(id: number){

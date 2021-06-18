@@ -47,7 +47,6 @@
   <q-map-card *cdkVirtualFor="let m of maplist"
               [map]="m"
               [setting]="setting"
-              [generatedSeed] = "generatedSeed"
               (selectedMap)="selectMap($event)"
               (generate)="selectMap($event)"></q-map-card>
 </cdk-virtual-scroll-viewport>
