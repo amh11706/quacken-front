@@ -1,4 +1,12 @@
-<div class="flex">             
+<div class="flex">
+    <div class="flex-item">
+      <span id="searchLabel">Search Map: </span>
+      <input type="text" 
+              placeholder="search by map name, user or tags..."
+              (keyup.enter) = "filter()"
+              [(ngModel)]="data">
+      <button mat-raised-button (click)="filter()">Search</button>  
+    </div>          
     <button mat-raised-button (click)="openFilterWindow()">Filter</button>
     <mat-form-field style="margin-top: 15px;">
       <mat-label>Sort by:</mat-label>
@@ -8,15 +16,6 @@
       </mat-select>
     </mat-form-field>
 </div>
-
-<div class="flex-item">
-  <span id="searchLabel">Search Map: </span>
-  <input type="text" 
-          placeholder="search by map name, user or tags..."
-          (keyup.enter) = "filter()"
-          [(ngModel)]="data">
-  <button mat-raised-button (click)="filter()">Search</button>  
-</div>   
 
 <div class="item">
   <mat-chip-list>
@@ -47,6 +46,5 @@
   <q-map-card *cdkVirtualFor="let m of maplist"
               [map]="m"
               [setting]="setting"
-              (generate)="selectMap($event)"
               (selectedMap)="selectMap($event)"></q-map-card>
 </cdk-virtual-scroll-viewport>
