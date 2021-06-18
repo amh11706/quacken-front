@@ -1,6 +1,4 @@
-import { Component, ViewChild, ElementRef, Input, ChangeDetectorRef } from '@angular/core';
-import { SettingsService } from 'src/app/settings/settings.service';
-import { WsService } from 'src/app/ws.service';
+import { Component, ViewChild, ElementRef, Input } from '@angular/core';
 import { JsonSprite, Sprite } from '../twod-render/sprite';
 import { BigRockData } from '../twod-render/objects/big_rock';
 import { SmallRockData } from '../twod-render/objects/small_rock';
@@ -19,6 +17,12 @@ const FlagColorOffsets: Record<number, number> = {
   styleUrls: ['./canvas.component.scss'],
 })
 export class CanvasComponent {
+  static readonly water = new Sprite('cell', 64, 48, [[128, 0]]);
+  static readonly sz = new Sprite('safezone', 64, 48, [[128, 0]]);
+  static readonly wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
+  static readonly whirl = new Sprite('whirl', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0]]);
+  static readonly rocks = new JsonSprite(BigRockData);
+  static readonly smallRocks = new JsonSprite(SmallRockData);
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('flagCanvas', { static: true }) flagCanvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('frame') frame?: ElementRef<HTMLElement>;
@@ -29,7 +33,7 @@ export class CanvasComponent {
 
   private canvas?: CanvasRenderingContext2D | null;
   private flags: { x: number, y: number, t: number, points: number, cs: number[] }[] = [];
-  private flag = new Sprite('buoy', 50, 69, [
+  static readonly flag = new Sprite('buoy', 50, 69, [
     [50, 0], [50, 69], [50, 138],
     [100, 0], [100, 69], [100, 138],
     [0, 0], [0, 69], [0, 138],
@@ -47,13 +51,13 @@ export class CanvasComponent {
 
   private async drawFlags() {
     if (!this.canvas || this.flags.length === 0) return;
-    await this.flag.prom;
+    await CanvasComponent.flag.prom;
     for (const f of this.flags) {
       if (f.t === undefined) f.t = 0;
       const offset = FlagColorOffsets[99];
       const x = (f.x + f.y) * 32;
       const y = (-f.x + f.y) * 24;
-      this.flag.draw(this.canvas, f.points + offset, x + 7, y - 33);
+      CanvasComponent.flag.draw(this.canvas, f.points + offset, x + 7, y - 33);
     }
   }
 
@@ -63,9 +67,7 @@ export class CanvasComponent {
       this.canvas = this.canvasElement?.nativeElement.getContext('2d');
     }
     if (!this.canvas) return;
-    const water = new Sprite('cell', 64, 48, [[128, 0]]);
-    const sz = new Sprite('safezone', 64, 48, [[128, 0]]);
-    await Promise.all([water.prom, sz.prom]);
+    await Promise.all([CanvasComponent.water.prom, CanvasComponent.sz.prom]);
     const ctx = this.canvas;
     if (wasLoaded) {
     } else {
@@ -81,8 +83,8 @@ export class CanvasComponent {
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
-        if (this.safeZone && (y > 32 || y < 3)) sz.draw(ctx, 0);
-        else water.draw(ctx, 0);
+        if (this.safeZone && (y > 32 || y < 3)) CanvasComponent.sz.draw(ctx, 0);
+        else CanvasComponent.water.draw(ctx, 0);
         ctx.translate(32, -24);
         const tile = map[y][x];
         if (tile >= 21 && tile <= 23) this.flags.push({ x, y, points: tile - 21, ...flags.shift() });
@@ -93,11 +95,7 @@ export class CanvasComponent {
     }
     ctx.restore();
 
-    const wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
-    const whirl = new Sprite('whirl', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0]]);
-    const rocks = new JsonSprite(BigRockData);
-    const smallRocks = new JsonSprite(SmallRockData);
-    await Promise.all([wind.prom, whirl.prom, rocks.prom, smallRocks.prom]);
+    await Promise.all([CanvasComponent.wind.prom, CanvasComponent.whirl.prom, CanvasComponent.rocks.prom, CanvasComponent.smallRocks.prom]);
 
     tiles.sort((a, b) => {
       if (a.tile >= 20 && b.tile < 20) return 1;
@@ -109,10 +107,10 @@ export class CanvasComponent {
       const tile = t.tile;
       const x = (t.x + t.y) * 32;
       const y = (-t.x + t.y) * 24;
-      if (tile === 51) smallRocks.draw(ctx, Math.floor(Math.random() * 4), x, y);
-      else if (tile === 50) rocks.draw(ctx, Math.floor(Math.random() * 4), x, y);
-      else if (tile > 8) whirl.draw(ctx, (tile - 1) % 4, x, y);
-      else if (tile > 4) wind.draw(ctx, (tile - 1) % 4, x, y);
+      if (tile === 51) CanvasComponent.smallRocks.draw(ctx, Math.floor(Math.random() * 4), x, y);
+      else if (tile === 50) CanvasComponent.rocks.draw(ctx, Math.floor(Math.random() * 4), x, y);
+      else if (tile > 8) CanvasComponent.whirl.draw(ctx, (tile - 1) % 4, x, y);
+      else if (tile > 4) CanvasComponent.wind.draw(ctx, (tile - 1) % 4, x, y);
     }
 
     this.drawFlags();
