@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
+import { Internal, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
-import { SettingsService } from '../settings.service';
+import { SettingPartial, SettingsService } from '../settings.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { Settings } from '../setting/settings';
@@ -17,7 +17,7 @@ import { MapOption } from './map-card/map-card.component';
 export class MapListComponent implements OnInit {
   data: string = '';
   generatedSeed: string = '';
-  selectedMap?: any;
+  selectedMap: SettingPartial = { value: 0 };
   servermapList: MapOption[] = [];
   mapHeight: number = 36;
   mapWidth: number = 20;
@@ -39,16 +39,16 @@ export class MapListComponent implements OnInit {
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
   async ngOnInit() {
-    this.servermapList = await this.ws.request(OutCmd.CgMapList);
-    this.initGenerated();
-    this.initFilters();
-    this.maplist.next(this.servermapList);
-    this.ws.subscribe(InCmd.LobbyJoin, l => {
+    this.ws.subscribe(Internal.Lobby, l => {
       if (this.selectedMap.value > 1 || !l.map) return
       const generatedMap = this.servermapList[0];
       generatedMap.data = this.b64ToArray(l.map);
       generatedMap.description = l.seed;
     });
+    this.servermapList = await this.ws.request(OutCmd.CgMapList);
+    this.initGenerated();
+    this.initFilters();
+    this.maplist.next(this.servermapList);
   }
 
   initGenerated() {

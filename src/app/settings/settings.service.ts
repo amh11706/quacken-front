@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { InCmd, Internal, OutCmd } from '../ws-messages';
+import { InCmd, OutCmd } from '../ws-messages';
 
 import { WsService } from '../ws.service';
 import { Settings } from './setting/settings';
@@ -13,7 +13,7 @@ export interface Setting {
   data?: any;
 }
 
-interface SettingPartial {
+export interface SettingPartial {
   value: number;
   data?: any;
 }
