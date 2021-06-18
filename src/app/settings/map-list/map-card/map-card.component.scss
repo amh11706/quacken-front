@@ -72,3 +72,12 @@ mat-card-actions {
 .mat-chip.mat-standard-chip.mat-chip-disabled {
   opacity: 1;
 }
+
+mat-form-field {
+  width: 100%;
+}
+
+input.seed {
+  text-overflow: ellipsis;
+  width: 100%;
+}

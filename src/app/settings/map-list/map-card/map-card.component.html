@@ -38,10 +38,21 @@
   <div class="grid-2"
        *ngIf="map">
     <mat-card-title id="title">{{generated}}</mat-card-title>
-    <div>
-      Seed: <input type="text"
-             [(ngModel)]="map.description">
-    </div>
+    <mat-label id="seedDescription">Seeds:</mat-label>
+    <input  id="seed"
+            class="seed"
+            type="text"
+            (ngModelChange)="addSeed($event)"
+            [(ngModel)]="map.description">
+  </div>
+  <div class="grid-3">
+    <mat-label>Previous seeds:</mat-label>
+    <mat-form-field>
+      <mat-select (selectionChange)="updateSeed($event.value)">
+        <mat-option *ngFor="let seed of seeds" 
+                    [value]="seed">{{seed}}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <mat-card-actions class="grid-4 action">
     <button mat-raised-button
