@@ -3,6 +3,11 @@ button {
   margin-top: 2px;
   margin-left: 10px;
   background: rgb(199, 33, 33);
+  max-width: 90px;
+}
+
+.filterButton {
+  justify-content: center;
 }
 
 #maps {
@@ -18,7 +23,6 @@ q-map-card {
 .flex {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   flex-wrap: wrap;
 }
 
@@ -28,6 +32,21 @@ q-map-card {
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 1px;
+  flex: 1;
+}
+
+.search {
+  flex: 1 1 auto;
+}
+
+.filter {
+  justify-content: flex-end;
+  padding-right: 5px;
+  margin-top: 5px;
+}
+
+.shrink {
+  flex-shrink:1;
 }
 
 .flex-item .button{
@@ -42,23 +61,11 @@ q-map-card {
   margin: 5px !important;
 }
 
-.star {
-  color: gold;
-  font-size: 16px;
-  align-items: center;
-}
-
 #searchLabel {
   margin-right: 5px;
 }
 
-input {
-  min-width: 220px;
-}
-
-.up {
-  position: relative;
-  bottom: 4px;
-  left: 8px;
-  font-size: 10px;
+mat-tab{
+  height: 100%;
+  min-height: 200px;
 }

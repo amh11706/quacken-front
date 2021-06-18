@@ -1,20 +1,24 @@
 <div class="flex">
-    <div class="flex-item">
+    <span class="flex-item shrink"></span>
+    <div class="flex-item search">
       <span id="searchLabel">Search Map: </span>
       <input type="text" 
               placeholder="search by map name, user or tags..."
               (keyup.enter) = "filter()"
               [(ngModel)]="data">
       <button mat-raised-button (click)="filter()">Search</button>  
+    </div>
+    <div class="flex-item filter">
+      <button mat-raised-button 
+              (click)="openFilterWindow()">Filter</button>
+      <mat-form-field style="margin-top: 15px;">
+        <mat-label>Sort by:</mat-label>
+        <mat-select [(value)]="selectedSortOption"
+                    (selectionChange)="sort($event.value)">
+          <mat-option *ngFor="let option of sortList" [value]="option">{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>          
-    <button mat-raised-button (click)="openFilterWindow()">Filter</button>
-    <mat-form-field style="margin-top: 15px;">
-      <mat-label>Sort by:</mat-label>
-      <mat-select [(value)]="selectedSortOption"
-                  (selectionChange)="sort($event.value)">
-        <mat-option *ngFor="let option of sortList" [value]="option">{{option}}</mat-option>
-      </mat-select>
-    </mat-form-field>
 </div>
 
 <div class="item">
