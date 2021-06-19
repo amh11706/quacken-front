@@ -1,20 +1,22 @@
 <div class="flex">
-    <div class="flex-item">
-      <span id="searchLabel">Search Map: </span>
-      <input type="text" 
-              placeholder="search by map name, user or tags..."
-              (keyup.enter) = "filter()"
-              [(ngModel)]="data">
-      <button mat-raised-button (click)="filter()">Search</button>  
-    </div>          
-    <button mat-raised-button (click)="openFilterWindow()">Filter</button>
-    <mat-form-field style="margin-top: 15px;">
-      <mat-label>Sort by:</mat-label>
-      <mat-select [(value)]="selectedSortOption"
-                  (selectionChange)="sort($event.value)">
-        <mat-option *ngFor="let option of sortList" [value]="option">{{option}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <span id="searchLabel">Search Map: </span>
+  <input type="text"
+         placeholder="1v1"
+         (keyup.enter)="filter()"
+         (blur)="filter()"
+         [(ngModel)]="data">
+  <button mat-raised-button
+          (click)="filter()">Search</button>
+  <button mat-raised-button
+          (click)="openFilterWindow()">Filter</button>
+  <mat-form-field style="margin-top: 15px;">
+    <mat-label>Sort by:</mat-label>
+    <mat-select [(value)]="selectedSortOption"
+                (selectionChange)="sort($event.value)">
+      <mat-option *ngFor="let option of sortList"
+                  [value]="option">{{option}}</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
 <div class="item">
@@ -22,13 +24,14 @@
     <mat-chip *ngFor="let tag of selectedFilters"
               [selectable]="selectable"
               [removable]="removable"
-              (removed)="removeTag(tag)">
-              <ng-container *ngIf="+tag else string">
-                <q-rating [rating]="+tag"
-                          [forTags]="true"></q-rating>
-              </ng-container>
-              <ng-template #string>{{tag}}</ng-template>
-      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              (removed)="toggleTag(tag)">
+      <ng-container *ngIf="+tag else string">
+        <q-rating [rating]="+tag"
+                  [forTags]="true"></q-rating>
+      </ng-container>
+      <ng-template #string>{{tag}}</ng-template>
+      <mat-icon matChipRemove
+                *ngIf="removable">cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>
 </div>

@@ -18,27 +18,19 @@ q-map-card {
 .flex {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-}
-
-.flex-item{
-  display: flex;
-  align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  margin-top: 1px;
 }
 
-.flex-item .button{
+.flex-item .button {
   margin-left: 20px;
 }
 
-.item{
+.item {
   text-align: center;
 }
 
-::ng-deep .mat-chip-list-wrapper{
+::ng-deep .mat-chip-list-wrapper {
   margin: 5px !important;
 }
 

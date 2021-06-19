@@ -15,23 +15,23 @@ import { MapOption } from './map-card/map-card.component';
 })
 
 export class MapListComponent implements OnInit {
-  data: string = '';
-  generatedSeed: string = '';
+  data = '';
+  generatedSeed = '';
   selectedMap: SettingPartial = { value: 0 };
   servermapList: MapOption[] = [];
-  mapHeight: number = 36;
-  mapWidth: number = 20;
+  mapHeight = 36;
+  mapWidth = 20;
   maplist = new ReplaySubject<MapOption[]>(1);
   selectedFilters: string[] = [];
-  visible: boolean = true;
-  selectable: boolean = true;
-  removable: boolean = true;
-  sortList: string[] = [
-    "Ascending Avg. Rating", "Descending Avg. Rating",
-    "Ascending User", "Descending User",
-    "Ascending Map Name", "Descending Map Name",
+  visible = true;
+  selectable = true;
+  removable = true;
+  sortList = [
+    'Ascending Avg. Rating', 'Descending Avg. Rating',
+    'Ascending User', 'Descending User',
+    'Ascending Map Name', 'Descending Map Name',
   ];
-  selectedSortOption: string = this.sortList[0];
+  selectedSortOption = this.sortList[0];
   tagList: string[] = [];
   userList: string[] = [];
   setting = Settings['cadeMap'];
@@ -54,12 +54,12 @@ export class MapListComponent implements OnInit {
   initGenerated() {
     this.servermapList.unshift({
       id: 0,
-      description: "",
-      name: "Generated",
+      description: '',
+      name: 'Generated',
       released: false,
       userId: 0,
-      username: "",
-      tags: [""],
+      username: '',
+      tags: [''],
       ratingAverage: 0,
       ratingCount: 0,
       data: this.initMap(),
@@ -70,10 +70,10 @@ export class MapListComponent implements OnInit {
     this.servermapList.forEach((map) => {
       for (let tag of map.tags) {
         const search = new RegExp(tag, 'i')
-        if ((!this.tagList.find(a => search.test(a))) && tag !== "") this.tagList.push(tag);
+        if ((!this.tagList.find(a => search.test(a))) && tag !== '') this.tagList.push(tag);
       }
       const search = new RegExp(map.username, 'i')
-      if (!this.userList.find(a => search.test(a)) && map.username !== "") this.userList.push(map.username);
+      if (!this.userList.find(a => search.test(a)) && map.username !== '') this.userList.push(map.username);
     });
   }
 
@@ -82,7 +82,7 @@ export class MapListComponent implements OnInit {
       data: {
         tagList: this.tagList,
         userList: this.userList,
-        addTag: this.addTag.bind(this),
+        toggleTag: this.toggleTag.bind(this),
       },
     });
   }
@@ -120,38 +120,33 @@ export class MapListComponent implements OnInit {
       name: this.setting.name,
       value: id < 0 ? maps[rand].id : id,
       group: this.setting.group,
-      data: id < 0 ? maps[rand].name : "Generated",
+      data: id < 0 ? maps[rand].name : 'Generated',
     });
     this.selectedMap = await this.ss.get(this.setting.group, this.setting.name);
   }
 
   filter() {
-    if (this.data === "" || this.data === undefined) this.maplist.next(this.servermapList);
-    this.maplist.next(this.servermapList.filter(map => {
-      const search = new RegExp(this.data, 'i');
-      const tag = map.tags.some(tag => search.test(tag));
-      if (this.selectedFilters.length > 0) {
-        const selectedTags = this.selectedFilters.filter(element => map.tags.includes(element) || (element === map.username && search.test(map.name) ||
-          +element <= map.ratingAverage)).length > 0;
-        return search.test(map.name) && selectedTags || search.test(map.username) && selectedTags || tag && selectedTags;
-      }
-      return search.test(map.name) || search.test(map.username) || tag;
-    }));
+    if (!this.data) this.maplist.next(this.servermapList);
+    const search = new RegExp(this.data, 'i');
+    const filteredMaps = this.servermapList.filter(map => {
+      const textMatched = search.test(map.name) || search.test(map.username) || map.tags.some(search.test);
+      if (!textMatched || this.selectedFilters.length === 0) return textMatched;
+
+      const tagMatched = this.selectedFilters.some(filter => {
+        return filter === map.username || +filter <= map.ratingAverage || map.tags.includes(filter);
+      });
+      return tagMatched;
+    });
+    this.maplist.next(filteredMaps);
   }
 
-  removeTag(tag: string): void {
-    const index = this.selectedFilters.indexOf(tag);
-
-    if (index >= 0) {
-      this.selectedFilters.splice(index, 1);
+  toggleTag(tag: string): void {
+    if (this.selectedFilters.indexOf(tag) !== -1) {
+      this.selectedFilters = this.selectedFilters.filter(el => el !== tag);
+    } else {
+      this.selectedFilters.push(tag);
     }
-    this.filter();
-  }
 
-  addTag(tag: string): void {
-    const searchTags = new RegExp(tag, 'i');
-    if (this.selectedFilters.find(a => searchTags.test(a))) return;
-    this.selectedFilters.push(tag);
     this.filter();
   }
 
