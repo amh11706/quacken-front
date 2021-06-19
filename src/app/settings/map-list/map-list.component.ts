@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Internal, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
@@ -35,12 +35,12 @@ export class MapListComponent implements OnInit {
   tagList: string[] = [];
   userList: string[] = [];
   setting = Settings['cadeMap'];
-
+ 
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
   async ngOnInit() {
     this.ws.subscribe(Internal.Lobby, l => {
-      if (this.selectedMap.value > 1 || !l.map) return
+      if (this.selectedMap.value > 1 || !l.map || !this.servermapList[0]) return
       const generatedMap = this.servermapList[0];
       generatedMap.data = this.b64ToArray(l.map);
       generatedMap.description = l.seed;
@@ -152,12 +152,18 @@ export class MapListComponent implements OnInit {
 
   sort(value: string) {
     switch (value) {
-      case this.sortList[0]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.ratingAverage > n2.ratingAverage ? 1 : -1)); break;
-      case this.sortList[1]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.ratingAverage > n2.ratingAverage ? -1 : 1)); break;
-      case this.sortList[2]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.username.toLowerCase() > n2.username.toLowerCase() ? 1 : -1)); break;
-      case this.sortList[3]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.username.toLowerCase() > n2.username.toLowerCase() ? -1 : 1)); break;
-      case this.sortList[4]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.name.toLowerCase() > n2.name.toLowerCase() ? 1 : -1)); break;
-      case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1, n2) => n1.name.toLowerCase() > n2.name.toLowerCase() ? -1 : 1)); break;
+      case this.sortList[0]: this.maplist.next(this.servermapList.sort((n1, n2) => 
+        n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : (n1.ratingAverage || Number.MIN_VALUE) - (n2.ratingAverage || Number.MIN_VALUE)))); break;
+      case this.sortList[1]: this.maplist.next(this.servermapList.sort((n1, n2) => 
+        n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 :  (n2.ratingAverage || Number.MIN_VALUE) - (n1.ratingAverage || Number.MIN_VALUE)))); break;
+      case this.sortList[2]: this.maplist.next(this.servermapList.sort((n1, n2) => 
+        n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n1.username.toLowerCase().localeCompare(n2.username.toLowerCase())))); break;
+      case this.sortList[3]: this.maplist.next(this.servermapList.sort((n1, n2) => 
+        n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n2.username.toLowerCase().localeCompare(n1.username.toLowerCase())))); break;
+      case this.sortList[4]: this.maplist.next(this.servermapList.sort((n1, n2) => 
+        n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n1.name.toLowerCase().localeCompare(n2.name.toLowerCase())))); break;
+      case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1, n2) => 
+        n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n2.name.toLowerCase().localeCompare(n1.name.toLowerCase())))); break;
       default: this.maplist.next(this.servermapList);
     }
   }
