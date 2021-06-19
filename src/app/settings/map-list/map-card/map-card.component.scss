@@ -3,9 +3,10 @@ q-canvas {
 }
 
 mat-card {
-  min-width: 700px;
   max-width: 800px;
-  margin: 10px auto 0 auto;
+  min-width: 350px;
+  width: 80vw;
+  margin: 15px auto 0 auto;
   background-color: rgb(110, 108, 108);
 }
 
@@ -15,36 +16,40 @@ button {
 }
 
 .flex-container {
-  display: grid;
-  grid-template-columns: 315px 1fr;
-  grid-template-rows: 1fr 0.5fr 0.3fr;
+  display: flex;
+  flex-direction: row;
 }
 
-.grid-1 {
-  grid-column: 1;
-  grid-row: 1 / span 3;
+.flex-item1 {
+  max-width: 315px;
+  min-width: 315px;
 }
 
-.grid-2 {
-  grid-column-start: 2;
-  padding: 8px 0 0 10px
+.flex-item2 {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding-left: 10px;
 }
 
-.grid-3 {
-  grid-row-start: 2;
-  grid-column: 2;
+.flex-subitem1 {
   margin: -12px 0 10px 5px;
 }
 
-.grid-4 {
-  grid-row-start: 3;
-  grid-column: 2;
+.flex-subitem2{
+  width: 100%;
+  min-width: 200px;
+}
+
+.flex-generated {
+  margin: 50px 0 10px 5px;
 }
 
 #title {
   font-weight: bold;
   font-size: 18px;
   color: rgb(199, 33, 33);
+  margin-top: 5px;
 }
 
 #subtitle {
@@ -53,31 +58,41 @@ button {
 
 #description {
   font-style: italic;
+  padding-top: 10px;
 }
 
 #subitem {
   margin-top: 8px;
 }
 
-.action {
-  position: absolute;
-  width: 98%;
-  bottom: 31px;
-}
-
-mat-card-actions {
-  margin-left: 0px !important;
-}
-
 .mat-chip.mat-standard-chip.mat-chip-disabled {
   opacity: 1;
+}
+
+::ng-deep .mat-chip-list-wrapper{
+  margin-left: -14px !important;
 }
 
 mat-form-field {
   width: 100%;
 }
 
+mat-card-actions {
+  margin-left: 0px !important;
+  margin-top: -5px;
+}
+
 input.seed {
   text-overflow: ellipsis;
   width: 100%;
+}
+
+@media screen and (max-width: 800px){
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .flex-item2 {
+    padding-left: 0;
+  }
 }

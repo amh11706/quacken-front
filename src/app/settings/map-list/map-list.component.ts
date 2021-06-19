@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { Internal, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
@@ -35,7 +35,7 @@ export class MapListComponent implements OnInit {
   tagList: string[] = [];
   userList: string[] = [];
   setting = Settings['cadeMap'];
-
+ 
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
   async ngOnInit() {

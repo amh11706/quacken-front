@@ -110,6 +110,7 @@
 #chatframe {
   grid-column-start: 2;
   grid-column-end: 3;
+  align-self: flex-end;
 }
 
 mat-card {
