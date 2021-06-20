@@ -130,7 +130,7 @@ export class MapListComponent implements OnInit {
     if (!this.search) this.maplist.next(this.servermapList);
     const search = new RegExp(this.search, 'i');
     this.filteredMapList = this.servermapList.filter(map => {
-      const textMatched = search.test(map.name) || search.test(map.username) || map.tags.some(search.test);
+      const textMatched = search.test(map.name) || search.test(map.username) || map.tags.some(tag => search.test(tag));
       if (!textMatched || this.selectedFilters.length === 0) return textMatched;
 
       const tagMatched = this.selectedFilters.some(filter => {

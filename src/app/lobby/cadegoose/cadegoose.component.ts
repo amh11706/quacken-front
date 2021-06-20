@@ -40,6 +40,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   mapWidth = 20;
   protected joinMessage = CadeDesc;
   protected statAction = KeyActions.CShowStats;
+  protected showMapChoice = true;
 
   constructor(
     ws: WsService,
@@ -55,7 +56,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngOnInit() {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
-    this.ss.setLobbySettings(ownerSettings);
+    this.ss.setLobbySettings(ownerSettings, this.showMapChoice);
     this.es.setLobby(this.menuComponent, this.lobby);
     this.es.open = true;
 

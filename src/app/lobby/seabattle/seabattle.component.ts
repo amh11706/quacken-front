@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 import { BoatService } from '../cadegoose/boat.service';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
@@ -18,6 +18,7 @@ export class SeabattleComponent extends CadegooseComponent {
   mapWidth = 25;
   protected joinMessage = SbDesc;
   protected statAction = KeyActions.SBShowStats;
+  protected showMapChoice = false;
   moveKeys = {
     0: KeyActions.SBBlank,
     1: KeyActions.SBLeft,

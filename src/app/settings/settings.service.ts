@@ -34,6 +34,7 @@ export class SettingsService {
   tabIndex = 1;
   admin = true;
   lAdminSettings: SettingList = [];
+  showMapChoice = false;
 
   constructor(private ws: WsService) {
     ws.subscribe(InCmd.SettingSet, (s: Setting) => {
@@ -51,10 +52,9 @@ export class SettingsService {
     this.settings.set(group, settings);
   }
 
-  setLobbySettings(adminNames: SettingList) {
-    if (adminNames.length) this.tabIndex = 0;
-    else if (this.lAdminSettings.length && this.tabIndex > 0) this.tabIndex--;
+  setLobbySettings(adminNames: SettingList, showMapChoice = false) {
     this.lAdminSettings = adminNames;
+    this.showMapChoice = showMapChoice;
   }
 
   async getGroup(group: string, update = false): Promise<SettingMap> {
