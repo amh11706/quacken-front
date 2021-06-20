@@ -19,6 +19,8 @@ export class EscMenuComponent {
   InventoryComponent = InventoryComponent;
   SettingsComponent = SettingsComponent;
 
+  lobbyIndex = 0;
+
   constructor(
     public es: EscMenuService,
     public ss: SettingsService,

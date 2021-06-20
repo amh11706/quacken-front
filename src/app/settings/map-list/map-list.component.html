@@ -37,6 +37,7 @@
 
 <div class="item">
   <button mat-raised-button
+          [disabled]="!ss.admin"
           (click)="selectMap(-1)"
           matTooltip="Random User Map">Random</button>
 </div>
@@ -47,6 +48,7 @@
                              [maxBufferPx]="900">
   <q-map-card *cdkVirtualFor="let m of maplist"
               [map]="m"
+              [disabled]="!ss.admin"
               [description]="m.description"
               [class.selected]="m.id === selectedMap.value"
               (selectedMap)="selectMap($event)"></q-map-card>

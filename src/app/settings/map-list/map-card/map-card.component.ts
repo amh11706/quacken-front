@@ -24,6 +24,7 @@ export interface MapOption {
 
 export class MapCardComponent {
   @Input() map?: MapOption;
+  @Input() disabled = false;
   @Input() set description(d: string) {
     if (this.map && this.map?.id > 0) return;
     this.pushSeed(d);

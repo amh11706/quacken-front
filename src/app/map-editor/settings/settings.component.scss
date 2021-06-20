@@ -21,7 +21,7 @@
   min-width: 380px;
   max-width: 640px;
   min-height: 300px;
-  max-height: 450px;
+  max-height: 475px;
   margin-top: 10px;
   padding: 12px;
   color: #ddd;
@@ -72,10 +72,4 @@
     white-space: normal;
     line-height: auto;
   }
-
-.settings-container{
-  overflow-y: auto;
-  min-height: 40vh;
-  max-height: calc(100vh - 345px);
-}
 }

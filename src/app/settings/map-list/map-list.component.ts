@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { Internal, OutCmd } from 'src/app/ws-messages';
 import { WsService } from 'src/app/ws.service';
 import { SettingPartial, SettingsService } from '../settings.service';
@@ -15,8 +15,15 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   styleUrls: ['./map-list.component.scss']
 })
 
-export class MapListComponent implements OnInit {
+export class MapListComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport, { static: true }) mapViewport?: CdkVirtualScrollViewport;
+  @Input() set visible(v: boolean) {
+    if (!v) return;
+    const i = this.filteredMapList.findIndex(m => m.id === this.selectedMap.value);
+    if (i !== -1) setTimeout(() => {
+      this.mapViewport?.scrollToIndex(i);
+    });
+  }
   search = '';
   selectedMap: SettingPartial = { value: 0 };
   private servermapList: MapOption[] = [];
@@ -34,25 +41,27 @@ export class MapListComponent implements OnInit {
   private tagList: string[] = [];
   private userList: string[] = [];
   private setting = Settings['cadeMap'];
+  private subs = new Subscription();
 
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
   async ngOnInit() {
-    this.ws.subscribe(Internal.Lobby, async l => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, async l => {
       if ((await this.ss.get(this.setting.group, this.setting.name)).value > 1 || !l.map || !this.servermapList[0]) return
       const generatedMap = this.servermapList[0];
       generatedMap.data = this.b64ToArray(l.map);
       generatedMap.description = l.seed;
-    });
+    }));
     this.initGenerated();
     this.servermapList.push(...await this.ws.request(OutCmd.CgMapList));
     this.initFilters();
     this.maplist.next(this.servermapList);
 
     this.selectedMap = await this.ss.get(this.setting.group, this.setting.name);
-    setTimeout(() => {
-      this.mapViewport?.scrollToIndex(this.servermapList.findIndex(m => m.id === this.selectedMap.value));
-    });
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   initGenerated() {
@@ -115,7 +124,7 @@ export class MapListComponent implements OnInit {
   }
 
   async selectMap(id: number) {
-    const maps = this.servermapList;
+    const maps = this.filteredMapList;
     const map = id < 0 ? maps[Math.floor(Math.random() * maps.length)] : maps.find(m => m.id === id);
     this.ss.save({
       id: this.setting.id,

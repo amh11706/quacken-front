@@ -26,6 +26,7 @@
       </mat-card-content>
       <mat-card-actions class="flex-subitem2">
         <button mat-raised-button
+                [disabled]="!ss.admin"
                 color="accent"
                 (click)="selectMap(map.id)">Select</button>
       </mat-card-actions>
@@ -44,7 +45,8 @@
     <div class="flex-generated">
       <mat-label>Previous seeds:</mat-label>
       <mat-form-field>
-        <mat-select (selectionChange)="updateSeed($event.value)">
+        <mat-select (selectionChange)="updateSeed($event.value)"
+                    [disabled]="!ss.admin">
           <mat-option *ngFor="let seed of seeds"
                       [value]="seed">{{seed}}</mat-option>
         </mat-select>
@@ -52,6 +54,7 @@
     </div>
     <mat-card-actions class="flex-subitem2">
       <button mat-raised-button
+              [disabled]="!ss.admin"
               (click)="selectMap(0)">Randomize</button>
     </mat-card-actions>
   </div>

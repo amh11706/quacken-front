@@ -112,7 +112,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   private gotList(list: { [key: string]: DBTile[] }) {
     this.mapData = list;
-    console.log(list);
     const tile = this.shown;
     this.options = list[tile?.group ?? 'maps'];
     if (tile && this.options) for (const o of this.options) {
