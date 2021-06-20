@@ -92,7 +92,7 @@ export class SettingsService {
 
   async save(setting: Setting) {
     this.ws.send(OutCmd.SettingSet, setting);
-    const settings = await this.getGroup(setting.group);
-    settings[setting.name] = setting;
+    const oldSetting = await this.get(setting.group, setting.name);
+    Object.assign(oldSetting, setting);
   }
 }

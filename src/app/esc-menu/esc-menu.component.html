@@ -60,7 +60,9 @@
           </mat-tab>
           <mat-tab label="Map Selection"
                    *ngIf="ss.lAdminSettings.length">
-            <q-map-list></q-map-list>
+            <ng-template matTabContent>
+              <q-map-list></q-map-list>
+            </ng-template>
           </mat-tab>
         </mat-tab-group>
       </mat-tab>

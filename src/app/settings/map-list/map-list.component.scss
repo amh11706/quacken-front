@@ -1,3 +1,7 @@
+:host {
+  position: relative;
+}
+
 button {
   margin-right: 10px;
   margin-top: 2px;
@@ -11,13 +15,20 @@ button {
 }
 
 #maps {
-  height: 80vh;
-  min-height: 25vh;
+  height: calc(100vh - 463px);
+  min-height: 300px;
+  text-align: center;
 }
 
 q-map-card {
-  display: block;
-  // height: 300px;
+  display: inline-block;
+  margin: auto;
+  margin-top: 15px;
+  text-align: left;
+}
+
+.selected {
+  border: 2px solid rgb(199, 33, 33);
 }
 
 .flex {
@@ -33,10 +44,6 @@ q-map-card {
 
 .item {
   text-align: center;
-}
-
-::ng-deep .mat-chip-list-wrapper {
-  margin: 5px !important;
 }
 
 #searchLabel {

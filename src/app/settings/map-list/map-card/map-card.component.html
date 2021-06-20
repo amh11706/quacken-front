@@ -5,26 +5,25 @@
   </div>
   <ng-container *ngIf="map.id > 1 else generatedTemp">
     <div class="flex-item2">
-      <mat-card-title id="title">{{map.name}}</mat-card-title>
-      <mat-card-subtitle id="subtitle">
+      <mat-card-title class="title">{{map.name}}</mat-card-title>
+      <mat-card-subtitle class="subtitle">
         Designed by: {{map.username}}
       </mat-card-subtitle>
-      <mat-card-content id="description">
+      <mat-card-content class="description">
         Description:<p>{{map.description || "N/A"}}</p>
-      </mat-card-content>
-      <div class="flex-subitem1">
-        <q-rating [isPecentage]="true"
-                  [rating]="map.ratingAverage"
-                  [count]="map.ratingCount"></q-rating>
-        <div id="subitem">
+        <div class="flex-subitem1">
+          <q-rating [isPecentage]="true"
+                    [rating]="map.ratingAverage"
+                    [count]="map.ratingCount"></q-rating>
+        </div>
+        <div class="subitem">
           <mat-chip-list>
             <mat-chip #chipList
                       *ngFor="let option of map.tags"
-                      [disabled]="true"
                       [removable]="false">{{option}}</mat-chip>
           </mat-chip-list>
         </div>
-      </div>
+      </mat-card-content>
       <mat-card-actions class="flex-subitem2">
         <button mat-raised-button
                 color="accent"
@@ -37,25 +36,23 @@
 <ng-template #generatedTemp>
   <div class="flex-item2"
        *ngIf="map">
-      <mat-card-title id="title">{{generated}}</mat-card-title>
-      <mat-label id="seedDescription">Seeds:</mat-label>
-      <input  id="seed"
-              class="seed"
-              type="text"
-              (ngModelChange)="addSeed($event)"
-              [(ngModel)]="map.description">
-      <div class="flex-generated">
-        <mat-label>Previous seeds:</mat-label>
-        <mat-form-field>
-          <mat-select (selectionChange)="updateSeed($event.value)">
-            <mat-option *ngFor="let seed of seeds" 
-                        [value]="seed">{{seed}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <mat-card-actions class="flex-subitem2">
-        <button mat-raised-button
-                (click)="selectMap(0)">Randomize</button>
-      </mat-card-actions>
+    <mat-card-title class="title">{{generated}}</mat-card-title>
+    <mat-label class="subtitle">Seed:</mat-label>
+    <input class="seed"
+           readonly
+           [(ngModel)]="map.description">
+    <div class="flex-generated">
+      <mat-label>Previous seeds:</mat-label>
+      <mat-form-field>
+        <mat-select (selectionChange)="updateSeed($event.value)">
+          <mat-option *ngFor="let seed of seeds"
+                      [value]="seed">{{seed}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-card-actions class="flex-subitem2">
+      <button mat-raised-button
+              (click)="selectMap(0)">Randomize</button>
+    </mat-card-actions>
   </div>
 </ng-template>

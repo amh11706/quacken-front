@@ -4,7 +4,7 @@
          placeholder="1v1"
          (keyup.enter)="filter()"
          (blur)="filter()"
-         [(ngModel)]="data">
+         [(ngModel)]="search">
   <button mat-raised-button
           (click)="filter()">Search</button>
   <button mat-raised-button
@@ -22,16 +22,15 @@
 <div class="item">
   <mat-chip-list>
     <mat-chip *ngFor="let tag of selectedFilters"
-              [selectable]="selectable"
-              [removable]="removable"
+              [selectable]="false"
+              [removable]="true"
               (removed)="toggleTag(tag)">
       <ng-container *ngIf="+tag else string">
         <q-rating [rating]="+tag"
                   [forTags]="true"></q-rating>
       </ng-container>
       <ng-template #string>{{tag}}</ng-template>
-      <mat-icon matChipRemove
-                *ngIf="removable">cancel</mat-icon>
+      <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>
 </div>
@@ -43,11 +42,12 @@
 </div>
 
 <cdk-virtual-scroll-viewport id="maps"
-                             [itemSize]="300"
-                             [minBufferPx]="400"
-                             [maxBufferPx]="600">
+                             [itemSize]="320"
+                             [minBufferPx]="600"
+                             [maxBufferPx]="900">
   <q-map-card *cdkVirtualFor="let m of maplist"
               [map]="m"
-              [setting]="setting"
+              [description]="m.description"
+              [class.selected]="m.id === selectedMap.value"
               (selectedMap)="selectMap($event)"></q-map-card>
 </cdk-virtual-scroll-viewport>

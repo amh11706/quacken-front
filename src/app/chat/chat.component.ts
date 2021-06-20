@@ -5,8 +5,6 @@ import { WsService } from '../ws.service';
 import { ChatService, Message } from './chat.service';
 import { InCmd, Internal, OutCmd } from '../ws-messages';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { KeyBindingService } from '../settings/key-binding/key-binding.service';
-import { KeyActions } from '../settings/key-binding/key-actions';
 import { Invite } from './friends/friends.service';
 import { Router } from '@angular/router';
 import { CommandsComponent } from './commands/commands.component';

@@ -1,12 +1,7 @@
-q-canvas {
-  pointer-events: none;
-}
-
 mat-card {
   max-width: 800px;
   min-width: 350px;
   width: 80vw;
-  margin: 15px auto 0 auto;
   background-color: rgb(110, 108, 108);
 }
 
@@ -21,56 +16,36 @@ button {
 }
 
 .flex-item1 {
-  max-width: 315px;
-  min-width: 315px;
+  width: 315px;
 }
 
 .flex-item2 {
   display: flex;
   width: 100%;
   flex-direction: column;
+  justify-content: space-between;
   padding-left: 10px;
 }
 
-.flex-subitem1 {
-  margin: -12px 0 10px 5px;
-}
-
-.flex-subitem2{
+.flex-subitem2 {
   width: 100%;
   min-width: 200px;
 }
 
-.flex-generated {
-  margin: 50px 0 10px 5px;
-}
-
-#title {
+.title {
   font-weight: bold;
   font-size: 18px;
   color: rgb(199, 33, 33);
   margin-top: 5px;
 }
 
-#subtitle {
+.subtitle {
   font-style: italic;
 }
 
-#description {
+.description {
   font-style: italic;
   padding-top: 10px;
-}
-
-#subitem {
-  margin-top: 8px;
-}
-
-.mat-chip.mat-standard-chip.mat-chip-disabled {
-  opacity: 1;
-}
-
-::ng-deep .mat-chip-list-wrapper{
-  margin-left: -14px !important;
 }
 
 mat-form-field {
@@ -78,16 +53,16 @@ mat-form-field {
 }
 
 mat-card-actions {
-  margin-left: 0px !important;
-  margin-top: -5px;
+  margin-bottom: 0;
+  align-self: center;
 }
 
-input.seed {
+.seed {
   text-overflow: ellipsis;
   width: 100%;
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 800px) {
   .flex-container {
     flex-direction: column;
   }
