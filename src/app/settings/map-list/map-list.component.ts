@@ -55,8 +55,9 @@ export class MapListComponent implements OnInit, OnDestroy {
     }));
     this.initGenerated();
     this.servermapList.push(...await this.ws.request(OutCmd.CgMapList));
+    this.filteredMapList = this.servermapList;
     this.initFilters();
-    this.maplist.next(this.servermapList);
+    this.maplist.next(this.filteredMapList);
     this.selectedMap = await this.ss.get(this.setting.group, this.setting.name);
   }
 
