@@ -84,6 +84,7 @@ export const enum OutCmd {
   DeclineBlind,
 
   ShuffleTeams,
+  RateMap,
 }
 
 export const enum InCmd {

@@ -11,7 +11,6 @@ import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 import { links } from 'src/app/settings/setting/setting.component';
 import { SettingPartial, SettingsService } from 'src/app/settings/settings.service';
 import { Sounds, SoundService } from 'src/app/sound.service';
-import { Settings } from 'src/app/settings/setting/settings';
 
 interface TeamMessage {
   id: number;
@@ -41,7 +40,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   admin = false;
   statsOpen = false;
   roundGoing = false;
-  mapId: number = -1;
+  mapId: SettingPartial = {value: 0};
   private subs = new Subscription();
   private firstJoin = true;
 
@@ -112,7 +111,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.statsOpen = false;
       if (this.roundGoing) return;
       this.es.lobbyContext.stats = t.stats;
-      this.mapId = (await this.ss.get('l/cade', 'map')).value;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat = new Boat('');
     }));
@@ -122,6 +120,12 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.es.activeTab = 0;
       }
     }));
+
+    this.mapId = await this.ss.get('l/cade', 'map');
+  }
+
+  submitRating(value: number) {
+    this.ws.send(OutCmd.RateMap, value);
   }
 
   private gotBoat() {
