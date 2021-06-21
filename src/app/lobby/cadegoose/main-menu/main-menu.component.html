@@ -2,7 +2,8 @@
   <div *ngIf="statsOpen; else teams">
     <q-stat-end [stats]="es.lobbyContext?.stats"
                 (closeStats)="statsOpen = false"
-                [rating]="mapId > 1"></q-stat-end>
+                [rating]="mapId.value > 1"
+                (rateMap)="submitRating($event)"></q-stat-end>
   </div>
   <ng-template #teams>
     <h2 style="font-size: 20px;">Team Selection</h2>

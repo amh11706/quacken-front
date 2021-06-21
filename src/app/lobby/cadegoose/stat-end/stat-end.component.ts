@@ -11,8 +11,8 @@ export class StatEndComponent implements OnChanges {
   Number = Number;
   @Input() stats?: Record<number, StatRow>;
   @Input() rating: boolean = true;
+  @Output() rateMap = new EventEmitter<number>();
   @Output() closeStats = new EventEmitter<void>();
-  mapRating: number = 0;
   scores: StatRow[] = [];
   myScore?: StatRow;
   pointValues = [50, 25, 0, 10, 0, 0, 10, 20];
