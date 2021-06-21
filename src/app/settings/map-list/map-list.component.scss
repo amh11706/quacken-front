@@ -17,17 +17,14 @@ button {
 #maps {
   height: calc(100vh - 463px);
   min-height: 300px;
-  text-align: center;
 }
 
 q-map-card {
-  display: inline-block;
-  margin: auto;
+  display: block;
   margin-top: 15px;
-  text-align: left;
 }
 
-.selected {
+::ng-deep .selected mat-card {
   border: 2px solid rgb(199, 33, 33);
 }
 
