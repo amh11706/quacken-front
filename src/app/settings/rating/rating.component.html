@@ -13,8 +13,7 @@
             <div class="title">
                 Rate the current map:
             </div>
-            <button class="star" 
-                    [disabled]="alreadyVoted"
+            <button class="star"
                     mat-icon-button
                     *ngFor="let ratingId of ratingArr;index as i" 
                     [id]="'star_'+i" 

@@ -13,6 +13,7 @@ export interface MapOption {
   tags: string[],
   ratingAverage: number;
   ratingCount: number;
+  ratingMine?: number;
   data?: number[][];
 }
 

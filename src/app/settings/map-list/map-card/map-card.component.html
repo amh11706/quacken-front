@@ -4,6 +4,7 @@
     <q-canvas [map]="map.data"></q-canvas>
   </div>
   <ng-container *ngIf="map.id > 1 else generatedTemp">
+    <div class="youRated">You've rated: {{map.ratingMine || 0}}/5 stars</div>
     <div class="flex-item2">
       <mat-card-title class="title">{{map.name}}</mat-card-title>
       <mat-card-subtitle class="subtitle">

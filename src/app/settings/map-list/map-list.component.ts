@@ -36,6 +36,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     'Ascending Avg. Rating', 'Descending Avg. Rating',
     'Ascending User', 'Descending User',
     'Ascending Map Name', 'Descending Map Name',
+    'Maps You Rated'
   ];
   selectedSortOption = this.sortList[0];
   private tagList: string[] = [];
@@ -173,6 +174,8 @@ export class MapListComponent implements OnInit, OnDestroy {
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n1.name.toLowerCase().localeCompare(n2.name.toLowerCase())))); break;
       case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n2.name.toLowerCase().localeCompare(n1.name.toLowerCase())))); break;
+      case this.sortList[6]: this.maplist.next(this.servermapList.sort((n1, n2) =>
+        n1.id <= 1 || n1.ratingMine === 0 ? -1 : (n2.id <= 1 || n2.ratingMine === 0  ? 1 : (n2.ratingMine || Number.MIN_VALUE) - (n1.ratingMine || Number.MIN_VALUE)))); break;
       default: this.maplist.next(this.servermapList);
     }
   }
