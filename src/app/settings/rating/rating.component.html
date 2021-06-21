@@ -14,14 +14,20 @@
                 Rate the current map:
             </div>
             <button class="star" 
+                    [disabled]="alreadyVoted"
                     mat-icon-button
                     *ngFor="let ratingId of ratingArr;index as i" 
-                    [id]="'star_'+i" (click)="onClick(i+1)" 
-                    [matTooltip]="ratingId+1 + ' star'" matTooltipPosition="above">
+                    [id]="'star_'+i" 
+                    (click)="onClick(i+1)" 
+                    [matTooltip]="ratingId+1 + ' star'" 
+                    matTooltipPosition="above">
                 <mat-icon>
                   {{showIcon(i)}}
                 </mat-icon>
             </button>
+            <div *ngIf="alreadyVoted">
+                You've already voted {{this.rating}}/{{this.starCount}} for this map!
+            </div>
         </div>
     </ng-container>
 </ng-template>

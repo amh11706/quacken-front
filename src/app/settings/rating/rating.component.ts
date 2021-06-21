@@ -15,6 +15,7 @@ export class RatingComponent implements OnInit {
   starCount: number = 5;
   default_rating: number = 5;
   ratingArr: number[] = [];
+  alreadyVoted: boolean = false;
 
   constructor() {
   }

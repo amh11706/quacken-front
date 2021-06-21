@@ -9,8 +9,9 @@ import { Boat } from '../../quacken/boats/boat';
 import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 import { links } from 'src/app/settings/setting/setting.component';
-import { SettingsService } from 'src/app/settings/settings.service';
+import { SettingPartial, SettingsService } from 'src/app/settings/settings.service';
 import { Sounds, SoundService } from 'src/app/sound.service';
+import { Settings } from 'src/app/settings/setting/settings';
 
 interface TeamMessage {
   id: number;
@@ -40,7 +41,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   admin = false;
   statsOpen = false;
   roundGoing = false;
-  mapId = -1;
+  mapId: number = -1;
   private subs = new Subscription();
   private firstJoin = true;
 
@@ -52,7 +53,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     private sound: SoundService,
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
@@ -111,6 +112,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.statsOpen = false;
       if (this.roundGoing) return;
       this.es.lobbyContext.stats = t.stats;
+      this.mapId = (await this.ss.get('l/cade', 'map')).value;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat = new Boat('');
     }));

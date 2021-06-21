@@ -56,7 +56,6 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.servermapList.push(...await this.ws.request(OutCmd.CgMapList));
     this.initFilters();
     this.maplist.next(this.servermapList);
-
     this.selectedMap = await this.ss.get(this.setting.group, this.setting.name);
   }
 
@@ -124,7 +123,7 @@ export class MapListComponent implements OnInit, OnDestroy {
   }
 
   async selectMap(id: number) {
-    const maps = this.filteredMapList;
+    const maps = this.filteredMapList.length < 1 ? this.servermapList : this.filteredMapList;
     const map = id < 0 ? maps[Math.floor(Math.random() * maps.length)] : maps.find(m => m.id === id);
     this.ss.save({
       id: this.setting.id,
