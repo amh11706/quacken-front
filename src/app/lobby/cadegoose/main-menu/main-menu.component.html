@@ -1,7 +1,8 @@
 <mat-card id="menu">
   <div *ngIf="statsOpen; else teams">
     <q-stat-end [stats]="es.lobbyContext?.stats"
-                (closeStats)="statsOpen = false"></q-stat-end>
+                (closeStats)="statsOpen = false"
+                [rating]="mapId > 1"></q-stat-end>
   </div>
   <ng-template #teams>
     <h2 style="font-size: 20px;">Team Selection</h2>

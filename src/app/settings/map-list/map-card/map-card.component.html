@@ -40,7 +40,8 @@
     <mat-card-title class="title">{{generated}}</mat-card-title>
     <mat-label class="subtitle">Seed:</mat-label>
     <input class="seed"
-           readonly
+           (keydown)="checkInputType($event)"
+           (change)="updateSeed($any($event.target).value)"
            [(ngModel)]="map.description">
     <div class="flex-generated">
       <mat-label>Previous seeds:</mat-label>

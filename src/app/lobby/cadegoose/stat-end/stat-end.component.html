@@ -1,4 +1,5 @@
-<q-rating (ratingUpdated)="mapRating=$event"></q-rating>
+<q-rating *ngIf="rating" 
+          (ratingUpdated)="mapRating=$event"></q-rating>
 
 <h2 class="title">Round Summary</h2>
 

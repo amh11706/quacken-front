@@ -10,6 +10,7 @@ import { Stat, StatRow } from '../stats/stats.component';
 export class StatEndComponent implements OnChanges {
   Number = Number;
   @Input() stats?: Record<number, StatRow>;
+  @Input() rating: boolean = true;
   @Output() closeStats = new EventEmitter<void>();
   mapRating: number = 0;
   scores: StatRow[] = [];
