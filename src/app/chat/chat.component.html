@@ -1,7 +1,8 @@
 <div class="chatbox">
   <div class="output">
-    <cdk-virtual-scroll-viewport #output
-                                 itemSize="25"
+    <cdk-virtual-scroll-viewport (wheel)="scrolled()" [itemSize]="25"
+                                 [minBufferPx]="100"
+                                 [maxBufferPx]="200"
                                  class="textbox">
       <ng-container *cdkVirtualFor="let m of messages$">
         <p *ngIf="!m.blocked"

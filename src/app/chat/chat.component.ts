@@ -34,6 +34,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   messages$ = new ReplaySubject<Message[]>(1);
 
   private subs = new Subscription();
+  private scrolledToBottom = true;
 
   constructor(
     private ws: WsService,
@@ -49,12 +50,22 @@ export class ChatComponent implements OnInit, OnDestroy {
     const output = this.output;
     this.messages$.next(this.chat.messages);
     setTimeout(() => {
-      output.scrollToIndex(this.chat.messages.length + 50);
+      output.scrollTo({ bottom: 0 });
+      setTimeout(() => {
+        const el = output.elementRef.nativeElement;
+        el.scrollTop = el.scrollHeight;
+      });
     }, 50);
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  scrolled() {
+    const el = this.output?.elementRef.nativeElement;
+    if (!el) return;
+    this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 100;
   }
 
   accept(inv: Invite) {
@@ -70,15 +81,20 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   addMessage(message?: Message): void {
     if (message?.type === 6 && !this.disabled) {
-      this.dialog.open(CommandsComponent, { data: message , height:"50vh"});
+      this.dialog.open(CommandsComponent, { data: message, height: "50vh" });
       return;
     }
     if (!this.output) return;
     const output = this.output;
-    const scrolled = output.elementRef.nativeElement;
     this.messages$.next(this.chat.messages);
-    if (output.measureScrollOffset() + 100 >= scrolled.scrollHeight - scrolled.clientHeight) {
-      setTimeout(() => output.scrollToIndex(this.chat.messages.length + 20));
+    const el = output.elementRef.nativeElement;
+    if (this.scrolledToBottom) {
+      setTimeout(() => {
+        output.scrollTo({ bottom: 0 });
+        setTimeout(() => {
+          el.scrollTop = el.scrollHeight;
+        });
+      });
     }
   }
 
