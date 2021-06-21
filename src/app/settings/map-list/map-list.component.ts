@@ -38,7 +38,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     'Ascending Map Name', 'Descending Map Name',
     'Maps You Rated'
   ];
-  selectedSortOption = this.sortList[0];
+  selectedSortOption = this.sortList[1];
   private tagList: string[] = [];
   private userList: string[] = [];
   private setting = Settings['cadeMap'];
@@ -56,6 +56,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.initGenerated();
     this.servermapList.push(...await this.ws.request(OutCmd.CgMapList));
     this.filteredMapList = this.servermapList;
+    this.sort(this.selectedSortOption);
     this.initFilters();
     this.maplist.next(this.filteredMapList);
     this.selectedMap = await this.ss.get(this.setting.group, this.setting.name);
@@ -127,13 +128,16 @@ export class MapListComponent implements OnInit, OnDestroy {
   async selectMap(id: number) {
     const maps = this.filteredMapList.length < 1 ? this.servermapList : this.filteredMapList;
     const map = id < 0 ? maps[Math.floor(Math.random() * maps.length)] : maps.find(m => m.id === id);
+    if (!map) return;
     this.ss.save({
       id: this.setting.id,
       name: this.setting.name,
-      value: map?.id || 0,
+      value: map.id || 0,
       group: this.setting.group,
-      data: map?.name || 'Generated',
+      data: map.name || 'Generated',
     });
+    this.selectedMap.value = map.id;
+    if (id < 0) this.visible = true;
   }
 
   filter() {

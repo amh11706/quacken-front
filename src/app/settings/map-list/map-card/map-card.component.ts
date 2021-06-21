@@ -48,17 +48,6 @@ export class MapCardComponent {
   }
 
   updateSeed(seed: string) {
-    if ( seed.length != 64 ) return;
     this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
-  }
-
-  checkInputType(event: any) {
-    const key = event.key;
-    const cmd_key = event.metaKey;
-    const ctrl_key = event.ctrlKey;
-    const acceptedKeys = ["c", "v", "a"];
-    if ((cmd_key && acceptedKeys.includes(key)) || (ctrl_key && acceptedKeys.includes(key))) return true;
-    else event.preventDefault();
-    return false;
   }
 }
