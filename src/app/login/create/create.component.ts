@@ -3,14 +3,14 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 
+import { environment } from '../../../environments/environment';
 import { TermsComponent } from '../terms/terms.component';
 import { PrivacyComponent } from '../privacy/privacy.component';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'q-create',
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.scss']
+  styleUrls: ['./create.component.scss'],
 })
 export class CreateComponent {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -19,8 +19,9 @@ export class CreateComponent {
   user = {
     email: '',
     password: '',
-    name: ''
+    name: '',
   };
+
   pending = false;
 
   private path = environment.api;
@@ -30,7 +31,7 @@ export class CreateComponent {
     private http: HttpClient,
     private router: Router,
   ) {
-    const token = localStorage.getItem('token');
+    const token = window.localStorage.getItem('token');
     if (token) {
       router.navigate(['list']);
     }
@@ -42,7 +43,7 @@ export class CreateComponent {
       .subscribe(
         resp => {
           this.pending = false;
-          localStorage.setItem('token', resp);
+          window.localStorage.setItem('token', resp);
           this.router.navigate(['list']);
         },
         err => {
@@ -64,5 +65,4 @@ export class CreateComponent {
   showPrivacy() {
     this.dialog.open(PrivacyComponent);
   }
-
 }

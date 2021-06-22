@@ -1,16 +1,16 @@
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { TitleCasePipe } from '@angular/common';
-import {Component, EventEmitter, Output} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MatAutocompleteSelectedEvent, MatAutocomplete} from '@angular/material/autocomplete';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'q-tags',
   templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.scss']
+  styleUrls: ['./tags.component.scss'],
 })
 export class TagsComponent {
   visible = true;
@@ -25,14 +25,14 @@ export class TagsComponent {
   titleCasePipe=new TitleCasePipe()
   constructor() {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
-        startWith(null),
-        map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
+      startWith(null),
+      map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
   }
 
   add(event: MatChipInputEvent): void {
     const value = this.titleCasePipe.transform((event.value || '').trim());
     const search = new RegExp(value, 'i');
-    if (this.tags.find(a =>search.test(a)) || !this.allTags.find(tag=> search.test(tag))) return;
+    if (this.tags.find(a => search.test(a)) || !this.allTags.find(tag => search.test(tag))) return;
     if (value) {
       this.tags.push(value);
     }
@@ -54,7 +54,7 @@ export class TagsComponent {
   selected(event: MatAutocompleteSelectedEvent): void {
     const value = event.option.viewValue;
     const search = new RegExp(value, 'i');
-    if (this.tags.find(a =>search.test(a))) return;
+    if (this.tags.find(a => search.test(a))) return;
     this.tags.push(value);
     this.tagCtrl.setValue(null);
     this.chipChange.emit(true);

@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: "off" */
 export const enum Internal {
   Lobby = -100,
   MyBoat,
@@ -109,7 +110,7 @@ export const enum InCmd {
   InventoryCoin,
   InventoryUpdate,
 
-	ChatCommands,
+  ChatCommands,
 
   LobbyUpdate = 101,
   LobbyList,

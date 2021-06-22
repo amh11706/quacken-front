@@ -14,13 +14,14 @@ export class MapComponent implements OnDestroy {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @Input() myBoat = new Boat('');
   @Input() speed = 10;
-  @Input() set map(b64: string) { if (b64) this.renderMap(atob(b64)); }
+  @Input() set map(b64: string) { if (b64) this.renderMap(window.atob(b64)); }
   _mapScale = '';
   _mapScaleRaw = 0;
   @Input() set mapScale(v: number | string) {
     this._mapScale = `scale(${Math.round(+v / 5) / 10})`;
     this._mapScaleRaw = +v;
   }
+
   get mapScale() { return this._mapScale; }
 
   readonly titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'] as const;
@@ -120,5 +121,4 @@ export class MapComponent implements OnDestroy {
       this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', group: 'graphics' });
     }, 1000);
   }
-
 }

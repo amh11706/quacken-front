@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'q-map-debug',
   templateUrl: './map-debug.component.html',
-  styleUrls: ['./map-debug.component.scss']
+  styleUrls: ['./map-debug.component.scss'],
 })
 export class MapDebugComponent {
   private _seed = '';
@@ -15,6 +15,7 @@ export class MapDebugComponent {
       value = value.substr(2);
     }
   }
+
   get seed() { return this._seed; }
   @Output() seedChange = new EventEmitter<string>();
   seedParts: number[] = [];
@@ -43,5 +44,4 @@ export class MapDebugComponent {
     }
     this.seedChange.emit(this._seed);
   }
-
 }

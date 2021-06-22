@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import moment from 'moment';
-import { SettingsService } from 'src/app/settings/settings.service';
 
-import { OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
+import { SettingsService } from '../../../settings/settings.service';
+import { OutCmd } from '../../../ws-messages';
+import { WsService } from '../../../ws.service';
 import { StatService } from '../stat.service';
 
 interface Match {
@@ -22,7 +22,7 @@ interface Match {
 @Component({
   selector: 'q-matches',
   templateUrl: './matches.component.html',
-  styleUrls: ['./matches.component.scss']
+  styleUrls: ['./matches.component.scss'],
 })
 export class MatchesComponent implements OnInit {
   matches: Match[][] = [[], [], []];
@@ -48,5 +48,4 @@ export class MatchesComponent implements OnInit {
   async openMatch(m: Match) {
     window.open('/#/replay/' + m.matchId, '_blank');
   }
-
 }

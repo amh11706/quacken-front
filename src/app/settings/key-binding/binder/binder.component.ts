@@ -8,7 +8,7 @@ import { KeyBindingService } from '../key-binding.service';
 @Component({
   selector: 'q-binder',
   templateUrl: './binder.component.html',
-  styleUrls: ['./binder.component.scss']
+  styleUrls: ['./binder.component.scss'],
 })
 export class BinderComponent implements OnDestroy {
   private _binding?: KeyBindingEditMode;
@@ -27,6 +27,7 @@ export class BinderComponent implements OnDestroy {
     this.sub?.unsubscribe();
     this.sub = b.update.subscribe(() => { if (this._binding) this.binding = this._binding; });
   }
+
   @Input() index = 0;
   @Input() disabled = false;
   @Input() takenKeys?: Map<string, KeyBindingEditMode[]>;
@@ -59,7 +60,7 @@ export class BinderComponent implements OnDestroy {
     dialog.backdropClick().subscribe(() => {
       dialog.close();
     });
-    dialog.afterClosed().subscribe(async (key: string) => {
+    dialog.afterClosed().subscribe(async(key: string) => {
       if (key && this._binding) {
         if (this.conflict) {
           for (const binding of this.conflict) {
@@ -77,5 +78,4 @@ export class BinderComponent implements OnDestroy {
       sub.unsubscribe();
     });
   }
-
 }

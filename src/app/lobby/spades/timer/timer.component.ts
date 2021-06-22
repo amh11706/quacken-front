@@ -3,7 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 @Component({
   selector: 'q-timer',
   templateUrl: './timer.component.html',
-  styleUrls: ['./timer.component.css']
+  styleUrls: ['./timer.component.css'],
 })
 export class TimerComponent {
   @Output() expire = new EventEmitter();
@@ -26,5 +26,4 @@ export class TimerComponent {
       }, seconds * 1000 - 500);
     }, 500);
   }
-
 }

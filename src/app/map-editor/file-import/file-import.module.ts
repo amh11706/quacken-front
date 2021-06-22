@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FileImportComponent } from './file-import.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +10,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { FileUploadModule } from 'ng2-file-upload';
+import { FileImportComponent } from './file-import.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +36,6 @@ import { FileUploadModule } from 'ng2-file-upload';
     FormsModule,
     ReactiveFormsModule,
     FileImportComponent,
-  ]
+  ],
 })
 export class FileImportModule { }

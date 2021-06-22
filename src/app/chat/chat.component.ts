@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { ReplaySubject, Subscription } from 'rxjs';
 
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { WsService } from '../ws.service';
 import { ChatService, Message } from './chat.service';
 import { InCmd, Internal, OutCmd } from '../ws-messages';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Invite } from './friends/friends.service';
-import { Router } from '@angular/router';
 import { CommandsComponent } from './commands/commands.component';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'q-chat',
@@ -31,6 +31,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     'maroon', // alert/broadcast
     '#5d7563', // team chat
   ];
+
   messages$ = new ReplaySubject<Message[]>(1);
 
   private subs = new Subscription();
@@ -81,7 +82,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   addMessage(message?: Message): void {
     if (message?.type === 6 && !this.disabled) {
-      this.dialog.open(CommandsComponent, { data: message, height: "50vh" });
+      this.dialog.open(CommandsComponent, { data: message, height: '50vh' });
       return;
     }
     if (!this.output) return;
@@ -97,5 +98,4 @@ export class ChatComponent implements OnInit, OnDestroy {
       });
     }
   }
-
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { WsService } from 'src/app/ws.service';
+import { WsService } from '../../ws.service';
 import { SettingsService } from '../settings.service';
 import { DefaultBindings, KeyActions, KeyBindings, NotActive, StaticKeyBindings } from './key-actions';
 
@@ -50,7 +50,7 @@ function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBi
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class KeyBindingService {
   private bindSub?: Subject<string>;
@@ -95,7 +95,7 @@ export class KeyBindingService {
     }
   }
 
-  private handleKeyDown = async (e: KeyboardEvent) => {
+  private handleKeyDown = async(e: KeyboardEvent) => {
     if (!this.ws.connected) return;
     if (IgnoreTags.includes(document.activeElement?.tagName || '') || IgnoreKeys.includes(e.key)) return;
     const key = this.getKey(e);

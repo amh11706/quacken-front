@@ -6,7 +6,7 @@ import { DBTile } from '../map-editor.component';
 @Component({
   selector: 'q-structure-set',
   templateUrl: './structure-set.component.html',
-  styleUrls: ['./structure-set.component.scss']
+  styleUrls: ['./structure-set.component.scss'],
 })
 export class StructureSetComponent extends TileSetComponent implements OnInit, OnDestroy {
   protected group: 'tile' | 'structure' = 'structure';
@@ -35,7 +35,7 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
 
   deleteFeature() {
     if (!this.map) return;
-    if (!confirm('Are you sure you want to delete this feature? It will not be fully removed until you hit save.')) {
+    if (!window.confirm('Are you sure you want to delete this feature? It will not be fully removed until you hit save.')) {
       return;
     }
     const feature = this.map.selectedTile.activeFeature;
@@ -66,10 +66,9 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
           return;
         case 'y2':
           if (feature.y2 < feature.y1) feature.y1 = feature.y2;
-          return;
+          break;
         default:
       }
-
     } else {
       switch (which) {
         case 'x1':
@@ -83,10 +82,9 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
           return;
         case 'y2':
           feature.y1 = +feature.y2 - 7;
-          return;
+          break;
         default:
       }
     }
   }
-
 }

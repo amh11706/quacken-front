@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './login.component';
 import { CreateComponent } from './create/create.component';
 import { PrivacyComponent } from './privacy/privacy.component';
@@ -16,7 +17,6 @@ import { RestoreComponent } from './restore/restore.component';
 import { AutoSelectModule } from '../autoselect/autoselect.module';
 import { LoginRoutingModule } from './login-routing.module';
 import { LoginFormComponent } from './login-form/login-form.component';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -38,6 +38,6 @@ import { HttpClientModule } from '@angular/common/http';
     MatButtonModule,
     MatDialogModule,
     AutoSelectModule,
-  ]
+  ],
 })
 export class LoginModule { }

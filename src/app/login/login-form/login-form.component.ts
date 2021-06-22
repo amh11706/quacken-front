@@ -2,23 +2,24 @@ import { HttpClient } from '@angular/common/http';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { AuthGuard } from 'src/app/auth.guard';
-import { environment } from 'src/environments/environment';
+import { AuthGuard } from '../../auth.guard';
+import { environment } from '../../../environments/environment';
 import { PrivacyComponent } from '../privacy/privacy.component';
 import { TermsComponent } from '../terms/terms.component';
 
 @Component({
   selector: 'q-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
 
   user = {
     email: '',
-    password: ''
+    password: '',
   };
+
   pending = false;
   errMessage = '';
 
@@ -30,7 +31,7 @@ export class LoginFormComponent {
     private router: Router,
     private guard: AuthGuard,
   ) {
-    const token = localStorage.getItem('token');
+    const token = window.localStorage.getItem('token');
     if (token) {
       router.navigate(['list']);
     }
@@ -42,7 +43,7 @@ export class LoginFormComponent {
       .subscribe(
         resp => {
           this.pending = false;
-          localStorage.setItem('token', resp);
+          window.localStorage.setItem('token', resp);
           this.router.navigate([this.guard.triedPath || 'list']);
           this.guard.triedPath = '';
         },
@@ -58,7 +59,7 @@ export class LoginFormComponent {
   }
 
   guestLogin() {
-    localStorage.setItem('token', 'guest');
+    window.localStorage.setItem('token', 'guest');
     this.router.navigate([this.guard.triedPath || 'list']);
     this.guard.triedPath = '';
   }
@@ -86,5 +87,4 @@ export class LoginFormComponent {
         },
       );
   }
-
 }

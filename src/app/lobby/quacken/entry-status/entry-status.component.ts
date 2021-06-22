@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Internal, InCmd } from 'src/app/ws-messages';
 
+import { Internal, InCmd } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
 import { Lobby } from '../../lobby.component';
 import { Turn } from '../boats/boats.component';
@@ -9,7 +9,7 @@ import { Turn } from '../boats/boats.component';
 @Component({
   selector: 'q-entry-status',
   templateUrl: './entry-status.component.html',
-  styleUrls: ['./entry-status.component.css']
+  styleUrls: ['./entry-status.component.css'],
 })
 export class EntryStatusComponent implements OnInit, OnDestroy {
   treasure = [0, 0, 0, 0];
@@ -29,5 +29,4 @@ export class EntryStatusComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
-
 }

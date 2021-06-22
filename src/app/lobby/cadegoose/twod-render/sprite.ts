@@ -1,5 +1,3 @@
-import { Position } from "./gu-boats/gu-boat";
-
 export function getTileImage(tile: string): Promise<HTMLImageElement> {
   const p = document.createElement('img');
   p.src = `/assets/images/${tile}.png`;
@@ -18,7 +16,7 @@ export class Sprite {
     private name: string,
     private width: number,
     private height: number,
-    private positions: [number, number][]
+    private positions: [number, number][],
   ) {
     this.prom = getTileImage(name).then(img => this.img = img);
   }
@@ -31,17 +29,9 @@ export class Sprite {
       pos[0], pos[1],
       this.width, this.height,
       x, y,
-      this.width, this.height
+      this.width, this.height,
     );
   }
-}
-
-export interface SpriteData {
-  name: string;
-  img?: string;
-  imgPosition?: string;
-  orientations: { [key: string]: Orientation };
-  orientation?: Orientation;
 }
 
 export interface Orientation {
@@ -53,7 +43,15 @@ export interface Orientation {
   offsety: number;
 }
 
-export class SpriteImage{
+export interface SpriteData {
+  name: string;
+  img?: string;
+  imgPosition?: string;
+  orientations: { [key: string]: Orientation };
+  orientation?: Orientation;
+}
+
+export class SpriteImage {
   img?: string;
   imgPosition?: string;
   pOffsetX?: number;
@@ -81,7 +79,7 @@ export class JsonSprite {
       values.x, values.y,
       values.width, values.height,
       x + 2 - values.offsetx, y - values.offsety,
-      values.width, values.height
+      values.width, values.height,
     );
   }
 }

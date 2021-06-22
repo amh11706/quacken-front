@@ -3,17 +3,16 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 @Component({
   selector: 'q-rating',
   templateUrl: './rating.component.html',
-  styleUrls: ['./rating.component.scss']
+  styleUrls: ['./rating.component.scss'],
 })
 export class RatingComponent implements OnInit {
-
   @Output() ratingUpdated = new EventEmitter<number>();
   @Input() rating: number = 0;
-  @Input() isPecentage: boolean = false; //determines when to use specific template
+  @Input() isPecentage: boolean = false; // determines when to use specific template
   @Input() forTags: boolean = false;
   @Input() count: number = 0;
   starCount: number = 5;
-  default_rating: number = 5;
+  defaultRating: number = 5;
   ratingArr: number[] = [];
   alreadyVoted: boolean = false;
 
@@ -21,7 +20,7 @@ export class RatingComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(!this.isPecentage){
+    if (!this.isPecentage) {
       for (let index = 0; index < this.starCount; index++) {
         this.ratingArr.push(index);
       }
@@ -29,7 +28,7 @@ export class RatingComponent implements OnInit {
   }
 
   getStars(rating: number): string {
-    const size = rating / this.default_rating * 100;
+    const size = rating / this.defaultRating * 100;
     return size + '%';
   }
 
@@ -46,5 +45,4 @@ export class RatingComponent implements OnInit {
       return 'star_border';
     }
   }
-
 }

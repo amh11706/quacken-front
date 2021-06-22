@@ -33,7 +33,7 @@ interface InvUpdate {
 @Component({
   selector: 'q-inventory',
   templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.scss']
+  styleUrls: ['./inventory.component.scss'],
 })
 export class InventoryComponent implements OnDestroy {
   private _id?: number;
@@ -42,6 +42,7 @@ export class InventoryComponent implements OnDestroy {
     this._id = value;
     this.doSubs();
   }
+
   get id(): number | undefined {
     return this._id;
   }
@@ -82,18 +83,24 @@ export class InventoryComponent implements OnDestroy {
 
     this.subs.add(this.ws.subscribe(InCmd.InventoryUpdate, (u: InvUpdate) => {
       if (!this.inv) return;
-      if (u.update) for (const update of u.update) {
-        for (const i of this.inv.items) if (i.s === update.id) {
-          i.q = update.quantity;
-          i.f = true;
-          break;
+      if (u.update) {
+        for (const update of u.update) {
+          for (const i of this.inv.items) {
+            if (i.s === update.id) {
+              i.q = update.quantity;
+              i.f = true;
+              break;
+            }
+          }
         }
       }
-      if (u.new) for (const update of u.new) {
-        update.f = true;
-        this.inv.filtered?.push(update);
-        if (this.inv.filtered !== this.inv.items) this.inv.items.push(update);
-        this.sort(this.inv.sort, false);
+      if (u.new) {
+        for (const update of u.new) {
+          update.f = true;
+          this.inv.filtered?.push(update);
+          if (this.inv.filtered !== this.inv.items) this.inv.items.push(update);
+          this.sort(this.inv.sort, false);
+        }
       }
       if (u.del) {
         this.inv.filtered = this.inv.filtered.filter(i => u.del?.indexOf(i.s) === -1);
@@ -151,6 +158,7 @@ export class InventoryComponent implements OnDestroy {
 
     this.inv.filtered = [];
     const search = key.toLowerCase();
+    // eslint-disable-next-line no-labels
     itemLoop:
     for (const i of this.inv.items) {
       const values = Object.values(i);
@@ -158,10 +166,10 @@ export class InventoryComponent implements OnDestroy {
         value = value.toString().toLowerCase();
         if (value.indexOf(search) !== -1) {
           this.inv.filtered.push(i);
+          // eslint-disable-next-line no-labels
           continue itemLoop;
         }
       }
     }
   }
-
 }

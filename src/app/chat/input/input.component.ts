@@ -1,15 +1,15 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { KeyActions } from 'src/app/settings/key-binding/key-actions';
-import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
-import { OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
+import { KeyActions } from '../../settings/key-binding/key-actions';
+import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
+import { OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws.service';
 import { ChatService } from '../chat.service';
 
 @Component({
   selector: 'q-input',
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss']
+  styleUrls: ['./input.component.scss'],
 })
 export class InputComponent implements OnInit, OnDestroy {
   @Input() disabled = false;
@@ -45,7 +45,6 @@ export class InputComponent implements OnInit, OnDestroy {
         this.chat.saveText = param.value;
       }
       param.value = history[this.chat.historyIndex];
-
     } else if (e.key === 'ArrowDown') {
       if (this.chat.historyIndex === -1 || !param) return;
       const history = this.chat.commandHistory;
@@ -94,7 +93,7 @@ export class InputComponent implements OnInit, OnDestroy {
     const firstSpace = text.indexOf(' ');
     const secondSpace = text.indexOf(' ', firstSpace + 1);
     const cmdSplit = text.substr(0, firstSpace) === '/tell' ? secondSpace : firstSpace;
-    let command = cmdSplit > 0 ? text.substr(0, cmdSplit + 1) : text;
+    const command = cmdSplit > 0 ? text.substr(0, cmdSplit + 1) : text;
     this.chat.commandHistory = this.chat.commandHistory.filter(entry => entry !== command);
     this.chat.commandHistory.push(command);
   }

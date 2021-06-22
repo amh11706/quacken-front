@@ -1,17 +1,17 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
-import { Boat } from '../quacken/boats/boat';
-import { Settings } from 'src/app/settings/setting/settings';
-import { QuackenComponent } from '../quacken/quacken.component';
-import { SettingMap, SettingsService } from 'src/app/settings/settings.service';
-import { InCmd, Internal } from 'src/app/ws-messages';
-import { FriendsService } from 'src/app/chat/friends/friends.service';
-import { WsService } from 'src/app/ws.service';
-import { Turn } from '../quacken/boats/boats.component';
-import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
+import { Settings } from '../../settings/setting/settings';
+import { SettingMap, SettingsService } from '../../settings/settings.service';
+import { InCmd, Internal } from '../../ws-messages';
+import { FriendsService } from '../../chat/friends/friends.service';
+import { WsService } from '../../ws.service';
+import { EscMenuService } from '../../esc-menu/esc-menu.service';
+import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
+import { KeyActions } from '../../settings/key-binding/key-actions';
 import { MainMenuComponent } from './main-menu/main-menu.component';
-import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
-import { KeyActions } from 'src/app/settings/key-binding/key-actions';
+import { Turn } from '../quacken/boats/boats.component';
+import { QuackenComponent } from '../quacken/quacken.component';
+import { Boat } from '../quacken/boats/boat';
 import { TwodRenderComponent } from './twod-render/twod-render.component';
 
 const ownerSettings: (keyof typeof Settings)[] = [
@@ -77,5 +77,4 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     super.setMapB64(map);
     this.renderer?.fillMap(this.map, this.lobby?.flags);
   }
-
 }

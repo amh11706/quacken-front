@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
+import { Settings } from '../../settings/setting/settings';
+import { InCmd, Internal } from '../../ws-messages';
+import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { WsService } from '../../ws.service';
 import { SettingsService, SettingMap } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
-import { Settings } from 'src/app/settings/setting/settings';
-import { InCmd, Internal } from 'src/app/ws-messages';
-import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
-  'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen'
+  'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen',
 ];
 
 export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy ducks to steal their food and bring it home.';
@@ -30,6 +30,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     if (l.map) this.setMapB64(l.map);
     setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.Lobby, data: l }));
   }
+
   get lobby(): Lobby | undefined {
     return this._lobby;
   }
@@ -78,7 +79,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
   protected setMapB64(map: string) {
     if (!this.map.length) this.initMap();
-    const bString = atob(map);
+    const bString = window.atob(map);
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
@@ -97,5 +98,4 @@ export class QuackenComponent implements OnInit, OnDestroy {
       this.map.push(row);
     }
   }
-
 }

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
 import { InCmd } from '../ws-messages';
-moment.locale('en-GB');
 
 import { WsService } from '../ws.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { Sounds, SoundService } from '../sound.service';
-import { P } from '@angular/cdk/keycodes';
+moment.locale('en-GB');
 
 export interface Message {
   type: number;
@@ -24,7 +23,7 @@ export interface Message {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatService {
   commandsComponent: any;
@@ -44,14 +43,14 @@ export class ChatService {
       this.commands = commands.lobby;
       this.commands.push(...commands.global);
       if (commands.lobbyAdmin) this.commands.push(...commands.lobbyAdmin);
-      this.commands = this.commands.filter(command => command.base !== "/help"); //remove /help from commands
+      this.commands = this.commands.filter(command => command.base !== '/help'); // remove /help from commands
       for (const cmd of this.commands) {
         cmd.title = cmd.base.substring(1);
       }
       for (const cmd of this.commands) {
         const params = cmd.params as any as string;
         let messageFound = false;
-        cmd.params = params.replace(/[\[\]<>]/g, '').split(' ').map(p => {
+        cmd.params = params.replace(/[[]<>]/g, '').split(' ').map(p => {
           if (p === 'message') messageFound = true;
           return { name: p, value: p === 'new' ? p : '' };
         });
@@ -62,7 +61,7 @@ export class ChatService {
 
     this.ws.subscribe(InCmd.ChatMessage, (message: Message) => {
       if (message.type === 6) return;
-      if (document.hidden && message.type === 5 || [8, 9].includes(message.type)) sound.play(Sounds.Notification);
+      if ((document.hidden && message.type === 5) || [8, 9].includes(message.type)) sound.play(Sounds.Notification);
       this.messages.push(message);
       if (message.type === 5) {
         let command = '/tell ' + message.from;
@@ -97,7 +96,7 @@ export class ChatService {
   }
 
   setTell(name: string) {
-      const param = this.selectedCommand.params.find(p => p.name === 'message');
+    const param = this.selectedCommand.params.find(p => p.name === 'message');
     if (param?.value) this.commandHistory.push(param.value);
     this.selectedCommand = this.commands.find(cmd => cmd.base === '/tell') || this.selectedCommand;
     this.selectedCommand.params[0].value = name;
@@ -108,5 +107,4 @@ export class ChatService {
     this.setTell(friend);
     this.kbs.emitAction(KeyActions.FocusChat);
   }
-
 }

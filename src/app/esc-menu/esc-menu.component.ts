@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { WsService } from '../ws.service';
 import { EscMenuService } from './esc-menu.service';
 import { ProfileComponent } from './profile/profile.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { SettingsService } from '../settings/settings.service';
 
 @Component({
   selector: 'q-esc-menu',
   templateUrl: './esc-menu.component.html',
-  styleUrls: ['./esc-menu.component.scss']
+  styleUrls: ['./esc-menu.component.scss'],
 })
 export class EscMenuComponent {
   ProfileComponent = ProfileComponent;

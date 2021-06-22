@@ -6,7 +6,7 @@ import { Item } from '../inventory.component';
 @Component({
   selector: 'q-split',
   templateUrl: './split.component.html',
-  styleUrls: ['./split.component.css']
+  styleUrls: ['./split.component.css'],
 })
 export class SplitComponent {
   quantity = 0;
@@ -14,5 +14,4 @@ export class SplitComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: Item) {
     this.quantity = Math.round(data.q / 2);
   }
-
 }

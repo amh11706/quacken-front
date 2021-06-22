@@ -2,12 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
 
-import { WsService } from 'src/app/ws.service';
+import { WsService } from '../../ws.service';
 
 @Component({
   selector: 'q-logout-confirm',
   templateUrl: './logout-confirm.component.html',
-  styleUrls: ['./logout-confirm.component.css']
+  styleUrls: ['./logout-confirm.component.css'],
 })
 export class LogoutConfirmComponent implements OnInit, OnDestroy {
   seconds = 10;
@@ -32,9 +32,8 @@ export class LogoutConfirmComponent implements OnInit, OnDestroy {
 
   logout() {
     this.ws.close();
-    localStorage.removeItem('token');
+    window.localStorage.removeItem('token');
     this.router.navigate(['auth/login']);
     this.dialogRef.close();
   }
-
 }

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -14,6 +15,16 @@ export interface MapTile {
 }
 
 export type MapGroups = 'maps' | 'cgmaps' | 'tile_sets' | 'tiles' | 'structure_sets' | 'structures' | 'tmaps' | 'tmap_sets';
+
+export interface StructureData {
+  group: number;
+  type: number;
+  density: number;
+  x1: number;
+  x2: number;
+  y1: number;
+  y2: number;
+}
 
 export interface DBTile {
   id: number;
@@ -37,16 +48,6 @@ export interface DBTile {
   tags: string[];
 }
 
-export interface StructureData {
-  group: number;
-  type: number;
-  density: number;
-  x1: number;
-  x2: number;
-  y1: number;
-  y2: number;
-}
-
 export interface MapEditor {
   selected: number;
   selectedTile: DBTile;
@@ -60,17 +61,16 @@ export interface MapEditor {
   tileSettings?: boolean;
 }
 
-
-
 @Component({
   selector: 'q-map-editor',
   templateUrl: './map-editor.component.html',
-  styleUrls: ['./map-editor.component.css']
+  styleUrls: ['./map-editor.component.css'],
 })
 export class MapEditorComponent implements OnInit, OnDestroy {
   @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;
   @Input()
   private sub = new Subscription();
+
   editor: MapEditor = {
     selected: 50,
     selectedTile: {
@@ -86,7 +86,6 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     settingsOpen: true,
   };
 
-
   constructor(
     private ws: WsService,
     public es: EscMenuService,
@@ -99,7 +98,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const session = localStorage.getItem(this.ws.user?.id + '-editor');
+    const session = window.localStorage.getItem(this.ws.user?.id + '-editor');
     if (session) {
       const s = JSON.parse(session);
       if (s.selectedTile) {
@@ -126,8 +125,8 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   private saveSession = () => {
-    localStorage.setItem(this.ws.user?.id + '-editor', JSON.stringify(
-      this.editor
+    window.localStorage.setItem(this.ws.user?.id + '-editor', JSON.stringify(
+      this.editor,
     ));
   }
 
@@ -186,9 +185,11 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     const changes = source.pop();
     const buffer = [];
 
-    if (changes) for (const oldTile of changes) {
-      const change = this.setTile(oldTile.x, oldTile.y, oldTile.v);
-      if (change) buffer.push(change);
+    if (changes) {
+      for (const oldTile of changes) {
+        const change = this.setTile(oldTile.x, oldTile.y, oldTile.v);
+        if (change) buffer.push(change);
+      }
     }
 
     target.push(buffer);

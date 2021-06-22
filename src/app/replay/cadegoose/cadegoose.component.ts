@@ -1,20 +1,20 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { InMessage, WsService } from 'src/app/ws.service';
-import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
-import { Turn } from 'src/app/lobby/quacken/boats/boats.component';
-import { Message } from 'src/app/chat/chat.service';
-import { Boat } from 'src/app/lobby/quacken/boats/boat';
 import { Subscription, Observable } from 'rxjs';
-import { BoatTick } from 'src/app/lobby/quacken/hud/hud.component';
-import { Lobby } from 'src/app/lobby/lobby.component';
-import { boatToSync } from 'src/app/lobby/quacken/boats/convert';
-import { AiRender, Points, AiData, AiBoatData } from './ai-render';
 import { Scene } from 'three';
 import { FormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { startWith, map } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { InMessage, WsService } from '../../ws.service';
+import { InCmd, Internal, OutCmd } from '../../ws-messages';
+import { Turn } from '../../lobby/quacken/boats/boats.component';
+import { Message } from '../../chat/chat.service';
+import { Boat } from '../../lobby/quacken/boats/boat';
+import { BoatTick } from '../../lobby/quacken/hud/hud.component';
+import { Lobby } from '../../lobby/lobby.component';
+import { boatToSync } from '../../lobby/quacken/boats/convert';
+import { AiRender, Points, AiData, AiBoatData } from './ai-render';
 
 interface ParsedTurn {
   turn: number;
@@ -26,6 +26,7 @@ interface ParsedTurn {
   }[];
 }
 
+/* eslint-disable no-unused-vars */
 enum ClaimOption {
   MinPoints,
   DuplicateDeterence,
@@ -36,7 +37,7 @@ enum ClaimOption {
 @Component({
   selector: 'q-replay-cadegoose',
   templateUrl: './cadegoose.component.html',
-  styleUrls: ['./cadegoose.component.scss']
+  styleUrls: ['./cadegoose.component.scss'],
 })
 export class CadegooseComponent implements OnInit, OnDestroy {
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;
@@ -58,6 +59,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       this.selectAiBoat();
     }
   }
+
   @Input() set messages(messages: InMessage[][]) {
     delete this.aiData;
     this.selectAiBoat();
@@ -69,7 +71,9 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       for (const m of group) {
         switch (m.cmd) {
           case InCmd.Turn:
+            // eslint-disable-next-line no-case-declarations
             const turn: Turn = m.data;
+            // eslint-disable-next-line no-case-declarations
             const parsed: ParsedTurn = {
               turn: this.turns.length + 1,
               index: i,
@@ -90,6 +94,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   tabIndex = 0;
   turns: ParsedTurn[] = [];
   maxScore = 0;
@@ -114,6 +119,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     [ClaimOption.RockValue]: 50,
     [ClaimOption.WindValue]: 75,
   };
+
   ClaimOption = ClaimOption;
   ships = [
     { value: 27, label: 'Grand Frigate' },
@@ -131,6 +137,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     { value: 15, label: 'Cutter' },
     { value: 14, label: 'Sloop' },
   ];
+
   selectedShips: { value: number, label: string }[] = [this.ships[1], { ...this.ships[1] }, { ...this.ships[1] }, { ...this.ships[1] }];
   separatorKeysCodes: number[] = [ENTER, COMMA];
   shipCtrl = new FormControl();
@@ -327,5 +334,4 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     this.getMatchAi(true, sendMap);
     this.boats = boats;
   }
-
 }

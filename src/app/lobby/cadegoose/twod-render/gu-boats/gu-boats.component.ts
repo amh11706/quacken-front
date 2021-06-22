@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
-import { BoatService, checkSZ } from '../../boat.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { WsService } from '../../../../ws.service';
+import { Boat } from '../../../../lobby/quacken/boats/boat';
+import { Turn, Clutter } from '../../../../lobby/quacken/boats/boats.component';
+import { Internal } from '../../../../ws-messages';
+import { Sounds, SoundService } from '../../../../sound.service';
 import { GuBoat, Point } from './gu-boat';
-import { WsService } from 'src/app/ws.service';
-import { Boat } from 'src/app/lobby/quacken/boats/boat';
-import { Turn, Clutter } from 'src/app/lobby/quacken/boats/boats.component';
-import { Internal } from 'src/app/ws-messages';
-import { Sounds, SoundService } from 'src/app/sound.service';
+import { BoatService, checkSZ } from '../../boat.service';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 3,
@@ -19,7 +19,7 @@ const CannonSounds: Record<number, Sounds> = {
   0: Sounds.CannonFireSmall,
   1: Sounds.CannonFireMedium,
   2: Sounds.CannonFireBig,
-}
+};
 
 @Component({
   selector: 'q-gu-boats',
@@ -35,15 +35,18 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       boat.render?.showInfluence(boat.team === v);
     }
   }
-  get hoveredTeam () {
+
+  get hoveredTeam() {
     return this._hoveredTeam;
   }
+
   private _hoveredTeam: number = -1;
   @Input() map?: HTMLElement;
   protected checkSZ = (pos: { x: number, y: number }) => {
     if (!this.showIsland) return false;
     return checkSZ(pos);
   }
+
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
   moveTransition = (transition: number): string => {
@@ -67,7 +70,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
       GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
-      for(const boat of this.boats){
+      for (const boat of this.boats) {
         this.render(boat)?.updateTeam(boat);
       }
     }));
@@ -118,11 +121,13 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   protected setHeaderFlags(flags: Turn['flags']) {
     for (const boat of this.boats) if (boat.render) boat.render.flags = [];
     for (const f of flags) {
-      if (f.cs) for (const id of f.cs) {
-        const team = f.t === this.myBoat.team ? 98 : f.t;
-        this._boats[id]?.render?.flags.push({
-          p: f.p, t: f.t, offset: 160 - (FlagColorOffsets[team] + f.p) * 10 + 'px',
-        } as any);
+      if (f.cs) {
+        for (const id of f.cs) {
+          const team = f.t === this.myBoat.team ? 98 : f.t;
+          this._boats[id]?.render?.flags.push({
+            p: f.p, t: f.t, offset: 160 - (FlagColorOffsets[team] + f.p) * 10 + 'px',
+          } as any);
+        }
       }
     }
     for (const boat of this.boats) {
@@ -139,7 +144,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     for (const boat of this.boats) {
       if (boat.render) continue;
       let newBoat = this._boats[boat.id];
-      if (!newBoat || newBoat.render && boat.render !== newBoat.render) newBoat = this._boats[-boat.id];
+      if (!newBoat || (newBoat.render && boat.render !== newBoat.render)) newBoat = this._boats[-boat.id];
       if (!newBoat || newBoat.render) continue;
       boat.render = new GuBoat(boat, undefined as any);
     }

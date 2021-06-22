@@ -16,7 +16,7 @@ export const Notes: Note[] = [
       'Team icons in the player list to easier spot who is not yet on a team.',
       'Boats should no longer be able to face backwards after sinking.',
       'Hovering player counts on the lobby card now shows player names.',
-      'Numerous other bug fixes and stability improvements.'
+      'Numerous other bug fixes and stability improvements.',
     ],
   },
   {
@@ -28,7 +28,7 @@ export const Notes: Note[] = [
       'New setting for "Always focus chat" which disables keyboard shortcuts in favor of focusing the chat.',
       'Fixed the next move token selection to reset when you sink rather than giving you the wrong moves without showing it.',
       'Flags and rocks now draw above boats in a way that looks more correct.',
-      'Move input which has not been confirmed by the server will now appear greyed out.'
+      'Move input which has not been confirmed by the server will now appear greyed out.',
     ],
   },
   {
@@ -37,12 +37,12 @@ export const Notes: Note[] = [
       'Cade AI is alive!',
       'Bot settings (enabled + difficulty) added which make bots pad the weaker team to even things up.',
       'Import .txt maps (from the java client) directly in the map editor.',
-      'Many smaller fixes and improvements.'
+      'Many smaller fixes and improvements.',
     ],
   },
   {
     title: 'Release 02 May 2021',
-    
+
     points: [
       'Global Cadesim web released!',
       'This is an adapted version of the project hosted at superquacken.com made by Imaduck and Captainvampi.',

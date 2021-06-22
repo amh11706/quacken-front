@@ -13,11 +13,10 @@ export interface Card {
 @Component({
   selector: 'q-card',
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css']
+  styleUrls: ['./card.component.css'],
 })
 export class CardComponent {
   @Input() card: Card = {} as Card;
 
   constructor() { }
-
 }

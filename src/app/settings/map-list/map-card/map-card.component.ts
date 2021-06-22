@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { WsService } from '../../../ws.service';
+import { OutCmd } from '../../../ws-messages';
 import { SettingsService } from '../../settings.service';
-import { WsService } from 'src/app/ws.service';
-import { OutCmd } from 'src/app/ws-messages';
 
 export interface MapOption {
   id: number
@@ -20,7 +20,7 @@ export interface MapOption {
 @Component({
   selector: 'q-map-card',
   templateUrl: './map-card.component.html',
-  styleUrls: ['./map-card.component.scss']
+  styleUrls: ['./map-card.component.scss'],
 })
 
 export class MapCardComponent {
@@ -30,6 +30,7 @@ export class MapCardComponent {
     if (this.map && this.map?.id > 0) return;
     this.pushSeed(d);
   }
+
   @Output() selectedMap = new EventEmitter<number>();
   generated = 'Generated';
   seeds: string[] = [];

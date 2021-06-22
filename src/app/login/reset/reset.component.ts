@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild, OnDestroy, ElementRef, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'q-reset',
   templateUrl: './reset.component.html',
-  styleUrls: ['./reset.component.scss']
+  styleUrls: ['./reset.component.scss'],
 })
 export class ResetComponent implements OnInit, OnDestroy {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -26,7 +26,7 @@ export class ResetComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private router: Router,
   ) {
-    const token = localStorage.getItem('token');
+    const token = window.localStorage.getItem('token');
     if (token) {
       router.navigate(['list']);
     }
@@ -62,6 +62,4 @@ export class ResetComponent implements OnInit, OnDestroy {
   back() {
     this.router.navigate(['auth/login']);
   }
-
-
 }

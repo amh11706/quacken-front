@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription, BehaviorSubject } from 'rxjs';
 
-import { WsService } from '../../../ws.service';
-import { FriendsService } from 'src/app/chat/friends/friends.service';
-import { Boat } from '../boats/boat';
-import { Turn } from '../boats/boats.component';
+import { FriendsService } from '../../../chat/friends/friends.service';
+import { InCmd, Internal, OutCmd } from '../../../ws-messages';
+import { KeyBindingService } from '../../../settings/key-binding/key-binding.service';
+import { KeyActions } from '../../../settings/key-binding/key-actions';
+import { SettingsService, SettingMap } from '../../../settings/settings.service';
+import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Lobby } from '../../lobby.component';
-import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
-import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
-import { KeyActions } from 'src/app/settings/key-binding/key-actions';
-import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
-import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
+import { Turn } from '../boats/boats.component';
+import { Boat } from '../boats/boat';
+import { WsService } from '../../../ws.service';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -27,7 +27,7 @@ export interface BoatTick {
 @Component({
   selector: 'q-hud',
   templateUrl: './hud.component.html',
-  styleUrls: ['./hud.component.scss']
+  styleUrls: ['./hud.component.scss'],
 })
 export class HudComponent implements OnInit, OnDestroy {
   @Input() kbControls = 1;
@@ -38,6 +38,7 @@ export class HudComponent implements OnInit, OnDestroy {
     3: KeyActions.QRight,
     4: KeyActions.QToken,
   } as const;
+
   @Input() protected actions = {
     bombLeft: KeyActions.QBombLeft,
     bombRight: KeyActions.QBombRight,
@@ -48,10 +49,12 @@ export class HudComponent implements OnInit, OnDestroy {
     ready: KeyActions.QReady,
     back: KeyActions.QBack,
   };
+
   tokens = [
     '', '', '', '', '', '', '', '', '', '',
     'duckpoo', 'duckpoo', 'duckpoo', 'duckpoo',
   ];
+
   weapons = weapons;
 
   document = document;
@@ -162,9 +165,11 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   private handleKeys() {
-    if (this.actions.ready) this.subs.add(this.kbs.subscribe(this.actions.ready, v => {
-      if (v && this.kbControls) this.imReady();
-    }));
+    if (this.actions.ready) {
+      this.subs.add(this.kbs.subscribe(this.actions.ready, v => {
+        if (v && this.kbControls) this.imReady();
+      }));
+    }
 
     this.subs.add(this.kbs.subscribe(this.actions.back, v => {
       if (this.locked || !v || !this.kbControls) return;
@@ -366,5 +371,4 @@ export class HudComponent implements OnInit, OnDestroy {
     const seconds = this.seconds < 10 ? '0' + this.seconds : this.seconds;
     this.ws.dispatchMessage({ cmd: Internal.Time, data: this.minutes + ':' + seconds });
   }
-
 }

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 
-import { ChatModule } from 'src/app/chat/chat.module';
+import { ChatModule } from '../../chat/chat.module';
 
 import { SpadesComponent } from './spades.component';
 import { CardComponent } from './card/card.component';
@@ -21,6 +21,6 @@ import { TimerComponent } from './timer/timer.component';
     MatButtonModule,
     MatSliderModule,
   ],
-  exports: [SpadesComponent]
+  exports: [SpadesComponent],
 })
 export class SpadesModule { }

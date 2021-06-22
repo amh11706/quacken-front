@@ -5,7 +5,7 @@ import { Card } from '../card/card.component';
 @Component({
   selector: 'q-last-trick',
   templateUrl: './last-trick.component.html',
-  styleUrls: ['./last-trick.component.css']
+  styleUrls: ['./last-trick.component.css'],
 })
 export class LastTrickComponent {
   @Input() cards: Card[] = [];
@@ -14,5 +14,4 @@ export class LastTrickComponent {
   cardSuits = ['♦', '♣', '♥', '♠'];
 
   constructor() { }
-
 }

@@ -1,18 +1,19 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ReplaySubject, Subscription } from 'rxjs';
-import { Internal, OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
-import { SettingPartial, SettingsService } from '../settings.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+
+import { Internal, OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws.service';
+import { SettingPartial, SettingsService } from '../settings.service';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { Settings } from '../setting/settings';
 import { MapOption } from './map-card/map-card.component';
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'q-map-list',
   templateUrl: './map-list.component.html',
-  styleUrls: ['./map-list.component.scss']
+  styleUrls: ['./map-list.component.scss'],
 })
 
 export class MapListComponent implements OnInit, OnDestroy {
@@ -20,10 +21,13 @@ export class MapListComponent implements OnInit, OnDestroy {
   @Input() set visible(v: boolean) {
     if (!v) return;
     const i = this.filteredMapList.findIndex(m => m.id === this.selectedMap.value);
-    if (i !== -1) setTimeout(() => {
-      this.mapViewport?.scrollToIndex(i);
-    });
+    if (i !== -1) {
+      setTimeout(() => {
+        this.mapViewport?.scrollToIndex(i);
+      });
+    }
   }
+
   search = '';
   selectedMap: SettingPartial = { value: 0 };
   private servermapList: MapOption[] = [];
@@ -36,19 +40,20 @@ export class MapListComponent implements OnInit, OnDestroy {
     'Ascending Avg. Rating', 'Descending Avg. Rating',
     'Ascending User', 'Descending User',
     'Ascending Map Name', 'Descending Map Name',
-    'Maps You Rated'
+    'Maps You Rated',
   ];
+
   selectedSortOption = this.sortList[1];
   private tagList: string[] = [];
   private userList: string[] = [];
-  private setting = Settings['cadeMap'];
+  private setting = Settings.cadeMap;
   private subs = new Subscription();
 
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
   async ngOnInit() {
     this.subs.add(this.ws.subscribe(Internal.Lobby, async l => {
-      if ((await this.ss.get(this.setting.group, this.setting.name)).value > 1 || !l.map || !this.servermapList[0]) return
+      if ((await this.ss.get(this.setting.group, this.setting.name)).value > 1 || !l.map || !this.servermapList[0]) return;
       const generatedMap = this.servermapList[0];
       generatedMap.data = this.b64ToArray(l.map);
       generatedMap.description = l.seed;
@@ -83,7 +88,7 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   initFilters() {
     this.servermapList.forEach((map) => {
-      for (let tag of map.tags) {
+      for (const tag of map.tags) {
         if (tag && !this.tagList.includes(tag)) this.tagList.push(tag);
       }
       if (map.username && !this.userList.includes(map.username)) this.userList.push(map.username);
@@ -114,7 +119,7 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   b64ToArray(map: string): number[][] {
     const data = this.initMap();
-    const bString = atob(map);
+    const bString = window.atob(map);
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
@@ -159,7 +164,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (this.selectedFilters.indexOf(tag) !== -1) {
       this.selectedFilters = this.selectedFilters.filter(el => el !== tag);
     } else {
-      if (this.selectedFilters.some(r=> [1,2,3,4].includes(+r))) return;
+      if (this.selectedFilters.some(r => [1, 2, 3, 4].includes(+r))) return;
       this.selectedFilters.push(tag);
     }
 
@@ -181,9 +186,8 @@ export class MapListComponent implements OnInit, OnDestroy {
       case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n2.name.toLowerCase().localeCompare(n1.name.toLowerCase())))); break;
       case this.sortList[6]: this.maplist.next(this.servermapList.sort((n1, n2) =>
-        n1.id <= 1 || n1.ratingMine === 0 ? -1 : (n2.id <= 1 || n2.ratingMine === 0  ? 1 : (n2.ratingMine || Number.MIN_VALUE) - (n1.ratingMine || Number.MIN_VALUE)))); break;
+        n1.id <= 1 || n1.ratingMine === 0 ? -1 : (n2.id <= 1 || n2.ratingMine === 0 ? 1 : (n2.ratingMine || Number.MIN_VALUE) - (n1.ratingMine || Number.MIN_VALUE)))); break;
       default: this.maplist.next(this.servermapList);
     }
   }
-
 }

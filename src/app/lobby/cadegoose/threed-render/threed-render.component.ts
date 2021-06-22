@@ -1,6 +1,4 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef, Input, NgZone } from '@angular/core';
-import { WsService } from 'src/app/ws.service';
-import { BoatService, flagMats } from '../boat.service';
 import {
   Scene, PerspectiveCamera, WebGLRenderer, BufferGeometry, MeshBasicMaterial, Object3D, Vector3, Vector2,
   Raycaster, ACESFilmicToneMapping, Fog, AmbientLight, MOUSE, Material, PlaneBufferGeometry, TextureLoader,
@@ -10,13 +8,15 @@ import { MapControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Water } from 'three/examples/jsm/objects/Water2';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import Stats from 'three/examples/jsm/libs/stats.module';
-import { Internal } from 'src/app/ws-messages';
-import { BoatRender } from '../boat-render';
 import { Sky } from 'three/examples/jsm/objects/Sky';
 import * as TWEEN from '@tweenjs/tween.js';
 import { Subscription } from 'rxjs';
+import { Internal } from '../../../ws-messages';
+import { WsService } from '../../../ws.service';
+import { SettingMap } from '../../../settings/settings.service';
 import { Boat } from '../../quacken/boats/boat';
-import { SettingMap } from 'src/app/settings/settings.service';
+import { BoatRender } from '../boat-render';
+import { BoatService, flagMats } from '../boat.service';
 
 const sunSettings = {
   turbidity: 20,
@@ -217,7 +217,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private requestRender = () => {
     if (!this.alive || this.frameRequested) return;
     this.frameRequested = true;
-    this.ngZone.runOutsideAngular(() => requestAnimationFrame(this.animate));
+    this.ngZone.runOutsideAngular(() => window.requestAnimationFrame(this.animate));
   }
 
   private render = () => {
@@ -289,10 +289,9 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       normalMap1: loader.load('assets/images/Water_2_M_Normal.jpg'),
     });
 
-    this.water.rotation.x = - Math.PI / 2;
+    this.water.rotation.x = -Math.PI / 2;
     (this.water.material as ShaderMaterial).fog = false;
     (this.water.material as ShaderMaterial).depthWrite = false;
-
 
     this.scene.add(this.water);
   }
@@ -306,10 +305,10 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     const pmremGenerator = new PMREMGenerator(this.renderer);
 
     const uniforms = sky.material.uniforms;
-    uniforms['turbidity'].value = sunSettings.turbidity;
-    uniforms['rayleigh'].value = sunSettings.rayleigh;
-    uniforms['mieCoefficient'].value = sunSettings.mieCoefficient;
-    uniforms['mieDirectionalG'].value = sunSettings.mieDirectionalG;
+    uniforms.turbidity.value = sunSettings.turbidity;
+    uniforms.rayleigh.value = sunSettings.rayleigh;
+    uniforms.mieCoefficient.value = sunSettings.mieCoefficient;
+    uniforms.mieDirectionalG.value = sunSettings.mieDirectionalG;
 
     const theta = Math.PI * (sunSettings.inclination - 0.5);
     const phi = 2 * Math.PI * (sunSettings.azimuth - 0.5);
@@ -335,7 +334,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         gltf.scene.position.y += obj.offsetY || 0;
         if (obj.rotate) gltf.scene.rotateY(obj.rotate);
         resolve(gltf);
-      }, undefined, function (error) {
+      }, undefined, function(error) {
         console.error(error);
       });
     });
@@ -448,7 +447,5 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         square = square.clone();
       }
     }
-
   }
-
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { KeyActions } from 'src/app/settings/key-binding/key-actions';
+import { KeyActions } from '../../settings/key-binding/key-actions';
 import { BoatService } from '../cadegoose/boat.service';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
 import { SbMainMenuComponent } from './sb-main-menu/sb-main-menu.component';
@@ -25,6 +25,7 @@ export class SeabattleComponent extends CadegooseComponent {
     2: KeyActions.SBForward,
     3: KeyActions.SBRight,
   } as const;
+
   actions = {
     bombLeft: KeyActions.SBBombLeft,
     bombRight: KeyActions.SBBombRight,
@@ -35,5 +36,4 @@ export class SeabattleComponent extends CadegooseComponent {
     ready: KeyActions.Noop,
     back: KeyActions.SBBack,
   };
-
 }

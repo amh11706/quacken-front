@@ -2,14 +2,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, debounceTime, mergeMap } from 'rxjs/operators';
-import { OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
+import { OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws.service';
 import { FriendsService } from '../friends/friends.service';
 
 @Component({
   selector: 'q-name-search',
   templateUrl: './name-search.component.html',
-  styleUrls: ['./name-search.component.scss']
+  styleUrls: ['./name-search.component.scss'],
 })
 export class NameSearchComponent implements OnInit {
   @Input() value = '';
@@ -42,5 +42,4 @@ export class NameSearchComponent implements OnInit {
     }
     return this.ws.request(this.onlineOnly ? OutCmd.SearchNamesOnline : OutCmd.SearchNames, search);
   }
-
 }

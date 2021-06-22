@@ -1,9 +1,9 @@
 import * as TWEEN from '@tweenjs/tween.js';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Vector3, Euler } from 'three';
 import { Boat } from '../quacken/boats/boat';
 import { JobQueue } from './job-queue';
-import { Vector3, Euler } from 'three';
 
 function headerColor(boat: Boat): string {
   if (boat.isMe) {
@@ -14,7 +14,8 @@ function headerColor(boat: Boat): string {
   return '#019901';
 }
 
-const moveColor = [,
+const moveColor = [
+  null,
   '#b9cef1',
   '#97c469',
   '#ff9d55',
@@ -24,11 +25,11 @@ const moveColor = [,
 
 const flagColor = { 0: 'lime', 1: 'red', 100: '#666' };
 
-
 const red = new THREE.LineBasicMaterial({ color: 'red', transparent: true, opacity: 0 });
 const green = new THREE.LineBasicMaterial({ color: 'lime', transparent: true, opacity: 0 });
 
-export const moveEase: any[] = [,
+export const moveEase: any[] = [
+  null,
   TWEEN.Easing.Linear.None,
   TWEEN.Easing.Quadratic.In,
   TWEEN.Easing.Quadratic.Out,
@@ -246,7 +247,7 @@ export class BoatRender {
       ctx.fillRect(-60 + 30 * i, 24, 30, 20);
     }
     ctx.lineWidth = 2;
-    ctx.strokeRect(- 60, 24, 120, 20);
+    ctx.strokeRect(-60, 24, 120, 20);
 
     if (this.flags.length) {
       ctx.font = font;
@@ -285,7 +286,6 @@ export class BoatRender {
             .repeat(1).yoyo(true)
             .start(startTime)
             .onComplete(resolve);
-
         } else if (startTime && transitions[0]) {
           t = new TWEEN.Tween(this.obj.position, BoatRender.tweens)
             .easing(moveEase[transitions[0]])
@@ -311,7 +311,6 @@ export class BoatRender {
             .repeat(1).yoyo(true)
             .start(startTime)
             .onComplete(resolve);
-
         } else if (startTime && transitions[1]) {
           t = new TWEEN.Tween(this.obj.position, BoatRender.tweens)
             .easing(moveEase[transitions[1]])

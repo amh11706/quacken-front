@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { InCmd } from 'src/app/ws-messages';
 
+import { InCmd } from '../../ws-messages';
 import { WsService } from '../../ws.service';
 import { Message } from '../chat.service';
 
@@ -13,7 +13,7 @@ export interface Invite {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FriendsService {
   allowInvite = false;

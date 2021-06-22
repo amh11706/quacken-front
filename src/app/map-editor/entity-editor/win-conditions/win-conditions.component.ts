@@ -4,7 +4,7 @@ import { DBTile } from '../../map-editor.component';
 @Component({
   selector: 'q-win-conditions',
   templateUrl: './win-conditions.component.html',
-  styleUrls: ['./win-conditions.component.scss']
+  styleUrls: ['./win-conditions.component.scss'],
 })
 export class WinConditionsComponent implements OnChanges {
   @Input() tile?: DBTile;
@@ -23,6 +23,7 @@ export class WinConditionsComponent implements OnChanges {
     { name: 'Bomb Duck', id: 104 },
     { name: 'Bomb Head', id: 105 },
   ];
+
   types = ['>', '<', '='];
 
   constructor() { }
@@ -43,5 +44,4 @@ export class WinConditionsComponent implements OnChanges {
     else this.winConditions = this.winConditions.splice(i - 1, 1);
     if (this.tile) this.tile.unsaved = true;
   }
-
 }

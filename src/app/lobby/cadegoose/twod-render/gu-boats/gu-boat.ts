@@ -1,10 +1,11 @@
-import { BoatRender, moveEase } from '../../boat-render';
-import { Boat } from 'src/app/lobby/quacken/boats/boat';
-import { BoatTypes } from 'src/app/lobby/quacken/boats/boat-types';
-import { SpriteData, Orientation } from '../sprite';
-import { Boats } from './objects';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as TWEEN from '@tweenjs/tween.js';
+
+import { Boat } from '../../../../lobby/quacken/boats/boat';
+import { BoatTypes } from '../../../../lobby/quacken/boats/boat-types';
+import { SpriteData, Orientation } from '../sprite';
+import { Boats } from './objects';
+import { BoatRender, moveEase } from '../../boat-render';
 
 // pixel coordinates relative to top left of canvas
 export class Point {
@@ -98,7 +99,7 @@ export class GuBoat extends BoatRender {
   private getTeamImage(team: number, which: string): Promise<string> {
     let prom = GuBoat.teamImages.get(which + team);
     if (prom) return prom;
-    const sail = new Image();
+    const sail = new window.Image();
     sail.src = '/assets/boats/' + which + '.png';
     if (team > 1) {
       prom = Promise.resolve(sail.src);
@@ -159,7 +160,6 @@ export class GuBoat extends BoatRender {
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
             .onComplete(resolve);
-
         } else if (startTime && transitions[0]) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
             .easing(moveEase[transitions[0]])
@@ -188,7 +188,6 @@ export class GuBoat extends BoatRender {
             .onUpdate(() => this.coords?.fromPosition(this.pos))
             .onUpdate(() => console.log)
             .onComplete(resolve);
-
         } else if (startTime && transitions[1]) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
             .easing(moveEase[transitions[1]])
@@ -247,7 +246,7 @@ export class GuBoat extends BoatRender {
           if (index === 8) {
             resolve();
             // swap to sink sprites when facing down
-            setTimeout(async () => {
+            setTimeout(async() => {
               this.spriteData = Boats[this.boat.type as BoatTypes]?.sink;
               if (!this.spriteData) return;
               const team = this.team === GuBoat.myTeam ? 99 : this.team;

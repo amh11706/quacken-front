@@ -14,7 +14,7 @@ export const TierTitles = [
 @Component({
   selector: 'q-leaders',
   templateUrl: './leaders.component.html',
-  styleUrls: ['./leaders.component.css']
+  styleUrls: ['./leaders.component.css'],
 })
 export class LeadersComponent {
   @Input() name?: string;
@@ -23,5 +23,4 @@ export class LeadersComponent {
   constructor(
     public stat: StatService,
   ) { }
-
 }

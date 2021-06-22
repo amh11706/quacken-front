@@ -1,19 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
-import { StatService, Stat, UserRank } from './stat.service';
-import { WsService } from 'src/app/ws.service';
-import { Observable, Subscription } from 'rxjs';
+import { WsService } from '../../ws.service';
+import { OutCmd } from '../../ws-messages';
+import { FriendsService } from '../../chat/friends/friends.service';
+import { ChatService } from '../../chat/chat.service';
 import { TierTitles } from './leaders/leaders.component';
-import { OutCmd } from 'src/app/ws-messages';
-import { FormControl } from '@angular/forms';
-import { mergeMap, startWith, debounceTime } from 'rxjs/operators';
-import { FriendsService } from 'src/app/chat/friends/friends.service';
-import { ChatService } from 'src/app/chat/chat.service';
+import { StatService, Stat, UserRank } from './stat.service';
 
 @Component({
   selector: 'q-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
@@ -77,6 +75,4 @@ export class ProfileComponent implements OnInit, OnDestroy {
   invite(friend: string) {
     this.ws.send(OutCmd.ChatCommand, '/invite ' + friend);
   }
-
 }
-

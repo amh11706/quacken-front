@@ -1,5 +1,5 @@
-import { EventEmitter } from '@angular/core';
-import { Component, Input, Output } from '@angular/core';
+import { EventEmitter, Component, Input, Output } from '@angular/core';
+
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { DBTile } from '../map-editor.component';
 import { WsService } from '../../ws.service';
@@ -25,7 +25,7 @@ const mapConversion: { [key: number]: number } = {
 @Component({
   selector: 'q-file-import',
   templateUrl: './file-import.component.html',
-  styleUrls: ['./file-import.component.scss']
+  styleUrls: ['./file-import.component.scss'],
 })
 export class FileImportComponent {
   @Input() mapData: { [key: string]: DBTile[] } = {};
@@ -43,7 +43,7 @@ export class FileImportComponent {
     for (let i = 0; i < this.uploader.queue.length; i++) {
       const fileItem = this.uploader.queue[i]._file;
       if (fileItem.size > 10000) {
-        alert('Each File should be less than 10 KB of size.');
+        window.alert('Each File should be less than 10 KB of size.');
         return;
       }
     }
@@ -55,7 +55,7 @@ export class FileImportComponent {
         released: true,
         data: this.convert(mapFile.data),
         description: 'imported map',
-        group: 'cgmaps'
+        group: 'cgmaps',
       };
       const prom = await this.socket.request(OutCmd.MapCreate, map);
       if (prom.error) {
@@ -70,20 +70,20 @@ export class FileImportComponent {
   }
 
   convert(mapData: string) {
-    const rows = mapData.split('\n').slice(0, 36).map(function (x) { return x.split(',').map(v => mapConversion[+v]); });
+    const rows = mapData.split('\n').slice(0, 36).map(function(x) { return x.split(',').map(v => mapConversion[+v]); });
     while (rows.length > 36) rows.pop();
     return rows;
   }
 
-  read(file_list: FileItem[]) {
+  read(fileList: FileItem[]) {
     const promises: Promise<any>[] = [];
-    for (const file of file_list) {
+    for (const file of fileList) {
       const filePromise = new Promise(resolve => {
         const reader = new FileReader();
         reader.readAsText(file._file);
         reader.onload = () => resolve({
           name: file._file.name,
-          data: reader.result
+          data: reader.result,
         });
       });
       promises.push(filePromise);
@@ -99,5 +99,4 @@ export class FileImportComponent {
   clear() {
     this.uploader.clearQueue();
   }
-
 }

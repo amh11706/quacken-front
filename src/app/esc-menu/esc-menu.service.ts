@@ -5,7 +5,7 @@ import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { WsService } from '../ws.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EscMenuService {
   open = false;
@@ -63,7 +63,7 @@ export class EscMenuService {
 
   private logout() {
     this.ws.close();
-    localStorage.removeItem('token');
+    window.localStorage.removeItem('token');
     this.router.navigate(['auth/login']);
   }
 
@@ -71,5 +71,4 @@ export class EscMenuService {
     this.router.navigateByUrl('/list');
     this.open = false;
   }
-
 }

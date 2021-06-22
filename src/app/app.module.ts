@@ -14,6 +14,6 @@ import { RecordComponent } from './record/record.component';
     BrowserAnimationsModule,
     AppRoutingModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { KeyActions } from 'src/app/settings/key-binding/key-actions';
-import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
+import { KeyActions } from '../../../settings/key-binding/key-actions';
+import { InCmd, Internal, OutCmd } from '../../../ws-messages';
 import { Boat } from '../../quacken/boats/boat';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
@@ -12,7 +12,7 @@ export interface MoveMessage {
 @Component({
   selector: 'q-cade-hud',
   templateUrl: './hud.component.html',
-  styleUrls: ['./hud.component.scss']
+  styleUrls: ['./hud.component.scss'],
 })
 export class CadeHudComponent extends HudComponent implements OnInit {
   @Input() kbControls = 0;
@@ -22,6 +22,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     2: KeyActions.CForward,
     3: KeyActions.CRight,
   } as const;
+
   @Input() protected actions = {
     bombLeft: KeyActions.CBombLeft,
     bombRight: KeyActions.CBombRight,
@@ -32,6 +33,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     ready: KeyActions.Noop,
     back: KeyActions.CBack,
   };
+
   shots = [0, 0, 0, 0, 0, 0, 0, 0];
   moves = [0, 0, 0, 0];
   haveMoves = [2, 4, 2];
@@ -107,7 +109,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     i--;
     const side = Math.floor(i / 4);
     let adjusted = (i % 4) * 2 + side;
-    while (!strict && this.shots[adjusted] === this.myBoat.maxShots && adjusted < 6) adjusted += 2;
+    if (!strict) while (this.shots[adjusted] === this.myBoat.maxShots && adjusted < 6) adjusted += 2;
     this.addShot(adjusted);
   }
 
@@ -149,11 +151,13 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   checkMaxMoves() {
     this.usingMoves = [0, 0, 0];
-    if (!this.locked) for (let i = 0; i < this.moves.length; i++) {
-      const move = this.moves[i];
-      if (move === 0) continue;
-      if (this.haveMoves[move - 1] > this.usingMoves[move - 1]) this.usingMoves[move - 1]++;
-      else this.moves[i] = 0;
+    if (!this.locked) {
+      for (let i = 0; i < this.moves.length; i++) {
+        const move = this.moves[i];
+        if (move === 0) continue;
+        if (this.haveMoves[move - 1] > this.usingMoves[move - 1]) this.usingMoves[move - 1]++;
+        else this.moves[i] = 0;
+      }
     }
     super.checkMaxMoves();
   }

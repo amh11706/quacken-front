@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
+import { MatMenuModule } from '@angular/material/menu';
 import { ChatModule } from '../chat/chat.module';
 import { ListComponent } from './list.component';
 import { SettingsModule } from '../settings/settings.module';
@@ -18,7 +19,6 @@ import { LobbyListComponent } from './lobby-list/lobby-list.component';
 import { FriendsModule } from '../chat/friends/friends.module';
 import { EscMenuModule } from '../esc-menu/esc-menu.module';
 import { NameModule } from '../chat/name/name.module';
-import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent, EditorErrorComponent, LobbyListComponent],

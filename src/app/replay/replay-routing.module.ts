@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LobbyComponent } from '../lobby/lobby.component';
 import { ReplayComponent } from './replay.component';
-
 
 const routes: Routes = [
   {
@@ -13,6 +11,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class ReplayRoutingModule { }

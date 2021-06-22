@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RatingComponent } from './rating.component';
 
 @NgModule({
-  declarations: [ RatingComponent],
+  declarations: [RatingComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -15,6 +15,6 @@ import { RatingComponent } from './rating.component';
     MatIconModule,
     MatTooltipModule,
   ],
-  exports: [ RatingComponent ],
+  exports: [RatingComponent],
 })
 export class RatingModule { }

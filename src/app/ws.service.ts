@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Subject, Subscription, ReplaySubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+import { environment } from '../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
-import { environment } from 'src/environments/environment';
 
 export interface InMessage {
   cmd: InCmd | Internal;
@@ -19,7 +19,7 @@ export interface TokenUser {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WsService {
   private socket?: WebSocket;
@@ -43,7 +43,7 @@ export class WsService {
     this.subscribe(InCmd.Kick, (reason: string) => {
       this.close();
       this.reason = reason;
-      localStorage.removeItem('token');
+      window.localStorage.removeItem('token');
       this.router.navigate(['auth/login']);
     });
     this.subscribe(InCmd.NavigateTo, (path: string) => {

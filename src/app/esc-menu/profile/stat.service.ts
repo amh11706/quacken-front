@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { WsService } from 'src/app/ws.service';
-import { OutCmd } from 'src/app/ws-messages';
-import { FriendsService } from 'src/app/chat/friends/friends.service';
-import { Message } from 'src/app/chat/chat.service';
+import { WsService } from '../../ws.service';
+import { OutCmd } from '../../ws-messages';
+import { FriendsService } from '../../chat/friends/friends.service';
+import { Message } from '../../chat/chat.service';
+import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
+import { KeyActions } from '../../settings/key-binding/key-actions';
 import { EscMenuService } from '../esc-menu.service';
-import { KeyBindingService } from 'src/app/settings/key-binding/key-binding.service';
-import { KeyActions } from 'src/app/settings/key-binding/key-actions';
 
 export interface Stat {
   id: number;
@@ -53,7 +53,7 @@ const mapColumns: Column[] = [
 ];
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StatService {
   profileTab = 0;

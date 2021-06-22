@@ -2,20 +2,20 @@ import { Injectable, OnDestroy } from '@angular/core';
 import {
   Scene,
   Box3,
-  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera
+  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
+import { WsService } from '../../ws.service';
+import { OutCmd, Internal } from '../../ws-messages';
+import { Sounds, SoundService } from '../../sound.service';
 import { BoatsComponent, Clutter, Turn } from '../quacken/boats/boats.component';
-import { WsService } from 'src/app/ws.service';
-import { OutCmd, Internal } from 'src/app/ws-messages';
 import { Cannonball } from './clutter/cannonball';
 import { BoatRender } from './boat-render';
 import { JobQueue } from './job-queue';
 import { BoatSync, BoatStatus } from '../quacken/boats/convert';
 import { ObstacleConfig } from './threed-render/threed-render.component';
-import { Sounds, SoundService } from 'src/app/sound.service';
 
 export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
@@ -117,7 +117,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       return;
     }
 
-    this.worker.addJob(async () => {
+    this.worker.addJob(async() => {
       const boats = this.boats;
       supSet(b, reset);
       if (reset) await this.renderSync();
@@ -210,9 +210,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     if (!this.turn) return;
     if (step === 4) this.resetBoats();
     const turnPart = this.turn.steps[step] || [];
-    if (!turnPart.length) return new Promise<void>(resolve => {
-      setTimeout(resolve, 5000 / this.speed);
-    });
+    if (!turnPart.length) {
+      return new Promise<void>(resolve => {
+        setTimeout(resolve, 5000 / this.speed);
+      });
+    }
 
     const promises: Promise<any>[] = [];
     const updates = new Map<number, BoatStatus>();
@@ -343,5 +345,4 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }
     return boatUpdates;
   }
-
 }

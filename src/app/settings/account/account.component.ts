@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
-import { MessageComponent } from './message/message.component';
 import { Router } from '@angular/router';
+import { WsService } from '../../ws.service';
+import { OutCmd } from '../../ws-messages';
+import { MessageComponent } from './message/message.component';
 
 @Component({
   selector: 'q-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss']
+  styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent {
   pending = false;
@@ -32,7 +32,7 @@ export class AccountComponent {
     const res = await this.ws.request(OutCmd.ChangeName, { name, password });
     this.pending = false;
     const message = res === 'Success' ? 'Name changed! This will take effect next time you log in.' : res;
-    if (res === 'Success') localStorage.removeItem('token');
+    if (res === 'Success') window.localStorage.removeItem('token');
     this.dialog.open(MessageComponent, { data: message });
   }
 
@@ -50,11 +50,10 @@ export class AccountComponent {
     this.pending = false;
     if (res === 'Success') {
       this.ws.close();
-      localStorage.removeItem('token');
+      window.localStorage.removeItem('token');
       await this.router.navigate(['auth/login']);
     }
     const message = res === 'Success' ? 'Account deleted.' : res;
     this.dialog.open(MessageComponent, { data: message });
   }
-
 }

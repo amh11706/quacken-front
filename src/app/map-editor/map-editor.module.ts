@@ -8,6 +8,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { ChatModule } from '../chat/chat.module';
 import { TwodRenderModule } from '../lobby/cadegoose/twod-render/twod-render.module';
@@ -23,12 +26,9 @@ import { MapComponent } from './map/map.component';
 import { MapEditorRoutingModule } from './map-editor-routing.module';
 import { TmapSetComponent } from './tmap-set/tmap-set.component';
 import { EntityEditorComponent } from './entity-editor/entity-editor.component';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { WinConditionsComponent } from './entity-editor/win-conditions/win-conditions.component';
 import { FileImportModule } from './file-import/file-import.module';
 import { TagsComponent } from './tags/tags.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -63,7 +63,7 @@ import { MatChipsModule } from '@angular/material/chips';
     TwodRenderModule,
     FileImportModule,
   ],
-  providers:[TitleCasePipe],
-  exports: [MapEditorComponent]
+  providers: [TitleCasePipe],
+  exports: [MapEditorComponent],
 })
 export class MapEditorModule { }

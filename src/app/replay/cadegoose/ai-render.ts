@@ -1,6 +1,6 @@
 import { Object3D, PlaneBufferGeometry, Mesh, BoxHelper, CanvasTexture, MeshBasicMaterial, Group } from 'three';
-import { Boat } from 'src/app/lobby/quacken/boats/boat';
-import { BoatService } from 'src/app/lobby/cadegoose/boat.service';
+import { Boat } from '../../lobby/quacken/boats/boat';
+import { BoatService } from '../../lobby/cadegoose/boat.service';
 
 export interface Points {
   Shoot: number[][];
@@ -107,9 +107,6 @@ export class AiRender {
     if (!this.boat) return range;
     for (const coordString in this.boat.pm) {
       if (!this.boat.pm.hasOwnProperty(coordString)) continue;
-      const coords = coordString.split(',');
-      const x = +coords[0] * 50;
-      const y = +coords[1] * 50;
       const points = this.boat.pm[coordString];
       const index = this.metric === 'Flags' || this.metric === 'Claims' ? this.radius : this.step;
       const value = this.metric === 'EndBonus' ? points[this.metric] : points[this.metric][index];
@@ -181,5 +178,4 @@ export class AiRender {
       ctx.fillText(String(value), x + 25, y + 40);
     }
   }
-
 }

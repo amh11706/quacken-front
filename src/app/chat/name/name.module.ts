@@ -10,6 +10,6 @@ import { NameComponent } from './name.component';
     CommonModule,
     MatMenuModule,
   ],
-  exports: [NameComponent]
+  exports: [NameComponent],
 })
 export class NameModule { }

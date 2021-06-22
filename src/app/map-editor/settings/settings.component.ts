@@ -1,15 +1,16 @@
+/* eslint-disable no-case-declarations */
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
 
-import { WsService } from 'src/app/ws.service';
+import { OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws.service';
 import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
 import { TagsComponent } from '../tags/tags.component';
 
 @Component({
   selector: 'q-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   @ViewChild(TagsComponent) tags!: TagsComponent;
@@ -27,21 +28,24 @@ export class SettingsComponent implements OnInit, OnDestroy {
     },
     settingsOpen: true,
   };
+
   groups = {
     maps: 'Map',
     tile_sets: 'Tile Set',
     tmap_sets: 'Challenge Set',
     structure_sets: 'Structure Set',
-    cgmaps: 'Map'
+    cgmaps: 'Map',
   };
+
   types = [
     'Head',
     'Middle Egg', 'Right Egg',
     'Left Pod', 'Middle Pod', 'Right Pod',
     'Left Locker', 'Right Locker',
     'Left Cuttle', 'Right Cuttle',
-    'Middle Obstacle', 'Right Obstacle'
+    'Middle Obstacle', 'Right Obstacle',
   ];
+
   selected: string | number = 'new';
   options: DBTile[] = [];
   private sub = new Subscription();
@@ -58,7 +62,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub.add(this.socket.connected$.subscribe(v => {
       if (!v) return;
-      setTimeout(async () => this.gotList(await this.socket.request(OutCmd.MapListAll)));
+      setTimeout(async() => this.gotList(await this.socket.request(OutCmd.MapListAll)));
     }));
     this.shown = this.map.selectedTile;
     if (!this.map.tileSettings) {
@@ -68,42 +72,52 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.selected = this.shown.id || 'new';
 
     let unsaved = this.shown.unsaved;
-    if (!this.map.tileSettings) switch (this.shown.group) {
-      case 'tile_sets':
-        if (this.map.tiles) {
-          // prevent babel error with loop label
-          unsaved = unsaved;
-          tiles:
-          for (const group of this.map.tiles) {
-            if (group) for (const tile of group) {
-              if (tile.unsaved) {
-                unsaved = true;
-                break tiles;
+    if (!this.map.tileSettings) {
+      switch (this.shown.group) {
+        case 'tile_sets':
+          if (this.map.tiles) {
+            // prevent babel error with loop label
+            // eslint-disable-next-line no-self-assign
+            unsaved = unsaved;
+            // eslint-disable-next-line no-labels
+            tiles:
+            for (const group of this.map.tiles) {
+              if (group) {
+                for (const tile of group) {
+                  if (tile.unsaved) {
+                    unsaved = true;
+                    // eslint-disable-next-line no-labels
+                    break tiles;
+                  }
+                }
               }
             }
           }
-        }
-        break;
-      case 'structure_sets':
-        if (this.map.structures) for (const structure of this.map.structures) {
-          if (structure.unsaved) {
-            unsaved = true;
-            break;
+          break;
+        case 'structure_sets':
+          if (this.map.structures) {
+            for (const structure of this.map.structures) {
+              if (structure.unsaved) {
+                unsaved = true;
+                break;
+              }
+            }
           }
-        }
-        break;
-      case 'tmap_sets':
-        if (this.map.tmaps) for (const map of this.map.tmaps) {
-          if (map.unsaved) {
-            unsaved = true;
-            break;
+          break;
+        case 'tmap_sets':
+          if (this.map.tmaps) {
+            for (const map of this.map.tmaps) {
+              if (map.unsaved) {
+                unsaved = true;
+                break;
+              }
+            }
           }
-        }
-        break;
-      default:
+          break;
+        default:
+      }
     }
     if (unsaved) this.error = 'Unsaved changes! They will be discarded if you select a different map without saving.';
-    //this.tags.addAll(this.shown.tags);
   }
 
   ngOnDestroy() {
@@ -114,10 +128,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.mapData = list;
     const tile = this.shown;
     this.options = list[tile?.group ?? 'maps'];
-    if (tile && this.options) for (const o of this.options) {
-      if (o.id === tile.id) {
-        this.shown = { ...tile, ...o };
-        break;
+    if (tile && this.options) {
+      for (const o of this.options) {
+        if (o.id === tile.id) {
+          this.shown = { ...tile, ...o };
+          break;
+        }
       }
     }
   }
@@ -155,7 +171,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.structureSet = this.shown || this.map.selectedTile;
     this.map.structureSet.data = [[]];
     this.map.selectedTile = structureSet[0] || {
-      id: null, name: '', undos: [], redos: [], tags: []
+      id: null, name: '', undos: [], redos: [], tags: [],
     };
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
@@ -172,7 +188,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.tmapSet = this.shown || this.map.selectedTile;
     this.map.tmapSet.data = [[]];
     this.map.selectedTile = tmaps[0] || {
-      id: null, name: '', undos: [], redos: [], tags: []
+      id: null, name: '', undos: [], redos: [], tags: [],
     };
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
@@ -199,7 +215,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   // Create or save
   private handleMap(msg: DBTile) {
     this.pending = false;
-    this.error = msg && msg.error || '';
+    this.error = (msg && msg.error) || '';
     if (this.error) return;
     this.map.tileSettings = false;
 
@@ -273,9 +289,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     delete this.map.tmaps;
     const tile = this.shown || this.map.selectedTile;
     tile.unsaved = false;
-    
+
     const selected = this.options.find(option => option.id === +this.selected) || {
-      id: null, name: '', undos: [], redos: [], tags: []
+      id: null, name: '', undos: [], redos: [], tags: [],
     };
     Object.assign(tile, selected);
     this.tags.addAll(tile.tags);
@@ -332,26 +348,34 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     switch (tile.group) {
       case 'tile_sets':
-        if (this.map.tiles) for (const group of this.map.tiles) {
-          if (group) for (const t of group) {
-            t.group = 'tiles';
-            if (t.unsaved) this.save(t);
-            t.unsaved = false;
+        if (this.map.tiles) {
+          for (const group of this.map.tiles) {
+            if (group) {
+              for (const t of group) {
+                t.group = 'tiles';
+                if (t.unsaved) this.save(t);
+                t.unsaved = false;
+              }
+            }
           }
         }
         break;
       case 'structure_sets':
-        if (this.map.structures) for (const structure of this.map.structures) {
-          structure.group = 'structures';
-          if (structure.unsaved) this.save(structure);
-          structure.unsaved = false;
+        if (this.map.structures) {
+          for (const structure of this.map.structures) {
+            structure.group = 'structures';
+            if (structure.unsaved) this.save(structure);
+            structure.unsaved = false;
+          }
         }
         break;
       case 'tmap_sets':
-        if (this.map.tmaps) for (const map of this.map.tmaps) {
-          map.group = 'tmaps';
-          if (map.unsaved) this.save(map);
-          map.unsaved = false;
+        if (this.map.tmaps) {
+          for (const map of this.map.tmaps) {
+            map.group = 'tmaps';
+            if (map.unsaved) this.save(map);
+            map.unsaved = false;
+          }
         }
         break;
       default:
@@ -387,5 +411,4 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.gotMap(await this.socket.request(OutCmd.MapGet, { group: tile.group, tile: tile.id }));
     }
   }
-
 }

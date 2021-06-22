@@ -5,8 +5,8 @@ import { QdragDirective } from './qdrag.directive';
 @NgModule({
   declarations: [QdragDirective],
   imports: [
-    CommonModule
+    CommonModule,
   ],
-  exports: [QdragDirective]
+  exports: [QdragDirective],
 })
 export class QdragModule { }

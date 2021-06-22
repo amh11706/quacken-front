@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-
-import { WsService } from 'src/app/ws.service';
-import { Lobby } from '../../lobby.component';
 import { Subscription } from 'rxjs';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
+
+import { WsService } from '../../../ws.service';
+import { InCmd, OutCmd } from '../../../ws-messages';
+import { Lobby } from '../../lobby.component';
 
 interface Player {
   sId: number;
@@ -19,7 +19,7 @@ export const spots = ['south', 'west', 'north', 'east'];
 @Component({
   selector: 'q-spot',
   templateUrl: './spot.component.html',
-  styleUrls: ['./spot.component.css']
+  styleUrls: ['./spot.component.css'],
 })
 export class SpotComponent implements OnInit, OnDestroy {
   private _lobby: Lobby = {} as Lobby;
@@ -41,6 +41,7 @@ export class SpotComponent implements OnInit, OnDestroy {
     l.players = [...this.rotatedSpots];
     this.rotateSpots(mySpot);
   }
+
   get lobby() {
     return this._lobby;
   }
@@ -131,5 +132,4 @@ export class SpotComponent implements OnInit, OnDestroy {
     this.offerBlind = false;
     this.ws.send(OutCmd.Bid, bid);
   }
-
 }

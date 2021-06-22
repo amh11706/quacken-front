@@ -7,19 +7,19 @@ export const Titles = [
   'Right Wind', 'Down Wind', 'Up Wind', 'Left Wind',
   'Whirl 1', 'Whirl 2', 'Whirl 3', 'Whirl 4',
   'Reverse Whirl 1', 'Reverse Whirl 2', 'Reverse Whirl 3', 'Reverse Whirl 4',
-  'Rock', 'Small Rock'
+  'Rock', 'Small Rock',
 ];
 
 export const CadeTitles = [
   'Right Wind', 'Down Wind', 'Up Wind', 'Left Wind',
   'Whirl 1', 'Whirl 2', 'Whirl 3', 'Whirl 4',
-  'Rock', 'Small Rock'
+  'Rock', 'Small Rock',
 ];
 
 @Component({
   selector: 'q-obstacles',
   templateUrl: './obstacles.component.html',
-  styleUrls: ['./obstacles.component.css']
+  styleUrls: ['./obstacles.component.css'],
 })
 export class ObstaclesComponent implements OnInit, OnDestroy {
   @Input() map?: MapEditor;
@@ -68,5 +68,4 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
       this.map.selected = scroll[current - 1] || scroll[scroll.length - 1];
     }
   }
-
 }

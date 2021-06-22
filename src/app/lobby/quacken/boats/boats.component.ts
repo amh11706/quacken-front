@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
+import * as TWEEN from '@tweenjs/tween.js';
 
+import { InCmd, Internal, OutCmd } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
 import { Boat } from './boat';
 import { BoatStatus, BoatSync, syncToBoat } from './convert';
 import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
-import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
 import { StatRow } from '../../cadegoose/stats/stats.component';
-import * as TWEEN from '@tweenjs/tween.js';
 import { BoatRender } from '../../cadegoose/boat-render';
 
 export interface Clutter {
@@ -41,7 +41,7 @@ interface Sync {
 @Component({
   selector: 'q-boats',
   templateUrl: './boats.component.html',
-  styleUrls: ['./boats.component.scss']
+  styleUrls: ['./boats.component.scss'],
 })
 export class BoatsComponent implements OnInit, OnDestroy {
   weapons = weapons;
@@ -52,6 +52,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     'bread',
     'head',
   ];
+
   clutter: Clutter[] = [];
   szFade = ', opacity .8s linear .7s';
   moveNames = ['', 'left', 'forward', 'right', 'obscured', 'overmove'];
@@ -84,6 +85,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       default: return '';
     }
   }
+
   @Input() rotateTransition = (b: Boat): string => {
     if (b.rotateTransition === 1) {
       return 9 / this.speed + 's ease ' + 1 / this.speed + 's';
@@ -93,7 +95,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       '', // normal rotate handled above
       '3s linear .5s', // sink rotate
       '1s ease', // duck poo
-      '.2s ease' // defenduck spin
+      '.2s ease', // defenduck spin
     ][b.rotateTransition];
   }
 
@@ -307,7 +309,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (!boat || boat.name !== sBoat.n) boat = new Boat(sBoat.n, sBoat.ty, sBoat.id === this.ws.sId);
       const id = this.turn ? -sBoat.id : sBoat.id;
       newBoats[id] = boat;
-      if(boat.isMe && sBoat.team !== undefined && sBoat.team !== this.myBoat.team){
+      if (boat.isMe && sBoat.team !== undefined && sBoat.team !== this.myBoat.team) {
         this.myBoat = new Boat('');
       }
       syncToBoat(boat, sBoat);
@@ -362,5 +364,4 @@ export class BoatsComponent implements OnInit, OnDestroy {
       c.d = u.d;
     }
   }
-
 }

@@ -5,7 +5,7 @@ import { Lobby } from '../../lobby/lobby.component';
 @Component({
   selector: 'q-lobby-card',
   templateUrl: './lobby-card.component.html',
-  styleUrls: ['./lobby-card.component.scss']
+  styleUrls: ['./lobby-card.component.scss'],
 })
 export class LobbyCardComponent {
   @Input() lobby = {} as Lobby;
@@ -14,5 +14,4 @@ export class LobbyCardComponent {
   titles = { CadeGoose: 'Cadesim' } as any;
 
   constructor() { }
-
 }

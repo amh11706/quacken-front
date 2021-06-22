@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'q-record',
   templateUrl: './record.component.html',
-  styleUrls: ['./record.component.scss']
+  styleUrls: ['./record.component.scss'],
 })
 export class RecordComponent implements OnInit {
   isRecording = false;
@@ -29,7 +29,7 @@ export class RecordComponent implements OnInit {
   private async startRecording() {
     this.isRecording = true;
     this.stream = await (navigator.mediaDevices as any).getDisplayMedia({
-      video: { frameRate: 2, displaySurface: 'window', cursor: 'never' }
+      video: { frameRate: 2, displaySurface: 'window', cursor: 'never' },
     }).catch(() => this.isRecording = false);
     if (!this.stream) return;
 

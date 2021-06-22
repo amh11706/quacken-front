@@ -2,12 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AutoSelectDirective } from './autoselect.directive';
 
-
-
 @NgModule({
   declarations: [AutoSelectDirective],
   imports: [
-    CommonModule
+    CommonModule,
   ],
   exports: [AutoSelectDirective],
 })

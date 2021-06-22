@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
-import { QdragModule } from 'src/app/qdrag/qdrag.module';
+import { CommonModule } from '@angular/common';
+
+import { QdragModule } from '../../../qdrag/qdrag.module';
 import { GuBoatsComponent } from './gu-boats/gu-boats.component';
 import { TwodRenderComponent } from './twod-render.component';
-import { CommonModule } from '@angular/common';
 import { SpriteImageModule } from './sprite-img/sprite-img.module';
 
 @NgModule({

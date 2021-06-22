@@ -3,12 +3,12 @@ import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/c
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'q-restore',
   templateUrl: './restore.component.html',
-  styleUrls: ['./restore.component.scss']
+  styleUrls: ['./restore.component.scss'],
 })
 export class RestoreComponent implements OnInit, OnDestroy {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -25,7 +25,7 @@ export class RestoreComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private router: Router,
   ) {
-    const token = localStorage.getItem('token');
+    const token = window.localStorage.getItem('token');
     if (token) {
       router.navigate(['list']);
     }
@@ -61,5 +61,4 @@ export class RestoreComponent implements OnInit, OnDestroy {
   back() {
     this.router.navigate(['auth/login']);
   }
-
 }

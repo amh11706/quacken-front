@@ -69,8 +69,7 @@ export class CanvasComponent {
     if (!this.canvas) return;
     await Promise.all([CanvasComponent.water.prom, CanvasComponent.sz.prom]);
     const ctx = this.canvas;
-    if (wasLoaded) {
-    } else {
+    if (!wasLoaded) {
       ctx.scale(0.2, 0.2);
       ctx.translate(-150, 400);
       // ctx.translate(0, this.mapWidth * 24 - 24);
@@ -80,7 +79,6 @@ export class CanvasComponent {
 
     const tiles: { x: number, y: number, tile: number }[] = [];
     ctx.save();
-    let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
         if (this.safeZone && (y > 32 || y < 3)) CanvasComponent.sz.draw(ctx, 0);
@@ -89,7 +87,6 @@ export class CanvasComponent {
         const tile = map[y][x];
         if (tile >= 21 && tile <= 23) this.flags.push({ x, y, points: tile - 21, ...flags.shift() });
         else if (tile) tiles.push({ x, y, tile });
-        i++;
       }
       ctx.translate(32 - this.mapWidth * 32, 24 + 24 * this.mapWidth);
     }
@@ -115,5 +112,4 @@ export class CanvasComponent {
 
     this.drawFlags();
   }
-
 }

@@ -2,21 +2,21 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Message } from 'src/app/chat/chat.service';
-import { StatService } from 'src/app/esc-menu/profile/stat.service';
-import { Lobby } from 'src/app/lobby/lobby.component';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
+import { Message } from '../../chat/chat.service';
+import { StatService } from '../../esc-menu/profile/stat.service';
+import { Lobby } from '../../lobby/lobby.component';
+import { InCmd, OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws.service';
+import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { CreateComponent } from '../create/create.component';
 import { EditorErrorComponent } from '../editor-error/editor-error.component';
 import { NewsComponent } from '../news/news.component';
 import { Notes } from '../news/notes';
-import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 @Component({
   selector: 'q-lobby-list',
   templateUrl: './lobby-list.component.html',
-  styleUrls: ['./lobby-list.component.scss']
+  styleUrls: ['./lobby-list.component.scss'],
 })
 export class LobbyListComponent implements OnInit, OnDestroy {
   lobbies: Lobby[] = [];
@@ -79,5 +79,4 @@ export class LobbyListComponent implements OnInit, OnDestroy {
   openNews() {
     this.dialog.open(NewsComponent, { maxHeight: '90vh' });
   }
-
 }

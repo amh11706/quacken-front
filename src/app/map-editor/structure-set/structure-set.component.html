@@ -101,7 +101,7 @@
                max="45">
       </p>
 
-      <ng-container *ngIf="map.selectedTile.activeFeature.group == 0">
+      <ng-container *ngIf="map.selectedTile.activeFeature.group === 0">
         <mat-form-field>
           <mat-label>Tile Type</mat-label>
           <mat-select [(ngModel)]="map.selectedTile.activeFeature.type"
@@ -113,7 +113,7 @@
           </mat-select>
         </mat-form-field>
       </ng-container>
-      <ng-container *ngIf="map.selectedTile.activeFeature.group != 0">
+      <ng-container *ngIf="map.selectedTile.activeFeature.group !== 0">
         <mat-form-field>
           <input matInput
                  placeholder="Density"

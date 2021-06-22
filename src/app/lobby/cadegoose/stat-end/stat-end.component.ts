@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { WsService } from 'src/app/ws.service';
+import { WsService } from '../../../ws.service';
 import { Stat, StatRow } from '../stats/stats.component';
 
 @Component({
   selector: 'q-stat-end',
   templateUrl: './stat-end.component.html',
-  styleUrls: ['./stat-end.component.scss']
+  styleUrls: ['./stat-end.component.scss'],
 })
 export class StatEndComponent implements OnChanges {
   Number = Number;
@@ -50,8 +50,7 @@ export class StatEndComponent implements OnChanges {
   }
 
   close() {
-    //do something with this.mapRating
-    this.closeStats.emit()
+    // do something with this.mapRating
+    this.closeStats.emit();
   }
-
 }

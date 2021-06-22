@@ -6,13 +6,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 import { QdragModule } from '../../qdrag/qdrag.module';
 
 import { FriendsComponent } from './friends.component';
 import { NameModule } from '../name/name.module';
-import { MatTabsModule } from '@angular/material/tabs';
 import { PlayerListComponent } from './player-list/player-list.component';
-import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [FriendsComponent, PlayerListComponent],

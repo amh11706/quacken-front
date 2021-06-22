@@ -6,7 +6,7 @@ import { MapEditor } from '../map-editor.component';
 @Component({
   selector: 'q-structure-map',
   templateUrl: './structure-map.component.html',
-  styleUrls: ['./structure-map.component.css']
+  styleUrls: ['./structure-map.component.css'],
 })
 export class StructureMapComponent implements OnInit {
   @Input() map?: MapEditor;
@@ -22,5 +22,4 @@ export class StructureMapComponent implements OnInit {
     for (let x = 0; x < 25; x++) this.columns.push(x);
     for (let y = 0; y < 52; y++) this.rows.push(y);
   }
-
 }

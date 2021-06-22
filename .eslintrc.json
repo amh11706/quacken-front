@@ -3,6 +3,7 @@
   "ignorePatterns": [
     "projects/**/*"
   ],
+  "plugins": ["import"],
   "overrides": [
     {
       "files": [
@@ -16,10 +17,22 @@
         "createDefaultProgram": true
       },
       "extends": [
+        "standard",
+        "plugin:import/recommended",
+        "plugin:import/typescript",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "semi": ["error", "always"],
+        "import/order": ["error", { "groups": ["builtin", "external", "internal"] }],
+        "func-call-spacing":"off",
+        "no-return-assign": "off",
+        "no-prototype-builtins": "off",
+        "space-before-function-paren": ["error", "never"],
+        "comma-dangle": ["error", "always-multiline"],
+        "no-useless-constructor": "off",
+        "accessor-pairs": "off",
         "@angular-eslint/component-selector": [
           "error",
           {

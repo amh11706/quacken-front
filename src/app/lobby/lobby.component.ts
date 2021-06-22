@@ -29,7 +29,7 @@ export interface Lobby {
 @Component({
   selector: 'q-lobby',
   templateUrl: './lobby.component.html',
-  styleUrls: ['./lobby.component.css']
+  styleUrls: ['./lobby.component.css'],
 })
 export class LobbyComponent implements OnInit, OnDestroy {
   lobby?: Lobby;
@@ -73,5 +73,4 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
     this.ss.admin = true;
   }
-
 }

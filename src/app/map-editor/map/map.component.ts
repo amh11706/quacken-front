@@ -20,7 +20,7 @@ export class Pos {
 @Component({
   selector: 'q-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.css'],
 })
 export class MapComponent {
   @Input() map?: MapEditor;
@@ -107,5 +107,4 @@ export class MapComponent {
       sTile.redos = [];
     }
   }
-
 }

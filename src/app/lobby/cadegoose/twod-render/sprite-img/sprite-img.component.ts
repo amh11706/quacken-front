@@ -11,7 +11,7 @@ interface Sprite{
 @Component({
   selector: 'q-sprite-img',
   templateUrl: './sprite-img.component.html',
-  styleUrls: ['./sprite-img.component.scss']
+  styleUrls: ['./sprite-img.component.scss'],
 })
 export class SpriteImgComponent {
   @Input() render = {} as Sprite;

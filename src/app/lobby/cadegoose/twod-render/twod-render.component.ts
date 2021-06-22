@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
-import { Boat } from '../../quacken/boats/boat';
 import { Subscription } from 'rxjs';
-import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
-import { Sprite, JsonSprite, SpriteData, Orientation, SpriteImage } from './sprite';
+import Stats from 'three/examples/jsm/libs/stats.module';
+import { SettingsService, SettingMap } from '../../../settings/settings.service';
+import { InCmd, Internal } from '../../../ws-messages';
+import { WsService } from '../../../ws.service';
+import { MapEditor } from '../../../map-editor/map-editor.component';
+import { Boat } from '../../quacken/boats/boat';
+import { Sprite, SpriteImage } from './sprite';
 import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
 import { FlagData } from './objects/flags';
-import { InCmd, Internal } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
 import { GuBoat, Point, Position } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
-import Stats from 'three/examples/jsm/libs/stats.module';
 import { MapComponent } from '../../../map-editor/map/map.component';
-import { MapEditor } from 'src/app/map-editor/map-editor.component';
 import { Lobby } from '../../lobby.component';
 
 const FlagColorOffsets: Record<number, number> = {
@@ -23,8 +23,8 @@ const FlagColorOffsets: Record<number, number> = {
   100: 12,
 };
 
-type flagIndex = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14";
-type index = "0" | "1" | "2" | "3";
+type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
+type index = '0' | '1' | '2' | '3';
 @Component({
   selector: 'q-twod-render',
   templateUrl: './twod-render.component.html',
@@ -53,6 +53,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this._mapScale = +v / 50;
     this._mapScaleRaw = +v;
   }
+
   get mapScale() { return this._mapScale; }
   @Input() graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
   private frameRequested = true;
@@ -144,7 +145,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private requestRender = () => {
     if (!this.alive || this.frameRequested) return;
     this.frameRequested = true;
-    requestAnimationFrame(this.animate);
+    window.requestAnimationFrame(this.animate);
   }
 
   getHeight() {
@@ -178,16 +179,14 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       const flagObj = { t: flags?.shift()?.t || 99, points: tile - 21, ...flags, zIndex: (pOffsetY - 23), sprite: flag };
       this.obstacles.push(flagObj);
       this.flags.push(flagObj);
-    }
-    else if (tile === 50) {
+    } else if (tile === 50) {
       const bigRock = new SpriteImage(BigRockData);
       bigRock.pOffsetX = pOffsetX;
       bigRock.pOffsetY = pOffsetY;
       bigRock.orientation = BigRockData.orientations[rand.toString() as index];
       bigRock.imgPosition = `-${bigRock.orientation.x}px -${bigRock.orientation.y}px`;
       this.obstacles.push({ t: tile, zIndex: (pOffsetY - 10), sprite: bigRock });
-    }
-    else if (tile === 51) {
+    } else if (tile === 51) {
       const smallRock = new SpriteImage(SmallRockData);
       smallRock.pOffsetX = pOffsetX;
       smallRock.pOffsetY = pOffsetY;
@@ -213,7 +212,6 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.obstacles = [];
     this.flags = [];
     ctx.save();
-    let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
         const xOffset = (x + y) * 32;
@@ -222,10 +220,9 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         else this.water.draw(ctx, 0, xOffset, yOffset);
         const tile = map[y][x];
         if (!tile) continue;
-        else if (tile >= 21 && tile <= 23 || tile === 50 || tile === 51) this.addObstacles(x, y, tile, flags);
+        else if ((tile >= 21 && tile <= 23) || tile === 50 || tile === 51) this.addObstacles(x, y, tile, flags);
         else if (tile > 8) this.whirl.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
         else if (tile > 4) this.wind.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
-        i++;
       }
     }
     ctx.restore();
@@ -246,7 +243,6 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     e.preventDefault();
     this.saveScale();
   }
-
 
   extractCoord(event: MouseEvent): Position {
     const rect = this.canvasElement?.nativeElement.getBoundingClientRect();

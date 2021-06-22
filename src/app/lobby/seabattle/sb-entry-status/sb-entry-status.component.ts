@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InCmd, Internal } from 'src/app/ws-messages';
+import { InCmd, Internal } from '../../../ws-messages';
 import { Stat, StatRow } from '../../cadegoose/stats/stats.component';
 import { Lobby } from '../../lobby.component';
 import { Turn } from '../../quacken/boats/boats.component';
@@ -8,10 +8,9 @@ import { CadeEntryStatusComponent } from '../../cadegoose/cade-entry-status/cade
 @Component({
   selector: 'q-sb-entry-status',
   templateUrl: './sb-entry-status.component.html',
-  styleUrls: ['./sb-entry-status.component.scss']
+  styleUrls: ['./sb-entry-status.component.scss'],
 })
 export class SbEntryStatusComponent extends CadeEntryStatusComponent implements OnInit {
-
   ngOnInit() {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.updatePoints(t.stats)));

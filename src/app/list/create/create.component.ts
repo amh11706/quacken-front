@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { CadeDesc } from 'src/app/lobby/cadegoose/cadegoose.component';
-import { QuackenDesc } from 'src/app/lobby/quacken/quacken.component';
-import { SbDesc } from 'src/app/lobby/seabattle/seabattle.component';
-import { SettingMap, SettingsService } from 'src/app/settings/settings.service';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
-import { WsService } from 'src/app/ws.service';
+import { CadeDesc } from '../../lobby/cadegoose/cadegoose.component';
+import { QuackenDesc } from '../../lobby/quacken/quacken.component';
+import { SbDesc } from '../../lobby/seabattle/seabattle.component';
+import { SettingMap, SettingsService } from '../../settings/settings.service';
+import { InCmd, OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws.service';
 
 export const Descriptions = {
   Quacken: QuackenDesc,
@@ -20,7 +20,7 @@ const groups = ['quacken', 'spades', 'cade', 'cade'];
 @Component({
   selector: 'q-create',
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.scss']
+  styleUrls: ['./create.component.scss'],
 })
 export class CreateComponent implements OnInit, OnDestroy {
   created = false;
@@ -59,5 +59,4 @@ export class CreateComponent implements OnInit, OnDestroy {
   async changeType() {
     this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType.value], true);
   }
-
 }

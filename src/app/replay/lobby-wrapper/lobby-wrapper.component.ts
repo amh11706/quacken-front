@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { WsService } from 'src/app/ws.service';
-import { ChatService } from 'src/app/chat/chat.service';
-import { FriendsService } from 'src/app/chat/friends/friends.service';
+import { WsService } from '../../ws.service';
+import { ChatService } from '../../chat/chat.service';
+import { FriendsService } from '../../chat/friends/friends.service';
 
 @Component({
   selector: 'q-lobby-wrapper',
@@ -10,7 +10,5 @@ import { FriendsService } from 'src/app/chat/friends/friends.service';
   providers: [WsService, ChatService, FriendsService],
 })
 export class LobbyWrapperComponent {
-
   constructor(public ws: WsService, public chat: ChatService, public fs: FriendsService) { }
-
 }

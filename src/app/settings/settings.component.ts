@@ -8,7 +8,7 @@ import { Sounds, SoundService } from '../sound.service';
 @Component({
   selector: 'q-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css']
+  styleUrls: ['./settings.component.css'],
 })
 export class SettingsComponent {
   links = [
@@ -24,5 +24,4 @@ export class SettingsComponent {
     public kbs: KeyBindingService,
     public sound: SoundService,
   ) { }
-
 }

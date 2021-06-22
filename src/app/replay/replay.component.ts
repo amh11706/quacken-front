@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
 import { SettingMap, SettingsService } from '../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../ws-messages';
 import { WsService, InMessage } from '../ws.service';
 import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
-import { ActivatedRoute } from '@angular/router';
 import { FriendsService } from '../chat/friends/friends.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
@@ -18,7 +18,7 @@ const joinMessage = 'Match replay: Use the replay controls to see a previous mat
 @Component({
   selector: 'q-replay',
   templateUrl: './replay.component.html',
-  styleUrls: ['./replay.component.scss']
+  styleUrls: ['./replay.component.scss'],
 })
 export class ReplayComponent implements OnInit, OnDestroy {
   @ViewChild(LobbyWrapperComponent, { static: true }) private lobbyWrapper?: LobbyWrapperComponent;
@@ -111,7 +111,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
         this.esc.open = false;
       });
       setTimeout(() => { // temporary fix for starting replay
-        this.playTo(Number(this.route.snapshot.queryParams['tick']));
+        this.playTo(Number(this.route.snapshot.queryParams.tick));
       }, 500);
     });
   }
@@ -230,5 +230,4 @@ export class ReplayComponent implements OnInit, OnDestroy {
       this.fakeWs.dispatchMessage(m);
     }
   }
-
 }

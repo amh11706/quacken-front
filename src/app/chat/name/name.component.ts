@@ -1,16 +1,16 @@
 import { Component, Input } from '@angular/core';
 
-import { ChatService, Message } from '../chat.service';
-import { WsService } from 'src/app/ws.service';
+import { WsService } from '../../ws.service';
+import { OutCmd } from '../../ws-messages';
+import { EscMenuService } from '../../esc-menu/esc-menu.service';
+import { StatService } from '../../esc-menu/profile/stat.service';
 import { FriendsService } from '../friends/friends.service';
-import { OutCmd } from 'src/app/ws-messages';
-import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
-import { StatService } from 'src/app/esc-menu/profile/stat.service';
+import { ChatService, Message } from '../chat.service';
 
 @Component({
   selector: 'q-name',
   templateUrl: './name.component.html',
-  styleUrls: ['./name.component.css']
+  styleUrls: ['./name.component.css'],
 })
 export class NameComponent {
   @Input() message: Message = {} as Message;
@@ -57,5 +57,4 @@ export class NameComponent {
   kick() {
     this.ws.send(OutCmd.ChatCommand, '/kick ' + this.getName());
   }
-
 }

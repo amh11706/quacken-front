@@ -1,16 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Message } from 'src/app/chat/chat.service';
-import { FriendsService } from 'src/app/chat/friends/friends.service';
-import { WsService } from 'src/app/ws.service';
-import { Lobby } from '../../lobby.component';
 import { Subscription } from 'rxjs';
-import { Turn } from '../../quacken/boats/boats.component';
+
+import { Message } from '../../../chat/chat.service';
+import { FriendsService } from '../../../chat/friends/friends.service';
+import { WsService } from '../../../ws.service';
+import { InCmd, Internal, OutCmd } from '../../../ws-messages';
+import { EscMenuService } from '../../../esc-menu/esc-menu.service';
+import { links } from '../../../settings/setting/setting.component';
+import { SettingPartial, SettingsService } from '../../../settings/settings.service';
+import { Sounds, SoundService } from '../../../sound.service';
 import { Boat } from '../../quacken/boats/boat';
-import { InCmd, Internal, OutCmd } from 'src/app/ws-messages';
-import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
-import { links } from 'src/app/settings/setting/setting.component';
-import { SettingPartial, SettingsService } from 'src/app/settings/settings.service';
-import { Sounds, SoundService } from 'src/app/sound.service';
+import { Turn } from '../../quacken/boats/boats.component';
+import { Lobby } from '../../lobby.component';
 
 interface TeamMessage {
   id: number;
@@ -23,13 +24,15 @@ interface TeamMessage {
 @Component({
   selector: 'q-main-menu',
   templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.scss']
+  styleUrls: ['./main-menu.component.scss'],
 })
 export class MainMenuComponent implements OnInit, OnDestroy {
-  boatTitles = [
-    , , , , , , , , , , , , , , 'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
-    'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate'
+  // eslint-disable-next-line no-sparse-arrays
+  boatTitles = [, , , , , , , , , , , , , ,
+    'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
+    'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate',
   ];
+
   links = links;
   defenders: Message[] = [];
   attackers: Message[] = [];
@@ -40,7 +43,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   admin = false;
   statsOpen = false;
   roundGoing = false;
-  mapId: SettingPartial = {value: 0};
+  mapId: SettingPartial = { value: 0 };
   private subs = new Subscription();
   private firstJoin = true;
 
@@ -55,9 +58,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
-    this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, async(m: Lobby) => {
       if (m.turn === 1) this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
-      this.roundGoing = m.turn && m.turn <= (await this.ss.get('l/cade', 'turns'))?.value || false;
+      this.roundGoing = (m.turn && m.turn <= (await this.ss.get('l/cade', 'turns'))?.value) || false;
       if (!m.players) return;
       if (this.firstJoin) {
         this.firstJoin = false;
@@ -75,7 +78,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
           this.ready = p.r;
           this.myTeam = p.t;
         }
-        let user = this.fs.lobby.find((mes) => mes.sId === +id);
+        const user = this.fs.lobby.find((mes) => mes.sId === +id);
         if (!user) return;
         user.team = p.t;
       }
@@ -87,7 +90,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.ready = m.r;
       }
       this.setTeam(m.id, m.t);
-      let user = this.fs.lobby.find((mes) => mes.sId === m.id);
+      const user = this.fs.lobby.find((mes) => mes.sId === m.id);
       if (!user) return;
       user.team = m.t;
     }));
@@ -104,7 +107,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
       this.myBoat = b;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Turn, async (t: Turn) => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, async(t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
       this.roundGoing = t.turn <= (await this.ss.get('l/cade', 'turns')).value;
       this.statsOpen = false;
@@ -180,12 +183,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     user.message = this.teams[id];
     if (team === 0) this.defenders.push(user);
     else this.attackers.push(user);
-    return;
   }
 
   public plural(length: number): string {
-    if (length === 1) return length + " player";
-    else return length + " players";
+    if (length === 1) return length + ' player';
+    else return length + ' players';
   }
-
 }

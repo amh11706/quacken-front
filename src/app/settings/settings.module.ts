@@ -12,16 +12,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 import { SettingComponent } from './setting/setting.component';
 import { SettingsComponent } from './settings.component';
 import { AccountComponent } from './account/account.component';
 import { MessageComponent } from './account/message/message.component';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { KeyBindingComponent } from './key-binding/key-binding.component';
 import { BinderComponent } from './key-binding/binder/binder.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { ExitPromptComponent } from './key-binding/exit-prompt/exit-prompt.component';
-import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -50,6 +50,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatDialogModule,
     MatMenuModule,
   ],
-  exports: [SettingComponent, SettingsComponent]
+  exports: [SettingComponent, SettingsComponent],
 })
 export class SettingsModule { }

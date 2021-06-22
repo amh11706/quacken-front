@@ -16,7 +16,7 @@
        [style.height]="(feature.y2 - feature.y1 + 1) * 25 + 'px'"
        [style.width]="(feature.x2 - feature.x1 + 1) * 25 + 'px'">
     <p>
-      {{feature.group == 0 ? types[feature.type] : groups[feature.group] + feature.density}}
+      {{feature.group === 0 ? types[feature.type] : groups[feature.group] + feature.density}}
     </p>
   </div>
 </div>

@@ -4,7 +4,6 @@ import { Directive, ElementRef, OnInit } from '@angular/core';
   selector: '[qAutoSelect]',
 })
 export class AutoSelectDirective implements OnInit {
-
   constructor(
     private elRef: ElementRef<HTMLInputElement>,
   ) { }
@@ -14,5 +13,4 @@ export class AutoSelectDirective implements OnInit {
       this.elRef.nativeElement.select();
     });
   }
-
 }

@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
 
-import { WsService } from 'src/app/ws.service';
+import { OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws.service';
 import { DBTile, MapEditor, MapGroups } from '../map-editor.component';
 
 export const TileTypes = [
@@ -11,13 +11,13 @@ export const TileTypes = [
   'Left Pod', 'Middle Pod',
   'Left Locker', 'Right Locker',
   'Left Cuttle', 'Right Cuttle',
-  'Left Obstacle', 'Middle Obstacle', 'Right Obstacle'
+  'Left Obstacle', 'Middle Obstacle', 'Right Obstacle',
 ];
 
 @Component({
   selector: 'q-tile-set',
   templateUrl: './tile-set.component.html',
-  styleUrls: ['./tile-set.component.scss']
+  styleUrls: ['./tile-set.component.scss'],
 })
 export class TileSetComponent implements OnInit, OnDestroy {
   @Input() map?: MapEditor;
@@ -53,7 +53,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.map.tiles[msg.type] = this.map.tiles[msg.type].filter((tile: DBTile) => {
       return tile.id !== msg.id;
     });
-    this.map.selectedTile = { id: 0, group: 'maps', type: 0, name: '', undos: [], redos: [], tags: []};
+    this.map.selectedTile = { id: 0, group: 'maps', type: 0, name: '', undos: [], redos: [], tags: [] };
   }
 
   select(tile: DBTile) {
@@ -67,8 +67,12 @@ export class TileSetComponent implements OnInit, OnDestroy {
   newTile() {
     if (!this.map) return;
     this.map.selectedTile = {
-      id: 0, name: '', group: 'maps',
-      undos: [], redos: [], tags: [],
+      id: 0,
+      name: '',
+      group: 'maps',
+      undos: [],
+      redos: [],
+      tags: [],
       type: this.map.selectedTile.type || 0,
       structure_set: this.map.structureSet?.id,
       tile_set: this.map.tileSet?.id,
@@ -90,22 +94,21 @@ export class TileSetComponent implements OnInit, OnDestroy {
     const map = {
       group: this.group + 's',
       weight: tile.weight,
-      id: tile.id
+      id: tile.id,
     };
     await this.ws.request(OutCmd.WeightSave, map);
     this.pending = false;
   }
 
   async deleteTile(tile: DBTile) {
-    if (!confirm(`Delete ${this.group} '${tile.name}'? this cannot be undone.`)) return;
+    if (!window.confirm(`Delete ${this.group} '${tile.name}'? this cannot be undone.`)) return;
     this.pending = true;
     const map = {
       group: this.group + 's',
       type: tile.type,
-      id: tile.id
+      id: tile.id,
     };
     const msg = await this.ws.request(OutCmd.MapDelete, map);
     this.handleDelete(msg);
   }
-
 }

@@ -25,7 +25,7 @@ export interface SettingMap {
 type SettingList = (keyof typeof Settings)[];
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SettingsService {
   private settings = new Map<string, SettingMap>();
@@ -80,7 +80,7 @@ export class SettingsService {
         this.ready.delete(group);
       });
     }
-    return new Promise<SettingMap>(async (resolve) => {
+    return new Promise<SettingMap>(resolve => {
       ready?.subscribe(v => resolve(v));
     });
   }

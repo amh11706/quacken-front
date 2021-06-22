@@ -5,7 +5,7 @@ import { TileSetComponent } from '../tile-set/tile-set.component';
 @Component({
   selector: 'q-tmap-set',
   templateUrl: './tmap-set.component.html',
-  styleUrls: ['./tmap-set.component.scss']
+  styleUrls: ['./tmap-set.component.scss'],
 })
 export class TmapSetComponent extends TileSetComponent {
   protected group: 'tile' | 'structure' | 'tmap' = 'tmap';
@@ -28,5 +28,4 @@ export class TmapSetComponent extends TileSetComponent {
     if (!tile.settings) tile.settings = {};
     super.select(tile);
   }
-
 }

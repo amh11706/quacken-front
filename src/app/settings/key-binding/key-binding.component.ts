@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 import { SettingsService } from '../settings.service';
 import { KeyBindingService } from './key-binding.service';
 import { ExitPromptComponent } from './exit-prompt/exit-prompt.component';
 import { KeyBindings, KeyBinding, DefaultBindings, KeyActions, LinkGroups, NotActive } from './key-actions';
-import { Subject } from 'rxjs';
 import { MessageComponent } from '../account/message/message.component';
 
 export interface KeyBindingEditMode extends KeyBinding {
@@ -20,7 +20,7 @@ type KeyBindingsEditMode = Record<keyof KeyBindings, KeyBindingEditMode[]>;
 @Component({
   selector: 'q-key-binding',
   templateUrl: './key-binding.component.html',
-  styleUrls: ['./key-binding.component.scss']
+  styleUrls: ['./key-binding.component.scss'],
 })
 export class KeyBindingComponent implements OnInit, OnDestroy {
   actions = new KeyBindings() as KeyBindingsEditMode;
@@ -79,9 +79,9 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
 
   private setTakenKeys() {
     this.takenKeys.clear();
-    const groups: (keyof KeyBindings)[] = this.group === 'Global' ?
-      Object.keys(this.actions) as (keyof KeyBindings)[] :
-      ['Global', this.group];
+    const groups: (keyof KeyBindings)[] = this.group === 'Global'
+      ? Object.keys(this.actions) as (keyof KeyBindings)[]
+      : ['Global', this.group];
 
     for (const group of groups) {
       for (const binding of this.actions[group]) {
@@ -140,7 +140,10 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
       }
     }
     this.ss.save({
-      id: 32, name: 'bindings', group: 'controls', value: 0,
+      id: 32,
+      name: 'bindings',
+      group: 'controls',
+      value: 0,
       data: toSave,
     });
 
@@ -188,5 +191,4 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
       if (this.notDefault) this.dialog.open(MessageComponent, { data: 'Some defaults could not be set due to conflicting bindings.' });
     });
   }
-
 }

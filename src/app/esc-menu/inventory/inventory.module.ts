@@ -26,6 +26,6 @@ import { SplitComponent } from './split/split.component';
     MatButtonModule,
     MatSliderModule,
   ],
-  exports: [InventoryComponent]
+  exports: [InventoryComponent],
 })
 export class InventoryModule { }

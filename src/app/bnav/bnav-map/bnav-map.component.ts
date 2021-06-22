@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { WsService } from 'src/app/ws.service';
 import { Subscription } from 'rxjs';
-import { Internal } from 'src/app/ws-messages';
-import { BoatSync } from 'src/app/lobby/quacken/boats/convert';
+
+import { WsService } from '../../ws.service';
+import { Internal } from '../../ws-messages';
+import { BoatSync } from '../../lobby/quacken/boats/convert';
 
 @Component({
   selector: 'q-bnav-map',
   templateUrl: './bnav-map.component.html',
-  styleUrls: ['./bnav-map.component.scss']
+  styleUrls: ['./bnav-map.component.scss'],
 })
 export class BnavMapComponent implements OnInit, OnDestroy {
   @Output() positionChange = new EventEmitter<string>();
@@ -17,13 +18,39 @@ export class BnavMapComponent implements OnInit, OnDestroy {
   private clickY = 0;
 
   private ourBoat: BoatSync = {
-    x: 5, y: 5, f: 0, inSZ: false,
-    n: 'Our Boat', id: 1, t: 0, b: 0, tp: 0, ty: 0, ml: 0, mDamage: 1, mMoves: 3, inSq: 0,
+    x: 5,
+    y: 5,
+    f: 0,
+    inSZ: false,
+    n: 'Our Boat',
+    id: 1,
+    t: 0,
+    b: 0,
+    tp: 0,
+    ty: 0,
+    ml: 0,
+    mDamage: 1,
+    mMoves: 3,
+    inSq: 0,
   };
+
   private theirBoat: BoatSync = {
-    x: 3, y: 5, f: 1, inSZ: false,
-    n: 'Their Boat', id: 0, t: 0, b: 0, tp: 0, ty: 2, ml: 0, mDamage: 1, mMoves: 3, inSq: 0,
+    x: 3,
+    y: 5,
+    f: 1,
+    inSZ: false,
+    n: 'Their Boat',
+    id: 0,
+    t: 0,
+    b: 0,
+    tp: 0,
+    ty: 2,
+    ml: 0,
+    mDamage: 1,
+    mMoves: 3,
+    inSq: 0,
   };
+
   private boats = { us: this.ourBoat, them: this.theirBoat };
   private sub = new Subscription();
 
@@ -50,7 +77,7 @@ export class BnavMapComponent implements OnInit, OnDestroy {
     const b = this.theirBoat;
     const ob = this.ourBoat;
     const relativeFace = (b.f - ob.f + 4) % 4;
-    let relativeX = b.x - ob.y, relativeY = b.y - ob.y;
+    let relativeX = b.x - ob.y; let relativeY = b.y - ob.y;
     if (ob.f % 2) [relativeX, relativeY] = [relativeY, relativeX];
     if (ob.f > 1) [relativeX, relativeY] = [-relativeX, -relativeY];
 
@@ -80,5 +107,4 @@ export class BnavMapComponent implements OnInit, OnDestroy {
     if (Math.abs(e.clientX - this.clickX) + Math.abs(e.clientY - this.clickY) > 20) return;
     this.clickTile(x, y);
   }
-
 }

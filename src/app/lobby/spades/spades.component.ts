@@ -1,25 +1,25 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild, ComponentRef } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Lobby } from '../lobby.component';
-import { Card } from './card/card.component';
-import { spots } from './spot/spot.component';
-import { SettingsService, SettingMap } from 'src/app/settings/settings.service';
-import { FriendsService } from 'src/app/chat/friends/friends.service';
-import { WsService } from 'src/app/ws.service';
+import { SettingsService, SettingMap } from '../../settings/settings.service';
+import { FriendsService } from '../../chat/friends/friends.service';
+import { WsService } from '../../ws.service';
+import { Settings } from '../../settings/setting/settings';
+import { InCmd, OutCmd } from '../../ws-messages';
+import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { TimerComponent } from './timer/timer.component';
-import { Settings } from 'src/app/settings/setting/settings';
-import { InCmd, OutCmd } from 'src/app/ws-messages';
-import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
+import { spots } from './spot/spot.component';
+import { Card } from './card/card.component';
+import { Lobby } from '../lobby.component';
 
 const ownerSettings: (keyof typeof Settings)[] = [
-  'watchers', 'turnTime', 'playTo'
+  'watchers', 'turnTime', 'playTo',
 ];
 
 @Component({
   selector: 'q-spades',
   templateUrl: './spades.component.html',
-  styleUrls: ['./spades.component.css']
+  styleUrls: ['./spades.component.css'],
 })
 export class SpadesComponent implements OnInit, OnDestroy {
   @ViewChild(TimerComponent, { static: false }) timer?: TimerComponent;
@@ -52,6 +52,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }
     l.lastTrick = newPlayed;
   }
+
   get lobby() {
     return this._lobby;
   }
@@ -199,8 +200,10 @@ export class SpadesComponent implements OnInit, OnDestroy {
 
   private highlightPass(s: Card[]) {
     const pass: Card[] = [];
+    // eslint-disable-next-line no-labels
     search:
     for (const c of s) {
+      // eslint-disable-next-line no-labels
       for (const card of this.cards) if (card.id === c.id) continue search;
       c.selected = true;
       pass.push(c);
@@ -233,7 +236,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
   private checkValid() {
     const length = this.lobby.played.length % 4;
     if (this.played || this.lobby.playingP === 0 ||
-      length === 0 && this.lobby.playingP !== this.ws.sId) {
+      (length === 0 && this.lobby.playingP !== this.ws.sId)) {
       for (const card of this.cards) card.valid = false;
       this.selected = [];
       return;
@@ -283,5 +286,4 @@ export class SpadesComponent implements OnInit, OnDestroy {
       this.play(this.selected);
     }
   }
-
 }

@@ -17,7 +17,7 @@ interface DBMove {
 @Component({
   selector: 'q-bnav',
   templateUrl: './bnav.component.html',
-  styleUrls: ['./bnav.component.scss']
+  styleUrls: ['./bnav.component.scss'],
 })
 export class BnavComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
@@ -72,5 +72,4 @@ export class BnavComponent implements OnInit, OnDestroy {
     this.newMove.shots = '';
     this.newMove.notes = '';
   }
-
 }

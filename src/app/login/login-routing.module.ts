@@ -8,46 +8,45 @@ import { ResetComponent } from './reset/reset.component';
 import { RestoreComponent } from './restore/restore.component';
 import { TermsComponent } from './terms/terms.component';
 
-
 const routes: Routes = [
-    {
-        path: '',
-        component: LoginComponent,
-        children: [
-            {
-                path: 'login',
-                component: LoginFormComponent,
-            },
-            {
-                path: 'terms',
-                component: TermsComponent,
-            },
-            {
-                path: 'privacy',
-                component: PrivacyComponent,
-            },
-            {
-                path: 'create',
-                component: CreateComponent,
-            },
-            {
-                path: 'reset/:token',
-                component: ResetComponent,
-            },
-            {
-                path: 'restore/:token',
-                component: RestoreComponent,
-            },
-            {
-                path: '**',
-                redirectTo: 'login',
-            },
-        ],
-    },
+  {
+    path: '',
+    component: LoginComponent,
+    children: [
+      {
+        path: 'login',
+        component: LoginFormComponent,
+      },
+      {
+        path: 'terms',
+        component: TermsComponent,
+      },
+      {
+        path: 'privacy',
+        component: PrivacyComponent,
+      },
+      {
+        path: 'create',
+        component: CreateComponent,
+      },
+      {
+        path: 'reset/:token',
+        component: ResetComponent,
+      },
+      {
+        path: 'restore/:token',
+        component: RestoreComponent,
+      },
+      {
+        path: '**',
+        redirectTo: 'login',
+      },
+    ],
+  },
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
 export class LoginRoutingModule { }

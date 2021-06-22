@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
+import { OutCmd } from '../../ws-messages';
+import { StatService } from '../../esc-menu/profile/stat.service';
 import { FriendsService, Invite } from './friends.service';
 import { WsService } from '../../ws.service';
 import { ChatService } from '../chat.service';
-import { Router } from '@angular/router';
-import { OutCmd } from 'src/app/ws-messages';
-import { StatService } from 'src/app/esc-menu/profile/stat.service';
 
 @Component({
   selector: 'q-friends',
   templateUrl: './friends.component.html',
-  styleUrls: ['./friends.component.scss']
+  styleUrls: ['./friends.component.scss'],
 })
 export class FriendsComponent {
   links = [
@@ -53,5 +53,4 @@ export class FriendsComponent {
   invite(friend: string) {
     this.ws.send(OutCmd.ChatCommand, '/invite ' + friend);
   }
-
 }

@@ -20,6 +20,6 @@ import { LobbyRoutingModule } from './lobby-routing.module';
     CadegooseModule,
     SeabattleModule,
   ],
-  exports: [LobbyComponent]
+  exports: [LobbyComponent],
 })
 export class LobbyModule { }

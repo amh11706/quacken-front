@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Component, Input, OnChanges } from '@angular/core';
 
 export interface StatRow {
@@ -18,7 +19,7 @@ export const enum Stat {
 @Component({
   selector: 'q-stats',
   templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.scss']
+  styleUrls: ['./stats.component.scss'],
 })
 export class StatsComponent implements OnChanges {
   @Input() stats?: Record<number, StatRow>;
@@ -55,5 +56,4 @@ export class StatsComponent implements OnChanges {
     this.defenders.sort((a, b) => +b.stats[Stat.PointsScored] - +a.stats[Stat.PointsScored]);
     this.attackers.sort((a, b) => +b.stats[Stat.PointsScored] - +a.stats[Stat.PointsScored]);
   }
-
 }
