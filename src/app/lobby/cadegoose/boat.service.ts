@@ -56,7 +56,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     // }));
   }
 
-  private static dispose(o: any): void {
+  static dispose(o: any): void {
     if (o.geometry) {
       o.geometry.dispose();
     }

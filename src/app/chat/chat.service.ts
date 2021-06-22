@@ -50,7 +50,7 @@ export class ChatService {
       for (const cmd of this.commands) {
         const params = cmd.params as any as string;
         let messageFound = false;
-        cmd.params = params.replace(/[[]<>]/g, '').split(' ').map(p => {
+        cmd.params = params.replace(/[[\]<>]/g, '').split(' ').map(p => {
           if (p === 'message') messageFound = true;
           return { name: p, value: p === 'new' ? p : '' };
         });

@@ -86,7 +86,7 @@ export class WsService {
     };
   }
 
-  subscribe(cmd: InCmd | Internal, next?: (value: any) => void, error?: (error: any) => void, complete?: () => void): Subscription {
+  subscribe(cmd: InCmd | Internal, next?: (value: any) => void, error?: (e: any) => void, complete?: () => void): Subscription {
     const sub = this.messages.get(cmd);
     if (sub && sub.observers.length) return sub.subscribe(next, error, complete);
 
