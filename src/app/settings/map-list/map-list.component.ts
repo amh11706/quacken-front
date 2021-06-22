@@ -159,6 +159,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (this.selectedFilters.indexOf(tag) !== -1) {
       this.selectedFilters = this.selectedFilters.filter(el => el !== tag);
     } else {
+      if (this.selectedFilters.some(r=> [1,2,3,4].includes(+r))) return;
       this.selectedFilters.push(tag);
     }
 

@@ -14,14 +14,14 @@
                           [forTags]="true"></q-rating>
             </mat-chip>
         </mat-chip-list>
-        <mat-divider></mat-divider>
+        <mat-divider class="divider"></mat-divider>
             Tags:
             <mat-chip-list>
                 <mat-chip #chipList *ngFor="let tag of data.tagList" 
                     [removable]="false"
                     (click)="onClick(tag)">{{tag}}</mat-chip>
             </mat-chip-list>
-        <mat-divider></mat-divider>
+        <mat-divider class="divider"></mat-divider>
     
         Creators:
         <mat-chip-list>
