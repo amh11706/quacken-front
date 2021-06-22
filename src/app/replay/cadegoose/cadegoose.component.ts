@@ -184,7 +184,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     return this.ships.filter(ship => ship.label.toLowerCase().indexOf(filterValue) !== -1);
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.subs.add(this.ws.fakeWs?.subscribe(Internal.Boats, (boats: Boat[]) => {
       this.boats = [...boats];
       this.findMyBoat();

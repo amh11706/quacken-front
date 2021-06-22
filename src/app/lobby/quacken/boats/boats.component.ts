@@ -189,7 +189,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected async handleTurn(turn: Turn): Promise<void> {
+  protected handleTurn(turn: Turn): void {
     if (this.turn) {
       console.log('got turn while in turn', this.turn);
       return;

@@ -156,7 +156,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     return (this.mapWidth + this.mapHeight) * 32;
   }
 
-  async colorFlags(): Promise<void> {
+  colorFlags(): void {
     if (this.flags.length === 0) return;
     for (const f of this.flags) {
       if (!f.points) continue;

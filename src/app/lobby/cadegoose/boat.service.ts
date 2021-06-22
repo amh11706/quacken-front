@@ -83,7 +83,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (const p of Object.values(this.ships)) p.then(s => BoatService.dispose(s.scene));
   }
 
-  async setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: Camera): Promise<void> {
+  setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: Camera): void {
     this.scene = s;
     this.camera = cam;
 
@@ -163,7 +163,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (const boat of this.boats) boat.render?.updateMoves();
   }
 
-  protected async handleTurn(turn: Turn): Promise<void> {
+  protected handleTurn(turn: Turn): void {
     this.flagData = turn.flags;
     this.setHeaderFlags(turn.flags);
     super.handleTurn(turn);
@@ -315,7 +315,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }
   }
 
-  private async renderSync() {
+  private renderSync() {
     if (this.blockRender) return;
 
     for (const boat of this.boats) {

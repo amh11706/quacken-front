@@ -130,7 +130,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     return data;
   }
 
-  async selectMap(id: number): Promise<void> {
+  selectMap(id: number): void {
     const maps = this.filteredMapList.length < 1 ? this.servermapList : this.filteredMapList;
     const map = id < 0 ? maps[Math.floor(Math.random() * maps.length)] : maps.find(m => m.id === id);
     if (!map) return;

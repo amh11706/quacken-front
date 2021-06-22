@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import moment from 'moment';
 
-import { SettingsService } from '../../../settings/settings.service';
 import { OutCmd } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
 import { StatService } from '../stat.service';
@@ -30,7 +29,6 @@ export class MatchesComponent implements OnInit {
   constructor(
     private ws: WsService,
     public stat: StatService,
-    private ss: SettingsService,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -45,7 +43,7 @@ export class MatchesComponent implements OnInit {
     }
   }
 
-  async openMatch(m: Match): Promise<void> {
+  openMatch(m: Match): void {
     window.open('/#/replay/' + m.matchId, '_blank');
   }
 }

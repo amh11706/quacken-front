@@ -57,7 +57,7 @@ export class SettingsService {
     this.showMapChoice = showMapChoice;
   }
 
-  async getGroup(group: string, update = false): Promise<SettingMap> {
+  getGroup(group: string, update = false): Promise<SettingMap> {
     if (!update) {
       const settings = this.settings.get(group);
       if (settings) return Promise.resolve(settings);

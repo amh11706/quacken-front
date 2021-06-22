@@ -43,7 +43,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     private kbs: KeyBindingService,
   ) { }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage } });
     if (this.lobbyWrapper) {
       this.fakeChat = this.lobbyWrapper.chat;

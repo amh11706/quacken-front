@@ -41,7 +41,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     this.notDefaultElements = el.nativeElement.getElementsByClassName('notdefault');
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     if (!this.kbs.activeBindings) return;
     const groupMap = new Map<LinkGroups, KeyBinding[]>();
     for (const key in this.actions) {
