@@ -49,24 +49,18 @@ export class GuBoat extends BoatRender {
   img?: string;
   imgPosition?: string;
   flags: { p: number, t: number, offset: string }[] = [];
-  static hovering: number = 0;
+  static hovering = 0;
 
   constructor(boat: Boat, gltf: GLTF) {
     super(boat, gltf);
   }
 
-  init(boat: Boat) {
+  init(boat: Boat): void {
     this.coords = new Point().fromPosition(boat.pos);
     this.spriteData = Boats[boat.type as BoatTypes]?.sail;
     if (!this.spriteData) return;
     this.updateImage();
     this.updateTeam(boat);
-  }
-
-  dispose() {
-    return this.worker.addJob(() => {
-
-    }, false);
   }
 
   showInfluence(v = true): void {
@@ -77,7 +71,7 @@ export class GuBoat extends BoatRender {
     return this;
   }
 
-  protected _update(animate: boolean, boat: Boat) {
+  protected _update(animate: boolean, boat: Boat): Promise<any> {
     const startTime = animate ? new Date().valueOf() : 0;
     const promises: Promise<any>[] = [];
 
@@ -130,7 +124,7 @@ export class GuBoat extends BoatRender {
     return prom;
   }
 
-  public async updateTeam(boat: Boat) {
+  public async updateTeam(boat: Boat): Promise<void> {
     if (!this.spriteData) return;
     await new Promise(resolve => setTimeout(resolve));
     const team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;
@@ -138,18 +132,16 @@ export class GuBoat extends BoatRender {
     if (Boats[boat.type as BoatTypes]?.sink) this.getTeamImage(team, this.spriteData.name + '/sink');
   }
 
-  rebuildHeader() { }
-
   scaleHeader(): BoatRender {
     return this;
   }
 
-  protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]) {
+  protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]): Promise<void>[] {
     const decodeX = [0, 0.4, 0, -0.4];
     const decodeY = [-0.4, 0, 0.4, 0];
 
     const p = [
-      new Promise<void | Object>(resolve => {
+      new Promise<void | { x: number, y: number }>(resolve => {
         const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
@@ -176,7 +168,7 @@ export class GuBoat extends BoatRender {
         this.coords?.fromPosition(this.pos);
       }),
 
-      new Promise<void | Object>(resolve => {
+      new Promise<void | { x: number, y: number }>(resolve => {
         const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
@@ -215,7 +207,7 @@ export class GuBoat extends BoatRender {
     this.imgPosition = (-this.orientation.x) + 'px ' + (-this.orientation.y) + 'px';
   }
 
-  protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number) {
+  protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number): Promise<any>[] {
     const promises: Promise<any>[] = [];
 
     if (startTime && (transition || !opacity)) {

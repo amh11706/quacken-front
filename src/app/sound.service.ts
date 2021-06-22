@@ -53,7 +53,7 @@ export class SoundService {
     ss.getGroup('sounds').then(settings => this.settings = settings);
   }
 
-  load(sound: Sounds) {
+  load(sound: Sounds): Promise<string> {
     let p = this.loaded.get(sound);
     if (p) return p;
     p = window.fetch('assets/sounds/' + SoundFiles[sound].file)

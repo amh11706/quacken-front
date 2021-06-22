@@ -68,7 +68,7 @@ export class BnavMapComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(Internal.MyBoat, () => null));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
@@ -84,7 +84,7 @@ export class BnavMapComponent implements OnInit, OnDestroy {
     this.positionChange.emit(`${relativeX},${relativeY},${relativeFace}`);
   }
 
-  clickTile(x: number, y: number) {
+  clickTile(x: number, y: number): void {
     const b = this.theirBoat;
     if (x === 5 && y === 5) {
       this.ourBoat.f = (this.ourBoat.f + 1) % 4;
@@ -98,12 +98,12 @@ export class BnavMapComponent implements OnInit, OnDestroy {
     this.updateBoats();
   }
 
-  mouseDown(e: MouseEvent) {
+  mouseDown(e: MouseEvent): void {
     this.clickX = e.clientX;
     this.clickY = e.clientY;
   }
 
-  mouseUp(e: MouseEvent, x: number, y: number) {
+  mouseUp(e: MouseEvent, x: number, y: number): void {
     if (Math.abs(e.clientX - this.clickX) + Math.abs(e.clientY - this.clickY) > 20) return;
     this.clickTile(x, y);
   }

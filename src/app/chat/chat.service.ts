@@ -95,7 +95,7 @@ export class ChatService {
     });
   }
 
-  setTell(name: string) {
+  setTell(name: string): void {
     const param = this.selectedCommand.params.find(p => p.name === 'message');
     if (param?.value) this.commandHistory.push(param.value);
     this.selectedCommand = this.commands.find(cmd => cmd.base === '/tell') || this.selectedCommand;
@@ -103,7 +103,7 @@ export class ChatService {
     this.kbs.emitAction(KeyActions.FocusChat);
   }
 
-  sendTell(friend: string) {
+  sendTell(friend: string): void {
     this.setTell(friend);
     this.kbs.emitAction(KeyActions.FocusChat);
   }

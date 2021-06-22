@@ -21,7 +21,7 @@ export class CommandsComponent {
     private ref: MatDialogRef<CommandsComponent>,
   ) { }
 
-  clickCommand(c: any) {
+  clickCommand(c: { base: string, params: string }): void {
     if (c.params) {
       const param = this.chat.selectedCommand.params.find(p => p.name === 'message');
       if (param?.value) this.chat.commandHistory.push(param.value);

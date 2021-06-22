@@ -36,13 +36,13 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     }
   }
 
-  get hoveredTeam() {
+  get hoveredTeam(): number {
     return this._hoveredTeam;
   }
 
-  private _hoveredTeam: number = -1;
+  private _hoveredTeam = -1;
   @Input() map?: HTMLElement;
-  protected checkSZ = (pos: { x: number, y: number }) => {
+  protected checkSZ = (pos: { x: number, y: number }): boolean => {
     if (!this.showIsland) return false;
     return checkSZ(pos);
   }
@@ -65,7 +65,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     this.blockRender = false;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // no super to prevent double init thanks to extended class not being a component
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
@@ -84,12 +84,12 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     this.sound.load(Sounds.RockDamage);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     super.ngOnDestroy();
     GuBoat.myTeam = 99;
   }
 
-  clickBoat(boat: Boat) {
+  clickBoat(boat: Boat): void {
     this.ws.dispatchMessage({ cmd: Internal.BoatClicked, data: boat });
   }
 
@@ -118,7 +118,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     return new Promise(resolve => setTimeout(resolve, step % 2 === 1 ? 7000 / this.speed : 0));
   }
 
-  protected setHeaderFlags(flags: Turn['flags']) {
+  protected setHeaderFlags(flags: Turn['flags']): void {
     for (const boat of this.boats) if (boat.render) boat.render.flags = [];
     for (const f of flags) {
       if (f.cs) {
@@ -140,7 +140,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     }
   }
 
-  protected checkNewShips() {
+  protected checkNewShips(): never[] {
     for (const boat of this.boats) {
       if (boat.render) continue;
       let newBoat = this._boats[boat.id];

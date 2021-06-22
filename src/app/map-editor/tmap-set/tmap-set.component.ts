@@ -10,12 +10,12 @@ import { TileSetComponent } from '../tile-set/tile-set.component';
 export class TmapSetComponent extends TileSetComponent {
   protected group: 'tile' | 'structure' | 'tmap' = 'tmap';
 
-  protected initTile(tile: DBTile) {
+  protected initTile(tile: DBTile): void {
     if (this.map?.tmaps) tile = this.map.tmaps.find(el => el.id === tile.id) || tile;
     this.select(tile);
   }
 
-  protected handleDelete = (msg: any) => {
+  protected handleDelete = (msg: DBTile): void => {
     this.pending = false;
     if (!this.map?.tmaps) return;
     this.map.tmaps = this.map.tmaps.filter(map => {
@@ -24,7 +24,7 @@ export class TmapSetComponent extends TileSetComponent {
     this.map.selectedTile = this.map.tmaps[0] || { id: null, name: '', undos: [], redos: [] };
   }
 
-  select(tile: DBTile) {
+  select(tile: DBTile): void {
     if (!tile.settings) tile.settings = {};
     super.select(tile);
   }

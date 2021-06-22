@@ -54,7 +54,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.ss.getGroup('l/cade', true);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
     this.ss.setLobbySettings(ownerSettings, this.showMapChoice);
     this.es.setLobby(this.menuComponent, this.lobby);
@@ -65,15 +65,15 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.sub.add(this.kbs.subscribe(this.statAction, v => this.statOpacity = v ? 1 : 0));
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.renderer?.fillMap(this.map, this.lobby?.flags);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     super.ngOnDestroy();
   }
 
-  protected setMapB64(map: string) {
+  protected setMapB64(map: string): void {
     super.setMapB64(map);
     this.renderer?.fillMap(this.map, this.lobby?.flags);
   }

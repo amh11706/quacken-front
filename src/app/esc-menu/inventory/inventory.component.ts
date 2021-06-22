@@ -60,7 +60,7 @@ export class InventoryComponent implements OnDestroy {
     this.id = this.ws.user?.inventory;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subs.unsubscribe();
     this.ws.send(OutCmd.InventoryCmd, { cmd: 'c', id: this.id });
   }
@@ -111,7 +111,7 @@ export class InventoryComponent implements OnDestroy {
     }));
   }
 
-  clickStack(i: Item) {
+  clickStack(i: Item): void {
     if (i.q < 2) return;
     const dialog = this.dialog.open(SplitComponent, { data: i });
     dialog.afterClosed().subscribe(value => {
@@ -120,7 +120,7 @@ export class InventoryComponent implements OnDestroy {
     });
   }
 
-  drop(e: DragEvent, i: Item) {
+  drop(e: DragEvent, i: Item): void {
     if (!this.dragging) return;
     e.preventDefault();
     if (i.id !== this.dragging.id || i.q >= 250) return;
@@ -128,7 +128,7 @@ export class InventoryComponent implements OnDestroy {
     delete this.dragging;
   }
 
-  sort(by: 's' | 'id' | 't' | 'q' | 'n' | 'f', send = true) {
+  sort(by: 's' | 'id' | 't' | 'q' | 'n' | 'f', send = true): void {
     if (send) this.ws.send(OutCmd.InventoryCmd, { cmd: 'sort', id: this.id, data: by });
     if (!this.inv) return;
     this.inv.filtered.sort((a, b) => {
@@ -144,12 +144,12 @@ export class InventoryComponent implements OnDestroy {
     });
   }
 
-  searchBounce(key: string) {
+  searchBounce(key: string): void {
     clearTimeout(this.searchDebounce);
     this.searchDebounce = window.setTimeout(() => this.search(key), 500);
   }
 
-  search(key: string) {
+  search(key: string): void {
     if (!this.inv) return;
     if (!key) {
       this.inv.filtered = this.inv.items;

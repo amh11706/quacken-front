@@ -4,7 +4,7 @@ import Stats from 'three/examples/jsm/libs/stats.module';
 import { SettingsService, SettingMap } from '../../../settings/settings.service';
 import { InCmd, Internal } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
-import { MapEditor } from '../../../map-editor/map-editor.component';
+import { MapEditor, MapTile } from '../../../map-editor/map-editor.component';
 import { Boat } from '../../quacken/boats/boat';
 import { Sprite, SpriteImage } from './sprite';
 import { BigRockData } from './objects/big_rock';
@@ -44,8 +44,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() set map(map: number[][]) { this.fillMap(map, []); }
   private mapUtil = new MapComponent();
   @Input() set editor(e: MapEditor) { this.mapUtil.map = e; }
-  @Input() set undo(u: any) { this.mapUtil.undo = u; }
-  @Input() set setTile(st: any) { this.mapUtil.setTile = st; }
+  @Input() set undo(u: (source: MapTile[][], target: MapTile[][]) => void) { this.mapUtil.undo = u; }
+  @Input() set setTile(st: (x: number, y: number, v: number) => MapTile | undefined) { this.mapUtil.setTile = st; }
   @Input() ctrlZoom = false;
   private _mapScale = 1;
   private _mapScaleRaw = 50;
@@ -54,7 +54,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this._mapScaleRaw = +v;
   }
 
-  get mapScale() { return this._mapScale; }
+  get mapScale(): number { return this._mapScale; }
   @Input() graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
   private frameRequested = true;
   private frameTarget = 0;
@@ -112,13 +112,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ngZone.runOutsideAngular(this.requestRender.bind(this));
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.stats = Stats();
     this.fps?.nativeElement.appendChild(this.stats.dom);
     this.stats.dom.style.position = 'relative';
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.alive = false;
   }
@@ -148,26 +148,27 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     window.requestAnimationFrame(this.animate);
   }
 
-  getHeight() {
+  getHeight(): number {
     return (this.mapWidth + this.mapHeight) * 24;
   }
 
-  getWidth() {
+  getWidth(): number {
     return (this.mapWidth + this.mapHeight) * 32;
   }
 
-  async colorFlags() {
+  async colorFlags(): Promise<void> {
     if (this.flags.length === 0) return;
     for (const f of this.flags) {
+      if (!f.points) continue;
       const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
       const offset = FlagColorOffsets[team] ?? FlagColorOffsets[99];
-      const pixel = FlagData.orientations[(f.points! + offset).toString() as flagIndex];
+      const pixel = FlagData.orientations[(f.points + offset).toString() as flagIndex];
       f.sprite.imgPosition = `-${pixel.x}px -${pixel.y}px`;
       f.sprite.orientation = pixel;
     }
   }
 
-  public addObstacles(x: number, y: number, tile: number, flags: any) {
+  public addObstacles(x: number, y: number, tile: number, flags: {t: number, points?: number, cs?: number[]}[]): void {
     const obstacle = new Point().fromPosition({ x, y });
     const pOffsetX = obstacle.x;
     const pOffsetY = obstacle.y;
@@ -196,7 +197,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  async fillMap(map: number[][], flags: any[]) {
+  async fillMap(map: number[][], flags: any[]): Promise<void> {
     await Promise.all([this.wind.prom, this.whirl.prom, this.water.prom, this.sz.prom]);
     const wasLoaded = !!this.canvas;
     if (!this.canvas) {
@@ -229,7 +230,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.colorFlags();
   }
 
-  scroll(e: WheelEvent) {
+  scroll(e: WheelEvent): void {
     if (this.ctrlZoom && !e.ctrlKey) return;
     if (e.deltaY < 0) {
       this._mapScaleRaw *= 21 / 20;
@@ -255,17 +256,17 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     return position;
   }
 
-  mousedown(event: MouseEvent) {
+  mousedown(event: MouseEvent): void {
     const p = this.extractCoord(event);
     this.mapUtil.clickTile(event, p.x, p.y);
   }
 
-  mouseup(event: MouseEvent) {
+  mouseup(event: MouseEvent): void {
     const p = this.extractCoord(event);
     this.mapUtil.mouseUp(event, p.x, p.y);
   }
 
-  mousemove(event: MouseEvent) {
+  mousemove(event: MouseEvent): void {
     if (!this.mapUtil.painting) return;
     const p = this.extractCoord(event);
     this.mapUtil.clickTile(event, p.x, p.y);

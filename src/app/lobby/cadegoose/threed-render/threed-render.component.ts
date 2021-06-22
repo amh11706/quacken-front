@@ -123,7 +123,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.buildGrid();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.frame?.nativeElement.appendChild(this.renderer.domElement);
     this.frame?.nativeElement.addEventListener('dblclick', this.centerOnBoat.bind(this));
     this.bs.map = this.frame?.nativeElement;
@@ -152,7 +152,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.frame?.nativeElement.addEventListener('click', this.click, false);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.alive = false;
     window.removeEventListener('resize', this.onWindowResize);
@@ -193,7 +193,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.bs.findClick(this.rayCaster.ray);
   }
 
-  protected updateIntersects() {
+  protected updateIntersects(): void {
     if (!this.mouseMoved && this.hoveredTeam === -1) return;
     this.rayCaster.setFromCamera(this.mouse, this.camera);
     this.bs.showInfluence(this.rayCaster.ray, this.hoveredTeam);
@@ -340,7 +340,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  protected buildGrid() {
+  protected buildGrid(): void {
     const grid = new Object3D();
     grid.position.y = GRID_DEPTH;
     let geometry = new PlaneBufferGeometry(this.mapWidth + 0.025, 0.025, this.mapWidth, 1);
@@ -378,7 +378,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mapScene.add(grid);
   }
 
-  fillMap(map: number[][], flags: any[]) {
+  fillMap(map: number[][], flags: any[]): void {
     for (const o of this.mapObjects) o.parent?.remove(o);
     this.mapObjects = [];
 

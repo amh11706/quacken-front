@@ -37,11 +37,13 @@ export class CreateComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.sub.add(this.ws.connected$.subscribe(async v => {
+    this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v) return;
       this.ws.send(OutCmd.LobbyListJoin);
-      this.settings = await this.ss.getGroup('l/create');
-      this.changeType();
+      this.ss.getGroup('l/create').then(s => {
+        this.settings = s;
+        this.changeType();
+      });
     }));
     this.sub.add(this.ws.subscribe(InCmd.NavigateTo, () => this.ref.close()));
   }
@@ -56,7 +58,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.created = true;
   }
 
-  async changeType() {
+  async changeType(): Promise<void> {
     this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType.value], true);
   }
 }

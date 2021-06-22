@@ -33,17 +33,17 @@ export class BnavComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
-  setPercents() {
+  setPercents(): void {
     let total = 0;
     for (const move of this.moves) total += move.count;
     for (const move of this.moves) move.percent = Math.round(move.count / total * 1000) / 10 + '%';
   }
 
-  positionChange(position: string) {
+  positionChange(position: string): void {
     this.newMove.position = position;
     this.moves = [];
     clearTimeout(this.debounce);
@@ -53,7 +53,7 @@ export class BnavComponent implements OnInit, OnDestroy {
     }), 500);
   }
 
-  submitMoves() {
+  submitMoves(): void {
     this.ws.request(OutCmd.BnavSavePosition, this.newMove).then((m: DBMove) => {
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Moves submitted. Thank you!' } });
       if (m.position !== this.newMove.position) return;

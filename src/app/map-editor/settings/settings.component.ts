@@ -59,7 +59,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   constructor(protected socket: WsService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sub.add(this.socket.connected$.subscribe(v => {
       if (!v) return;
       setTimeout(async() => this.gotList(await this.socket.request(OutCmd.MapListAll)));
@@ -120,7 +120,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (unsaved) this.error = 'Unsaved changes! They will be discarded if you select a different map without saving.';
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
@@ -281,7 +281,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (selected) Object.assign(selected, tile);
   }
 
-  select() {
+  select(): void {
     this.error = '';
     this.success = '';
     delete this.map.tiles;
@@ -297,7 +297,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.tags.addAll(tile.tags);
   }
 
-  updateOptions() {
+  updateOptions(): void {
     const tile = this.shown || this.map.selectedTile;
     this.options = this.mapData[tile.group];
     this.selected = 'new';
@@ -329,7 +329,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     return map;
   }
 
-  save(tile = this.shown || this.map.selectedTile) {
+  save(tile = this.shown || this.map.selectedTile): void {
     this.success = '';
     this.error = tile.name ? '' : 'Name is required.';
     tile.tags = this.tags.tags || [];
@@ -382,7 +382,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async edit() {
+  async edit(): Promise<void> {
     if (this.map.tileSettings) {
       this.map.tileSettings = false;
       this.map.settingsOpen = false;

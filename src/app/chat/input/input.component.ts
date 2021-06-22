@@ -31,7 +31,7 @@ export class InputComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  handleKey(e: KeyboardEvent) {
+  handleKey(e: KeyboardEvent): void {
     const param = this.chat.selectedCommand.params.find(p => p.name === 'message');
     if (e.key === 'Enter') {
       this.sendInput(e);
@@ -61,15 +61,15 @@ export class InputComponent implements OnInit, OnDestroy {
     }
   }
 
-  focusChat() {
+  focusChat(): void {
     setTimeout(() => document.getElementById('message')?.focus());
   }
 
-  blurChat() {
+  blurChat(): void {
     setTimeout(() => document.getElementById('message')?.blur());
   }
 
-  sendInput(e: Event) {
+  sendInput(e: Event): void {
     e.preventDefault();
     let text = this.chat.selectedCommand.base;
     for (const param of this.chat.selectedCommand.params) {

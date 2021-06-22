@@ -8,6 +8,4 @@ import { MapEditor } from '../map-editor.component';
 })
 export class EntityEditorComponent {
   @Input() map?: MapEditor;
-
-  constructor() { }
 }

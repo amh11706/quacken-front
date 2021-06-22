@@ -42,7 +42,7 @@ export class SpotComponent implements OnInit, OnDestroy {
     this.rotateSpots(mySpot);
   }
 
-  get lobby() {
+  get lobby(): Lobby {
     return this._lobby;
   }
 
@@ -54,7 +54,7 @@ export class SpotComponent implements OnInit, OnDestroy {
 
   constructor(public ws: WsService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sub.add(this.ws.subscribe(InCmd.Cards, (c: number[]) => {
       for (const p of this.lobby.players) p.ready = false;
       if (c[0] >= 0) this.offerBlind = false;
@@ -98,7 +98,7 @@ export class SpotComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
@@ -115,20 +115,20 @@ export class SpotComponent implements OnInit, OnDestroy {
     }
   }
 
-  sit(spot: number) { this.ws.send(OutCmd.Sit, spot); }
+  sit(spot: number): void { this.ws.send(OutCmd.Sit, spot); }
 
-  jump() { this.ws.send(OutCmd.Jump); }
+  jump(): void { this.ws.send(OutCmd.Jump); }
 
-  kick(spot: number) { this.ws.send(OutCmd.Kick, spot); }
+  kick(spot: number): void { this.ws.send(OutCmd.Kick, spot); }
 
-  ready() { this.ws.send(OutCmd.Ready); }
+  ready(): void { this.ws.send(OutCmd.Ready); }
 
-  showCards() {
+  showCards(): void {
     this.offerBlind = false;
     this.ws.send(OutCmd.DeclineBlind);
   }
 
-  bid(bid: number) {
+  bid(bid: number): void {
     this.offerBlind = false;
     this.ws.send(OutCmd.Bid, bid);
   }

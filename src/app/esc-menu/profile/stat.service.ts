@@ -80,7 +80,7 @@ export class StatService {
     private kbs: KeyBindingService,
   ) { }
 
-  openUser(name: string, open = true) {
+  openUser(name: string, open = true): void {
     this.target = name;
     this.refresh();
     if (open) {
@@ -90,7 +90,7 @@ export class StatService {
     this.profileTab = 0;
   }
 
-  openUserMatches(open = true) {
+  openUserMatches(open = true): void {
     this.refresh();
     if (open) {
       this.kbs.emitAction(KeyActions.OpenProfile);
@@ -99,12 +99,12 @@ export class StatService {
     this.profileTab = 4;
   }
 
-  openLeaders(id: number) {
+  openLeaders(id: number): void {
     this.id = id;
     this.refreshLeaders();
   }
 
-  async refresh() {
+  async refresh(): Promise<void> {
     this.userRanks = [];
     this.userRanks = await this.ws.request(OutCmd.RanksUser, this.target);
     if (this.userRanks !== undefined) {
@@ -128,7 +128,7 @@ export class StatService {
     }
   }
 
-  changeGroup() {
+  changeGroup(): void {
     this.leaders = [];
     if (this.id % 100 === 99) {
       this.id = this.group * 100 + 99;
@@ -150,7 +150,7 @@ export class StatService {
     }
   }
 
-  async refreshLeaders() {
+  async refreshLeaders(): Promise<void> {
     this.leaders = [];
     delete this.rankLeaders;
     if (!this.id) return;

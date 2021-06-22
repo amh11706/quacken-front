@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { WsService } from '../../ws.service';
 import { SettingsService } from '../settings.service';
 import { DefaultBindings, KeyActions, KeyBindings, NotActive, StaticKeyBindings } from './key-actions';
@@ -57,7 +57,7 @@ export class KeyBindingService {
   private subMap = new Map<KeyActions, Subject<boolean>>();
   private bindings = new Map<string, KeyActions[]>();
   private _activeBindings?: StaticKeyBindings;
-  get activeBindings() { return this._activeBindings; }
+  get activeBindings(): StaticKeyBindings | undefined { return this._activeBindings; }
 
   constructor(private ss: SettingsService, private ws: WsService) {
     document.addEventListener('keydown', this.handleKeyDown);
@@ -79,7 +79,7 @@ export class KeyBindingService {
     return modifiers + key;
   }
 
-  emitAction(action: KeyActions, value = true) {
+  emitAction(action: KeyActions, value = true): void {
     this.subMap.get(action)?.next(value);
   }
 
@@ -128,7 +128,7 @@ export class KeyBindingService {
     list.push(action);
   }
 
-  setBindings(bindings: StaticKeyBindings) {
+  setBindings(bindings: StaticKeyBindings): void {
     this.bindings.clear();
     for (const k in bindings) {
       if (!bindings.hasOwnProperty(k)) continue;
@@ -141,14 +141,14 @@ export class KeyBindingService {
     this._activeBindings = bindings;
   }
 
-  subscribe(action: KeyActions, cb: (value: boolean) => void) {
+  subscribe(action: KeyActions, cb: (value: boolean) => void): Subscription | void {
     if (action === KeyActions.Noop) return;
     const subject = this.subMap.get(action) || new Subject();
     this.subMap.set(action, subject);
     return subject.subscribe(cb);
   }
 
-  bindSubscribe(cb: (e: string) => void) {
+  bindSubscribe(cb: (e: string) => void): Subscription {
     if (this.bindSub) throw new Error('Already subbed');
 
     this.bindSub = new Subject();

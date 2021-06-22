@@ -44,7 +44,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (!this.output) return;
     this.subs.add(this.ws.subscribe(InCmd.ChatMessage, (m) => this.addMessage(m)));
     this.subs.add(this.ws.subscribe(Internal.RefreshChat, () => this.addMessage()));
@@ -59,23 +59,23 @@ export class ChatComponent implements OnInit, OnDestroy {
     }, 50);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
-  scrolled() {
+  scrolled(): void {
     const el = this.output?.elementRef.nativeElement;
     if (!el) return;
     this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 100;
   }
 
-  accept(inv: Invite) {
+  accept(inv: Invite): void {
     inv.resolved = true;
     if (inv.ty === 0) this.ws.send(OutCmd.FriendAdd, inv.f);
     else this.router.navigate(['lobby', inv.tg]);
   }
 
-  decline(inv: Invite) {
+  decline(inv: Invite): void {
     inv.resolved = true;
     this.ws.send(OutCmd.FriendDecline, inv);
   }

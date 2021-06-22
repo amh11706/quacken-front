@@ -70,8 +70,8 @@ export class HudComponent implements OnInit, OnDestroy {
   protected subs = new Subscription();
   protected group = 'l/quacken';
   protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
-  protected get maxTurn() { return this.lobbySettings.turns?.value || 90; }
-  protected get secondsPerTurn() { return this.lobbySettings.turnTime?.value || 30; }
+  protected get maxTurn(): number { return this.lobbySettings.turns?.value || 90; }
+  protected get secondsPerTurn(): number { return this.lobbySettings.turnTime?.value || 30; }
 
   private timeInterval?: number;
   private minutes = 0;
@@ -88,7 +88,7 @@ export class HudComponent implements OnInit, OnDestroy {
     public es: EscMenuService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
     this.handleKeys();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
@@ -155,12 +155,12 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subs.unsubscribe();
     this.stopTimer();
   }
 
-  protected eraseSlot(slot: number) {
+  protected eraseSlot(slot: number): void {
     this.getMoves()[slot] = 0;
   }
 
@@ -233,14 +233,14 @@ export class HudComponent implements OnInit, OnDestroy {
     this.sendMoves();
   }
 
-  protected resetMoves() {
+  protected resetMoves(): void {
     const moves = this.getMoves();
     for (const i in moves) moves[i] = 0;
     this.maxMoves = false;
     this.blockedPosition = this.myBoat.maxMoves === 4 ? 4 : 3;
   }
 
-  checkMaxMoves() {
+  checkMaxMoves(): void {
     if (this.myBoat.maxMoves === 4) {
       this.maxMoves = false;
       return;
@@ -250,25 +250,25 @@ export class HudComponent implements OnInit, OnDestroy {
     if (moveCount === 4) this.getMoves()[3] = 0;
   }
 
-  setBomb(i: number, strict = false) {
+  setBomb(i: number, strict = false): void {
     if (this.locked || !this.weapons[this.myBoat.type] || this.myBoat.tokenPoints < 2) return;
     if (this.myBoat.bomb === i) this.myBoat.bomb = 0;
     else this.myBoat.bomb = i;
     this.ws.request(OutCmd.Bomb, this.myBoat.bomb);
   }
 
-  imReady() {
+  imReady(): void {
     this.stopTimer();
     this.myBoat.ready = true;
     this.locked = true;
     this.ws.send(OutCmd.Ready);
   }
 
-  start() {
+  start(): void {
     this.ws.send(OutCmd.ChatCommand, '/start');
   }
 
-  protected async sendMoves() {
+  protected async sendMoves(): Promise<void> {
     this.checkMaxMoves();
     this.serverMoves = await this.ws.request(OutCmd.Moves, this.getMoves());
   }
@@ -277,7 +277,7 @@ export class HudComponent implements OnInit, OnDestroy {
     return this.myBoat.moves || [];
   }
 
-  clickTile(ev: MouseEvent, slot: number) {
+  clickTile(ev: MouseEvent, slot: number): void {
     if (this.locked) return;
     const boat = this.myBoat;
     const moves = this.getMoves();
@@ -293,12 +293,12 @@ export class HudComponent implements OnInit, OnDestroy {
     this.sendMoves();
   }
 
-  drag(move: number, slot: number = 4) {
+  drag(move: number, slot = 4): void {
     this.move = move;
     this.source = slot;
   }
 
-  drop(ev: DragEvent, slot: number) {
+  drop(ev: DragEvent, slot: number): void {
     ev.preventDefault();
     if (this.locked) return;
     const moves = this.getMoves();
@@ -313,14 +313,14 @@ export class HudComponent implements OnInit, OnDestroy {
     this.source = 4;
   }
 
-  dragEnd() {
+  dragEnd(): void {
     if (this.locked || this.source > 3) return;
 
     this.getMoves()[this.source] = 0;
     this.sendMoves();
   }
 
-  setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
+  setTurn(turn: number, sec: number = this.secondsPerTurn - 1): void {
     if (turn === this.maxTurn) sec = 0;
     else if (turn < 0) {
       this.endRound();
@@ -340,12 +340,12 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
-  startTimer(ms: number = 1000) {
+  startTimer(ms = 1000): void {
     clearInterval(this.timeInterval);
     this.timeInterval = window.setInterval(() => this.tickTimer(), ms);
   }
 
-  stopTimer() {
+  stopTimer(): void {
     clearInterval(this.timeInterval);
     delete this.timeInterval;
   }

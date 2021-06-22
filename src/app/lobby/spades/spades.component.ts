@@ -53,7 +53,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     l.lastTrick = newPlayed;
   }
 
-  get lobby() {
+  get lobby(): Lobby {
     return this._lobby;
   }
 
@@ -73,7 +73,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     public es: EscMenuService,
   ) { }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.es.setLobby(1);
     this.ss.setLobbySettings(ownerSettings);
 
@@ -166,7 +166,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     if (me && me.offerBlind) this.select = 2;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.es.setLobby();
     this.sub.unsubscribe();
 
@@ -175,7 +175,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     this.ss.admin = true;
   }
 
-  timeUp() {
+  timeUp(): void {
     if (this.lobby.playingP === this.ws.sId) {
       let valid = [];
       for (const c of this.cards) if (c.valid) valid.push(c);
@@ -192,7 +192,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }
   }
 
-  play(cards: Card[]) {
+  play(cards: Card[]): void {
     const m = cards.map(c => c.id);
     this.ws.send(OutCmd.Card, m);
     this.select = 1;
@@ -265,7 +265,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     this.selected = this.selected.filter(c => c.valid);
   }
 
-  click(c: Card) {
+  click(c: Card): void {
     if (c.selected) {
       this.selected = this.selected.filter(card => {
         if (c === card) card.selected = false;

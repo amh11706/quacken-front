@@ -16,7 +16,7 @@ export class MapDebugComponent {
     }
   }
 
-  get seed() { return this._seed; }
+  get seed(): string { return this._seed; }
   @Output() seedChange = new EventEmitter<string>();
   seedParts: number[] = [];
   seedPartEdit = [
@@ -27,9 +27,7 @@ export class MapDebugComponent {
     'Flag scramble 1', 'Flag scramble 2',
   ];
 
-  constructor() { }
-
-  randomSeed() {
+  randomSeed(): void {
     this.seedParts = [];
     for (let i = 0; i < 32; i++) {
       this.seedParts.push(Math.floor(Math.random() * 256));
@@ -37,7 +35,7 @@ export class MapDebugComponent {
     this.setStringSeed();
   }
 
-  setStringSeed() {
+  setStringSeed(): void {
     this._seed = '';
     for (const part of this.seedParts) {
       this._seed += part.toString(16).padStart(2, '0');

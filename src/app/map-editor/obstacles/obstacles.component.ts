@@ -33,16 +33,15 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
 
   titles = Titles;
   cadeTitles = CadeTitles;
-  constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.background) {
       this.background.addEventListener('mousemove', this.mouseMove);
       this.background.addEventListener('wheel', this.handleScroll);
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.background) {
       this.background.removeEventListener('mousemove', this.mouseMove);
       this.background.removeEventListener('wheel', this.handleScroll);

@@ -12,6 +12,4 @@ export class LobbyCardComponent {
   publicModes = ['Public', 'Public Invitation', 'Private'];
   descriptions = Descriptions;
   titles = { CadeGoose: 'Cadesim' } as any;
-
-  constructor() { }
 }

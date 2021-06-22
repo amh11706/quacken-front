@@ -11,7 +11,7 @@ import { CadeEntryStatusComponent } from '../../cadegoose/cade-entry-status/cade
   styleUrls: ['./sb-entry-status.component.scss'],
 })
 export class SbEntryStatusComponent extends CadeEntryStatusComponent implements OnInit {
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.updatePoints(t.stats)));
     this.subs.add(this.ws.subscribe(Internal.Lobby, (l: Lobby) => l.stats && this.updatePoints(l.stats)));

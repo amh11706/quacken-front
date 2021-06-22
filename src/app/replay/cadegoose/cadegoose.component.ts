@@ -184,7 +184,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     return this.ships.filter(ship => ship.label.toLowerCase().indexOf(filterValue) !== -1);
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.subs.add(this.ws.fakeWs?.subscribe(Internal.Boats, (boats: Boat[]) => {
       this.boats = [...boats];
       this.findMyBoat();
@@ -222,7 +222,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (myBoat) this.clickBoat(myBoat);
   }
 
-  tabChange() {
+  tabChange(): void {
     if (this.tabIndex === 0) setTimeout(() => this.tick = this._tick);
   }
 
@@ -235,16 +235,16 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     });
   }
 
-  clickTurn(turn: ParsedTurn) {
+  clickTurn(turn: ParsedTurn): void {
     this.playTo.emit(turn.index - 2);
     // if (this.tabIndex < 2) setTimeout(() => this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat }));
   }
 
-  hoverBoat(boat: Boat, enter = true) {
+  hoverBoat(boat: Boat, enter = true): void {
     boat.render?.showInfluence(enter);
   }
 
-  clickBoat(boat: Boat, center = true, selectAi = true) {
+  clickBoat(boat: Boat, center = true, selectAi = true): void {
     if (selectAi) this.selectAiBoat(this.aiData?.boats.find(b => b.id === boat.id), false);
     if (this.activeBoat === boat) {
       if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat });
@@ -265,7 +265,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (this.boatTicks[boat.id]) this.updateBoat();
   }
 
-  async getMatchAi(claimsOnly = false, sendMap = true) {
+  async getMatchAi(claimsOnly = false, sendMap = true): Promise<void> {
     this.pauseMatch.emit();
     if (!claimsOnly) {
       this.playTo.emit((this.activeTurn?.index || this.turns[0].index) - 2);
@@ -301,26 +301,26 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (lastBoatFound) this.selectAiBoat(this.activeAiBoat);
   }
 
-  selectAiBoat(boat?: AiBoatData, clickBoat = true) {
+  selectAiBoat(boat?: AiBoatData, clickBoat = true): void {
     this.activeAiBoat = boat;
     if (clickBoat && boat?.boat) this.clickBoat(boat.boat, false, false);
     this.aiRender.setBoat(boat);
     this.aiRender.setClaims(this.aiData?.claims || []);
   }
 
-  setAiMetric() {
+  setAiMetric(): void {
     this.aiRender.setMetric(this.aiMetric);
   }
 
-  setAiStep() {
+  setAiStep(): void {
     this.aiRender.setStep(this.aiStep);
   }
 
-  setAiRadius() {
+  setAiRadius(): void {
     this.aiRender.setRadius(this.aiRadius);
   }
 
-  getClaims(sendMap = true) {
+  getClaims(sendMap = true): void {
     if (!this.selectedShips.length) return;
     const boats = this.boats;
     this.boats = [];

@@ -51,7 +51,7 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.subs.add(this.ws.subscribe(Internal.Lobby, async l => {
       if ((await this.ss.get(this.setting.group, this.setting.name)).value > 1 || !l.map || !this.servermapList[0]) return;
       const generatedMap = this.servermapList[0];
@@ -71,7 +71,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  initGenerated() {
+  initGenerated(): void {
     this.servermapList.push({
       id: 0,
       description: '',
@@ -86,7 +86,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     });
   }
 
-  initFilters() {
+  initFilters(): void {
     this.servermapList.forEach((map) => {
       for (const tag of map.tags) {
         if (tag && !this.tagList.includes(tag)) this.tagList.push(tag);
@@ -95,7 +95,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     });
   }
 
-  openFilterWindow() {
+  openFilterWindow(): void {
     this.bottomSheet.open(MapFilterComponent, {
       data: {
         tagList: this.tagList,
@@ -105,7 +105,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     });
   }
 
-  initMap() {
+  initMap(): number[][] {
     const map = [];
     for (let y = 0; y < this.mapHeight; y++) {
       const row = [];
@@ -130,7 +130,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     return data;
   }
 
-  async selectMap(id: number) {
+  async selectMap(id: number): Promise<void> {
     const maps = this.filteredMapList.length < 1 ? this.servermapList : this.filteredMapList;
     const map = id < 0 ? maps[Math.floor(Math.random() * maps.length)] : maps.find(m => m.id === id);
     if (!map) return;
@@ -145,7 +145,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (id < 0) this.visible = true;
   }
 
-  filter() {
+  filter(): void {
     if (!this.search) this.maplist.next(this.servermapList);
     const search = new RegExp(this.search, 'i');
     this.filteredMapList = this.servermapList.filter(map => {
@@ -171,7 +171,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.filter();
   }
 
-  sort(value: string) {
+  sort(value: string): void {
     switch (value) {
       case this.sortList[0]: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : (n1.ratingAverage || Number.MIN_VALUE) - (n2.ratingAverage || Number.MIN_VALUE)))); break;

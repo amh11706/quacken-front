@@ -41,11 +41,11 @@ export class CanvasComponent {
     [200, 0], [200, 69], [200, 138],
   ]);
 
-  getHeight() {
+  getHeight(): number {
     return (this.mapHeight + this.mapWidth) * 24;
   }
 
-  getWidth() {
+  getWidth(): number {
     return (this.mapHeight + this.mapWidth) * 32;
   }
 
@@ -61,7 +61,7 @@ export class CanvasComponent {
     }
   }
 
-  async fillMap(map: number[][], flags: any[]) {
+  async fillMap(map: number[][], flags: any[]): Promise<void> {
     const wasLoaded = !!this.canvas;
     if (!this.canvas) {
       this.canvas = this.canvasElement?.nativeElement.getContext('2d');

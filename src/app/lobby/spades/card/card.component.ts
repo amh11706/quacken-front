@@ -17,6 +17,4 @@ export interface Card {
 })
 export class CardComponent {
   @Input() card: Card = {} as Card;
-
-  constructor() { }
 }

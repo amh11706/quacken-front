@@ -31,7 +31,7 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     public es: EscMenuService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sub.add(this.ws.subscribe(InCmd.LobbyList, lobbies => {
       this.lobbies = lobbies;
     }));
@@ -48,35 +48,35 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(InCmd.LobbyRemove, id => {
       this.lobbies = this.lobbies.filter(l => l.id !== id);
     }));
-    this.sub.add(this.ws.connected$.subscribe(async v => {
+    this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v) return;
       this.ws.send(OutCmd.LobbyListJoin);
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
-  openUserMatches() {
+  openUserMatches(): void {
     this.stat.openUserMatches();
   }
 
-  join(l: Lobby, e: MouseEvent) {
+  join(l: Lobby, e: MouseEvent): void {
     if (e.ctrlKey || !l.group.publicMode?.value) this.router.navigate(['lobby', l.id]);
     else this.ws.send(OutCmd.LobbyApply, l.id);
   }
 
-  createLobby() {
+  createLobby(): void {
     this.dialog.open(CreateComponent, { maxHeight: '90vh' });
   }
 
-  openEditor() {
+  openEditor(): void {
     if (this.ws.user?.id) this.router.navigate(['editor']);
     else this.dialog.open(EditorErrorComponent);
   }
 
-  openNews() {
+  openNews(): void {
     this.dialog.open(NewsComponent, { maxHeight: '90vh' });
   }
 }

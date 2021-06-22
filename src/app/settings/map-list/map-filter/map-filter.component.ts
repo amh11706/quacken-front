@@ -9,10 +9,10 @@ import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bott
 export class MapFilterComponent {
   constructor(
     public filterRef: MatBottomSheetRef<MapFilterComponent>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: { tagList: string[], userList: string[], toggleTag: (v: string) => void },
   ) { }
 
-  onClick(filterOption: string) {
+  onClick(filterOption: string): void {
     this.data.toggleTag(filterOption);
   }
 }

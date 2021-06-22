@@ -8,6 +8,4 @@ import { Notes } from './notes';
 })
 export class NewsComponent {
   notes = Notes;
-
-  constructor() { }
 }

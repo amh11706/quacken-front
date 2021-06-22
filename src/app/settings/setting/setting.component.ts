@@ -50,11 +50,11 @@ export class SettingComponent {
     if (this.setting.group) this.group = await this.ss.getGroup(this.setting.group);
   }
 
-  send() {
+  send(): void {
     this.ws.send(this.setting.trigger, this.setting.data);
   }
 
-  save() {
+  save(): void {
     const newSetting = this.group[this.setting.name];
     if (typeof this.setting.max === 'number') {
       if (newSetting.value > this.setting.max) newSetting.value = this.setting.max;

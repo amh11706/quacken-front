@@ -37,18 +37,18 @@ export class MapCardComponent {
 
   constructor(public ss: SettingsService, public ws: WsService) { }
 
-  selectMap(id: number) {
+  selectMap(id: number): void {
     this.selectedMap.emit(id);
   }
 
-  pushSeed(seed: string) {
+  pushSeed(seed: string): void {
     if (seed !== '' && !(this.seeds.find(item => item === seed))) {
       this.seeds.push(seed);
       if (this.seeds.length > 8) this.seeds.shift();
     }
   }
 
-  updateSeed(seed: string) {
+  updateSeed(seed: string): void {
     this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
   }
 }

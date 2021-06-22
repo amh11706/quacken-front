@@ -12,12 +12,12 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
   protected group: 'tile' | 'structure' = 'structure';
   groups = ['Tiles', 'Obstacle Zones', 'Wing Zones'];
 
-  protected initTile(tile: DBTile) {
+  protected initTile(tile: DBTile): void {
     if (this.map?.structures) tile = this.map.structures.find(el => el.id === tile.id) || tile;
     this.select(tile);
   }
 
-  protected handleDelete = (msg: any) => {
+  protected handleDelete = (msg: DBTile): void => {
     this.pending = false;
     if (!this.map?.structures) return;
     this.map.structures = this.map.structures.filter(structure => {
@@ -26,14 +26,14 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
     this.map.selectedTile = this.map.structures[0] || { id: null, name: '', undos: [], redos: [] };
   }
 
-  newFeature() {
+  newFeature(): void {
     if (!this.map) return;
     const feature = { group: 0, x1: 0, y1: 0, x2: 7, y2: 7, type: 0, density: 1 };
     this.map.selectedTile.data?.push(feature);
     this.map.selectedTile.activeFeature = feature;
   }
 
-  deleteFeature() {
+  deleteFeature(): void {
     if (!this.map) return;
     if (!window.confirm('Are you sure you want to delete this feature? It will not be fully removed until you hit save.')) {
       return;
@@ -46,7 +46,7 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
     this.map.selectedTile.unsaved = true;
   }
 
-  updatePosition(e: Event, which: 'x1' | 'x2' | 'y1' | 'y2') {
+  updatePosition(e: Event, which: 'x1' | 'x2' | 'y1' | 'y2'): void {
     if (!this.map || !(e.target instanceof HTMLInputElement)) return;
     this.map.selectedTile.unsaved = true;
     const feature = this.map.selectedTile.activeFeature;

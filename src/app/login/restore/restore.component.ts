@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,17 +31,17 @@ export class RestoreComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sub.add(this.route.paramMap.subscribe(params => {
       this.user.token = params.get('token') || '';
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
-  reset() {
+  reset(): void {
     this.pending = true;
     this.http.post<any>(this.path + 'restore', JSON.stringify(this.user)).subscribe(
       () => {
@@ -50,15 +50,16 @@ export class RestoreComponent implements OnInit, OnDestroy {
         this.err = 'Account restored. You can now log in with the email address you provided.';
         if (this.errComponent) this.dialog.open(this.errComponent);
       },
-      err => {
+      (err: unknown) => {
         this.pending = false;
+        if (!(err instanceof HttpErrorResponse)) return;
         this.err = err.error;
         if (this.errComponent) this.dialog.open(this.errComponent);
       },
     );
   }
 
-  back() {
+  back(): void {
     this.router.navigate(['auth/login']);
   }
 }

@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import {
   Scene,
   Box3,
-  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera,
+  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera, Object3D,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -24,7 +24,7 @@ export const flagMats = {
   100: new MeshStandardMaterial({ color: '#333', side: DoubleSide }),
 };
 
-export const checkSZ = (pos: { x: number, y: number }) => {
+export const checkSZ = (pos: { x: number, y: number }): boolean => {
   return pos.y > 32 || pos.y < 3;
 };
 
@@ -56,7 +56,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     // }));
   }
 
-  static dispose(o: any) {
+  private static dispose(o: any): void {
     if (o.geometry) {
       o.geometry.dispose();
     }
@@ -76,14 +76,14 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     super.ngOnDestroy();
 
     this.worker.clearJobs();
     for (const p of Object.values(this.ships)) p.then(s => BoatService.dispose(s.scene));
   }
 
-  async setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: Camera) {
+  async setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: Camera): Promise<void> {
     this.scene = s;
     this.camera = cam;
 
@@ -97,7 +97,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     this.renderSync();
   }
 
-  setControls(con: OrbitControls) {
+  setControls(con: OrbitControls): void {
     this.controls = con;
     con.addEventListener('change', () => {
       if (!this.camera) return;
@@ -107,7 +107,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     });
   }
 
-  protected setBoats(b: BoatSync[], reset = true) {
+  protected setBoats(b: BoatSync[], reset = true): void {
     const supSet = super.setBoats.bind(this);
     if (reset) {
       this.worker.clearJobs();
@@ -134,7 +134,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     });
   }
 
-  protected deleteBoat(id: number) {
+  protected deleteBoat(id: number): void {
     const supDelete = super.deleteBoat.bind(this);
     this.worker.addJob(() => {
       const boat = this._boats[id];
@@ -148,7 +148,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }, false);
   }
 
-  protected handleMoves(s: { t: number, m: number[], s: number[] }) {
+  protected handleMoves(s: { t: number, m: number[], s: number[] }): void {
     const boat = this._boats[-s.t] || this._boats[s.t];
     if (!boat) return;
     boat.moves = s.m;
@@ -163,13 +163,13 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (const boat of this.boats) boat.render?.updateMoves();
   }
 
-  protected async handleTurn(turn: Turn) {
+  protected async handleTurn(turn: Turn): Promise<void> {
     this.flagData = turn.flags;
     this.setHeaderFlags(turn.flags);
     super.handleTurn(turn);
   }
 
-  protected setHeaderFlags(flags: Turn['flags']) {
+  protected setHeaderFlags(flags: Turn['flags']): void {
     if (!this.flags) return;
 
     for (const boat of this.boats) if (boat.render) boat.render.flags = [];
@@ -190,7 +190,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }
   }
 
-  protected playTurn() {
+  protected playTurn(): void {
     this.worker.clearJobs();
     for (let step = 0; step < 8; step++) {
       this.worker.addJob(() => this._playTurn(step));
@@ -245,7 +245,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     return Promise.all(promises);
   }
 
-  protected handleUpdate(updates: Clutter[], _: number) {
+  protected handleUpdate(updates: Clutter[], _: number): void {
     if (!this.scene) return;
     Cannonball.speed = this.speed;
     for (const u of updates) {
@@ -268,7 +268,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     }
   }
 
-  showInfluence(ray: Ray, team: number) {
+  showInfluence(ray: Ray, team: number): void {
     if (!this.camera) return;
     const cam = this.camera;
     this.boats.sort((a, b) => {
@@ -295,7 +295,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (const boat of this.boats) boat.render?.showInfluence(boat.team === hovered);
   }
 
-  findClick(ray: Ray) {
+  findClick(ray: Ray): void {
     if (!this.camera) return;
     const cam = this.camera;
     this.boats.sort((a, b) => {
@@ -329,7 +329,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     });
   }
 
-  protected checkNewShips() {
+  protected checkNewShips(): Promise<void>[] {
     const boatUpdates: Promise<void>[] = [];
     for (const boat of this.boats) {
       if (boat.render) continue;

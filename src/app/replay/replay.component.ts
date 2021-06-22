@@ -43,7 +43,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     private kbs: KeyBindingService,
   ) { }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage } });
     if (this.lobbyWrapper) {
       this.fakeChat = this.lobbyWrapper.chat;
@@ -73,7 +73,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     delete this.ws.fakeWs;
     delete this.fs.fakeFs;
     this.sub.unsubscribe();
@@ -136,12 +136,12 @@ export class ReplayComponent implements OnInit, OnDestroy {
     }
   }
 
-  pause() {
+  pause(): void {
     clearInterval(this.tickInterval);
     this.tickInterval = 0;
   }
 
-  togglePlay() {
+  togglePlay(): void {
     if (this.tickInterval) {
       clearInterval(this.tickInterval);
       this.tickInterval = 0;
@@ -159,7 +159,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     }, (this.graphicSettings?.turnTime.value || 10) * 1000 / 30);
   }
 
-  nextTurn() {
+  nextTurn(): void {
     if (this.tickInterval) {
       this.togglePlay();
       this.togglePlay();
@@ -174,7 +174,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     this.playTo(this.messages.length - 1);
   }
 
-  prevTurn() {
+  prevTurn(): void {
     if (this.tickInterval) {
       this.togglePlay();
       this.togglePlay();
@@ -189,7 +189,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     this.playTo(1);
   }
 
-  playTo(value: number) {
+  playTo(value: number): void {
     if (value === this.tick) return;
 
     if (value < this.tick) {

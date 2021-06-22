@@ -22,7 +22,7 @@ export class MapComponent implements OnDestroy {
     this._mapScaleRaw = +v;
   }
 
-  get mapScale() { return this._mapScale; }
+  get mapScale(): number | string { return this._mapScale; }
 
   readonly titles = ['', 'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'] as const;
   private wheelDebounce?: number;
@@ -45,7 +45,7 @@ export class MapComponent implements OnDestroy {
     private ss: SettingsService,
   ) { }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
@@ -101,7 +101,7 @@ export class MapComponent implements OnDestroy {
     ctx.translate(0, -2600);
   }
 
-  scroll(e: WheelEvent) {
+  scroll(e: WheelEvent): void {
     if (e.deltaY < 0) {
       this._mapScaleRaw *= 21 / 20;
       if (this._mapScaleRaw > 100) this._mapScaleRaw = 100;

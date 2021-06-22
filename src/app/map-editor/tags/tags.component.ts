@@ -36,7 +36,7 @@ export class TagsComponent {
     if (value) {
       this.tags.push(value);
     }
-    event.chipInput!.clear();
+    event.chipInput?.clear();
 
     this.tagCtrl.setValue(null);
     this.chipChange.emit(true);
@@ -66,7 +66,7 @@ export class TagsComponent {
     return this.allTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0);
   }
 
-  addAll(mapTags: string[]) {
+  addAll(mapTags: string[]): void {
     this.tags = [];
     mapTags.forEach(mapTag => this.tags.push(mapTag));
   }

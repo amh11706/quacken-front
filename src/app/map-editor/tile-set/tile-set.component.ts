@@ -31,11 +31,11 @@ export class TileSetComponent implements OnInit, OnDestroy {
 
   constructor(protected ws: WsService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.map) this.initTile(this.map.selectedTile);
   }
 
-  protected initTile(tile: DBTile) {
+  protected initTile(tile: DBTile): void {
     if (!this.map?.tiles) return;
     const group = this.map.tiles[tile.type];
     if (!group) return;
@@ -43,11 +43,11 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.select(tile);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
-  protected handleDelete(msg: any) {
+  protected handleDelete(msg: DBTile): void {
     if (!this.map?.tiles) return;
     this.pending = false;
     this.map.tiles[msg.type] = this.map.tiles[msg.type].filter((tile: DBTile) => {
@@ -56,7 +56,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.map.selectedTile = { id: 0, group: 'maps', type: 0, name: '', undos: [], redos: [], tags: [] };
   }
 
-  select(tile: DBTile) {
+  select(tile: DBTile): void {
     if (!this.map) return;
     if (this.map.tileSet) this.map.tileSet.activeGroup = tile.type;
     tile.undos = tile.undos || [];
@@ -64,7 +64,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.map.selectedTile = tile;
   }
 
-  newTile() {
+  newTile(): void {
     if (!this.map) return;
     this.map.selectedTile = {
       id: 0,
@@ -81,7 +81,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.editTile();
   }
 
-  editTile() {
+  editTile(): void {
     const groups: { [key: string]: MapGroups } = { tile: 'tiles', structure: 'structures', tmap: 'tmaps' };
     if (!this.map?.selectedTile) return;
     this.map.selectedTile.group = groups[this.group];
@@ -89,7 +89,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.map.tileSettings = true;
   }
 
-  async saveWeight(tile: DBTile) {
+  async saveWeight(tile: DBTile): Promise<void> {
     this.pending = true;
     const map = {
       group: this.group + 's',
@@ -100,7 +100,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.pending = false;
   }
 
-  async deleteTile(tile: DBTile) {
+  async deleteTile(tile: DBTile): Promise<void> {
     if (!window.confirm(`Delete ${this.group} '${tile.name}'? this cannot be undone.`)) return;
     this.pending = true;
     const map = {

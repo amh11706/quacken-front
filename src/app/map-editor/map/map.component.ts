@@ -11,7 +11,7 @@ export class Pos {
 
   constructor(public x: number, public y: number) { }
 
-  move(dir: number) {
+  move(dir: number): void {
     this.x += Pos.dx[dir];
     this.y += Pos.dy[dir];
   }
@@ -32,9 +32,7 @@ export class MapComponent {
   private clickX?: number;
   private clickY?: number;
 
-  constructor() { }
-
-  clickTile(e: MouseEvent, x: number, y: number) {
+  clickTile(e: MouseEvent, x: number, y: number): void {
     if (!this.map || !this.setTile) return;
     const tile = this.map.selectedTile;
     if (!tile.data) return;
@@ -64,7 +62,7 @@ export class MapComponent {
     if (tile.undos.length > MAX_UNDOS) tile.undos = tile.undos.slice(-MAX_UNDOS);
   }
 
-  mouseUp(e: MouseEvent, x: number, y: number) {
+  mouseUp(e: MouseEvent, x: number, y: number): void {
     this.painting = false;
     if (!this.clickX || !this.clickY || !this.setTile || !this.map) return;
     if (Math.abs(e.clientX - this.clickX) + Math.abs(e.clientY - this.clickY) > 5) return;

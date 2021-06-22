@@ -30,31 +30,31 @@ export class NameComponent {
     return name;
   }
 
-  openProfile() {
+  openProfile(): void {
     this.stat.openUser(this.message.from);
   }
 
-  sendTell() {
+  sendTell(): void {
     this.chat.sendTell(this.getName());
   }
 
-  add() {
+  add(): void {
     this.ws.send(OutCmd.FriendInvite, this.message.from);
   }
 
-  block() {
+  block(): void {
     this.ws.send(OutCmd.Block, this.message.from);
   }
 
-  unblock() {
+  unblock(): void {
     this.ws.send(OutCmd.Unblock, this.message.from);
   }
 
-  invite() {
+  invite(): void {
     this.ws.send(OutCmd.ChatCommand, '/invite ' + this.getName());
   }
 
-  kick() {
+  kick(): void {
     this.ws.send(OutCmd.ChatCommand, '/kick ' + this.getName());
   }
 }

@@ -97,7 +97,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     const session = window.localStorage.getItem(this.ws.user?.id + '-editor');
     if (session) {
       const s = JSON.parse(session);
@@ -117,7 +117,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     this.es.setLobby(GuideComponent);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.saveSession();
     window.removeEventListener('beforeunload', this.saveSession);
     this.sub.unsubscribe();
@@ -130,12 +130,12 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     ));
   }
 
-  openGuide() {
+  openGuide(): void {
     this.es.open = true;
     this.es.activeTab = 0;
   }
 
-  resetUndos = () => {
+  resetUndos = (): void => {
     this.editor.selectedTile.undos = [];
     this.editor.selectedTile.redos = [];
   }
@@ -161,7 +161,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }));
   }
 
-  async save() {
+  async save(): Promise<void> {
     const tile = this.editor.selectedTile;
     if (!tile.unsaved) return;
     if (this.editor.tileSet) {
@@ -181,7 +181,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     tile.unsaved = false;
   }
 
-  undo = (source: MapTile[][], target: MapTile[][]) => {
+  undo = (source: MapTile[][], target: MapTile[][]): void => {
     const changes = source.pop();
     const buffer = [];
 
@@ -195,7 +195,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     target.push(buffer);
   }
 
-  setTile = (x: number, y: number, v: number) => {
+  setTile = (x: number, y: number, v: number): { x: number, y: number, v: number } | undefined => {
     if (x < 0 || x > 20 || y < 3 || y > 32) return;
     const tile = this.editor.selectedTile;
     if (!tile.data || v === tile.data[y][x]) return;
@@ -206,7 +206,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     return oldTile;
   }
 
-  openSettings() {
+  openSettings(): void {
     this.editor.settingsOpen = true;
   }
 }

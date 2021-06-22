@@ -26,44 +26,44 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private chat: ChatService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v || !this.ws.user || this.stat.target) return;
       this.stat.openUser(this.ws.user?.name, false);
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
-  showLeaders(s: Stat) {
+  showLeaders(s: Stat): void {
     this.stat.openLeaders(s.id);
     this.stat.profileTab = 3;
   }
 
-  showRankLeaders(rank: UserRank) {
+  showRankLeaders(rank: UserRank): void {
     this.stat.openLeaders(rank.rankArea * 100 - 1);
     this.stat.profileTab = 3;
   }
 
-  reset() {
+  reset(): void {
     this.stat.openUser(this.ws.user?.name || '');
   }
 
-  showUser(name: string) {
+  showUser(name: string): void {
     this.stat.openUser(name || this.ws.user?.name || '');
   }
 
-  sendTell(friend: string) {
+  sendTell(friend: string): void {
     this.chat.setTell(friend);
   }
 
-  remove(friend: string) {
+  remove(friend: string): void {
     this.ws.send(OutCmd.FriendRemove, friend);
   }
 
-  unblock(blocked: string) {
+  unblock(blocked: string): void {
     this.ws.send(OutCmd.Unblock, blocked);
   }
 
@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   //   this.ws.send(OutCmd.FriendDecline, inv);
   // }
 
-  invite(friend: string) {
+  invite(friend: string): void {
     this.ws.send(OutCmd.ChatCommand, '/invite ' + friend);
   }
 }

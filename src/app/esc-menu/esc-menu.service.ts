@@ -54,7 +54,7 @@ export class EscMenuService {
     this.activeTab = tab;
   }
 
-  setLobby(component?: any, context?: any) {
+  setLobby(component?: unknown, context?: unknown): void {
     this.activeTab = -1;
     this.lobbyComponent = component;
     this.lobbyContext = context;
@@ -67,7 +67,7 @@ export class EscMenuService {
     this.router.navigate(['auth/login']);
   }
 
-  leave() {
+  leave(): void {
     this.router.navigateByUrl('/list');
     this.open = false;
   }

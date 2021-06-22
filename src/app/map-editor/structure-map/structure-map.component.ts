@@ -16,9 +16,7 @@ export class StructureMapComponent implements OnInit {
   rows: number[] = [];
   columns: number[] = [];
 
-  constructor() { }
-
-  ngOnInit() {
+  ngOnInit(): void {
     for (let x = 0; x < 25; x++) this.columns.push(x);
     for (let y = 0; y < 52; y++) this.rows.push(y);
   }

@@ -47,7 +47,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   protected group = 'l/cade';
   serverShots = [0, 0, 0, 0, 0, 0, 0, 0];
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (boat: Boat) => {
       this.wantMove = 2;
@@ -87,7 +87,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     }));
   }
 
-  protected async eraseSlot(slot: number) {
+  protected async eraseSlot(slot: number): Promise<void> {
     super.eraseSlot(slot);
     const usedCannons = this.usingCannons;
     this.usingCannons -= this.shots[slot * 2] + this.shots[slot * 2 + 1];
@@ -98,7 +98,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     }
   }
 
-  async setBomb(i: number, strict = false) {
+  async setBomb(i: number, strict = false): Promise<void> {
     if (i === 0) {
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
       this.usingCannons = 0;
@@ -113,16 +113,17 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.addShot(adjusted);
   }
 
-  changeWantMove() {
+  changeWantMove(): void {
     if (this.auto) this.setAutoWant();
     else this.ws.send(OutCmd.WantMove, this.wantMove);
   }
 
-  sendReady() {
+  sendReady(): void {
     this.ws.send(OutCmd.Ready);
   }
 
-  imReady() {
+  imReady(): void {
+    // override parent behavior
   }
 
   private setAutoWant() {
@@ -136,7 +137,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.ws.send(OutCmd.WantMove, this.wantMove);
   }
 
-  clickTile(ev: MouseEvent, slot: number) {
+  clickTile(ev: MouseEvent, slot: number): void {
     if (this.locked || slot === this.blockedPosition) return;
     const moves = this.getMoves();
     const move = moves[slot];
@@ -149,7 +150,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.sendMoves();
   }
 
-  checkMaxMoves() {
+  checkMaxMoves(): void {
     this.usingMoves = [0, 0, 0];
     if (!this.locked) {
       for (let i = 0; i < this.moves.length; i++) {
@@ -162,7 +163,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     super.checkMaxMoves();
   }
 
-  async addShot(i: number) {
+  async addShot(i: number): Promise<void> {
     if (this.locked) return;
     const oldShots = this.shots[i];
     this.shots[i] = (oldShots + 1) % ((this.myBoat.maxShots || 1) + 1);
@@ -178,7 +179,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     return this.moves;
   }
 
-  protected resetMoves() {
+  protected resetMoves(): void {
     super.resetMoves();
     for (let i = 0; i < this.usingMoves.length; i++) this.haveMoves[i] -= this.usingMoves[i];
     this.usingMoves = [0, 0, 0];
@@ -188,13 +189,13 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.serverShots = [...this.shots];
   }
 
-  async setTurn(turn: number, sec: number = this.secondsPerTurn - 1) {
+  async setTurn(turn: number, sec: number = this.secondsPerTurn - 1): Promise<void> {
     const old = this.secondsPerTurn;
     await this.ss.get('l/cade', 'turnTime');
     super.setTurn(turn, sec + this.secondsPerTurn - old);
   }
 
-  disengage(side = 0) {
+  disengage(side = 0): void {
     this.ws.send(OutCmd.SpawnSide, side);
     this.ss.getGroup('boats').then(settings => settings.spawnSide.value = side);
   }

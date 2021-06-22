@@ -26,20 +26,18 @@ export class WinConditionsComponent implements OnChanges {
 
   types = ['>', '<', '='];
 
-  constructor() { }
-
   ngOnChanges(): void {
     if (!this.tile?.settings) return;
     this.winConditions = this.tile.settings.winConditions || [];
     this.tile.settings.winConditions = this.winConditions;
   }
 
-  addCondition() {
+  addCondition(): void {
     this.winConditions.push({ id: this.conditions[0].id, value: 0, type: 0 });
     if (this.tile) this.tile.unsaved = true;
   }
 
-  removeCondition(i: number) {
+  removeCondition(i: number): void {
     if (this.winConditions.length === 1) this.winConditions = [];
     else this.winConditions = this.winConditions.splice(i - 1, 1);
     if (this.tile) this.tile.unsaved = true;

@@ -64,12 +64,12 @@ export class AiRender {
     this.object.add(mapObject);
   }
 
-  setBoat(boat?: AiBoatData) {
+  setBoat(boat?: AiBoatData): void {
     this.boat = boat;
     this.updateRender();
   }
 
-  setClaims(claims: { x: number, y: number, size: number }[]) {
+  setClaims(claims: { x: number, y: number, size: number }[]): void {
     BoatService.dispose(this.claims);
     this.claims.remove(...this.claims.children);
     this.object.add(this.claims);
@@ -87,17 +87,17 @@ export class AiRender {
     }
   }
 
-  setMetric(metric: keyof Points) {
+  setMetric(metric: keyof Points): void {
     this.metric = metric;
     this.updateRender();
   }
 
-  setStep(step: number) {
+  setStep(step: number): void {
     this.step = step;
     this.updateRender();
   }
 
-  setRadius(radius: number) {
+  setRadius(radius: number): void {
     this.radius = radius;
     this.updateRender();
   }

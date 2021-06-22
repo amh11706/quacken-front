@@ -19,7 +19,7 @@ export class AccountComponent {
     private router: Router,
   ) { }
 
-  async changePass(newPass: string, password: string) {
+  async changePass(newPass: string, password: string): Promise<void> {
     this.pending = true;
     const res = await this.ws.request(OutCmd.ChangePass, { newPassword: newPass, password });
     this.pending = false;
@@ -27,7 +27,7 @@ export class AccountComponent {
     this.dialog.open(MessageComponent, { data: message });
   }
 
-  async changeName(name: string, password: string) {
+  async changeName(name: string, password: string): Promise<void> {
     this.pending = true;
     const res = await this.ws.request(OutCmd.ChangeName, { name, password });
     this.pending = false;
@@ -36,7 +36,7 @@ export class AccountComponent {
     this.dialog.open(MessageComponent, { data: message });
   }
 
-  async changeEmail(email: string, password: string) {
+  async changeEmail(email: string, password: string): Promise<void> {
     this.pending = true;
     const res = await this.ws.request(OutCmd.ChangeEmail, { email, password });
     this.pending = false;
@@ -44,7 +44,7 @@ export class AccountComponent {
     this.dialog.open(MessageComponent, { data: message });
   }
 
-  async delete(password: string) {
+  async delete(password: string): Promise<void> {
     this.pending = true;
     const res = await this.ws.request(OutCmd.ChangeEmail, { email: '', password });
     this.pending = false;

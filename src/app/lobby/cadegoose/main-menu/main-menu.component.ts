@@ -55,7 +55,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     private sound: SoundService,
   ) { }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async(m: Lobby) => {
@@ -126,7 +126,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.mapId = await this.ss.get('l/cade', 'map');
   }
 
-  submitRating(value: number) {
+  submitRating(value: number): void {
     this.ws.send(OutCmd.RateMap, value);
   }
 
@@ -136,7 +136,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     for (const p of Object.values(this.teams)) p.r = false;
   }
 
-  toggleReady() {
+  toggleReady(): void {
     if (this.myBoat.isMe) {
       this.es.open = false;
       return;
@@ -149,17 +149,17 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.ws.send(OutCmd.Ready, this.ready);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
-  joinTeam(team: number) {
+  joinTeam(team: number): void {
     if (team === this.myTeam) team = 99;
     this.ws.send(OutCmd.Team, team);
     this.ready = false;
   }
 
-  shuffleTeams() {
+  shuffleTeams(): void {
     this.ws.send(OutCmd.ShuffleTeams);
   }
 
@@ -187,6 +187,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   public plural(length: number): string {
     if (length === 1) return length + ' player';
-    else return length + ' players';
+    return length + ' players';
   }
 }

@@ -19,18 +19,18 @@ export class LogoutConfirmComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<LogoutConfirmComponent>,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.ticker = window.setInterval(() => {
       if (this.seconds === 0) this.logout();
       else this.seconds--;
     }, 1000);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     clearInterval(this.ticker);
   }
 
-  logout() {
+  logout(): void {
     this.ws.close();
     window.localStorage.removeItem('token');
     this.router.navigate(['auth/login']);

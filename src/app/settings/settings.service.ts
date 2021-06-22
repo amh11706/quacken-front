@@ -48,11 +48,11 @@ export class SettingsService {
     });
   }
 
-  setFakeSettings(group: string, settings: SettingMap) {
+  setFakeSettings(group: string, settings: SettingMap): void {
     this.settings.set(group, settings);
   }
 
-  setLobbySettings(adminNames: SettingList, showMapChoice = false) {
+  setLobbySettings(adminNames: SettingList, showMapChoice = false): void {
     this.lAdminSettings = adminNames;
     this.showMapChoice = showMapChoice;
   }
@@ -90,7 +90,7 @@ export class SettingsService {
     return Promise.resolve(settings[name]);
   }
 
-  async save(setting: Setting) {
+  async save(setting: Setting): Promise<void> {
     this.ws.send(OutCmd.SettingSet, setting);
     const oldSetting = await this.get(setting.group, setting.name);
     Object.assign(oldSetting, setting);

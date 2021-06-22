@@ -7,19 +7,16 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class RatingComponent implements OnInit {
   @Output() ratingUpdated = new EventEmitter<number>();
-  @Input() rating: number = 0;
-  @Input() isPecentage: boolean = false; // determines when to use specific template
-  @Input() forTags: boolean = false;
-  @Input() count: number = 0;
-  starCount: number = 5;
-  defaultRating: number = 5;
+  @Input() rating = 0;
+  @Input() isPecentage = false; // determines when to use specific template
+  @Input() forTags = false;
+  @Input() count = 0;
+  starCount = 5;
+  defaultRating = 5;
   ratingArr: number[] = [];
-  alreadyVoted: boolean = false;
+  alreadyVoted = false;
 
-  constructor() {
-  }
-
-  ngOnInit() {
+  ngOnInit(): void {
     if (!this.isPecentage) {
       for (let index = 0; index < this.starCount; index++) {
         this.ratingArr.push(index);
@@ -32,17 +29,15 @@ export class RatingComponent implements OnInit {
     return size + '%';
   }
 
-  onClick(rating:number) {
+  onClick(rating: number): void {
     this.rating = rating;
     this.ratingUpdated.emit(rating);
-    return false;
   }
 
-  showIcon(index:number): string {
+  showIcon(index: number): string {
     if (this.rating >= index + 1) {
       return 'star';
-    } else {
-      return 'star_border';
     }
+    return 'star_border';
   }
 }

@@ -21,7 +21,7 @@ export class Sprite {
     this.prom = getTileImage(name).then(img => this.img = img);
   }
 
-  draw(ctx: CanvasRenderingContext2D, index: number, x = 0, y = 0) {
+  draw(ctx: CanvasRenderingContext2D, index: number, x = 0, y = 0): void {
     if (!this.img) throw new Error(this.name + ' image not loaded.');
     const pos = this.positions[index];
     ctx.drawImage(
@@ -71,7 +71,7 @@ export class JsonSprite {
     this.prom = getTileImage(data.name).then(img => this.img = img);
   }
 
-  draw(ctx: CanvasRenderingContext2D, index: number, x = 0, y = 0) {
+  draw(ctx: CanvasRenderingContext2D, index: number, x = 0, y = 0): void {
     if (!this.img) throw new Error(this.data.name + ' image not loaded.');
     const values = this.data.orientations[index];
     ctx.drawImage(

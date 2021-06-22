@@ -101,7 +101,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   constructor(protected ws: WsService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
     this.subs.add(this.ws.subscribe(Internal.ResetBoats, () => this.resetBoats()));
@@ -132,7 +132,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     clearTimeout(this.animateTimeout);
     clearTimeout(this.animateTimeout2);
     clearTimeout(this.animateTimeout3);
@@ -141,7 +141,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  protected handleMoves(s: { t: number, m: number[], s?: number[] }) {
+  protected handleMoves(s: { t: number, m: number[], s?: number[] }): void {
     const boat = this._boats[s.t];
     if (boat) {
       boat.moves = s.m;
@@ -149,7 +149,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected deleteBoat(id: number) {
+  protected deleteBoat(id: number): void {
     if (id === this.myBoat.id) {
       const pos = this.myBoat.pos;
       this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: new Boat('').setPos(pos.x, pos.y) });
@@ -189,7 +189,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected async handleTurn(turn: Turn) {
+  protected async handleTurn(turn: Turn): Promise<void> {
     if (this.turn) {
       console.log('got turn while in turn', this.turn);
       return;
@@ -235,7 +235,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.UnlockMoves }));
   }
 
-  protected playTurn() {
+  protected playTurn(): void {
     const clutterPart = this.turn?.cSteps[this.step] || [];
     this.animateTimeout2 = window.setTimeout(() => this.handleUpdate(clutterPart, this.step), 10000 / this.speed);
     const turnPart = this.turn?.steps[this.step] || [];
@@ -291,7 +291,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected sortBoats() {
+  protected sortBoats(): void {
     this.boats.sort((a, b) => {
       if (a.pos.y > b.pos.y) return 1;
       if (a.pos.y < b.pos.y) return -1;
@@ -299,7 +299,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     });
   }
 
-  protected setBoats(boats: BoatSync[], reset = true) {
+  protected setBoats(boats: BoatSync[], reset = true): void {
     const newBoats: Record<number, Boat> = {};
     if (!reset) Object.assign(newBoats, this._boats);
     // if (this.turn && boats.length > 1) return console.log('skipped boat set');
@@ -346,7 +346,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected handleUpdate(updates: Clutter[], _: number) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected handleUpdate(updates: Clutter[], _: number): void {
     for (const u of updates) {
       if (u.dis) {
         this.clutter.push(u);

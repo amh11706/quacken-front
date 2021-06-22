@@ -44,7 +44,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private fs: FriendsService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.ss.admin = false;
     this.sub.add(this.route.paramMap.subscribe(params => {
       if (this.sent) return;
@@ -69,7 +69,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.ss.admin = true;
   }

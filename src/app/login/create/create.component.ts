@@ -1,6 +1,6 @@
 import { Component, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 
 import { environment } from '../../../environments/environment';
@@ -37,7 +37,7 @@ export class CreateComponent {
     }
   }
 
-  create() {
+  create(): void {
     this.pending = true;
     this.http.post<any>(this.path + 'create', JSON.stringify(this.user))
       .subscribe(
@@ -46,23 +46,24 @@ export class CreateComponent {
           window.localStorage.setItem('token', resp);
           this.router.navigate(['list']);
         },
-        err => {
+        (err: unknown) => {
           this.pending = false;
+          if (!(err instanceof HttpErrorResponse)) return;
           this.err = err.error;
           if (this.errComponent) this.dialog.open(this.errComponent);
         },
       );
   }
 
-  back() {
+  back(): void {
     this.router.navigate(['auth/login']);
   }
 
-  showTerms() {
+  showTerms(): void {
     this.dialog.open(TermsComponent);
   }
 
-  showPrivacy() {
+  showPrivacy(): void {
     this.dialog.open(PrivacyComponent);
   }
 }

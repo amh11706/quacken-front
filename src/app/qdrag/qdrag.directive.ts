@@ -18,7 +18,7 @@ export class QdragDirective implements OnInit, OnDestroy {
 
   constructor(private el: ElementRef) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.offsetX = +this.offsetX;
     this.offsetY = +this.offsetY;
     this.updateTransform();
@@ -35,7 +35,7 @@ export class QdragDirective implements OnInit, OnDestroy {
     if (this.bindToWindow !== undefined) window.addEventListener('resize', this.offsetToRightGap);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     window.removeEventListener('resize', this.offsetToRightGap);
   }
 

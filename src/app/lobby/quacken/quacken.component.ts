@@ -53,7 +53,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.getSettings();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc } });
     this.ss.getGroup('l/quacken', true);
     this.ss.setLobbySettings(ownerSettings);
@@ -62,7 +62,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
@@ -70,14 +70,14 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.es.setLobby();
   }
 
-  async getSettings() {
+  async getSettings(): Promise<void> {
     [this.graphicSettings, this.controlSettings] = await Promise.all([
       this.ss.getGroup('graphics'),
       this.ss.getGroup('controls'),
     ]);
   }
 
-  protected setMapB64(map: string) {
+  protected setMapB64(map: string): void {
     if (!this.map.length) this.initMap();
     const bString = window.atob(map);
     let i = 0;
@@ -89,7 +89,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected initMap() {
+  protected initMap(): void {
     for (let y = 0; y < this.mapHeight; y++) {
       const row = [];
       for (let x = 0; x < this.mapWidth; x++) {

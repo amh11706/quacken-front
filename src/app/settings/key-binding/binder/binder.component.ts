@@ -48,7 +48,7 @@ export class BinderComponent implements OnDestroy {
     this.sub?.unsubscribe();
   }
 
-  openDialog(ref: TemplateRef<any>) {
+  openDialog(ref: TemplateRef<any>): void {
     this.newKey = this.key;
     const sub = this.kbs.bindSubscribe(e => {
       this.newKey = e;
@@ -60,7 +60,7 @@ export class BinderComponent implements OnDestroy {
     dialog.backdropClick().subscribe(() => {
       dialog.close();
     });
-    dialog.afterClosed().subscribe(async(key: string) => {
+    dialog.afterClosed().subscribe((key: string) => {
       if (key && this._binding) {
         if (this.conflict) {
           for (const binding of this.conflict) {

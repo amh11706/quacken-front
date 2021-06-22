@@ -59,7 +59,7 @@ export class WsService {
     });
   }
 
-  connect(token = this.token) {
+  connect(token = this.token): void {
     if (this.socket) {
       this.socket.onclose = null;
       this.socket.close();
@@ -95,7 +95,7 @@ export class WsService {
     return newSub.subscribe(next, error, complete);
   }
 
-  dispatchMessage(message: InMessage) {
+  dispatchMessage(message: InMessage): void {
     if (message.id) {
       const cb = this.requests.get(message.id);
       this.requests.delete(message.id);
@@ -107,7 +107,7 @@ export class WsService {
     else console.log('Unhandled message:', message);
   }
 
-  close() {
+  close(): void {
     this.connected = false;
     this.connected$.next(false);
     window.clearTimeout(this.timeOut);
@@ -118,13 +118,13 @@ export class WsService {
     delete this.socket;
   }
 
-  send(cmd: OutCmd, data?: any, force = false) {
+  send(cmd: OutCmd, data?: unknown, force = false): void {
     const message = { cmd, data };
     this.outMessages$.next(message);
     if (this.connected || force) this.sendRaw(JSON.stringify(message));
   }
 
-  request(cmd: OutCmd, data?: any): Promise<any> {
+  request(cmd: OutCmd, data?: unknown): Promise<any> {
     const message = { cmd, id: this.nextId, data };
     this.outMessages$.next(message);
     this.sendRaw(JSON.stringify(message));

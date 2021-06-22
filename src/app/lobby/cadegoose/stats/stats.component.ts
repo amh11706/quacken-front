@@ -40,9 +40,7 @@ export class StatsComponent implements OnChanges {
     { stat: Stat.ShotsTaken, title: 'Taken' },
   ];
 
-  constructor() { }
-
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (!this.stats) return;
 
     this.defenders = [];

@@ -33,7 +33,7 @@ export class MatchesComponent implements OnInit {
     private ss: SettingsService,
   ) { }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     const matches = await this.ws.request(OutCmd.MatchesUser);
     for (const m of matches) {
       m.createdAtString = moment(m.createdAt, 'X').format('lll');
@@ -45,7 +45,7 @@ export class MatchesComponent implements OnInit {
     }
   }
 
-  async openMatch(m: Match) {
+  async openMatch(m: Match): Promise<void> {
     window.open('/#/replay/' + m.matchId, '_blank');
   }
 }

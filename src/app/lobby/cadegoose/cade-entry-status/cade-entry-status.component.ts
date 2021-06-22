@@ -16,7 +16,7 @@ export class CadeEntryStatusComponent extends EntryStatusComponent implements On
   @Input() myTeam?: number;
   @Output() hoveredTeam = new EventEmitter<number>();
 
-  ngOnInit() {
+  ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => this.points = t.points));
     this.subs.add(this.ws.subscribe(Internal.Lobby, (l: Lobby) => this.points = l.points));

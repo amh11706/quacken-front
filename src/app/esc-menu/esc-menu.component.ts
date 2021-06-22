@@ -31,16 +31,16 @@ export class EscMenuComponent {
     this.es.activeTab = 0;
   }
 
-  logout() {
+  logout(): void {
     this.dialog.open(LogoutConfirmComponent, { width: '90%', maxWidth: '300px' });
   }
 
-  leave() {
+  leave(): void {
     this.router.navigateByUrl('/list');
     this.es.open = false;
   }
 
-  openDiscord() {
+  openDiscord(): void {
     window.open('https://discord.gg/SDFPXp2Cmq', '_blank');
   }
 }

@@ -27,30 +27,30 @@ export class FriendsComponent {
     private router: Router,
   ) { }
 
-  sendTell(friend: string) {
+  sendTell(friend: string): void {
     this.chat.setTell(friend);
   }
 
-  remove(friend: string) {
+  remove(friend: string): void {
     this.ws.send(OutCmd.FriendRemove, friend);
   }
 
-  unblock(blocked: string) {
+  unblock(blocked: string): void {
     this.ws.send(OutCmd.Unblock, blocked);
   }
 
-  accept(inv: Invite) {
+  accept(inv: Invite): void {
     this.fs.invites = this.fs.invites.filter(i => i !== inv);
     if (inv.ty === 0) this.ws.send(OutCmd.FriendAdd, inv.f);
     else this.router.navigate(['lobby', inv.tg]);
   }
 
-  decline(inv: Invite) {
+  decline(inv: Invite): void {
     this.fs.invites = this.fs.invites.filter(i => i !== inv);
     this.ws.send(OutCmd.FriendDecline, inv);
   }
 
-  invite(friend: string) {
+  invite(friend: string): void {
     this.ws.send(OutCmd.ChatCommand, '/invite ' + friend);
   }
 }

@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./editor-error.component.scss'],
 })
 export class EditorErrorComponent {
-  constructor() { }
 }

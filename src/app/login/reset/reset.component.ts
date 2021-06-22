@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -32,17 +32,17 @@ export class ResetComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.sub.add(this.route.paramMap.subscribe(params => {
       this.token = params.get('token') || '';
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
-  reset() {
+  reset(): void {
     this.pending = true;
     this.http.post<any>(this.path + 'reset', JSON.stringify({
       password: this.password, token: this.token,
@@ -51,15 +51,16 @@ export class ResetComponent implements OnInit, OnDestroy {
         this.pending = false;
         this.back();
       },
-      err => {
+      (err: unknown) => {
         this.pending = false;
+        if (!(err instanceof HttpErrorResponse)) return;
         this.err = err.error;
         if (this.errComponent) this.dialog.open(this.errComponent);
       },
     );
   }
 
-  back() {
+  back(): void {
     this.router.navigate(['auth/login']);
   }
 }

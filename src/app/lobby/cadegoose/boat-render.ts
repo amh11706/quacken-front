@@ -74,7 +74,7 @@ export class BoatRender {
     this.init(boat, gltf);
   }
 
-  protected init(boat: Boat, gltf: GLTF) {
+  protected init(boat: Boat, gltf: GLTF): void {
     if (!BoatRender.circle) {
       const circle = new THREE.EllipseCurve(0, 0, 0.5, 0.5, 0, 2 * Math.PI, false, 0);
       const circleGeo = new THREE.BufferGeometry().setFromPoints(circle.getPoints(50));
@@ -110,7 +110,7 @@ export class BoatRender {
     this.hitbox = this.obj.getObjectByName('hitbox') as any;
   }
 
-  dispose() {
+  dispose(): Promise<void> {
     return this.worker.addJob(() => {
       this.obj.parent?.remove(this.obj);
       this.influence?.material.dispose();
@@ -161,7 +161,7 @@ export class BoatRender {
     return this;
   }
 
-  update(animate = true, trigger?: () => void) {
+  update(animate = true, trigger?: () => void): Promise<void> | void {
     if (!animate) this.worker.clearJobs();
     const boat = { ...this.boat } as Boat;
     const job = this.worker.addJob(() => {
@@ -174,7 +174,7 @@ export class BoatRender {
     return job;
   }
 
-  protected _update(animate: boolean, boat: Boat) {
+  protected _update(animate: boolean, boat: Boat): Promise<void[]> {
     const startTime = animate ? new Date().valueOf() : 0;
     const promises: Promise<any>[] = [];
 
@@ -198,7 +198,7 @@ export class BoatRender {
     return Promise.all(promises);
   }
 
-  rebuildHeader() {
+  rebuildHeader(): void {
     if (this.title) this.header.remove(this.title);
 
     this.makeHeader();
@@ -269,7 +269,7 @@ export class BoatRender {
     return this;
   }
 
-  protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]) {
+  protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]): Promise<void>[] {
     if (!this.obj.position.x || !this.obj.position.z) console.log(x, y, this.obj.position, this.boat.name);
     let t: any;
     const decodeX = [0, 0.4, 0, -0.4];
@@ -335,7 +335,7 @@ export class BoatRender {
     return p;
   }
 
-  protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number) {
+  protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number): Promise<unknown>[] {
     const promises: Promise<Euler | Vector3>[] = [];
 
     if (startTime && (transition || !opacity)) {

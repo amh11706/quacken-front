@@ -23,7 +23,7 @@ export class Cannonball {
       scene.add(this.cb);
     }
 
-    start(delay = 0) {
+    start(delay = 0): void {
       const obj = this.obj;
       if (typeof obj.dir !== 'number' || !obj.dis) return this.remove();
       const hit = obj.dis < 4;
@@ -47,7 +47,7 @@ export class Cannonball {
       );
     }
 
-    remove() {
+    remove(): void {
       for (const t of this.group.getAll()) TWEEN.remove(t);
       this.group.removeAll();
       this.cb.parent?.remove(this.cb);

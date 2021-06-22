@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./exit-prompt.component.scss'],
 })
 export class ExitPromptComponent {
-  constructor() { }
 }

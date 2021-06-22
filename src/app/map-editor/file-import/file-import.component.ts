@@ -38,7 +38,7 @@ export class FileImportComponent {
 
   constructor(private socket: WsService) { }
 
-  async process() {
+  async process(): Promise<void> {
     this.mapErrors = [];
     for (let i = 0; i < this.uploader.queue.length; i++) {
       const fileItem = this.uploader.queue[i]._file;
@@ -69,34 +69,34 @@ export class FileImportComponent {
     this.uploader.clearQueue();
   }
 
-  convert(mapData: string) {
+  convert(mapData: string): number[][] {
     const rows = mapData.split('\n').slice(0, 36).map(function(x) { return x.split(',').map(v => mapConversion[+v]); });
     while (rows.length > 36) rows.pop();
     return rows;
   }
 
-  read(fileList: FileItem[]) {
-    const promises: Promise<any>[] = [];
+  read(fileList: FileItem[]): Promise<{name: string, data: string}[]> {
+    const promises: Promise<{name: string, data: string}>[] = [];
     for (const file of fileList) {
-      const filePromise = new Promise(resolve => {
+      const filePromise = new Promise<{name: string, data: string}>(resolve => {
         const reader = new FileReader();
         reader.readAsText(file._file);
         reader.onload = () => resolve({
           name: file._file.name,
-          data: reader.result,
+          data: reader.result as string,
         });
       });
       promises.push(filePromise);
     }
-    return Promise.all<{ name: string, data: string }>(promises);
+    return Promise.all(promises);
   }
 
-  close() {
+  close(): void {
     this.showFileUploadChange.emit(false);
     this.uploader.clearQueue();
   }
 
-  clear() {
+  clear(): void {
     this.uploader.clearQueue();
   }
 }

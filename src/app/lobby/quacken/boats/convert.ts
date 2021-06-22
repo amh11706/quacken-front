@@ -50,7 +50,7 @@ export function boatToSync(boat: Boat): BoatSync {
   };
 }
 
-export function syncToBoat(boat: Boat, sBoat: BoatSync) {
+export function syncToBoat(boat: Boat, sBoat: BoatSync): void {
   boat.setPos(sBoat.x, sBoat.y)
     .setTreasure(sBoat.t)
     .draw();

@@ -41,7 +41,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     this.notDefaultElements = el.nativeElement.getElementsByClassName('notdefault');
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     if (!this.kbs.activeBindings) return;
     const groupMap = new Map<LinkGroups, KeyBinding[]>();
     for (const key in this.actions) {
@@ -73,7 +73,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     this.setTakenKeys();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.exitPrompt();
   }
 
@@ -95,7 +95,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     }
   }
 
-  changeGroup() {
+  changeGroup(): void {
     this.setTakenKeys();
     this.exitPrompt();
     this.updateChanged();
@@ -109,14 +109,14 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateChanged() {
+  updateChanged(): void {
     setTimeout(() => {
       this.changed = !!this.changedElements.length;
       this.notDefault = !!this.notDefaultElements.length;
     });
   }
 
-  async save() {
+  async save(): Promise<void> {
     const toActivate = new KeyBindings();
     const toSave: Record<KeyActions, [string, string]> = {} as any;
 
@@ -155,7 +155,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     this.updateChanged();
   }
 
-  cancel() {
+  cancel(): void {
     for (const k in this.actions) {
       if (!this.actions.hasOwnProperty(k)) continue;
       for (const binding of this.actions[k as keyof KeyBindings]) {
@@ -168,7 +168,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     this.updateChanged();
   }
 
-  setDefaults() {
+  setDefaults(): void {
     if (this.changed) this.cancel();
     for (const binding of this.actions[this.group]) {
       let changed = false;

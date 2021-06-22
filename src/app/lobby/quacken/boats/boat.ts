@@ -9,7 +9,7 @@ export class Boat {
   id = 0;
   oId?: number;
   team?: number;
-  title: string = '';
+  title = '';
   renderName: string;
   maxDamage = 3;
   maxMoves = 4;
@@ -42,24 +42,24 @@ export class Boat {
     this.renderName = this.name;
   }
 
-  draw(offsetX: number = 0, offsetY: number = 0) {
+  draw(offsetX = 0, offsetY = 0): Boat {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
     return this;
   }
 
-  setPos(x: number, y: number, checkSZ: boolean = true) {
+  setPos(x: number, y: number, checkSZ = true): Boat {
     if (checkSZ && this.checkSZ({ x, y }) && !this.checkSZ(this.pos)) this.enterSZ();
     this.pos = { x, y };
     return this;
   }
 
-  rotateByMove(m: number) {
+  rotateByMove(m: number): Boat {
     if (m) this.face += (m - 2) * this.spinDeg;
     return this;
   }
 
-  setTransition(transition: number, move: number) {
+  setTransition(transition: number, move: number): Boat {
     this.tryFace = transition;
     if (move === 2) this.moveTransition = [1, 1];
     else if (transition % 2) this.moveTransition = [2, 3];
@@ -72,7 +72,7 @@ export class Boat {
     return this.treasure;
   }
 
-  setTreasure(treasure: number) {
+  setTreasure(treasure: number): Boat {
     this.treasure = treasure;
     return this;
   }
@@ -81,7 +81,7 @@ export class Boat {
     return Math.round(this.damage * 100 / this.maxDamage);
   }
 
-  addDamage(crunchDir: number, damage: number = 1) {
+  addDamage(crunchDir: number, damage = 1): Boat {
     this.crunchDir = crunchDir;
     if (damage >= 100) {
       this.damage = this.maxDamage;
@@ -107,7 +107,7 @@ export class Boat {
     this.moveLock = 1;
   }
 
-  checkSZ = (pos: { x: number, y: number }) => {
+  checkSZ = (pos: { x: number, y: number }): boolean => {
     return pos.y > 48 && pos.y < 52 && pos.x >= 0 && pos.x < 25;
   }
 

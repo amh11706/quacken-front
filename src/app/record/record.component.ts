@@ -12,8 +12,6 @@ export class RecordComponent implements OnInit {
   private context?: CanvasRenderingContext2D;
   private video = document.createElement('video');
 
-  constructor() { }
-
   ngOnInit(): void {
     const canvas = document.getElementById('canvas');
     if (canvas instanceof HTMLCanvasElement) {
@@ -22,7 +20,7 @@ export class RecordComponent implements OnInit {
     }
   }
 
-  toggleRecording() {
+  toggleRecording(): void {
     this.isRecording ? this.stopRecording() : this.startRecording();
   }
 

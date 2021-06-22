@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -37,7 +37,7 @@ export class LoginFormComponent {
     }
   }
 
-  login() {
+  login(): void {
     this.pending = true;
     this.http.post<any>(this.path + 'login', JSON.stringify(this.user))
       .subscribe(
@@ -54,25 +54,25 @@ export class LoginFormComponent {
       );
   }
 
-  createAccount() {
+  createAccount(): void {
     this.router.navigate(['auth/create']);
   }
 
-  guestLogin() {
+  guestLogin(): void {
     window.localStorage.setItem('token', 'guest');
     this.router.navigate([this.guard.triedPath || 'list']);
     this.guard.triedPath = '';
   }
 
-  showTerms() {
+  showTerms(): void {
     this.dialog.open(TermsComponent);
   }
 
-  showPrivacy() {
+  showPrivacy(): void {
     this.dialog.open(PrivacyComponent);
   }
 
-  sendReset() {
+  sendReset(): void {
     this.pending = true;
     this.errMessage = 'Sending reset link...';
     this.http.post<any>(this.path + 'forgot', JSON.stringify(this.user.email))
@@ -81,9 +81,9 @@ export class LoginFormComponent {
           this.pending = false;
           this.errMessage = 'Reset link sent! Check your email.';
         },
-        err => {
+        (err: unknown) => {
           this.pending = false;
-          this.errMessage = err.error;
+          if (err instanceof HttpErrorResponse) this.errMessage = err.error;
         },
       );
   }
