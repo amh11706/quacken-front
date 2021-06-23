@@ -36,6 +36,11 @@
   color: #eee;
   z-index: 49;
 }
+@media screen and (max-height: 350px){ //temporary fix for mobile screens
+  #side-menu {
+    grid-template-rows: calc(100% - 115px) 1fr;
+  }
+}
 
 #menuButtons {
   grid-row-start: 1;
