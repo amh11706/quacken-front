@@ -14,6 +14,7 @@ import { SMSloopData, SMSloopSinkData } from './smsloop';
 import { XebecData, XebecSinkData } from './xebec';
 import { MerchBrigData, MerchBrigSinkData } from './merchbrig';
 import { MerchGalData, MerchGalSinkData } from './merchgal';
+import { WarGalData, WarGalSinkData } from './wargal';
 import { BlackShipData } from './blackship';
 
 export const Boats: Partial<Record<BoatTypes, { sail: SpriteData, sink?: SpriteData }>> = {
@@ -30,5 +31,6 @@ export const Boats: Partial<Record<BoatTypes, { sail: SpriteData, sink?: SpriteD
   [BoatTypes.MerchBrig]: { sail: MerchBrigData, sink: MerchBrigSinkData },
   [BoatTypes.MerchGal]: { sail: MerchGalData, sink: MerchGalSinkData },
   [BoatTypes.Xebec]: { sail: XebecData, sink: XebecSinkData },
+  [BoatTypes.WarGal]: { sail: WarGalData, sink: WarGalSinkData },
   [BoatTypes.BlackShip]: { sail: BlackShipData },
 };
