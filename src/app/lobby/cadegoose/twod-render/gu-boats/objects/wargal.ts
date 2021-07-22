@@ -133,7 +133,7 @@ export const WarGalData = {
 };
 
 export const WarGalSinkData = {
-  name: 'wargal_sinking',
+  name: 'wargal',
   orientations: {
     23: {
       x: 2001,
