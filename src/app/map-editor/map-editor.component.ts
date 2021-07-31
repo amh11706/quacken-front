@@ -196,7 +196,11 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   setTile = (x: number, y: number, v: number): { x: number, y: number, v: number } | undefined => {
-    if (x < 0 || x > 20 || y < 3 || y > 32) return;
+    if (this.editor.selectedTile.group === 'cgmaps') {
+      if (x < 0 || x > 19 || y < 3 || y > 32) return;
+    } else {
+      if (x < 0 || x > 24 || y < 0 || y > 48) return;
+    }
     const tile = this.editor.selectedTile;
     if (!tile.data || v === tile.data[y][x]) return;
     tile.unsaved = true;
