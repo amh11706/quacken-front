@@ -23,6 +23,10 @@ export const links: Record<number, string> = {
   28: 'blackship/blackship',
 };
 
+export function getShipLink(id: number): string {
+  return `/assets/boats/${links[id] || 'boat' + id}.png`;
+}
+
 @Component({
   selector: 'q-setting',
   templateUrl: './setting.component.html',
@@ -40,7 +44,7 @@ export class SettingComponent {
 
   setting: any = {};
   group: SettingMap = {};
-  links = links;
+  getShipLink = getShipLink;
   private debounce?: number;
 
   constructor(public ss: SettingsService, private ws: WsService) { }

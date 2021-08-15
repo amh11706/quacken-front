@@ -7,14 +7,14 @@
                 (selectionChange)="save()">
       <mat-select-trigger>
         <img *ngIf="group[setting.name].value !== undefined"
-             [src]="'/assets/boats/' + (links[group[setting.name].value] || 'boat'+group[setting.name].value)  + '.png'"
+             [src]="getShipLink(group[setting.name].value)"
              [title]="setting.titles[group[setting.name].value]">
       </mat-select-trigger>
       <mat-optgroup *ngFor="let g of setting.groups"
                     [label]="g.name">
         <mat-option *ngFor="let o of g.options"
                     [value]="o">
-          <img src="/assets/boats/{{links[o] || 'boat'+o}}.png"
+          <img [src]="getShipLink(o)"
                class="boatoption"
                height="25px"
                width="25px">{{setting.titles[o]}}
