@@ -5,12 +5,14 @@
   float: left;
   width: 262px;
   height: 148px;
+  position: relative;
 }
 
 q-chat {
   display: inline-block;
   width: calc(99% - 270px);
   min-width: 150px;
+  overflow: hidden;
 }
 
 #hud {

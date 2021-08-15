@@ -1,4 +1,5 @@
-<ng-container *ngIf="group[setting.name]" [ngSwitch]="setting.type">
+<ng-container *ngIf="group[setting.name]"
+              [ngSwitch]="setting.type">
   <div *ngSwitchCase="'boat'"
        class="setting boat">
     <mat-select *ngIf="group[setting.name]"
@@ -6,14 +7,14 @@
                 (selectionChange)="save()">
       <mat-select-trigger>
         <img *ngIf="group[setting.name].value !== undefined"
-             [src]="links[group[setting.name].value] && '/assets/boats/' + links[group[setting.name].value] + '.png'"
+             [src]="'/assets/boats/' + (links[group[setting.name].value] || 'boat'+group[setting.name].value)  + '.png'"
              [title]="setting.titles[group[setting.name].value]">
       </mat-select-trigger>
       <mat-optgroup *ngFor="let g of setting.groups"
                     [label]="g.name">
         <mat-option *ngFor="let o of g.options"
                     [value]="o">
-          <img src="/assets/boats/{{links[o]}}.png"
+          <img src="/assets/boats/{{links[o] || 'boat'+o}}.png"
                class="boatoption"
                height="25px"
                width="25px">{{setting.titles[o]}}
@@ -72,4 +73,13 @@
            [max]="setting.max"
            [disabled]="setting.admin && !ss.admin">
   </mat-form-field>
+
+  <div *ngSwitchDefault
+       class="setting">
+    <q-custom-map [group]="group"
+                  (save)="save()"
+                  [setting]="setting"
+                  [disabled]="setting.admin && !ss.admin">
+    </q-custom-map>
+  </div>
 </ng-container>
