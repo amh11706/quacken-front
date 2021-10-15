@@ -44,10 +44,10 @@ export class WsService {
       this.close();
       this.reason = reason;
       window.localStorage.removeItem('token');
-      this.router.navigate(['auth/login']);
+      void this.router.navigate(['auth/login']);
     });
     this.subscribe(InCmd.NavigateTo, (path: string) => {
-      this.router.navigate([path]);
+      void this.router.navigate([path]);
     });
     this.subscribe(InCmd.SessionId, (id: number) => {
       this.sId = id;
@@ -86,7 +86,9 @@ export class WsService {
     };
   }
 
-  subscribe(cmd: InCmd | Internal, next?: (value: any) => void, error?: (e: any) => void, complete?: () => void): Subscription {
+  subscribe(
+    cmd: InCmd | Internal, next?: (value: any) => void, error?: (e: any) => void, complete?: () => void,
+  ): Subscription {
     const sub = this.messages.get(cmd);
     if (sub && sub.observers.length) return sub.subscribe(next, error, complete);
 

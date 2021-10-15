@@ -143,7 +143,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   private handleKeys() {
     this.sub.add(this.kbs.subscribe(KeyActions.Save, v => {
       if (this.editor.settingsOpen) return;
-      if (v) this.save();
+      if (v) void this.save();
     }));
     this.sub.add(this.kbs.subscribe(KeyActions.Redo, v => {
       if (this.editor.settingsOpen) return;

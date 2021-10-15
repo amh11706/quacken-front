@@ -36,7 +36,7 @@ export class EscMenuComponent {
   }
 
   leave(): void {
-    this.router.navigateByUrl('/list');
+    void this.router.navigateByUrl('/list');
     this.es.open = false;
   }
 

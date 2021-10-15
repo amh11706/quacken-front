@@ -68,7 +68,7 @@ export class SettingsService {
       ready = new Subject<SettingMap>();
       this.ready.set(group, ready);
 
-      this.ws.request(OutCmd.SettingGetGroup, group).then((m: Setting[]) => {
+      void this.ws.request(OutCmd.SettingGetGroup, group).then((m: Setting[]) => {
         let localSettings = this.settings.get(group);
         if (!localSettings) {
           localSettings = {};

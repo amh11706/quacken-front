@@ -40,9 +40,9 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v) return;
       this.ws.send(OutCmd.LobbyListJoin);
-      this.ss.getGroup('l/create').then(s => {
+      void this.ss.getGroup('l/create').then(s => {
         this.settings = s;
-        this.changeType();
+        void this.changeType();
       });
     }));
     this.sub.add(this.ws.subscribe(InCmd.NavigateTo, () => this.ref.close()));

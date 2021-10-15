@@ -42,7 +42,7 @@ export class FriendsComponent {
   accept(inv: Invite): void {
     this.fs.invites = this.fs.invites.filter(i => i !== inv);
     if (inv.ty === 0) this.ws.send(OutCmd.FriendAdd, inv.f);
-    else this.router.navigate(['lobby', inv.tg]);
+    else void this.router.navigate(['lobby', inv.tg]);
   }
 
   decline(inv: Invite): void {

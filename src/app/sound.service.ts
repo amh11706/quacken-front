@@ -50,7 +50,7 @@ export class SoundService {
   private settings: SettingMap = {};
 
   constructor(ss: SettingsService) {
-    ss.getGroup('sounds').then(settings => this.settings = settings);
+    void ss.getGroup('sounds').then(settings => this.settings = settings);
   }
 
   load(sound: Sounds): Promise<string> {
@@ -82,6 +82,6 @@ export class SoundService {
     const audio = new window.Audio();
     audio.src = await this.load(sound);
     audio.volume = (file.volume || 1) * groupVolume * masterVolume / 10000;
-    audio.play();
+    return audio.play();
   }
 }

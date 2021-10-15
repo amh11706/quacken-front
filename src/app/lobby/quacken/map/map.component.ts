@@ -14,7 +14,7 @@ export class MapComponent implements OnDestroy {
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @Input() myBoat = new Boat('');
   @Input() speed = 10;
-  @Input() set map(b64: string) { if (b64) this.renderMap(window.atob(b64)); }
+  @Input() set map(b64: string) { if (b64) void this.renderMap(window.atob(b64)); }
   _mapScale = '';
   _mapScaleRaw = 0;
   @Input() set mapScale(v: number | string) {
@@ -118,7 +118,7 @@ export class MapComponent implements OnDestroy {
   private saveScale() {
     clearTimeout(this.wheelDebounce);
     this.wheelDebounce = window.setTimeout(() => {
-      this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', group: 'graphics' });
+      void this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', group: 'graphics' });
     }, 1000);
   }
 }

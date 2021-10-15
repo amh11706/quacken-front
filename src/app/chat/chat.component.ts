@@ -69,10 +69,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 100;
   }
 
-  accept(inv: Invite): void {
+  accept(inv: Invite): Promise<boolean> | void {
     inv.resolved = true;
     if (inv.ty === 0) this.ws.send(OutCmd.FriendAdd, inv.f);
-    else this.router.navigate(['lobby', inv.tg]);
+    else return this.router.navigate(['lobby', inv.tg]);
   }
 
   decline(inv: Invite): void {

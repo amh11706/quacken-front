@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import {
   Scene,
   Box3,
-  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera, Object3D,
+  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -56,6 +56,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     // }));
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   static dispose(o: any): void {
     if (o.geometry) {
       o.geometry.dispose();
@@ -80,10 +81,10 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     super.ngOnDestroy();
 
     this.worker.clearJobs();
-    for (const p of Object.values(this.ships)) p.then(s => BoatService.dispose(s.scene));
+    for (const p of Object.values(this.ships)) void p.then(s => BoatService.dispose(s.scene));
   }
 
-  setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: Camera): void {
+  setScene(s: Scene, objGetter: (c: ObstacleConfig) => Promise<GLTF>, cam: Camera): Promise<void> | undefined {
     this.scene = s;
     this.camera = cam;
 
@@ -94,7 +95,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
 
       this.blockRender = false;
     }
-    this.renderSync();
+    return this.renderSync();
   }
 
   setControls(con: OrbitControls): void {
@@ -117,7 +118,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       return;
     }
 
-    this.worker.addJob(async() => {
+    void this.worker.addJob(async () => {
       const boats = this.boats;
       supSet(b, reset);
       if (reset) await this.renderSync();
@@ -136,11 +137,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
 
   protected deleteBoat(id: number): void {
     const supDelete = super.deleteBoat.bind(this);
-    this.worker.addJob(() => {
+    void this.worker.addJob(() => {
       const boat = this._boats[id];
       if (boat?.render) {
         const render = boat.render;
-        render.dispose().then(() => {
+        void render.dispose().then(() => {
           if (boat.render === render) delete boat.render;
         });
       }
@@ -153,7 +154,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     if (!boat) return;
     boat.moves = s.m;
     boat.shots = s.s || [];
-    this.worker.addJob(() => {
+    void this.worker.addJob(() => {
       boat.render?.updateMoves();
     });
   }
@@ -169,7 +170,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     super.handleTurn(turn);
   }
 
-  protected setHeaderFlags(flags: Turn['flags']): void {
+  protected setHeaderFlags(_flags: Turn['flags']): void {
     if (!this.flags) return;
 
     for (const boat of this.boats) if (boat.render) boat.render.flags = [];
@@ -193,15 +194,15 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   protected playTurn(): void {
     this.worker.clearJobs();
     for (let step = 0; step < 8; step++) {
-      this.worker.addJob(() => this._playTurn(step));
-      this.worker.addJob(() => this.handleUpdate(this.turn?.cSteps[step] || [], step));
+      void this.worker.addJob(() => this._playTurn(step));
+      void this.worker.addJob(() => this.handleUpdate(this.turn?.cSteps[step] || [], step));
     }
-    this.worker.addJob(() => {
+    void this.worker.addJob(() => {
       delete this.turn;
       this.step = -1;
       return new Promise(resolve => setTimeout(resolve, 30000 / this.speed));
     });
-    this.worker.addJob(() => {
+    void this.worker.addJob(() => {
       this.ws.send(OutCmd.Sync);
     });
   }
@@ -228,8 +229,8 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       if (!u) continue;
       if (u.c) {
         boat.addDamage(u.c - 1, u.cd || 0);
-        if (u.cd === 100) this.sound.play(Sounds.Sink, 10000 / this.speed);
-        if (u.c < 5) this.sound.play(Sounds.RockDamage, 3500 / this.speed);
+        if (u.cd === 100) void this.sound.play(Sounds.Sink, 10000 / this.speed);
+        if (u.c < 5) void this.sound.play(Sounds.RockDamage, 3500 / this.speed);
       }
       if (u.tm === undefined || u.tf === undefined) continue;
       if (boat.rotateTransition === 0) boat.rotateTransition = 1;
@@ -274,7 +275,8 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     this.boats.sort((a, b) => {
       if (!a.render) return -1;
       if (!b.render) return 1;
-      return a.render.obj.position.distanceToSquared(cam.position) - b.render.obj.position.distanceToSquared(cam.position);
+      return a.render.obj.position.distanceToSquared(cam.position) -
+        b.render.obj.position.distanceToSquared(cam.position);
     });
     const box = new Box3();
 
@@ -301,7 +303,8 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     this.boats.sort((a, b) => {
       if (!a.render) return -1;
       if (!b.render) return 1;
-      return a.render.obj.position.distanceToSquared(cam.position) - b.render.obj.position.distanceToSquared(cam.position);
+      return a.render.obj.position.distanceToSquared(cam.position) -
+        b.render.obj.position.distanceToSquared(cam.position);
     });
     const box = new Box3();
 
@@ -321,7 +324,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (const boat of this.boats) {
       if (!boat.render) continue;
       if (boat.render.update(false)) continue;
-      boat.render.dispose();
+      void boat.render.dispose();
       delete boat.render;
     }
     return Promise.all(this.checkNewShips()).then(() => {

@@ -37,7 +37,7 @@ export class SettingComponent {
   @Input() set name(value: keyof typeof Settings) {
     this.setting = Settings[value] || {};
     this.setting.name = this.setting.name || value;
-    this.fetch();
+    void this.fetch();
   }
 
   @Output() valueChange = new EventEmitter<number>();
@@ -68,7 +68,7 @@ export class SettingComponent {
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
       this.valueChange.emit(+newSetting.value);
-      this.ss.save({
+      void this.ss.save({
         id: this.setting.id,
         name: this.setting.name,
         value: +newSetting.value,

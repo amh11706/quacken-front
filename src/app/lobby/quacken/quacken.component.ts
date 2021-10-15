@@ -50,12 +50,12 @@ export class QuackenComponent implements OnInit, OnDestroy {
     protected fs: FriendsService,
     protected es: EscMenuService,
   ) {
-    this.getSettings();
+    void this.getSettings();
   }
 
   ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc } });
-    this.ss.getGroup('l/quacken', true);
+    void this.ss.getGroup('l/quacken', true);
     this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby(undefined, 'quacken');
 

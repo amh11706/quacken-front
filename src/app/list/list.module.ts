@@ -21,7 +21,14 @@ import { EscMenuModule } from '../esc-menu/esc-menu.module';
 import { NameModule } from '../chat/name/name.module';
 
 @NgModule({
-  declarations: [ListComponent, CreateComponent, NewsComponent, LobbyCardComponent, EditorErrorComponent, LobbyListComponent],
+  declarations: [
+    ListComponent,
+    CreateComponent,
+    NewsComponent,
+    LobbyCardComponent,
+    EditorErrorComponent,
+    LobbyListComponent,
+  ],
   imports: [
     CommonModule,
     ListRoutingModule,

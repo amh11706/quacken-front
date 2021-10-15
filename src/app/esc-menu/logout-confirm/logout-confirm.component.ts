@@ -21,7 +21,7 @@ export class LogoutConfirmComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ticker = window.setInterval(() => {
-      if (this.seconds === 0) this.logout();
+      if (this.seconds === 0) void this.logout();
       else this.seconds--;
     }, 1000);
   }
@@ -30,10 +30,10 @@ export class LogoutConfirmComponent implements OnInit, OnDestroy {
     clearInterval(this.ticker);
   }
 
-  logout(): void {
+  async logout(): Promise<void> {
     this.ws.close();
     window.localStorage.removeItem('token');
-    this.router.navigate(['auth/login']);
+    await this.router.navigate(['auth/login']);
     this.dialogRef.close();
   }
 }

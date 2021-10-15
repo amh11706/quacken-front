@@ -74,14 +74,14 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
         this.render(boat)?.updateTeam(boat);
       }
     }));
-    this.sound.load(Sounds.CannonFireBig);
-    this.sound.load(Sounds.CannonFireMedium);
-    this.sound.load(Sounds.CannonFireSmall);
-    this.sound.load(Sounds.CannonHit);
-    this.sound.load(Sounds.CannonSplash);
-    this.sound.load(Sounds.CannonSplash2);
-    this.sound.load(Sounds.Sink);
-    this.sound.load(Sounds.RockDamage);
+    void this.sound.load(Sounds.CannonFireBig);
+    void this.sound.load(Sounds.CannonFireMedium);
+    void this.sound.load(Sounds.CannonFireSmall);
+    void this.sound.load(Sounds.CannonHit);
+    void this.sound.load(Sounds.CannonSplash);
+    void this.sound.load(Sounds.CannonSplash2);
+    void this.sound.load(Sounds.Sink);
+    void this.sound.load(Sounds.RockDamage);
   }
 
   ngOnDestroy(): void {
@@ -104,14 +104,14 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       u.transform = `translate(${p.x}px, ${p.y}px)`;
       if (!u.dis) continue;
       const fireSound = CannonSounds[u.t - 2];
-      this.sound.play(fireSound);
-      if (u.dbl) this.sound.play(fireSound, 1000 / this.speed);
+      void this.sound.play(fireSound);
+      if (u.dbl) void this.sound.play(fireSound, 1000 / this.speed);
       if (u.dis < 4) {
-        this.sound.play(Sounds.CannonHit, (2500 * u.dis + 1500) / this.speed);
-        if (u.dbl) this.sound.play(Sounds.CannonHit, (2500 * u.dis + 2500) / this.speed);
+        void this.sound.play(Sounds.CannonHit, (2500 * u.dis + 1500) / this.speed);
+        if (u.dbl) void this.sound.play(Sounds.CannonHit, (2500 * u.dis + 2500) / this.speed);
       } else {
-        this.sound.play(Sounds.CannonSplash, 9000 / this.speed);
-        if (u.dbl) this.sound.play(Sounds.CannonSplash2, 10000 / this.speed);
+        void this.sound.play(Sounds.CannonSplash, 9000 / this.speed);
+        if (u.dbl) void this.sound.play(Sounds.CannonSplash2, 10000 / this.speed);
       }
     }
     this.clutter.push(...updates);

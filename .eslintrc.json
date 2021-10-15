@@ -3,7 +3,10 @@
   "ignorePatterns": [
     "projects/**/*"
   ],
-  "plugins": ["import"],
+  "plugins": [
+    "import",
+    "unused-imports"
+  ],
   "overrides": [
     {
       "files": [
@@ -26,19 +29,79 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+          "warn",
+          {
+            "vars": "all",
+            "varsIgnorePattern": "^_",
+            "args": "after-used",
+            "argsIgnorePattern": "^_"
+          }
+        ],
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-floating-promises": "warn",
         "@typescript-eslint/no-unnecessary-type-arguments": "warn",
         "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/type-annotation-spacing": ["warn", {"before": false, "after": true, "overrides": { "arrow": { "before": true, "after": true }}}],
-        "semi": ["error", "always"],
-        "require-await":"error",
-        "import/order": ["error", { "groups": ["builtin", "external", "internal"] }],
-        "func-call-spacing":"off",
+        "@typescript-eslint/type-annotation-spacing": [
+          "warn",
+          {
+            "before": false,
+            "after": true,
+            "overrides": {
+              "arrow": {
+                "before": true,
+                "after": true
+              }
+            }
+          }
+        ],
+        "no-void": [
+          "error",
+          {
+            "allowAsStatement": true
+          }
+        ],
+        "semi": [
+          "error",
+          "always"
+        ],
+        "require-await": "error",
+        "import/order": [
+          "error",
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal"
+            ]
+          }
+        ],
+        "no-return-await": "error",
+        "max-len": [
+          "warn",
+          {
+            "code": 120,
+            "ignoreStrings": true
+          }
+        ],
+        "func-call-spacing": "off",
         "no-return-assign": "off",
         "no-else-return": "error",
         "no-prototype-builtins": "off",
-        "space-before-function-paren": ["error", "never"],
-        "comma-dangle": ["error", "always-multiline"],
+        "space-before-function-paren": [
+          "error",
+          {
+            "anonymous": "never",
+            "named": "never",
+            "asyncArrow": "always"
+          }
+        ],
+        "comma-dangle": [
+          "error",
+          "always-multiline"
+        ],
         "no-useless-constructor": "off",
         "accessor-pairs": "off",
         "@angular-eslint/component-selector": [

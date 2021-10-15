@@ -28,7 +28,7 @@ export class ResetComponent implements OnInit, OnDestroy {
   ) {
     const token = window.localStorage.getItem('token');
     if (token) {
-      router.navigate(['list']);
+      void router.navigate(['list']);
     }
   }
 
@@ -61,6 +61,6 @@ export class ResetComponent implements OnInit, OnDestroy {
   }
 
   back(): void {
-    this.router.navigate(['auth/login']);
+    void this.router.navigate(['auth/login']);
   }
 }

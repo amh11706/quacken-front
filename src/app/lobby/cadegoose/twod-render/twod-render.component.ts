@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import Stats from 'three/examples/jsm/libs/stats.module';
+
 import { SettingsService, SettingMap } from '../../../settings/settings.service';
 import { InCmd, Internal } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
@@ -41,7 +42,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() safeZone = true;
   @Input() myBoat = new Boat('');
   @Input() speed = 15;
-  @Input() set map(map: number[][]) { this.fillMap(map, []); }
+  @Input() set map(map: number[][]) { void this.fillMap(map, []); }
   private mapUtil = new MapComponent();
   @Input() set editor(e: MapEditor) { this.mapUtil.map = e; }
   @Input() set undo(u: (source: MapTile[][], target: MapTile[][]) => void) { this.mapUtil.undo = u; }
@@ -55,7 +56,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get mapScale(): number { return this._mapScale; }
-  @Input() graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
+  @Input() graphicSettings: SettingMap = {
+    mapScale: { value: 50 },
+    speed: { value: 10 },
+    water: { value: 1 },
+    showFps: { value: 0 },
+  };
+
   private frameRequested = true;
   private frameTarget = 0;
   private alive = true;
@@ -130,7 +137,9 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.requestRender();
       return;
     }
-    if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
+    if (this.graphicSettings.maxFps) {
+      this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
+    }
 
     BoatRender.speed = this.speed;
     if (BoatRender.tweens.getAll().length) {
@@ -168,7 +177,9 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public addObstacles(x: number, y: number, tile: number, flags: {t: number, points?: number, cs?: number[]}[]): void {
+  public addObstacles(
+    x: number, y: number, tile: number, flags: { t: number, points?: number, cs?: number[] }[],
+  ): void {
     const obstacle = new Point().fromPosition({ x, y });
     const pOffsetX = obstacle.x;
     const pOffsetY = obstacle.y;
@@ -177,7 +188,12 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       const flag = new SpriteImage(FlagData);
       flag.pOffsetX = pOffsetX;
       flag.pOffsetY = pOffsetY;
-      const flagObj = { t: flags?.shift()?.t || 99, points: tile - 21, ...flags, zIndex: (pOffsetY - 23), sprite: flag };
+      const flagObj = {
+        t: flags?.shift()?.t || 99,
+        points: tile - 21,
+        zIndex: (pOffsetY - 23),
+        sprite: flag,
+      };
       this.obstacles.push(flagObj);
       this.flags.push(flagObj);
     } else if (tile === 50) {
@@ -275,7 +291,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private saveScale() {
     clearTimeout(this.wheelDebounce);
     this.wheelDebounce = window.setTimeout(() => {
-      this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', group: 'graphics' });
+      void this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', group: 'graphics' });
     }, 1000);
   }
 }

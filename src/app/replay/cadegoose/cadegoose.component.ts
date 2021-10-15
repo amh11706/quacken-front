@@ -6,6 +6,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { startWith, map } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+
 import { InMessage, WsService } from '../../ws.service';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
 import { Turn } from '../../lobby/quacken/boats/boats.component';
@@ -53,7 +54,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (value === this._tick) return;
     this._tick = value;
 
-    if (this.aiData && value % 30 === 28) this.getMatchAi();
+    if (this.aiData && value % 30 === 28) void this.getMatchAi();
     else {
       delete this.aiData;
       this.selectAiBoat();
@@ -138,7 +139,9 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     { value: 14, label: 'Sloop' },
   ];
 
-  selectedShips: { value: number, label: string }[] = [this.ships[1], { ...this.ships[1] }, { ...this.ships[1] }, { ...this.ships[1] }];
+  selectedShips: { value: number, label: string }[] =
+    [this.ships[1], { ...this.ships[1] }, { ...this.ships[1] }, { ...this.ships[1] }];
+
   separatorKeysCodes: number[] = [ENTER, COMMA];
   shipCtrl = new FormControl();
   filteredShips: Observable<{ value: number, label: string }[]>;
@@ -231,7 +234,10 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.BoatTick, data: this.boatTicks[this.activeBoat.id] });
     setTimeout(() => {
       if (!this.activeBoat) return;
-      this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: this.activeBoat.moves, shots: this.activeBoat.shots } });
+      this.ws.fakeWs?.dispatchMessage({
+        cmd: Internal.MyMoves,
+        data: { moves: this.activeBoat.moves, shots: this.activeBoat.shots },
+      });
     });
   }
 
@@ -286,7 +292,10 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (!this.aiData) return;
 
     if (this.aiData.map && this.lobby) {
-      this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.LobbyJoin, data: { ...this.lobby, map: this.aiData.map, flags: this.aiData.flags } });
+      this.ws.fakeWs?.dispatchMessage({
+        cmd: InCmd.LobbyJoin,
+        data: { ...this.lobby, map: this.aiData.map, flags: this.aiData.flags },
+      });
     }
 
     let lastBoatFound = false;
@@ -331,7 +340,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     //   boat.pos.y = 30;
     //   this.boats.push(boat);
     // }
-    this.getMatchAi(true, sendMap);
+    void this.getMatchAi(true, sendMap);
     this.boats = boats;
   }
 }

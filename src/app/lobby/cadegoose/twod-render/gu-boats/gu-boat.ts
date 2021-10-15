@@ -60,10 +60,10 @@ export class GuBoat extends BoatRender {
     this.spriteData = Boats[boat.type as BoatTypes]?.sail;
     if (!this.spriteData) return;
     this.updateImage();
-    this.updateTeam(boat);
+    void this.updateTeam(boat);
   }
 
-  showInfluence(v = true): void {
+  showInfluence(): void {
     this.boat.renderName = this.boat.title;
   }
 
@@ -75,7 +75,9 @@ export class GuBoat extends BoatRender {
     const startTime = animate ? new Date().valueOf() : 0;
     const promises: Promise<any>[] = [];
 
-    if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y || (boat.crunchDir !== -1 && boat.crunchDir < 4)) {
+    if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y ||
+      (boat.crunchDir !== -1 && boat.crunchDir < 4)
+    ) {
       promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
     }
 
@@ -84,7 +86,7 @@ export class GuBoat extends BoatRender {
     }
 
     if (!startTime) {
-      this.updateTeam(boat);
+      void this.updateTeam(boat);
     }
 
     return Promise.all(promises);
@@ -129,14 +131,16 @@ export class GuBoat extends BoatRender {
     await new Promise(resolve => setTimeout(resolve));
     const team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;
     this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sail') + ')';
-    if (Boats[boat.type as BoatTypes]?.sink) this.getTeamImage(team, this.spriteData.name + '/sink');
+    if (Boats[boat.type as BoatTypes]?.sink) void this.getTeamImage(team, this.spriteData.name + '/sink');
   }
 
   scaleHeader(): BoatRender {
     return this;
   }
 
-  protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]): Promise<void>[] {
+  protected updateBoatPos(
+    startTime: number, x: number, y: number, crunchDir: number, transitions: number[],
+  ): Promise<void>[] {
     const decodeX = [0, 0.4, 0, -0.4];
     const decodeY = [-0.4, 0, 0.4, 0];
 
@@ -238,7 +242,7 @@ export class GuBoat extends BoatRender {
           if (index === 8) {
             resolve();
             // swap to sink sprites when facing down
-            setTimeout(async() => {
+            setTimeout(async () => {
               this.spriteData = Boats[this.boat.type as BoatTypes]?.sink;
               if (!this.spriteData) return;
               const team = this.team === GuBoat.myTeam ? 99 : this.team;

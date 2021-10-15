@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { InCmd, Internal, OutCmd } from '../../../ws-messages';
-import { Boat } from '../../quacken/boats/boat';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
 export interface MoveMessage {
@@ -49,7 +48,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, (boat: Boat) => {
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, () => {
       this.wantMove = 2;
       this.auto = true;
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -81,7 +80,9 @@ export class CadeHudComponent extends HudComponent implements OnInit {
         }
       }
 
-      if (this.auto && (this.haveMoves[0] !== hadMoves[0] || this.haveMoves[1] !== hadMoves[1] || this.haveMoves[2] !== hadMoves[2])) {
+      if (this.auto &&
+        (this.haveMoves[0] !== hadMoves[0] || this.haveMoves[1] !== hadMoves[1] || this.haveMoves[2] !== hadMoves[2])
+      ) {
         this.setAutoWant();
       }
     }));
@@ -110,7 +111,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     const side = Math.floor(i / 4);
     let adjusted = (i % 4) * 2 + side;
     if (!strict) while (this.shots[adjusted] === this.myBoat.maxShots && adjusted < 6) adjusted += 2;
-    this.addShot(adjusted);
+    return this.addShot(adjusted);
   }
 
   changeWantMove(): void {
@@ -147,7 +148,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
       wantMove = (ev.button + 1 + wantMove) % 4;
     }
     moves[slot] = wantMove;
-    this.sendMoves();
+    void this.sendMoves();
   }
 
   checkMaxMoves(): void {
@@ -197,6 +198,6 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   disengage(side = 0): void {
     this.ws.send(OutCmd.SpawnSide, side);
-    this.ss.getGroup('boats').then(settings => settings.spawnSide.value = side);
+    void this.ss.getGroup('boats').then(settings => settings.spawnSide.value = side);
   }
 }

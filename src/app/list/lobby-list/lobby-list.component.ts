@@ -63,7 +63,7 @@ export class LobbyListComponent implements OnInit, OnDestroy {
   }
 
   join(l: Lobby, e: MouseEvent): void {
-    if (e.ctrlKey || !l.group.publicMode?.value) this.router.navigate(['lobby', l.id]);
+    if (e.ctrlKey || !l.group.publicMode?.value) void this.router.navigate(['lobby', l.id]);
     else this.ws.send(OutCmd.LobbyApply, l.id);
   }
 
@@ -72,7 +72,7 @@ export class LobbyListComponent implements OnInit, OnDestroy {
   }
 
   openEditor(): void {
-    if (this.ws.user?.id) this.router.navigate(['editor']);
+    if (this.ws.user?.id) void this.router.navigate(['editor']);
     else this.dialog.open(EditorErrorComponent);
   }
 

@@ -33,7 +33,7 @@ export class LoginFormComponent {
   ) {
     const token = window.localStorage.getItem('token');
     if (token) {
-      router.navigate(['list']);
+      void router.navigate(['list']);
     }
   }
 
@@ -44,7 +44,7 @@ export class LoginFormComponent {
         resp => {
           this.pending = false;
           window.localStorage.setItem('token', resp);
-          this.router.navigate([this.guard.triedPath || 'list']);
+          void this.router.navigate([this.guard.triedPath || 'list']);
           this.guard.triedPath = '';
         },
         () => {
@@ -55,12 +55,12 @@ export class LoginFormComponent {
   }
 
   createAccount(): void {
-    this.router.navigate(['auth/create']);
+    void this.router.navigate(['auth/create']);
   }
 
   guestLogin(): void {
     window.localStorage.setItem('token', 'guest');
-    this.router.navigate([this.guard.triedPath || 'list']);
+    void this.router.navigate([this.guard.triedPath || 'list']);
     this.guard.triedPath = '';
   }
 

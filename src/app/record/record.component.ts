@@ -21,7 +21,7 @@ export class RecordComponent implements OnInit {
   }
 
   toggleRecording(): void {
-    this.isRecording ? this.stopRecording() : this.startRecording();
+    void (this.isRecording ? this.stopRecording() : this.startRecording());
   }
 
   private async startRecording() {
@@ -39,7 +39,7 @@ export class RecordComponent implements OnInit {
     }
 
     this.video.srcObject = this.stream;
-    this.video.play();
+    void this.video.play();
 
     this.video.addEventListener('timeupdate', () => {
       if (!this.canvas || !this.context) return;

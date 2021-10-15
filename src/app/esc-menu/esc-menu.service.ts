@@ -64,11 +64,11 @@ export class EscMenuService {
   private logout() {
     this.ws.close();
     window.localStorage.removeItem('token');
-    this.router.navigate(['auth/login']);
+    void this.router.navigate(['auth/login']);
   }
 
   leave(): void {
-    this.router.navigateByUrl('/list');
+    void this.router.navigateByUrl('/list');
     this.open = false;
   }
 }

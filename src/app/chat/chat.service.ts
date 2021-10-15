@@ -32,7 +32,9 @@ export class ChatService {
   saveText = '';
   historyIndex = -1;
   commands: this['selectedCommand'][] = [];
-  selectedCommand: { base: string, title: string, params: { name: string, value: string }[], help: string } = { params: [] } as any;
+  selectedCommand: {
+    base: string, title: string, params: { name: string, value: string }[], help: string
+  } = { params: [] } as any;
 
   constructor(
     private ws: WsService,
@@ -61,7 +63,9 @@ export class ChatService {
 
     this.ws.subscribe(InCmd.ChatMessage, (message: Message) => {
       if (message.type === 6) return;
-      if ((document.hidden && message.type === 5) || [8, 9].includes(message.type)) sound.play(Sounds.Notification);
+      if ((document.hidden && message.type === 5) || [8, 9].includes(message.type)) {
+        void sound.play(Sounds.Notification);
+      }
       this.messages.push(message);
       if (message.type === 5) {
         let command = '/tell ' + message.from;

@@ -269,7 +269,9 @@ export class BoatRender {
     return this;
   }
 
-  protected updateBoatPos(startTime: number, x: number, y: number, crunchDir: number, transitions: number[]): Promise<void>[] {
+  protected updateBoatPos(
+    startTime: number, x: number, y: number, crunchDir: number, transitions: number[],
+  ): Promise<void>[] {
     if (!this.obj.position.x || !this.obj.position.z) console.log(x, y, this.obj.position, this.boat.name);
     let t: any;
     const decodeX = [0, 0.4, 0, -0.4];

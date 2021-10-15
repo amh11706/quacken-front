@@ -33,7 +33,7 @@ export class CreateComponent {
   ) {
     const token = window.localStorage.getItem('token');
     if (token) {
-      router.navigate(['list']);
+      void router.navigate(['list']);
     }
   }
 
@@ -44,7 +44,7 @@ export class CreateComponent {
         resp => {
           this.pending = false;
           window.localStorage.setItem('token', resp);
-          this.router.navigate(['list']);
+          void this.router.navigate(['list']);
         },
         (err: unknown) => {
           this.pending = false;
@@ -56,7 +56,7 @@ export class CreateComponent {
   }
 
   back(): void {
-    this.router.navigate(['auth/login']);
+    void this.router.navigate(['auth/login']);
   }
 
   showTerms(): void {

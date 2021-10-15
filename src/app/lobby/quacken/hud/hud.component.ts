@@ -89,7 +89,7 @@ export class HudComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
+    void this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
     this.handleKeys();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (this.turn > 0 && this.ws.connected) this.locked = b.moveLock !== 0;
@@ -181,7 +181,7 @@ export class HudComponent implements OnInit, OnDestroy {
         this.resetMoves();
       }
       this.eraseSlot(this.selected);
-      this.sendMoves();
+      void this.sendMoves();
     }));
 
     this.subs.add(this.kbs.subscribe(this.actions.BombLeftStrict, v => {
@@ -214,8 +214,12 @@ export class HudComponent implements OnInit, OnDestroy {
       this.subs.add(this.kbs.subscribe(value, v => { if (v) this.placeMove(+key); }));
     }
 
-    this.subs.add(this.kbs.subscribe(this.actions.nextSlot, v => { if (v && this.selected < 3 && this.kbControls) this.selected++; }));
-    this.subs.add(this.kbs.subscribe(this.actions.prevSlot, v => { if (v && this.selected > 0 && this.kbControls) this.selected--; }));
+    this.subs.add(this.kbs.subscribe(this.actions.nextSlot, v => {
+      if (v && this.selected < 3 && this.kbControls) this.selected++;
+    }));
+    this.subs.add(this.kbs.subscribe(this.actions.prevSlot, v => {
+      if (v && this.selected > 0 && this.kbControls) this.selected--;
+    }));
   }
 
   private placeMove(move: number) {
@@ -230,7 +234,7 @@ export class HudComponent implements OnInit, OnDestroy {
     moves[this.selected] = move;
     if (move === 0) this.blockedPosition = this.selected;
     if (this.selected < 3) this.selected += 1;
-    this.sendMoves();
+    void this.sendMoves();
   }
 
   protected resetMoves(): void {
@@ -250,11 +254,11 @@ export class HudComponent implements OnInit, OnDestroy {
     if (moveCount === 4) this.getMoves()[3] = 0;
   }
 
-  setBomb(i: number, strict = false): void {
+  setBomb(i: number, _strict = false): void {
     if (this.locked || !this.weapons[this.myBoat.type] || this.myBoat.tokenPoints < 2) return;
     if (this.myBoat.bomb === i) this.myBoat.bomb = 0;
     else this.myBoat.bomb = i;
-    this.ws.request(OutCmd.Bomb, this.myBoat.bomb);
+    void this.ws.request(OutCmd.Bomb, this.myBoat.bomb);
   }
 
   imReady(): void {
@@ -284,13 +288,13 @@ export class HudComponent implements OnInit, OnDestroy {
     if (ev.shiftKey && boat.tokenPoints > 1) {
       if (this.getMoves().indexOf(4) >= 0) return;
       moves[slot] = 4;
-      this.sendMoves();
+      void this.sendMoves();
       return;
     }
     const move = moves[slot];
     if (boat.type !== 0 && this.maxMoves && (move === 0 || move === 4)) return;
     moves[slot] = (ev.button + 1 + move) % 4;
-    this.sendMoves();
+    void this.sendMoves();
   }
 
   drag(move: number, slot = 4): void {
@@ -309,7 +313,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.maxMoves && this.source > 3 && (move === 0 || move === 4) && this.move < 4) return;
     if (this.source < 4) moves[this.source] = moves[slot];
     moves[slot] = this.move;
-    this.sendMoves();
+    void this.sendMoves();
     this.source = 4;
   }
 
@@ -317,7 +321,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.locked || this.source > 3) return;
 
     this.getMoves()[this.source] = 0;
-    this.sendMoves();
+    void this.sendMoves();
   }
 
   setTurn(turn: number, sec: number = this.secondsPerTurn - 1): void {

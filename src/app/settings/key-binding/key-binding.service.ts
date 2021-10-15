@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
+
 import { WsService } from '../../ws.service';
 import { SettingsService } from '../settings.service';
 import { DefaultBindings, KeyActions, KeyBindings, NotActive, StaticKeyBindings } from './key-actions';
@@ -64,7 +65,7 @@ export class KeyBindingService {
     document.addEventListener('keyup', this.handleKeyUp);
     ws.connected$.subscribe(v => {
       if (!v) return;
-      ss.get('controls', 'bindings').then(setting => {
+      void ss.get('controls', 'bindings').then(setting => {
         this.setBindings(mergeBindings(setting?.data || {}));
       });
     });
@@ -95,7 +96,7 @@ export class KeyBindingService {
     }
   }
 
-  private handleKeyDown = async(e: KeyboardEvent) => {
+  private handleKeyDown = async (e: KeyboardEvent) => {
     if (!this.ws.connected) return;
     if (IgnoreTags.includes(document.activeElement?.tagName || '') || IgnoreKeys.includes(e.key)) return;
     const key = this.getKey(e);

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
+
 import { SettingsService } from '../settings.service';
 import { KeyBindingService } from './key-binding.service';
 import { ExitPromptComponent } from './exit-prompt/exit-prompt.component';
@@ -104,7 +105,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
   private exitPrompt() {
     if (!this.changedElements.length) return;
     this.dialog.open(ExitPromptComponent).afterClosed().subscribe((v: boolean) => {
-      if (v) this.save();
+      if (v) void this.save();
       else this.cancel();
     });
   }
@@ -135,11 +136,16 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
       for (let i = 0; i < set.length; i++) {
         const binding = set[i];
         binding.activeBindings = [...binding.bindings];
-        toActivate[k].push({ action: binding.action, bindings: [...binding.bindings], title: binding.title, linkGroup: binding.linkGroup });
+        toActivate[k].push({
+          action: binding.action,
+          bindings: [...binding.bindings],
+          title: binding.title,
+          linkGroup: binding.linkGroup,
+        });
         toSave[binding.action] = binding.bindings;
       }
     }
-    this.ss.save({
+    void this.ss.save({
       id: 32,
       name: 'bindings',
       group: 'controls',

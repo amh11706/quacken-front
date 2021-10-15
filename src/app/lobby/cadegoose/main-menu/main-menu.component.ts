@@ -58,8 +58,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
-    this.subs.add(this.ws.subscribe(Internal.Lobby, async(m: Lobby) => {
-      if (m.turn === 1) this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
+    this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
+      if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       this.roundGoing = (m.turn && m.turn <= (await this.ss.get('l/cade', 'turns'))?.value) || false;
       if (!m.players) return;
       if (this.firstJoin) {
@@ -107,7 +107,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
       this.myBoat = b;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Turn, async(t: Turn) => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, async (t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
       this.roundGoing = t.turn <= (await this.ss.get('l/cade', 'turns')).value;
       this.statsOpen = false;

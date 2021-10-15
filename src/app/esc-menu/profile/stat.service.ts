@@ -82,7 +82,7 @@ export class StatService {
 
   openUser(name: string, open = true): void {
     this.target = name;
-    this.refresh();
+    void this.refresh();
     if (open) {
       this.kbs.emitAction(KeyActions.OpenProfile);
       this.es.open = true;
@@ -91,7 +91,7 @@ export class StatService {
   }
 
   openUserMatches(open = true): void {
-    this.refresh();
+    void this.refresh();
     if (open) {
       this.kbs.emitAction(KeyActions.OpenProfile);
       this.es.open = true;
@@ -99,9 +99,9 @@ export class StatService {
     this.profileTab = 4;
   }
 
-  openLeaders(id: number): void {
+  openLeaders(id: number): Promise<void> {
     this.id = id;
-    this.refreshLeaders();
+    return this.refreshLeaders();
   }
 
   async refresh(): Promise<void> {
@@ -110,7 +110,8 @@ export class StatService {
     if (this.userRanks !== undefined) {
       for (const rank of this.userRanks) {
         rank.progress = (rank.xp - (rank.prevXp || 0)) * 100 / (rank.nextXp - (rank.prevXp || 0));
-        rank.title = rank.xp?.toLocaleString() + ' xp, next level in: ' + (rank.nextXp - rank.xp)?.toLocaleString() + ' xp';
+        rank.title = rank.xp?.toLocaleString() + ' xp, next level in: ' +
+          (rank.nextXp - rank.xp)?.toLocaleString() + ' xp';
       }
       const stats = await this.ws.request(OutCmd.StatsUser, this.target);
 
@@ -128,11 +129,11 @@ export class StatService {
     }
   }
 
-  changeGroup(): void {
+  changeGroup(): Promise<void> | void {
     this.leaders = [];
     if (this.id % 100 === 99) {
       this.id = this.group * 100 + 99;
-      this.getRankLeaders();
+      return this.getRankLeaders();
     }
   }
 

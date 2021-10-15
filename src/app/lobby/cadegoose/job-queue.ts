@@ -9,7 +9,7 @@ export class JobQueue {
   private _done?: () => void;
 
   constructor(private jobTimeout = 5000) {
-    this.doJobs();
+    void this.doJobs();
   }
 
   addJob(f: (() => PromiseLike<void>) | (() => void), cancellable = true): Promise<void> {

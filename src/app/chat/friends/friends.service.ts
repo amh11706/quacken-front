@@ -112,13 +112,19 @@ export class FriendsService {
       this.friends.push(u.from);
       this.invites = this.invites.filter(i => i.ty !== 0 || i.f !== u.from);
       for (const n of this.lobby) if (n.from === u.from) n.friend = true;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 0, type: 3, message: 'has been added to your friend list.' } });
+      this.ws.dispatchMessage({
+        cmd: InCmd.ChatMessage,
+        data: { ...u, copy: 0, type: 3, message: 'has been added to your friend list.' },
+      });
     });
     this.ws.subscribe(InCmd.FriendRemove, (u: Message) => {
       this.friends = this.friends.filter(f => f !== u.from);
       this.offline = this.offline.filter(f => f !== u.from);
       for (const n of this.lobby) if (n.from === u.from) n.friend = false;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 0, type: 3, message: 'has been removed from your friend list.' } });
+      this.ws.dispatchMessage({
+        cmd: InCmd.ChatMessage,
+        data: { ...u, copy: 0, type: 3, message: 'has been removed from your friend list.' },
+      });
     });
   }
 

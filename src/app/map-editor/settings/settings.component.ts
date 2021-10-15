@@ -62,7 +62,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub.add(this.socket.connected$.subscribe(v => {
       if (!v) return;
-      setTimeout(async() => this.gotList(await this.socket.request(OutCmd.MapListAll)));
+      setTimeout(async () => this.gotList(await this.socket.request(OutCmd.MapListAll)));
     }));
     this.shown = this.map.selectedTile;
     if (!this.map.tileSettings) {
@@ -343,7 +343,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (tile.unsaved) {
       this.pending = true;
       const cmd = this.selected === 'new' ? OutCmd.MapCreate : OutCmd.MapSave;
-      this.socket.request(cmd, tile).then(m => this.handleMap(m));
+      void this.socket.request(cmd, tile).then(m => this.handleMap(m));
     }
 
     switch (tile.group) {

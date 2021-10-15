@@ -32,7 +32,13 @@ export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy 
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;
   protected menuComponent = MainMenuComponent;
-  graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
+  graphicSettings: SettingMap = {
+    mapScale: { value: 50 },
+    speed: { value: 10 },
+    water: { value: 1 },
+    showFps: { value: 0 },
+  };
+
   controlSettings: SettingMap = { lockAngle: { value: 0 } };
   hoveredTeam = -1;
   statOpacity = 0;
@@ -51,7 +57,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   ) {
     super(ws, ss, fs, es);
 
-    this.ss.getGroup('l/cade', true);
+    void this.ss.getGroup('l/cade', true);
   }
 
   ngOnInit(): void {

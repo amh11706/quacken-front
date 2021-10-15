@@ -65,7 +65,13 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('fps') fps?: ElementRef;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
-  @Input() graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 }, water: { value: 1 }, showFps: { value: 0 } };
+  @Input() graphicSettings: SettingMap = {
+    mapScale: { value: 50 },
+    speed: { value: 10 },
+    water: { value: 1 },
+    showFps: { value: 0 },
+  };
+
   @Input() hoveredTeam = -1;
   private alive = true;
   private sub = new Subscription();
@@ -98,7 +104,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     private ws: WsService,
     private ngZone: NgZone,
   ) {
-    bs.setScene(this.scene, this.loadObj, this.camera);
+    void bs.setScene(this.scene, this.loadObj, this.camera);
 
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -189,7 +195,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mouseMoved = true;
   }
 
-  private click = (event: MouseEvent) => {
+  private click = () => {
     this.bs.findClick(this.rayCaster.ray);
   }
 
@@ -207,7 +213,9 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.requestRender();
       return;
     }
-    if (this.graphicSettings.maxFps) this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
+    if (this.graphicSettings.maxFps) {
+      this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
+    }
 
     this.render();
     this.updateIntersects();
@@ -334,9 +342,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         gltf.scene.position.y += obj.offsetY || 0;
         if (obj.rotate) gltf.scene.rotateY(obj.rotate);
         resolve(gltf);
-      }, undefined, function(error) {
-        console.error(error);
-      });
+      }, undefined, console.error);
     });
   }
 
@@ -401,7 +407,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
           if (!prom) {
             prom = this.loadObj(obstacleModels[tile]).then(gltf => gltf);
             if (tile >= 21 && tile <= 23) {
-              prom.then(gltf => {
+              void prom.then(gltf => {
                 const flag = gltf.scene.getObjectByName('flag');
                 if (flag instanceof Mesh) flag.material?.dispose();
               });
@@ -411,7 +417,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
 
           const thisFlag = flagIndex;
           if (tile <= 23) flagIndex++;
-          prom.then(model => {
+          void prom.then(model => {
             const newObj = model.scene.clone();
             const centered = new Group();
             centered.add(newObj);

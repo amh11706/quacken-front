@@ -29,7 +29,7 @@ export class CanvasComponent {
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
   @Input() safeZone = true;
-  @Input() set map(map: number[][]) { this.fillMap(map, []); }
+  @Input() set map(map: number[][]) { void this.fillMap(map, []); }
 
   private canvas?: CanvasRenderingContext2D | null;
   private flags: { x: number, y: number, t: number, points: number, cs: number[] }[] = [];
@@ -92,7 +92,12 @@ export class CanvasComponent {
     }
     ctx.restore();
 
-    await Promise.all([CanvasComponent.wind.prom, CanvasComponent.whirl.prom, CanvasComponent.rocks.prom, CanvasComponent.smallRocks.prom]);
+    await Promise.all([
+      CanvasComponent.wind.prom,
+      CanvasComponent.whirl.prom,
+      CanvasComponent.rocks.prom,
+      CanvasComponent.smallRocks.prom,
+    ]);
 
     tiles.sort((a, b) => {
       if (a.tile >= 20 && b.tile < 20) return 1;
@@ -110,6 +115,6 @@ export class CanvasComponent {
       else if (tile > 4) CanvasComponent.wind.draw(ctx, (tile - 1) % 4, x, y);
     }
 
-    this.drawFlags();
+    await this.drawFlags();
   }
 }

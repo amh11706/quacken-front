@@ -47,14 +47,15 @@ export class BnavComponent implements OnInit, OnDestroy {
     this.newMove.position = position;
     this.moves = [];
     clearTimeout(this.debounce);
-    this.debounce = window.setTimeout(() => this.ws.request(OutCmd.BnavGetPositions, { position }).then((m: DBMove[]) => {
+    this.debounce = window.setTimeout(async () => {
+      const m: DBMove[] = await this.ws.request(OutCmd.BnavGetPositions, { position });
       this.moves = m;
       this.setPercents();
-    }), 500);
+    }, 500);
   }
 
   submitMoves(): void {
-    this.ws.request(OutCmd.BnavSavePosition, this.newMove).then((m: DBMove) => {
+    void this.ws.request(OutCmd.BnavSavePosition, this.newMove).then((m: DBMove) => {
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Moves submitted. Thank you!' } });
       if (m.position !== this.newMove.position) return;
       for (const move of this.moves) {
