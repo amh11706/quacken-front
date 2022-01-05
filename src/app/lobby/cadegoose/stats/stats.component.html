@@ -1,33 +1,19 @@
 <div class="container">
-    <div class="defenders"
-        [class.sameteam]="myTeam === 0"
-        [class.hoveredteam]="hoveredTeam === 1 || hoveredTeam === -1"
-        [class.showteams]="statOpacity && hoveredTeam">
-        <table>
-            <tr>
-                <th>Defenders</th>
-                <th *ngFor="let c of columns">{{c.title}}</th>
-            </tr>
-            <tr *ngFor="let r of defenders">
-                <td>{{r.user}}</td>
-                <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="attackers"
-        [class.sameteam]="myTeam === 1"
-        [class.hoveredteam]="hoveredTeam! <= 0"
-        [class.showteams]="statOpacity && hoveredTeam">
-        <table>
-            <tr>
-                <th>Attackers</th>
-                <th *ngFor="let c of columns">{{c.title}}</th>
-            </tr>
-            <tr *ngFor="let r of attackers">
-                <td>{{r.user}}</td>
-                <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
-            </tr>
-        </table>
-    </div>
+  <div *ngFor="let team of teams; let i = index"
+       class="team"
+       [style.borderColor]="teamColors[i]"
+       [class.sameteam]="myTeam === i"
+       [class.nothovered]="hoveredTeam !== i || hoveredTeam === -1"
+       [class.showteams]="statOpacity">
+    <table>
+      <tr>
+        <th>{{teamNames[i]}}</th>
+        <th *ngFor="let c of columns">{{c.title}}</th>
+      </tr>
+      <tr *ngFor="let r of team">
+        <td>{{r.user}}</td>
+        <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
+      </tr>
+    </table>
+  </div>
 </div>

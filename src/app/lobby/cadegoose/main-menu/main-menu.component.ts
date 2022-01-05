@@ -12,6 +12,7 @@ import { Sounds, SoundService } from '../../../sound.service';
 import { Boat } from '../../quacken/boats/boat';
 import { Turn } from '../../quacken/boats/boats.component';
 import { Lobby } from '../../lobby.component';
+import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 
 interface TeamMessage {
   id: number;
@@ -27,6 +28,8 @@ interface TeamMessage {
   styleUrls: ['./main-menu.component.scss'],
 })
 export class MainMenuComponent implements OnInit, OnDestroy {
+  teamColors = TeamColorsCss;
+  teamNames = TeamNames;
   // eslint-disable-next-line no-sparse-arrays
   boatTitles = [, , , , , , , , , , , , , ,
     'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
@@ -34,8 +37,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   ];
 
   links = links;
-  defenders: Message[] = [];
-  attackers: Message[] = [];
+  teamPlayers: Message[][] = [];
   teams: { [key: number]: TeamMessage } = {};
   myBoat = new Boat('');
   myTeam = 99;
@@ -70,8 +72,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.admin = m.owner || this.admin;
       this.ready = false;
       this.myTeam = 99;
-      this.defenders = [];
-      this.attackers = [];
+      this.teamPlayers = [];
+      for (let i = 0; i < m.points.length; i++) this.teamPlayers.push([]);
       for (const [id, p] of Object.entries(this.teams)) {
         this.setTeam(+id, p.t);
         if (+id === this.ws.sId) {
@@ -169,8 +171,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   }
 
   private resetUser(id: number) {
-    this.defenders = this.defenders.filter((m) => m.sId !== id);
-    this.attackers = this.attackers.filter((m) => m.sId !== id);
+    this.teamPlayers = this.teamPlayers.map(team => {
+      return team.filter((m) => m.sId !== id);
+    });
   }
 
   private setTeam(id: number, team: number) {
@@ -181,8 +184,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
     user = { ...user };
     user.message = this.teams[id];
-    if (team === 0) this.defenders.push(user);
-    else this.attackers.push(user);
+    while (this.teamPlayers.length <= team) this.teamPlayers.push([]);
+    this.teamPlayers[team].push(user);
   }
 
   public plural(length: number): string {

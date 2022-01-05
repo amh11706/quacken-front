@@ -6,6 +6,7 @@ import { BoatTypes } from '../../../../lobby/quacken/boats/boat-types';
 import { SpriteData, Orientation } from '../sprite';
 import { Boats } from './objects';
 import { BoatRender, moveEase } from '../../boat-render';
+import { TeamColors } from '../../cade-entry-status/cade-entry-status.component';
 
 // pixel coordinates relative to top left of canvas
 export class Point {
@@ -36,8 +37,6 @@ export class Position {
     return this;
   }
 }
-
-const teamColors = [[146, 236, 30], [236, 30, 30]];
 
 export class GuBoat extends BoatRender {
   static widthOffset = 19;
@@ -97,7 +96,7 @@ export class GuBoat extends BoatRender {
     if (prom) return prom;
     const sail = new window.Image();
     sail.src = '/assets/boats/' + which + '.png';
-    if (team > 1) {
+    if (team === 99) {
       prom = Promise.resolve(sail.src);
       GuBoat.teamImages.set(which + team, prom);
       return prom;
@@ -115,7 +114,7 @@ export class GuBoat extends BoatRender {
         const bytes = data.data;
         for (let i = 0; i < bytes.length; i += 4) {
           if (bytes[i] === 90 && bytes[i + 1] === 172 && bytes[i + 2] === 222) {
-            [bytes[i], bytes[i + 1], bytes[i + 2]] = teamColors[team];
+            [bytes[i], bytes[i + 1], bytes[i + 2]] = TeamColors[team];
           }
         }
         ctx.putImageData(data, 0, 0);

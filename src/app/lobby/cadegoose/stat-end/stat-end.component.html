@@ -11,7 +11,7 @@
             <th *ngFor="let c of columns">{{c.title}}</th>
         </tr>
         <tr *ngFor="let r of scores">
-            <td class="{{ r.team ? 'attacker' : 'defender' }}">{{r.user}}</td>
+            <td [style.color]="teamColors[r.team]">{{r.user}}</td>
             <td>{{r.score}}</td>
             <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
         </tr>

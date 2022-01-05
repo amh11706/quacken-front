@@ -1,40 +1,36 @@
 .container {
-    border-radius: 4px;
-    color: #eee;
-    background-color:rgba(67,67,67,0.8) ;
-    font-size: 12px;
-    text-align: center;
+  border-radius: 4px;
+  color: #eee;
+  background-color: rgba(67, 67, 67, 0.8);
+  font-size: 12px;
+  text-align: center;
 }
 
 table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 600px;
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 600px;
 }
 
 th,
 td {
-    border: 1px solid black;
-    padding: 4px 8px;
+  border: 1px solid black;
+  padding: 4px 8px;
 }
 
-.defenders {
-    border: 1px solid rgb(125, 236, 80);
-}
-
-.attackers {
-    margin-top: 2px;
-    border: 1px solid red;
+.team {
+  margin-top: 2px;
+  border: 1px solid rgb(125, 236, 80);
 }
 
 .sameteam {
-	border: 1px solid rgb(137, 214, 233);
+  border: 1px solid rgb(137, 214, 233) !important;
 }
 
-.hoveredteam{
-    display: none !important;
+.nothovered {
+  display: none !important;
 }
 
-.showteams{
-    display: block !important;
+.showteams {
+  display: block !important;
 }

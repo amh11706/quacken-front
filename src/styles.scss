@@ -30,6 +30,10 @@ input:-webkit-autofill:focus {
 
 body {
   overflow: hidden;
+  overscroll-behavior-y: none;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: black; // added for white bars on mobile
 }
 
 button {
@@ -72,10 +76,4 @@ button {
 html,
 body {
   height: 100%;
-}
-
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: black; // added for white bars on mobile
 }

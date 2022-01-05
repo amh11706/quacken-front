@@ -13,22 +13,18 @@
               (click)="clickTurn(turn)">
         Turn {{turn.turn}}<br>
         <div class="sinks">
-          <div>
-            <mat-icon *ngFor="let sink of turn.teams[0].sinks"
-                      [title]="sink.message">sailing</mat-icon>
-          </div>
-          <div class="right">
-            <mat-icon *ngFor="let sink of turn.teams[1].sinks"
+          <div *ngFor="let team of turn.teams; let i = index; let odd = odd"
+               [class.right]="odd">
+            <mat-icon *ngFor="let sink of team.sinks"
                       [title]="sink.message">sailing</mat-icon>
           </div>
         </div>
+
         <div class="points">
-          <div class="defender"
-               [title]="turn.teams[0].scoreChange"
-               [style.width]="50 * turn.teams[0].scoreChange / maxScore+ 'px'"></div>
-          <div class="attacker"
-               [title]="turn.teams[1].scoreChange"
-               [style.width]="50 * turn.teams[1].scoreChange / maxScore + 'px'"></div>
+          <div *ngFor="let team of turn.teams; let i = index"
+               [style.backgroundColor]="teamColors[i]"
+               [title]="team.scoreChange"
+               [style.width]="50 * team.scoreChange / maxScore+ 'px'"></div>
         </div>
       </button>
     </div>
@@ -42,7 +38,8 @@
     <button mat-button
             *ngFor="let boat of boats"
             [color]="boat === activeBoat ? 'primary' : undefined"
-            class="boat team{{boat.team}}"
+            class="boat"
+            [style.borderColor]="teamColors[boat.team || 0]"
             (click)="clickBoat(boat)"
             (mouseover)="hoverBoat(boat)"
             (mouseleave)="hoverBoat(boat, false)">

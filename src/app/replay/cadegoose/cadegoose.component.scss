@@ -26,13 +26,12 @@ q-map-debug {
     position: relative;
     width: 100px;
 
-    .defender {
+    :nth-child(odd) {
       position: absolute;
       right: 50px;
       height: 5px;
-      background-color: green;
     }
-    .attacker {
+    :nth-child(even) {
       position: absolute;
       left: 50px;
       height: 5px;
@@ -42,6 +41,7 @@ q-map-debug {
 
   .sinks {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     text-align: left;
 
@@ -61,12 +61,8 @@ q-map-debug {
   }
 }
 
-.boat.team0 {
+.boat {
   border-left: 3px solid green;
-}
-
-.boat.team1 {
-  border-left: 3px solid red;
 }
 
 .damage,

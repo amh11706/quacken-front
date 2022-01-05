@@ -3,9 +3,11 @@ import { JsonSprite, Sprite } from '../twod-render/sprite';
 import { BigRockData } from '../twod-render/objects/big_rock';
 import { SmallRockData } from '../twod-render/objects/small_rock';
 
-const FlagColorOffsets: Record<number, number> = {
+export const FlagColorOffsets: Readonly<Record<number, number>> = {
   0: 0,
   1: 3,
+  2: 15,
+  3: 18,
   98: 6,
   99: 9,
   100: 12,

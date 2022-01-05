@@ -8,16 +8,16 @@
   <ng-template #teams>
     <h2 style="font-size: 20px;">Team Selection</h2>
     <div id="flexmenu">
-      <div class="teamwrap">
+      <div class="teamwrap"
+           *ngFor="let team of teamPlayers; let i = index">
         <button mat-raised-button
-                matTooltip="Defender"
-                [matTooltipPosition]="'left'"
                 [disabled]="!es.open || !ws.connected"
-                (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
+                (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>
-        <p class="teamcount">Defenders: {{plural(defenders.length)}}</p>
-        <div id="defenders">
-          <div *ngFor="let m of defenders"
+        <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
+        <div class="team"
+             [style.borderColor]="teamColors[i]">
+          <div *ngFor="let m of team"
                class="lobbyPlayer"
                [class.ready]="m.message.r">
             <q-name [message]="m"></q-name>
@@ -25,26 +25,6 @@
                  [title]="boatTitles[m.message.b]">
             <span id="spawn"
                   [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' : 'I'}}</span>
-          </div>
-        </div>
-      </div>
-      <div class="teamwrap">
-        <button mat-raised-button
-                [matTooltipPosition]="'right'"
-                matTooltip="Attacker"
-                [disabled]="!es.open || !ws.connected"
-                (click)="joinTeam(1)">{{myTeam === 1 ? 'Leave' : 'Join'}}</button>
-        <p class="teamcount">Attackers: {{plural(attackers.length)}}</p>
-        <div id="attackers">
-          <div *ngFor="let m of attackers"
-               class="lobbyPlayer"
-               [class.ready]="m.message.r">
-            <q-name [message]="m"></q-name>
-            <img src="./assets/boats/{{links[m.message.b]}}.png"
-                 [title]="boatTitles[m.message.b]">
-            <span id="spawn"
-                  [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' :
-              'I'}}</span>
           </div>
         </div>
       </div>

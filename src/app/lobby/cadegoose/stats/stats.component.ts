@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Component, Input, OnChanges } from '@angular/core';
+import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 
 export interface StatRow {
   user: string; team: number; stats: (string | number)[]; score: number;
@@ -26,8 +27,9 @@ export class StatsComponent implements OnChanges {
   @Input() myTeam?: number;
   @Input() hoveredTeam?: number;
   @Input() statOpacity?: number;
-  defenders: StatRow[] = [];
-  attackers: StatRow[] = [];
+  teams: StatRow[][] = [];
+  teamColors = TeamColorsCss;
+  teamNames = TeamNames;
 
   columns = [
     { stat: Stat.PointsScored, title: 'Points Scored' },
@@ -43,15 +45,16 @@ export class StatsComponent implements OnChanges {
   ngOnChanges(): void {
     if (!this.stats) return;
 
-    this.defenders = [];
-    this.attackers = [];
+    this.teams = [];
     for (const row of Object.values(this.stats)) {
       const s = [...row.stats];
       if (s[Stat.ShotsFired]) s[Stat.ShotsHit] += ` (${Math.round(+s[Stat.ShotsHit] / +s[Stat.ShotsFired] * 100)}%)`;
-      (row.team === 0 ? this.defenders : this.attackers).push({ ...row, stats: s });
+      while (this.teams.length <= row.team) this.teams.push([]);
+      this.teams[row.team].push({ ...row, stats: s });
     }
 
-    this.defenders.sort((a, b) => +b.stats[Stat.PointsScored] - +a.stats[Stat.PointsScored]);
-    this.attackers.sort((a, b) => +b.stats[Stat.PointsScored] - +a.stats[Stat.PointsScored]);
+    for (const team of this.teams) {
+      team.sort((a, b) => +b.stats[Stat.PointsScored] - +a.stats[Stat.PointsScored]);
+    }
   }
 }

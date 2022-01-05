@@ -16,6 +16,7 @@ import { BoatTick } from '../../lobby/quacken/hud/hud.component';
 import { Lobby } from '../../lobby/lobby.component';
 import { boatToSync } from '../../lobby/quacken/boats/convert';
 import { AiRender, Points, AiData, AiBoatData } from './ai-render';
+import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 
 interface ParsedTurn {
   turn: number;
@@ -65,7 +66,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     delete this.aiData;
     this.selectAiBoat();
     this.turns = [];
-    let lastTurn = { teams: [{}, {}] } as ParsedTurn;
+    let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
     for (let i = 0; i < messages.length; i++) {
       const group = messages[i];
       const sinks: Message[][] = [[], []];
@@ -88,7 +89,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
             this.turns.push(parsed);
             break;
           case InCmd.ChatMessage:
-            if (m.data?.from === '_sink') sinks[m.data.copy ^ 1].push(m.data);
+            if (m.data?.from === '_sink') sinks[m.data.copy ? 0 : 1].push(m.data);
             break;
           default:
         }
@@ -96,6 +97,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }
   }
 
+  teamColors = TeamColorsCss;
   tabIndex = 0;
   turns: ParsedTurn[] = [];
   maxScore = 0;

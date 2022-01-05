@@ -101,6 +101,9 @@ export const Settings = {
   cadeMap: {
     admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList,
   },
+  cadeTeams: {
+    admin: true, id: 43, group: 'l/cade', name: 'teams', type: 'slider', label: 'Teams', min: 2, max: 4,
+  },
   duckLvl: {
     admin: true, id: 4, group: 'l/quacken', type: 'slider', label: 'Duck Level', min: 0, max: 11, step: 1,
   },

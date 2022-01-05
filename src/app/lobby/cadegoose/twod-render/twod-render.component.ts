@@ -15,14 +15,7 @@ import { GuBoat, Point, Position } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { Lobby } from '../../lobby.component';
-
-const FlagColorOffsets: Record<number, number> = {
-  0: 0,
-  1: 3,
-  98: 6,
-  99: 9,
-  100: 12,
-};
+import { FlagColorOffsets } from '../canvas/canvas.component';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = '0' | '1' | '2' | '3';

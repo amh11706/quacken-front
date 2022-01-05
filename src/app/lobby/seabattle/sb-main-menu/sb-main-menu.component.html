@@ -8,9 +8,11 @@
   <ng-template #teams>
     <h2>Match Settings</h2>
     <div id="flexmenu">
-      <div class="teamwrap">
-        <div id="defenders">
-          <div *ngFor="let m of defenders"
+      <div class="teamwrap"
+           *ngFor="let team of teamPlayers; let i = index">
+        <div class="team"
+             [style.borderColor]="teamColors[i]">
+          <div *ngFor="let m of team"
                class="lobbyPlayer"
                [class.ready]="m.message.r">
             <q-name [message]="m"></q-name>
@@ -21,23 +23,7 @@
         <br>
         <button mat-raised-button
                 [disabled]="!es.open"
-                (click)="joinTeam(0)">{{myTeam === 0 ? 'Leave' : 'Join'}}</button>
-      </div>
-
-      <div class="teamwrap">
-        <div id="attackers">
-          <div *ngFor="let m of attackers"
-               class="lobbyPlayer"
-               [class.ready]="m.message.r">
-            <q-name [message]="m"></q-name>
-            <img src="./assets/boats/{{links[m.message.b]}}.png"
-                 [title]="boatTitles[m.message.b]">
-          </div>
-        </div>
-        <br>
-        <button mat-raised-button
-                [disabled]="!es.open"
-                (click)="joinTeam(1)">{{myTeam === 1 ? 'Leave' : 'Join'}}</button>
+                (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
       </div>
 
       <div id="buttons">

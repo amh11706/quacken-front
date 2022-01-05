@@ -6,10 +6,13 @@ import { Internal } from '../../../../ws-messages';
 import { Sounds, SoundService } from '../../../../sound.service';
 import { GuBoat, Point } from './gu-boat';
 import { BoatService, checkSZ } from '../../boat.service';
+import { TeamColorsCss } from '../../cade-entry-status/cade-entry-status.component';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 3,
   1: 6,
+  2: 15,
+  3: 18,
   98: 0,
   99: 9,
   100: 12,
@@ -49,6 +52,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
+  teamColors = TeamColorsCss;
   moveTransition = (transition: number): string => {
     switch (transition) {
       case 0: return '0s linear';
@@ -71,7 +75,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
       GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
       for (const boat of this.boats) {
-        this.render(boat)?.updateTeam(boat);
+        this.render(boat)?.updateTeam?.(boat);
       }
     }));
     void this.sound.load(Sounds.CannonFireBig);
@@ -125,7 +129,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
         for (const id of f.cs) {
           const team = f.t === this.myBoat.team ? 98 : f.t;
           this._boats[id]?.render?.flags.push({
-            p: f.p, t: f.t, offset: 160 - (FlagColorOffsets[team] + f.p) * 10 + 'px',
+            p: f.p, t: f.t, offset: 220 - (FlagColorOffsets[team] + f.p) * 10 + 'px',
           } as any);
         }
       }

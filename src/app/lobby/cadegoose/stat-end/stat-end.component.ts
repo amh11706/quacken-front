@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { WsService } from '../../../ws.service';
+import { TeamColorsCss } from '../cade-entry-status/cade-entry-status.component';
 import { Stat, StatRow } from '../stats/stats.component';
 
 @Component({
@@ -9,6 +10,7 @@ import { Stat, StatRow } from '../stats/stats.component';
 })
 export class StatEndComponent implements OnChanges {
   Number = Number;
+  teamColors = TeamColorsCss;
   @Input() stats?: Record<number, StatRow>;
   @Input() rating = true;
   @Output() rateMap = new EventEmitter<number>();

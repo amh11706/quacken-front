@@ -18,7 +18,8 @@
      src="/assets/images/alkaid_island.png">
 
 <div *ngFor="let boat of boats; trackBy: trackBoatBy"
-     class="boat team{{boat.team}}"
+     class="boat"
+     [style.color]="teamColors[boat.team || 0]"
      [class.sameteam]="boat.team === myBoat.team"
      [style.zIndex]="render(boat).coords?.y"
      [style.opacity]="boat.opacity"
@@ -44,12 +45,13 @@
   </div>
 
   <div [style.opacity]="boat.team === hoveredTeam ? 1 : 0"
-               [style.width]="boat.influence*92 + 'px'"
-               [style.height]="boat.influence*92 + 'px'"
-               class="influence"></div>
+       [style.borderColor]="teamColors[boat.team || 0]"
+       [style.width]="boat.influence*92 + 'px'"
+       [style.height]="boat.influence*92 + 'px'"
+       class="influence"></div>
 
   <q-sprite-img [render]="render(boat)"
-               (click)="clickBoat(boat)"
-               (mouseenter)="hoveredTeam = boat.team || 0;"
-               (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
+                (click)="clickBoat(boat)"
+                (mouseenter)="hoveredTeam = boat.team || 0;"
+                (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
 </div>

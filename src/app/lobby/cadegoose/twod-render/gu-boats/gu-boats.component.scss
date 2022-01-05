@@ -47,11 +47,8 @@ q-sprite-img {
   pointer-events: none;
 }
 
-.team1 .influence {
-  border-color: red;
-}
 .sameteam .influence {
-  border-color: rgb(137, 214, 233);
+  border-color: rgb(137, 214, 233) !important;
 }
 
 .boattitle {
@@ -60,17 +57,11 @@ q-sprite-img {
   font-size: 13px;
 }
 
-.team0 {
-  color: rgb(125, 236, 80);
-}
-.team1 {
-  color: red;
-}
 .sameteam {
-  color: rgb(137, 214, 233);
+  color: rgb(137, 214, 233) !important;
 }
 .isme {
-  color: rgb(214, 247, 255);
+  color: rgb(214, 247, 255) !important;
 }
 
 

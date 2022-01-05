@@ -19,8 +19,7 @@
   display: inline-block;
 }
 
-#defenders,
-#attackers {
+.team {
   display: inline-block;
   margin-top: 8px;
   padding-top: 4px;
@@ -30,10 +29,6 @@
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.3);
   overflow-y: auto;
-}
-
-#attackers {
-  border-color: red;
 }
 
 .lobbyPlayer {
@@ -86,7 +81,7 @@ q-name {
   padding-left: 8px;
 }
 
-.teamcount{
+.teamcount {
   margin-bottom: 1px;
   color: rgb(161, 159, 159);
   font-size: 12px;
