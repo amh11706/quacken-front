@@ -120,11 +120,14 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   }
 
   sendReady(): void {
-    this.ws.send(OutCmd.Ready);
+    this.ws.send(OutCmd.Ready, { ready: true });
   }
 
   imReady(): void {
-    // override parent behavior
+    this.stopTimer();
+    this.myBoat.ready = true;
+    this.locked = true;
+    this.ws.send(OutCmd.Ready, { ready: true, moves: this.getMoves(), shots: this.shots });
   }
 
   private setAutoWant() {

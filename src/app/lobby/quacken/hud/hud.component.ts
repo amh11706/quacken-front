@@ -119,6 +119,10 @@ export class HudComponent implements OnInit, OnDestroy {
         this.resetMoves();
       }
 
+      if (m.seconds) {
+        if (m.seconds > 20) m.seconds = 20;
+        m.seconds = Math.round(m.seconds * this.secondsPerTurn / 30);
+      }
       if (!this.timeInterval && this.turn > 0 && this.turn < this.maxTurn) this.startTimer();
       else this.stopTimer();
       this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);

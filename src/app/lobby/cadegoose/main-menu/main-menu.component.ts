@@ -148,7 +148,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       return;
     }
     this.ready = !this.ready;
-    this.ws.send(OutCmd.Ready, this.ready);
+    this.ws.send(OutCmd.Ready, { ready: this.ready });
   }
 
   ngOnDestroy(): void {
