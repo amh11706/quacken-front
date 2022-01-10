@@ -133,6 +133,11 @@
         </mat-radio-group>
       </div>
     </div>
+    <button *ngIf="secondsPerTurn === 40" mat-button
+            mat-raised-button
+            [disabled]="!myBoat.isMe || (locked && !myBoat.moveLock)"
+            color="accent"
+            id="hudReady" (click)="imReady()">Ready</button>
   </div>
   <div *ngIf="myBoat.inSZ"
        id="disengage">

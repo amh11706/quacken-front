@@ -61,7 +61,9 @@ export const Settings = {
     admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 100, step: 5,
   },
   cadeTurnTime: {
-    admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 35, step: 5,
+    // eslint-disable-next-line object-property-newline
+    admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 40, step: 5,
+    stepLabels: { 40: 'Unlimited' },
   },
   cadeTurns: {
     admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5,

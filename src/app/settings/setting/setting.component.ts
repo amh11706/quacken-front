@@ -73,7 +73,7 @@ export class SettingComponent {
         name: this.setting.name,
         value: +newSetting.value,
         group: this.setting.group,
-        data: newSetting.data,
+        data: this.setting.stepLabels ? this.setting.stepLabels?.[newSetting.value] : newSetting.data,
       });
       if (this.setting.trigger) {
         this.ws.send(this.setting.trigger, +newSetting.value);

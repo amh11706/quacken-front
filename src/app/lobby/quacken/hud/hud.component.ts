@@ -71,7 +71,7 @@ export class HudComponent implements OnInit, OnDestroy {
   protected group = 'l/quacken';
   protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
   protected get maxTurn(): number { return this.lobbySettings.turns?.value || 90; }
-  protected get secondsPerTurn(): number { return this.lobbySettings.turnTime?.value || 30; }
+  get secondsPerTurn(): number { return this.lobbySettings.turnTime?.value || 30; }
 
   private timeInterval?: number;
   private minutes = 0;
@@ -335,10 +335,16 @@ export class HudComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const remaining = this.secondsPerTurn * turn + sec;
-    this.minutes = Math.floor(remaining / 60);
-    this.seconds = remaining % 60;
-    this.turnSeconds = sec;
+    if (this.secondsPerTurn === 40) {
+      this.seconds = turn === this.maxTurn ? turn : turn + 1;
+      this.minutes = 0;
+      this.turnSeconds = this.secondsPerTurn;
+    } else {
+      const remaining = this.secondsPerTurn * turn + sec;
+      this.minutes = Math.floor(remaining / 60);
+      this.seconds = remaining % 60;
+      this.turnSeconds = sec;
+    }
     this.updatetime();
   }
 
@@ -360,6 +366,8 @@ export class HudComponent implements OnInit, OnDestroy {
 
   private tickTimer() {
     if (this.turn === 0) return this.stopTimer();
+    // unlimited time
+    if (this.secondsPerTurn === 40) return;
     if (this.turnSeconds < 1 || this.minutes + this.seconds === 0) {
       this.imReady();
       return;
@@ -370,6 +378,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.seconds += 60;
       this.minutes--;
     }
+    if (this.turnSeconds > this.secondsPerTurn) this.setTurn(this.maxTurn - this.turn);
     this.turnSeconds--;
     this.updatetime();
   }

@@ -14,9 +14,10 @@
   transform: translate(50vw, 50vh) translate(-50%, -50%);
 }
 
-.obstacle{
+.obstacle {
   position: absolute;
   pointer-events: none;
+  transform: translate(-50%, -50%) translate(32px, 24px);
 }
 
 q-gu-boats {

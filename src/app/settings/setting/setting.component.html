@@ -43,7 +43,8 @@
 
   <div *ngSwitchCase="'slider'"
        class="setting">
-    <span class="label">{{setting.label}} ({{group[setting.name].value}})</span>
+    <span class="label">{{setting.label}} ({{setting.stepLabels?.[group[setting.name].value] ||
+      group[setting.name].value}})</span>
     <mat-slider [min]="setting.min"
                 [max]="setting.max"
                 [step]="setting.step"
