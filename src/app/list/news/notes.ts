@@ -5,6 +5,16 @@ interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 14 January 2022',
+    points: [
+      'Support for up to 4 cade teams!',
+      'Unlimited time setting for practice. Slide time setting to max to enable.',
+      'More options for how many bots you want in your lobby.',
+      'Lag protection; no more grey moves. The server will now wait for your final moves regardless of lag before playing the turn.',
+      'Attempted IOS mobile fix for drag and drop.',
+    ],
+  },
+  {
     title: 'Release 30 May 2021',
     points: [
       'Feedback fueled fancy fixes.',
