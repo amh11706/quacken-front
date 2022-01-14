@@ -41,6 +41,6 @@ export class EscMenuComponent {
   }
 
   openDiscord(): void {
-    window.open('https://discord.gg/SDFPXp2Cmq', '_blank');
+    window.open('https://discord.gg/UVAPZFYrUW', '_blank');
   }
 }

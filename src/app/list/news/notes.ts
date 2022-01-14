@@ -12,6 +12,7 @@ export const Notes: Note[] = [
       'More options for how many bots you want in your lobby.',
       'Lag protection; no more grey moves. The server will now wait for your final moves regardless of lag before playing the turn.',
       'Attempted IOS mobile fix for drag and drop.',
+      'Fixed discord link.',
     ],
   },
   {
