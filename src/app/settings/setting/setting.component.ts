@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { WsService } from '../../ws.service';
+import { AdvancedComponent } from '../advanced/advanced.component';
 import { SettingsService, SettingMap } from '../settings.service';
 
 import { Settings } from './settings';
@@ -47,11 +49,21 @@ export class SettingComponent {
   getShipLink = getShipLink;
   private debounce?: number;
 
-  constructor(public ss: SettingsService, private ws: WsService) { }
+  constructor(public ss: SettingsService, private ws: WsService, private dialog: MatDialog) { }
 
   private async fetch() {
     this.group[this.setting.name] = { value: 0 };
     if (this.setting.group) this.group = await this.ss.getGroup(this.setting.group);
+  }
+
+  openAdvanced(): void {
+    this.dialog.open(AdvancedComponent, {
+      data: {
+        component: this.setting.advancedComponent,
+        setting: this.group[this.setting.name],
+        save: this.save.bind(this),
+      },
+    }).afterClosed().subscribe(this.save.bind(this));
   }
 
   send(): void {

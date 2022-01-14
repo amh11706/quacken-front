@@ -23,6 +23,8 @@ import { KeyBindingComponent } from './key-binding/key-binding.component';
 import { BinderComponent } from './key-binding/binder/binder.component';
 import { ExitPromptComponent } from './key-binding/exit-prompt/exit-prompt.component';
 import { CustomMapComponent } from './custom-map/custom-map.component';
+import { BotSettingComponent } from './bot-setting/bot-setting.component';
+import { AdvancedComponent } from './advanced/advanced.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { CustomMapComponent } from './custom-map/custom-map.component';
     BinderComponent,
     ExitPromptComponent,
     CustomMapComponent,
+    BotSettingComponent,
+    AdvancedComponent,
   ],
   imports: [
     CommonModule,

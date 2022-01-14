@@ -1,4 +1,5 @@
 :host {
+  position: relative;
   width: 100%;
   max-width: 190px;
 }
@@ -12,6 +13,13 @@ mat-checkbox {
 mat-checkbox {
   display: inline-block;
   text-align: left;
+}
+
+mat-icon {
+  position: absolute;
+  right: 14px;
+  font-size: 18px;
+  cursor: pointer;
 }
 
 button {

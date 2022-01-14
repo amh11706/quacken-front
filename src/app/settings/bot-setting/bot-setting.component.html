@@ -1,0 +1,67 @@
+<mat-form-field class="setting">
+  <mat-label>{{BotSetting.label}}</mat-label>
+  <mat-select [(value)]="setting.value"
+              (selectionChange)="save()"
+              [disabled]="BotSetting.admin && !ss.admin">
+    <mat-option *ngFor="let option of BotSetting.options; let i = index"
+                [value]="i">{{option}}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<p *ngIf="setting.value === 1">Add the minimum bots required for all teams to have equal ships.</p>
+
+<ng-container *ngIf="setting.value === 2">
+  <p>Pad teams the same as auto, then add the following additional ships to each team:</p>
+  <div class="boatList">
+    <div *ngFor="let boatType of setting.data.padExtra; let i = index"
+         class="boat">
+      <mat-select [(ngModel)]="setting.data.padExtra[i]">
+        <mat-select-trigger>
+          <img [src]="getShipLink(boatType)"
+               [title]="Ships.titles[boatType]">
+        </mat-select-trigger>
+        <mat-option *ngFor="let o of Ships.groups[0].options"
+                    [value]="o">
+          <img [src]="getShipLink(o)"
+               class="boatoption"
+               height="25px"
+               width="25px">{{Ships.titles[o]}}
+        </mat-option>
+      </mat-select>
+      <mat-icon (click)="removePadExtra(i)">cancel</mat-icon>
+    </div>
+    <div class="boat"
+         (click)="addPadExtra()">
+      <mat-icon>add</mat-icon>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="setting.value === 3">
+  <p>Add exactly these bots to each team:</p>
+  <div *ngFor="let team of setting.data.custom; let teamId = index"
+       class="boatList"
+       [style.borderColor]="TeamColors[teamId]">
+    <div *ngFor="let boatType of team; let i = index"
+         class="boat">
+      <mat-select [(ngModel)]="team[i]">
+        <mat-select-trigger>
+          <img [src]="getShipLink(boatType)"
+               [title]="Ships.titles[boatType]">
+        </mat-select-trigger>
+        <mat-option *ngFor="let o of Ships.groups[0].options"
+                    [value]="o">
+          <img [src]="getShipLink(o)"
+               class="boatoption"
+               height="25px"
+               width="25px">{{Ships.titles[o]}}
+        </mat-option>
+      </mat-select>
+      <mat-icon (click)="removeCustom(team, i)">cancel</mat-icon>
+    </div>
+    <div class="boat"
+         (click)="addCustom(team)">
+      <mat-icon>add</mat-icon>
+    </div>
+  </div>
+</ng-container>

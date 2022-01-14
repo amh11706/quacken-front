@@ -23,16 +23,21 @@
     </mat-select>
   </div>
 
-  <mat-form-field *ngSwitchCase="'option'"
-                  class="setting">
-    <mat-label>{{setting.label}}</mat-label>
-    <mat-select [(value)]="group[setting.name].value"
-                (selectionChange)="save()"
-                [disabled]="setting.admin && !ss.admin">
-      <mat-option *ngFor="let option of setting.options; let i = index"
-                  [value]="i">{{option}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <ng-container *ngSwitchCase="'option'">
+    <mat-form-field class="setting">
+      <mat-label>{{setting.label}}</mat-label>
+      <mat-select [(value)]="group[setting.name].value"
+                  (selectionChange)="save()"
+                  [disabled]="setting.admin && !ss.admin">
+        <mat-option *ngFor="let option of setting.options; let i = index"
+                    [value]="i">{{option}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-icon *ngIf="setting.advancedComponent"
+              title="Advanced"
+              (click)="openAdvanced()">settings</mat-icon>
+  </ng-container>
+
 
   <div *ngSwitchCase="'button'"
        class="setting">

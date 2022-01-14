@@ -1,0 +1,43 @@
+.boatList {
+  display: inline-block;
+  margin-top: 8px;
+  margin-right: 4px;
+  padding-top: 4px;
+  min-width: 200px;
+  height: 200px;
+  border: 1px solid rgb(137, 214, 233);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+}
+
+.boat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+  padding: 4px;
+  margin: 4px 8px;
+  border: 1px solid black;
+
+  mat-select {
+    width: 40px;
+    margin-right: 8px;
+  }
+
+  img {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+.boatoption {
+  position: relative;
+  top: 6px;
+  margin-right: 4px;
+}
+
+mat-icon {
+  cursor: pointer;
+}

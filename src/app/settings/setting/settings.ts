@@ -1,5 +1,6 @@
 /* eslint-disable no-sparse-arrays */
 import { OutCmd } from '../../ws-messages';
+import { BotSettingComponent } from '../bot-setting/bot-setting.component';
 
 export const Settings = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' },
@@ -69,7 +70,16 @@ export const Settings = {
     admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5,
   },
   enableBots: {
-    admin: true, id: 35, group: 'l/cade', name: 'bots', type: 'checkbox', label: 'Enable bots',
+    admin: true,
+    id: 35,
+    group: 'l/cade',
+    name: 'bots',
+    type: 'option',
+    label: 'Bots',
+    options: [
+      'Disabled', 'Auto', 'Pad extra', 'Custom',
+    ],
+    advancedComponent: BotSettingComponent,
   },
   botDifficulty: {
     admin: true, id: 36, group: 'l/cade', name: 'botDifficulty', type: 'slider', label: 'Bot difficulty', min: 25, max: 100, step: 25,
