@@ -1,23 +1,22 @@
 ::ng-deep .mat-snack-bar-container {
-    background-color: rgba(67, 67, 67, 0.8) !important;
+  background-color: rgba(67, 67, 67, 0.8) !important;
 }
 
 .dismiss {
-    display:flex;
-    justify-content: flex-end;
-    color: rgb(199, 33, 33);
+  display: flex;
+  justify-content: flex-end;
 }
 
 .star mat-icon {
-    color: gold;
-    font-size: 16px;
+  color: gold;
+  font-size: 16px;
 }
 
 .mat-chip-list .mat-chip {
-    width: auto;
-    min-width: 0;
-  }
+  width: auto;
+  min-width: 0;
+}
 
 .divider {
-    margin-top: 5px;
+  margin-top: 5px;
 }

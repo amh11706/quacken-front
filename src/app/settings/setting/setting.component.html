@@ -43,6 +43,7 @@
        class="setting">
     <button *ngIf="!(setting.admin && !ss.admin)"
             mat-raised-button
+            color="accent"
             (click)="send()">{{setting.label}}</button>
   </div>
 

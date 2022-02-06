@@ -184,7 +184,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       }
       this.ws.send(OutCmd.Sync);
       this.step = -1;
-    } else if (this.myBoat.isMe) {
+    } else if (this.myBoat.isMe && this.turn) {
       this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
     }
   }

@@ -33,6 +33,16 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     back: KeyActions.CBack,
   };
 
+  maneuverValues = [100, 75, 150, 200];
+  usingManeuvers = [0, 0, 0, 0];
+  wantManeuver = 0;
+  maneuvers = [
+    { id: 4, class: 'move bombtoken', title: 'Chain Shot' },
+    { id: 8, class: 'move', title: 'In-place Turn' },
+    { id: 12, class: 'move', title: 'Double Forward' },
+    { id: 16, class: 'move', title: 'Flotsam' },
+  ];
+
   shots = [0, 0, 0, 0, 0, 0, 0, 0];
   moves = [0, 0, 0, 0];
   haveMoves = [2, 4, 2];
@@ -99,6 +109,17 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     }
   }
 
+  async bombToken(ev: DragEvent, slot: number): Promise<void> {
+    ev.preventDefault();
+    if (this.locked || this.move > 7 || this.move < 4) return;
+    for (const i in this.shots) if (this.shots[i] > 2) this.shots[i] = 0;
+    this.usingCannons -= this.shots[slot];
+    this.shots[slot] = this.move;
+    this.usingManeuvers[0] = this.move === 4 ? 100 : 200;
+    this.move = 0;
+    this.serverShots = await this.ws.request(OutCmd.Shots, this.shots);
+  }
+
   async setBomb(i: number, strict = false): Promise<void> {
     if (i === 0) {
       this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -117,6 +138,11 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   changeWantMove(): void {
     if (this.auto) this.setAutoWant();
     else this.ws.send(OutCmd.WantMove, this.wantMove);
+  }
+
+  setWantToken(value: number): void {
+    this.wantManeuver = value;
+    this.ws.send(OutCmd.WantManeuver, this.wantManeuver);
   }
 
   imReady(): void {
@@ -141,7 +167,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     if (this.locked || slot === this.blockedPosition) return;
     const moves = this.getMoves();
     const move = moves[slot];
-    if (move === 0 && this.maxMoves) return;
+    if ((move === 0 && this.maxMoves) || move > 7) return;
     let wantMove = (ev.button + 1 + move) % 4;
     while (wantMove !== 0 && this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0) {
       wantMove = (ev.button + 1 + wantMove) % 4;
@@ -152,11 +178,18 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   checkMaxMoves(): void {
     this.usingMoves = [0, 0, 0];
+    this.usingManeuvers = [0, 0, 0, 0];
     if (!this.locked) {
       for (let i = 0; i < this.moves.length; i++) {
         const move = this.moves[i];
         if (move === 0) continue;
-        if (this.haveMoves[move - 1] > this.usingMoves[move - 1]) this.usingMoves[move - 1]++;
+        if (move > 7) {
+          const maneuver = Math.floor(move / 4 - 1);
+          const points = move % 2 === 0 ? 100 : 200;
+          if (this.maneuverValues[maneuver] >= points + this.usingManeuvers[maneuver]) {
+            this.usingManeuvers[maneuver] = points;
+          } else this.moves[i] = 0;
+        } else if (this.haveMoves[move - 1] > this.usingMoves[move - 1]) this.usingMoves[move - 1]++;
         else this.moves[i] = 0;
       }
     }
@@ -167,7 +200,10 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     if (this.locked) return;
     const oldShots = this.shots[i];
     this.shots[i] = (oldShots + 1) % ((this.myBoat.maxShots || 1) + 1);
-    this.usingCannons += this.shots[i] - oldShots;
+    if (oldShots > 2) {
+      this.usingManeuvers[0] = 0;
+      this.shots[i] = 0;
+    } else this.usingCannons += this.shots[i] - oldShots;
     if (this.usingCannons > this.lastTick.tp) {
       this.usingCannons -= this.shots[i];
       this.shots[i] = 0;
@@ -183,6 +219,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     super.resetMoves();
     for (let i = 0; i < this.usingMoves.length; i++) this.haveMoves[i] -= this.usingMoves[i];
     this.usingMoves = [0, 0, 0];
+    this.usingManeuvers = [0, 0, 0, 0];
     this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     this.usingCannons = 0;
     this.serverMoves = [...this.getMoves()];

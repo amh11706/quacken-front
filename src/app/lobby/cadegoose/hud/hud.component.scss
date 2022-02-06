@@ -1,28 +1,71 @@
-@use '~@angular/material' as mat;
+@use "~@angular/material" as mat;
 @import "../../../../styles/colors.scss";
 
-.container{
+.container {
   height: 50vh;
   min-height: 120px;
   max-height: 160px;
 }
 
 #boatcontrol {
-  display: inline-block;
-  width: 277px;
-}
-
-#source {
   grid-column: left;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: 55% 30% 15%;
+  grid-template-rows: 20% 50% 30%;
 }
 
 #hudReady {
+  grid-column: 3;
+  grid-row: 3;
   line-height: 1.8;
+  color: rgb(125, 236, 80);
+}
+
+#maneuvers {
+  grid-column: 1;
+  grid-row: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-right: 16px;
+
+  .want {
+    border: 1px solid yellow;
+  }
+
+  .move {
+    margin-left: 3px;
+    height: 27px;
+    width: 27px;
+    overflow: hidden;
+  }
+
+  .bombtoken {
+    border-radius: 50%;
+  }
+
+  .maneuver {
+    position: absolute;
+    object-position: bottom;
+    object-fit: cover;
+    bottom: 0;
+    left: 0;
+    opacity: 0.5;
+    pointer-events: none;
+
+    &.usable {
+      cursor: grab;
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
 }
 
 #chat {
   grid-column: right;
-  min-width: 285px;
 }
 
 #disengage {
@@ -36,15 +79,13 @@
 }
 
 q-chat {
-  width: calc(99% - 285px);
-  height: 50vh;
   min-width: 150px;
   margin-left: 0px;
 }
 
 #hud {
   display: grid;
-  grid-template-columns: [left]277px [middle]0.05fr [right]1fr;
+  grid-template-columns: [left]300px [middle]0.01fr [right]1fr;
   grid-template-rows: 1fr;
   background-color: rgba(67, 67, 67, 0.8);
   position: absolute;
@@ -65,49 +106,50 @@ q-chat {
   }
 }
 
-
 #movesource {
   grid-column: 1;
+  grid-row: 2;
   position: relative;
-  float: left;
   width: 150px;
   min-height: 2vh;
-  margin: 8px;
 
   button {
     margin-top: 4px;
   }
+
+  div {
+    display: inline-block;
+    text-align: center;
+    font-size: 11px;
+    color: #eee;
+  }
+
+  mat-radio-button {
+    transform: scale(0.5);
+  }
+
+  mat-checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
 
-mat-radio-button {
-  transform: scale(0.5);
-}
-
-mat-checkbox {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-#movesource div {
-  display: inline-block;
-  text-align: center;
-  font-size: 11px;
-  color: #eee;
+#boatStats {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 #damage,
 #bilge {
-  float: left;
-  margin: 2px 35px;
   width: 100px;
-  height: 15px;
+  height: 10px;
   background-color: #aaaaaa;
   overflow: hidden;
 }
 
 #bilge {
-  margin-top: 0;
+  margin-top: 2px;
 }
 
 #damagebar,
@@ -125,9 +167,10 @@ mat-checkbox {
 }
 
 #time {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  align-self: flex-end;
   position: relative;
-  margin: min(7vh, 30px) 10px;
-  float: right;
   height: 76px;
   width: 15px;
   background-color: #aaaaaa;
@@ -143,9 +186,8 @@ mat-checkbox {
 }
 
 #moves {
-  float: right;
-  margin-right: 27px;
-  margin-top: auto;
+  grid-column: 2;
+  grid-row: 1 / span 3;
 }
 
 .moverow {
@@ -153,7 +195,7 @@ mat-checkbox {
 }
 
 .move {
-  position:relative;
+  position: relative;
   background-color: rgba(95, 94, 94, 0.8);
   width: 35px;
   min-height: 25px;
@@ -220,13 +262,13 @@ mat-checkbox {
   }
 }
 
-.unconfirmedShots::after{
-  content:"";
+.unconfirmedShots::after {
+  content: "";
   position: absolute;
   width: 16px;
   height: 16px;
   margin: -1px;
-  margin-left:-7px !important;
+  margin-left: -7px !important;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.7);
 }
@@ -281,9 +323,17 @@ mat-checkbox {
   background: url("/assets/images/cannon.png") center/cover;
 }
 
-.bomb {
+.token1, .token2 {
   background: url("/assets/images/cannon1.png") center/cover;
   background-position-x: 1px;
+}
+
+.token4 {
+  background: url("/assets/images/arrow4.png") center/cover;
+}
+
+.token5 {
+  background: url("/assets/images/arrow5.png") center/cover;
 }
 
 .selected {
@@ -314,13 +364,13 @@ mat-checkbox {
   margin-left: 1px;
 }
 
-.unconfirmed::after{
-  content:"";
+.unconfirmed::after {
+  content: "";
   position: absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.7);
 }
 
@@ -329,22 +379,22 @@ mat-checkbox {
   height: 13px;
 }
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
 @media only screen and (max-height: 350px) {
-  .container{
+  .container {
     height: 40vh;
   }
-  .move{
+  .move {
     height: 9vh;
   }
 }

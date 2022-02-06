@@ -6,8 +6,10 @@
          (blur)="filter()"
          [(ngModel)]="search">
   <button mat-raised-button
+          color="accent"
           (click)="filter()">Search</button>
   <button mat-raised-button
+          color="accent"
           (click)="openFilterWindow()">Filter</button>
   <mat-form-field style="margin-top: 15px;">
     <mat-label>Sort by:</mat-label>
@@ -37,6 +39,7 @@
 
 <div class="item">
   <button mat-raised-button
+          color="accent"
           [disabled]="!ss.admin"
           (click)="selectMap(-1)"
           matTooltip="Random User Map">Random</button>

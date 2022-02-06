@@ -65,6 +65,7 @@ export const enum OutCmd {
   SpawnSide,
   Team,
   WantMove,
+  WantManeuver,
   Sync,
 
   MapListAll,

@@ -66,7 +66,7 @@ export class HudComponent implements OnInit, OnDestroy {
   turn = 0;
   serverMoves = [0, 0, 0, 0];
   private source = 4;
-  private move = 0;
+  protected move = 0;
   protected subs = new Subscription();
   protected group = 'l/quacken';
   protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
@@ -314,7 +314,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.move === 0) this.blockedPosition = slot;
     else if (this.source < 4 && this.blockedPosition === slot) this.blockedPosition = this.source;
 
-    if (this.maxMoves && this.source > 3 && (move === 0 || move === 4) && this.move < 4) return;
+    if (this.maxMoves && this.source > 3 && (move === 0 || move === 4)) return;
     if (this.source < 4) moves[this.source] = moves[slot];
     moves[slot] = this.move;
     void this.sendMoves();
