@@ -215,7 +215,7 @@ export class GuBoat extends BoatRender {
 
     if (startTime && (transition || !opacity)) {
       promises.push(new Promise(resolve => {
-        if (transition === 1) {
+        if (transition === 1 || transition === 4) {
           new TWEEN.Tween(this, BoatRender.tweens)
             .easing(TWEEN.Easing.Linear.None)
             .to({ rotateDeg: face }, 8000 / BoatRender.speed)
@@ -230,7 +230,7 @@ export class GuBoat extends BoatRender {
       }).then(() => this.rotateDeg = face));
     }
 
-    if (startTime && transition > 1) {
+    if (startTime && transition > 1 && transition !== 4) {
       promises.push(new Promise<void>(resolve => {
         const delay = 2000 / BoatRender.speed;
         const delayOffset = 10000 / BoatRender.speed;

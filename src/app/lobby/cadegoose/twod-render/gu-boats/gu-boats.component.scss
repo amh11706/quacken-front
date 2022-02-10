@@ -105,17 +105,28 @@ q-sprite-img {
   animation-timing-function: linear, steps(16);
 }
 
-.size2 .shot { background-image: url("/assets/clutter/cannonball_small.png"); }
-.size3 .shot { background-image: url("/assets/clutter/cannonball_medium.png"); }
-.size4 .shot { background-image: url("/assets/clutter/cannonball_large.png"); }
+.size1 .shot { background-image: url("/assets/clutter/cannonball_small.png"); }
+.size2 .shot { background-image: url("/assets/clutter/cannonball_medium.png"); }
+.size3 .shot { background-image: url("/assets/clutter/cannonball_large.png"); }
+.size4 .shot { background-image: url("/assets/clutter/chain_cannonball.png"); }
+.size5 .shot { background-image: url("/assets/clutter/flaming_cannonball.png"); }
 .shot.dis4 { animation-name: move, splash !important; animation-timing-function: linear, steps(13); }
 
 .smoke { animation: smoke calc(var(--speed) * 1s) steps(18) both; }
-.size2 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
-.size3 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }
-.size4 .smoke { --endX: -960px; animation-timing-function: steps(24); background-image: url("/assets/clutter/explode_large.png"); }
+.size1 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
+.size2 .smoke, .size4 .smoke, .size5 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }
+.size3 .smoke { --endX: -960px; animation-timing-function: steps(24); background-image: url("/assets/clutter/explode_large.png"); }
 
 .shot.dir0, .shot.dir1 { --tranY: calc(0px - var(--distance) * 24px) }
 .shot.dir2, .shot.dir3 { --tranY: calc(var(--distance) * 24px) }
 .shot.dir1, .shot.dir2 { --tranX: calc(var(--distance) * 32px) }
 .shot.dir0, .shot.dir3 { --tranX: calc(0px - var(--distance) * 32px) }
+
+.clutterimg {
+  height: 48px;
+  width: 64px;
+  background-position: center;
+}
+
+.clutter16 { background-image: url("/assets/clutter/flotsam.png"); }
+.clutter17 { background-image: url("/assets/clutter/flaming_flotsam.png"); }

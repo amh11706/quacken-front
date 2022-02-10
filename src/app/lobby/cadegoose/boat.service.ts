@@ -232,6 +232,10 @@ export class BoatService extends BoatsComponent implements OnDestroy {
         if (u.cd === 100) void this.sound.play(Sounds.Sink, 10000 / this.speed);
         if (u.c < 5) void this.sound.play(Sounds.RockDamage, 3500 / this.speed);
       }
+      if (u.s) {
+        boat.face += boat.spinDeg * u.s;
+        boat.rotateTransition = 4;
+      }
       if (u.tm === undefined || u.tf === undefined) continue;
       if (boat.rotateTransition === 0) boat.rotateTransition = 1;
       boat.setPos(u.x, u.y)

@@ -33,7 +33,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     back: KeyActions.CBack,
   };
 
-  maneuverValues = [100, 75, 150, 200];
+  maneuverValues = [100, 100, 150, 200];
   usingManeuvers = [0, 0, 0, 0];
   wantManeuver = 0;
   maneuvers = [
@@ -167,12 +167,16 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     if (this.locked || slot === this.blockedPosition) return;
     const moves = this.getMoves();
     const move = moves[slot];
-    if ((move === 0 && this.maxMoves) || move > 7) return;
-    let wantMove = (ev.button + 1 + move) % 4;
-    while (wantMove !== 0 && this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0) {
-      wantMove = (ev.button + 1 + wantMove) % 4;
+    if ((move === 0 && this.maxMoves) || move > 11) return;
+    if (move > 7) {
+      moves[slot] = (move + 2) % 4 + 8;
+    } else {
+      let wantMove = (ev.button + 1 + move) % 4;
+      while (wantMove !== 0 && this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0) {
+        wantMove = (ev.button + 1 + wantMove) % 4;
+      }
+      moves[slot] = wantMove;
     }
-    moves[slot] = wantMove;
     void this.sendMoves();
   }
 

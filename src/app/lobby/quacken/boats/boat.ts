@@ -55,7 +55,7 @@ export class Boat {
   }
 
   rotateByMove(m: number): Boat {
-    if (m) this.face += (m - 2) * this.spinDeg;
+    if (m && m < 6) this.face += (m - 2) * this.spinDeg;
     return this;
   }
 

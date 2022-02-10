@@ -287,6 +287,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
     this.animateTimeout2 = window.setTimeout(() => {
       this.clutter = sync.cSync || [];
+      this.handleUpdate(this.clutter, 0);
     }, 1000);
     if (sync.sync) {
       this.setBoats(sync.sync);

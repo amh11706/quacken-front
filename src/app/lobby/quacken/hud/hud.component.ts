@@ -123,7 +123,7 @@ export class HudComponent implements OnInit, OnDestroy {
         if (m.seconds > 20) m.seconds = 20;
         m.seconds = Math.round(m.seconds * this.secondsPerTurn / 30);
       }
-      if (!this.timeInterval && this.turn > 0 && this.turn < this.maxTurn) this.startTimer();
+      if (!this.timeInterval && this.turn > 0 && this.turn <= this.maxTurn) this.startTimer();
       else this.stopTimer();
       this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);
     }));
@@ -308,7 +308,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   drop(ev: DragEvent, slot: number): void {
     ev.preventDefault();
-    if (this.locked) return;
+    if (this.locked || (this.source > 3 && this.blockedPosition === slot)) return;
     const moves = this.getMoves();
     const move = moves[slot];
     if (this.move === 0) this.blockedPosition = slot;

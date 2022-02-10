@@ -2,7 +2,11 @@
      class="clutter"
      [style.transform]="obj.transform">
 
-  <div class="size{{obj.t}}"
+  <div *ngIf="obj.t >= 8"
+       class="clutterimg clutter{{obj.t}}"></div>
+
+  <div *ngIf="obj.t < 8"
+       class="size{{obj.t}}"
        style="--speed: {{10/speed}};">
     <div class="shot"
          class="dir{{obj.dir}} dis{{obj.dis}}"></div>
