@@ -217,17 +217,15 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     if (ev.shiftKey) {
       const token = moves[slot] > 7 ? Math.round(moves[slot] / 4) - 1 : 0;
       let wantToken = (ev.button + 1 + token) % 4;
-      while (wantToken !== 0 && this.lastTick.attr[wantToken] - this.usingManeuvers[wantToken] < 100) {
+      while (wantToken !== 0 && (this.lastTick.attr[wantToken] || 0) - this.usingManeuvers[wantToken] < 100) {
         wantToken = (ev.button + 1 + wantToken) % 4;
       }
       if (wantToken > 0) {
         const maneuver = wantToken * 4 + 4;
         moves[slot] = this.lastTick.attr[wantToken] - this.usingManeuvers[wantToken] === 200 ? maneuver + 1 : maneuver;
-      } else {
-        moves[slot] = 0;
+        void this.sendMoves();
+        return;
       }
-      void this.sendMoves();
-      return;
     }
     const move = moves[slot];
     if ((move === 0 && this.maxMoves) || move > 11) return;
