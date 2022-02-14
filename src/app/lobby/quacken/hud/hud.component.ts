@@ -66,6 +66,7 @@ export class HudComponent implements OnInit, OnDestroy {
   selected = 0;
   turn = 0;
   serverMoves = [0, 0, 0, 0];
+  private serverMovesPending = [0, 0, 0, 0];
   protected source = 4;
   draggedMove = 0;
   protected subs = new Subscription();
@@ -284,8 +285,10 @@ export class HudComponent implements OnInit, OnDestroy {
 
   protected async sendMoves(): Promise<void> {
     this.checkMaxMoves();
-    if (this.arrayEqual(this.serverMoves, this.getMoves())) return;
-    this.serverMoves = await this.ws.request(OutCmd.Moves, this.getMoves());
+    const moves = this.getMoves();
+    if (this.arrayEqual(this.serverMovesPending, moves)) return;
+    this.serverMovesPending = [...moves];
+    this.serverMoves = await this.ws.request(OutCmd.Moves, moves);
   }
 
   public getMoves(): number[] {

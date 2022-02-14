@@ -4,6 +4,4 @@
 #
 # For IE 9-11 support, please remove 'not' from the last line of the file and adjust as needed
 
-cover 95%
-not ie > 0
-not dead
+last 2 chrome versions

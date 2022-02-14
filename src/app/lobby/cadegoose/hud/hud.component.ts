@@ -54,6 +54,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   auto = true;
   protected group = 'l/cade';
   serverShots = [0, 0, 0, 0, 0, 0, 0, 0];
+  private serverShotsPending = [0, 0, 0, 0, 0, 0, 0, 0];
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -73,14 +74,17 @@ export class CadeHudComponent extends HudComponent implements OnInit {
       this.newTurn = true;
     }));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
+      if (!t.attr) t.attr = {};
+      this.lastTick = t;
       if (this.newTurn) {
         this.usingCannons = 0;
         this.usingMoves = [0, 0, 0];
         this.usingManeuvers = [0, 0, 0, 0];
         this.newTurn = false;
+      } else {
+        this.checkMaxMoves();
+        this.checkMaxShots();
       }
-      if (!t.attr) t.attr = {};
-      this.lastTick = t;
       const hadMoves = this.haveMoves;
       if (t.t) {
         this.haveMoves = [0, 0, 0];
@@ -190,10 +194,10 @@ export class CadeHudComponent extends HudComponent implements OnInit {
       if (shot === 0) continue;
       const usingManeuver = shot >= 4;
       if (usingManeuver) {
-        const points = shot % 2 === 0 ? 100 : 200;
-        if (this.lastTick.attr[0] >= points + this.usingManeuvers[0]) {
-          this.usingManeuvers[0] = points;
-        } else this.shots[i] = 0;
+        const points = this.lastTick.attr[0];
+        if (points === 200) this.shots[i] |= 0b1;
+        else if (points < 100) this.shots[i] = 0;
+        this.usingManeuvers[0] = points - points % 100;
         if (shot < 6) continue;
         shot = 1;
       }
@@ -207,7 +211,8 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   private async sendShots(): Promise<void> {
     this.checkMaxShots();
-    if (this.arrayEqual(this.serverShots, this.shots)) return;
+    if (this.arrayEqual(this.serverShotsPending, this.shots)) return;
+    this.serverShotsPending = [...this.shots];
     this.serverShots = await this.ws.request(OutCmd.Shots, this.shots);
   }
 
@@ -257,10 +262,10 @@ export class CadeHudComponent extends HudComponent implements OnInit {
       }
       if (move > 7) {
         const maneuver = Math.floor(move / 4 - 1);
-        const points = move % 2 === 0 ? 100 : 200;
-        if (this.lastTick.attr[maneuver] >= points + this.usingManeuvers[maneuver]) {
-          this.usingManeuvers[maneuver] = points;
-        } else this.moves[i] = 0;
+        const points = this.lastTick.attr[maneuver];
+        if (points === 200) this.moves[i] |= 0b1;
+        else if (points < 100) this.moves[i] = 0;
+        this.usingManeuvers[maneuver] = points - points % 100;
       } else if (this.haveMoves[move - 1] > this.usingMoves[move - 1]) this.usingMoves[move - 1]++;
       else this.moves[i] = 0;
     }
