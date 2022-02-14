@@ -22,6 +22,7 @@ export interface BoatTick {
   d: number;
   b: number;
   tp: number;
+  attr: Record<number, number>;
 }
 
 @Component({
@@ -65,8 +66,8 @@ export class HudComponent implements OnInit, OnDestroy {
   selected = 0;
   turn = 0;
   serverMoves = [0, 0, 0, 0];
-  private source = 4;
-  protected move = 0;
+  protected source = 4;
+  draggedMove = 0;
   protected subs = new Subscription();
   protected group = 'l/quacken';
   protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
@@ -276,8 +277,14 @@ export class HudComponent implements OnInit, OnDestroy {
     this.ws.send(OutCmd.ChatCommand, '/start');
   }
 
+  protected arrayEqual(a: number[], b: number[]): boolean {
+    for (const i in a) if (a[i] !== b[i]) return false;
+    return true;
+  }
+
   protected async sendMoves(): Promise<void> {
     this.checkMaxMoves();
+    if (this.arrayEqual(this.serverMoves, this.getMoves())) return;
     this.serverMoves = await this.ws.request(OutCmd.Moves, this.getMoves());
   }
 
@@ -301,8 +308,8 @@ export class HudComponent implements OnInit, OnDestroy {
     void this.sendMoves();
   }
 
-  drag(move: number, slot = 4): void {
-    this.move = move;
+  drag(move: number, slot = 8): void {
+    this.draggedMove = move;
     this.source = slot;
   }
 
@@ -311,12 +318,12 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.locked || (this.source > 3 && this.blockedPosition === slot)) return;
     const moves = this.getMoves();
     const move = moves[slot];
-    if (this.move === 0) this.blockedPosition = slot;
+    if (this.draggedMove === 0) this.blockedPosition = slot;
     else if (this.source < 4 && this.blockedPosition === slot) this.blockedPosition = this.source;
 
     if (this.maxMoves && this.source > 3 && (move === 0 || move === 4)) return;
     if (this.source < 4) moves[this.source] = moves[slot];
-    moves[slot] = this.move;
+    moves[slot] = this.draggedMove;
     void this.sendMoves();
     this.source = 4;
   }

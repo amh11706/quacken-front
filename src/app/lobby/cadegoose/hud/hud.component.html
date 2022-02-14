@@ -10,32 +10,34 @@
       <div *ngFor="let move of moves; let i=index"
            class="moverow">
         <div class="leftbombs"
-             (drop)="bombToken($event, i*2)"
-             (dragstart)="drag(shots[i*2])"
-             [draggable]="shots[i*2] > 3"
-             (dragover)="(move === 4 || move === 5) && $event.preventDefault()"
-             (click)="addShot(i*2)">
+             (drop)="dropCannon(i*2)"
+             (dragstart)="dragCannon(shots[i*2], i*2)"
+             (dragend)="dragendCannon()"
+             [draggable]="shots[i*2]"
+             (dragover)="draggedMove < 4 || draggedMove >= 8"
+             (click)="addShot($event, i*2)">
           <div class="bombslot token{{shots[i*2]}}"
                [class.unconfirmedShots]="!serverShots[i*2] !== !shots[i*2]"
                [class.blocked]="locked"></div>
           <div *ngIf="myBoat.maxShots === 2"
                class="bombslot"
-               [class.token1]="shots[i*2] === 2"
+               [class.token1]="shots[i*2] === 2 || shots[i*2] > 5"
                [class.unconfirmedShots]="!(2-serverShots[i*2]) !== !(2-shots[i*2])"
                [class.blocked]="locked"></div>
         </div>
         <div class="rightbombs"
-             (drop)="bombToken($event, i*2+1)"
-             (dragstart)="drag(shots[i*2+1])"
-             [draggable]="shots[i*2+1] > 3"
-             (dragover)="(move === 4 || move === 5) && $event.preventDefault()"
-             (click)="addShot(i*2+1)">
+             (drop)="dropCannon(i*2+1)"
+             (dragstart)="dragCannon(shots[i*2+1], i*2+1)"
+             (dragend)="dragendCannon()"
+             [draggable]="shots[i*2+1]"
+             (dragover)="draggedMove < 4 || draggedMove >= 8"
+             (click)="addShot($event, i*2+1)">
           <div class="bombslot token{{shots[i*2+1]}}"
                [class.blocked]="locked"
                [class.unconfirmedShots]="!serverShots[i*2+1] !== !shots[i*2+1]"></div>
           <div *ngIf="myBoat.maxShots === 2"
                class="bombslot"
-               [class.token1]="shots[i*2+1] === 2"
+               [class.token1]="shots[i*2+1] === 2 || shots[i*2+1] > 5"
                [class.blocked]="locked"
                [class.unconfirmedShots]="!(2-serverShots[i*2+1]) !== !(2-shots[i*2+1])"></div>
         </div>
@@ -47,7 +49,7 @@
              (drop)="drop($event, i)"
              (mouseup)="clickTile($event, i)"
              (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
-             (dragover)="$event.preventDefault()">
+             (dragover)="draggedMove >= 4 && draggedMove < 8">
           <img *ngIf="move || i === blockedPosition"
                src="./assets/images/arrow{{move}}.png"
                draggable="true"
@@ -78,6 +80,8 @@
       </mat-checkbox>
       <div id="cannons">
         <div class="bombempty"
+             [draggable]="lastTick.tp - usingCannons > 0"
+             (dragstart)="dragCannon(1)"
              [class.bombmove]="lastTick.tp - usingCannons > 0"></div><br>
         <span id="cannontext">{{lastTick.tp - usingCannons}}X</span>
       </div>
@@ -150,22 +154,22 @@
     <div id="maneuvers">
       <div *ngFor="let m of maneuvers; let i = index"
            (click)="setWantToken(i)"
-           [title]="m.title"
+           [title]="m.title + ' - ' + (lastTick.attr[i] === 200 ? 100 : (lastTick.attr[i] || 0)%100) + '%'"
            [class.want]="wantManeuver === i"
            [class]="m.class">
-        <img *ngIf="maneuverValues[i] - usingManeuvers[i] > 0"
+        <img *ngIf="lastTick.attr[i] - usingManeuvers[i] > 0"
              class="maneuver"
              draggable="true"
-             (dragstart)="drag(m.id)"
-             [class.usable]="maneuverValues[i] - usingManeuvers[i] >= 100"
-             [style.maxHeight]="maneuverValues[i] - usingManeuvers[i] + '%'"
+             (dragstart)="dragManeuver(m.id)"
+             [class.usable]="lastTick.attr[i] - usingManeuvers[i] >= 100"
+             [style.maxHeight]="lastTick.attr[i] - usingManeuvers[i] + '%'"
              src="./assets/images/arrow{{m.id}}.png">
-        <img *ngIf="maneuverValues[i] - usingManeuvers[i] > 100"
+        <img *ngIf="lastTick.attr[i] - usingManeuvers[i] > 100"
              class="maneuver"
              draggable="true"
-             (dragstart)="drag(m.id + 1)"
-             [class.usable]="maneuverValues[i] >= 200"
-             [style.maxHeight]="maneuverValues[i] - 100 + '%'"
+             (dragstart)="dragManeuver(m.id + 1)"
+             [class.usable]="lastTick.attr[i] >= 200"
+             [style.maxHeight]="lastTick.attr[i] - 100 + '%'"
              src="./assets/images/arrow{{m.id + 1}}.png">
       </div>
     </div>

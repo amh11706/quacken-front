@@ -53,7 +53,7 @@
     object-fit: cover;
     bottom: 0;
     left: 0;
-    opacity: 0.5;
+    opacity: 0.7;
     pointer-events: none;
 
     &.usable {
@@ -249,6 +249,7 @@ q-chat {
   margin: -1px;
   border: 1px solid black;
   border-radius: 8px;
+  pointer-events: none;
 }
 
 #cannons {
@@ -328,11 +329,11 @@ q-chat {
   background-position-x: 1px;
 }
 
-.token4 {
+.token4, .token6 {
   background: url("/assets/images/arrow4.png") center/cover;
 }
 
-.token5 {
+.token5, .token7 {
   background: url("/assets/images/arrow5.png") center/cover;
 }
 

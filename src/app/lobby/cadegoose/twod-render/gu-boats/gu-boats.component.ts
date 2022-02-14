@@ -107,7 +107,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       const p = new Point().fromPosition(u);
       u.transform = `translate(${p.x}px, ${p.y}px)`;
       if (!u.dis) continue;
-      const fireSound = CannonSounds[u.t - 2];
+      const fireSound = CannonSounds[u.t - 2] || Sounds.CannonFireBig;
       void this.sound.play(fireSound);
       if (u.dbl) void this.sound.play(fireSound, 1000 / this.speed);
       if (u.dis < 4) {
