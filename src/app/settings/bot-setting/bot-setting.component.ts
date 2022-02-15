@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 import { getShipLink } from '../setting/setting.component';
-import { Settings } from '../setting/settings';
+import { BoatSetting, OptionSetting, Settings } from '../setting/settings';
 import { Setting, SettingsService } from '../settings.service';
 
 interface BotSetting extends Setting {
@@ -17,8 +17,8 @@ interface BotSetting extends Setting {
   styleUrls: ['./bot-setting.component.scss'],
 })
 export class BotSettingComponent {
-  BotSetting = Settings.enableBots;
-  Ships = Settings.nextCadeBoat;
+  BotSetting = Settings.enableBots as OptionSetting;
+  Ships = Settings.nextCadeBoat as BoatSetting;
   getShipLink = getShipLink;
   TeamColors = TeamColorsCss;
 

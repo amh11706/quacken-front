@@ -5,7 +5,7 @@ import { WsService } from '../../ws.service';
 import { AdvancedComponent } from '../advanced/advanced.component';
 import { SettingsService, SettingMap } from '../settings.service';
 
-import { Settings } from './settings';
+import { Setting, Settings } from './settings';
 
 export const links: Record<number, string> = {
   14: 'smsloop/smsloop',
@@ -38,13 +38,12 @@ export function getShipLink(id: number): string {
 export class SettingComponent {
   @Input() set name(value: keyof typeof Settings) {
     this.setting = Settings[value] || {};
-    this.setting.name = this.setting.name || value;
     void this.fetch();
   }
 
   @Output() valueChange = new EventEmitter<number>();
 
-  setting: any = {};
+  setting = {} as Setting;
   group: SettingMap = {};
   getShipLink = getShipLink;
   private debounce?: number;
@@ -57,22 +56,29 @@ export class SettingComponent {
   }
 
   openAdvanced(): void {
+    const copy = { ...this.group[this.setting.name] };
     this.dialog.open(AdvancedComponent, {
       data: {
         component: this.setting.advancedComponent,
-        setting: this.group[this.setting.name],
+        setting: copy,
         save: this.save.bind(this),
       },
-    }).afterClosed().subscribe(this.save.bind(this));
+    }).afterClosed().subscribe((value: boolean) => {
+      if (!value) return;
+      // only assign the value if the user clicked save.
+      Object.assign(this.group[this.setting.name], copy);
+      this.save();
+    });
   }
 
   send(): void {
+    if (this.setting.type !== 'button') return;
     this.ws.send(this.setting.trigger, this.setting.data);
   }
 
   save(): void {
     const newSetting = this.group[this.setting.name];
-    if (typeof this.setting.max === 'number') {
+    if (this.setting.type === 'slider') {
       if (newSetting.value > this.setting.max) newSetting.value = this.setting.max;
       else if (newSetting.value < this.setting.min) newSetting.value = this.setting.min;
     }
@@ -85,7 +91,7 @@ export class SettingComponent {
         name: this.setting.name,
         value: +newSetting.value,
         group: this.setting.group,
-        data: this.setting.stepLabels ? this.setting.stepLabels?.[newSetting.value] : newSetting.data,
+        data: this.setting.type === 'slider' && this.setting.stepLabels ? this.setting.stepLabels?.[newSetting.value] : newSetting.data,
       });
       if (this.setting.trigger) {
         this.ws.send(this.setting.trigger, +newSetting.value);

@@ -1,92 +1,77 @@
-<ng-container *ngIf="group[setting.name]"
-              [ngSwitch]="setting.type">
-  <div *ngSwitchCase="'boat'"
-       class="setting boat">
-    <mat-select *ngIf="group[setting.name]"
-                [(ngModel)]="group[setting.name].value"
-                (selectionChange)="save()">
-      <mat-select-trigger>
-        <img *ngIf="group[setting.name].value !== undefined"
-             [src]="getShipLink(group[setting.name].value)"
-             [title]="setting.titles[group[setting.name].value]">
-      </mat-select-trigger>
-      <mat-optgroup *ngFor="let g of setting.groups"
-                    [label]="g.name">
-        <mat-option *ngFor="let o of g.options"
-                    [value]="o">
-          <img [src]="getShipLink(o)"
-               class="boatoption"
-               height="25px"
-               width="25px">{{setting.titles[o]}}
-        </mat-option>
-      </mat-optgroup>
+<div *ngIf="setting.type === 'boat'"
+     class="setting boat">
+  <mat-select *ngIf="group[setting.name]"
+              [(ngModel)]="group[setting.name].value"
+              (selectionChange)="save()">
+    <mat-select-trigger>
+      <img *ngIf="group[setting.name].value !== undefined"
+           [src]="getShipLink(group[setting.name].value)"
+           [title]="setting.titles[group[setting.name].value]">
+    </mat-select-trigger>
+    <mat-optgroup *ngFor="let g of setting.groups"
+                  [label]="g.name">
+      <mat-option *ngFor="let o of g.options"
+                  [value]="o">
+        <img [src]="getShipLink(o)"
+             class="boatoption"
+             height="25px"
+             width="25px">{{setting.titles[o]}}
+      </mat-option>
+    </mat-optgroup>
+  </mat-select>
+</div>
+
+<ng-container *ngIf="setting.type === 'option'">
+  <mat-form-field class="setting">
+    <mat-label>{{setting.label}}</mat-label>
+    <mat-select [(value)]="group[setting.name].value"
+                (selectionChange)="save()"
+                [disabled]="setting.admin && !ss.admin">
+      <mat-option *ngFor="let option of setting.options; let i = index"
+                  [value]="i">{{option}}</mat-option>
     </mat-select>
-  </div>
-
-  <ng-container *ngSwitchCase="'option'">
-    <mat-form-field class="setting">
-      <mat-label>{{setting.label}}</mat-label>
-      <mat-select [(value)]="group[setting.name].value"
-                  (selectionChange)="save()"
-                  [disabled]="setting.admin && !ss.admin">
-        <mat-option *ngFor="let option of setting.options; let i = index"
-                    [value]="i">{{option}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-icon *ngIf="setting.advancedComponent"
-              title="Advanced"
-              (click)="openAdvanced()">settings</mat-icon>
-  </ng-container>
-
-
-  <div *ngSwitchCase="'button'"
-       class="setting">
-    <button *ngIf="!(setting.admin && !ss.admin)"
-            mat-raised-button
-            color="accent"
-            (click)="send()">{{setting.label}}</button>
-  </div>
-
-  <div *ngSwitchCase="'slider'"
-       class="setting">
-    <span class="label">{{setting.label}} ({{setting.stepLabels?.[group[setting.name].value] ||
-      group[setting.name].value}})</span>
-    <mat-slider [min]="setting.min"
-                [max]="setting.max"
-                [step]="setting.step"
-                [value]="group[setting.name].value"
-                [disabled]="setting.admin && !ss.admin"
-                (input)="group[setting.name].value=$event.value || 0; save()">
-    </mat-slider>
-  </div>
-
-  <div *ngSwitchCase="'checkbox'"
-       class="setting">
-    <mat-checkbox [(ngModel)]="group[setting.name].value"
-                  (change)="save()"
-                  [disabled]="setting.admin && !ss.admin">
-      <span [innerHTML]="setting.label"></span>
-    </mat-checkbox>
-  </div>
-
-  <mat-form-field *ngSwitchCase="'number'"
-                  class="setting">
-    <input matInput
-           [(ngModel)]="group[setting.name].value"
-           (change)="save()"
-           placeholder="Max Players"
-           type="number"
-           [min]="setting.min"
-           [max]="setting.max"
-           [disabled]="setting.admin && !ss.admin">
   </mat-form-field>
-
-  <div *ngSwitchDefault
-       class="setting">
-    <q-custom-map [group]="group"
-                  (save)="save()"
-                  [setting]="setting"
-                  [disabled]="setting.admin && !ss.admin">
-    </q-custom-map>
-  </div>
+  <mat-icon *ngIf="setting.advancedComponent"
+            title="Advanced"
+            (click)="openAdvanced()">settings</mat-icon>
 </ng-container>
+
+
+<div *ngIf="setting.type === 'button'"
+     class="setting">
+  <button *ngIf="!(setting.admin && !ss.admin)"
+          mat-raised-button
+          color="accent"
+          (click)="send()">{{setting.label}}</button>
+</div>
+
+<div *ngIf="setting.type === 'slider'"
+     class="setting">
+  <span class="label">{{setting.label}} ({{setting.stepLabels?.[group[setting.name].value] ||
+    group[setting.name].value}})</span>
+  <mat-slider [min]="setting.min"
+              [max]="setting.max"
+              [step]="setting.step"
+              [value]="group[setting.name].value"
+              [disabled]="setting.admin && !ss.admin"
+              (input)="group[setting.name].value=$event.value || 0; save()">
+  </mat-slider>
+</div>
+
+<div *ngIf="setting.type === 'checkbox'"
+     class="setting">
+  <mat-checkbox [(ngModel)]="group[setting.name].value"
+                (change)="save()"
+                [disabled]="setting.admin && !ss.admin || false">
+    <span [innerHTML]="setting.label"></span>
+  </mat-checkbox>
+</div>
+
+<div *ngIf="setting.type === 'customMap'"
+     class="setting">
+  <q-custom-map [group]="group"
+                (save)="save()"
+                [setting]="setting"
+                [disabled]="setting.admin && !ss.admin || false">
+  </q-custom-map>
+</div>

@@ -2,8 +2,63 @@
 import { OutCmd } from '../../ws-messages';
 import { BotSettingComponent } from '../bot-setting/bot-setting.component';
 
-export const Settings = {
-  startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' },
+interface BaseSetting {
+  readonly type: string;
+  readonly admin?: boolean;
+  readonly label?: string;
+  readonly id: number;
+  readonly group: string;
+  readonly name: string;
+  readonly advancedComponent?: any;
+  readonly trigger?: OutCmd;
+}
+
+interface ButtonSetting extends BaseSetting {
+  readonly type: 'button',
+  readonly trigger: OutCmd;
+  readonly data: string;
+}
+
+export interface BoatSetting extends BaseSetting {
+  readonly type: 'boat',
+  readonly trigger: OutCmd;
+  readonly titles: readonly (string | undefined)[];
+  readonly groups: readonly { name: string, options: readonly number[] }[];
+}
+
+interface SliderSetting extends BaseSetting {
+  readonly type: 'slider',
+  readonly min: number,
+  readonly max: number,
+  readonly step: number,
+  readonly stepLabels?: Record<number, string>;
+}
+
+export interface OptionSetting extends BaseSetting {
+  readonly type: 'option',
+  readonly options: readonly string[];
+  readonly trigger?: OutCmd;
+}
+
+interface CheckboxSetting extends BaseSetting {
+  readonly type: 'checkbox',
+}
+
+export interface CustomMapSetting extends BaseSetting {
+  readonly type: 'customMap' | 'tileSet' | 'structureSet',
+  readonly cmd: OutCmd,
+}
+
+export type Setting = ButtonSetting | BoatSetting | SliderSetting | OptionSetting | CheckboxSetting | CustomMapSetting;
+
+type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'speed' | 'lockAngle' | 'water' | 'showFps' |
+'maxFps' | 'spawnSide' | 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'soundMaster' |
+'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' |
+'cadeMap' | 'cadeTeams' | 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
+'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked';
+
+export const Settings: Record<SettingName, Setting> = {
+  startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
   nextBoat: {
     id: 1,
     group: 'boats',
@@ -31,10 +86,10 @@ export const Settings = {
     ],
   },
   mapScale: {
-    id: 2, group: 'graphics', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1,
+    id: 2, group: 'graphics', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1, name: 'mapScale',
   },
   speed: {
-    id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 1,
+    id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 1, name: 'speed',
   },
   lockAngle: {
     id: 22, group: 'controls', name: 'lockAngle', type: 'checkbox', label: 'Lock camera rotation',
@@ -51,6 +106,7 @@ export const Settings = {
   spawnSide: {
     id: 21,
     group: 'boats',
+    name: 'spawnSide',
     type: 'option',
     label: 'Spawn Side',
     trigger: OutCmd.SpawnSide,
@@ -59,7 +115,7 @@ export const Settings = {
     ],
   },
   jobberQuality: {
-    admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 100, step: 5,
+    admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 100, step: 5, name: 'jobberQuality',
   },
   cadeTurnTime: {
     // eslint-disable-next-line object-property-newline
@@ -102,10 +158,10 @@ export const Settings = {
     ],
   },
   cadeMaxPlayers: {
-    admin: true, id: 24, group: 'l/cade', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40,
+    admin: true, id: 24, group: 'l/cade', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40, step: 1,
   },
   cadeSpawnDelay: {
-    admin: true, id: 42, group: 'l/cade', name: 'spawnDelay', type: 'slider', label: 'Respawn Delay', min: 0, max: 5,
+    admin: true, id: 42, group: 'l/cade', name: 'spawnDelay', type: 'slider', label: 'Respawn Delay', min: 0, max: 5, step: 1,
   },
   cadeHotEntry: {
     admin: true, id: 26, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an<br>entry is in progress',
@@ -114,18 +170,19 @@ export const Settings = {
     admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList,
   },
   cadeTeams: {
-    admin: true, id: 43, group: 'l/cade', name: 'teams', type: 'slider', label: 'Teams', min: 2, max: 4,
+    admin: true, id: 43, group: 'l/cade', name: 'teams', type: 'slider', label: 'Teams', min: 2, max: 4, step: 1,
   },
   duckLvl: {
-    admin: true, id: 4, group: 'l/quacken', type: 'slider', label: 'Duck Level', min: 0, max: 11, step: 1,
+    admin: true, id: 4, group: 'l/quacken', type: 'slider', label: 'Duck Level', min: 0, max: 11, step: 1, name: 'duckLvl',
   },
   maxPlayers: {
-    admin: true, id: 5, group: 'l/quacken', type: 'slider', label: 'Max Players', min: 0, max: 13,
+    admin: true, id: 5, group: 'l/quacken', type: 'slider', label: 'Max Players', min: 0, max: 13, step: 1, name: 'maxPlayers',
   },
   publicMode: {
     admin: true,
     id: 6,
     group: 'l/quacken',
+    name: 'publicMode',
     type: 'option',
     label: 'Lobby Privacy',
     options: [
@@ -133,47 +190,48 @@ export const Settings = {
     ],
   },
   tileSet: {
-    admin: true, id: 7, group: 'l/quacken', type: 'tileSet', label: 'Tile Set', cmd: OutCmd.TileSetList,
+    admin: true, id: 7, group: 'l/quacken', type: 'tileSet', label: 'Tile Set', cmd: OutCmd.TileSetList, name: 'tileSet',
   },
   structureSet: {
-    admin: true, id: 8, group: 'l/quacken', type: 'structureSet', label: 'Structure Set', cmd: OutCmd.StructureSetList,
+    admin: true, id: 8, group: 'l/quacken', type: 'structureSet', label: 'Structure Set', cmd: OutCmd.StructureSetList, name: 'structureSet',
   },
   hotEntry: {
-    admin: true, id: 9, group: 'l/quacken', type: 'checkbox', label: 'Allow join while an<br>entry is in progress',
+    admin: true, id: 9, group: 'l/quacken', type: 'checkbox', label: 'Allow join while an<br>entry is in progress', name: 'hotEntry',
   },
   autoGen: {
-    admin: true, id: 10, group: 'l/quacken', type: 'checkbox', label: 'Generate new map<br>when a round starts',
+    admin: true, id: 10, group: 'l/quacken', type: 'checkbox', label: 'Generate new map<br>when a round starts', name: 'autoGen',
   },
   kbControls: {
-    id: 11, group: 'controls', type: 'checkbox', label: 'Enable keyboard<br>move entry',
+    id: 11, group: 'controls', type: 'checkbox', label: 'Enable keyboard<br>move entry', name: 'kbControls',
   },
   alwaysChat: {
-    id: 41, group: 'controls', type: 'checkbox', label: 'Always focus chat',
+    id: 41, group: 'controls', type: 'checkbox', label: 'Always focus chat', name: 'alwaysChat',
   },
   customMap: {
-    admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: OutCmd.MapList,
+    admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: OutCmd.MapList, name: 'customMap',
   },
   hideMoves: {
-    admin: true, id: 13, group: 'l/quacken', type: 'checkbox', label: 'Hide Moves',
+    admin: true, id: 13, group: 'l/quacken', type: 'checkbox', label: 'Hide Moves', name: 'hideMoves',
   },
   createType: {
     id: 14,
     group: 'l/create',
+    name: 'createType',
     type: 'option',
     options: [
       'Quacken', 'Spades', 'Cadesim', 'Sea Battle',
     ],
   },
   turnTime: {
-    admin: true, id: 15, group: 'l/spades', type: 'slider', label: 'Turn Time', min: 5, max: 30,
+    admin: true, id: 15, group: 'l/spades', type: 'slider', label: 'Turn Time', min: 5, max: 30, step: 1, name: 'turnTime',
   },
   playTo: {
-    admin: true, id: 16, group: 'l/spades', type: 'slider', label: 'Play To', min: 250, max: 1000, step: 50,
+    admin: true, id: 16, group: 'l/spades', type: 'slider', label: 'Play To', min: 250, max: 1000, step: 50, name: 'playTo',
   },
   watchers: {
-    admin: true, id: 17, group: 'l/spades', type: 'checkbox', label: 'Allow Watchers',
+    admin: true, id: 17, group: 'l/spades', type: 'checkbox', label: 'Allow Watchers', name: 'watchers',
   },
   updateLinked: {
-    id: 33, group: 'controls', type: 'checkbox', label: 'Update linked settings',
+    id: 33, group: 'controls', type: 'checkbox', label: 'Update linked settings', name: 'updateLinked',
   },
 };

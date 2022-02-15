@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { SettingMap } from '../settings.service';
 import { WsService } from '../../../app/ws.service';
+import { CustomMapSetting } from '../setting/settings';
 
 @Component({
   selector: 'q-custom-map',
@@ -10,7 +11,7 @@ import { WsService } from '../../../app/ws.service';
 })
 export class CustomMapComponent implements OnInit {
   @Input() group?: SettingMap;
-  @Input() setting: any;
+  @Input() setting!: CustomMapSetting;
   @Input() disabled = false;
   @Output() save = new EventEmitter();
 
@@ -20,6 +21,7 @@ export class CustomMapComponent implements OnInit {
   constructor(private ws: WsService) { }
 
   async ngOnInit(): Promise<void> {
+    if (!this.setting) console.error('CustomMapComponent requires setting input');
     const m = await this.ws.request(this.setting.cmd);
     for (const i of m) i.label = i.name + ' (' + i.username + ')';
     this.data = m;
