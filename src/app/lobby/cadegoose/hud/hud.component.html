@@ -15,7 +15,7 @@
              (dragend)="dragendCannon()"
              [draggable]="shots[i*2]"
              (dragover)="draggedMove < 4 || draggedMove >= 8"
-             (click)="addShot($event, i*2)">
+             (mouseup)="addShot($event, i*2)">
           <div class="bombslot token{{shots[i*2]}}"
                [class.unconfirmedShots]="!serverShots[i*2] !== !shots[i*2]"
                [class.blocked]="locked"></div>
@@ -31,7 +31,7 @@
              (dragend)="dragendCannon()"
              [draggable]="shots[i*2+1]"
              (dragover)="draggedMove < 4 || draggedMove >= 8"
-             (click)="addShot($event, i*2+1)">
+             (mouseup)="addShot($event, i*2+1)">
           <div class="bombslot token{{shots[i*2+1]}}"
                [class.blocked]="locked"
                [class.unconfirmedShots]="!serverShots[i*2+1] !== !shots[i*2+1]"></div>

@@ -7,6 +7,7 @@ interface JobberSetting extends Setting {
     Sail: number;
     Carp: number;
     Bilge: number;
+    Cannon: number;
     Maneuver: number;
   }
 }
@@ -19,13 +20,13 @@ interface JobberSetting extends Setting {
 export class JobberQualityComponent {
   JobberSetting = Settings.jobberQuality as SliderSetting;
   advanced = false;
-  sliders: (keyof JobberSetting['data'])[] = ['Sail', 'Carp', 'Bilge', 'Maneuver'];
+  sliders: (keyof JobberSetting['data'])[] = ['Sail', 'Carp', 'Bilge', 'Cannon', 'Maneuver'];
 
   constructor(
     @Inject('setting') public setting: JobberSetting,
     public ss: SettingsService,
   ) {
-    if (!this.setting.data) this.setting.data = { Sail: 70, Carp: 70, Bilge: 70, Maneuver: 70 };
+    if (!this.setting.data) this.setting.data = { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
     this.advanced = this.setting.value > 100;
   }
 
