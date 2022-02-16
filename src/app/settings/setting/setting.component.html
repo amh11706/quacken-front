@@ -21,8 +21,9 @@
   </mat-select>
 </div>
 
-<ng-container *ngIf="setting.type === 'option'">
-  <mat-form-field class="setting">
+<div *ngIf="setting.type === 'option'"
+     class="setting">
+  <mat-form-field>
     <mat-label>{{setting.label}}</mat-label>
     <mat-select [(value)]="settingValue.value"
                 (selectionChange)="save()"
@@ -34,7 +35,7 @@
   <mat-icon *ngIf="setting.advancedComponent"
             title="Advanced"
             (click)="openAdvanced()">settings</mat-icon>
-</ng-container>
+</div>
 
 
 <div *ngIf="setting.type === 'button'"
@@ -56,6 +57,9 @@
               [disabled]="setting.admin && !ss.admin"
               (input)="settingValue.value=$event.value || 0; save()">
   </mat-slider>
+  <mat-icon *ngIf="setting.advancedComponent"
+            title="Advanced"
+            (click)="openAdvanced()">settings</mat-icon>
 </div>
 
 <div *ngIf="setting.type === 'checkbox'"

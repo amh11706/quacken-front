@@ -17,7 +17,10 @@ mat-checkbox {
 
 mat-icon {
   position: absolute;
-  right: 14px;
+  right: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
   font-size: 18px;
   cursor: pointer;
 }
@@ -32,6 +35,7 @@ button {
 }
 
 .setting {
+  display: inline-block;
   flex: 1 1 0;
   position: relative;
   margin-bottom: 8px;

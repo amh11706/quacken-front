@@ -1,6 +1,7 @@
 /* eslint-disable no-sparse-arrays */
 import { OutCmd } from '../../ws-messages';
 import { BotSettingComponent } from '../bot-setting/bot-setting.component';
+import { JobberQualityComponent } from '../jobber-quality/jobber-quality.component';
 
 interface BaseSetting {
   readonly type: string;
@@ -26,7 +27,7 @@ export interface BoatSetting extends BaseSetting {
   readonly groups: readonly { name: string, options: readonly number[] }[];
 }
 
-interface SliderSetting extends BaseSetting {
+export interface SliderSetting extends BaseSetting {
   readonly type: 'slider',
   readonly min: number,
   readonly max: number,
@@ -115,7 +116,10 @@ export const Settings: Record<SettingName, Setting> = {
     ],
   },
   jobberQuality: {
-    admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 100, step: 5, name: 'jobberQuality',
+    // eslint-disable-next-line object-property-newline
+    admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 105, step: 5, name: 'jobberQuality',
+    stepLabels: { 105: 'Advanced' },
+    advancedComponent: JobberQualityComponent,
   },
   cadeTurnTime: {
     // eslint-disable-next-line object-property-newline

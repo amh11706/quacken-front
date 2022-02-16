@@ -10,7 +10,6 @@ import { Setting } from '../settings.service';
 export class AdvancedComponent {
   @Input() component: any;
   @Input() setting = {} as Setting;
-  @Input() save?: () => void;
   customInjector: Injector;
 
   constructor(injector: Injector, @Inject(MAT_DIALOG_DATA) data: { component: any, setting: Setting }) {
@@ -19,7 +18,6 @@ export class AdvancedComponent {
       Injector.create({
         providers: [
           { provide: 'setting', useValue: this.setting },
-          { provide: 'save', useValue: this.save },
         ],
         parent: injector,
       });

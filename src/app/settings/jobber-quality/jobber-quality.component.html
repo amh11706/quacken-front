@@ -1,0 +1,31 @@
+<mat-checkbox [(ngModel)]="advanced"
+              (change)="updateAdvanced()"
+              [disabled]="JobberSetting.admin && !ss.admin || false">
+  <span>Advanced</span>
+</mat-checkbox>
+
+<div *ngIf="!advanced; else advancedSliders"
+     class="setting">
+  <span class="label">{{JobberSetting.label}} ({{setting.value}})</span>
+  <mat-slider [min]="JobberSetting.min"
+              [max]="100"
+              [step]="JobberSetting.step"
+              [value]="setting.value"
+              [disabled]="JobberSetting.admin && !ss.admin"
+              (input)="setting.value=$event.value || 0">
+  </mat-slider>
+</div>
+
+<ng-template #advancedSliders>
+  <div *ngFor="let slider of sliders"
+       class="setting">
+    <span class="label">{{slider}} ({{setting.data[slider] > 100 ? 'Unlimited' : setting.data[slider]}})</span>
+    <mat-slider [min]="0"
+                [max]="105"
+                [step]="5"
+                [value]="setting.data[slider]"
+                [disabled]="JobberSetting.admin && !ss.admin"
+                (input)="setting.data[slider]=$event.value || 0">
+    </mat-slider>
+  </div>
+</ng-template>

@@ -1,7 +1,6 @@
 <mat-form-field class="setting">
   <mat-label>{{BotSetting.label}}</mat-label>
   <mat-select [(value)]="setting.value"
-              (selectionChange)="save()"
               [disabled]="BotSetting.admin && !ss.admin">
     <mat-option *ngFor="let option of BotSetting.options; let i = index"
                 [value]="i">{{option}}</mat-option>

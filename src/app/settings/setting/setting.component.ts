@@ -58,17 +58,16 @@ export class SettingComponent {
   }
 
   openAdvanced(): void {
-    const copy = { ...this.group[this.setting.name] };
+    const copy: SettingPartial = JSON.parse(JSON.stringify(this.settingValue));
     this.dialog.open(AdvancedComponent, {
       data: {
         component: this.setting.advancedComponent,
         setting: copy,
-        save: this.save.bind(this),
       },
-    }).afterClosed().subscribe((value: boolean) => {
-      if (!value) return;
+    }).afterClosed().subscribe((value: string) => {
+      if (value !== 'true') return;
       // only assign the value if the user clicked save.
-      Object.assign(this.group[this.setting.name], copy);
+      Object.assign(this.settingValue, copy);
       this.save();
     });
   }
@@ -79,8 +78,7 @@ export class SettingComponent {
   }
 
   save(): void {
-    const newSetting = this.group[this.setting.name];
-    if (!newSetting) return;
+    const newSetting = this.settingValue;
     if (this.setting.type === 'slider') {
       if (newSetting.value > this.setting.max) newSetting.value = this.setting.max;
       else if (newSetting.value < this.setting.min) newSetting.value = this.setting.min;
@@ -94,7 +92,9 @@ export class SettingComponent {
         name: this.setting.name,
         value: +newSetting.value,
         group: this.setting.group,
-        data: this.setting.type === 'slider' && this.setting.stepLabels ? this.setting.stepLabels?.[newSetting.value] : newSetting.data,
+        data: this.setting.type === 'slider' && typeof newSetting.data !== 'object' && this.setting.stepLabels
+          ? this.setting.stepLabels?.[newSetting.value]
+          : newSetting.data,
       });
       if (this.setting.trigger) {
         this.ws.send(this.setting.trigger, +newSetting.value);

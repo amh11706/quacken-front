@@ -25,6 +25,7 @@ import { ExitPromptComponent } from './key-binding/exit-prompt/exit-prompt.compo
 import { CustomMapComponent } from './custom-map/custom-map.component';
 import { BotSettingComponent } from './bot-setting/bot-setting.component';
 import { AdvancedComponent } from './advanced/advanced.component';
+import { JobberQualityComponent } from './jobber-quality/jobber-quality.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AdvancedComponent } from './advanced/advanced.component';
     CustomMapComponent,
     BotSettingComponent,
     AdvancedComponent,
+    JobberQualityComponent,
   ],
   imports: [
     CommonModule,
