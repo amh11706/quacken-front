@@ -11,7 +11,7 @@
            class="moverow">
         <div class="leftbombs"
              (drop)="dropCannon(i*2)"
-             (dragstart)="dragCannon(shots[i*2], i*2)"
+             (dragstart)="dragCannon(i*2)"
              (dragend)="dragendCannon()"
              [draggable]="shots[i*2]"
              (dragover)="draggedMove < 4 || draggedMove >= 8"
@@ -21,13 +21,13 @@
                [class.blocked]="locked"></div>
           <div *ngIf="myBoat.maxShots === 2"
                class="bombslot"
-               [class.token1]="shots[i*2] === 2 || shots[i*2] > 5"
-               [class.unconfirmedShots]="!(2-serverShots[i*2]) !== !(2-shots[i*2])"
+               [class.token1]="shots[i*2] === 2 || (shots[i*2] || 0) > 5"
+               [class.unconfirmedShots]="!(2-(serverShots[i*2] || 0)) !== !(2-(shots[i*2]|| 0))"
                [class.blocked]="locked"></div>
         </div>
         <div class="rightbombs"
              (drop)="dropCannon(i*2+1)"
-             (dragstart)="dragCannon(shots[i*2+1], i*2+1)"
+             (dragstart)="dragCannon(i*2+1)"
              (dragend)="dragendCannon()"
              [draggable]="shots[i*2+1]"
              (dragover)="draggedMove < 4 || draggedMove >= 8"
@@ -37,9 +37,9 @@
                [class.unconfirmedShots]="!serverShots[i*2+1] !== !shots[i*2+1]"></div>
           <div *ngIf="myBoat.maxShots === 2"
                class="bombslot"
-               [class.token1]="shots[i*2+1] === 2 || shots[i*2+1] > 5"
+               [class.token1]="shots[i*2+1] === 2 || (shots[i*2+1] || 0) > 5"
                [class.blocked]="locked"
-               [class.unconfirmedShots]="!(2-serverShots[i*2+1]) !== !(2-shots[i*2+1])"></div>
+               [class.unconfirmedShots]="!(2-(serverShots[i*2+1] || 0)) !== !(2-(shots[i*2+1] || 0))"></div>
         </div>
 
         <div class="move"
@@ -81,7 +81,7 @@
       <div id="cannons">
         <div class="bombempty"
              [draggable]="lastTick.tp - usingCannons > 0"
-             (dragstart)="dragCannon(1)"
+             (dragstart)="dragCannon(8, 1)"
              [class.bombmove]="lastTick.tp - usingCannons > 0"></div><br>
         <span id="cannontext">{{lastTick.tp - usingCannons}}X</span>
       </div>
@@ -95,7 +95,7 @@
           <br>
           <div class="move move1"
                [title]="tokenStrings[0]">
-            <img [style.opacity]="haveMoves[0] > usingMoves[0] ? 1 : 0"
+            <img [style.opacity]="(haveMoves[0] || 0) > (usingMoves[0] || 0) ? 1 : 0"
                  name="left"
                  id="tile1"
                  draggable="true"
@@ -103,7 +103,7 @@
                  (dragstart)="drag(1)">
           </div>
           <br>
-          {{haveMoves[0] - usingMoves[0]}}X
+          {{(haveMoves[0] || 0) - (usingMoves[0] || 0)}}X
         </div>
         <div>
           <mat-radio-button [style.paddingLeft]="'10px'"
@@ -113,7 +113,7 @@
           <br>
           <div class="move move2"
                [title]="tokenStrings[1]">
-            <img [style.opacity]="haveMoves[1] > usingMoves[1] ? 1 : 0"
+            <img [style.opacity]="(haveMoves[1] || 0) > (usingMoves[1] || 0) ? 1 : 0"
                  name="forward"
                  id="tile2"
                  draggable="true"
@@ -121,7 +121,7 @@
                  (dragstart)="drag(2)">
           </div>
           <br>
-          {{haveMoves[1] - usingMoves[1]}}X
+          {{(haveMoves[1] || 0) - (usingMoves[1] || 0)}}X
         </div>
         <div>
           <mat-radio-button [style.paddingLeft]="'10px'"
@@ -131,7 +131,7 @@
           <br>
           <div class="move move3"
                [title]="tokenStrings[2]">
-            <img [style.opacity]="haveMoves[2] > usingMoves[2] ? 1 : 0"
+               <img [style.opacity]="(haveMoves[2] || 0) > (usingMoves[2] || 0) ? 1 : 0"
                  name="right"
                  id="tile3"
                  draggable="true"
@@ -139,7 +139,7 @@
                  (dragstart)="drag(3)">
           </div>
           <br>
-          {{haveMoves[2] - usingMoves[2]}}X
+          {{(haveMoves[2] || 0) - (usingMoves[2] || 0)}}X
         </div>
       </mat-radio-group>
     </div>
@@ -157,19 +157,19 @@
            [title]="m.title + ' - ' + (lastTick.attr[i] === 200 ? 100 : (lastTick.attr[i] || 0)%100) + '%'"
            [class.want]="wantManeuver === i"
            [class]="m.class">
-        <img *ngIf="lastTick.attr[i] - usingManeuvers[i] > 0"
+        <img *ngIf="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) > 0"
              class="maneuver"
              draggable="true"
              (dragstart)="dragManeuver(m.id)"
-             [class.usable]="lastTick.attr[i] - usingManeuvers[i] >= 100"
-             [style.maxHeight]="lastTick.attr[i] - usingManeuvers[i] + '%'"
+             [class.usable]="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) >= 100"
+             [style.maxHeight]="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) + '%'"
              src="./assets/images/arrow{{m.id}}.png">
-        <img *ngIf="lastTick.attr[i] - usingManeuvers[i] > 100"
+        <img *ngIf="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) > 100"
              class="maneuver"
              draggable="true"
              (dragstart)="dragManeuver(m.id + 1)"
-             [class.usable]="lastTick.attr[i] >= 200"
-             [style.maxHeight]="lastTick.attr[i] - 100 + '%'"
+             [class.usable]="(lastTick.attr[i] || 0) >= 200"
+             [style.maxHeight]="(lastTick.attr[i] || 0) - 100 + '%'"
              src="./assets/images/arrow{{m.id + 1}}.png">
       </div>
     </div>

@@ -1,8 +1,8 @@
 <q-twod-render [mapHeight]="mapHeight"
                [mapWidth]="mapWidth"
                [safeZone]="false"
-               [speed]="graphicSettings.speed.value"
-               [mapScale]="graphicSettings.mapScale.value"
+               [speed]="graphicSettings.speed?.value || 30"
+               [mapScale]="graphicSettings.mapScale?.value || 50"
                [graphicSettings]="graphicSettings"
                [myBoat]="myBoat"
                [hoveredTeam]="hoveredTeam"></q-twod-render>

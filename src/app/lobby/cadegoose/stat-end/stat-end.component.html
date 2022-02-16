@@ -27,7 +27,7 @@
             <ng-container *ngFor="let c of columns">
                 <tr *ngIf="pointValues[c.stat] && myScore.stats[c.stat]">
                     <td>{{c.title}}</td>
-                    <td>{{pointValues[c.stat] * Number(myScore.stats[c.stat])}}</td>
+                    <td>{{(pointValues[c.stat] || 0) * Number(myScore.stats[c.stat])}}</td>
                 </tr>
             </ng-container>
         </table>

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { SettingMap } from '../settings.service';
+import { SettingMap, SettingPartial } from '../settings.service';
 import { WsService } from '../../../app/ws.service';
 import { CustomMapSetting } from '../setting/settings';
 
@@ -10,7 +10,7 @@ import { CustomMapSetting } from '../setting/settings';
   styleUrls: ['./custom-map.component.scss'],
 })
 export class CustomMapComponent implements OnInit {
-  @Input() group?: SettingMap;
+  @Input() settingValue?: SettingPartial;
   @Input() setting!: CustomMapSetting;
   @Input() disabled = false;
   @Output() save = new EventEmitter();
@@ -29,7 +29,7 @@ export class CustomMapComponent implements OnInit {
   }
 
   preSave(): void {
-    const setting = this.group?.[this.setting.name];
+    const setting = this.settingValue;
     if (!setting) return;
     const selected = this.data.find(el => el.id === +setting.value);
     setting.data = selected?.label || 'Random';

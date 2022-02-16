@@ -62,9 +62,9 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
     const scroll = this.map.selectedTile.group === 'cgmaps' ? this.cadeScrollOrder : this.scrollOrder;
     const current = scroll.indexOf(this.map.selected);
     if (e.deltaY < 0) {
-      this.map.selected = scroll[current + 1] || scroll[0];
+      this.map.selected = scroll[current + 1] || scroll[0] || this.map.selected;
     } else {
-      this.map.selected = scroll[current - 1] || scroll[scroll.length - 1];
+      this.map.selected = scroll[current - 1] || scroll[scroll.length - 1] || this.map.selected;
     }
   }
 }

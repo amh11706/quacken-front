@@ -12,7 +12,7 @@ export class TimerComponent {
   seconds = 0.5;
   private timer?: number;
 
-  go(seconds: number): void {
+  go(seconds = 10): void {
     clearTimeout(this.timer);
     this.percent = 0;
     this.seconds = 0.5;

@@ -11,7 +11,7 @@
     <mat-select [(ngModel)]="map.tileSet.activeGroup">
       <mat-option *ngFor="let type of types; let i = index"
                   [value]="i">
-        {{type}} <span *ngIf="map.tiles[i]">({{map.tiles[i].length}})</span>
+        {{type}} <span *ngIf="map.tiles[i]">({{map.tiles[i]?.length}})</span>
       </mat-option>
     </mat-select>
   </mat-form-field>

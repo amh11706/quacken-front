@@ -32,7 +32,7 @@ export class Cannonball {
     const time = new Date().valueOf() + delay;
     this.group.add(new TWEEN.Tween(p)
       .to(
-        { x: p.x + decodeX[obj.dir] * obj.dis, z: p.z + decodeY[obj.dir] * obj.dis }
+        { x: p.x + (decodeX[obj.dir] || 0) * obj.dis, z: p.z + (decodeY[obj.dir] || 0) * obj.dis }
         , 3000 / Cannonball.speed * obj.dis,
       )
       .start(time)

@@ -19,7 +19,7 @@
               (click)="jump()">
         Stand Up
       </button>
-      <button *ngIf="!spot.ready && rotatedSpots[0].sId && rotatedSpots[1].sId && rotatedSpots[2].sId && rotatedSpots[3].sId"
+      <button *ngIf="!spot.ready && rotatedSpots[0]?.sId && rotatedSpots[1]?.sId && rotatedSpots[2]?.sId && rotatedSpots[3]?.sId"
               mat-raised-button
               (click)="ready()">
         Ready

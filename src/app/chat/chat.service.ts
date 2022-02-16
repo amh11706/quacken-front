@@ -58,7 +58,7 @@ export class ChatService {
         });
         if (!messageFound && cmd.params.length < 2 && params.length) cmd.params.push({ name: '', value: '' });
       }
-      this.selectedCommand = this.commands[0];
+      this.selectedCommand = this.commands[0] ?? this.selectedCommand;
     });
 
     this.ws.subscribe(InCmd.ChatMessage, (message: Message) => {
@@ -103,7 +103,8 @@ export class ChatService {
     const param = this.selectedCommand.params.find(p => p.name === 'message');
     if (param?.value) this.commandHistory.push(param.value);
     this.selectedCommand = this.commands.find(cmd => cmd.base === '/tell') || this.selectedCommand;
-    this.selectedCommand.params[0].value = name;
+    const newParam = this.selectedCommand.params[0];
+    if (newParam) newParam.value = name;
     this.kbs.emitAction(KeyActions.FocusChat);
   }
 

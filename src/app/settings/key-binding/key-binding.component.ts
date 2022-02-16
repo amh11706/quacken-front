@@ -52,11 +52,14 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
       const defaultGroup = DefaultBindings[k];
       const editGroup = this.actions[k];
       for (let i = 0; i < defaultGroup.length; i++) {
+        const activeBindings = activeGroup[i]?.bindings;
+        const defaultGroupBiindings = defaultGroup[i];
+        if (!activeBindings || !defaultGroupBiindings?.bindings) continue;
         const b: KeyBindingEditMode = {
-          ...defaultGroup[i],
-          bindings: [...activeGroup[i].bindings],
-          activeBindings: activeGroup[i].bindings,
-          defaultBindings: defaultGroup[i].bindings,
+          ...defaultGroupBiindings,
+          bindings: [...activeBindings],
+          activeBindings: activeBindings,
+          defaultBindings: defaultGroupBiindings.bindings,
           update: new Subject(),
           group: k,
         };
@@ -122,7 +125,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     const toSave: Record<KeyActions, [string, string]> = {} as any;
 
     const updateLinked = await this.ss.get('controls', 'updateLinked');
-    if (updateLinked.value) {
+    if (updateLinked?.value) {
       for (const binding of this.actions[this.group]) {
         if (!binding.links) continue;
         for (const link of binding.links) link.bindings = [...binding.bindings];
@@ -135,6 +138,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
       const set = this.actions[k];
       for (let i = 0; i < set.length; i++) {
         const binding = set[i];
+        if (!binding) continue;
         binding.activeBindings = [...binding.bindings];
         toActivate[k].push({
           action: binding.action,
@@ -179,12 +183,13 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     for (const binding of this.actions[this.group]) {
       let changed = false;
       for (let i = 0; i < binding.bindings.length; i++) {
-        if (binding.defaultBindings[i] === binding.bindings[i]) continue;
-        const conflict = this.takenKeys.get(binding.defaultBindings[i]);
-        if (!conflict || conflict[0].group === binding.group) {
-          this.takenKeys.delete(binding.bindings[i]);
-          binding.bindings[i] = binding.defaultBindings[i];
-          this.takenKeys.set(binding.bindings[i], [binding]);
+        const defaultBinding = binding.defaultBindings[i];
+        if (!defaultBinding || defaultBinding === binding.bindings[i]) continue;
+        const conflict = this.takenKeys.get(defaultBinding);
+        if (!conflict || conflict[0]?.group === binding.group) {
+          this.takenKeys.delete(binding.bindings[i] || '');
+          binding.bindings[i] = defaultBinding;
+          this.takenKeys.set(defaultBinding, [binding]);
           changed = true;
         }
       }

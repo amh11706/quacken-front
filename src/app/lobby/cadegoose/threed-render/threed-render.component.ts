@@ -230,7 +230,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private render = () => {
     if (!this.alive || !this.controls) return;
-    this.bs.speed = this.graphicSettings.speed.value || 15;
+    this.bs.speed = this.graphicSettings.speed?.value || 15;
     BoatRender.speed = this.bs.speed;
     const time = new Date().valueOf();
     TWEEN.update(time);
@@ -240,7 +240,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (time - this.lastFrame > 50 && this.slowFrames < 50) this.slowFrames++;
     else if (this.slowFrames > 0) this.slowFrames /= 2;
     this.lastFrame = time;
-    if (this.slowFrames > 5) this.graphicSettings.water.value = 0;
+    if (this.slowFrames > 5 && this.graphicSettings.water) this.graphicSettings.water.value = 0;
 
     if (this.graphicSettings.water && !this.water) this.buildWater();
     if (!this.graphicSettings.water && this.water) {
@@ -313,10 +313,10 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     const pmremGenerator = new PMREMGenerator(this.renderer);
 
     const uniforms = sky.material.uniforms;
-    uniforms.turbidity.value = sunSettings.turbidity;
-    uniforms.rayleigh.value = sunSettings.rayleigh;
-    uniforms.mieCoefficient.value = sunSettings.mieCoefficient;
-    uniforms.mieDirectionalG.value = sunSettings.mieDirectionalG;
+    if (uniforms.turbidity) uniforms.turbidity.value = sunSettings.turbidity;
+    if (uniforms.rayleigh) uniforms.rayleigh.value = sunSettings.rayleigh;
+    if (uniforms.mieCoefficient) uniforms.mieCoefficient.value = sunSettings.mieCoefficient;
+    if (uniforms.mieDirectionalG) uniforms.mieDirectionalG.value = sunSettings.mieDirectionalG;
 
     const theta = Math.PI * (sunSettings.inclination - 0.5);
     const phi = 2 * Math.PI * (sunSettings.azimuth - 0.5);
@@ -325,12 +325,13 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     sun.y = Math.sin(phi) * Math.sin(theta);
     sun.z = Math.sin(phi) * Math.cos(theta);
 
-    uniforms.sunPosition.value.copy(sun);
+    uniforms.sunPosition?.value.copy(sun);
 
     this.scene.environment = pmremGenerator.fromScene(sky as any).texture;
   }
 
-  private loadObj(obj: ObstacleConfig): Promise<GLTF> {
+  private loadObj(obj?: ObstacleConfig): Promise<GLTF> {
+    if (!obj) return Promise.reject(new Error('Object not defined'));
     return new Promise((resolve) => {
       const loader = new GLTFLoader();
       loader.load('assets/models/' + obj.path + '/scene.' + (obj.ext || 'glb'), (gltf) => {
@@ -398,8 +399,10 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.bs.flags = [];
 
     for (let y = 0; y < map.length; y++) {
-      for (let x = 0; x < map[y].length; x++) {
-        const tile = map[y][x];
+      const row = map[y];
+      if (!row) break;
+      for (let x = 0; x < row.length; x++) {
+        const tile = row[x];
         if (!tile) continue;
         if (obstacleModels[tile]) {
           // load 3d

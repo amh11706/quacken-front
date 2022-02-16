@@ -23,7 +23,7 @@ export class StructureSetComponent extends TileSetComponent implements OnInit, O
     this.map.structures = this.map.structures.filter(structure => {
       return structure.id !== msg.id;
     });
-    this.map.selectedTile = this.map.structures[0] || { id: null, name: '', undos: [], redos: [] };
+    this.map.selectedTile = this.map.structures[0] || { id: null, name: '', undos: [], redos: [] } as unknown as DBTile;
   }
 
   newFeature(): void {

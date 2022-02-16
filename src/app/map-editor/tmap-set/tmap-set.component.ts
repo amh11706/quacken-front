@@ -21,7 +21,7 @@ export class TmapSetComponent extends TileSetComponent {
     this.map.tmaps = this.map.tmaps.filter(map => {
       return map.id !== msg.id;
     });
-    this.map.selectedTile = this.map.tmaps[0] || { id: null, name: '', undos: [], redos: [] };
+    this.map.selectedTile = this.map.tmaps[0] || { id: null, name: '', undos: [], redos: [] } as unknown as DBTile;
   }
 
   select(tile: DBTile): void {

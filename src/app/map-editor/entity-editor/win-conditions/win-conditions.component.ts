@@ -33,7 +33,7 @@ export class WinConditionsComponent implements OnChanges {
   }
 
   addCondition(): void {
-    this.winConditions.push({ id: this.conditions[0].id, value: 0, type: 0 });
+    this.winConditions.push({ id: this.conditions[0]?.id || 0, value: 0, type: 0 });
     if (this.tile) this.tile.unsaved = true;
   }
 

@@ -127,7 +127,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private gotList(list: { [key: string]: DBTile[] }) {
     this.mapData = list;
     const tile = this.shown;
-    this.options = list[tile?.group ?? 'maps'];
+    this.options = list[tile?.group ?? 'maps'] ?? this.options;
     if (tile && this.options) {
       for (const o of this.options) {
         if (o.id === tile.id) {
@@ -151,11 +151,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
     for (const t of tileSet) {
       if (!t.type) t.type = 0;
       if (!tiles[t.type]) tiles[t.type] = [t];
-      else tiles[t.type].push(t);
+      else tiles[t.type]?.push(t);
     }
     this.map.selectedTile = tileSet[0] || {
       id: null, name: '', undos: [], redos: [], tags: [],
-    };
+    } as unknown as DBTile;
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
@@ -172,7 +172,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.structureSet.data = [[]];
     this.map.selectedTile = structureSet[0] || {
       id: null, name: '', undos: [], redos: [], tags: [],
-    };
+    } as unknown as DBTile;
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
@@ -189,7 +189,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.tmapSet.data = [[]];
     this.map.selectedTile = tmaps[0] || {
       id: null, name: '', undos: [], redos: [], tags: [],
-    };
+    } as unknown as DBTile;
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
@@ -270,7 +270,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     if (msg) {
-      this.mapData[msg.group].push(msg);
+      this.mapData[msg.group]?.push(msg);
       tile.id = msg.id;
       this.selected = tile.id;
       this.success = this.groups[tile.group] + ' Created!';
@@ -299,7 +299,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   updateOptions(): void {
     const tile = this.shown || this.map.selectedTile;
-    this.options = this.mapData[tile.group];
+    this.options = this.mapData[tile.group] ?? this.options;
     this.selected = 'new';
     this.select();
   }

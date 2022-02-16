@@ -20,7 +20,7 @@
           <img [src]="getShipLink(boatType)"
                [title]="Ships.titles[boatType]">
         </mat-select-trigger>
-        <mat-option *ngFor="let o of Ships.groups[0].options"
+        <mat-option *ngFor="let o of Ships.groups[0]?.options"
                     [value]="o">
           <img [src]="getShipLink(o)"
                class="boatoption"
@@ -49,7 +49,7 @@
           <img [src]="getShipLink(boatType)"
                [title]="Ships.titles[boatType]">
         </mat-select-trigger>
-        <mat-option *ngFor="let o of Ships.groups[0].options"
+        <mat-option *ngFor="let o of Ships.groups[0]?.options"
                     [value]="o">
           <img [src]="getShipLink(o)"
                class="boatoption"

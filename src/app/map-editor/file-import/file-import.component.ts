@@ -41,8 +41,8 @@ export class FileImportComponent {
   async process(): Promise<void> {
     this.mapErrors = [];
     for (let i = 0; i < this.uploader.queue.length; i++) {
-      const fileItem = this.uploader.queue[i]._file;
-      if (fileItem.size > 10000) {
+      const fileItem = this.uploader.queue[i]?._file;
+      if (fileItem && fileItem.size > 10000) {
         window.alert('Each File should be less than 10 KB of size.');
         return;
       }
@@ -62,7 +62,7 @@ export class FileImportComponent {
         this.mapErrors.push(prom.error); // do something with errors
       } else {
         if (this.mapData[prom.group]) {
-          this.mapData[prom.group].push(prom);
+          this.mapData[prom.group]?.push(prom);
         }
       }
     }
@@ -70,7 +70,7 @@ export class FileImportComponent {
   }
 
   convert(mapData: string): number[][] {
-    const rows = mapData.split('\n').slice(0, 36).map(function(x) { return x.split(',').map(v => mapConversion[+v]); });
+    const rows = mapData.split('\n').slice(0, 36).map(function(x) { return x.split(',').map(v => mapConversion[+v] || 0); });
     while (rows.length > 36) rows.pop();
     return rows;
   }

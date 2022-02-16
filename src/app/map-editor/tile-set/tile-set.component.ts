@@ -50,9 +50,9 @@ export class TileSetComponent implements OnInit, OnDestroy {
   protected handleDelete(msg: DBTile): void {
     if (!this.map?.tiles) return;
     this.pending = false;
-    this.map.tiles[msg.type] = this.map.tiles[msg.type].filter((tile: DBTile) => {
+    this.map.tiles[msg.type] = this.map.tiles[msg.type]?.filter((tile: DBTile) => {
       return tile.id !== msg.id;
-    });
+    }) ?? [];
     this.map.selectedTile = { id: 0, group: 'maps', type: 0, name: '', undos: [], redos: [], tags: [] };
   }
 
@@ -84,7 +84,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
   editTile(): void {
     const groups: { [key: string]: MapGroups } = { tile: 'tiles', structure: 'structures', tmap: 'tmaps' };
     if (!this.map?.selectedTile) return;
-    this.map.selectedTile.group = groups[this.group];
+    this.map.selectedTile.group = groups[this.group] ?? this.map.selectedTile.group;
     this.map.settingsOpen = true;
     this.map.tileSettings = true;
   }

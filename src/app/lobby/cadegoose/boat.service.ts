@@ -177,7 +177,8 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     for (let i = 0; i < this.flags.length; i++) {
       const f = this.flagData[i];
       if (!f) continue;
-      this.flags[i].material = flagMats[f.t as keyof typeof flagMats];
+      const flag = this.flags[i];
+      if (flag) flag.material = flagMats[f.t as keyof typeof flagMats];
       if (f.cs) for (const id of f.cs) this._boats[id]?.render?.flags.push({ p: f.p, t: f.t });
     }
     for (const boat of this.boats) {
@@ -344,7 +345,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       if (!prom) continue;
       boatUpdates.push(prom.then(gltf => {
         let newBoat = this._boats[boat.id];
-        if (newBoat.render && boat.render !== newBoat.render) newBoat = this._boats[-boat.id];
+        if (newBoat?.render && boat.render !== newBoat.render) newBoat = this._boats[-boat.id];
         if (!this.camera || !newBoat || newBoat.render) return;
         boat.render = new BoatRender(boat, gltf).scaleHeader(this.camera);
         this.scene?.add(boat.render.obj);

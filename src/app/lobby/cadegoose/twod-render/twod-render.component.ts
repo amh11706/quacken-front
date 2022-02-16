@@ -99,7 +99,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     GuBoat.widthOffset = this.mapWidth - 1;
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t) => {
       for (let i = 0; i < this.flags.length; i++) {
-        this.flags[i].t = t.flags[i].t;
+        const flag = this.flags[i];
+        if (flag) flag.t = t.flags[i].t;
       }
       this.colorFlags();
     }));
@@ -163,7 +164,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     for (const f of this.flags) {
       if (f.points === undefined) continue;
       const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
-      const offset = FlagColorOffsets[team] ?? FlagColorOffsets[99];
+      const offset = FlagColorOffsets[team] ?? FlagColorOffsets[99] ?? 9;
       const pixel = FlagData.orientations[(f.points + offset).toString() as flagIndex];
       f.sprite.imgPosition = `-${pixel.x}px -${pixel.y}px`;
       f.sprite.orientation = pixel;
@@ -228,7 +229,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         const yOffset = (-x + y) * 24;
         if (this.safeZone && (y > 32 || y < 3)) this.sz.draw(ctx, 0, xOffset, yOffset);
         else this.water.draw(ctx, 0, xOffset, yOffset);
-        const tile = map[y][x];
+        const tile = map[y]?.[x];
         if (!tile) continue;
         else if ((tile >= 21 && tile <= 23) || tile === 50 || tile === 51) this.addObstacles(x, y, tile, flags);
         else if (tile > 8) this.whirl.draw(ctx, (tile - 1) % 4, xOffset, yOffset);

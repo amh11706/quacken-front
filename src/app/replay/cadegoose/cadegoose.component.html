@@ -52,9 +52,9 @@
                [style.transform]="'translateX(' + boat.getDamage() / 2 + 'px)'"></div>
         </div>
         <div class="bilge"
-             title="{{boatTicks[boat.id].b || 0}}%">
+             title="{{boatTicks[boat.id]?.b || 0}}%">
           <div class="bilgebar"
-               [style.transform]="'translateX(' + boatTicks[boat.id].b / 2 + 'px)'"></div>
+               [style.transform]="'translateX(' + (boatTicks[boat.id]?.b || 0) / 2 + 'px)'"></div>
         </div>
       </ng-container>
     </button>

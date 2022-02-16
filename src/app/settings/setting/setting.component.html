@@ -1,12 +1,12 @@
 <div *ngIf="setting.type === 'boat'"
      class="setting boat">
-  <mat-select *ngIf="group[setting.name]"
-              [(ngModel)]="group[setting.name].value"
+  <mat-select *ngIf="settingValue"
+              [(ngModel)]="settingValue.value"
               (selectionChange)="save()">
     <mat-select-trigger>
-      <img *ngIf="group[setting.name].value !== undefined"
-           [src]="getShipLink(group[setting.name].value)"
-           [title]="setting.titles[group[setting.name].value]">
+      <img *ngIf="settingValue.value !== undefined"
+           [src]="getShipLink(settingValue.value)"
+           [title]="setting.titles[settingValue.value]">
     </mat-select-trigger>
     <mat-optgroup *ngFor="let g of setting.groups"
                   [label]="g.name">
@@ -24,7 +24,7 @@
 <ng-container *ngIf="setting.type === 'option'">
   <mat-form-field class="setting">
     <mat-label>{{setting.label}}</mat-label>
-    <mat-select [(value)]="group[setting.name].value"
+    <mat-select [(value)]="settingValue.value"
                 (selectionChange)="save()"
                 [disabled]="setting.admin && !ss.admin">
       <mat-option *ngFor="let option of setting.options; let i = index"
@@ -47,20 +47,20 @@
 
 <div *ngIf="setting.type === 'slider'"
      class="setting">
-  <span class="label">{{setting.label}} ({{setting.stepLabels?.[group[setting.name].value] ||
-    group[setting.name].value}})</span>
+  <span class="label">{{setting.label}} ({{setting.stepLabels?.[settingValue.value] ||
+    settingValue.value}})</span>
   <mat-slider [min]="setting.min"
               [max]="setting.max"
               [step]="setting.step"
-              [value]="group[setting.name].value"
+              [value]="settingValue.value"
               [disabled]="setting.admin && !ss.admin"
-              (input)="group[setting.name].value=$event.value || 0; save()">
+              (input)="settingValue.value=$event.value || 0; save()">
   </mat-slider>
 </div>
 
 <div *ngIf="setting.type === 'checkbox'"
      class="setting">
-  <mat-checkbox [(ngModel)]="group[setting.name].value"
+  <mat-checkbox [(ngModel)]="settingValue.value"
                 (change)="save()"
                 [disabled]="setting.admin && !ss.admin || false">
     <span [innerHTML]="setting.label"></span>
@@ -69,7 +69,7 @@
 
 <div *ngIf="setting.type === 'customMap'"
      class="setting">
-  <q-custom-map [group]="group"
+  <q-custom-map [settingValue]="settingValue"
                 (save)="save()"
                 [setting]="setting"
                 [disabled]="setting.admin && !ss.admin || false">

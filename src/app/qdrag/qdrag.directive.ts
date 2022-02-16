@@ -86,8 +86,10 @@ export class QdragDirective implements OnInit, OnDestroy {
   }
 
   private touchStart = (event: TouchEvent) => {
-    this.startX = event.touches[0].clientX;
-    this.startY = event.touches[0].clientY;
+    const touch = event.touches[0];
+    if (!touch) return;
+    this.startX = touch.clientX;
+    this.startY = touch.clientY;
     document.addEventListener('touchmove', this.touchMove);
     document.addEventListener('touchcancel', this.touchEnd);
     document.addEventListener('touchend', this.touchEnd);
@@ -103,6 +105,7 @@ export class QdragDirective implements OnInit, OnDestroy {
 
   private touchMove = (event: TouchEvent) => {
     const touch = event.touches[0];
+    if (!touch) return;
     this.offsetX += (touch.clientX - this.startX) / this.scale;
     this.offsetY += (touch.clientY - this.startY) / this.scale;
     this.startX = touch.clientX;

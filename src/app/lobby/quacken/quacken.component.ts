@@ -5,7 +5,7 @@ import { Settings } from '../../settings/setting/settings';
 import { InCmd, Internal } from '../../ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { WsService } from '../../ws.service';
-import { SettingsService, SettingMap } from '../../settings/settings.service';
+import { SettingsService, SettingPartial } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
@@ -36,8 +36,8 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   map: number[][] = [];
-  graphicSettings: SettingMap = { mapScale: { value: 50 }, speed: { value: 10 } };
-  controlSettings: SettingMap = { kbControls: { value: 1 } };
+  graphicSettings = { mapScale: { value: 50 } as SettingPartial, speed: { value: 10 } as SettingPartial };
+  controlSettings = { kbControls: { value: 1 } as SettingPartial };
   myBoat = new Boat('');
   protected sub = new Subscription();
 
@@ -71,10 +71,13 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   async getSettings(): Promise<void> {
-    [this.graphicSettings, this.controlSettings] = await Promise.all([
+    const [graphicSettings, controlSettings] = await Promise.all([
       this.ss.getGroup('graphics'),
       this.ss.getGroup('controls'),
     ]);
+
+    if (graphicSettings.mapScale && graphicSettings.speed) this.graphicSettings = graphicSettings as this['graphicSettings'];
+    if (controlSettings.kbControls) this.controlSettings = controlSettings as this['controlSettings'];
   }
 
   protected setMapB64(map: string): void {
@@ -82,8 +85,10 @@ export class QuackenComponent implements OnInit, OnDestroy {
     const bString = window.atob(map);
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
+      const row = this.map[y];
+      if (!row) break;
       for (let x = 0; x < this.mapWidth; x++) {
-        this.map[y][x] = bString.charCodeAt(i);
+        row[x] = bString.charCodeAt(i);
         i++;
       }
     }

@@ -53,12 +53,12 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   createLobby(): void {
-    this.createGroup.createType = this.settings.createType;
+    this.createGroup.createType = this.settings.createType ?? this.createGroup.createType;
     this.ws.send(OutCmd.LobbyCreate, this.createGroup);
     this.created = true;
   }
 
   async changeType(): Promise<void> {
-    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType.value], true);
+    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType?.value || 0], true);
   }
 }

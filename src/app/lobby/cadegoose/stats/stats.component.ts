@@ -48,13 +48,14 @@ export class StatsComponent implements OnChanges {
     this.teams = [];
     for (const row of Object.values(this.stats)) {
       const s = [...row.stats];
-      if (s[Stat.ShotsFired]) s[Stat.ShotsHit] += ` (${Math.round(+s[Stat.ShotsHit] / +s[Stat.ShotsFired] * 100)}%)`;
+      const shotsFired = s[Stat.ShotsFired];
+      if (shotsFired) s[Stat.ShotsHit] += ` (${Math.round(+(s[Stat.ShotsHit] || 0) / +shotsFired * 100)}%)`;
       while (this.teams.length <= row.team) this.teams.push([]);
-      this.teams[row.team].push({ ...row, stats: s });
+      this.teams[row.team]?.push({ ...row, stats: s });
     }
 
     for (const team of this.teams) {
-      team.sort((a, b) => +b.stats[Stat.PointsScored] - +a.stats[Stat.PointsScored]);
+      team.sort((a, b) => +(b.stats[Stat.PointsScored] || 0) - +(a.stats[Stat.PointsScored] || 0));
     }
   }
 }

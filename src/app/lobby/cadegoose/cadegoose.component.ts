@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { Settings } from '../../settings/setting/settings';
-import { SettingMap, SettingsService } from '../../settings/settings.service';
+import { SettingsService } from '../../settings/settings.service';
 import { InCmd, Internal } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { WsService } from '../../ws.service';
@@ -33,14 +33,14 @@ export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy 
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;
   protected menuComponent = MainMenuComponent;
-  graphicSettings: SettingMap = {
+  graphicSettings = {
     mapScale: { value: 50 },
     speed: { value: 10 },
     water: { value: 1 },
     showFps: { value: 0 },
   };
 
-  controlSettings: SettingMap = { lockAngle: { value: 0 } };
+  controlSettings = { lockAngle: { value: 0 }, kbControls: { value: 0 } };
   hoveredTeam = -1;
   statOpacity = 0;
   mapHeight = 36;

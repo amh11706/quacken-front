@@ -44,7 +44,7 @@ export class InputComponent implements OnInit, OnDestroy {
         this.chat.historyIndex = history.length - 1;
         this.chat.saveText = param.value;
       }
-      param.value = history[this.chat.historyIndex];
+      param.value = history[this.chat.historyIndex] ?? param.value;
     } else if (e.key === 'ArrowDown') {
       if (this.chat.historyIndex === -1 || !param) return;
       const history = this.chat.commandHistory;
@@ -55,7 +55,7 @@ export class InputComponent implements OnInit, OnDestroy {
       }
 
       this.chat.historyIndex++;
-      param.value = history[this.chat.historyIndex];
+      param.value = history[this.chat.historyIndex] ?? param.value;
     } else if (e.key === 'Escape') {
       this.blurChat();
     }

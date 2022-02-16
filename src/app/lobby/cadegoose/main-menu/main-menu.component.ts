@@ -62,7 +62,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
-      this.roundGoing = (m.turn && m.turn <= (await this.ss.get('l/cade', 'turns'))?.value) || false;
+      const maxTurns = (await this.ss.get('l/cade', 'turns'))?.value;
+      this.roundGoing = (maxTurns && m.turn && m.turn <= maxTurns) || false;
       if (!m.players) return;
       if (this.firstJoin) {
         this.firstJoin = false;
@@ -111,7 +112,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, async (t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
-      this.roundGoing = t.turn <= (await this.ss.get('l/cade', 'turns')).value;
+      const maxTurns = (await this.ss.get('l/cade', 'turns'))?.value;
+      this.roundGoing = (maxTurns && t.turn <= maxTurns) || false;
       this.statsOpen = false;
       if (this.roundGoing) return;
       this.es.lobbyContext.stats = t.stats;
@@ -125,7 +127,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.mapId = await this.ss.get('l/cade', 'map');
+    this.mapId = await this.ss.get('l/cade', 'map') ?? this.mapId;
   }
 
   submitRating(value: number): void {
@@ -185,7 +187,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     user = { ...user };
     user.message = this.teams[id];
     while (this.teamPlayers.length <= team) this.teamPlayers.push([]);
-    this.teamPlayers[team].push(user);
+    this.teamPlayers[team]?.push(user);
   }
 
   public plural(length: number): string {

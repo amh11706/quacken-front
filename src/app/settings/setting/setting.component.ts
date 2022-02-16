@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { WsService } from '../../ws.service';
 import { AdvancedComponent } from '../advanced/advanced.component';
-import { SettingsService, SettingMap } from '../settings.service';
+import { SettingsService, SettingMap, SettingPartial } from '../settings.service';
 
 import { Setting, Settings } from './settings';
 
@@ -45,6 +45,7 @@ export class SettingComponent {
 
   setting = {} as Setting;
   group: SettingMap = {};
+  settingValue = {} as SettingPartial;
   getShipLink = getShipLink;
   private debounce?: number;
 
@@ -53,6 +54,7 @@ export class SettingComponent {
   private async fetch() {
     this.group[this.setting.name] = { value: 0 };
     if (this.setting.group) this.group = await this.ss.getGroup(this.setting.group);
+    this.settingValue = this.group[this.setting.name] ?? this.settingValue;
   }
 
   openAdvanced(): void {
@@ -78,6 +80,7 @@ export class SettingComponent {
 
   save(): void {
     const newSetting = this.group[this.setting.name];
+    if (!newSetting) return;
     if (this.setting.type === 'slider') {
       if (newSetting.value > this.setting.max) newSetting.value = this.setting.max;
       else if (newSetting.value < this.setting.min) newSetting.value = this.setting.min;

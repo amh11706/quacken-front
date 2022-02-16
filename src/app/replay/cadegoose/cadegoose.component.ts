@@ -69,6 +69,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
     for (let i = 0; i < messages.length; i++) {
       const group = messages[i];
+      if (!group) continue;
       const sinks: Message[][] = [[], []];
       for (const m of group) {
         switch (m.cmd) {
@@ -80,7 +81,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
               turn: this.turns.length + 1,
               index: i,
               teams: turn.points.map((score, j) => {
-                const team = { score, scoreChange: score - lastTurn.teams[j].score, sinks: sinks[j] };
+                const team = { score, scoreChange: score - (lastTurn.teams[j]?.score || 0), sinks: sinks[j] || [] };
                 if (team.scoreChange > this.maxScore) this.maxScore = team.scoreChange;
                 return team;
               }),
@@ -89,7 +90,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
             this.turns.push(parsed);
             break;
           case InCmd.ChatMessage:
-            if (m.data?.from === '_sink') sinks[m.data.copy ? 0 : 1].push(m.data);
+            if (m.data?.from === '_sink') sinks[m.data.copy ? 0 : 1]?.push(m.data);
             break;
           default:
         }
@@ -142,7 +143,8 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   ];
 
   selectedShips: { value: number, label: string }[] =
-    [this.ships[1], { ...this.ships[1] }, { ...this.ships[1] }, { ...this.ships[1] }];
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    [this.ships[1]!, { ...this.ships[1]! }, { ...this.ships[1]! }, { ...this.ships[1]! }];
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
   shipCtrl = new FormControl();
@@ -205,7 +207,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, (ticks: Record<number, BoatTick>) => {
       this.boatTicks = ticks;
-      for (const boat of this.boats) boat.damage = ticks[boat.id]?.d;
+      for (const boat of this.boats) boat.damage = ticks[boat.id]?.d || 0;
       this.updateBoat();
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.Moves, moves => {
@@ -276,7 +278,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   async getMatchAi(claimsOnly = false, sendMap = true): Promise<void> {
     this.pauseMatch.emit();
     if (!claimsOnly) {
-      this.playTo.emit((this.activeTurn?.index || this.turns[0].index) - 2);
+      this.playTo.emit((this.activeTurn?.index || this.turns[0]?.index || 2) - 2);
       await new Promise(resolve => setTimeout(resolve, 10));
     }
     const moves: Record<number, { moves: number[], shots?: number[] }> = {};

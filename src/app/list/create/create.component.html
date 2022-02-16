@@ -35,7 +35,7 @@
     <p>{{idDescriptions[settings.createType?.value || 0]}}</p>
     <div id="lsettings">
         <ng-container
-                      *ngTemplateOutlet="[quackenEdit, spadesEdit, cadeEdit, cadeEdit][settings.createType?.value || 0]">
+                      *ngTemplateOutlet="[quackenEdit, spadesEdit, cadeEdit, cadeEdit][settings.createType?.value || 0] || cadeEdit">
         </ng-container>
     </div>
 

@@ -35,11 +35,11 @@ export class MatchesComponent implements OnInit {
     const matches = await this.ws.request(OutCmd.MatchesUser);
     for (const m of matches) {
       m.createdAtString = moment(m.createdAt, 'X').format('lll');
-      this.matches[m.rankArea - 1].push(m);
+      this.matches[m.rankArea - 1]?.push(m);
     }
 
-    if (!this.matches[this.stat.group].length) {
-      for (let i = 0; i < this.matches.length; i++) if (this.matches[i].length) this.stat.group = i;
+    if (!this.matches[this.stat.group]?.length) {
+      for (let i = 0; i < this.matches.length; i++) if (this.matches[i]?.length) this.stat.group = i;
     }
   }
 

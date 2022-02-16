@@ -30,7 +30,7 @@ export class MapComponent implements OnDestroy {
   private canvas?: CanvasRenderingContext2D | null;
   private tiles = new Map<string, Promise<HTMLImageElement>>();
 
-  moveTransition = (transition: number): string => {
+  moveTransition = (transition?: number): string => {
     switch (transition) {
       case 0: return '0s linear';
       case 1: return 10 / this.speed + 's linear';

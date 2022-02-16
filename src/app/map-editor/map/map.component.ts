@@ -12,8 +12,8 @@ export class Pos {
   constructor(public x: number, public y: number) { }
 
   move(dir: number): void {
-    this.x += Pos.dx[dir];
-    this.y += Pos.dy[dir];
+    this.x += Pos.dx[dir] || 0;
+    this.y += Pos.dy[dir] || 0;
   }
 }
 

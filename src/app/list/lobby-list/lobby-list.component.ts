@@ -11,7 +11,7 @@ import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { CreateComponent } from '../create/create.component';
 import { EditorErrorComponent } from '../editor-error/editor-error.component';
 import { NewsComponent } from '../news/news.component';
-import { Notes } from '../news/notes';
+import { Note, Notes } from '../news/notes';
 
 @Component({
   selector: 'q-lobby-list',
@@ -20,7 +20,7 @@ import { Notes } from '../news/notes';
 })
 export class LobbyListComponent implements OnInit, OnDestroy {
   lobbies: Lobby[] = [];
-  note = Notes[0];
+  note = Notes[0] as Note;
   private sub = new Subscription();
   @Input() message: Message = {} as Message;
   constructor(
@@ -38,7 +38,7 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(InCmd.LobbyUpdate, update => {
       for (let i = 0; i < this.lobbies.length; i++) {
         const lobby = this.lobbies[i];
-        if (update.id === lobby.id) {
+        if (update.id === lobby?.id) {
           Object.assign(lobby, update);
           return;
         }

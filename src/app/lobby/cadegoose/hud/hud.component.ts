@@ -89,8 +89,10 @@ export class CadeHudComponent extends HudComponent implements OnInit {
       if (t.t) {
         this.haveMoves = [0, 0, 0];
         for (let i = 0; i < t.t.length; i++) {
-          this.tokenStrings[i] = t.t[i].join(', ');
-          for (const count of t.t[i]) this.haveMoves[i] += count;
+          const tokens = t.t[i];
+          if (!tokens) continue;
+          this.tokenStrings[i] = tokens.join(', ');
+          for (const count of tokens) this.haveMoves[i] += count;
         }
       }
 
@@ -143,8 +145,9 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   private setAutoWant() {
     let min = 255;
     for (const move of [1, 0, 2]) {
-      if (this.haveMoves[move] < min) {
-        min = this.haveMoves[move];
+      const haveMove = this.haveMoves[move] || 0;
+      if (haveMove < min) {
+        min = haveMove;
         this.wantMove = move + 1;
       }
     }
@@ -153,10 +156,11 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   dragManeuver(token: number): void {
     if (token >= 8) return this.drag(token);
-    this.dragCannon(token);
+    this.dragCannon(8, token);
   }
 
-  dragCannon(token: number, slot = 8): void {
+  dragCannon(slot = 8, token = this.shots[slot]): void {
+    if (!token) return;
     if (token > 5) token -= 2;
     if (token < 4) token = 6;
     this.draggedMove = token;
@@ -164,7 +168,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   }
 
   dragendCannon(): void {
-    const shot = this.shots[this.source];
+    const shot = this.shots[this.source] || 0;
     if (shot >= 6 || shot === 2) this.shots[this.source] = 1;
     else this.shots[this.source] = 0;
     void this.sendShots();
@@ -172,7 +176,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   dropCannon(slot: number): void {
     if (this.locked) return;
-    const oldShots = this.shots[slot];
+    const oldShots = this.shots[slot] || 0;
     const isChain = this.draggedMove !== 6;
     if (isChain) {
       this.shots[slot] = oldShots ? this.draggedMove + 2 : this.draggedMove;
@@ -190,11 +194,11 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.usingCannons = 0;
     this.usingManeuvers[0] = 0;
     for (let i = 0; i < this.shots.length; i++) {
-      let shot = this.shots[i];
+      let shot = this.shots[i] || 0;
       if (shot === 0) continue;
       const usingManeuver = shot >= 4;
       if (usingManeuver) {
-        const points = this.lastTick.attr[0];
+        const points = this.lastTick.attr[0] || 0;
         if (points === 200) this.shots[i] |= 0b1;
         else if (points < 100) this.shots[i] = 0;
         this.usingManeuvers[0] = points - points % 100;
@@ -219,27 +223,31 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   clickTile(ev: MouseEvent, slot: number): void {
     if (this.locked || slot === this.blockedPosition) return;
     const moves = this.getMoves();
+    const move = moves[slot] || 0;
     if (ev.shiftKey) {
-      const token = moves[slot] > 7 ? Math.round(moves[slot] / 4) - 1 : 0;
+      const token = move > 7 ? Math.round(move / 4) - 1 : 0;
       let wantToken = (ev.button + 1 + token) % 4;
-      while (wantToken !== 0 && (this.lastTick.attr[wantToken] || 0) - this.usingManeuvers[wantToken] < 100) {
+      let points = (this.lastTick.attr[wantToken] || 0) - (this.usingManeuvers[wantToken] || 0);
+      while (wantToken !== 0 && points < 100) {
         wantToken = (ev.button + 1 + wantToken) % 4;
+        points = (this.lastTick.attr[wantToken] || 0) - (this.usingManeuvers[wantToken] || 0);
       }
       if (wantToken > 0) {
         const maneuver = wantToken * 4 + 4;
-        moves[slot] = this.lastTick.attr[wantToken] - this.usingManeuvers[wantToken] === 200 ? maneuver + 1 : maneuver;
+        moves[slot] = points === 200 ? maneuver + 1 : maneuver;
         void this.sendMoves();
         return;
       }
     }
-    const move = moves[slot];
     if ((move === 0 && this.maxMoves) || move > 11) return;
     if (move > 7) {
       moves[slot] = (move + 2) % 4 + 8;
     } else {
       let wantMove = (ev.button + 1 + move) % 4;
-      while (wantMove !== 0 && this.haveMoves[wantMove - 1] - this.usingMoves[wantMove - 1] <= 0) {
+      let tokens = (this.haveMoves[wantMove - 1] || 0) - (this.usingMoves[wantMove - 1] || 0);
+      while (wantMove !== 0 && tokens <= 0) {
         wantMove = (ev.button + 1 + wantMove) % 4;
+        tokens = (this.haveMoves[wantMove - 1] || 0) - (this.usingMoves[wantMove - 1] || 0);
       }
       moves[slot] = wantMove;
     }
@@ -249,11 +257,11 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   checkMaxMoves(): void {
     if (this.locked) return;
     this.usingMoves = [0, 0, 0];
-    this.usingManeuvers = [this.usingManeuvers[0], 0, 0, 0];
+    this.usingManeuvers = [this.usingManeuvers[0] || 0, 0, 0, 0];
     let moveCount = 0;
     for (let i = 0; i < this.moves.length; i++) {
       const move = this.moves[i];
-      if (move === 0) continue;
+      if (!move) continue;
       moveCount++;
       if (moveCount > this.myBoat.maxMoves) {
         this.moves[i] = 0;
@@ -262,11 +270,11 @@ export class CadeHudComponent extends HudComponent implements OnInit {
       }
       if (move > 7) {
         const maneuver = Math.floor(move / 4 - 1);
-        const points = this.lastTick.attr[maneuver];
+        const points = this.lastTick.attr[maneuver] || 0;
         if (points === 200) this.moves[i] |= 0b1;
         else if (points < 100) this.moves[i] = 0;
         this.usingManeuvers[maneuver] = points - points % 100;
-      } else if (this.haveMoves[move - 1] > this.usingMoves[move - 1]) this.usingMoves[move - 1]++;
+      } else if ((this.haveMoves[move - 1] || 0) > (this.usingMoves[move - 1] || 0)) this.usingMoves[move - 1]++;
       else this.moves[i] = 0;
     }
   }
@@ -274,14 +282,14 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   addShot(e: MouseEvent, i: number): void {
     if (this.locked) return;
     if (e.shiftKey) {
-      const points = this.lastTick.attr[0] - this.usingManeuvers[0];
+      const points = (this.lastTick.attr[0] || 0) - (this.usingManeuvers[0] || 0);
       if (points >= 100) {
-        this.dragCannon(this.lastTick.attr[0] - this.usingManeuvers[0] === 200 ? 5 : 4);
+        this.dragCannon(8, points === 200 ? 5 : 4);
         this.dropCannon(i);
         return;
       }
     }
-    const oldShots = this.shots[i];
+    const oldShots = this.shots[i] || 0;
     if (oldShots > 5) {
       this.shots[i] = 0;
     } else if (oldShots > 2) {
@@ -298,7 +306,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   protected resetMoves(): void {
     super.resetMoves();
-    for (let i = 0; i < this.usingMoves.length; i++) this.haveMoves[i] -= this.usingMoves[i];
+    for (let i = 0; i < this.usingMoves.length; i++) this.haveMoves[i] -= this.usingMoves[i] || 0;
     this.usingMoves = [0, 0, 0];
     this.usingManeuvers = [0, 0, 0, 0];
     this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -315,6 +323,8 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   disengage(side = 0): void {
     this.ws.send(OutCmd.SpawnSide, side);
-    void this.ss.getGroup('boats').then(settings => settings.spawnSide.value = side);
+    void this.ss.getGroup('boats').then(settings => {
+      if (settings.spawnSide) settings.spawnSide.value = side;
+    });
   }
 }

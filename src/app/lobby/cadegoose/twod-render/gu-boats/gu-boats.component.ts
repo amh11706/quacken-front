@@ -53,7 +53,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
   teamColors = TeamColorsCss;
-  moveTransition = (transition: number): string => {
+  moveTransition = (transition?: number): string => {
     switch (transition) {
       case 0: return '0s linear';
       case 1: return 10 / this.speed + 's linear';
@@ -129,7 +129,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
         for (const id of f.cs) {
           const team = f.t === this.myBoat.team ? 98 : f.t;
           this._boats[id]?.render?.flags.push({
-            p: f.p, t: f.t, offset: 220 - (FlagColorOffsets[team] + f.p) * 10 + 'px',
+            p: f.p, t: f.t, offset: 220 - ((FlagColorOffsets[team] ?? 9) + f.p) * 10 + 'px',
           } as any);
         }
       }

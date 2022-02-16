@@ -75,7 +75,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   @Input() getX = (p: { x: number, y: number }): number => (p.x) * 50;
   @Input() getY = (p: { x: number, y: number }): number => (p.y) * 50;
   getObj = (o: Clutter): string => `translate(${this.getX(o)}px,${this.getY(o)}px)`;
-  @Input() moveTransition = (transition: number): string => {
+  @Input() moveTransition = (transition?: number): string => {
     switch (transition) {
       case 0: return '0s linear';
       case 1: return 10 / this.speed + 's linear';
@@ -96,7 +96,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       '3s linear .5s', // sink rotate
       '1s ease', // duck poo
       '.2s ease', // defenduck spin
-    ][b.rotateTransition];
+    ][b.rotateTransition] || '';
   }
 
   constructor(protected ws: WsService) { }

@@ -90,12 +90,12 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.Bidding, () => {
-      this.timer?.go(this.settings.turnTime.value * 2);
+      this.timer?.go((this.settings.turnTime?.value || 10) * 2);
       this.lobby.playing = true;
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.Playing, (p: { id: number, quantity: number }) => {
-      this.timer?.go(this.settings.turnTime.value);
+      this.timer?.go(this.settings.turnTime?.value);
       this.lobby.bidding = 0;
       this.lobby.playingP = p.id;
       this.select = p.quantity;
@@ -109,7 +109,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
         if (this.cards.length === 1) {
           const delay = this.lobby.played.length === 4 ? 1500 : 500;
           setTimeout(() => {
-            if (this.cards.length === 1) this.play([this.cards[0]]);
+            if (this.cards.length === 1) this.play(this.cards);
           }, delay);
         } else if (this.selected.length) this.play(this.selected);
       }
@@ -161,7 +161,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }));
 
     this.settings = await this.ss.getGroup('l/spades', true);
-    if (this.lobby.playing) this.timer?.go(this.settings.turnTime.value);
+    if (this.lobby.playing) this.timer?.go(this.settings.turnTime?.value);
     const me = this.lobby.players[this.lobby.sitting];
     if (me && me.offerBlind) this.select = 2;
   }
@@ -177,12 +177,13 @@ export class SpadesComponent implements OnInit, OnDestroy {
 
   timeUp(): void {
     if (this.lobby.playingP === this.ws.sId) {
-      let valid = [];
+      let valid: Card[] = [];
       for (const c of this.cards) if (c.valid) valid.push(c);
 
       const play = [];
       for (let i = 0; i < this.select; i++) {
-        const card: Card = valid[Math.round(Math.random() * (valid.length - 1))];
+        const card = valid[Math.round(Math.random() * (valid.length - 1))];
+        if (!card) continue;
         play.push(card);
         valid = valid.filter(c => c !== card);
       }
@@ -192,7 +193,8 @@ export class SpadesComponent implements OnInit, OnDestroy {
     }
   }
 
-  play(cards: Card[]): void {
+  play(cards?: Card[]): void {
+    if (!cards) return;
     const m = cards.map(c => c.id);
     this.ws.send(OutCmd.Card, m);
     this.select = 1;

@@ -19,9 +19,9 @@
         </div>
 
         <p *ngIf="conflict"
-           class="warning">Warning! This will unset '{{conflict[0].title}}' from group '{{conflict[0].group}}'<span
+           class="warning">Warning! This will unset '{{conflict[0]?.title}}' from group '{{conflict[0]?.group}}'<span
                   *ngIf="conflict.length === 2">
-                and '{{conflict[1].title}}' from group '{{conflict[1].group}}'</span><span *ngIf="conflict.length > 2">
+                and '{{conflict[1]?.title}}' from group '{{conflict[1]?.group}}'</span><span *ngIf="conflict.length > 2">
                 and {{conflict.length -1}} other bindings</span>.
         </p>
     </mat-dialog-content>

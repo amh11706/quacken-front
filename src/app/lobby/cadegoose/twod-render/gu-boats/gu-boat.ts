@@ -114,7 +114,8 @@ export class GuBoat extends BoatRender {
         const bytes = data.data;
         for (let i = 0; i < bytes.length; i += 4) {
           if (bytes[i] === 90 && bytes[i + 1] === 172 && bytes[i + 2] === 222) {
-            [bytes[i], bytes[i + 1], bytes[i + 2]] = TeamColors[team];
+            const color = TeamColors[team];
+            if (color) [bytes[i], bytes[i + 1], bytes[i + 2]] = color;
           }
         }
         ctx.putImageData(data, 0, 0);

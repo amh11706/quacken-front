@@ -109,7 +109,7 @@ export class AiRender {
       if (!this.boat.pm.hasOwnProperty(coordString)) continue;
       const points = this.boat.pm[coordString];
       const index = this.metric === 'Flags' || this.metric === 'Claims' ? this.radius : this.step;
-      const value = this.metric === 'EndBonus' ? points[this.metric] : points[this.metric][index];
+      const value = (this.metric === 'EndBonus' ? points?.[this.metric] : points?.[this.metric][index]) || 0;
 
       if (Array.isArray(value)) range.max = Math.max(range.max, ...value);
       else {
@@ -159,11 +159,11 @@ export class AiRender {
     for (const coordString in this.boat.pm) {
       if (!this.boat.pm.hasOwnProperty(coordString)) continue;
       const coords = coordString.split(',');
-      const x = +coords[0] * 50;
-      const y = +coords[1] * 50;
+      const x = +(coords[0] || 0) * 50;
+      const y = +(coords[1] || 0) * 50;
       const points = this.boat.pm[coordString];
       const index = this.metric === 'Flags' || this.metric === 'Claims' ? this.radius : this.step;
-      const value = this.metric === 'EndBonus' ? points[this.metric] : points[this.metric][index];
+      const value = this.metric === 'EndBonus' ? points?.[this.metric] : points?.[this.metric][index];
       if (!value) continue;
       if (Array.isArray(value)) {
         this.drawShots(x, y, value, max);

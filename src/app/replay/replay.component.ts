@@ -102,10 +102,11 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.fakeMessages();
-      const join = this.messages[0][0];
+      const join = this.messages[0]?.[0];
+      if (!join) return;
       join.cmd = InCmd.Turn;
       const firstSync = { cmd: InCmd.Sync, data: { sync: Object.values(join.data?.boats), flags: join.data.flags } };
-      this.messages[0].push(firstSync);
+      this.messages[0]?.push(firstSync);
       this.checkMessage(firstSync);
       setTimeout(() => {
         this.esc.open = false;
@@ -156,7 +157,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       if (this.tick % 30 === 28) this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
       this.tick++;
       this.fakeMessages();
-    }, (this.graphicSettings?.turnTime.value || 10) * 1000 / 30);
+    }, (this.graphicSettings?.turnTime?.value || 10) * 1000 / 30);
   }
 
   nextTurn(): void {
@@ -166,7 +167,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     }
     // setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));
     for (let target = this.tick + 3; target < this.messages.length; target++) {
-      if (this.messages[target].find(el => el.cmd === InCmd.Turn)) {
+      if (this.messages[target]?.find(el => el.cmd === InCmd.Turn)) {
         this.playTo(target - 2);
         return;
       }
@@ -181,7 +182,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     }
     // setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));
     for (let target = this.tick - 1; target > 0; target--) {
-      if (this.messages[target].find(el => el.cmd === InCmd.Turn)) {
+      if (this.messages[target]?.find(el => el.cmd === InCmd.Turn)) {
         this.playTo(target - 2);
         return;
       }
@@ -195,10 +196,10 @@ export class ReplayComponent implements OnInit, OnDestroy {
     if (value < this.tick) {
       for (let i = this.tick; i >= 0; i--) {
         let syncFound = false;
-        for (let i2 = this.messages[i].length - 1; i2 >= 0; i2--) {
-          const m = this.messages[i][i2];
-          if (m.cmd === InCmd.Sync) syncFound = true;
-          else if (m.data === this.fakeChat.messages[this.fakeChat.messages.length - 1]) this.fakeChat.messages.pop();
+        for (let i2 = (this.messages[i]?.length || 0) - 1; i2 >= 0; i2--) {
+          const m = this.messages[i]?.[i2];
+          if (m?.cmd === InCmd.Sync) syncFound = true;
+          else if (m?.data === this.fakeChat.messages[this.fakeChat.messages.length - 1]) this.fakeChat.messages.pop();
         }
 
         if (i > value || !syncFound) continue;
@@ -218,7 +219,9 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   private fakeMessages(skipTurn = false) {
-    for (const m of this.messages[this.tick]) {
+    const messages = this.messages[this.tick];
+    if (!messages) return;
+    for (const m of messages) {
       this.checkMessage(m);
       if (m.cmd !== InCmd.Sync) {
         this.fakeWs.dispatchMessage(m);

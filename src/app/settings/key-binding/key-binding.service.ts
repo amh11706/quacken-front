@@ -36,9 +36,10 @@ function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBi
     const mergedBindings = merged[k as keyof KeyBindings];
     for (let i = 0; i < mergedBindings.length; i++) {
       const binding = mergedBindings[i];
-      if (binding.bindings) continue;
+      if (!binding || binding.bindings) continue;
 
-      const defaults = DefaultBindings[k as keyof KeyBindings][i].bindings;
+      const defaults = DefaultBindings[k as keyof KeyBindings][i]?.bindings;
+      if (!defaults) continue;
       binding.bindings = [
         keyMap.get(defaults[0]) ? NotActive : defaults[0],
         keyMap.get(defaults[1]) ? NotActive : defaults[1],
@@ -100,7 +101,7 @@ export class KeyBindingService {
     if (!this.ws.connected) return;
     if (IgnoreTags.includes(document.activeElement?.tagName || '') || IgnoreKeys.includes(e.key)) return;
     const key = this.getKey(e);
-    if (key !== 'Escape' && (await this.ss.get('controls', 'alwaysChat')).value) {
+    if (key !== 'Escape' && (await this.ss.get('controls', 'alwaysChat'))?.value) {
       this.emitAction(KeyActions.FocusChat);
       return;
     }

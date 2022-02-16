@@ -56,7 +56,7 @@ export class CanvasComponent {
     await CanvasComponent.flag.prom;
     for (const f of this.flags) {
       if (f.t === undefined) f.t = 0;
-      const offset = FlagColorOffsets[99];
+      const offset = FlagColorOffsets[99] ?? 9;
       const x = (f.x + f.y) * 32;
       const y = (-f.x + f.y) * 24;
       CanvasComponent.flag.draw(this.canvas, f.points + offset, x + 7, y - 33);
@@ -86,8 +86,8 @@ export class CanvasComponent {
         if (this.safeZone && (y > 32 || y < 3)) CanvasComponent.sz.draw(ctx, 0);
         else CanvasComponent.water.draw(ctx, 0);
         ctx.translate(32, -24);
-        const tile = map[y][x];
-        if (tile >= 21 && tile <= 23) this.flags.push({ x, y, points: tile - 21, ...flags.shift() });
+        const tile = map[y]?.[x];
+        if (tile && tile >= 21 && tile <= 23) this.flags.push({ x, y, points: tile - 21, ...flags.shift() });
         else if (tile) tiles.push({ x, y, tile });
       }
       ctx.translate(32 - this.mapWidth * 32, 24 + 24 * this.mapWidth);

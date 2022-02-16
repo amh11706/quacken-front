@@ -19,7 +19,7 @@ export class SbEntryStatusComponent extends CadeEntryStatusComponent implements 
 
   private updatePoints(stats: Record<number, StatRow>) {
     for (const s of Object.values(stats)) {
-      this.points[s.team] = +s.stats[Stat.ShotsHit];
+      this.points[s.team] = +(s.stats[Stat.ShotsHit] || 0);
     }
   }
 }

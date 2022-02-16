@@ -57,7 +57,8 @@ export class SpotComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(InCmd.Cards, (c: number[]) => {
       for (const p of this.lobby.players) p.ready = false;
-      if (c[0] >= 0) this.offerBlind = false;
+      const card = c[0];
+      if (card && card >= 0) this.offerBlind = false;
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.Sit, (p: Player) => {

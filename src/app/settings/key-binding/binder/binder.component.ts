@@ -14,7 +14,7 @@ export class BinderComponent implements OnDestroy {
   private _binding?: KeyBindingEditMode;
   @Input() set binding(b: KeyBindingEditMode) {
     this._binding = b;
-    this.key = b.bindings[this.index];
+    this.key = b.bindings[this.index] ?? this.key;
     this.changed = this.key !== b.activeBindings[this.index];
     this.notDefault = this.key !== b.defaultBindings[this.index];
     this.title = '';

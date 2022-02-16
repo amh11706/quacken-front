@@ -7,11 +7,11 @@ import { JobQueue } from './job-queue';
 import { TeamColors } from './cade-entry-status/cade-entry-status.component';
 
 function headerColor(boat: Boat): string {
-  const color = [...TeamColors[boat.team || 0]];
-  if (boat.isMe) {
-    for (let i = 0; i < 3; i++) color[i] = Math.round(color[i] * 0.9);
+  const color = TeamColors[boat.team || 0];
+  if (color && boat.isMe) {
+    for (let i = 0; i < 3; i++) color[i] = Math.round((color[i] || 0) * 0.9);
   }
-  return `rgb(${color.join(',')})`;
+  return `rgb(${color?.join(',')})`;
 }
 
 const moveColor = [
@@ -241,7 +241,7 @@ export class BoatRender {
     ctx.fillText(this.boat.renderName, 0, 0);
 
     for (let i = 0; i < this.boat.moves.length; i++) {
-      const color = moveColor[this.boat.moves[i]];
+      const color = moveColor[this.boat.moves[i] || 0];
       if (!color) continue;
       ctx.fillStyle = color;
       ctx.fillRect(-60 + 30 * i, 24, 30, 20);

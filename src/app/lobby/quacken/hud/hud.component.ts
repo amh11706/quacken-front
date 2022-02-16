@@ -305,7 +305,7 @@ export class HudComponent implements OnInit, OnDestroy {
       void this.sendMoves();
       return;
     }
-    const move = moves[slot];
+    const move = moves[slot] || 0;
     if (boat.type !== 0 && this.maxMoves && (move === 0 || move === 4)) return;
     moves[slot] = (ev.button + 1 + move) % 4;
     void this.sendMoves();
@@ -325,7 +325,7 @@ export class HudComponent implements OnInit, OnDestroy {
     else if (this.source < 4 && this.blockedPosition === slot) this.blockedPosition = this.source;
 
     if (this.maxMoves && this.source > 3 && (move === 0 || move === 4)) return;
-    if (this.source < 4) moves[this.source] = moves[slot];
+    if (this.source < 4) moves[this.source] = moves[slot] || 0;
     moves[slot] = this.draggedMove;
     void this.sendMoves();
     this.source = 4;

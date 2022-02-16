@@ -43,7 +43,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     'Maps You Rated',
   ];
 
-  selectedSortOption = this.sortList[1];
+  selectedSortOption = this.sortList[1] || '';
   private tagList: string[] = [];
   private userList: string[] = [];
   private setting = Settings.cadeMap;
@@ -53,8 +53,8 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.subs.add(this.ws.subscribe(Internal.Lobby, async l => {
-      if ((await this.ss.get(this.setting.group, this.setting.name)).value > 1 ||
-        !l.map || !this.servermapList[0]) return;
+      const settingValue = (await this.ss.get(this.setting.group, this.setting.name))?.value || 0;
+      if (settingValue > 1 || !l.map || !this.servermapList[0]) return;
       const generatedMap = this.servermapList[0];
       generatedMap.data = this.b64ToArray(l.map);
       generatedMap.description = l.seed;
@@ -65,7 +65,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.sort(this.selectedSortOption);
     this.initFilters();
     this.maplist.next(this.filteredMapList);
-    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name);
+    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name) ?? this.selectedMap;
   }
 
   ngOnDestroy(): void {
@@ -123,8 +123,10 @@ export class MapListComponent implements OnInit, OnDestroy {
     const bString = window.atob(map);
     let i = 0;
     for (let y = 0; y < this.mapHeight; y++) {
+      const row = data[y];
+      if (!row) break;
       for (let x = 0; x < this.mapWidth; x++) {
-        data[y][x] = bString.charCodeAt(i);
+        row[x] = bString.charCodeAt(i);
         i++;
       }
     }

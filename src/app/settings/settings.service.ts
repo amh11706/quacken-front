@@ -19,7 +19,7 @@ export interface SettingPartial {
 }
 
 export interface SettingMap {
-  [key: string]: SettingPartial;
+  [key: string]: SettingPartial | undefined;
 }
 
 type SettingList = (keyof typeof Settings)[];
@@ -39,7 +39,8 @@ export class SettingsService {
   constructor(private ws: WsService) {
     ws.subscribe(InCmd.SettingSet, (s: Setting) => {
       const group = this.settings.get(s.group);
-      if (group && group[s.name]) group[s.name].value = s.value;
+      const setting = group?.[s.name];
+      if (setting) setting.value = s.value;
     });
 
     ws.connected$.subscribe(v => {
@@ -85,7 +86,7 @@ export class SettingsService {
     });
   }
 
-  async get(group: string, name: string): Promise<SettingPartial> {
+  async get(group: string, name: string): Promise<SettingPartial | undefined> {
     const settings = await this.getGroup(group);
     return Promise.resolve(settings[name]);
   }

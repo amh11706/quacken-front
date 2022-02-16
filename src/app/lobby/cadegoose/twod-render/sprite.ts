@@ -24,6 +24,7 @@ export class Sprite {
   draw(ctx: CanvasRenderingContext2D, index: number, x = 0, y = 0): void {
     if (!this.img) throw new Error(this.name + ' image not loaded.');
     const pos = this.positions[index];
+    if (!pos) throw new Error(this.name + ' position not found ' + index);
     ctx.drawImage(
       this.img,
       pos[0], pos[1],
@@ -74,6 +75,7 @@ export class JsonSprite {
   draw(ctx: CanvasRenderingContext2D, index: number, x = 0, y = 0): void {
     if (!this.img) throw new Error(this.data.name + ' image not loaded.');
     const values = this.data.orientations[index];
+    if (!values) throw new Error(this.data.name + ' orientation not found ' + index);
     ctx.drawImage(
       this.img,
       values.x, values.y,
