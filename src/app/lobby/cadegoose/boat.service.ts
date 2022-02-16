@@ -229,7 +229,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       boat.imageOpacity = 1;
       if (!u) continue;
       if (u.c) {
-        boat.addDamage(u.c - 1, u.cd || 0);
+        boat.addDamage(u.c - 1, 0);
         if (u.cd === 100) void this.sound.play(Sounds.Sink, 10000 / this.speed);
         if (u.c < 5) void this.sound.play(Sounds.RockDamage, 3500 / this.speed);
       }
