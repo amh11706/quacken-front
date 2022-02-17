@@ -84,7 +84,7 @@ export class Boat {
   addDamage(crunchDir: number, damage = 1): Boat {
     this.crunchDir = crunchDir;
     if (damage >= 100) {
-      this.damage = this.maxDamage;
+      // this.damage = this.maxDamage;
       this.sink();
     }
     setTimeout(() => this.crunch(crunchDir), 100);

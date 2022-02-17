@@ -86,6 +86,12 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     void this.sound.load(Sounds.CannonSplash2);
     void this.sound.load(Sounds.Sink);
     void this.sound.load(Sounds.RockDamage);
+
+    // setTimeout(() => {
+    //   void this.handleUpdate([
+    //     { x: 10, y: 18, t: 12, dir: 3 },
+    //   ], 0);
+    // }, 1000);
   }
 
   ngOnDestroy(): void {

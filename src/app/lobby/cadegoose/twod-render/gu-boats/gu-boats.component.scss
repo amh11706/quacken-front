@@ -108,13 +108,13 @@ q-sprite-img {
 .size1 .shot { background-image: url("/assets/clutter/cannonball_small.png"); }
 .size2 .shot { background-image: url("/assets/clutter/cannonball_medium.png"); }
 .size3 .shot { background-image: url("/assets/clutter/cannonball_large.png"); }
-.size4 .shot { background-image: url("/assets/clutter/chain_cannonball.png"); }
-.size5 .shot { background-image: url("/assets/clutter/flaming_cannonball.png"); }
+.size4 .shot, .size6 .shot { background-image: url("/assets/clutter/chain_cannonball.png"); }
+.size5 .shot, .size7 .shot { background-image: url("/assets/clutter/flaming_cannonball.png"); }
 .shot.dis4 { animation-name: move, splash !important; animation-timing-function: linear, steps(13); }
 
 .smoke { animation: smoke calc(var(--speed) * 1s) steps(18) both; }
 .size1 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
-.size2 .smoke, .size4 .smoke, .size5 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }
+.size2 .smoke, .size4 .smoke, .size5 .smoke, .size6 .smoke, .size7 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }
 .size3 .smoke { --endX: -960px; animation-timing-function: steps(24); background-image: url("/assets/clutter/explode_large.png"); }
 
 .shot.dir0, .shot.dir1 { --tranY: calc(0px - var(--distance) * 24px) }
@@ -128,5 +128,28 @@ q-sprite-img {
   background-position: center;
 }
 
+@keyframes wave {
+  from { transform: scale(calc(var(--scaleX) / 4), calc(var(--scaleY) / 4)) }
+  60% { opacity: 1 }
+  to { transform: scale(var(--scaleX), var(--scaleY)); opacity: 0 }
+}
+
+.clutter12 { 
+  background-image: url("/assets/clutter/wave.png");
+  position: absolute;
+  opacity: 0;
+  width: 128px;
+  height: 96px;
+  pointer-events: all;
+  animation-name: wave;
+  animation-duration: calc(var(--speed, 1) * 1s);
+  animation-delay: calc(var(--speed, 1) * 0.7s);
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+.clutter12.dir0 { bottom: -48px; right: -64px; --scaleX: 1; --scaleY: -1; }
+.clutter12.dir1 { bottom: -48px; left: 0; --scaleX: -1; --scaleY: -1; }
+.clutter12.dir2 { top: 0; left: 0; --scaleX: -1; --scaleY: 1 }
+.clutter12.dir3 { top: 0; right: -64px; --scaleX: 1; --scaleY: 1; }
 .clutter16 { background-image: url("/assets/clutter/flotsam.png"); }
 .clutter17 { background-image: url("/assets/clutter/flaming_flotsam.png"); }

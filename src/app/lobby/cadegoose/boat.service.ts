@@ -196,7 +196,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     this.worker.clearJobs();
     for (let step = 0; step < 8; step++) {
       void this.worker.addJob(() => this._playTurn(step));
-      void this.worker.addJob(() => this.handleUpdate(this.turn?.cSteps[step] || [], step));
+      if (step % 2 === 1) void this.worker.addJob(() => this.handleUpdate(this.turn?.cSteps[step] || [], step));
     }
     void this.worker.addJob(() => {
       delete this.turn;
@@ -211,6 +211,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   private _playTurn(step: number) {
     if (!this.turn) return;
     if (step === 4) this.resetBoats();
+    if (step % 2 === 0) this.handleUpdate(this.turn?.cSteps[step] || [], step);
     const turnPart = this.turn.steps[step] || [];
     if (!turnPart.length) {
       return new Promise<void>(resolve => {
@@ -229,7 +230,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       boat.imageOpacity = 1;
       if (!u) continue;
       if (u.c) {
-        boat.addDamage(u.c - 1, 0);
+        boat.addDamage(u.c - 1, u.cd);
         if (u.cd === 100) void this.sound.play(Sounds.Sink, 10000 / this.speed);
         if (u.c < 5) void this.sound.play(Sounds.RockDamage, 3500 / this.speed);
       }
