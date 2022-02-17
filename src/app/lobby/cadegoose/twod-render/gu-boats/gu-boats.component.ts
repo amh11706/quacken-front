@@ -89,7 +89,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
     // setTimeout(() => {
     //   void this.handleUpdate([
-    //     { x: 10, y: 18, t: 12, dir: 3 },
+    //     { x: 10, y: 18, t: 8, dir: 0 },
     //   ], 0);
     // }, 1000);
   }
