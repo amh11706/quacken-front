@@ -145,14 +145,13 @@ q-sprite-img {
   animation-delay: calc(var(--speed, 1) * 0.7s);
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
 }
 .clutter12.dir0 { bottom: -48px; right: -64px; --scaleX: 1; --scaleY: -1; }
 .clutter12.dir1 { bottom: -48px; left: 0; --scaleX: -1; --scaleY: -1; }
 .clutter12.dir2 { top: 0; left: 0; --scaleX: -1; --scaleY: 1 }
 .clutter12.dir3 { top: 0; right: -64px; --scaleX: 1; --scaleY: 1; }
 
-.clutter8 { background-image: url("/assets/clutter/wave2.png"); }
+.clutter8 { background-image: url("/assets/clutter/wave2.png"); top: -24px; left: -32px; }
 .clutter8.dir0 { --scaleX: 1; --scaleY: 1; }
 .clutter8.dir1 { --scaleX: -1; --scaleY: 1; }
 .clutter8.dir2 { --scaleX: -1; --scaleY: 1.25; --rotate: 90deg; }
