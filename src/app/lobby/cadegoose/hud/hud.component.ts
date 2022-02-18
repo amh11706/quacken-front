@@ -313,6 +313,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.usingCannons = 0;
     this.serverMoves = [...this.getMoves()];
     this.serverShots = [...this.shots];
+    this.serverShotsPending = [...this.shots];
   }
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1): Promise<void> {

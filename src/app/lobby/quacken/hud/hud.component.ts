@@ -248,6 +248,7 @@ export class HudComponent implements OnInit, OnDestroy {
     for (const i in moves) moves[i] = 0;
     this.maxMoves = false;
     this.blockedPosition = this.myBoat.maxMoves === 4 ? 4 : 3;
+    this.serverMovesPending = [...this.getMoves()];
   }
 
   checkMaxMoves(): void {
