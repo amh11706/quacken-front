@@ -48,24 +48,20 @@
     [class.inProgress]="lobby.inProgress"
     [title]="descriptions[lobby.type]">{{titles[lobby.type] || lobby.type}}</h3>
 <h4>{{lobby.name}}</h4>
-<p #playerListTrigger="matMenuTrigger"
-   class="playerlist"
-   [matMenuTriggerFor]="playerList"
-   (mouseover)="lobby.players.length && playerListTrigger.openMenu()"
-   (mouseleave)="playerListTrigger.closeMenu()">
-  {{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}</p>
-
-<mat-menu #playerList="matMenu"
-          [hasBackdrop]="false">
-  <ng-template *ngIf="lobby.players.length"
-               matMenuContent
-               let-links="links">
+<div class="playerCount"
+     (mouseover)="lobby.players.length && showPlayers = true"
+     (mouseleave)="showPlayers = false">
+  {{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}
+  <div class="playerList"
+  (click)="$event.stopPropagation()"
+       [class.visible]="showPlayers">
     <div *ngFor="let p of lobby.players"
          class="playerName">
       <q-name [message]=p></q-name>
     </div>
-  </ng-template>
-</mat-menu>
+  </div>
+</div>
+
 
 <p class="settingsView">
   <ng-container

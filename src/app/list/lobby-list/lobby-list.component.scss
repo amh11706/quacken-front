@@ -19,6 +19,7 @@
   position: relative;
   padding: 12px 0;
   overflow-y: auto;
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
@@ -49,7 +50,7 @@
 .card:hover {
   height: 200px;
   width: 150px;
-  overflow: hidden;
+  overflow: visible;
   padding: 8px 16px;
   background-color: rgba(64, 64, 66, 0.5);
   border: 1px solid black;
@@ -67,6 +68,7 @@
   max-width: 900px;
   max-height: calc(100vh - 60px);
   min-height: 80vh;
+  height: calc(100vh - 300px);
   margin: auto;
   padding: 16px;
   background-color: rgba(66, 66, 66, 0.85);
