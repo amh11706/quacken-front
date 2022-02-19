@@ -142,6 +142,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
   }
 
   protected handleMoves(s: { t: number, m: number[], s?: number[] }): void {
+    if (Array.isArray(s)) {
+      for (const part of s) this.handleMoves(part);
+      return;
+    }
     const boat = this._boats[s.t];
     if (boat) {
       boat.moves = s.m;

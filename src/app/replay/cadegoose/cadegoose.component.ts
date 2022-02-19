@@ -211,7 +211,8 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       this.updateBoat();
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.Moves, moves => {
-      if (this.activeBoat?.id === moves.t) this.updateBoat();
+      if (!Array.isArray(moves)) moves = [moves];
+      for (const move of moves) if (this.activeBoat?.id === move.t) this.updateBoat();
     }));
   }
 

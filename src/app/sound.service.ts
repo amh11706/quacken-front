@@ -33,7 +33,7 @@ const SoundFiles: Record<Sounds, SoundFile> = {
   [Sounds.BattleStart]: { file: 'battle_starting.ogg', group: SoundGroups.Alert, minDelay: 1500 },
   [Sounds.CannonFireBig]: { file: 'cannon_fire_big.ogg', group: SoundGroups.Ship, minDelay: 50 },
   [Sounds.CannonFireMedium]: { file: 'cannon_fire_medium.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.7 },
-  [Sounds.CannonFireSmall]: { file: 'cannon_fire_small.ogg', group: SoundGroups.Ship, minDelay: 5, volume: 0.4 },
+  [Sounds.CannonFireSmall]: { file: 'cannon_fire_small.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.4 },
   [Sounds.CannonHit]: { file: 'cannonball_hit.ogg', group: SoundGroups.Ship, minDelay: 50 },
   [Sounds.CannonSplash]: { file: 'cannonball_splash.ogg', group: SoundGroups.Ship, minDelay: 100, volume: 0.7 },
   [Sounds.CannonSplash2]: { file: 'cannonball_splash2.ogg', group: SoundGroups.Ship, minDelay: 100, volume: 0.7 },
@@ -46,19 +46,20 @@ const SoundFiles: Record<Sounds, SoundFile> = {
   providedIn: 'root',
 })
 export class SoundService {
-  private loaded = new Map<Sounds, Promise<string>>();
+  private loaded = new Map<Sounds, Promise<AudioBuffer>>();
   private settings: SettingMap = {};
+  private ctx = new AudioContext();
 
   constructor(ss: SettingsService) {
     void ss.getGroup('sounds').then(settings => this.settings = settings);
   }
 
-  load(sound: Sounds): Promise<string> {
+  load(sound: Sounds): Promise<AudioBuffer> {
     let p = this.loaded.get(sound);
     if (p) return p;
     p = window.fetch('assets/sounds/' + SoundFiles[sound].file)
-      .then(file => file.blob())
-      .then(URL.createObjectURL);
+      .then(file => file.arrayBuffer())
+      .then(file => this.ctx.decodeAudioData(file));
     this.loaded.set(sound, p);
     return p;
   }
@@ -79,9 +80,13 @@ export class SoundService {
     const groupVolume = (this.settings[file.group]?.value ?? 50);
     if (!groupVolume && fallback) return this.play(fallback, delay);
 
-    const audio = new window.Audio();
-    audio.src = await this.load(sound);
-    audio.volume = (file.volume || 1) * groupVolume * masterVolume / 10000;
-    return audio.play();
+    const source = this.ctx.createBufferSource();
+    source.buffer = await this.load(sound);
+    const gainNode = this.ctx.createGain();
+    gainNode.gain.value = (file.volume || 1) * groupVolume * masterVolume / 10000;
+    gainNode.connect(this.ctx.destination);
+    source.connect(gainNode);
+    source.onended = () => gainNode.disconnect();
+    return source.start(0);
   }
 }
