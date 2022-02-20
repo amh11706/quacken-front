@@ -297,6 +297,9 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     } else {
       this.shots[i] = (oldShots + 1) % (this.myBoat.maxShots + 1);
     }
+    if (this.usingCannons === this.lastTick.tp && (this.shots[i] || 0) > oldShots) {
+      this.shots[i] = 0;
+    }
     void this.sendShots();
   }
 
