@@ -6,3 +6,38 @@ q-stats {
   transition: 0.3s;
   pointer-events: none;
 }
+
+#advancedMap {
+  position: absolute;
+  left: 10px;
+  top: calc(50% - 220px);
+  width: 200px;
+  padding: 0;
+  padding-top: 24px;
+  text-align: center;
+  border: 1px solid black;
+  background-color: rgba(66, 66, 66, 0.85);
+  color: #eee;
+
+  button {
+    margin: 12px;
+  }
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  cursor: grab;
+}
+
+q-advanced-map {
+  display: block;
+  max-height: 400px;
+  overflow-y: auto;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
+  padding-top: 8px;
+}

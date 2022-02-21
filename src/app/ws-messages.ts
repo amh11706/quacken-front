@@ -11,6 +11,7 @@ export const enum Internal {
   CenterOnBoat,
   BoatClicked,
   Scene,
+  OpenAdvanced,
 }
 
 export const enum OutCmd {

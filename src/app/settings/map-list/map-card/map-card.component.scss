@@ -9,8 +9,12 @@ mat-card {
   background-color: rgb(110, 108, 108);
 }
 
+mat-card-actions {
+  display: flex;
+}
+
 button {
-  width: 100%;
+  flex-grow: 1;
 }
 
 .flex-container {

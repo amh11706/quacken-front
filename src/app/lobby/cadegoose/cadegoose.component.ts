@@ -1,8 +1,10 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 import { Settings } from '../../settings/setting/settings';
 import { SettingsService } from '../../settings/settings.service';
-import { InCmd, Internal } from '../../ws-messages';
+import { InCmd, Internal, OutCmd } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { WsService } from '../../ws.service';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
@@ -45,6 +47,9 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   statOpacity = 0;
   mapHeight = 36;
   mapWidth = 20;
+  advancedMapOpen = false;
+  mapSeed = '';
+  private mapDebounce = new Subject();
   protected joinMessage = CadeDesc;
   protected statAction = KeyActions.CShowStats;
   protected showMapChoice = true;
@@ -68,8 +73,15 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.es.open = true;
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
+    this.sub.add(this.ws.subscribe(Internal.OpenAdvanced, () => {
+      this.mapSeed = this.lobby?.seed;
+      this.advancedMapOpen = true;
+    }));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));
     this.sub.add(this.kbs.subscribe(this.statAction, v => this.statOpacity = v ? 1 : 0));
+    this.sub.add(this.mapDebounce.pipe(debounceTime(500)).subscribe(seed => {
+      this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
+    }));
   }
 
   ngAfterViewInit(): void {
@@ -83,5 +95,9 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected setMapB64(map: string): void {
     super.setMapB64(map);
     this.renderer?.fillMap(this.map, this.lobby?.flags);
+  }
+
+  updateSeed(seed: string): void {
+    this.mapDebounce.next(seed);
   }
 }

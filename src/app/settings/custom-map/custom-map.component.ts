@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { SettingMap, SettingPartial } from '../settings.service';
+import { SettingPartial } from '../settings.service';
 import { WsService } from '../../../app/ws.service';
 import { CustomMapSetting } from '../setting/settings';
 

@@ -8,6 +8,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { NameModule } from '../../chat/name/name.module';
 import { SettingsModule } from '../../settings/settings.module';
@@ -23,12 +26,14 @@ import { StatsComponent } from './stats/stats.component';
 import { StatEndComponent } from './stat-end/stat-end.component';
 import { ThreedRenderComponent } from './threed-render/threed-render.component';
 import { RatingModule } from '../../settings/rating/rating.module';
+import { AdvancedMapComponent } from './advanced-map/advanced-map.component';
 
 @NgModule({
   declarations: [
     CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent,
     MainMenuComponent, StatsComponent, StatEndComponent,
     ThreedRenderComponent,
+    AdvancedMapComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +45,9 @@ import { RatingModule } from '../../settings/rating/rating.module';
     MatIconModule,
     MatTooltipModule,
     MatExpansionModule,
+    MatSliderModule,
+    MatFormFieldModule,
+    MatInputModule,
     QdragModule,
     ChatModule,
     SettingsModule,

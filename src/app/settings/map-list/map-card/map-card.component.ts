@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { WsService } from '../../../ws.service';
-import { OutCmd } from '../../../ws-messages';
+import { Internal, OutCmd } from '../../../ws-messages';
 import { SettingsService } from '../../settings.service';
+import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
 
 export interface MapOption {
   id: number
@@ -35,7 +36,7 @@ export class MapCardComponent {
   generated = 'Generated';
   seeds: string[] = [];
 
-  constructor(public ss: SettingsService, public ws: WsService) { }
+  constructor(public ss: SettingsService, public ws: WsService, private es: EscMenuService) { }
 
   selectMap(id: number): void {
     this.selectedMap.emit(id);
@@ -50,5 +51,10 @@ export class MapCardComponent {
 
   updateSeed(seed: string): void {
     this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
+  }
+
+  openAdvanced(): void {
+    this.ws.dispatchMessage({ cmd: Internal.OpenAdvanced });
+    this.es.open = false;
   }
 }
