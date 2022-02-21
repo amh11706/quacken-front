@@ -5,13 +5,15 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
-    title: 'Release 20 February 2022',
+    title: 'Release 23 February 2022',
     points: [
       'Maneuvers!',
       'Place or cycle through available maneuvers by holding shift when you click.',
       'Advanced jobber quality options: Fine tune every category.',
       'Unlimited and zero jobber quality options for some spicier configurations.',
+      'Advanced map generation settings for finding the perfect map.',
       'Draggable cannon tokens.',
+      'Control + click cannons to fill all.',
       'Moved ready button for unlimited time to below the timer bar.',
       'Player list on card hover is much less flickery.',
     ],

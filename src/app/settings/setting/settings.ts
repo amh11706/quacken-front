@@ -2,6 +2,7 @@
 import { OutCmd } from '../../ws-messages';
 import { BotSettingComponent } from '../bot-setting/bot-setting.component';
 import { JobberQualityComponent } from '../jobber-quality/jobber-quality.component';
+import { SettingPartial } from '../settings.service';
 
 interface BaseSetting {
   readonly type: string;
@@ -33,6 +34,7 @@ export interface SliderSetting extends BaseSetting {
   readonly max: number,
   readonly step: number,
   readonly stepLabels?: Record<number, string>;
+  readonly setLabel?: (s: SettingPartial) => void;
 }
 
 export interface OptionSetting extends BaseSetting {
@@ -53,10 +55,10 @@ export interface CustomMapSetting extends BaseSetting {
 export type Setting = ButtonSetting | BoatSetting | SliderSetting | OptionSetting | CheckboxSetting | CustomMapSetting;
 
 type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'speed' | 'lockAngle' | 'water' | 'showFps' |
-'maxFps' | 'spawnSide' | 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'soundMaster' |
-'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' |
-'cadeMap' | 'cadeTeams' | 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
-'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked';
+  'maxFps' | 'spawnSide' | 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'soundMaster' |
+  'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' |
+  'cadeMap' | 'cadeTeams' | 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
+  'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked';
 
 export const Settings: Record<SettingName, Setting> = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
@@ -120,6 +122,11 @@ export const Settings: Record<SettingName, Setting> = {
     admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 105, step: 5, name: 'jobberQuality',
     stepLabels: { 105: 'Advanced' },
     advancedComponent: JobberQualityComponent,
+    setLabel: (s) => {
+      if (!s.data) s.data = { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
+      delete s.data.label;
+      if (s.value > 100) s.data.label = Object.entries(s.data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
+    },
   },
   cadeTurnTime: {
     // eslint-disable-next-line object-property-newline

@@ -26,7 +26,9 @@ export class JobberQualityComponent {
     @Inject('setting') public setting: JobberSetting,
     public ss: SettingsService,
   ) {
-    if (!this.setting.data) this.setting.data = { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
+    if (!this.setting.data || typeof this.setting.data.Sail === 'undefined') {
+      this.setting.data = { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
+    }
     this.advanced = this.setting.value > 100;
   }
 

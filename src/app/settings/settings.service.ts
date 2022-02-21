@@ -42,11 +42,6 @@ export class SettingsService {
       const setting = group?.[s.name];
       if (setting) setting.value = s.value;
     });
-
-    ws.connected$.subscribe(v => {
-      if (!v) return;
-      this.settings.clear();
-    });
   }
 
   setFakeSettings(group: string, settings: SettingMap): void {
@@ -76,7 +71,10 @@ export class SettingsService {
           this.settings.set(group, localSettings);
         }
 
-        for (const setting of m) localSettings[setting.name] = setting;
+        for (const setting of m) {
+          if (localSettings[setting.name]) Object.assign(localSettings[setting.name], setting);
+          else localSettings[setting.name] = setting;
+        }
         ready?.next(localSettings);
         this.ready.delete(group);
       });

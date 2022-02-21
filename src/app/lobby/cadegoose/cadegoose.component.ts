@@ -63,7 +63,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   ) {
     super(ws, ss, fs, es);
 
-    void this.ss.getGroup('l/cade', true);
+    this.group = 'l/cade';
+    void this.ss.getGroup(this.group, true);
   }
 
   ngOnInit(): void {
@@ -79,8 +80,11 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     }));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));
     this.sub.add(this.kbs.subscribe(this.statAction, v => this.statOpacity = v ? 1 : 0));
-    this.sub.add(this.mapDebounce.pipe(debounceTime(500)).subscribe(seed => {
+    this.sub.add(this.mapDebounce.pipe(debounceTime(100)).subscribe(seed => {
       this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
+    }));
+    this.sub.add(this.ws.connected$.subscribe(v => {
+      if (v) void this.ss.getGroup(this.group, true);
     }));
   }
 

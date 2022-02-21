@@ -281,6 +281,11 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   addShot(e: MouseEvent, i: number): void {
     if (this.locked) return;
+    if (e.ctrlKey) {
+      for (const i in this.shots) this.shots[i] = this.myBoat.maxShots;
+      void this.sendShots();
+      return;
+    }
     if (e.shiftKey) {
       const points = (this.lastTick.attr[0] || 0) - (this.usingManeuvers[0] || 0);
       if (points >= 100) {

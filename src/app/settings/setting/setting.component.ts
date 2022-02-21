@@ -72,6 +72,26 @@ export class SettingComponent {
     });
   }
 
+  private setLabel(): void {
+    let label = '';
+    switch (this.setting.type) {
+      case 'option':
+        label = this.setting.options[this.settingValue.value] || '';
+        break;
+      case 'slider':
+        if (this.setting.setLabel) return this.setting.setLabel(this.settingValue);
+        label = this.setting.stepLabels?.[this.settingValue.value] || '';
+        break;
+      default:
+        return;
+    }
+
+    if (this.setting.advancedComponent) {
+      if (typeof this.settingValue.data !== 'object') this.settingValue.data = {};
+      this.settingValue.data.label = label ? '"' + label + '"' : undefined;
+    } else this.settingValue.data = label || undefined;
+  }
+
   send(): void {
     if (this.setting.type !== 'button') return;
     this.ws.send(this.setting.trigger, this.setting.data);
@@ -83,6 +103,7 @@ export class SettingComponent {
       if (newSetting.value > this.setting.max) newSetting.value = this.setting.max;
       else if (newSetting.value < this.setting.min) newSetting.value = this.setting.min;
     }
+    this.setLabel();
 
     clearTimeout(this.debounce);
     this.debounce = window.setTimeout(() => {
@@ -92,9 +113,7 @@ export class SettingComponent {
         name: this.setting.name,
         value: +newSetting.value,
         group: this.setting.group,
-        data: this.setting.type === 'slider' && typeof newSetting.data !== 'object' && this.setting.stepLabels
-          ? this.setting.stepLabels?.[newSetting.value]
-          : newSetting.data,
+        data: newSetting.data,
       });
       if (this.setting.trigger) {
         this.ws.send(this.setting.trigger, +newSetting.value);

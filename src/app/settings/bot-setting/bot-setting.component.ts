@@ -26,7 +26,9 @@ export class BotSettingComponent {
     @Inject('setting') public setting: BotSetting,
     public ss: SettingsService,
   ) {
-    if (!this.setting.data) this.setting.data = { padExtra: [], custom: [[], [], [], []] };
+    if (!this.setting.data || !this.setting.data.padExtra) {
+      this.setting.data = { padExtra: [], custom: [[], [], [], []] };
+    }
   }
 
   addPadExtra(): void {
