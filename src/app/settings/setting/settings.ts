@@ -175,10 +175,10 @@ export const Settings: Record<SettingName, Setting> = {
     admin: true, id: 42, group: 'l/cade', name: 'spawnDelay', type: 'slider', label: 'Respawn Delay', min: 0, max: 5, step: 1,
   },
   cadeHotEntry: {
-    admin: true, id: 26, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an<br>entry is in progress',
+    admin: true, id: 26, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an entry is in progress',
   },
   cadeMap: {
-    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Custom Map', cmd: OutCmd.CgMapList,
+    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Map', cmd: OutCmd.CgMapList,
   },
   cadeTeams: {
     admin: true, id: 43, group: 'l/cade', name: 'teams', type: 'slider', label: 'Teams', min: 2, max: 4, step: 1,
@@ -219,7 +219,7 @@ export const Settings: Record<SettingName, Setting> = {
     id: 41, group: 'controls', type: 'checkbox', label: 'Always focus chat', name: 'alwaysChat',
   },
   customMap: {
-    admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Custom Map', cmd: OutCmd.MapList, name: 'customMap',
+    admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Map', cmd: OutCmd.MapList, name: 'customMap',
   },
   hideMoves: {
     admin: true, id: 13, group: 'l/quacken', type: 'checkbox', label: 'Hide Moves', name: 'hideMoves',

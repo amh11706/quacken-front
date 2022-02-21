@@ -32,7 +32,7 @@ export class CustomMapComponent implements OnInit {
     const setting = this.settingValue;
     if (!setting) return;
     const selected = this.data.find(el => el.id === +setting.value);
-    setting.data = selected?.label || 'Random';
+    setting.data = selected?.label || 'Generated';
     this.save.emit();
   }
 }

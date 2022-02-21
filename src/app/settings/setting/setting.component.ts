@@ -75,6 +75,9 @@ export class SettingComponent {
   private setLabel(): void {
     let label = '';
     switch (this.setting.type) {
+      case 'checkbox':
+        label = this.settingValue.value ? 'true' : 'false';
+        break;
       case 'option':
         label = this.setting.options[this.settingValue.value] || '';
         break;
@@ -110,7 +113,7 @@ export class SettingComponent {
       this.valueChange.emit(+newSetting.value);
       void this.ss.save({
         id: this.setting.id,
-        name: this.setting.name,
+        name: this.setting.label || this.setting.name,
         value: +newSetting.value,
         group: this.setting.group,
         data: newSetting.data,

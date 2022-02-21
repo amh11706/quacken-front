@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { WsService } from '../../../ws.service';
 import { Internal, OutCmd } from '../../../ws-messages';
 import { SettingsService } from '../../settings.service';
-import { EscMenuService } from 'src/app/esc-menu/esc-menu.service';
+import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 
 export interface MapOption {
   id: number
