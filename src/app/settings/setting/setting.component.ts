@@ -87,7 +87,7 @@ export class SettingComponent {
     }
 
     if (this.setting.advancedComponent) {
-      if (typeof this.settingValue.data !== 'object') this.settingValue.data = {};
+      if (typeof this.settingValue.data !== 'object' || !this.settingValue.data) this.settingValue.data = {};
       this.settingValue.data.label = label ? '"' + label + '"' : undefined;
     } else this.settingValue.data = label || undefined;
   }
