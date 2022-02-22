@@ -38,7 +38,7 @@
     <div class="movebar"
          [class.ready]="boat.ready">
       <div *ngFor="let move of boat.moves"
-           class="movebarslice {{moveNames[move]}}">
+           class="movebarslice {{moveNames[move] ?? 'maneuver'}}">
       </div>
     </div>
 
