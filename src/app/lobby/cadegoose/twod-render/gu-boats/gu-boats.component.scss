@@ -91,7 +91,7 @@ q-sprite-img {
 
 // speed set from html
 .shot.double { top: 10px; --delay: calc(var(--speed) * .2s) }
-.clutter { z-index: 2000; pointer-events: none; }
+.clutter { z-index: 5; pointer-events: none; }
 .shot, .smoke {
   position: absolute;
   top: 9px;
