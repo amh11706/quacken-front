@@ -84,7 +84,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
     }));
     this.sub.add(this.ws.connected$.subscribe(v => {
-      if (v) void this.ss.getGroup(this.group, true);
+      if (v) setTimeout(() => this.ss.getGroup(this.group, true), 1000);
     }));
   }
 
