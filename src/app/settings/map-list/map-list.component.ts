@@ -143,7 +143,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       title: this.setting.label || this.setting.name,
       value: map.id || 0,
       group: this.setting.group,
-      data: map.name || 'Generated',
+      data: map.name ? `${map.name} (${map.username})` : 'Generated',
     });
     this.selectedMap.value = map.id;
     if (id < 0) this.visible = true;
