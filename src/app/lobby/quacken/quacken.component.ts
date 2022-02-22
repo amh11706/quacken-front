@@ -56,13 +56,12 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc } });
-    void this.ss.getGroup(this.group, true);
     this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby(undefined, 'quacken');
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
     this.sub.add(this.ws.connected$.subscribe(v => {
-      if (v) void this.ss.getGroup(this.group, true);
+      if (v) setTimeout(() => this.ss.getGroup(this.group, true), 1000);
     }));
   }
 

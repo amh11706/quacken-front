@@ -64,7 +64,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     super(ws, ss, fs, es);
 
     this.group = 'l/cade';
-    void this.ss.getGroup(this.group, true);
   }
 
   ngOnInit(): void {
