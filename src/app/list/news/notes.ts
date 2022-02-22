@@ -5,7 +5,7 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
-    title: 'Release 23 February 2022',
+    title: 'Release 22 February 2022',
     points: [
       'Maneuvers!',
       'Place or cycle through available maneuvers by holding shift when you click.',
