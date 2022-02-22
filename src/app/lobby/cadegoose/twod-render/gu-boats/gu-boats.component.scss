@@ -91,7 +91,8 @@ q-sprite-img {
 
 // speed set from html
 .shot.double { top: 10px; --delay: calc(var(--speed) * .2s) }
-.clutter { z-index: 5; pointer-events: none; }
+.clutter { z-index: 2000; pointer-events: none; }
+.clutter16, .clutter17 { z-index: 5; }
 .shot, .smoke {
   position: absolute;
   top: 9px;
@@ -138,7 +139,7 @@ q-sprite-img {
   to { transform: rotate(var(--rotate, 0)) scale(var(--scaleX), var(--scaleY)); opacity: 0 }
 }
 
-.clutter12, .clutter8 { 
+.clutter12 .clutterimg, .clutter8 .clutterimg { 
   background-image: url("/assets/clutter/wave.png");
   position: absolute;
   opacity: 0;
@@ -150,16 +151,16 @@ q-sprite-img {
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
 }
-.clutter12.dir0 { bottom: -48px; right: -64px; --scaleX: 1; --scaleY: -1; }
-.clutter12.dir1 { bottom: -48px; left: 0; --scaleX: -1; --scaleY: -1; }
-.clutter12.dir2 { top: 0; left: 0; --scaleX: -1; --scaleY: 1 }
-.clutter12.dir3 { top: 0; right: -64px; --scaleX: 1; --scaleY: 1; }
+.clutter12 .clutterimg.dir0 { bottom: -48px; right: -64px; --scaleX: 1; --scaleY: -1; }
+.clutter12 .clutterimg.dir1 { bottom: -48px; left: 0; --scaleX: -1; --scaleY: -1; }
+.clutter12 .clutterimg.dir2 { top: 0; left: 0; --scaleX: -1; --scaleY: 1 }
+.clutter12 .clutterimg.dir3 { top: 0; right: -64px; --scaleX: 1; --scaleY: 1; }
 
-.clutter8 { background-image: url("/assets/clutter/wave2.png"); top: -24px; left: -32px; }
-.clutter8.dir0 { --scaleX: 1; --scaleY: 1; }
-.clutter8.dir1 { --scaleX: -1; --scaleY: 1; }
-.clutter8.dir2 { --scaleX: -1; --scaleY: 1.25; --rotate: 90deg; }
-.clutter8.dir3 { --scaleX: 1; --scaleY: 1.25; --rotate: -90deg; }
+.clutter8 .clutterimg { background-image: url("/assets/clutter/wave2.png"); top: -24px; left: -32px; }
+.clutter8 .clutterimg.dir0 { --scaleX: 1; --scaleY: 1; }
+.clutter8 .clutterimg.dir1 { --scaleX: -1; --scaleY: 1; }
+.clutter8 .clutterimg.dir2 { --scaleX: -1; --scaleY: 1.25; --rotate: 90deg; }
+.clutter8 .clutterimg.dir3 { --scaleX: 1; --scaleY: 1.25; --rotate: -90deg; }
 
-.clutter16 { background-image: url("/assets/clutter/flotsam.png"); }
-.clutter17 { background-image: url("/assets/clutter/flaming_flotsam.png"); }
+.clutter16 .clutterimg { background-image: url("/assets/clutter/flotsam.png"); }
+.clutter17 .clutterimg { background-image: url("/assets/clutter/flaming_flotsam.png"); }
