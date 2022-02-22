@@ -8,6 +8,7 @@ import { Settings } from './setting/settings';
 export interface Setting {
   id: number;
   name: string;
+  title: string;
   group: string;
   value: number;
   data?: any;

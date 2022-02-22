@@ -113,7 +113,8 @@ export class SettingComponent {
       this.valueChange.emit(+newSetting.value);
       void this.ss.save({
         id: this.setting.id,
-        name: this.setting.label || this.setting.name,
+        name: this.setting.name,
+        title: this.setting.label || this.setting.name,
         value: +newSetting.value,
         group: this.setting.group,
         data: newSetting.data,

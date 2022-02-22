@@ -152,6 +152,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     void this.ss.save({
       id: 32,
       name: 'bindings',
+      title: '',
       group: 'controls',
       value: 0,
       data: toSave,
