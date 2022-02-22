@@ -207,13 +207,13 @@ export const Settings: Record<SettingName, Setting> = {
     admin: true, id: 8, group: 'l/quacken', type: 'structureSet', label: 'Structure Set', cmd: OutCmd.StructureSetList, name: 'structureSet',
   },
   hotEntry: {
-    admin: true, id: 9, group: 'l/quacken', type: 'checkbox', label: 'Allow join while an<br>entry is in progress', name: 'hotEntry',
+    admin: true, id: 9, group: 'l/quacken', type: 'checkbox', label: 'Allow join while an entry is in progress', name: 'hotEntry',
   },
   autoGen: {
-    admin: true, id: 10, group: 'l/quacken', type: 'checkbox', label: 'Generate new map<br>when a round starts', name: 'autoGen',
+    admin: true, id: 10, group: 'l/quacken', type: 'checkbox', label: 'Generate new map when a round starts', name: 'autoGen',
   },
   kbControls: {
-    id: 11, group: 'controls', type: 'checkbox', label: 'Enable keyboard<br>move entry', name: 'kbControls',
+    id: 11, group: 'controls', type: 'checkbox', label: 'Enable keyboard move entry', name: 'kbControls',
   },
   alwaysChat: {
     id: 41, group: 'controls', type: 'checkbox', label: 'Always focus chat', name: 'alwaysChat',

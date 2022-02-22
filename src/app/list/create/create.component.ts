@@ -5,6 +5,7 @@ import { CadeDesc } from '../../lobby/cadegoose/cadegoose.component';
 import { QuackenDesc } from '../../lobby/quacken/quacken.component';
 import { SbDesc } from '../../lobby/seabattle/seabattle.component';
 import { SettingMap, SettingsService } from '../../settings/settings.service';
+import { Settings } from '../../settings/setting/settings';
 import { InCmd, OutCmd } from '../../ws-messages';
 import { WsService } from '../../ws.service';
 
@@ -27,6 +28,12 @@ export class CreateComponent implements OnInit, OnDestroy {
   settings: SettingMap = {};
   createGroup: SettingMap = {};
   idDescriptions = Object.values(Descriptions);
+  typeSettings: (keyof typeof Settings)[][] = [
+    ['maxPlayers', 'hotEntry', 'publicMode'],
+    ['turnTime', 'playTo', 'watchers'],
+    ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode'],
+    ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode'],
+  ];
 
   private sub = new Subscription();
 

@@ -16,6 +16,7 @@ export const Notes: Note[] = [
       'Control + click cannons to fill all.',
       'Moved ready button for unlimited time to below the timer bar.',
       'Player list on card hover is much less flickery.',
+      'Nicer setting update messages.',
     ],
   },
   {

@@ -1,59 +1,23 @@
-<ng-template #quackenEdit>
-    <q-setting name="maxPlayers"></q-setting>
-    <q-setting name="duckLvl"></q-setting>
-    <q-setting name="publicMode"></q-setting>
-    <q-setting name="customMap"></q-setting>
-    <q-setting name="tileSet"></q-setting>
-    <q-setting name="structureSet"></q-setting>
-    <q-setting name="hotEntry"></q-setting>
-    <q-setting name="autoGen"></q-setting>
-    <q-setting name="hideMoves"></q-setting>
-</ng-template>
-
-<ng-template #spadesEdit>
-    <q-setting name="turnTime"></q-setting>
-    <q-setting name="playTo"></q-setting>
-    <q-setting name="watchers"></q-setting>
-</ng-template>
-
-<ng-template #cadeEdit>
-    <q-setting name="cadeMaxPlayers"></q-setting>
-    <q-setting name="jobberQuality"></q-setting>
-    <q-setting name="cadeTurnTime"></q-setting>
-    <q-setting name="cadeTurns"></q-setting>
-    <q-setting name="enableBots"></q-setting>
-    <q-setting name="botDifficulty"></q-setting>
-    <q-setting name="cadeHotEntry"></q-setting>
-    <q-setting name="cadePublicMode"></q-setting>
-    <q-setting name="cadeMap"></q-setting>
-</ng-template>
-
 <ng-container *ngIf="ws.user?.id">
-    <h2 id="create">Lobby Type: <q-setting name="createType"
-                   (valueChange)="changeType()"></q-setting>
-    </h2>
-    <p>{{idDescriptions[settings.createType?.value || 0]}}</p>
-    <div id="lsettings">
-        <ng-container
-                      *ngTemplateOutlet="[quackenEdit, spadesEdit, cadeEdit, cadeEdit][settings.createType?.value || 0] || cadeEdit">
-        </ng-container>
-    </div>
+  <h2 id="create">Lobby Type: <q-setting name="createType"
+               (valueChange)="changeType()"></q-setting>
+  </h2>
+  <p>{{idDescriptions[settings.createType?.value || 0]}}</p>
+  <div id="lsettings">
+    <q-setting *ngFor="let setting of typeSettings[settings.createType?.value || 0]"
+               [name]="setting"></q-setting>
+  </div>
 
-    <p *ngIf="createGroup.customMap?.value || createGroup.map?.value"
-       class="error">
-        Note: Selecting a custom map will override map generation settings.
-        Clear the custom map selection to re enable map generation.
-    </p>
-    <p>
-        <button mat-raised-button
-                color="accent"
-                (click)="createLobby()"
-                [disabled]="created">Create</button>
-    </p>
+  <p>
+    <button mat-raised-button
+            color="accent"
+            (click)="createLobby()"
+            [disabled]="created">Create</button>
+  </p>
 </ng-container>
 
 <p *ngIf="!ws.user?.id"
    class="error">
-    Guests cannot make lobbies. Join an existing lobby or create an account
-    to make your own.
+  Guests cannot make lobbies. Join an existing lobby or create an account
+  to make your own.
 </p>
