@@ -139,7 +139,8 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (!map) return;
     void this.ss.save({
       id: this.setting.id,
-      name: this.setting.label || this.setting.name,
+      name: this.setting.name,
+      title: this.setting.label || this.setting.name,
       value: map.id || 0,
       group: this.setting.group,
       data: map.name || 'Generated',

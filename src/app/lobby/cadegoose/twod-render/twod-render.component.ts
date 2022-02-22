@@ -285,7 +285,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private saveScale() {
     clearTimeout(this.wheelDebounce);
     this.wheelDebounce = window.setTimeout(() => {
-      void this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', group: 'graphics' });
+      void this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', title: '', group: 'graphics' });
     }, 1000);
   }
 }
