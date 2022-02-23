@@ -89,9 +89,9 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
     // setTimeout(() => {
     //   void this.handleUpdate([
-    //     { x: 2, y: 3, t: 17, dir: 0 },
+    //     { x: 2, y: 4, t: 17, dir: 0 },
     //   ], 0);
-    // }, 500);
+    // }, 1000);
   }
 
   ngOnDestroy(): void {

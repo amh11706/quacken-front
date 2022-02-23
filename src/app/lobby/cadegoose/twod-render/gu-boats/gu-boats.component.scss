@@ -77,12 +77,23 @@ q-sprite-img {
   from { background: url("/assets/clutter/splash_large.png") 0 no-repeat; }
   to { background: url("/assets/clutter/splash_large.png") -520px no-repeat; }
 }
+@keyframes rotate {
+  to { transform: translate(var(--tranX,0), var(--tranY,0)) rotate(360deg);}
+}
 @keyframes move { 
-  to { transform: translate(var(--tranX,0), var(--tranY,0)); }
+  to { transform: translate(var(--tranX,0), var(--tranY,0)) rotate(360deg); }
 }
 @keyframes smoke {
   from { background-position-x: 0; }
   to { background-position-x: var(--endX); }
+}
+
+@keyframes floatsam {
+  0%   { opacity: 0.85; }
+  25%   { opacity: 0.95; }
+  50%   { opacity: 1; }
+  75%   { opacity: 0.95; }
+  100% { opacity: 0.85; }
 }
 
 .shot.dis1 { --movetime: .3s; --distance: 1; }
@@ -101,6 +112,7 @@ q-sprite-img {
   width: 40px;
   background-repeat: no-repeat;
 }
+
 .shot {
   background-position: center;
   animation-duration: calc(var(--speed) * var(--movetime)), calc(var(--speed) * .5s);
@@ -116,7 +128,6 @@ q-sprite-img {
 .size4 .shot, .size6 .shot { background-image: url("/assets/clutter/chain_cannonball.png"); }
 .size5 .shot, .size7 .shot { background-image: url("/assets/clutter/flaming_cannonball.png"); }
 .shot.dis4 { animation-name: move, splash !important; animation-timing-function: linear, steps(13); }
-
 .smoke { animation: smoke calc(var(--speed) * 1s) steps(18) both; }
 .size1 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
 .size2 .smoke, .size4 .smoke, .size5 .smoke, .size6 .smoke, .size7 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }
@@ -164,3 +175,5 @@ q-sprite-img {
 
 .clutter16 .clutterimg { background-image: url("/assets/clutter/flotsam.png"); }
 .clutter17 .clutterimg { background-image: url("/assets/clutter/flaming_flotsam.png"); }
+
+.clutter17 {animation: floatsam 2s ease-in-out infinite;}
