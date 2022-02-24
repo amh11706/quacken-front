@@ -115,6 +115,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.myBoat.isMe = this._boats[this.myBoat.id] === this.myBoat;
       this.setBoats(Object.values(m.boats));
       this.clutter = m.clutter || this.clutter;
+      this.handleUpdate(this.clutter, 0);
     }));
     this.subs.add(this.ws.subscribe(InCmd.NewBoat, (boat: BoatSync) => this.setBoats([boat], false)));
     this.subs.add(this.ws.subscribe(InCmd.DelBoat, (id: number) => this.deleteBoat(id)));
