@@ -89,11 +89,11 @@ q-sprite-img {
 }
 
 @keyframes floatsam {
-  0%   { opacity: 0.6; transform: scale(1) }
+  0%   { opacity: 0.7; transform: scale(1) }
   25%   { opacity: 0.95; }
   50%   { opacity: 1; transform: scale(1.01) }
   75%   { opacity: 0.95; }
-  100% { opacity: 0.6; transform: scale(1) }
+  100% { opacity: 0.7; transform: scale(1) }
 }
 
 .shot.dis1 { --movetime: .3s; --distance: 1; }
