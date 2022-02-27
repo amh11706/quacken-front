@@ -6,6 +6,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
 
+const ClientVersion = 1;
+
 export interface InMessage {
   cmd: InCmd | Internal;
   id?: number;
@@ -57,6 +59,19 @@ export class WsService {
     this.subscribe(InCmd.Copy, (copy: number) => {
       this.copy = copy;
     });
+    this.subscribe(InCmd.Reload, () => {
+      const lastReload = sessionStorage.getItem('reloadTime');
+      if (lastReload && +lastReload > new Date().valueOf() - 30000) {
+        this.dispatchMessage({
+          cmd: InCmd.ChatMessage,
+          data: { type: 0, message: 'Outdated client. Please clear your cache then refresh the page.' },
+        });
+        this.close();
+        return;
+      }
+      sessionStorage.setItem('reloadTime', String(new Date().valueOf()));
+      location.reload();
+    });
   }
 
   connect(token = this.token): void {
@@ -71,7 +86,7 @@ export class WsService {
     this.socket = new WebSocket(environment.ws);
 
     this.socket.onopen = () => {
-      this.socket?.send(token);
+      this.socket?.send(JSON.stringify({ token, ClientVersion }));
     };
 
     this.socket.onmessage = message => this.dispatchMessage(JSON.parse(message.data));
