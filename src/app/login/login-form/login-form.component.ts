@@ -1,18 +1,19 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthGuard } from '../../auth.guard';
 import { environment } from '../../../environments/environment';
 import { PrivacyComponent } from '../privacy/privacy.component';
 import { TermsComponent } from '../terms/terms.component';
+import { WsService } from '../../ws.service';
 
 @Component({
   selector: 'q-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements AfterViewInit {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
 
   user = {
@@ -34,6 +35,14 @@ export class LoginFormComponent {
     const token = window.localStorage.getItem('token');
     if (token) {
       void router.navigate(['list']);
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (WsService.reason) {
+      this.errMessage = WsService.reason;
+      delete WsService.reason;
+      if (this.errComponent) this.dialog.open(this.errComponent);
     }
   }
 

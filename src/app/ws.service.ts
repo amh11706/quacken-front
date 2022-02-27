@@ -22,6 +22,7 @@ export interface TokenUser {
   providedIn: 'root',
 })
 export class WsService {
+  static reason?: string;
   private socket?: WebSocket;
   private token = '';
   private timeOut?: number;
@@ -35,14 +36,13 @@ export class WsService {
   outMessages$ = new Subject<{ cmd: OutCmd, data: any, id?: number }>();
   fakeWs?: WsService;
 
-  reason?: string;
   sId?: number;
   copy?: number;
 
   constructor(private router: Router) {
     this.subscribe(InCmd.Kick, (reason: string) => {
       this.close();
-      this.reason = reason;
+      WsService.reason = reason;
       window.localStorage.removeItem('token');
       void this.router.navigate(['auth/login']);
     });
