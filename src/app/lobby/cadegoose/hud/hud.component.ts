@@ -283,7 +283,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     if (this.locked) return;
     if (e.ctrlKey || e.metaKey) {
       for (const shot in this.shots) {
-        if (e.shiftKey || i % 2 === +shot % 2) {
+        if (e.shiftKey || (i % 2 === +shot % 2 && +shot >= i)) {
           this.shots[shot] = this.myBoat.maxShots;
         }
       }
