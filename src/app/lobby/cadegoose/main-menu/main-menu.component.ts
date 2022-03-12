@@ -70,7 +70,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.es.activeTab = 0;
       }
       this.teams = m.players;
-      this.admin = m.owner || this.admin;
+      this.admin = m.owner ?? this.admin;
       this.ready = false;
       this.myTeam = 99;
       this.teamPlayers = [];
