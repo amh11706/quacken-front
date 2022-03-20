@@ -58,7 +58,8 @@ type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'spee
   'maxFps' | 'spawnSide' | 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'soundMaster' |
   'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' |
   'cadeMap' | 'cadeTeams' | 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
-  'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked';
+  'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked' |
+  'renderMode';
 
 export const Settings: Record<SettingName, Setting> = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
@@ -88,24 +89,13 @@ export const Settings: Record<SettingName, Setting> = {
       { name: 'Next Ship', options: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
     ],
   },
-  mapScale: {
-    id: 2, group: 'graphics', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1, name: 'mapScale',
-  },
-  speed: {
-    id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 1, name: 'speed',
-  },
-  lockAngle: {
-    id: 22, group: 'controls', name: 'lockAngle', type: 'checkbox', label: 'Lock camera rotation',
-  },
-  water: {
-    id: 31, group: 'graphics', name: 'water', type: 'checkbox', label: 'Animated Water',
-  },
-  showFps: {
-    id: 29, group: 'graphics', name: 'showFps', type: 'checkbox', label: 'Show FPS',
-  },
-  maxFps: {
-    id: 28, group: 'graphics', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 15, max: 240, step: 15,
-  },
+  mapScale: { id: 2, group: 'graphics', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1, name: 'mapScale' },
+  speed: { id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 1, name: 'speed' },
+  water: { id: 31, group: 'graphics', name: 'water', type: 'checkbox', label: 'Animated Water' },
+  showFps: { id: 29, group: 'graphics', name: 'showFps', type: 'checkbox', label: 'Show FPS' },
+  maxFps: { id: 28, group: 'graphics', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 15, max: 240, step: 15 },
+  renderMode: { id: 44, group: 'graphics', name: 'renderMode', type: 'option', label: 'Render Mode', options: ['2D', '3D'] },
+  lockAngle: { id: 22, group: 'controls', name: 'lockAngle', type: 'checkbox', label: 'Lock camera rotation' },
   spawnSide: {
     id: 21,
     group: 'boats',
@@ -133,9 +123,7 @@ export const Settings: Record<SettingName, Setting> = {
     admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 40, step: 5,
     stepLabels: { 40: 'Unlimited' },
   },
-  cadeTurns: {
-    admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5,
-  },
+  cadeTurns: { admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5 },
   enableBots: {
     admin: true,
     id: 35,
