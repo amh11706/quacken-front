@@ -113,6 +113,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
+      if (m.map === undefined) return;
       this.turn = m.turn ?? this.turn;
       if (this.turn > 0 && this.myBoat.isMe && this.ws.connected) this.locked = this.myBoat.moveLock !== 0;
       else {

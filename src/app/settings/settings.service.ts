@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { InCmd, OutCmd } from '../ws-messages';
 
 import { WsService } from '../ws.service';
@@ -17,6 +17,7 @@ export interface Setting {
 export interface SettingPartial {
   value: number;
   data?: any;
+  stream?: BehaviorSubject<number>;
 }
 
 export interface SettingMap {
@@ -41,7 +42,10 @@ export class SettingsService {
     ws.subscribe(InCmd.SettingSet, (s: Setting) => {
       const group = this.settings.get(s.group);
       const setting = group?.[s.name];
-      if (setting) setting.value = s.value;
+      if (setting) {
+        setting.value = s.value;
+        setting.stream?.next(s.value);
+      }
     });
   }
 
@@ -73,8 +77,11 @@ export class SettingsService {
         }
 
         for (const setting of m) {
-          if (localSettings[setting.name]) Object.assign(localSettings[setting.name], setting);
-          else localSettings[setting.name] = setting;
+          const oldSetting = localSettings[setting.name];
+          if (oldSetting) {
+            Object.assign(oldSetting, setting);
+            oldSetting.stream?.next(setting.value);
+          } else localSettings[setting.name] = { ...setting, stream: new BehaviorSubject(setting.value) };
         }
         ready?.next(localSettings);
         this.ready.delete(group);
@@ -93,6 +100,9 @@ export class SettingsService {
   async save(setting: Setting): Promise<void> {
     this.ws.send(OutCmd.SettingSet, setting);
     const oldSetting = await this.get(setting.group, setting.name);
-    if (oldSetting) Object.assign(oldSetting, setting);
+    if (oldSetting) {
+      Object.assign(oldSetting, setting);
+      oldSetting.stream?.next(setting.value);
+    }
   }
 }

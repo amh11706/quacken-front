@@ -160,7 +160,9 @@ export const Settings: Record<SettingName, Setting> = {
     admin: true, id: 24, group: 'l/cade', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40, step: 1,
   },
   cadeSpawnDelay: {
+    // eslint-disable-next-line object-property-newline
     admin: true, id: 42, group: 'l/cade', name: 'spawnDelay', type: 'slider', label: 'Respawn Delay', min: 0, max: 5, step: 1,
+    stepLabels: { 5: 'No Respawn' },
   },
   cadeHotEntry: {
     admin: true, id: 26, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an entry is in progress',

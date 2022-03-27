@@ -16,6 +16,7 @@ import { SbStatsComponent } from './sb-stats/sb-stats.component';
 import { SbEntryStatusComponent } from './sb-entry-status/sb-entry-status.component';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
 import { SeabattleComponent } from './seabattle.component';
+import { ThreedRenderModule } from '../cadegoose/threed-render/threed-render.module';
 
 @NgModule({
   declarations: [SeabattleComponent, SbEntryStatusComponent, SbStatsComponent, SbMainMenuComponent],
@@ -23,6 +24,7 @@ import { SeabattleComponent } from './seabattle.component';
     CommonModule,
     CadegooseModule,
     TwodRenderModule,
+    ThreedRenderModule,
     MatButtonModule,
     MatRadioModule,
     MatCheckboxModule,

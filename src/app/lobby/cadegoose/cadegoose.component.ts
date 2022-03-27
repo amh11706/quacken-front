@@ -33,13 +33,14 @@ export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy 
   styleUrls: ['./cadegoose.component.scss'],
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;
+  @ViewChild('renderer', { static: false }) renderer?: TwodRenderComponent;
   protected menuComponent = MainMenuComponent;
   graphicSettings = {
     mapScale: { value: 50 },
     speed: { value: 10 },
     water: { value: 1 },
     showFps: { value: 0 },
+    renderMode: { value: -1 },
   };
 
   controlSettings = { lockAngle: { value: 0 }, kbControls: { value: 0 } };
@@ -98,6 +99,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected setMapB64(map: string): void {
     super.setMapB64(map);
     this.renderer?.fillMap(this.map, this.lobby?.flags);
+    this.ws.send(OutCmd.Sync);
   }
 
   updateSeed(seed: string): void {

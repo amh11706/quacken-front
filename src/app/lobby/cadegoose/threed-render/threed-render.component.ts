@@ -65,6 +65,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('fps') fps?: ElementRef;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
+  @Input() safeZone = true;
   @Input() graphicSettings: SettingMap = {
     mapScale: { value: 50 },
     speed: { value: 10 },
@@ -368,6 +369,8 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       line = line.clone();
       line.position.x++;
     }
+    this.mapScene.add(grid);
+    if (!this.safeZone) return;
 
     const szGeo = new PlaneBufferGeometry(20, 3);
     const szMat = new MeshBasicMaterial({ color: 'cyan', opacity: 0.3, transparent: true });
@@ -381,8 +384,6 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     sz = sz.clone();
     sz.position.z += 33;
     grid.add(sz);
-
-    this.mapScene.add(grid);
   }
 
   fillMap(map: number[][], flags: any[]): void {
@@ -430,7 +431,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
             else {
               const flag = centered.getObjectByName('flag');
               if (flag instanceof Mesh) {
-                flag.material = flagMats[flags[thisFlag].t as keyof typeof flagMats];
+                flag.material = flagMats[flags[thisFlag]?.t as keyof typeof flagMats] || flag.material;
                 this.bs.flags[thisFlag] = flag;
               }
             }

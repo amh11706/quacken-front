@@ -37,6 +37,10 @@
   color: aquamarine;
 }
 
+q-card {
+  transform: translateY(0);
+}
+
 q-card.played {
   transition: .5s;
 }

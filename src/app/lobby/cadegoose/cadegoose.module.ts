@@ -24,15 +24,14 @@ import { CadeEntryStatusComponent } from './cade-entry-status/cade-entry-status.
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { StatsComponent } from './stats/stats.component';
 import { StatEndComponent } from './stat-end/stat-end.component';
-import { ThreedRenderComponent } from './threed-render/threed-render.component';
 import { RatingModule } from '../../settings/rating/rating.module';
 import { AdvancedMapComponent } from './advanced-map/advanced-map.component';
+import { ThreedRenderModule } from './threed-render/threed-render.module';
 
 @NgModule({
   declarations: [
     CadegooseComponent, CadeHudComponent, CadeEntryStatusComponent,
     MainMenuComponent, StatsComponent, StatEndComponent,
-    ThreedRenderComponent,
     AdvancedMapComponent,
   ],
   imports: [
@@ -54,6 +53,7 @@ import { AdvancedMapComponent } from './advanced-map/advanced-map.component';
     QuackenModule,
     NameModule,
     TwodRenderModule,
+    ThreedRenderModule,
     RatingModule,
   ],
   exports: [

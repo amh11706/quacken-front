@@ -261,9 +261,12 @@ export class SpadesComponent implements OnInit, OnDestroy {
       else validSuits = [true, true, true, true];
     }
 
+    let validCards = 0;
     for (const card of this.cards) {
       card.valid = validSuits[card.suit];
+      if (card.valid) validCards++;
     }
+    if (validCards === 0) for (const card of this.cards) card.valid = true;
     this.selected = this.selected.filter(c => c.valid);
   }
 

@@ -36,8 +36,13 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   map: number[][] = [];
-  graphicSettings = { mapScale: { value: 50 } as SettingPartial, speed: { value: 10 } as SettingPartial };
   controlSettings = { kbControls: { value: 1 } as SettingPartial };
+  graphicSettings = {
+    mapScale: { value: 50 } as SettingPartial,
+    speed: { value: 10 } as SettingPartial,
+    renderMode: { value: -1 } as SettingPartial,
+  };
+
   myBoat = new Boat('');
   protected sub = new Subscription();
   protected group = 'l/quacken';
@@ -81,6 +86,9 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
     if (graphicSettings.mapScale && graphicSettings.speed) this.graphicSettings = graphicSettings as this['graphicSettings'];
     if (controlSettings.kbControls) this.controlSettings = controlSettings as this['controlSettings'];
+    this.sub.add(this.graphicSettings.renderMode.stream?.subscribe(() => {
+      setTimeout(() => this.setMapB64(this._lobby?.map || ''), 0);
+    }));
   }
 
   protected setMapB64(map: string): void {
