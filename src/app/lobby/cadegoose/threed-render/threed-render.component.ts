@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 import { Internal } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
 import { SettingMap } from '../../../settings/settings.service';
-import { Boat } from '../../quacken/boats/boat';
+import { Boat, Team } from '../../quacken/boats/boat';
 import { BoatRender } from '../boat-render';
 import { BoatService, flagMats } from '../boat.service';
 
@@ -386,7 +386,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     grid.add(sz);
   }
 
-  fillMap(map: number[][], flags: any[]): void {
+  fillMap(map: number[][], flags: { x: number, y: number, t: Team, p: number, cs: number[] }[]): void {
     for (const o of this.mapObjects) o.parent?.remove(o);
     this.mapObjects = [];
 
@@ -431,7 +431,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
             else {
               const flag = centered.getObjectByName('flag');
               if (flag instanceof Mesh) {
-                flag.material = flagMats[flags[thisFlag]?.t as keyof typeof flagMats] || flag.material;
+                flag.material = flagMats[flags[thisFlag]?.t || 0] || flag.material;
                 this.bs.flags[thisFlag] = flag;
               }
             }

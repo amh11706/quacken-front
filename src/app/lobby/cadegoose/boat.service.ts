@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import {
   Scene,
   Box3,
-  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera,
+  Ray, MeshStandardMaterial, Mesh, DoubleSide, Camera, Material,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
@@ -16,8 +16,9 @@ import { BoatRender } from './boat-render';
 import { JobQueue } from './job-queue';
 import { BoatSync, BoatStatus } from '../quacken/boats/convert';
 import { ObstacleConfig } from './threed-render/threed-render.component';
+import { Team } from '../quacken/boats/boat';
 
-export const flagMats = {
+export const flagMats: Record<Team, Material> = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
   1: new MeshStandardMaterial({ color: 'darkred', side: DoubleSide }),
   2: new MeshStandardMaterial({ color: 'gold', side: DoubleSide }),
@@ -44,7 +45,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   private ships: Record<number, Promise<GLTF>> = {};
   protected blockRender = true;
   flags: Mesh[] = [];
-  private flagData: { x: number, y: number, t: number, p: number, cs: number[] }[] = [];
+  private flagData: { x: number, y: number, t: Team, p: number, cs: number[] }[] = [];
   private worker = new JobQueue();
   protected checkSZ = checkSZ;
 
@@ -180,7 +181,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       const f = this.flagData[i];
       if (!f) continue;
       const flag = this.flags[i];
-      if (flag) flag.material = flagMats[f.t as keyof typeof flagMats] ?? flagMats[99];
+      if (flag) flag.material = flagMats[f.t] ?? flagMats[99];
       if (f.cs) for (const id of f.cs) this._boats[id]?.render?.flags.push({ p: f.p, t: f.t });
     }
     for (const boat of this.boats) {

@@ -2,14 +2,15 @@ import * as TWEEN from '@tweenjs/tween.js';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Vector3, Euler } from 'three';
-import { Boat } from '../quacken/boats/boat';
+import { Boat, Team } from '../quacken/boats/boat';
 import { JobQueue } from './job-queue';
 import { TeamColors } from './cade-entry-status/cade-entry-status.component';
 
 function headerColor(boat: Boat): string {
-  const color = TeamColors[boat.team || 0];
-  if (color && boat.isMe) {
-    for (let i = 0; i < 3; i++) color[i] = Math.round((color[i] || 0) * 0.9);
+  let color = TeamColors[boat.team || 0];
+  if (!color) return 'white';
+  if (boat.isMe) {
+    color = color.map(c => Math.min(c + 50, 255)) as typeof color;
   }
   return `rgb(${color?.join(',')})`;
 }
@@ -23,9 +24,9 @@ const moveColor = [
   'red',
 ];
 
-const flagColor = { 0: 'lime', 1: 'red', 2: 'gold', 3: 'magenta', 100: '#666' };
+const flagColor: Record<Team, string> = { 0: 'lime', 1: 'red', 2: 'gold', 3: 'magenta', 99: '', 100: '#666' };
 
-const teamColors = [
+const teamMaterials = [
   new THREE.LineBasicMaterial({ color: 'lime', transparent: true, opacity: 0 }),
   new THREE.LineBasicMaterial({ color: 'red', transparent: true, opacity: 0 }),
   new THREE.LineBasicMaterial({ color: 'gold', transparent: true, opacity: 0 }),
@@ -48,9 +49,9 @@ export class BoatRender {
   static myLastPos = { x: 0, z: 0 };
 
   obj = new THREE.Group();
-  team: number;
+  team: Team;
   hitbox?: THREE.LineSegments<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
-  flags: { p: number, t: number }[] = [];
+  flags: { p: number, t: Team }[] = [];
 
   private influence?: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>;
   private header = new THREE.Group();
@@ -84,7 +85,7 @@ export class BoatRender {
       const circleGeo = new THREE.BufferGeometry().setFromPoints(circle.getPoints(50));
       circleGeo.rotateX(-Math.PI / 2);
       circleGeo.translate(0, 0.02, 0);
-      BoatRender.circle = new THREE.Line(circleGeo, teamColors[0]);
+      BoatRender.circle = new THREE.Line(circleGeo, teamMaterials[0]);
       BoatRender.circle.visible = false;
     }
 
@@ -95,7 +96,7 @@ export class BoatRender {
 
     this.influence = BoatRender.circle.clone();
     this.influence.scale.setScalar(boat.influence * 2);
-    this.influence.material = teamColors[boat.team ?? 0]?.clone() ?? this.influence.material;
+    this.influence.material = teamMaterials[boat.team ?? 0]?.clone() ?? this.influence.material;
     this.obj.add(this.influence);
 
     this.obj.add(this.header);
@@ -191,7 +192,7 @@ export class BoatRender {
     }
 
     if (this.team !== boat.team && this.influence) {
-      const material = teamColors[boat.team ?? 0]?.clone();
+      const material = teamMaterials[boat.team ?? 0]?.clone();
       if (material) {
         this.influence.material.dispose();
         this.influence.material = material;
@@ -262,7 +263,7 @@ export class BoatRender {
       const flagWidth = ctx.measureText(this.flags.reduce((p, c) => p + c.p, '')).width;
       let shownFlags = '';
       for (const f of this.flags) {
-        ctx.fillStyle = flagColor[f.t as keyof typeof flagColor];
+        ctx.fillStyle = flagColor[f.t];
         const offset = ctx.measureText(shownFlags).width;
         ctx.fillText(String(f.p), -flagWidth / 2 + offset, 64);
         shownFlags += f.p;

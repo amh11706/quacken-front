@@ -4,7 +4,7 @@ import * as TWEEN from '@tweenjs/tween.js';
 
 import { InCmd, Internal, OutCmd } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
-import { Boat } from './boat';
+import { Boat, Team } from './boat';
 import { BoatStatus, BoatSync, boatToSync, syncToBoat } from './convert';
 import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
@@ -29,7 +29,7 @@ export interface Turn {
   cSteps: Clutter[][];
   treasure: number[];
   points: number[];
-  flags: { x: number, y: number, t: number, p: number, cs: number[] }[];
+  flags: { x: number, y: number, t: Team, p: number, cs: number[] }[];
   stats: Record<number, StatRow>;
 }
 

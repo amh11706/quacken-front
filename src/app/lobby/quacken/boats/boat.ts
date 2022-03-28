@@ -1,5 +1,7 @@
 import { BoatRender } from '../../cadegoose/boat-render';
 
+export type Team = 0 | 1 | 2 | 3 | 99 | 100;
+
 export class Boat {
   treasure = 0;
   damage = 0;
@@ -8,7 +10,7 @@ export class Boat {
   shots?: number[];
   id = 0;
   oId?: number;
-  team?: number;
+  team?: Team;
   title = '';
   renderName: string;
   maxDamage = 3;

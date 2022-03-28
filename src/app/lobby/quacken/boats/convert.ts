@@ -1,4 +1,4 @@
-import { Boat } from './boat';
+import { Boat, Team } from './boat';
 
 export interface BoatStatus {
   id: number;
@@ -14,7 +14,7 @@ export interface BoatStatus {
 
 export interface BoatSync extends BoatStatus {
   oId?: number;
-  team?: number;
+  team?: Team;
   inSZ: boolean;
   n: string;
   ti?: string;

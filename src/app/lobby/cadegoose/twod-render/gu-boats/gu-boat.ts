@@ -1,7 +1,7 @@
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as TWEEN from '@tweenjs/tween.js';
 
-import { Boat } from '../../../../lobby/quacken/boats/boat';
+import { Boat, Team } from '../../../../lobby/quacken/boats/boat';
 import { BoatTypes } from '../../../../lobby/quacken/boats/boat-types';
 import { SpriteData, Orientation } from '../sprite';
 import { Boats } from './objects';
@@ -40,14 +40,14 @@ export class Position {
 
 export class GuBoat extends BoatRender {
   static widthOffset = 19;
-  static myTeam = 99;
+  static myTeam: Team = 99;
   static teamImages = new Map<string, Promise<string>>();
   coords?: Point;
   private spriteData?: SpriteData;
   orientation?: Orientation;
   img?: string;
   imgPosition?: string;
-  flags: { p: number, t: number, offset: string }[] = [];
+  flags: { p: number, t: Team, offset: string }[] = [];
   static hovering = 0;
 
   constructor(boat: Boat, gltf: GLTF) {
