@@ -23,10 +23,14 @@ const moveColor = [
   'red',
 ];
 
-const flagColor = { 0: 'lime', 1: 'red', 100: '#666' };
+const flagColor = { 0: 'lime', 1: 'red', 2: 'gold', 3: 'magenta', 100: '#666' };
 
-const red = new THREE.LineBasicMaterial({ color: 'red', transparent: true, opacity: 0 });
-const green = new THREE.LineBasicMaterial({ color: 'lime', transparent: true, opacity: 0 });
+const teamColors = [
+  new THREE.LineBasicMaterial({ color: 'lime', transparent: true, opacity: 0 }),
+  new THREE.LineBasicMaterial({ color: 'red', transparent: true, opacity: 0 }),
+  new THREE.LineBasicMaterial({ color: 'gold', transparent: true, opacity: 0 }),
+  new THREE.LineBasicMaterial({ color: 'magenta', transparent: true, opacity: 0 }),
+];
 
 export const moveEase: any[] = [
   null,
@@ -80,7 +84,7 @@ export class BoatRender {
       const circleGeo = new THREE.BufferGeometry().setFromPoints(circle.getPoints(50));
       circleGeo.rotateX(-Math.PI / 2);
       circleGeo.translate(0, 0.02, 0);
-      BoatRender.circle = new THREE.Line(circleGeo);
+      BoatRender.circle = new THREE.Line(circleGeo, teamColors[0]);
       BoatRender.circle.visible = false;
     }
 
@@ -90,8 +94,8 @@ export class BoatRender {
     this.obj.rotation.y = -boat.face * Math.PI / 180;
 
     this.influence = BoatRender.circle.clone();
-    this.influence.scale.setScalar(boat.influence);
-    this.influence.material = (boat.team ? red : green).clone();
+    this.influence.scale.setScalar(boat.influence * 2);
+    this.influence.material = teamColors[boat.team ?? 0]?.clone() ?? this.influence.material;
     this.obj.add(this.influence);
 
     this.obj.add(this.header);
@@ -187,9 +191,12 @@ export class BoatRender {
     }
 
     if (this.team !== boat.team && this.influence) {
-      this.influence.material.dispose();
-      this.influence.material = (boat.team ? red : green).clone();
-      this.rebuildHeader();
+      const material = teamColors[boat.team ?? 0]?.clone();
+      if (material) {
+        this.influence.material.dispose();
+        this.influence.material = material;
+        this.rebuildHeader();
+      }
     }
 
     if (this.name !== boat.name) {

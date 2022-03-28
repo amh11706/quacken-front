@@ -20,6 +20,8 @@ import { ObstacleConfig } from './threed-render/threed-render.component';
 export const flagMats = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),
   1: new MeshStandardMaterial({ color: 'darkred', side: DoubleSide }),
+  2: new MeshStandardMaterial({ color: 'gold', side: DoubleSide }),
+  3: new MeshStandardMaterial({ color: 'magenta', side: DoubleSide }),
   99: new MeshStandardMaterial({ color: '#CDCA97', side: DoubleSide }),
   100: new MeshStandardMaterial({ color: '#333', side: DoubleSide }),
 };
@@ -112,10 +114,6 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     const supSet = super.setBoats.bind(this);
     if (reset) {
       this.worker.clearJobs();
-    } else {
-      super.setBoats(b, reset);
-      this.checkNewShips();
-      return;
     }
 
     void this.worker.addJob(async () => {
@@ -182,7 +180,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       const f = this.flagData[i];
       if (!f) continue;
       const flag = this.flags[i];
-      if (flag) flag.material = flagMats[f.t as keyof typeof flagMats];
+      if (flag) flag.material = flagMats[f.t as keyof typeof flagMats] ?? flagMats[99];
       if (f.cs) for (const id of f.cs) this._boats[id]?.render?.flags.push({ p: f.p, t: f.t });
     }
     for (const boat of this.boats) {
@@ -260,6 +258,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     if (!this.scene) return;
     Cannonball.speed = this.speed;
     for (const u of updates) {
+      if (u.t > 4) continue;
       new Cannonball(this.scene, u).start();
       if (u.dbl) new Cannonball(this.scene, u).start(2000 / this.speed);
     }
@@ -295,7 +294,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       return;
     }
 
-    let hovered = 0;
+    let hovered = -1;
     for (const boat of this.boats) {
       if (!boat.render?.hitbox) continue;
       box.setFromObject(boat.render.hitbox);

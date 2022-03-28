@@ -114,7 +114,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.autoClear = false;
     this.scene.fog = new Fog(0);
 
-    const light = new AmbientLight(0x404040, 4); // soft white light
+    const light = new AmbientLight(0x404040, 6); // soft white light
     this.scene.add(light);
 
     this.buildWater();
