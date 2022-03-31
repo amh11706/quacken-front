@@ -9,7 +9,7 @@
          (mouseup)="mouseUp($event, x, y)"
          (mouseover)="painting ? clickTile($event, x, y) : null">
       <img *ngIf="tile"
-           src="./assets/images/obstacle{{tile}}.png"
+           src="./assets/april/images/obstacle{{tile}}.png"
            draggable="false"
            [class]="'img' + tile"
            [title]="tile < 5 ? titles[tile + 1] : ''">

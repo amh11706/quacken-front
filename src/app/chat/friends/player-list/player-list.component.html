@@ -11,13 +11,13 @@
       <span *ngIf="m.team !== undefined">
         <ng-container [ngSwitch]="m.team">
           <ng-container *ngSwitchCase="0">
-            <img class="team" title="Defender" src="assets/images/icon_defend1.png">
+            <img class="team" title="Defender" src="assets/april/images/icon_defend1.png">
           </ng-container>
           <ng-container *ngSwitchCase="99">
-            <img title="Watcher" src="assets/images/watch.png">
+            <img title="Watcher" src="assets/april/images/watch.png">
           </ng-container>
           <ng-container *ngSwitchDefault>
-            <img class="team" title="Attacker" src="assets/images/icon_attack{{m.team}}.png">
+            <img class="team" title="Attacker" src="assets/april/images/icon_attack{{m.team}}.png">
           </ng-container>
         </ng-container>
       </span>

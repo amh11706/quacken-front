@@ -29,7 +29,7 @@
                          (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
                          (dragover)="$event.preventDefault()">
                          <img *ngIf="move"
-                              src="./assets/images/{{move === 4 ? tokens[myBoat.type] : 'arrow'+move}}.png"
+                              src="./assets/april/images/{{move === 4 ? tokens[myBoat.type] : 'arrow'+move}}.png"
                               (dragstart)="drag(move, i)"
                               (dragend)="dragEnd()">
                     </div>
@@ -46,17 +46,17 @@
                <img class="movetile"
                     name="left"
                     id="tile1"
-                    src="./assets/images/arrow1.png"
+                    src="./assets/april/images/arrow1.png"
                     (dragstart)="drag(1)">
                <img class="movetile"
                     name="forward"
                     id="tile2"
-                    src="./assets/images/arrow2.png"
+                    src="./assets/april/images/arrow2.png"
                     (dragstart)="drag(2)">
                <img class="movetile"
                     name="right"
                     id="tile3"
-                    src="./assets/images/arrow3.png"
+                    src="./assets/april/images/arrow3.png"
                     (dragstart)="drag(3)">
           </div>
 
@@ -69,19 +69,19 @@
                          <div id="treasurebox"
                               *ngIf="!weapons[myBoat.type]">
                               <img *ngIf="myBoat.getTreasure()"
-                                   src="./assets/images/obstacle{{myBoat.getTreasure()}}.png">
+                                   src="./assets/april/images/obstacle{{myBoat.getTreasure()}}.png">
                          </div>
                     </ng-container>
 
                     <div *ngIf="weapons[myBoat.type]"
                          class="token">
                          <img *ngIf="myBoat.tokenPoints > 1 && myBoat.bomb === 0"
-                              [src]="'/assets/images/'+weapons[myBoat.type]+'.png'">
+                              [src]="'/assets/april/images/'+weapons[myBoat.type]+'.png'">
                     </div>
                     <div *ngIf="tokens[myBoat.type]"
                          class="token">
                          <img *ngIf="myBoat.tokenPoints > 1 && myBoat.moves.indexOf(4) === -1"
-                              [src]="'/assets/images/'+tokens[myBoat.type]+'.png'"
+                              [src]="'/assets/april/images/'+tokens[myBoat.type]+'.png'"
                               (dragstart)="drag(4)">
                     </div>
                </div>

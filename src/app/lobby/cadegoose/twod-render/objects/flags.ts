@@ -1,6 +1,6 @@
 export const FlagData = {
   name: 'buoy',
-  img: 'url("assets/images/buoy.png")',
+  img: 'url("assets/april/images/buoy.png")',
   imgPosition: '',
   orientations: {
     0: {

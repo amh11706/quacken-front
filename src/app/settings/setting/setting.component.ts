@@ -26,7 +26,7 @@ export const links: Record<number, string> = {
 };
 
 export function getShipLink(id: number): string {
-  return `/assets/boats/${links[id] || 'boat' + id}.png`;
+  return `/assets/april/boats/${links[id] || 'boat' + id}.png`;
 }
 
 @Component({

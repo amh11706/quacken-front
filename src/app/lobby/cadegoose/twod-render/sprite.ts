@@ -1,6 +1,6 @@
 export function getTileImage(tile: string): Promise<HTMLImageElement> {
   const p = document.createElement('img');
-  p.src = `/assets/images/${tile}.png`;
+  p.src = `/assets/april/images/${tile}.png`;
   const tilePromise = new Promise<HTMLImageElement>(resolve => {
     p.onload = () => resolve(p);
     p.onerror = () => resolve(p);

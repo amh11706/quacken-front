@@ -278,7 +278,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     const waterGeometry = new PlaneBufferGeometry(10000, 10000);
     const floorGeo = new PlaneBufferGeometry(10000, 10000);
     const loader = new TextureLoader();
-    const floorTex = loader.load('assets/images/kingwall.png');
+    const floorTex = loader.load('assets/april/images/kingwall.png');
     floorTex.wrapS = floorTex.wrapT = RepeatWrapping;
     floorTex.repeat = new Vector2(10, 10);
     const floorMat = new MeshStandardMaterial({ map: floorTex });
@@ -294,8 +294,8 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       flowDirection: new Vector2(0.15, 0.15),
       textureWidth: 1024,
       textureHeight: 1024,
-      normalMap0: loader.load('assets/images/Water_1_M_Normal.jpg'),
-      normalMap1: loader.load('assets/images/Water_2_M_Normal.jpg'),
+      normalMap0: loader.load('assets/april/images/Water_1_M_Normal.jpg'),
+      normalMap1: loader.load('assets/april/images/Water_2_M_Normal.jpg'),
     });
 
     this.water.rotation.x = -Math.PI / 2;
@@ -444,7 +444,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         let mat = this.tiles.get(tile);
         if (!mat) {
           mat = square.material.clone();
-          mat.map = loader.load('assets/images/obstacle' + tile + '.png');
+          mat.map = loader.load('assets/april/images/obstacle' + tile + '.png');
           mat.map.minFilter = LinearFilter;
           mat.map.anisotropy = this.renderer.capabilities.getMaxAnisotropy() || 0;
           this.tiles.set(tile, mat);

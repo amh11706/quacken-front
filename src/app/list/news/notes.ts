@@ -5,6 +5,15 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 01 April 2022',
+    points: [
+      'Graphics Overhaul!',
+      'We\'ve finally found an artist to help us move the game forward with new modes coming soon.',
+      'New high-detail textures so it can look just as good when you zoom in as it does from afar.',
+      'We hope you all enjoy these changes because there will be a lot more where this came from 😊',
+    ],
+  },
+  {
     title: 'Release 22 February 2022',
     points: [
       'Maneuvers!',

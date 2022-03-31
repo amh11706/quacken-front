@@ -7,7 +7,7 @@
           <img *ngIf="myBoat.type < 10 || obj.t > 0"
                [title]="clutterTypes[obj.t]"
                class="clutterimage clutter{{obj.t}}{{obj.p ? ' sunk' : ''}}"
-               src="./assets/images/{{clutterTypes[obj.t]}}.png">
+               src="./assets/april/images/{{clutterTypes[obj.t]}}.png">
           <div *ngIf="obj.d === 1 && obj.t === 4"
                class="wave"
                [style.top]="'50px'"
@@ -36,7 +36,7 @@
                      [title]="boat.title + titles[boat.treasure]"
                      [style.color]="boat.isMe ? 'aquamarine' : 'lightblue'">
                     {{boat.name}}<img *ngIf="boat.treasure"
-                         src="/assets/images/obstacle{{boat.treasure}}.png">
+                         src="/assets/april/images/obstacle{{boat.treasure}}.png">
                </span>
 
                <div class="movebar"
@@ -56,7 +56,7 @@
           </div>
 
           <img class="boatimage"
-               src="./assets/boats/boat{{boat.type}}.png"
+               src="./assets/april/boats/boat{{boat.type}}.png"
                [style.opacity]="boat.imageOpacity"
                [style.transform]="'rotate(' + boat.face + 'deg)'"
                [style.transition]="rotateTransition(boat)">

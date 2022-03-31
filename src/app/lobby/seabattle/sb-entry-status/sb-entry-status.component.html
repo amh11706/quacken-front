@@ -7,7 +7,7 @@
      (mouseover)="hoveredTeam.emit(0)"
      (mouseleave)="hoveredTeam.emit(-1)">
     <span *ngIf="myTeam !== 0; else defend0">
-      <img src="assets/images/icon_defend1.png">
+      <img src="assets/april/images/icon_defend1.png">
     </span>
     {{points[0]}}
   </p>
@@ -21,16 +21,16 @@
        (mouseleave)="hoveredTeam.emit(-1)">
       {{points[i]}}
       <span *ngIf="myTeam !== i; else attack0">
-        <img src="assets/images/icon_attack{{i}}.png">
+        <img src="assets/april/images/icon_attack{{i}}.png">
       </span>
     </p>
   </ng-container>
 </div>
 
 <ng-template #attack0>
-  <img src="assets/images/icon_attack0.png">
+  <img src="assets/april/images/icon_attack0.png">
 </ng-template>
 
 <ng-template #defend0>
-  <img src="assets/images/icon_defend0.png">
+  <img src="assets/april/images/icon_defend0.png">
 </ng-template>

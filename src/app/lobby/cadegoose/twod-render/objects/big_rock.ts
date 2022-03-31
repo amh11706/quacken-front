@@ -1,6 +1,6 @@
 export const BigRockData = {
   name: 'rocks_big',
-  img: 'url("assets/images/rocks_big.png")',
+  img: 'url("assets/april/images/rocks_big.png")',
   imgPosition: '',
   orientations: {
     0: {

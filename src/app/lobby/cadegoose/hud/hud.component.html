@@ -51,7 +51,7 @@
              (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
              (dragover)="draggedMove >= 4 && draggedMove < 8">
           <img *ngIf="move || i === blockedPosition"
-               src="./assets/images/arrow{{move}}.png"
+               src="./assets/april/images/arrow{{move}}.png"
                draggable="true"
                (dragstart)="drag(move, i)"
                (dragend)="dragEnd()">
@@ -99,7 +99,7 @@
                  name="left"
                  id="tile1"
                  draggable="true"
-                 src="./assets/images/arrow1.png"
+                 src="./assets/april/images/arrow1.png"
                  (dragstart)="drag(1)">
           </div>
           <br>
@@ -117,7 +117,7 @@
                  name="forward"
                  id="tile2"
                  draggable="true"
-                 src="./assets/images/arrow2.png"
+                 src="./assets/april/images/arrow2.png"
                  (dragstart)="drag(2)">
           </div>
           <br>
@@ -135,7 +135,7 @@
                  name="right"
                  id="tile3"
                  draggable="true"
-                 src="./assets/images/arrow3.png"
+                 src="./assets/april/images/arrow3.png"
                  (dragstart)="drag(3)">
           </div>
           <br>
@@ -163,14 +163,14 @@
              (dragstart)="dragManeuver(m.id)"
              [class.usable]="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) >= 100"
              [style.maxHeight]="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) + '%'"
-             src="./assets/images/arrow{{m.id}}.png">
+             src="./assets/april/images/arrow{{m.id}}.png">
         <img *ngIf="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) > 100"
              class="maneuver"
              draggable="true"
              (dragstart)="dragManeuver(m.id + 1)"
              [class.usable]="(lastTick.attr[i] || 0) >= 200"
              [style.maxHeight]="(lastTick.attr[i] || 0) - 100 + '%'"
-             src="./assets/images/arrow{{m.id + 1}}.png">
+             src="./assets/april/images/arrow{{m.id + 1}}.png">
       </div>
     </div>
   </div>

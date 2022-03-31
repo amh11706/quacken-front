@@ -53,7 +53,7 @@ export class MapComponent implements OnDestroy {
     let tilePromise = this.tiles.get(tile);
     if (!tilePromise) {
       const p = document.createElement('img');
-      p.src = `/assets/images/${tile}.png`;
+      p.src = `/assets/april/images/${tile}.png`;
       tilePromise = new Promise(resolve => {
         p.onload = () => resolve(p);
         p.onerror = () => resolve(p);

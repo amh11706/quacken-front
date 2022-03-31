@@ -1,6 +1,6 @@
 export const SmallRockData = {
   name: 'rocks_small',
-  img: 'url("assets/images/rocks_small.png")',
+  img: 'url("assets/april/images/rocks_small.png")',
   imgPosition: '',
   orientations: {
     0: {

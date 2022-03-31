@@ -95,7 +95,7 @@ export class GuBoat extends BoatRender {
     let prom = GuBoat.teamImages.get(which + team);
     if (prom) return prom;
     const sail = new window.Image();
-    sail.src = '/assets/boats/' + which + '.png';
+    sail.src = '/assets/april/boats/' + which + '.png';
     if (team === 99) {
       prom = Promise.resolve(sail.src);
       GuBoat.teamImages.set(which + team, prom);
@@ -113,7 +113,7 @@ export class GuBoat extends BoatRender {
         const data = ctx.getImageData(0, 0, sail.width, sail.height);
         const bytes = data.data;
         for (let i = 0; i < bytes.length; i += 4) {
-          if (bytes[i] === 90 && bytes[i + 1] === 172 && bytes[i + 2] === 222) {
+          if (bytes[i] === 31 && bytes[i + 1] === 224 && bytes[i + 2] === 255) {
             const color = TeamColors[team];
             if (color) [bytes[i], bytes[i + 1], bytes[i + 2]] = color;
           }
