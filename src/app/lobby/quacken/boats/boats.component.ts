@@ -115,6 +115,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.myBoat.isMe = this._boats[this.myBoat.id] === this.myBoat;
       this.setBoats(Object.values(m.boats));
       m.boats = this.boats.map(boatToSync) as any;
+      this.clutter = [];
       const clutter = m.clutter || [];
       this.handleUpdate(clutter, 0);
     }));
@@ -292,6 +293,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.step = -1;
 
     this.animateTimeout2 = window.setTimeout(() => {
+      this.clutter = [];
       const clutter = sync.cSync || [];
       this.handleUpdate(clutter, 0);
     }, 1000);
