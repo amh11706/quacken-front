@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Settings } from '../../settings/setting/settings';
-import { InCmd, Internal } from '../../ws-messages';
+import { InCmd, Internal, OutCmd } from '../../ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { WsService } from '../../ws.service';
 import { SettingsService, SettingPartial } from '../../settings/settings.service';
@@ -87,7 +87,10 @@ export class QuackenComponent implements OnInit, OnDestroy {
     if (graphicSettings.mapScale && graphicSettings.speed) this.graphicSettings = graphicSettings as this['graphicSettings'];
     if (controlSettings.kbControls) this.controlSettings = controlSettings as this['controlSettings'];
     this.sub.add(this.graphicSettings.renderMode.stream?.subscribe(() => {
-      setTimeout(() => this.setMapB64(this._lobby?.map || ''), 0);
+      setTimeout(() => {
+        this.setMapB64(this._lobby?.map || '');
+        this.ws.send(OutCmd.Sync);
+      }, 0);
     }));
   }
 

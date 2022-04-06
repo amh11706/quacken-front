@@ -99,7 +99,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected setMapB64(map: string): void {
     super.setMapB64(map);
     this.renderer?.fillMap(this.map, this.lobby?.flags);
-    this.ws.send(OutCmd.Sync);
   }
 
   updateSeed(seed: string): void {
