@@ -32,6 +32,7 @@ const CannonSounds: Record<number, Sounds> = {
 export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   @Input() showIsland = false;
   @Input() speed = 15;
+  @Input() fishBoats = 0;
   @Input() set hoveredTeam(v: number) {
     this._hoveredTeam = v;
     for (const boat of this.boats) {

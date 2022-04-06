@@ -12,7 +12,6 @@ export class Boat {
   oId?: number;
   team?: Team;
   title = '';
-  renderName: string;
   maxDamage = 3;
   maxMoves = 4;
   influence = 1;
@@ -40,9 +39,7 @@ export class Boat {
     public name: string,
     public type = 0,
     public isMe = false,
-  ) {
-    this.renderName = this.name;
-  }
+  ) { }
 
   draw(offsetX = 0, offsetY = 0): Boat {
     this.offsetX = offsetX;

@@ -2,6 +2,7 @@
                *ngIf="graphicSettings.renderMode.value === 0"
                [hoveredTeam]="hoveredTeam"
                [speed]="graphicSettings.speed.value"
+               [fishBoats]="lobbySettings.fishBoats?.value || 0"
                [mapScale]="graphicSettings.mapScale.value"
                [graphicSettings]="graphicSettings"
                [myBoat]="myBoat"></q-twod-render>

@@ -5,7 +5,7 @@ import { Settings } from '../../settings/setting/settings';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { WsService } from '../../ws.service';
-import { SettingsService, SettingPartial } from '../../settings/settings.service';
+import { SettingsService, SettingPartial, SettingMap } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
@@ -37,6 +37,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
   map: number[][] = [];
   controlSettings = { kbControls: { value: 1 } as SettingPartial };
+  lobbySettings = { fishBoats: { value: 0 } } as SettingMap;
   graphicSettings = {
     mapScale: { value: 50 } as SettingPartial,
     speed: { value: 10 } as SettingPartial,
@@ -66,7 +67,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
     this.sub.add(this.ws.connected$.subscribe(v => {
-      if (v) setTimeout(() => this.ss.getGroup(this.group, true), 1000);
+      if (v) setTimeout(async () => this.lobbySettings = await this.ss.getGroup(this.group, true), 1000);
     }));
   }
 

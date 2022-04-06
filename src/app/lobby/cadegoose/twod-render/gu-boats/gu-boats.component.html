@@ -32,7 +32,7 @@
        *ngIf="boat.name || boat.isMe">
     <span class="boattitle"
           [class.isme]="boat.isMe">
-      {{boat.renderName}}
+      {{!fishBoats || hoveredTeam === boat.team ? boat.title : boat.name}}
     </span>
 
     <div class="movebar"

@@ -35,6 +35,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() safeZone = true;
   @Input() myBoat = new Boat('');
   @Input() speed = 15;
+  @Input() fishBoats = 0;
   @Input() set map(map: number[][]) { void this.fillMap(map, []); }
   private mapUtil = new MapComponent();
   @Input() set editor(e: MapEditor) { this.mapUtil.map = e; }

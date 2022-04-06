@@ -130,12 +130,12 @@ export class BoatRender {
   showInfluence(v = true): void {
     if (this.tweenTarget === +v) return;
     this.tweenTarget = +v;
-    this.boat.renderName = this.boat.title;
+    this.name = this.boat.name;
 
     if (this.nameTimeout) clearTimeout(this.nameTimeout);
     this.nameTimeout = window.setTimeout(() => {
       if (!this.influence) return;
-      if (this.name !== this.boat.renderName) this.rebuildHeader();
+      if (this.name !== this.boat.title) this.rebuildHeader();
 
       if (this.influenceTween) {
         this.influenceTween.end();
@@ -210,7 +210,7 @@ export class BoatRender {
     if (this.title) this.header.remove(this.title);
 
     this.makeHeader();
-    this.name = this.boat.renderName;
+    this.name = this.boat.name;
     this.team = this.boat.team || 0;
     this.moves = [...this.boat.moves];
   }
@@ -232,7 +232,7 @@ export class BoatRender {
     const font = `${size}px bold sans-serif`;
     ctx.font = font;
 
-    const width = Math.max(ctx.measureText(this.boat.renderName).width, 160);
+    const width = Math.max(ctx.measureText(this.boat.title).width, 160);
     const height = size + 72;
     ctx.canvas.width = width;
     ctx.canvas.height = height;
@@ -246,7 +246,7 @@ export class BoatRender {
 
     ctx.translate(width / 2, size / 2);
     ctx.fillStyle = headerColor(this.boat);
-    ctx.fillText(this.boat.renderName, 0, 0);
+    ctx.fillText(this.boat.title, 0, 0);
 
     for (let i = 0; i < this.boat.moves.length; i++) {
       const color = moveColor[this.boat.moves[i] || 0];

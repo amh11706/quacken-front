@@ -59,7 +59,7 @@ type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'spee
   'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' |
   'cadeMap' | 'cadeTeams' | 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
   'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked' |
-  'renderMode';
+  'renderMode' | 'fishBoats';
 
 export const Settings: Record<SettingName, Setting> = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
@@ -166,6 +166,9 @@ export const Settings: Record<SettingName, Setting> = {
   },
   cadeHotEntry: {
     admin: true, id: 26, group: 'l/cade', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an entry is in progress',
+  },
+  fishBoats: {
+    admin: true, id: 45, group: 'l/cade', name: 'fishBoats', type: 'checkbox', label: 'Fish boat names',
   },
   cadeMap: {
     admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Map', cmd: OutCmd.CgMapList,
