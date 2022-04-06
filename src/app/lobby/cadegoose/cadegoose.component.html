@@ -1,15 +1,26 @@
-<q-twod-render #renderer
-               *ngIf="graphicSettings.renderMode.value === 0"
-               [hoveredTeam]="hoveredTeam"
-               [speed]="graphicSettings.speed.value"
-               [fishBoats]="lobbySettings.fishBoats?.value || 0"
-               [mapScale]="graphicSettings.mapScale.value"
-               [graphicSettings]="graphicSettings"
-               [myBoat]="myBoat"></q-twod-render>
-<q-threed-render #renderer
-                 *ngIf="graphicSettings.renderMode.value === 1"
+<div #background>
+  <q-twod-render #renderer
+                 *ngIf="graphicSettings.renderMode.value === 0"
                  [hoveredTeam]="hoveredTeam"
-                 [graphicSettings]="graphicSettings"></q-threed-render>
+                 [speed]="graphicSettings.speed.value"
+                 [fishBoats]="lobbySettings.fishBoats?.value || 0"
+                 [mapScale]="graphicSettings.mapScale.value"
+                 [ctrlZoom]="advancedMapOpen"
+                 [setTile]="advancedMapOpen ? setTile : 0"
+                 [undo]="undo"
+                 [editor]="editor"
+                 [graphicSettings]="graphicSettings"
+                 [myBoat]="myBoat"></q-twod-render>
+  <q-threed-render #renderer
+                   *ngIf="graphicSettings.renderMode.value === 1"
+                   [hoveredTeam]="hoveredTeam"
+                   [graphicSettings]="graphicSettings"></q-threed-render>
+
+</div>
+<q-obstacles *ngIf="advancedMapOpen"
+             [map]="editor"
+             [background]="background">
+</q-obstacles>
 
 <q-cade-entry-status (keydown.Tab)="statOpacity = 1"
                      (hoveredTeam)="hoveredTeam = $event"

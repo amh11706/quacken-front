@@ -64,6 +64,6 @@ import { TagsComponent } from './tags/tags.component';
     FileImportModule,
   ],
   providers: [TitleCasePipe],
-  exports: [MapEditorComponent],
+  exports: [MapEditorComponent, ObstaclesComponent],
 })
 export class MapEditorModule { }

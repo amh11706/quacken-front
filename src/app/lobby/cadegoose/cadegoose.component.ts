@@ -15,6 +15,7 @@ import { Turn } from '../quacken/boats/boats.component';
 import { QuackenComponent } from '../quacken/quacken.component';
 import { Boat } from '../quacken/boats/boat';
 import { TwodRenderComponent } from './twod-render/twod-render.component';
+import { MapEditor, MapTile } from '../../map-editor/map-editor.component';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'cadeMaxPlayers', 'jobberQuality',
@@ -35,6 +36,22 @@ export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy 
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('renderer', { static: false }) renderer?: TwodRenderComponent;
   protected menuComponent = MainMenuComponent;
+
+  editor: MapEditor = {
+    selected: 50,
+    selectedTile: {
+      undos: [],
+      redos: [],
+      id: 0,
+      type: 0,
+      name: '',
+      group: 'cgmaps',
+      data: [],
+      tags: [],
+    },
+    settingsOpen: false,
+  };
+
   graphicSettings = {
     mapScale: { value: 50 },
     speed: { value: 10 },
@@ -50,7 +67,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   mapWidth = 20;
   advancedMapOpen = false;
   mapSeed = '';
-  private mapDebounce = new Subject();
+  private mapDebounce = new Subject<string>();
+  private mapDataDebounce = new Subject();
   protected joinMessage = CadeDesc;
   protected statAction = KeyActions.CShowStats;
   protected showMapChoice = true;
@@ -83,8 +101,25 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.sub.add(this.mapDebounce.pipe(debounceTime(100)).subscribe(seed => {
       this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
     }));
+    this.sub.add(this.mapDataDebounce.pipe(debounceTime(100)).subscribe(() => {
+      let bString = '';
+      for (const row of this.map) {
+        bString = bString.concat(String.fromCharCode(...row));
+      }
+      this.ws.send(OutCmd.SetMapData, window.btoa(bString));
+    }));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) setTimeout(async () => this.lobbySettings = await this.ss.getGroup(this.group, true), 1000);
+    }));
+    this.sub.add(this.kbs.subscribe(KeyActions.Redo, v => {
+      if (!this.advancedMapOpen) return;
+      const tile = this.editor.selectedTile;
+      if (v && tile.redos.length) this.undo(tile.redos, tile.undos);
+    }));
+    this.sub.add(this.kbs.subscribe(KeyActions.Undo, v => {
+      if (!this.advancedMapOpen) return;
+      const tile = this.editor.selectedTile;
+      if (v && tile.undos.length) this.undo(tile.undos, tile.redos);
     }));
   }
 
@@ -99,9 +134,36 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   protected setMapB64(map: string): void {
     super.setMapB64(map);
     this.renderer?.fillMap(this.map, this.lobby?.flags);
+    this.editor.selectedTile.data = this.map;
   }
 
   updateSeed(seed: string): void {
     this.mapDebounce.next(seed);
+  }
+
+  undo = (source: MapTile[][], target: MapTile[][]): void => {
+    const changes = source.pop();
+    const buffer = [];
+
+    if (changes) {
+      for (const oldTile of changes) {
+        const change = this.setTile(oldTile.x, oldTile.y, oldTile.v);
+        if (change) buffer.push(change);
+      }
+    }
+
+    target.push(buffer);
+  }
+
+  setTile = (x: number, y: number, v: number): { x: number, y: number, v: number } | undefined => {
+    if (x < 0 || x >= this.mapHeight || y < 3 || y > 32) return;
+    const data = this.map;
+    const row = data[y];
+    if (!row) return;
+    if (v === row[x]) return;
+    const oldTile = { x, y, v: row[x] || 0 };
+    row[x] = v;
+    this.mapDataDebounce.next();
+    return oldTile;
   }
 }
