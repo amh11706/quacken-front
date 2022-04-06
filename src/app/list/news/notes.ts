@@ -5,6 +5,16 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 06 April 2022',
+    points: [
+      'Mini cade update.',
+      'New lobby setting for "Fish names" instead of player names on boats.',
+      'Advanced map setting mode while in a lobby now allows drawing directly on the map.',
+      'Fixed a bug causing sound spam at the end of a match.',
+      'The lobby will now only wait ~5 seconds for lagged players.',
+    ],
+  },
+  {
     title: 'Release 22 February 2022',
     points: [
       'Maneuvers!',
