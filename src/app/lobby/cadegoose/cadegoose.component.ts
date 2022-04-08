@@ -36,7 +36,7 @@ export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy 
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('renderer', { static: false }) renderer?: TwodRenderComponent;
   protected menuComponent = MainMenuComponent;
-
+  private pendingChanges: MapTile[] = [];
   editor: MapEditor = {
     selected: 50,
     selectedTile: {
@@ -102,11 +102,16 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
     }));
     this.sub.add(this.mapDataDebounce.pipe(debounceTime(100)).subscribe(() => {
+      for (const change of this.pendingChanges) {
+        const row = this.map[change.y];
+        if (row) row[change.x] = change.v;
+      }
+      this.pendingChanges = [];
       let bString = '';
       for (const row of this.map) {
         bString = bString.concat(String.fromCharCode(...row));
       }
-      this.ws.send(OutCmd.SetMapData, window.btoa(bString));
+      this.ws.send(OutCmd.SetMapData, btoa(bString));
     }));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) setTimeout(async () => this.lobbySettings = await this.ss.getGroup(this.group, true), 1000);
@@ -155,14 +160,10 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     target.push(buffer);
   }
 
-  setTile = (x: number, y: number, v: number): { x: number, y: number, v: number } | undefined => {
+  setTile = (x: number, y: number, v: number): MapTile | undefined => {
     if (x < 0 || x >= this.mapHeight || y < 3 || y > 32) return;
-    const data = this.map;
-    const row = data[y];
-    if (!row) return;
-    if (v === row[x]) return;
-    const oldTile = { x, y, v: row[x] || 0 };
-    row[x] = v;
+    const oldTile = { x, y, v: this.map[y]?.[x] || 0 };
+    this.pendingChanges.push({ x, y, v });
     this.mapDataDebounce.next();
     return oldTile;
   }
