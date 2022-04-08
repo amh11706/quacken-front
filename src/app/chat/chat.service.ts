@@ -48,15 +48,10 @@ export class ChatService {
       this.commands = this.commands.filter(command => command.base !== '/help'); // remove /help from commands
       for (const cmd of this.commands) {
         cmd.title = cmd.base.substring(1);
-      }
-      for (const cmd of this.commands) {
         const params = cmd.params as any as string;
-        let messageFound = false;
         cmd.params = params.replace(/[[\]<>]/g, '').split(' ').map(p => {
-          if (p === 'message') messageFound = true;
           return { name: p, value: p === 'new' ? p : '' };
         });
-        if (!messageFound && cmd.params.length < 2 && params.length) cmd.params.push({ name: '', value: '' });
       }
       this.selectedCommand = this.commands[0] ?? this.selectedCommand;
     });
