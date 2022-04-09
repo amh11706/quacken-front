@@ -89,10 +89,11 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   initFilters(): void {
     this.servermapList.forEach((map) => {
+      if (map.username && !this.userList.includes(map.username)) this.userList.push(map.username);
+      if (!map.tags) return;
       for (const tag of map.tags) {
         if (tag && !this.tagList.includes(tag)) this.tagList.push(tag);
       }
-      if (map.username && !this.userList.includes(map.username)) this.userList.push(map.username);
     });
   }
 
@@ -153,11 +154,11 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (!this.search) this.maplist.next(this.servermapList);
     const search = new RegExp(this.search, 'i');
     this.filteredMapList = this.servermapList.filter(map => {
-      const textMatched = search.test(map.name) || search.test(map.username) || map.tags.some(tag => search.test(tag));
+      const textMatched = search.test(map.name) || search.test(map.username) || map.tags?.some(tag => search.test(tag));
       if (!textMatched || this.selectedFilters.length === 0) return textMatched;
 
       const tagMatched = this.selectedFilters.some(filter => {
-        return filter === map.username || +filter <= map.ratingAverage || map.tags.includes(filter);
+        return filter === map.username || +filter <= map.ratingAverage || map.tags?.includes(filter);
       });
       return tagMatched;
     });
@@ -199,15 +200,11 @@ export class MapListComponent implements OnInit, OnDestroy {
       case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n2.name.toLowerCase().localeCompare(n1.name.toLowerCase()))));
         break;
-      case this.sortList[6]: this.maplist.next(this.servermapList.sort((n1, n2) =>
-        n1.id <= 1 || n1.ratingMine === 0
-          ? -1
-          : (
-              n2.id <= 1 || n2.ratingMine === 0
-                ? 1
-                : (n2.ratingMine || Number.MIN_VALUE) - (n1.ratingMine || Number.MIN_VALUE)
-            ),
-      ));
+      case this.sortList[6]: this.maplist.next(this.servermapList.sort((n1, n2) => {
+        if (n1.id <= 1 || n1.ratingMine === 0) return -1;
+        if (n2.id <= 1 || n2.ratingMine === 0) return 1;
+        return (n2.ratingMine || Number.MIN_VALUE) - (n1.ratingMine || Number.MIN_VALUE);
+      }));
         break;
       default:
         this.maplist.next(this.servermapList);

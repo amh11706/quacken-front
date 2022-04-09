@@ -11,7 +11,7 @@ export interface MapOption {
   released: boolean
   userId: number
   username: string,
-  tags: string[],
+  tags?: string[],
   ratingAverage: number;
   ratingCount: number;
   ratingMine?: number;
