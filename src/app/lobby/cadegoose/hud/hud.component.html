@@ -60,12 +60,12 @@
     </div>
     <div id="boatStats">
       <div id="damage"
-           title="{{myBoat.getDamage()}}%">
+           matTooltip="Damage: {{myBoat.getDamage()}}%">
         <div id="damagebar"
              [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
       </div>
       <div id="bilge"
-           title="{{lastTick.b || 0}}%">
+           matTooltip="Bilge: {{lastTick.b || 0}}%">
         <div id="bilgebar"
              [style.transform]="'translateX(' + lastTick.b + 'px)'"></div>
       </div>
@@ -131,7 +131,7 @@
           <br>
           <div class="move move3"
                [title]="tokenStrings[2]">
-               <img [style.opacity]="(haveMoves[2] || 0) > (usingMoves[2] || 0) ? 1 : 0"
+            <img [style.opacity]="(haveMoves[2] || 0) > (usingMoves[2] || 0) ? 1 : 0"
                  name="right"
                  id="tile3"
                  draggable="true"
@@ -154,7 +154,7 @@
     <div id="maneuvers">
       <div *ngFor="let m of maneuvers; let i = index"
            (click)="setWantToken(i)"
-           [title]="m.title + ' - ' + (lastTick.attr[i] === 200 ? 100 : (lastTick.attr[i] || 0)%100) + '%'"
+           [matTooltip]="m.title + ' - ' + (lastTick.attr[i] || 0) + '%'"
            [class.want]="wantManeuver === i"
            [class]="m.class">
         <img *ngIf="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) > 0"
