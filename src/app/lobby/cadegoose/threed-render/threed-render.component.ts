@@ -243,8 +243,8 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.lastFrame = time;
     if (this.slowFrames > 5 && this.graphicSettings.water) this.graphicSettings.water.value = 0;
 
-    if (this.graphicSettings.water && !this.water) this.buildWater();
-    if (!this.graphicSettings.water && this.water) {
+    if (this.graphicSettings.water?.value && !this.water) this.buildWater();
+    if (!this.graphicSettings.water?.value && this.water) {
       this.scene.remove(this.water);
       (this.water.material as Material).dispose();
       this.water.geometry.dispose();
