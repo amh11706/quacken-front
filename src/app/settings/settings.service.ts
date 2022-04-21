@@ -44,7 +44,7 @@ export class SettingsService {
       const setting = group?.[s.name];
       if (setting) {
         setting.value = s.value;
-        setting.stream?.next(s.value);
+        setting.stream?.next?.(s.value);
       }
     });
   }
@@ -80,10 +80,10 @@ export class SettingsService {
           const oldSetting = localSettings[setting.name];
           if (oldSetting) {
             Object.assign(oldSetting, setting);
-            oldSetting.stream?.next(setting.value);
+            oldSetting.stream?.next?.(setting.value);
           } else localSettings[setting.name] = { ...setting, stream: new BehaviorSubject(setting.value) };
         }
-        ready?.next(localSettings);
+        ready?.next?.(localSettings);
         this.ready.delete(group);
       });
     }
@@ -102,7 +102,7 @@ export class SettingsService {
     const oldSetting = await this.get(setting.group, setting.name);
     if (oldSetting) {
       Object.assign(oldSetting, setting);
-      oldSetting.stream?.next(setting.value);
+      oldSetting.stream?.next?.(setting.value);
     }
   }
 }

@@ -12,6 +12,7 @@ import { StatRow } from '../../cadegoose/stats/stats.component';
 import { BoatRender } from '../../cadegoose/boat-render';
 
 export interface Clutter {
+  id?: number;
   t: number;
   x: number;
   y: number;

@@ -113,6 +113,12 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     for (const u of updates) {
       const p = new Point().fromPosition(u);
       u.transform = `translate(${p.x}px, ${p.y}px)`;
+      const oldClutter = u.id && this.clutter.find(c => c.id === u.id);
+      if (oldClutter) {
+        Object.assign(oldClutter, u);
+      } else {
+        this.clutter.push(u);
+      }
       if (!u.dis) continue;
       const fireSound = CannonSounds[u.t - 2] || Sounds.CannonFireBig;
       void this.sound.play(fireSound);
@@ -125,7 +131,6 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
         if (u.dbl) void this.sound.play(Sounds.CannonSplash2, 10000 / this.speed);
       }
     }
-    this.clutter.push(...updates);
     return new Promise(resolve => setTimeout(resolve, step % 2 === 1 ? 7000 / this.speed : 0));
   }
 

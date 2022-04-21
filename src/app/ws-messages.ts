@@ -44,6 +44,7 @@ export const enum OutCmd {
   MatchesUser,
   MatchData,
   MatchAi,
+  MatchScore,
 
   ChangeEmail,
   ChangePass,

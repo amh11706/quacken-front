@@ -62,7 +62,9 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }
   }
 
+  private _messages: InMessage[][] = [];
   @Input() set messages(messages: InMessage[][]) {
+    this._messages = messages;
     delete this.aiData;
     this.selectAiBoat();
     this.turns = [];
@@ -274,6 +276,20 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }
     if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat });
     if (this.boatTicks[boat.id]) this.updateBoat();
+  }
+
+  async getScores(): Promise<void> {
+    const messages: InMessage[] = [];
+    for (const g of this._messages) {
+      for (const m of g) {
+        if (m.cmd === InCmd.Sync) messages.push(m);
+      }
+    }
+    const scores = await this.ws.request(OutCmd.MatchScore, {
+      messages,
+      map: this.lobby?.map,
+    });
+    console.log(scores);
   }
 
   async getMatchAi(claimsOnly = false, sendMap = true): Promise<void> {
