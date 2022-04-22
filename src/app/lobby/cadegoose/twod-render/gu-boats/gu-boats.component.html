@@ -1,7 +1,7 @@
 <div *ngFor="let obj of clutter"
      class="clutter clutter{{obj.t}}"
      style="--speed: {{10/speed}};"
-     [style.transform]="obj.transform">
+     [style.transform]="'translate(' + obj.coords.x + 'px, ' + obj.coords.y  + 'px)'">
 
   <div *ngIf="obj.t >= 8"
        class="clutterimg dir{{obj.dir}}"></div>

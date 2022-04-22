@@ -21,7 +21,8 @@ export interface Clutter {
   dir?: number;
   dis?: number;
   dbl?: number;
-  transform?: string;
+  tm?: number;
+  tf?: number;
 }
 
 export interface Turn {

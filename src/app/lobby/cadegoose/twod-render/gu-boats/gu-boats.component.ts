@@ -4,9 +4,10 @@ import { Boat } from '../../../../lobby/quacken/boats/boat';
 import { Turn, Clutter } from '../../../../lobby/quacken/boats/boats.component';
 import { Internal } from '../../../../ws-messages';
 import { Sounds, SoundService } from '../../../../sound.service';
-import { GuBoat, Point } from './gu-boat';
+import { GuBoat } from './gu-boat';
 import { BoatService, checkSZ } from '../../boat.service';
 import { TeamColorsCss } from '../../cade-entry-status/cade-entry-status.component';
+import { MovableClutter } from './clutter';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 3,
@@ -53,6 +54,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
+  clutter: MovableClutter[] = [];
   teamColors = TeamColorsCss;
   moveTransition = (transition?: number): string => {
     switch (transition) {
@@ -110,14 +112,15 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   protected handleUpdate(updates: Clutter[], step: number): Promise<void> {
     if (updates.length === 0) return Promise.resolve();
+    const startTime = new Date().valueOf();
     for (const u of updates) {
-      const p = new Point().fromPosition(u);
-      u.transform = `translate(${p.x}px, ${p.y}px)`;
       const oldClutter = u.id && this.clutter.find(c => c.id === u.id);
       if (oldClutter) {
         Object.assign(oldClutter, u);
+        oldClutter.setTransitions();
+        oldClutter.updatePos(startTime, u.x, u.y);
       } else {
-        this.clutter.push(u);
+        this.clutter.push(new MovableClutter(u));
       }
       if (!u.dis) continue;
       const fireSound = CannonSounds[u.t - 2] || Sounds.CannonFireBig;
