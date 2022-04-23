@@ -199,7 +199,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     this.worker.clearJobs();
     for (let step = 0; step < 8; step++) {
       void this.worker.addJob(() => this._playTurn(step));
-      if (step % 2 === 1) void this.worker.addJob(() => this.handleUpdate(this.turn?.cSteps[step] || [], step));
+      if (step % 2 === 1) {
+        void this.worker.addJob(() => {
+          this.handleUpdate(this.turn?.cSteps[step]?.filter(c => !c.id) || [], step);
+        });
+      }
     }
     void this.worker.addJob(() => {
       delete this.turn;
@@ -215,6 +219,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     if (!this.turn) return;
     if (step === 4) this.resetBoats();
     if (step % 2 === 0) this.handleUpdate(this.turn?.cSteps[step] || [], step);
+    else this.handleUpdate(this.turn?.cSteps[step]?.filter(c => c.id) || [], step);
     const turnPart = this.turn.steps[step] || [];
     if (!turnPart.length) {
       return new Promise<void>(resolve => {

@@ -39,6 +39,7 @@ export class MovableClutter implements Clutter {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
             .easing(moveEase[this.transitions[0]])
             .to({ x }, 10000 / BoatRender.speed)
+            .delay(3000 / BoatRender.speed)
             .start(startTime)
             .onUpdate(() => this.coords.fromPosition(this.pos))
             .onComplete(resolve);
@@ -55,6 +56,7 @@ export class MovableClutter implements Clutter {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
             .easing(moveEase[this.transitions[1]])
             .to({ y }, 10000 / BoatRender.speed)
+            .delay(3000 / BoatRender.speed)
             .start(startTime)
             .onUpdate(() => this.coords.fromPosition(this.pos))
             .onComplete(resolve);
