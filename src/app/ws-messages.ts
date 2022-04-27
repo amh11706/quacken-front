@@ -90,6 +90,7 @@ export const enum OutCmd {
   ShuffleTeams,
   RateMap,
   SetMapData,
+  SetMyJobbers,
 }
 
 export const enum InCmd {

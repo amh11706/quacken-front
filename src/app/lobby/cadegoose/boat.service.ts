@@ -201,7 +201,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       void this.worker.addJob(() => this._playTurn(step));
       if (step % 2 === 1) {
         void this.worker.addJob(() => {
-          this.handleUpdate(this.turn?.cSteps[step]?.filter(c => !c.id) || [], step);
+          return this.handleUpdate(this.turn?.cSteps[step]?.filter(c => !c.id) || [], step);
         });
       }
     }

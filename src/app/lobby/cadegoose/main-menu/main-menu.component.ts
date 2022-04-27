@@ -41,6 +41,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   teams: { [key: number]: TeamMessage } = {};
   myBoat = new Boat('');
   myTeam = 99;
+  myJobbers = 100;
   ready = false;
   admin = false;
   statsOpen = false;
@@ -188,6 +189,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     user.message = this.teams[id];
     while (this.teamPlayers.length <= team) this.teamPlayers.push([]);
     this.teamPlayers[team]?.push(user);
+  }
+
+  updateJobbers(v: number | null): void {
+    this.ws.send(OutCmd.SetMyJobbers, v);
   }
 
   public plural(length: number): string {

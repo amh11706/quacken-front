@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { NameModule } from '../../chat/name/name.module';
 import { SettingsModule } from '../../settings/settings.module';
@@ -48,6 +49,7 @@ import { MapEditorModule } from '../../map-editor/map-editor.module';
     MatSliderModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
     QdragModule,
     ChatModule,
     SettingsModule,

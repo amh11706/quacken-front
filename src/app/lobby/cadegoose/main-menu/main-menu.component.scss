@@ -86,3 +86,16 @@ q-name {
   color: rgb(161, 159, 159);
   font-size: 12px;
 }
+
+.jobberSelect {
+  text-align: center;
+}
+
+.lowjobbers {
+  border: 1px solid orange;
+  border-radius: 5px;
+}
+
+::ng-deep.mat-menu-content {
+  padding: 0 !important;
+}

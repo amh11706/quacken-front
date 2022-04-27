@@ -21,8 +21,27 @@
                class="lobbyPlayer"
                [class.ready]="m.message.r">
             <q-name [message]="m"></q-name>
-            <img src="./assets/boats/{{links[m.message.b]}}.png"
-                 [title]="boatTitles[m.message.b]">
+            <img *ngIf="m.sId === ws.sId; else boatImage"
+                 [matMenuTriggerFor]="jobbers"
+                 src="./assets/boats/{{links[m.message.b]}}.png"
+                 [class.lowjobbers]="m.message.jq < 100"
+                 [title]="boatTitles[m.message.b] + ' ' + m.message.jq + '%'">
+            <mat-menu #jobbers="matMenu">
+              <mat-card class="jobberSelect"
+                        (click)="$event.stopPropagation()">
+                <span>Your Jobber Quality ({{myJobbers}}%)</span><br>
+                <mat-slider [value]="myJobbers"
+                            (valueChange)="updateJobbers($event)"
+                            (input)="myJobbers = $event.value || 0"
+                            max="100"
+                            step="5"></mat-slider>
+              </mat-card>
+            </mat-menu>
+            <ng-template #boatImage>
+              <img src="./assets/boats/{{links[m.message.b]}}.png"
+                   [class.lowjobbers]="m.message.jq < 100"
+                   [title]="boatTitles[m.message.b] + ' ' + m.message.jq + '%'">
+            </ng-template>
             <span id="spawn"
                   [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' : 'I'}}</span>
           </div>
