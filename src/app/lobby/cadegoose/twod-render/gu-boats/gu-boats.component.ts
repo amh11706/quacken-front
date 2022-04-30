@@ -4,6 +4,7 @@ import { Boat } from '../../../../lobby/quacken/boats/boat';
 import { Turn, Clutter } from '../../../../lobby/quacken/boats/boats.component';
 import { Internal } from '../../../../ws-messages';
 import { Sounds, SoundService } from '../../../../sound.service';
+import { ImageService } from '../../../../image.service';
 import { GuBoat } from './gu-boat';
 import { BoatService, checkSZ } from '../../boat.service';
 import { TeamColorsCss } from '../../cade-entry-status/cade-entry-status.component';
@@ -67,7 +68,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     }
   }
 
-  constructor(ws: WsService, sound: SoundService) {
+  constructor(ws: WsService, sound: SoundService, private image: ImageService) {
     super(ws, sound);
     this.blockRender = false;
   }
@@ -89,6 +90,20 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     void this.sound.load(Sounds.CannonSplash2);
     void this.sound.load(Sounds.Sink);
     void this.sound.load(Sounds.RockDamage);
+    this.image.load('/assets/clutter/cannonball_small.png');
+    this.image.load('/assets/clutter/cannonball_medium.png');
+    this.image.load('/assets/clutter/cannonball_large.png');
+    this.image.load('/assets/clutter/chain_cannonball.png');
+    this.image.load('/assets/clutter/flaming_cannonball.png');
+    this.image.load('/assets/clutter/explode_small.png');
+    this.image.load('/assets/clutter/explode_medium.png');
+    this.image.load('/assets/clutter/explode_large.png');
+    this.image.load('/assets/clutter/wave.png');
+    this.image.load('/assets/clutter/wave2.png');
+    this.image.load('/assets/clutter/flotsam.png');
+    this.image.load('/assets/clutter/flaming_flotsam.png');
+    this.image.load('/assets/clutter/hit.png');
+    this.image.load('/assets/clutter/splash_large.png');
 
     // setTimeout(() => {
     //   void this.handleUpdate([
