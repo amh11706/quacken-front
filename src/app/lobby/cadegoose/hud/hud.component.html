@@ -10,7 +10,7 @@
       <div *ngFor="let move of moves; let i=index"
            class="moverow">
         <div class="leftbombs"
-             (drop)="dropCannon(i*2)"
+             (drop)="$event.preventDefault(); dropCannon(i*2)"
              (dragstart)="dragCannon(i*2)"
              (dragend)="dragendCannon()"
              [draggable]="shots[i*2]"
@@ -26,7 +26,7 @@
                [class.blocked]="locked"></div>
         </div>
         <div class="rightbombs"
-             (drop)="dropCannon(i*2+1)"
+             (drop)="$event.preventDefault(); dropCannon(i*2+1)"
              (dragstart)="dragCannon(i*2+1)"
              (dragend)="dragendCannon()"
              [draggable]="shots[i*2+1]"

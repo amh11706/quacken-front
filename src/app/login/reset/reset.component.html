@@ -1,5 +1,6 @@
 <div id="logincontainer">
-  <h1>Disturb the Quacken</h1>
+  <div id="logo"><img src="/assets/gclogo.png"></div>
+  <p>Powered by superquacken.com</p>
   <form id="loginform"
         ngNativeValidate
         (ngSubmit)="reset()"
@@ -11,16 +12,16 @@
              qAutoSelect
              type="password"
              minlength="6"
-             placeholder="Password"
+             placeholder="New Password"
              autocomplete="new-password"
              required>
     </mat-form-field>
 
     <button [disabled]="pending"
             type="submit"
-            mat-raised-button
+            class="login"
+            mat-stroked-button
             color="accent">Reset Password</button>
-    <br>
     <p>
       <span class="link"
             (click)="back()">Back to login</span>.
