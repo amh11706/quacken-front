@@ -1,6 +1,6 @@
+<div style="--speed: {{10/speed}};">
 <div *ngFor="let obj of clutter"
      class="clutter clutter{{obj.t}}"
-     style="--speed: {{10/speed}};"
      [style.transform]="'translate(' + obj.coords.x + 'px, ' + obj.coords.y  + 'px)'">
 
   <div *ngIf="obj.t >= 8"
@@ -58,4 +58,5 @@
                 (click)="clickBoat(boat)"
                 (mouseenter)="hoveredTeam = boat.team || 0;"
                 (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
+</div>
 </div>
