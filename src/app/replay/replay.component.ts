@@ -102,6 +102,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.fakeMessages();
+      this.ss.admin = true;
       const join = this.messages[0]?.[0];
       if (!join) return;
       join.cmd = InCmd.Turn;

@@ -63,6 +63,7 @@ export class SettingComponent {
       data: {
         component: this.setting.advancedComponent,
         setting: copy,
+        admin: this.setting.admin,
       },
     }).afterClosed().subscribe((value: string) => {
       if (value !== 'true') return;

@@ -21,7 +21,7 @@
                class="lobbyPlayer"
                [class.ready]="m.message.r">
             <q-name [message]="m"></q-name>
-            <img *ngIf="m.sId === ws.sId; else boatImage"
+            <img *ngIf="m.sId === ws.sId && ws.connected; else boatImage"
                  [matMenuTriggerFor]="jobbers"
                  src="./assets/boats/{{links[m.message.b]}}.png"
                  [class.lowjobbers]="m.message.jq < 100"
@@ -49,12 +49,12 @@
       </div>
 
       <div id="buttons">
-        <button *ngIf="admin && !roundGoing"
+        <button *ngIf="admin && !roundGoing && ws.connected"
                 mat-raised-button
                 (click)="shuffleTeams()">Shuffle Teams</button>
         <br>
         <button mat-raised-button
-                [disabled]="!es.open"
+                [disabled]="!es.open || !ws.connected"
                 color="accent"
                 id="ready"
                 [class.cancel]="ready"
