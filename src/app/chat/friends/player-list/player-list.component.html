@@ -8,20 +8,28 @@
   </ng-template>
   <ng-container *ngFor="let m of fs.lobby">
     <div class="lobbyPlayer">
-      <span *ngIf="m.team !== undefined">
+      <ng-container *ngIf="m.team !== undefined">
         <ng-container [ngSwitch]="m.team">
           <ng-container *ngSwitchCase="0">
-            <img class="team" title="Defender" src="assets/images/icon_defend1.png">
+            <img class="team"
+                 title="Defender"
+                 src="assets/images/icon_defend1.png">
           </ng-container>
           <ng-container *ngSwitchCase="99">
-            <img title="Watcher" src="assets/images/watch.png">
+            <img title="Watcher"
+                 src="assets/images/watch.png">
           </ng-container>
           <ng-container *ngSwitchDefault>
-            <img class="team" title="Attacker" src="assets/images/icon_attack{{m.team}}.png">
+            <img class="team"
+                 title="Attacker"
+                 src="assets/images/icon_attack{{m.team}}.png">
           </ng-container>
         </ng-container>
-      </span>
+      </ng-container>
       <q-name [message]="m"></q-name>
+      <mat-icon *ngIf="m.op"
+                [inline]="true"
+                title="Opped">star</mat-icon>
     </div>
   </ng-container>
 </mat-card>

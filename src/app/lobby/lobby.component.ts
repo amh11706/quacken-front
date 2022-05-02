@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws.service';
 import { SettingsService } from '../settings/settings.service';
-import { FriendsService } from '../chat/friends/friends.service';
 import { Clutter } from './quacken/boats/boats.component';
 import { InCmd, OutCmd } from '../ws-messages';
 import { StatRow } from './cadegoose/stats/stats.component';
@@ -41,7 +40,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ws: WsService,
     private ss: SettingsService,
-    private fs: FriendsService,
   ) { }
 
   ngOnInit(): void {
@@ -57,10 +55,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(InCmd.LobbyJoin, l => {
       this.sent = false;
       this.lobby = l;
-      if (l.owner) {
-        this.fs.allowInvite = true;
-        this.ss.admin = true;
-      }
     }));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v) return;

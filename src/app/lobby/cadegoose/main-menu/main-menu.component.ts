@@ -20,6 +20,7 @@ interface TeamMessage {
   r: boolean;
   b: number;
   s: number;
+  a: boolean;
 }
 
 @Component({
@@ -43,7 +44,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   myTeam = 99;
   myJobbers = 100;
   ready = false;
-  admin = false;
   statsOpen = false;
   roundGoing = false;
   mapId: SettingPartial = { value: 0 };
@@ -54,7 +54,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     public ws: WsService,
     private fs: FriendsService,
     public es: EscMenuService,
-    private ss: SettingsService,
+    public ss: SettingsService,
     private sound: SoundService,
   ) { }
 
@@ -71,7 +71,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.es.activeTab = 0;
       }
       this.teams = m.players;
-      this.admin = m.owner ?? this.admin;
       this.ready = false;
       this.myTeam = 99;
       this.teamPlayers = [];
@@ -85,6 +84,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         const user = this.fs.lobby.find((mes) => mes.sId === +id);
         if (!user) return;
         user.team = p.t;
+        user.op = p.a;
       }
     }));
     this.subs.add(this.ws.subscribe(InCmd.Team, (m: TeamMessage) => {
@@ -97,6 +97,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       const user = this.fs.lobby.find((mes) => mes.sId === m.id);
       if (!user) return;
       user.team = m.t;
+      user.op = m.a;
+      if (user.sId === this.ws.sId) {
+        this.ss.admin = m.a;
+      }
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, (m: Message) => {
       if (m.sId) this.removeUser(m.sId);

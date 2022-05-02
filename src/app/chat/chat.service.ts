@@ -12,6 +12,7 @@ export interface Message {
   type: number;
   message?: any;
   team?: number;
+  op?: boolean;
   from: string;
   copy?: number;
   sId?: number;
