@@ -100,6 +100,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       user.op = m.a;
       if (user.sId === this.ws.sId) {
         this.ss.admin = m.a;
+        this.fs.allowInvite = m.a;
       }
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, (m: Message) => {

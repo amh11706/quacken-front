@@ -96,7 +96,10 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       this.mapSeed = this.lobby?.seed;
       this.advancedMapOpen = true;
     }));
-    this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => { if (this.lobby) this.lobby.stats = t.stats; }));
+    this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
+      if (this.lobby) this.lobby.stats = t.stats;
+      this.advancedMapOpen = false;
+    }));
     this.sub.add(this.kbs.subscribe(this.statAction, v => this.statOpacity = v ? 1 : 0));
     this.sub.add(this.mapDebounce.pipe(debounceTime(100)).subscribe(seed => {
       this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
