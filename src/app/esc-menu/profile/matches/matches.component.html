@@ -1,29 +1,35 @@
 <div id="matches">
-    <mat-form-field>
-        <mat-select [(value)]="stat.group"
-                    (valueChange)="stat.changeGroup()"
-                    placeholder="Category">
-            <mat-option [value]="0">Quacken ({{matches[0]?.length}})</mat-option>
-            <mat-option [value]="1">Cadesim ({{matches[1]?.length}})</mat-option>
-            <mat-option [value]="2">Sea Battle ({{matches[2]?.length}})</mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-form-field>
+    <mat-select [(value)]="stat.group"
+                (valueChange)="stat.changeGroup()"
+                placeholder="Category">
+      <mat-option [value]="0">Quacken ({{matches[0]?.length}})</mat-option>
+      <mat-option [value]="1">Cadesim ({{matches[1]?.length}})</mat-option>
+      <mat-option [value]="2">Sea Battle ({{matches[2]?.length}})</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <form *ngIf="ws.user?.admin">
+    <!-- <mat-form-field floatLabel="never"> -->
+    <q-name-search [value]="stat.target"
+                   (valueChange)="fetchMatches($event)"></q-name-search>
+    <!-- </mat-form-field> -->
+  </form>
 
-    <div id="selection">
-        <table>
-            <tr>
-                <th>Lobby</th>
-                <th>Date</th>
-                <th>Score</th>
-                <th>View</th>
-            </tr>
-            <tr *ngFor="let row of matches[stat.group]">
-                <td>{{row.lobby}}</td>
-                <td>{{row.createdAtString}}</td>
-                <td>{{row.score}}</td>
-                <td><button mat-raised-button
-                            (click)="openMatch(row)">Open</button></td>
-            </tr>
-        </table>
-    </div>
+  <div id="selection">
+    <table>
+      <tr>
+        <th>Lobby</th>
+        <th>Date</th>
+        <th>Score</th>
+        <th>View</th>
+      </tr>
+      <tr *ngFor="let row of matches[stat.group]">
+        <td>{{row.lobby}}</td>
+        <td>{{row.createdAtString}}</td>
+        <td>{{row.score}}</td>
+        <td><button mat-raised-button
+                  (click)="openMatch(row)">Open</button></td>
+      </tr>
+    </table>
+  </div>
 </div>

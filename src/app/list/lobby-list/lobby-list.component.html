@@ -30,6 +30,13 @@
         <mat-icon id="addLobby">add</mat-icon>
       </button>
 
+      <button *ngFor="let c of competitions" mat-button
+              class="card"
+              (click)="createCompetitionLobby(c)">
+        <h3 class="cardTitle">Competition {{c.name.data}}</h3>
+        <mat-icon id="addLobby">add</mat-icon>
+      </button>
+
       <button mat-button
               *ngFor="let l of lobbies"
               (click)="join(l, $event)"

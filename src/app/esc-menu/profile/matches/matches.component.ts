@@ -27,16 +27,25 @@ export class MatchesComponent implements OnInit {
   matches: Match[][] = [[], [], []];
 
   constructor(
-    private ws: WsService,
+    public ws: WsService,
     public stat: StatService,
   ) { }
 
-  async ngOnInit(): Promise<void> {
-    const matches = await this.ws.request(OutCmd.MatchesUser);
+  ngOnInit(): void {
+    void this.fetchMatches();
+  }
+
+  async fetchMatches(name = this.stat.target): Promise<void> {
+    this.stat.target = name;
+    this.matches = [[], [], []];
+    const matches = await this.ws.request(OutCmd.MatchesUser, this.stat.target);
+    let newest = { createdAt: 0 } as Match;
     for (const m of matches) {
+      if (m.createdAt > newest.createdAt) newest = m;
       m.createdAtString = moment(m.createdAt, 'X').format('lll');
       this.matches[m.rankArea - 1]?.push(m);
     }
+    this.stat.group = (newest.rankArea ?? 2) - 1;
 
     if (!this.matches[this.stat.group]?.length) {
       for (let i = 0; i < this.matches.length; i++) if (this.matches[i]?.length) this.stat.group = i;

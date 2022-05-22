@@ -12,6 +12,7 @@ import { CreateComponent } from '../create/create.component';
 import { EditorErrorComponent } from '../editor-error/editor-error.component';
 import { NewsComponent } from '../news/news.component';
 import { Note, Notes } from '../news/notes';
+import { Competitions } from './competition';
 
 @Component({
   selector: 'q-lobby-list',
@@ -23,6 +24,8 @@ export class LobbyListComponent implements OnInit, OnDestroy {
   note = Notes[0] as Note;
   private sub = new Subscription();
   @Input() message: Message = {} as Message;
+  competitions = Competitions
+
   constructor(
     public stat: StatService,
     public ws: WsService,
@@ -69,6 +72,10 @@ export class LobbyListComponent implements OnInit, OnDestroy {
 
   createLobby(): void {
     this.dialog.open(CreateComponent, { maxHeight: '90vh' });
+  }
+
+  createCompetitionLobby(c: typeof Competitions[0]): void {
+    this.ws.send(OutCmd.LobbyCreate, c);
   }
 
   openEditor(): void {
