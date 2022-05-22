@@ -12,7 +12,8 @@ import { CreateComponent } from '../create/create.component';
 import { EditorErrorComponent } from '../editor-error/editor-error.component';
 import { NewsComponent } from '../news/news.component';
 import { Note, Notes } from '../news/notes';
-import { Competitions } from './competition';
+import { Competitions } from '../competition/competition';
+import { CompetitionComponent } from '../competition/competition.component';
 
 @Component({
   selector: 'q-lobby-list',
@@ -74,8 +75,8 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     this.dialog.open(CreateComponent, { maxHeight: '90vh' });
   }
 
-  createCompetitionLobby(c: typeof Competitions[0]): void {
-    this.ws.send(OutCmd.LobbyCreate, c);
+  openCompetitions(): void {
+    this.dialog.open(CompetitionComponent, { maxHeight: '90vh' });
   }
 
   openEditor(): void {

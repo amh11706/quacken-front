@@ -30,11 +30,12 @@
         <mat-icon id="addLobby">add</mat-icon>
       </button>
 
-      <button *ngFor="let c of competitions" mat-button
+      <button *ngIf="competitions.length"
+              mat-button
               class="card"
-              (click)="createCompetitionLobby(c)">
-        <h3 class="cardTitle">Competition {{c.name.data}}</h3>
-        <mat-icon id="addLobby">add</mat-icon>
+              (click)="openCompetitions()">
+        <h3 class="cardTitle">Competitions ({{competitions.length}})</h3>
+        <span id="competition">👑</span>
       </button>
 
       <button mat-button
