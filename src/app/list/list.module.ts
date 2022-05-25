@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { ChatModule } from '../chat/chat.module';
 import { ListComponent } from './list.component';
@@ -41,6 +42,7 @@ import { CompetitionComponent } from './competition/competition.component';
     MatSelectModule,
     MatMenuModule,
     MatCardModule,
+    NgSelectModule,
     ChatModule,
     SettingsModule,
     FriendsModule,

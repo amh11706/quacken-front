@@ -2,17 +2,18 @@
               class="buttons">
   <mat-card *ngFor="let c of competitions">
     <h3>{{c.description}}</h3>
-    <ng-container *ngFor="let round of c.rounds">
-      <p>{{round.description}}</p>
-      <div class="buttons">
-        <button *ngFor="let game of round.games; let i = index"
-                mat-raised-button
-                [disabled]="created"
-                (click)="createLobby(game)">
-          Game {{i + 1}}
-        </button>
-      </div>
-    </ng-container>
+    <ng-select [items]="c.rounds"
+               [clearable]="false"
+               bindLabel="description"
+               [(ngModel)]="selectedRound"></ng-select>
+    <div class="buttons">
+      <button *ngFor="let game of selectedRound?.games; let i = index"
+              mat-raised-button
+              [disabled]="created"
+              (click)="createLobby(game)">
+        Game {{i + 1}}
+      </button>
+    </div>
   </mat-card>
 </ng-container>
 

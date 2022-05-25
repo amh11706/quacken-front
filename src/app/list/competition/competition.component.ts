@@ -15,6 +15,7 @@ import { SettingMap } from '../../settings/settings.service';
 export class CompetitionComponent implements OnInit, OnDestroy {
   created = false;
   competitions = Competitions
+  selectedRound = Competitions[0]?.rounds[0]
   private sub = new Subscription();
 
   constructor(

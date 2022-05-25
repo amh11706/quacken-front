@@ -28,8 +28,8 @@ const BaseSettings = {
       Sail: 80,
       Carp: 80,
       Bilge: 80,
-      Cannon: 80,
-      Maneuver: 65,
+      Cannon: 60,
+      Maneuver: 60,
     },
   },
   turnTime: {
