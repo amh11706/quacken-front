@@ -31,8 +31,8 @@ export class CreateComponent implements OnInit, OnDestroy {
   typeSettings: (keyof typeof Settings)[][] = [
     ['maxPlayers', 'hotEntry', 'publicMode'],
     ['turnTime', 'playTo', 'watchers'],
-    ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode'],
-    ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode'],
+    ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
+    ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
   ];
 
   private sub = new Subscription();

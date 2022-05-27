@@ -35,7 +35,7 @@ export interface Turn {
   stats: Record<number, StatRow>;
 }
 
-interface Sync {
+export interface Sync {
   sync: BoatSync[];
   cSync: Clutter[];
 }

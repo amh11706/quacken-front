@@ -9,12 +9,11 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 import { InMessage, WsService } from '../../ws.service';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
-import { Turn } from '../../lobby/quacken/boats/boats.component';
+import { Sync, Turn } from '../../lobby/quacken/boats/boats.component';
 import { Message } from '../../chat/chat.service';
 import { Boat } from '../../lobby/quacken/boats/boat';
 import { BoatTick } from '../../lobby/quacken/hud/hud.component';
 import { Lobby } from '../../lobby/lobby.component';
-import { boatToSync } from '../../lobby/quacken/boats/convert';
 import { AiRender, Points, AiData, AiBoatData } from './ai-render';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 
@@ -26,6 +25,9 @@ interface ParsedTurn {
     scoreChange: number;
     sinks: Message[];
   }[];
+  sync: Sync;
+  ticks: Record<number, BoatTick>;
+  moves: Record<number, {shots: [], moves: []}>;
 }
 
 /* eslint-disable no-unused-vars */
@@ -69,17 +71,33 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     this.selectAiBoat();
     this.turns = [];
     let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
+    let lastSync: Sync = { sync: [], cSync: [] };
+    let moves: Record<number, {shots: [], moves: []}> = {};
     for (let i = 0; i < messages.length; i++) {
       const group = messages[i];
       if (!group) continue;
       const sinks: Message[][] = [[], []];
+      let ticks: Record<number, BoatTick> = {};
       for (const m of group) {
         switch (m.cmd) {
+          case InCmd.Moves:
+            moves[m.data.t] = { shots: m.data.s, moves: m.data.m };
+            break;
+          case InCmd.Sync:
+            lastSync = m.data;
+            break;
+          case InCmd.BoatTicks:
+            ticks = m.data;
+            break;
           case InCmd.Turn:
             // eslint-disable-next-line no-case-declarations
             const turn: Turn = m.data;
+
             // eslint-disable-next-line no-case-declarations
             const parsed: ParsedTurn = {
+              ticks,
+              moves,
+              sync: lastSync,
               turn: this.turns.length + 1,
               index: i,
               teams: turn.points.map((score, j) => {
@@ -88,6 +106,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
                 return team;
               }),
             };
+            moves = {};
             lastTurn = parsed;
             this.turns.push(parsed);
             break;
@@ -298,17 +317,16 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       this.playTo.emit((this.activeTurn?.index || this.turns[0]?.index || 2) - 2);
       await new Promise(resolve => setTimeout(resolve, 10));
     }
-    const moves: Record<number, { moves: number[], shots?: number[] }> = {};
-    for (const boat of this.boats) moves[boat.id] = { moves: boat.moves, shots: boat.shots };
+    console.log(this.activeTurn)
     this.aiData = await this.ws.request(OutCmd.MatchAi, {
       team: this.aiTeam,
-      boats: this.boats.map(boatToSync),
-      ticks: this.boatTicks,
+      boats: this.activeTurn?.sync.sync,
+      ticks: this.activeTurn?.ticks,
       map: sendMap ? this.randomMap || this.lobby?.map : undefined,
       seed: this.seed,
       claimOptions: this.claimOptions,
       claimsOnly,
-      moves,
+      moves: this.activeTurn?.moves,
     });
     if (!this.aiData) return;
 

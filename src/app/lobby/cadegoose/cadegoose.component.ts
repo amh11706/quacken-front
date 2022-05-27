@@ -24,6 +24,7 @@ const ownerSettings: (keyof typeof Settings)[] = [
   'cadeHotEntry', 'cadePublicMode',
   'cadeSpawnDelay', 'cadeMap',
   'cadeTeams', 'fishBoats',
+  'allowGuests',
 ];
 
 export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy ships in a battle for points.';
