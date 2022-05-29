@@ -20,6 +20,7 @@ import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entr
 import { StatRow } from '../../lobby/cadegoose/stats/stats.component';
 import { BoatStatus } from '../../lobby/quacken/boats/convert';
 import { Penalties, PenaltyComponent, PenaltySummary } from './penalty/penalty.component';
+import { SettingsService } from 'src/app/settings/settings.service';
 
 interface ParsedTurn {
   turn: number;
@@ -56,6 +57,7 @@ enum ClaimOption {
 })
 export class CadegooseComponent implements OnInit, OnDestroy {
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;
+  @ViewChild('penaltyBox', { static: false, read: ElementRef }) penaltyBox?: ElementRef<HTMLElement>;
   @Output() playTo = new EventEmitter<number>();
   @Output() pauseMatch = new EventEmitter<void>();
   @Input() seed = '';
@@ -64,7 +66,9 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     const i = Math.floor((value + 2) / 30) - 1;
     this.activeTurn = this.turns[i];
     const buttons = this.turnTab?.nativeElement.children;
+    const buttons2 = this.penaltyBox?.nativeElement.children;
     buttons?.[i >= 0 ? i : 0]?.scrollIntoView({ block: 'center' });
+    buttons2?.[i >= 0 ? i : 0]?.scrollIntoView({ block: 'center' });
     if (value === this._tick) return;
     this._tick = value;
 
@@ -75,9 +79,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _messages: InMessage[][] = [];
   @Input() set messages(messages: InMessage[][]) {
-    this._messages = messages;
     delete this.aiData;
     delete this.scores;
     this.selectAiBoat();
@@ -135,10 +137,11 @@ export class CadegooseComponent implements OnInit, OnDestroy {
         }
       }
     }
+    if (this.turns.length) setTimeout(() => this.getScores(), 100);
   }
 
   teamColors = TeamColorsCss;
-  tabIndex = 0;
+  tabIndex = 2;
   turns: ParsedTurn[] = [];
   maxScore = 0;
   activeTurn?: ParsedTurn;
@@ -206,7 +209,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
 
   private subs = new Subscription();
 
-  constructor(private ws: WsService, private dialog: MatDialog) {
+  constructor(private ws: WsService, private dialog: MatDialog, private ss: SettingsService) {
     this.filteredShips = this.shipCtrl.valueChanges.pipe(
       startWith(null),
       map((ship: string | null) => ship ? this._filter(ship) : this.ships.slice()));
@@ -284,7 +287,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   }
 
   tabChange(): void {
-    if (this.tabIndex === 0) setTimeout(() => this.tick = this._tick);
+    if (this.tabIndex === 0 || this.tabIndex === 2) setTimeout(() => this.tick = this._tick);
   }
 
   private updateBoat() {
@@ -299,7 +302,8 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     });
   }
 
-  clickTurn(turn: ParsedTurn): void {
+  clickTurn(turn?: ParsedTurn): void {
+    if (!turn) return;
     this.playTo.emit(turn.index - 2);
     // if (this.tabIndex < 2) setTimeout(() => this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat }));
   }
@@ -336,7 +340,9 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     });
 
     if (!this.scores) return;
+    const map = await this.ss.get('l/cade', 'map');
     for (const t of this.scores.totals) {
+      t.map = map?.data;
       t.total = 0;
       t.turns = [[], [], [], [], [], [], [], [], [], [], []];
     }
@@ -356,13 +362,14 @@ export class CadegooseComponent implements OnInit, OnDestroy {
         totals.total += penalty;
       });
     });
+
   }
 
   showTotals(penalties?: ScoreResponse['totals'][0]): void {
     this.dialog.open(PenaltyComponent, {
       data: {
         rows: penalties,
-        setTurn: (i: number) => this.activeTurn && this.clickTurn(this.turns[i - 1] ?? this.activeTurn),
+        setTurn: (i: number) => this.clickTurn(this.turns[i - 1]),
       },
     });
   }

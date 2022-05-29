@@ -1,11 +1,11 @@
-<mat-dialog-content>
-  <h3>{{data.rows.name}} Stats</h3>
+<mat-dialog-content id="screenshot">
+  <h3>{{data.rows.name}} Stats {{data.rows.map}}</h3>
   <table>
     <tr>
       <th>Action</th>
       <th>Penalty</th>
       <th>Quantity</th>
-      <th>Turns</th>
+      <th id="turnColumn">Turns</th>
     </tr>
     <tr *ngFor="let penalty of Penalties; let i = index">
       <td>{{penalty.title}}</td>
@@ -26,5 +26,8 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button
-          matDialogClose="false">Done</button>
+          matDialogClose>Done</button>
+  <button mat-raised-button
+          [disabled]="copied || copying"
+          (click)="copyPicture()">{{ copied ? 'Copied' : 'Copy Picture' }}</button>
 </mat-dialog-actions>

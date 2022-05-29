@@ -27,6 +27,7 @@
     "@auth0/angular-jwt": "~5.0.1",
     "@ng-select/ng-select": "~7.3.0",
     "@tweenjs/tween.js": "18.6.4",
+    "html-to-image": "^1.9.0",
     "moment": "~2.27.0",
     "ng2-file-upload": "~1.4.0",
     "rxjs": "~6.5.5",

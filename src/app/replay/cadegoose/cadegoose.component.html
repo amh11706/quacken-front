@@ -2,7 +2,7 @@
                (selectedIndexChange)="tabChange()">
   <mat-tab>
     <ng-template mat-tab-label>
-      Turns
+      <mat-icon>turn_right</mat-icon>
     </ng-template>
 
     <div #turnTab>
@@ -32,7 +32,7 @@
 
   <mat-tab>
     <ng-template mat-tab-label>
-      Boats
+      <mat-icon>sailing</mat-icon>
     </ng-template>
 
     <button mat-button
@@ -159,7 +159,7 @@
 
   <mat-tab>
     <ng-template mat-tab-label>
-      Score
+      <mat-icon>account_balance</mat-icon>
     </ng-template>
 
     <button *ngIf="!scores"
@@ -170,27 +170,30 @@
     <div *ngIf="scores">
       <button mat-raised-button
               class="scoreButton"
-              (click)="showTotals(scores.totals[0])">{{scores.totals[0]?.name}} Total</button>
+              (click)="showTotals(scores.totals[0])">{{scores.totals[0]?.name}} Total</button><br>
       <button mat-raised-button
               class="scoreButton"
               (click)="showTotals(scores.totals[1])">{{scores.totals[1]?.name}} Total</button>
-      <button *ngFor="let turn of scores.turns; let i = index"
-              mat-button
-              [color]="i+1 === activeTurn?.turn ? 'primary' : undefined"
-              class="turn"
-              (click)="activeTurn && clickTurn(turns[i] || activeTurn)">
-        Turn {{i+1}}<br>
-        <div class="points">
-          <div *ngFor="let team of turn"
-               [style.backgroundColor]="'transparent'">
-            <div *ngFor="let penalty of team; let i2 = index"
-                 class="penalty"
-                 [title]="Penalties[i2]?.title + ' - ' + penalty"
-                 [style.backgroundColor]="penaltyColors[i2]"
-                 [style.width]="50 * penalty*(Penalties[i2]?.value ?? 0) / maxPenalty + 'px'"></div>
+      <div #penaltyBox
+           id="penaltyBox">
+        <button *ngFor="let turn of scores.turns; let i = index"
+                mat-button
+                [color]="i+1 === activeTurn?.turn ? 'primary' : undefined"
+                class="turn"
+                (click)="clickTurn(turns[i])">
+          Turn {{i+1}}<br>
+          <div class="points">
+            <div *ngFor="let team of turn"
+                 [style.backgroundColor]="'transparent'">
+              <div *ngFor="let penalty of team; let i2 = index"
+                   class="penalty"
+                   [title]="Penalties[i2]?.title + ' - ' + penalty"
+                   [style.backgroundColor]="penaltyColors[i2]"
+                   [style.width]="50 * penalty*(Penalties[i2]?.value ?? 0) / maxPenalty + 'px'"></div>
+            </div>
           </div>
-        </div>
-      </button>
+        </button>
+      </div>
     </div>
   </mat-tab>
 

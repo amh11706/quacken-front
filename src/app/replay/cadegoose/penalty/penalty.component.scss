@@ -7,7 +7,17 @@ td, th {
   border: 1px solid grey;
 }
 
+#turnColumn {
+  width: 200px;
+}
+
 .turnlink {
   cursor: pointer;
   color: aqua;
+}
+
+#screenshot {
+  background-color: rgb(66, 66, 66);
+  padding: 16px 48px;
+  overflow-y: visible;
 }

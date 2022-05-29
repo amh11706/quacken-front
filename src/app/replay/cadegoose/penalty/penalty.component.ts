@@ -1,8 +1,10 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { toBlob } from 'html-to-image';
 
 export interface PenaltySummary {
   name: string,
+  map: string,
   penalties: number[],
   turns: { turn: number, quantity: number }[][],
   total: number,
@@ -29,8 +31,29 @@ export const Penalties = [
 })
 export class PenaltyComponent {
   Penalties = Penalties;
+  copied = false;
+  copying = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { rows: PenaltySummary, setTurn: (i: number) => void },
   ) { }
+
+  async copyPicture(): Promise<void> {
+    if (this.copying) return;
+    this.copying = true;
+    const el = document.getElementById('screenshot');
+    if (!el) return;
+    const blob = await toBlob(el, {
+      height: 700,
+      style: {
+        overflow: 'visible',
+      },
+    });
+    (navigator.clipboard as any).write([
+      new (window as any).ClipboardItem({
+        'image/png': blob,
+      }),
+    ]);
+    this.copied = true;
+  }
 }
