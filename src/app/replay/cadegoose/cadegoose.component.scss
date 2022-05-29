@@ -20,20 +20,34 @@ q-map-debug {
   padding-top: 25px;
 }
 
+.penalty {
+  height: 5px;
+}
+
+.scoreButton {
+  margin: 8px 0;
+}
+
 .turn {
   .points {
     display: inline-block;
     position: relative;
     width: 100px;
-
-    :nth-child(odd) {
-      position: absolute;
-      right: 50px;
-      height: 5px;
+    height: 5px;
+    line-height: 10px;
+    * {
+      display: inline-block;
     }
-    :nth-child(even) {
+
+    & > :nth-child(odd) {
       position: absolute;
-      left: 50px;
+      right: 52px;
+      height: 5px;
+      direction: rtl;
+    }
+    & > :nth-child(even) {
+      position: absolute;
+      left: 52px;
       height: 5px;
       background-color: red;
     }
@@ -117,7 +131,7 @@ button.margin {
   align-items: center;
   justify-content: center;
   margin: 8px 0;
-  
+
   * {
     max-width: 50%;
   }

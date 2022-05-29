@@ -162,7 +162,36 @@
       Score
     </ng-template>
 
-    <button mat-raised-button>Fetch</button>
+    <button *ngIf="!scores"
+            mat-raised-button
+            class="scoreButton"
+            (click)="getScores()">Fetch</button>
+
+    <div *ngIf="scores">
+      <button mat-raised-button
+              class="scoreButton"
+              (click)="showTotals(scores.totals[0])">{{scores.totals[0]?.name}} Total</button>
+      <button mat-raised-button
+              class="scoreButton"
+              (click)="showTotals(scores.totals[1])">{{scores.totals[1]?.name}} Total</button>
+      <button *ngFor="let turn of scores.turns; let i = index"
+              mat-button
+              [color]="i+1 === activeTurn?.turn ? 'primary' : undefined"
+              class="turn"
+              (click)="activeTurn && clickTurn(turns[i] || activeTurn)">
+        Turn {{i+1}}<br>
+        <div class="points">
+          <div *ngFor="let team of turn"
+               [style.backgroundColor]="'transparent'">
+            <div *ngFor="let penalty of team; let i2 = index"
+                 class="penalty"
+                 [title]="Penalties[i2]?.title + ' - ' + penalty"
+                 [style.backgroundColor]="penaltyColors[i2]"
+                 [style.width]="50 * penalty*(Penalties[i2]?.value ?? 0) / maxPenalty + 'px'"></div>
+          </div>
+        </div>
+      </button>
+    </div>
   </mat-tab>
 
   <!-- <mat-tab>

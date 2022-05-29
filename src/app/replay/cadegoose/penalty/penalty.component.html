@@ -1,0 +1,30 @@
+<mat-dialog-content>
+  <h3>{{data.rows.name}} Stats</h3>
+  <table>
+    <tr>
+      <th>Action</th>
+      <th>Penalty</th>
+      <th>Quantity</th>
+      <th>Turns</th>
+    </tr>
+    <tr *ngFor="let penalty of Penalties; let i = index">
+      <td>{{penalty.title}}</td>
+      <td>{{penalty.value || ''}}</td>
+      <td>{{data.rows.penalties[i] || ''}}</td>
+      <td>
+        <span *ngFor="let t of data.rows.turns[i]; let first = first"
+              class="turnlink"
+              (click)="data.setTurn(t.turn)"
+              [title]="t.quantity"><span *ngIf="!first">, </span>{{t.turn}}</span>
+      </td>
+    </tr>
+    <tr>
+      <th>Total Fine</th>
+      <th>{{data.rows.total.toLocaleString()}}</th>
+    </tr>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button
+          matDialogClose="false">Done</button>
+</mat-dialog-actions>

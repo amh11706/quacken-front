@@ -6,16 +6,20 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { startWith, map } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
 
 import { InMessage, WsService } from '../../ws.service';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
-import { Sync, Turn } from '../../lobby/quacken/boats/boats.component';
+import { Clutter, Sync, Turn } from '../../lobby/quacken/boats/boats.component';
 import { Message } from '../../chat/chat.service';
 import { Boat } from '../../lobby/quacken/boats/boat';
 import { BoatTick } from '../../lobby/quacken/hud/hud.component';
 import { Lobby } from '../../lobby/lobby.component';
 import { AiRender, Points, AiData, AiBoatData } from './ai-render';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
+import { StatRow } from '../../lobby/cadegoose/stats/stats.component';
+import { BoatStatus } from '../../lobby/quacken/boats/convert';
+import { Penalties, PenaltyComponent, PenaltySummary } from './penalty/penalty.component';
 
 interface ParsedTurn {
   turn: number;
@@ -27,10 +31,17 @@ interface ParsedTurn {
   }[];
   sync: Sync;
   ticks: Record<number, BoatTick>;
-  moves: Record<number, {shots: [], moves: []}>;
+  moves: Record<number, { shots: [], moves: [] }>;
+  steps: BoatStatus[][];
+  cSteps: Clutter[][];
+  stats: Record<number, StatRow>;
 }
 
-/* eslint-disable no-unused-vars */
+interface ScoreResponse {
+  totals: PenaltySummary[]
+  turns: number[][][]
+}
+
 enum ClaimOption {
   MinPoints,
   DuplicateDeterence,
@@ -68,18 +79,22 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   @Input() set messages(messages: InMessage[][]) {
     this._messages = messages;
     delete this.aiData;
+    delete this.scores;
     this.selectAiBoat();
     this.turns = [];
     let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
     let lastSync: Sync = { sync: [], cSync: [] };
-    let moves: Record<number, {shots: [], moves: []}> = {};
+    let moves: Record<number, { shots: [], moves: [] }> = {};
+    let ticks: Record<number, BoatTick> = {};
     for (let i = 0; i < messages.length; i++) {
       const group = messages[i];
       if (!group) continue;
       const sinks: Message[][] = [[], []];
-      let ticks: Record<number, BoatTick> = {};
       for (const m of group) {
         switch (m.cmd) {
+          case InCmd.LobbyJoin:
+            lastSync = { sync: Object.values(m.data.boats), cSync: [] };
+            break;
           case InCmd.Moves:
             moves[m.data.t] = { shots: m.data.s, moves: m.data.m };
             break;
@@ -92,7 +107,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
           case InCmd.Turn:
             // eslint-disable-next-line no-case-declarations
             const turn: Turn = m.data;
-
             // eslint-disable-next-line no-case-declarations
             const parsed: ParsedTurn = {
               ticks,
@@ -105,8 +119,12 @@ export class CadegooseComponent implements OnInit, OnDestroy {
                 if (team.scoreChange > this.maxScore) this.maxScore = team.scoreChange;
                 return team;
               }),
+              steps: turn.steps,
+              cSteps: turn.cSteps,
+              stats: turn.stats,
             };
             moves = {};
+            ticks = {};
             lastTurn = parsed;
             this.turns.push(parsed);
             break;
@@ -136,8 +154,22 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   aiStep = 0;
   aiRadius = 4;
   aiRender = new AiRender();
-
   randomMap = '';
+  scores?: ScoreResponse;
+  maxPenalty = 0;
+  Penalties = Penalties
+
+  penaltyColors = [
+    'white',
+    'red',
+    'purple',
+    'yellow',
+    'orange',
+    'green',
+    'blue',
+    'lime',
+  ];
+
   claimOptions = {
     [ClaimOption.MinPoints]: 70,
     [ClaimOption.DuplicateDeterence]: 80,
@@ -174,7 +206,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
 
   private subs = new Subscription();
 
-  constructor(private ws: WsService) {
+  constructor(private ws: WsService, private dialog: MatDialog) {
     this.filteredShips = this.shipCtrl.valueChanges.pipe(
       startWith(null),
       map((ship: string | null) => ship ? this._filter(ship) : this.ships.slice()));
@@ -298,17 +330,41 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   }
 
   async getScores(): Promise<void> {
-    const messages: InMessage[] = [];
-    for (const g of this._messages) {
-      for (const m of g) {
-        if (m.cmd === InCmd.Sync) messages.push(m);
-      }
-    }
-    const scores = await this.ws.request(OutCmd.MatchScore, {
-      messages,
+    this.scores = await this.ws.request(OutCmd.MatchScore, {
+      turns: this.turns,
       map: this.lobby?.map,
     });
-    console.log(scores);
+
+    if (!this.scores) return;
+    for (const t of this.scores.totals) {
+      t.total = 0;
+      t.turns = [[], [], [], [], [], [], [], [], [], [], []];
+    }
+
+    this.scores.turns.forEach((t, turnIndex) => {
+      t.forEach((teamPenalties, team) => {
+        const totals = this.scores?.totals[team];
+        if (!totals) return;
+
+        let penalty = 0;
+        teamPenalties.forEach((quantity, i) => {
+          if (quantity === 0) return;
+          penalty += quantity * (this.Penalties[i]?.value ?? 0);
+          totals.turns[i]?.push({ turn: turnIndex + 1, quantity });
+        });
+        if (penalty > this.maxPenalty) this.maxPenalty = penalty;
+        totals.total += penalty;
+      });
+    });
+  }
+
+  showTotals(penalties?: ScoreResponse['totals'][0]): void {
+    this.dialog.open(PenaltyComponent, {
+      data: {
+        rows: penalties,
+        setTurn: (i: number) => this.activeTurn && this.clickTurn(this.turns[i - 1] ?? this.activeTurn),
+      },
+    });
   }
 
   async getMatchAi(claimsOnly = false, sendMap = true): Promise<void> {
@@ -317,7 +373,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       this.playTo.emit((this.activeTurn?.index || this.turns[0]?.index || 2) - 2);
       await new Promise(resolve => setTimeout(resolve, 10));
     }
-    console.log(this.activeTurn)
     this.aiData = await this.ws.request(OutCmd.MatchAi, {
       team: this.aiTeam,
       boats: this.activeTurn?.sync.sync,
