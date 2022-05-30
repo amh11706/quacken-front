@@ -20,7 +20,7 @@ import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entr
 import { StatRow } from '../../lobby/cadegoose/stats/stats.component';
 import { BoatStatus } from '../../lobby/quacken/boats/convert';
 import { Penalties, PenaltyComponent, PenaltySummary } from './penalty/penalty.component';
-import { SettingsService } from 'src/app/settings/settings.service';
+import { SettingsService } from '../../settings/settings.service';
 
 interface ParsedTurn {
   turn: number;
@@ -96,6 +96,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
         switch (m.cmd) {
           case InCmd.LobbyJoin:
             lastSync = { sync: Object.values(m.data.boats), cSync: [] };
+            this.map = m.data.map;
             break;
           case InCmd.Moves:
             moves[m.data.t] = { shots: m.data.s, moves: m.data.m };
@@ -137,9 +138,10 @@ export class CadegooseComponent implements OnInit, OnDestroy {
         }
       }
     }
-    if (this.turns.length) setTimeout(() => this.getScores(), 100);
+    if (this.turns.length) void this.getScores();
   }
 
+  private map?: string;
   teamColors = TeamColorsCss;
   tabIndex = 2;
   turns: ParsedTurn[] = [];
@@ -336,7 +338,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   async getScores(): Promise<void> {
     this.scores = await this.ws.request(OutCmd.MatchScore, {
       turns: this.turns,
-      map: this.lobby?.map,
+      map: this.map,
     });
 
     if (!this.scores) return;
@@ -362,7 +364,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
         totals.total += penalty;
       });
     });
-
   }
 
   showTotals(penalties?: ScoreResponse['totals'][0]): void {
