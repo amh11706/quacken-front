@@ -5,6 +5,7 @@
     <ng-select [items]="c.rounds"
                [clearable]="false"
                bindLabel="description"
+               [appendTo]="'body'"
                [(ngModel)]="selectedRound"></ng-select>
     <div class="buttons">
       <button *ngFor="let game of selectedRound?.games; let i = index"
