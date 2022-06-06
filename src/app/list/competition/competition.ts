@@ -83,6 +83,26 @@ export const Competitions = [
         ],
       },
       {
+        description: 'Upper bracket - Round 4',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'R4 - 1', value: 0 },
+            map: { id: 18, value: 311, data: 'R4 - 1' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'R4 - 2', value: 0 },
+            map: { id: 18, value: 315, data: 'R4 - 2' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'R4 - 3', value: 0 },
+            map: { id: 18, value: 313, data: 'R4 - 3' },
+          },
+        ],
+      },
+      {
         description: 'Loser bracket - Round 1',
         games: [
           {
@@ -108,7 +128,17 @@ export const Competitions = [
           {
             ...BaseSettings,
             name: { data: 'R3 - Loser', value: 0 },
-            map: { id: 18, value: 298, data: 'R3 - Loser' },
+            map: { id: 18, value: 299, data: 'R3 - Loser' },
+          },
+        ],
+      },
+      {
+        description: 'Loser bracket - Round 4',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'R4 - Loser', value: 0 },
+            map: { id: 18, value: 302, data: 'R4 - Loser' },
           },
         ],
       },
