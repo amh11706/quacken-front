@@ -23,122 +23,52 @@ export const Competitions = [
     description: 'Black Flag Friends and Allies 1v1',
     rounds: [
       {
-        description: 'Upper bracket - Round 1',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R1 - 1', value: 0 },
-            map: { id: 18, value: 294, data: 'R1 - 1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'R1 - 2', value: 0 },
-            map: { id: 18, value: 295, data: 'R1 - 2' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'R1 - 3', value: 0 },
-            map: { id: 18, value: 296, data: 'R1 - 3' },
-          },
-        ],
-      },
-      {
-        description: 'Upper bracket - Round 2',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R2 - 1', value: 0 },
-            map: { id: 18, value: 303, data: 'R2 - 1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'R2 - 2', value: 0 },
-            map: { id: 18, value: 304, data: 'R2 - 2' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'R2 - 3', value: 0 },
-            map: { id: 18, value: 305, data: 'R2 - 3' },
-          },
-        ],
-      },
-      {
-        description: 'Upper bracket - Round 3',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R3 - 1', value: 0 },
-            map: { id: 18, value: 306, data: 'R3 - 1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'R3 - 2', value: 0 },
-            map: { id: 18, value: 307, data: 'R3 - 2' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'R3 - 3', value: 0 },
-            map: { id: 18, value: 308, data: 'R3 - 3' },
-          },
-        ],
-      },
-      {
-        description: 'Upper bracket - Round 4',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R4 - 1', value: 0 },
-            map: { id: 18, value: 311, data: 'R4 - 1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'R4 - 2', value: 0 },
-            map: { id: 18, value: 315, data: 'R4 - 2' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'R4 - 3', value: 0 },
-            map: { id: 18, value: 313, data: 'R4 - 3' },
-          },
-        ],
-      },
-      {
-        description: 'Loser bracket - Round 1',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R1 - Loser', value: 0 },
-            map: { id: 18, value: 297, data: 'R1 - Loser' },
-          },
-        ],
-      },
-      {
-        description: 'Loser bracket - Round 2',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R2 - Loser', value: 0 },
-            map: { id: 18, value: 298, data: 'R2 - Loser' },
-          },
-        ],
-      },
-      {
-        description: 'Loser bracket - Round 3',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R3 - Loser', value: 0 },
-            map: { id: 18, value: 299, data: 'R3 - Loser' },
-          },
-        ],
-      },
-      {
         description: 'Loser bracket - Round 4',
         games: [
           {
             ...BaseSettings,
             name: { data: 'R4 - Loser', value: 0 },
             map: { id: 18, value: 302, data: 'R4 - Loser' },
+          },
+        ],
+      },
+      {
+        description: 'Loser bracket - Round 5',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'R5 - Loser', value: 0 },
+            map: { id: 18, value: 312, data: 'R5 - Loser' },
+          },
+        ],
+      },
+      {
+        description: 'Loser bracket - Round 6',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'R6 - Loser', value: 0 },
+            map: { id: 18, value: 331, data: 'R6 - Loser' },
+          },
+        ],
+      },
+      {
+        description: 'Loser bracket - Finals',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'Loser Finals - 1', value: 0 },
+            map: { id: 18, value: 317, data: 'Loser Finals - 1' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'Loser Finals - 2', value: 0 },
+            map: { id: 18, value: 320, data: 'Loser Finals - 2' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'Loser Finals - 3', value: 0 },
+            map: { id: 18, value: 321, data: 'Loser Finals - 3' },
           },
         ],
       },
