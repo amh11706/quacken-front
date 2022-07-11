@@ -68,7 +68,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private water = new Sprite('cell', 64, 48, [[128, 0]]);
   private sz = new Sprite('safezone', 64, 48, [[128, 0]]);
   private wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
-  private whirl = new Sprite('whirl', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0]]);
+  private whirl = new Sprite('whirl', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0], [320, 0], [384, 0], [448, 0], [256, 0]]);
 
   private wheelDebounce?: number;
   private sub = new Subscription();
@@ -236,7 +236,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         const tile = map[y]?.[x];
         if (!tile) continue;
         else if ((tile >= 21 && tile <= 23) || tile === 50 || tile === 51) this.addObstacles(x, y, tile, flags);
-        else if (tile > 8) this.whirl.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
+        else if (tile > 8) this.whirl.draw(ctx, tile - 9, xOffset, yOffset);
         else if (tile > 4) this.wind.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
       }
     }

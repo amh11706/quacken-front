@@ -1,3 +1,5 @@
+import { SettingMap } from '../../settings/settings.service';
+
 const BaseSettings = {
   createType: { value: 2 },
   maxPlayers: { id: 24, value: 40 },
@@ -18,60 +20,68 @@ const BaseSettings = {
   allowGuests: { id: 46, value: 0 },
 };
 
-export const Competitions = [
-  {
-    description: 'Black Flag Friends and Allies 1v1',
-    rounds: [
-      {
-        description: 'Loser bracket - Round 4',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R4 - Loser', value: 0 },
-            map: { id: 18, value: 302, data: 'R4 - Loser' },
-          },
-        ],
-      },
-      {
-        description: 'Loser bracket - Round 5',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R5 - Loser', value: 0 },
-            map: { id: 18, value: 312, data: 'R5 - Loser' },
-          },
-        ],
-      },
-      {
-        description: 'Loser bracket - Round 6',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'R6 - Loser', value: 0 },
-            map: { id: 18, value: 331, data: 'R6 - Loser' },
-          },
-        ],
-      },
-      {
-        description: 'Loser bracket - Finals',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'Loser Finals - 1', value: 0 },
-            map: { id: 18, value: 317, data: 'Loser Finals - 1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Loser Finals - 2', value: 0 },
-            map: { id: 18, value: 320, data: 'Loser Finals - 2' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Loser Finals - 3', value: 0 },
-            map: { id: 18, value: 321, data: 'Loser Finals - 3' },
-          },
-        ],
-      },
-    ],
-  },
+interface Competition {
+  description: string,
+  rounds: {
+    description: string,
+    games: SettingMap[]
+  }[],
+}
+
+export const Competitions: Competition[] = [
+  // {
+  //   description: 'Black Flag Friends and Allies 1v1',
+  //   rounds: [
+  //     {
+  //       description: 'Loser bracket - Round 4',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'R4 - Loser', value: 0 },
+  //           map: { id: 18, value: 302, data: 'R4 - Loser' },
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       description: 'Loser bracket - Round 5',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'R5 - Loser', value: 0 },
+  //           map: { id: 18, value: 312, data: 'R5 - Loser' },
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       description: 'Loser bracket - Round 6',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'R6 - Loser', value: 0 },
+  //           map: { id: 18, value: 331, data: 'R6 - Loser' },
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       description: 'Loser bracket - Finals',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Loser Finals - 1', value: 0 },
+  //           map: { id: 18, value: 317, data: 'Loser Finals - 1' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Loser Finals - 2', value: 0 },
+  //           map: { id: 18, value: 320, data: 'Loser Finals - 2' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Loser Finals - 3', value: 0 },
+  //           map: { id: 18, value: 321, data: 'Loser Finals - 3' },
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 ];

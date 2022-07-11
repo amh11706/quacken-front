@@ -13,6 +13,7 @@ export const Titles = [
 export const CadeTitles = [
   'Right Wind', 'Down Wind', 'Up Wind', 'Left Wind',
   'Whirl 1', 'Whirl 2', 'Whirl 3', 'Whirl 4',
+  'Reverse Whirl 1', 'Reverse Whirl 2', 'Reverse Whirl 3', 'Reverse Whirl 4',
   'Rock', 'Small Rock',
 ];
 
@@ -27,9 +28,9 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
   @ViewChild('selectedTile', { static: false }) selectedTile?: ElementRef<HTMLDivElement>;
 
   obstacles = [1, 2, 3, 4, 6, 7, 5, 8, 10, 11, 9, 12, 15, 16, 14, 13, 50, 51];
-  cadeObstacles = [6, 7, 5, 8, 10, 11, 9, 12, 50, 51];
+  cadeObstacles = [6, 7, 5, 8, 10, 11, 9, 12, 15, 16, 14, 13, 50, 51];
   scrollOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 13, 50, 51];
-  cadeScrollOrder = [6, 7, 8, 9, 10, 11, 12, 50, 51, 21, 22, 23];
+  cadeScrollOrder = [5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 13, 50, 51, 21, 22, 23];
 
   titles = Titles;
   cadeTitles = CadeTitles;

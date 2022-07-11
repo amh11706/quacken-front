@@ -6,7 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
 
-const ClientVersion = 24;
+const ClientVersion = 25;
 
 export interface InMessage {
   cmd: InCmd | Internal;
