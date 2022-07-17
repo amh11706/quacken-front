@@ -68,7 +68,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private water = new Sprite('cell', 64, 48, [[128, 0]]);
   private sz = new Sprite('safezone', 64, 48, [[128, 0]]);
   private wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
-  private whirl = new Sprite('whirl', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0], [320, 0], [384, 0], [448, 0], [256, 0]]);
+  private whirl = new Sprite('whirl2', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0], [320, 0], [384, 0], [448, 0], [256, 0]]);
 
   private wheelDebounce?: number;
   private sub = new Subscription();
