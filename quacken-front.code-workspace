@@ -5,6 +5,13 @@
 		}
   ],
   "settings": {
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "html.format.endWithNewline": true,
+    "html.format.wrapAttributes": "force-aligned",
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
   }
 }

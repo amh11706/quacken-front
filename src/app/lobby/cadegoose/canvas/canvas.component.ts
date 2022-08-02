@@ -22,7 +22,7 @@ export class CanvasComponent {
   static readonly water = new Sprite('cell', 64, 48, [[128, 0]]);
   static readonly sz = new Sprite('safezone', 64, 48, [[128, 0]]);
   static readonly wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
-  static readonly whirl = new Sprite('whirl', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0]]);
+  static readonly whirl = new Sprite('whirl2', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0]]);
   static readonly rocks = new JsonSprite(BigRockData);
   static readonly smallRocks = new JsonSprite(SmallRockData);
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;

@@ -1,0 +1,50 @@
+<div *ngFor="let move of input.moves; let i=index"
+     class="moverow">
+  <div class="leftbombs"
+       (drop)="$event.preventDefault(); dropCannon(i*2)"
+       (dragstart)="dragCannon(i*2)"
+       (dragend)="dragendCannon()"
+       [draggable]="input.shots[i*2]"
+       (dragover)="this.dragContext.move < 4 || this.dragContext.move >= 8"
+       (mouseup)="addShot($event, i*2)">
+    <div class="bombslot token{{input.shots[i*2]}}"
+         [class.unconfirmedShots]="!serverInput.shots[i*2] !== !input.shots[i*2]"
+         [class.blocked]="locked"></div>
+    <div *ngIf="maxShots === 2"
+         class="bombslot"
+         [class.token1]="input.shots[i*2] === 2 || (input.shots[i*2] || 0) > 5"
+         [class.unconfirmedShots]="!(2-(serverInput.shots[i*2] || 0)) !== !(2-(input.shots[i*2]|| 0))"
+         [class.blocked]="locked"></div>
+  </div>
+  <div class="rightbombs"
+       (drop)="$event.preventDefault(); dropCannon(i*2+1)"
+       (dragstart)="dragCannon(i*2+1)"
+       (dragend)="dragendCannon()"
+       [draggable]="input.shots[i*2+1]"
+       (dragover)="this.dragContext.move < 4 || this.dragContext.move >= 8"
+       (mouseup)="addShot($event, i*2+1)">
+    <div class="bombslot token{{input.shots[i*2+1]}}"
+         [class.blocked]="locked"
+         [class.unconfirmedShots]="!serverInput.shots[i*2+1] !== !input.shots[i*2+1]"></div>
+    <div *ngIf="maxShots === 2"
+         class="bombslot"
+         [class.token1]="input.shots[i*2+1] === 2 || (input.shots[i*2+1] || 0) > 5"
+         [class.blocked]="locked"
+         [class.unconfirmedShots]="!(2-(serverInput.shots[i*2+1] || 0)) !== !(2-(input.shots[i*2+1] || 0))"></div>
+  </div>
+
+  <div class="move"
+       [class.blocked]="locked"
+       [class.selected]="kbControls && selected === i && !locked"
+       [class.unconfirmed]="input.moves[i] !== serverInput.moves[i]"
+       (drop)="drop($event, i)"
+       (mouseup)="clickTile($event, i)"
+       (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
+       (dragover)="this.dragContext.move >= 4 && this.dragContext.move < 8">
+    <img *ngIf="move || i === blockedPosition"
+         src="./assets/images/arrow{{move}}.png"
+         draggable="true"
+         (dragstart)="drag(move, i)"
+         (dragend)="dragEnd()">
+  </div>
+</div>

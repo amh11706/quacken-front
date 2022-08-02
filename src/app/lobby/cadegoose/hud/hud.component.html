@@ -6,58 +6,17 @@
       <div id="timebar"
            [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
     </div>
-    <div id="moves">
-      <div *ngFor="let move of moves; let i=index"
-           class="moverow">
-        <div class="leftbombs"
-             (drop)="$event.preventDefault(); dropCannon(i*2)"
-             (dragstart)="dragCannon(i*2)"
-             (dragend)="dragendCannon()"
-             [draggable]="shots[i*2]"
-             (dragover)="draggedMove < 4 || draggedMove >= 8"
-             (mouseup)="addShot($event, i*2)">
-          <div class="bombslot token{{shots[i*2]}}"
-               [class.unconfirmedShots]="!serverShots[i*2] !== !shots[i*2]"
-               [class.blocked]="locked"></div>
-          <div *ngIf="myBoat.maxShots === 2"
-               class="bombslot"
-               [class.token1]="shots[i*2] === 2 || (shots[i*2] || 0) > 5"
-               [class.unconfirmedShots]="!(2-(serverShots[i*2] || 0)) !== !(2-(shots[i*2]|| 0))"
-               [class.blocked]="locked"></div>
-        </div>
-        <div class="rightbombs"
-             (drop)="$event.preventDefault(); dropCannon(i*2+1)"
-             (dragstart)="dragCannon(i*2+1)"
-             (dragend)="dragendCannon()"
-             [draggable]="shots[i*2+1]"
-             (dragover)="draggedMove < 4 || draggedMove >= 8"
-             (mouseup)="addShot($event, i*2+1)">
-          <div class="bombslot token{{shots[i*2+1]}}"
-               [class.blocked]="locked"
-               [class.unconfirmedShots]="!serverShots[i*2+1] !== !shots[i*2+1]"></div>
-          <div *ngIf="myBoat.maxShots === 2"
-               class="bombslot"
-               [class.token1]="shots[i*2+1] === 2 || (shots[i*2+1] || 0) > 5"
-               [class.blocked]="locked"
-               [class.unconfirmedShots]="!(2-(serverShots[i*2+1] || 0)) !== !(2-(shots[i*2+1] || 0))"></div>
-        </div>
-
-        <div class="move"
-             [class.blocked]="locked"
-             [class.selected]="kbControls && selected === i && !locked"
-             [class.unconfirmed]="getMoves()[i] !== serverMoves[i]"
-             (drop)="drop($event, i)"
-             (mouseup)="clickTile($event, i)"
-             (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
-             (dragover)="draggedMove >= 4 && draggedMove < 8">
-          <img *ngIf="move || i === blockedPosition"
-               src="./assets/images/arrow{{move}}.png"
-               draggable="true"
-               (dragstart)="drag(move, i)"
-               (dragend)="dragEnd()">
-        </div>
-      </div>
-    </div>
+    <q-move-input id="moves"
+                  (inputChange)="sendMoves()"
+                  (unusedTokensChange)="unusedTokens = $event"
+                  [input]="localBoat"
+                  [kbControls]="kbControls"
+                  [serverInput]="serverBoat"
+                  [totalTokens]="totalTokens"
+                  [dragContext]="dragContext"
+                  [maxMoves]="myBoat.maxMoves"
+                  [maxShots]="myBoat.maxShots"
+                  [locked]="locked"></q-move-input>
     <div id="boatStats">
       <div id="damage"
            matTooltip="Damage: {{myBoat.getDamage()}}%">
@@ -80,10 +39,10 @@
       </mat-checkbox>
       <div id="cannons">
         <div class="bombempty"
-             [draggable]="lastTick.tp - usingCannons > 0"
+             [draggable]="unusedTokens.shots > 0"
              (dragstart)="dragCannon(8, 1)"
-             [class.bombmove]="lastTick.tp - usingCannons > 0"></div><br>
-        <span id="cannontext">{{lastTick.tp - usingCannons}}X</span>
+             [class.bombmove]="unusedTokens.shots > 0"></div><br>
+        <span id="cannontext">{{unusedTokens.shots}}X</span>
       </div>
       <mat-radio-group [(ngModel)]="wantMove"
                        (change)="changeWantMove()">
@@ -95,7 +54,7 @@
           <br>
           <div class="move move1"
                [title]="tokenStrings[0]">
-            <img [style.opacity]="(haveMoves[0] || 0) > (usingMoves[0] || 0) ? 1 : 0"
+            <img [style.opacity]="unusedTokens.moves[0] ? 1 : 0"
                  name="left"
                  id="tile1"
                  draggable="true"
@@ -103,7 +62,7 @@
                  (dragstart)="drag(1)">
           </div>
           <br>
-          {{(haveMoves[0] || 0) - (usingMoves[0] || 0)}}X
+          {{unusedTokens.moves[0]}}X
         </div>
         <div>
           <mat-radio-button [style.paddingLeft]="'10px'"
@@ -113,7 +72,7 @@
           <br>
           <div class="move move2"
                [title]="tokenStrings[1]">
-            <img [style.opacity]="(haveMoves[1] || 0) > (usingMoves[1] || 0) ? 1 : 0"
+            <img [style.opacity]="unusedTokens.moves[1] ? 1 : 0"
                  name="forward"
                  id="tile2"
                  draggable="true"
@@ -121,7 +80,7 @@
                  (dragstart)="drag(2)">
           </div>
           <br>
-          {{(haveMoves[1] || 0) - (usingMoves[1] || 0)}}X
+          {{unusedTokens.moves[1]}}X
         </div>
         <div>
           <mat-radio-button [style.paddingLeft]="'10px'"
@@ -131,7 +90,7 @@
           <br>
           <div class="move move3"
                [title]="tokenStrings[2]">
-            <img [style.opacity]="(haveMoves[2] || 0) > (usingMoves[2] || 0) ? 1 : 0"
+            <img [style.opacity]="unusedTokens.moves[2] ? 1 : 0"
                  name="right"
                  id="tile3"
                  draggable="true"
@@ -139,7 +98,7 @@
                  (dragstart)="drag(3)">
           </div>
           <br>
-          {{(haveMoves[2] || 0) - (usingMoves[2] || 0)}}X
+          {{unusedTokens.moves[2]}}X
         </div>
       </mat-radio-group>
     </div>
@@ -154,22 +113,22 @@
     <div id="maneuvers">
       <div *ngFor="let m of maneuvers; let i = index"
            (click)="setWantToken(i)"
-           [matTooltip]="m.title + ' - ' + (lastTick.attr[i] || 0) + '%'"
+           [matTooltip]="m.title + ' - ' + (unusedTokens.maneuvers[i] || 0) + '%'"
            [class.want]="wantManeuver === i"
            [class]="m.class">
-        <img *ngIf="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) > 0"
+        <img *ngIf="(unusedTokens.maneuvers[i] || 0) > 0"
              class="maneuver"
              draggable="true"
              (dragstart)="dragManeuver(m.id)"
-             [class.usable]="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) >= 100"
-             [style.maxHeight]="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) + '%'"
+             [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 100"
+             [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) + '%'"
              src="./assets/images/arrow{{m.id}}.png">
-        <img *ngIf="(lastTick.attr[i] || 0) - (usingManeuvers[i] || 0) > 100"
+        <img *ngIf="(unusedTokens.maneuvers[i] || 0) > 100"
              class="maneuver"
              draggable="true"
              (dragstart)="dragManeuver(m.id + 1)"
-             [class.usable]="(lastTick.attr[i] || 0) >= 200"
-             [style.maxHeight]="(lastTick.attr[i] || 0) - 100 + '%'"
+             [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 200"
+             [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) - 100 + '%'"
              src="./assets/images/arrow{{m.id + 1}}.png">
       </div>
     </div>

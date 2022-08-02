@@ -30,6 +30,10 @@ const routes: Routes = [
         loadChildren: () => import('../replay/replay.module').then(m => m.ReplayModule),
       },
       {
+        path: 'training/:id',
+        loadChildren: () => import('../training/training.module').then(m => m.TrainingModule),
+      },
+      {
         path: '**',
         redirectTo: 'list',
       },

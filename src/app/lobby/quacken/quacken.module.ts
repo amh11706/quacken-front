@@ -15,6 +15,7 @@ import { EntryStatusComponent } from './entry-status/entry-status.component';
 import { BoatsComponent } from './boats/boats.component';
 import { QuackenComponent } from './quacken.component';
 import { MapComponent } from './map/map.component';
+import { MoveInputModule } from '../../boats/move-input/move-input.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { MapComponent } from './map/map.component';
     QdragModule,
     ChatModule,
     SettingsModule,
+    MoveInputModule,
   ],
   exports: [
     QuackenComponent,

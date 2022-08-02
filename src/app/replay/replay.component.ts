@@ -27,7 +27,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
   private fakeWs: WsService = {} as any;
   private fakeChat: ChatService = {} as any;
-  private graphicSettings?: SettingMap;
+  graphicSettings?: SettingMap;
   private boats: BoatSync[] = [];
   private id = 0;
   tick = 0;
@@ -53,11 +53,11 @@ export class ReplayComponent implements OnInit, OnDestroy {
       this.fs.fakeFs = this.lobbyWrapper.fs;
       this.fs.fakeFs.isFriend = this.fs.isFriend.bind(this.fs);
       this.fs.fakeFs.isBlocked = this.fs.isBlocked.bind(this.fs);
+      this.sub.add(this.fakeWs.outMessages$.subscribe(m => {
+        if (m.cmd === OutCmd.Sync) this.sendSync();
+      }));
     }
     this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id' || 0))));
-    this.sub.add(this.fakeWs.outMessages$.subscribe(m => {
-      if (m.cmd === OutCmd.Sync) this.sendSync();
-    }));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) this.ws.send(OutCmd.BnavJoin);
     }));
@@ -122,7 +122,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     this.fakeWs.dispatchMessage({ cmd: InCmd.Sync, data: { sync: this.boats } });
   }
 
-  private checkMessage(m: InMessage) {
+  protected checkMessage(m: InMessage): void {
     switch (m.cmd) {
       case InCmd.Sync:
         this.boats = [...m.data.sync];
@@ -225,13 +225,13 @@ export class ReplayComponent implements OnInit, OnDestroy {
     for (const m of messages) {
       this.checkMessage(m);
       if (m.cmd !== InCmd.Sync) {
-        this.fakeWs.dispatchMessage(m);
+        this.fakeWs.dispatchMessage?.(m);
         continue;
       }
       if (!skipTurn) continue;
 
-      this.fakeWs.dispatchMessage({ cmd: Internal.ResetBoats });
-      this.fakeWs.dispatchMessage(m);
+      this.fakeWs.dispatchMessage?.({ cmd: Internal.ResetBoats });
+      this.fakeWs.dispatchMessage?.(m);
     }
   }
 }

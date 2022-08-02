@@ -190,10 +190,6 @@ q-chat {
   grid-row: 1 / span 3;
 }
 
-.moverow {
-  position: relative;
-}
-
 .move {
   position: relative;
   background-color: rgba(95, 94, 94, 0.8);
@@ -210,29 +206,6 @@ q-chat {
   width: 100%;
 }
 
-.leftbombs,
-.rightbombs {
-  position: absolute;
-  height: 100%;
-  width: 32px;
-  display: flex;
-  align-items: center;
-}
-
-.leftbombs {
-  left: -31px;
-  flex-direction: row-reverse;
-}
-
-.rightbombs {
-  left: 34px;
-}
-
-.bombmove {
-  background-color: rgba(95, 94, 94, 0.8);
-  margin: -1px;
-}
-
 .bombempty {
   background: url("/assets/images/cannonempty.png") 100% no-repeat;
   padding-left: 25px;
@@ -240,16 +213,6 @@ q-chat {
   height: 24px;
   border: 1px solid black;
   border-radius: 16px;
-}
-
-.bombslot {
-  background-color: rgba(95, 94, 94, 0.8);
-  width: 16px;
-  height: 16px;
-  margin: -1px;
-  border: 1px solid black;
-  border-radius: 8px;
-  pointer-events: none;
 }
 
 #cannons {
@@ -261,17 +224,6 @@ q-chat {
     top: -6px;
     left: 0;
   }
-}
-
-.unconfirmedShots::after {
-  content: "";
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  margin: -1px;
-  margin-left: -7px !important;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.7);
 }
 
 #cannontext {
@@ -324,19 +276,6 @@ q-chat {
   background: url("/assets/images/cannon.png") center/cover;
 }
 
-.token1, .token2 {
-  background: url("/assets/images/cannon1.png") center/cover;
-  background-position-x: 1px;
-}
-
-.token4, .token6 {
-  background: url("/assets/images/arrow4.png") center/cover;
-}
-
-.token5, .token7 {
-  background: url("/assets/images/arrow5.png") center/cover;
-}
-
 .selected {
   border: 2px solid mat.get-color-from-palette($primary);
 }
@@ -363,16 +302,6 @@ q-chat {
 
 #moveCheck {
   margin-left: 1px;
-}
-
-.unconfirmed::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
 }
 
 ::-webkit-scrollbar {

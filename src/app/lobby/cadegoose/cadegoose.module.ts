@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 
+import { MoveInputModule } from '../../boats/move-input/move-input.module';
 import { NameModule } from '../../chat/name/name.module';
 import { SettingsModule } from '../../settings/settings.module';
 import { ChatModule } from '../../chat/chat.module';
@@ -59,6 +60,7 @@ import { MapEditorModule } from '../../map-editor/map-editor.module';
     ThreedRenderModule,
     RatingModule,
     MapEditorModule,
+    MoveInputModule,
   ],
   exports: [
     CadegooseComponent,

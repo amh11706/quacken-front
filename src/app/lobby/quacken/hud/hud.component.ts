@@ -11,6 +11,7 @@ import { Lobby } from '../../lobby.component';
 import { Turn } from '../boats/boats.component';
 import { Boat } from '../boats/boat';
 import { WsService } from '../../../ws.service';
+import { Tokens } from '../../../boats/move-input/move-input.component';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -32,7 +33,7 @@ export interface BoatTick {
 })
 export class HudComponent implements OnInit, OnDestroy {
   @Input() kbControls = 1;
-  @Input() protected moveKeys: Record<number, KeyActions> = {
+  @Input() moveKeys: Record<number, KeyActions> = {
     0: KeyActions.QBlank,
     1: KeyActions.QLeft,
     2: KeyActions.QForward,
@@ -40,7 +41,7 @@ export class HudComponent implements OnInit, OnDestroy {
     4: KeyActions.QToken,
   } as const;
 
-  @Input() protected actions = {
+  @Input() actions = {
     bombLeft: KeyActions.QBombLeft,
     bombRight: KeyActions.QBombRight,
     BombLeftStrict: KeyActions.QBombLeftStrict,
@@ -56,19 +57,33 @@ export class HudComponent implements OnInit, OnDestroy {
     'duckpoo', 'duckpoo', 'duckpoo', 'duckpoo',
   ];
 
-  weapons = weapons;
+  localBoat = {
+    moves: [0, 0, 0, 0],
+    shots: [0, 0, 0, 0, 0, 0, 0, 0],
+  };
 
-  document = document;
+  serverBoat = {
+    moves: [0, 0, 0, 0],
+    shots: [0, 0, 0, 0, 0, 0, 0, 0],
+  };
+
+  protected serverBoatPending = {
+    moves: [0, 0, 0, 0],
+    shots: [0, 0, 0, 0, 0, 0, 0, 0],
+  };
+
+  totalTokens: Tokens = {
+    moves: [5, 5, 5],
+    shots: 0,
+    maneuvers: [0, 0, 0, 0],
+  };
+
+  weapons = weapons;
   myBoat = new Boat('');
 
   locked = true;
-  maxMoves = false;
-  selected = 0;
   turn = 0;
-  serverMoves = [0, 0, 0, 0];
-  private serverMovesPending = [0, 0, 0, 0];
-  protected source = 4;
-  draggedMove = 0;
+  dragContext = { source: 4, move: 0 };
   protected subs = new Subscription();
   protected group = 'l/quacken';
   protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
@@ -103,13 +118,13 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(Internal.UnlockMoves, () => {
       if (!this.ws.connected || !this.locked || !this.myBoat.isMe || !this.turn || this.turn > this.maxTurn) return;
-      this.resetMoves();
       this.locked = this.myBoat.moveLock !== 0;
       this.myBoat.ready = false;
-      this.selected = 0;
+      this.resetMoves();
     }));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
       this.myBoat.damage = t.d;
+      this.totalTokens.shots = Math.floor(t.tp / 2);
     }));
 
     this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
@@ -167,8 +182,14 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
-  protected eraseSlot(slot: number): void {
-    this.getMoves()[slot] = 0;
+  protected resetMoves(): void {
+    this.localBoat.shots = [0, 0, 0, 0, 0, 0, 0, 0];
+    this.localBoat.moves = [0, 0, 0, 0];
+    this.serverBoat.moves = [...this.localBoat.moves];
+    this.serverBoat.shots = [...this.localBoat.shots];
+    this.serverBoatPending.moves = [...this.localBoat.moves];
+    this.serverBoatPending.shots = [...this.localBoat.shots];
+    this.totalTokens = { ...this.totalTokens };
   }
 
   private handleKeys() {
@@ -177,96 +198,6 @@ export class HudComponent implements OnInit, OnDestroy {
         if (v && this.kbControls) this.imReady();
       }));
     }
-
-    this.subs.add(this.kbs.subscribe(this.actions.back, v => {
-      if (this.locked || !v || !this.kbControls) return;
-
-      if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
-        this.selected -= 1;
-      } else if (this.selected === 0 && !this.getMoves()[this.selected]) {
-        this.setBomb(0);
-        this.resetMoves();
-      }
-      this.eraseSlot(this.selected);
-      void this.sendMoves();
-    }));
-
-    this.subs.add(this.kbs.subscribe(this.actions.BombLeftStrict, v => {
-      if (!this.locked && v && this.kbControls) this.setBomb(this.selected + 1, true);
-    }));
-
-    this.subs.add(this.kbs.subscribe(this.actions.BombRightStrict, v => {
-      if (!this.locked && v && this.kbControls) this.setBomb(this.selected + 5, true);
-    }));
-
-    this.subs.add(this.kbs.subscribe(this.actions.bombLeft, v => {
-      if (this.locked || !v || !this.kbControls) return;
-
-      if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
-        return this.setBomb(this.selected);
-      }
-      this.setBomb(this.selected + 1);
-    }));
-
-    this.subs.add(this.kbs.subscribe(this.actions.bombRight, v => {
-      if (this.locked || !v || !this.kbControls) return;
-
-      if (this.selected > 0 && this.getMoves()[this.selected] === 0) {
-        return this.setBomb(this.selected + 4);
-      }
-      this.setBomb(this.selected + 5);
-    }));
-
-    for (const [key, value] of Object.entries(this.moveKeys)) {
-      this.subs.add(this.kbs.subscribe(value, v => { if (v) this.placeMove(+key); }));
-    }
-
-    this.subs.add(this.kbs.subscribe(this.actions.nextSlot, v => {
-      if (v && this.selected < 3 && this.kbControls) this.selected++;
-    }));
-    this.subs.add(this.kbs.subscribe(this.actions.prevSlot, v => {
-      if (v && this.selected > 0 && this.kbControls) this.selected--;
-    }));
-  }
-
-  private placeMove(move: number) {
-    if (this.locked || !this.kbControls) return;
-
-    const moves = this.getMoves();
-    const oldMove = moves[this.selected];
-    if (this.maxMoves && !(move === 0 || move === 4) && (oldMove === 0 || oldMove === 4)) {
-      if (this.selected < 3) this.selected += 1;
-      return;
-    }
-    moves[this.selected] = move;
-    if (move === 0) this.blockedPosition = this.selected;
-    if (this.selected < 3) this.selected += 1;
-    void this.sendMoves();
-  }
-
-  protected resetMoves(): void {
-    const moves = this.getMoves();
-    for (const i in moves) moves[i] = 0;
-    this.maxMoves = false;
-    this.blockedPosition = this.myBoat.maxMoves === 4 ? 4 : 3;
-    this.serverMovesPending = [...this.getMoves()];
-  }
-
-  checkMaxMoves(): void {
-    if (this.myBoat.maxMoves === 4) {
-      this.maxMoves = false;
-      return;
-    }
-    const moveCount = this.getMoves().reduce((a, c) => a + +(c > 0 && c < 4), 0);
-    this.maxMoves = moveCount >= 3;
-    if (moveCount === 4) this.getMoves()[3] = 0;
-  }
-
-  setBomb(i: number, _strict = false): void {
-    if (this.locked || !this.weapons[this.myBoat.type] || this.myBoat.tokenPoints < 2) return;
-    if (this.myBoat.bomb === i) this.myBoat.bomb = 0;
-    else this.myBoat.bomb = i;
-    void this.ws.request(OutCmd.Bomb, this.myBoat.bomb);
   }
 
   imReady(): void {
@@ -285,59 +216,31 @@ export class HudComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  protected async sendMoves(): Promise<void> {
-    this.checkMaxMoves();
-    const moves = this.getMoves();
-    if (this.arrayEqual(this.serverMovesPending, moves)) return;
-    this.serverMovesPending = [...moves];
-    this.serverMoves = await this.ws.request(OutCmd.Moves, moves);
+  async sendMoves(): Promise<void> {
+    void this.sendShots();
+    if (this.arrayEqual(this.serverBoatPending.moves, this.localBoat.moves)) return;
+    this.serverBoatPending.moves = [...this.localBoat.moves];
+    this.serverBoat.moves = await this.ws.request(OutCmd.Moves, this.localBoat.moves);
   }
 
-  public getMoves(): number[] {
-    return this.myBoat.moves || [];
-  }
-
-  clickTile(ev: MouseEvent, slot: number): void {
-    if (this.locked) return;
-    const boat = this.myBoat;
-    const moves = this.getMoves();
-    if (ev.shiftKey && boat.tokenPoints > 1) {
-      if (this.getMoves().indexOf(4) >= 0) return;
-      moves[slot] = 4;
-      void this.sendMoves();
-      return;
+  protected async sendShots(): Promise<void> {
+    if (this.arrayEqual(this.serverBoatPending.shots, this.localBoat.shots)) return;
+    this.serverBoatPending.shots = [...this.localBoat.shots];
+    for (let i = 0; i < this.localBoat.shots.length; i++) {
+      if (this.localBoat.shots[i]) {
+        await this.ws.request(OutCmd.Bomb, [1, 5, 2, 6, 3, 7, 4, 8][i]);
+        this.serverBoat.shots = [0, 0, 0, 0, 0, 0, 0, 0];
+        this.serverBoat.shots[i] = 1;
+        return;
+      }
     }
-    const move = moves[slot] || 0;
-    if (boat.type !== 0 && this.maxMoves && (move === 0 || move === 4)) return;
-    moves[slot] = (ev.button + 1 + move) % 4;
-    void this.sendMoves();
+    await this.ws.request(OutCmd.Bomb, 0);
+    this.serverBoat.shots = [0, 0, 0, 0, 0, 0, 0, 0];
   }
 
   drag(move: number, slot = 8): void {
-    this.draggedMove = move;
-    this.source = slot;
-  }
-
-  drop(ev: DragEvent, slot: number): void {
-    ev.preventDefault();
-    if (this.locked || (this.source > 3 && this.blockedPosition === slot)) return;
-    const moves = this.getMoves();
-    const move = moves[slot];
-    if (this.draggedMove === 0) this.blockedPosition = slot;
-    else if (this.source < 4 && this.blockedPosition === slot) this.blockedPosition = this.source;
-
-    if (this.maxMoves && this.source > 3 && (move === 0 || move === 4)) return;
-    if (this.source < 4) moves[this.source] = moves[slot] || 0;
-    moves[slot] = this.draggedMove;
-    void this.sendMoves();
-    this.source = 4;
-  }
-
-  dragEnd(): void {
-    if (this.locked || this.source > 3) return;
-
-    this.getMoves()[this.source] = 0;
-    void this.sendMoves();
+    this.dragContext.move = move;
+    this.dragContext.source = slot;
   }
 
   setTurn(turn: number, sec: number = this.secondsPerTurn - 1): void {
