@@ -40,27 +40,29 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     maneuvers: [0, 0, 0, 0],
   };
 
-  @Input() dragContext = { source: 4, move: 0 };
+  @Input() dragContext = { source: 8, move: 0 };
+  @Input() private cannonForce = false;
   @Input() locked = true;
-  @Input() maxMoves = 4;
+  @Input() private maxMoves = 4;
   @Input() maxShots = 2;
   @Input() kbControls = 0;
   @Input() private moveKeys: Record<number, KeyActions> = {
-    0: KeyActions.CBlank,
-    1: KeyActions.CLeft,
-    2: KeyActions.CForward,
-    3: KeyActions.CRight,
+    0: KeyActions.QBlank,
+    1: KeyActions.QLeft,
+    2: KeyActions.QForward,
+    3: KeyActions.QRight,
+    4: KeyActions.QToken,
   } as const;
 
   @Input() private actions = {
-    bombLeft: KeyActions.CBombLeft,
-    bombRight: KeyActions.CBombRight,
-    BombLeftStrict: KeyActions.CBombLeftStrict,
-    BombRightStrict: KeyActions.CBombRightStrict,
-    prevSlot: KeyActions.CPrevSlot,
-    nextSlot: KeyActions.CNextSlot,
-    ready: KeyActions.Noop,
-    back: KeyActions.CBack,
+    bombLeft: KeyActions.QBombLeft,
+    bombRight: KeyActions.QBombRight,
+    BombLeftStrict: KeyActions.QBombLeftStrict,
+    BombRightStrict: KeyActions.QBombRightStrict,
+    prevSlot: KeyActions.QPrevSlot,
+    nextSlot: KeyActions.QNextSlot,
+    ready: KeyActions.QReady,
+    back: KeyActions.QBack,
   };
 
   blockedPosition = 3;
@@ -104,12 +106,14 @@ export class MoveInputComponent implements OnInit, OnDestroy {
 
     this.subs.add(this.kbs.subscribe(this.actions.bombLeft, v => {
       if (this.locked || !v || !this.kbControls) return;
-      this.setBomb(this.selected + 1);
+      if (this.input.moves[this.selected] === 0 && this.selected > 0) this.setBomb(this.selected);
+      else this.setBomb(this.selected + 1);
     }));
 
     this.subs.add(this.kbs.subscribe(this.actions.bombRight, v => {
       if (this.locked || !v || !this.kbControls) return;
-      this.setBomb(this.selected + 5);
+      if (this.input.moves[this.selected] === 0 && this.selected > 0) this.setBomb(this.selected + 4);
+      else this.setBomb(this.selected + 5);
     }));
 
     for (const [key, value] of Object.entries(this.moveKeys)) {
@@ -175,6 +179,11 @@ export class MoveInputComponent implements OnInit, OnDestroy {
 
   addShot(e: MouseEvent, i: number): void {
     if (this.locked) return;
+    const oldShots = this.input.shots[i] || 0;
+    if (this.cannonForce && !oldShots) {
+      for (const s in this.input.shots) this.input.shots[s] = 0;
+      this.unusedTokens.shots = this._totalTokens.shots;
+    }
     if (e.ctrlKey || e.metaKey) {
       for (const shot in this.input.shots) {
         if (e.shiftKey || (i % 2 === +shot % 2 && +shot >= i)) {
@@ -193,7 +202,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    const oldShots = this.input.shots[i] || 0;
+
     if (oldShots > 5) {
       this.input.shots[i] = 0;
     } else if (oldShots > 2) {
@@ -259,7 +268,15 @@ export class MoveInputComponent implements OnInit, OnDestroy {
 
   drop(ev: DragEvent, slot: number): void {
     ev.preventDefault();
-    if (this.locked || (this.dragContext.source > 3 && this.blockedPosition === slot)) return;
+    if (this.dragContext.source > 7 && this.blockedPosition === slot) {
+      for (let i = 3; i >= 0; i--) {
+        if (!this.input.moves[i] && i !== slot) {
+          this.blockedPosition = i;
+          break;
+        }
+      }
+    }
+    if (this.locked || (this.dragContext.source > 7 && this.blockedPosition === slot)) return;
     const moves = this.input.moves;
     if (this.dragContext.move === 0) this.blockedPosition = slot;
     else if (this.dragContext.source < 4 && this.blockedPosition === slot) {
@@ -268,7 +285,8 @@ export class MoveInputComponent implements OnInit, OnDestroy {
 
     if (this.dragContext.source < 4) moves[this.dragContext.source] = moves[slot] || 0;
     moves[slot] = this.dragContext.move;
-    this.dragContext.source = 4;
+    this.dragContext.source = 8;
+    this.dragContext.move = 0;
     this.checkMaxMoves();
     this.inputChange.emit(this.input);
   }
@@ -292,6 +310,10 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   dropCannon(slot: number): void {
     if (this.locked) return;
     const oldShots = this.input.shots[slot] || 0;
+    if (this.cannonForce && !oldShots) {
+      for (const s in this.input.shots) this.input.shots[s] = 0;
+      this.unusedTokens.shots = this._totalTokens.shots;
+    }
     const isChain = this.dragContext.move !== 6;
     if (isChain) {
       this.input.shots[slot] = oldShots ? this.dragContext.move + 2 : this.dragContext.move;
@@ -300,9 +322,13 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     } else {
       this.input.shots[slot] += oldShots >= 4 ? 2 : 1;
     }
-    this.dragContext.move = 0;
-    this.checkMaxShots();
-    setTimeout(() => this.inputChange.emit(this.input));
+    // timeout to let dragend happen first
+    setTimeout(() => {
+      this.dragContext.source = 8;
+      this.dragContext.move = 0;
+      this.checkMaxShots();
+      setTimeout(() => this.inputChange.emit(this.input));
+    });
   }
 
   private checkMaxShots() {

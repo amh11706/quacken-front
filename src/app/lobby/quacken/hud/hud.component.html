@@ -8,6 +8,8 @@
     </div>
     <q-move-input id="moves"
                   (inputChange)="sendMoves()"
+                  (unusedTokensChange)="unusedTokens = $event"
+                  [cannonForce]="true"
                   [input]="localBoat"
                   [kbControls]="kbControls"
                   [serverInput]="serverBoat"
@@ -57,7 +59,8 @@
 
         <div *ngIf="weapons[myBoat.type]"
              class="token">
-          <img *ngIf="myBoat.tokenPoints > 1 && myBoat.bomb === 0"
+          <img *ngIf="unusedTokens.shots"
+               (dragstart)="drag(6)"
                [src]="'/assets/images/'+weapons[myBoat.type]+'.png'">
         </div>
         <div *ngIf="tokens[myBoat.type]"

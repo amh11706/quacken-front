@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Tokens } from '../../../boats/move-input/move-input.component';
+import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { InCmd, Internal, OutCmd } from '../../../ws-messages';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
@@ -14,6 +14,24 @@ export interface MoveMessage {
   styleUrls: ['./hud.component.scss'],
 })
 export class CadeHudComponent extends HudComponent implements OnInit {
+  moveKeys: Record<number, KeyActions> = {
+    0: KeyActions.CBlank,
+    1: KeyActions.CLeft,
+    2: KeyActions.CForward,
+    3: KeyActions.CRight,
+  } as const;
+
+  actions = {
+    bombLeft: KeyActions.CBombLeft,
+    bombRight: KeyActions.CBombRight,
+    BombLeftStrict: KeyActions.CBombLeftStrict,
+    BombRightStrict: KeyActions.CBombRightStrict,
+    prevSlot: KeyActions.CPrevSlot,
+    nextSlot: KeyActions.CNextSlot,
+    ready: KeyActions.Noop,
+    back: KeyActions.CBack,
+  };
+
   wantManeuver = 0;
   maneuvers = [
     { id: 4, class: 'move bombtoken', title: 'Chain Shot' },
@@ -21,12 +39,6 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     { id: 12, class: 'move', title: 'Double Forward' },
     { id: 16, class: 'move', title: 'Flotsam' },
   ];
-
-  unusedTokens: Tokens = {
-    moves: [0, 0, 0],
-    shots: 0,
-    maneuvers: [0, 0, 0, 0],
-  };
 
   tokenStrings = ['', '', ''];
   lastTick = { tp: 0, attr: {} } as BoatTick;

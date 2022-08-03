@@ -4,7 +4,6 @@ import { Subscription, BehaviorSubject } from 'rxjs';
 import { FriendsService } from '../../../chat/friends/friends.service';
 import { InCmd, Internal, OutCmd } from '../../../ws-messages';
 import { KeyBindingService } from '../../../settings/key-binding/key-binding.service';
-import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { SettingsService, SettingMap } from '../../../settings/settings.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Lobby } from '../../lobby.component';
@@ -12,6 +11,7 @@ import { Turn } from '../boats/boats.component';
 import { Boat } from '../boats/boat';
 import { WsService } from '../../../ws.service';
 import { Tokens } from '../../../boats/move-input/move-input.component';
+import { KeyActions } from '../../../settings/key-binding/key-actions';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -78,12 +78,18 @@ export class HudComponent implements OnInit, OnDestroy {
     maneuvers: [0, 0, 0, 0],
   };
 
+  unusedTokens: Tokens = {
+    moves: [0, 0, 0],
+    shots: 0,
+    maneuvers: [0, 0, 0, 0],
+  };
+
   weapons = weapons;
   myBoat = new Boat('');
 
   locked = true;
   turn = 0;
-  dragContext = { source: 4, move: 0 };
+  dragContext = { source: 8, move: 0 };
   protected subs = new Subscription();
   protected group = 'l/quacken';
   protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
@@ -124,7 +130,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
       this.myBoat.damage = t.d;
-      this.totalTokens.shots = Math.floor(t.tp / 2);
+      this.totalTokens.shots = t.tp >= 2 ? 1 : 0;
     }));
 
     this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
