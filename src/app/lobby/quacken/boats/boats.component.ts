@@ -239,7 +239,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
     for (const boat of this.boats) {
       boat.moves = [0, 0, 0, 0];
       boat.bomb = 0;
-      boat.ready = false;
     }
     setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.UnlockMoves }));
   }
@@ -301,6 +300,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }, 1000);
     if (sync.sync) {
       this.setBoats(sync.sync);
+      for (const boat of this.boats) {
+        boat.ready = false;
+      }
     }
   }
 

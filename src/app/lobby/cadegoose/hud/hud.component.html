@@ -18,7 +18,7 @@
                   [moveKeys]="moveKeys"
                   [maxMoves]="myBoat.maxMoves"
                   [maxShots]="myBoat.maxShots"
-                  [locked]="locked"></q-move-input>
+                  [locked]="lockTurn > turn"></q-move-input>
     <div id="boatStats">
       <div id="damage"
            matTooltip="Damage: {{myBoat.getDamage()}}%">
@@ -106,7 +106,7 @@
     </div>
     <button *ngIf="secondsPerTurn === 40"
             mat-icon-button
-            [disabled]="!myBoat.isMe || (locked && !myBoat.moveLock)"
+            [disabled]="!myBoat.isMe || (lockTurn > turn)"
             id="hudReady"
             (click)="imReady()">
       <mat-icon>play_arrow</mat-icon>
