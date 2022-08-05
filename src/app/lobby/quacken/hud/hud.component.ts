@@ -137,7 +137,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.myBoat.ready = false;
       if (this.turn > 0 && this.myBoat.isMe && this.ws.connected) this.lockTurn = this.myBoat.moveLock || this.lockTurn;
       else {
-        this.lockTurn = this.turn + 1;
+        this.lockTurn = Math.max(this.turn + 1, this.myBoat.moveLock);
         this.resetMoves();
       }
 
@@ -160,7 +160,7 @@ export class HudComponent implements OnInit, OnDestroy {
         this.turn = 0;
         this.lastMoveReset = 0;
       }
-      if (turn.turn !== 1) this.lockTurn = this.turn + 1;
+      if (turn.turn !== 1) this.lockTurn = Math.max(this.turn + 1, this.myBoat.moveLock);
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
@@ -181,7 +181,7 @@ export class HudComponent implements OnInit, OnDestroy {
         } else {
           this.lockTurn = this.myBoat.isMe ? this.turn || this.lockTurn : this.maxTurn + 1;
         }
-      });
+      }, 100);
     }));
   }
 

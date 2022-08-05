@@ -107,7 +107,7 @@
     </div>
     <button *ngIf="secondsPerTurn === 40"
             mat-icon-button
-            [disabled]="!myBoat.isMe || (lockTurn > turn)"
+            [disabled]="!myBoat.isMe || myBoat.ready"
             id="hudReady"
             (click)="imReady()">
       <mat-icon>play_arrow</mat-icon>
