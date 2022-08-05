@@ -96,7 +96,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   }
 
   imReady(): void {
-    if (this.myBoat.ready) return;
+    if (this.myBoat.ready || (this.secondsPerTurn < 40 && this.turnSeconds > 0)) return;
     this.stopTimer();
     this.myBoat.ready = true;
     this.lockTurn = this.turn + 1;

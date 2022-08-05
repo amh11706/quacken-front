@@ -30,6 +30,10 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     this._totalTokens = t;
     this.unusedTokens.moves = [...t.moves];
     this.unusedTokens.shots = t.shots;
+    if (this.locked) {
+      this.unusedTokensChange.next(this.unusedTokens);
+      return;
+    }
     this.checkMaxMoves();
     this.checkMaxShots();
   }
