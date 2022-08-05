@@ -1,10 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
-import { WsService } from '../../ws.service';
-import { Internal } from '../../ws-messages';
 
 export interface Tokens {
   moves: [number, number, number],
@@ -21,6 +19,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   @Input() input = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
   @Input() serverInput = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
   @Output() inputChange = new EventEmitter<{ moves: number[], shots: number[] }>();
+  @Input() reset?: Subject<void>;
   private _totalTokens: Tokens = {
     moves: [0, 0, 0],
     shots: 0,
@@ -45,7 +44,12 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   @Input() dragContext = { source: 8, move: 0 };
   @Input() private cannonForce = false;
   @Input() locked = true;
-  @Input() private maxMoves = 4;
+  private _maxMoves = 4;
+  @Input() set maxMoves(v: number) {
+    this._maxMoves = v;
+    this.blockedPosition = v === 4 ? 4 : 3;
+  }
+
   @Input() maxShots = 2;
   @Input() kbControls = 0;
   @Input() private moveKeys: Record<number, KeyActions> = {
@@ -73,15 +77,15 @@ export class MoveInputComponent implements OnInit, OnDestroy {
 
   constructor(
     private kbs: KeyBindingService,
-    private ws: WsService,
   ) { }
 
   ngOnInit(): void {
-    this.subs.add(this.ws.subscribe(Internal.UnlockMoves, () => {
-      if (!this.ws.connected) return;
-      this.resetMoves();
-      this.selected = 0;
-    }));
+    if (this.reset) {
+      this.subs.add(this.reset.subscribe(() => {
+        this.resetMoves();
+        this.selected = 0;
+      }));
+    }
     this.subs.add(this.kbs.subscribe(this.actions.back, v => {
       if (this.locked || !v || !this.kbControls) return;
 
@@ -154,7 +158,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   private resetMoves(): void {
     for (const i in this.input.moves) this.input.moves[i] = 0;
     for (const i in this.input.shots) this.input.shots[i] = 0;
-    this.blockedPosition = this.maxMoves === 4 ? 4 : 3;
+    this.blockedPosition = this._maxMoves === 4 ? 4 : 3;
     this.inputChange.emit(this.input);
   }
 
@@ -369,7 +373,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       const move = this.input.moves[i];
       if (!move) continue;
       moveCount++;
-      if (moveCount > this.maxMoves) {
+      if (moveCount > this._maxMoves) {
         this.input.moves[i] = 0;
         this.blockedPosition = i;
         continue;

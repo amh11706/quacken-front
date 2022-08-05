@@ -30,6 +30,7 @@ export const enum KeyActions {
   CBombRight,
   CBombLeftStrict,
   CBombRightStrict,
+  CReady,
 
   // Sea battle
   SBShowStats = 300,
@@ -74,7 +75,7 @@ export const enum LinkGroups {
   Forward, Left, Right, Blank,
   NextSlot, PrevSlot, Back,
   BombLeft, BombRight, BombLeftStrict, BombRightStrict,
-  ShowStats,
+  ShowStats, Ready,
 }
 
 export interface KeyBinding {
@@ -180,6 +181,7 @@ export const DefaultBindings: StaticKeyBindings = {
       bindings: ['Shift + D', 'Shift + E'],
       linkGroup: LinkGroups.BombRightStrict,
     },
+    { action: KeyActions.CReady, title: 'Ready', bindings: ['Space', NotActive], linkGroup: LinkGroups.Ready },
   ],
   'Sea battle': [
     {
@@ -254,6 +256,7 @@ export const DefaultBindings: StaticKeyBindings = {
       bindings: ['Shift + D', 'Shift + E'],
       linkGroup: LinkGroups.BombRightStrict,
     },
+    { action: KeyActions.SBReady, title: 'Ready', bindings: ['Space', NotActive], linkGroup: LinkGroups.Ready },
   ],
   Quacken: [
     {

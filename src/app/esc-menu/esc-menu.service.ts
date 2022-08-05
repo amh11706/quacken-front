@@ -11,6 +11,7 @@ export class EscMenuService {
   open = false;
   lobbyComponent: any;
   activeTab = 1;
+  lobbyTab = 0;
   lobbyContext: any;
 
   constructor(

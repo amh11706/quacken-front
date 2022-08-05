@@ -193,8 +193,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
       }
       this.ws.send(OutCmd.Sync);
       this.step = -1;
-    } else if (this.myBoat.isMe && this.turn) {
-      this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
+    } else {
+      this.ws.dispatchMessage({ cmd: Internal.ResetMoves });
     }
   }
 
@@ -212,7 +212,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (turn.turn === 1) {
       setTimeout(() => {
         for (const boat of this.boats) boat.ready = false;
-        this.ws.dispatchMessage({ cmd: Internal.UnlockMoves });
+        this.ws.dispatchMessage({ cmd: Internal.ResetMoves });
       }, 1000);
       return;
     }
@@ -240,7 +240,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       boat.moves = [0, 0, 0, 0];
       boat.bomb = 0;
     }
-    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.UnlockMoves }));
+    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves }));
   }
 
   protected playTurn(): void {

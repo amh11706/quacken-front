@@ -130,6 +130,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (!this.roundGoing && this.ws.connected) {
         this.es.open = true;
         this.es.activeTab = 0;
+        this.es.lobbyTab = 0;
       }
     }));
 

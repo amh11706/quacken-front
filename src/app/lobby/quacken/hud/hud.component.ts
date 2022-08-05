@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subscription, BehaviorSubject } from 'rxjs';
+import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 
 import { FriendsService } from '../../../chat/friends/friends.service';
 import { InCmd, Internal, OutCmd } from '../../../ws-messages';
@@ -89,7 +89,9 @@ export class HudComponent implements OnInit, OnDestroy {
 
   lockTurn = 1;
   turn = 0;
+  lastMoveReset = 0;
   dragContext = { source: 8, move: 0 };
+  resetMoves$ = new Subject<void>();
   protected subs = new Subscription();
   protected group = 'l/quacken';
   protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
@@ -122,11 +124,7 @@ export class HudComponent implements OnInit, OnDestroy {
         this.lockTurn = this.maxTurn + 1;
       }
     }));
-    this.subs.add(this.ws.subscribe(Internal.UnlockMoves, () => {
-      if (!this.ws.connected || this.myBoat.moveLock > this.turn + 1 || !this.myBoat.isMe) return;
-      this.lockTurn = this.turn || this.lockTurn;
-      this.resetMoves();
-    }));
+    this.subs.add(this.ws.subscribe(Internal.ResetMoves, this.resetMoves.bind(this)));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
       this.myBoat.damage = t.d;
       this.totalTokens.shots = t.tp >= 2 ? 1 : 0;
@@ -134,6 +132,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
     this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
       if (m.map === undefined) return;
+      this.lastMoveReset = 0;
       this.turn = m.turn ?? this.turn;
       this.myBoat.ready = false;
       if (this.turn > 0 && this.myBoat.isMe && this.ws.connected) this.lockTurn = this.myBoat.moveLock || this.lockTurn;
@@ -159,6 +158,7 @@ export class HudComponent implements OnInit, OnDestroy {
         this.setTurn(this.maxTurn - turn.turn);
       } else {
         this.turn = 0;
+        this.lastMoveReset = 0;
       }
       if (turn.turn !== 1) this.lockTurn = this.turn + 1;
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
@@ -166,6 +166,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
       this.myBoat.ready = false;
       this.turn = s.turn ?? this.turn;
+      this.resetMoves();
       setTimeout(() => {
         if (this.myBoat.moveLock > this.turn + 1) {
           this.ws.dispatchMessage({
@@ -190,13 +191,15 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   protected resetMoves(): void {
-    this.localBoat.shots = [0, 0, 0, 0, 0, 0, 0, 0];
-    this.localBoat.moves = [0, 0, 0, 0];
-    this.serverBoat.moves = [...this.localBoat.moves];
-    this.serverBoat.shots = [...this.localBoat.shots];
-    this.serverBoatPending.moves = [...this.localBoat.moves];
-    this.serverBoatPending.shots = [...this.localBoat.shots];
-    this.totalTokens = { ...this.totalTokens };
+    if (!this.ws.connected || this.myBoat.moveLock > this.turn + 1 || !this.myBoat.isMe) return;
+    if (this.turn <= this.lastMoveReset) return;
+    this.lastMoveReset = this.turn;
+    this.lockTurn = this.turn || this.lockTurn;
+    for (const i in this.serverBoat.moves) this.serverBoat.moves[i] = 0;
+    for (const i in this.serverBoat.shots) this.serverBoat.shots[i] = 0;
+    for (const i in this.serverBoatPending.moves) this.serverBoatPending.moves[i] = 0;
+    for (const i in this.serverBoatPending.shots) this.serverBoatPending.shots[i] = 0;
+    this.resetMoves$.next();
   }
 
   private handleKeys() {
@@ -292,6 +295,7 @@ export class HudComponent implements OnInit, OnDestroy {
     // unlimited time
     if (this.secondsPerTurn === 40) return;
     if (this.turnSeconds < 1 || this.minutes + this.seconds === 0) {
+      this.myBoat.ready = false;
       this.imReady();
       return;
     }

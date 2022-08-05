@@ -28,7 +28,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     BombRightStrict: KeyActions.CBombRightStrict,
     prevSlot: KeyActions.CPrevSlot,
     nextSlot: KeyActions.CNextSlot,
-    ready: KeyActions.Noop,
+    ready: KeyActions.CReady,
     back: KeyActions.CBack,
   };
 
@@ -96,6 +96,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   }
 
   imReady(): void {
+    if (this.myBoat.ready) return;
     this.stopTimer();
     this.myBoat.ready = true;
     this.lockTurn = this.turn + 1;

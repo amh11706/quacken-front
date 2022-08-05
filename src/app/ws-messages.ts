@@ -2,7 +2,7 @@
 export const enum Internal {
   Lobby = -100,
   MyBoat,
-  UnlockMoves,
+  ResetMoves,
   Time,
   RefreshChat,
   ResetBoats,
