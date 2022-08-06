@@ -31,37 +31,6 @@
   align-items: center;
   width: 100%;
   margin-right: 16px;
-
-  .want {
-    border: 1px solid yellow;
-  }
-
-  .move {
-    margin-left: 3px;
-    height: 27px;
-    width: 27px;
-    overflow: hidden;
-  }
-
-  .bombtoken {
-    border-radius: 50%;
-  }
-
-  .maneuver {
-    position: absolute;
-    object-position: bottom;
-    object-fit: cover;
-    bottom: 0;
-    left: 0;
-    opacity: 0.7;
-    pointer-events: none;
-
-    &.usable {
-      cursor: grab;
-      opacity: 1;
-      pointer-events: all;
-    }
-  }
 }
 
 #chat {
@@ -112,27 +81,6 @@ q-chat {
   position: relative;
   width: 150px;
   min-height: 2vh;
-
-  button {
-    margin-top: 4px;
-  }
-
-  div {
-    display: inline-block;
-    text-align: center;
-    font-size: 11px;
-    color: #eee;
-  }
-
-  mat-radio-button {
-    transform: scale(0.5);
-  }
-
-  mat-checkbox {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
 }
 
 #boatStats {
@@ -188,120 +136,6 @@ q-chat {
 #moves {
   grid-column: 2;
   grid-row: 1 / span 3;
-}
-
-.move {
-  position: relative;
-  background-color: rgba(95, 94, 94, 0.8);
-  width: 35px;
-  min-height: 25px;
-  max-height: 35px;
-  height: 11vh;
-  border: 1px solid black;
-  border-radius: 1px;
-}
-
-.move img {
-  height: 100%;
-  width: 100%;
-}
-
-.bombempty {
-  background: url("/assets/images/cannonempty.png") 100% no-repeat;
-  padding-left: 25px;
-  width: 24px;
-  height: 24px;
-  border: 1px solid black;
-  border-radius: 16px;
-}
-
-#cannons {
-  position: relative;
-  right: 12px;
-  width: 20px;
-  .bombslot {
-    position: relative;
-    top: -6px;
-    left: 0;
-  }
-}
-
-#cannontext {
-  margin-left: 4px;
-}
-
-#treasurebox,
-.token {
-  float: left;
-  margin-left: 8px;
-  height: 35px;
-  width: 35px;
-  border: 2px solid grey;
-  border-radius: 5px;
-  background-color: rgba(100, 100, 100, 0.3);
-}
-
-#tokens {
-  margin-left: 37px;
-}
-
-.token img {
-  margin-top: 4px;
-  height: 23px;
-  width: 23px;
-}
-
-#settings {
-  margin-left: 6px;
-  color: #bbb;
-}
-
-.blocked {
-  background-color: #999;
-}
-
-.move1 {
-  background: url("/assets/images/arrow1empty.png") center/cover;
-}
-
-.move2 {
-  background: url("/assets/images/arrow2empty.png") center/cover;
-}
-
-.move3 {
-  background: url("/assets/images/arrow3empty.png") center/cover;
-}
-
-.bombmove {
-  background: url("/assets/images/cannon.png") center/cover;
-}
-
-.selected {
-  border: 2px solid mat.get-color-from-palette($primary);
-}
-
-::ng-deep {
-  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-    border-color: rgb(146, 244, 66);
-  }
-
-  .mat-radio-button.mat-accent .mat-radio-inner-circle {
-    color: rgb(146, 244, 66);
-    background-color: rgb(146, 244, 66);
-  }
-
-  .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
-    background-color: rgba(235, 66, 66, 0.9);
-  }
-
-  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
-  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-    background-color: rgba(235, 66, 66, 0.9);
-  }
-}
-
-#moveCheck {
-  margin-left: 1px;
 }
 
 ::-webkit-scrollbar {

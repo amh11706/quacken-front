@@ -33,78 +33,13 @@
       </div>
     </div>
 
-    <div id="movesource"
-         name="movesource">
-      <mat-checkbox id="moveCheck"
-                    [(ngModel)]="auto"
-                    title="Auto"
-                    (change)="changeWantMove()">
-      </mat-checkbox>
-      <div id="cannons">
-        <div class="bombempty"
-             [draggable]="unusedTokens.shots > 0"
-             (dragstart)="dragCannon(8, 1)"
-             [class.bombmove]="unusedTokens.shots > 0"></div><br>
-        <span id="cannontext">{{unusedTokens.shots}}X</span>
-      </div>
-      <mat-radio-group [(ngModel)]="wantMove"
-                       (change)="changeWantMove()">
-        <div id="moveRadio">
-          <mat-radio-button [style.paddingLeft]="'10px'"
-                            [value]="1"
-                            [disabled]="auto">
-          </mat-radio-button>
-          <br>
-          <div class="move move1"
-               [title]="tokenStrings[0]">
-            <img [style.opacity]="unusedTokens.moves[0] ? 1 : 0"
-                 name="left"
-                 id="tile1"
-                 draggable="true"
-                 src="./assets/images/arrow1.png"
-                 (dragstart)="drag(1)">
-          </div>
-          <br>
-          {{unusedTokens.moves[0]}}X
-        </div>
-        <div>
-          <mat-radio-button [style.paddingLeft]="'10px'"
-                            [value]="2"
-                            [disabled]="auto">
-          </mat-radio-button>
-          <br>
-          <div class="move move2"
-               [title]="tokenStrings[1]">
-            <img [style.opacity]="unusedTokens.moves[1] ? 1 : 0"
-                 name="forward"
-                 id="tile2"
-                 draggable="true"
-                 src="./assets/images/arrow2.png"
-                 (dragstart)="drag(2)">
-          </div>
-          <br>
-          {{unusedTokens.moves[1]}}X
-        </div>
-        <div>
-          <mat-radio-button [style.paddingLeft]="'10px'"
-                            [value]="3"
-                            [disabled]="auto">
-          </mat-radio-button>
-          <br>
-          <div class="move move3"
-               [title]="tokenStrings[2]">
-            <img [style.opacity]="unusedTokens.moves[2] ? 1 : 0"
-                 name="right"
-                 id="tile3"
-                 draggable="true"
-                 src="./assets/images/arrow3.png"
-                 (dragstart)="drag(3)">
-          </div>
-          <br>
-          {{unusedTokens.moves[2]}}X
-        </div>
-      </mat-radio-group>
-    </div>
+    <q-move-source id="movesource"
+                   [totalTokens]="totalTokens"
+                   [unusedTokens]="unusedTokens"
+                   [dragContext]="dragContext"
+                   [tokenStrings]="tokenStrings"
+                   [updateWantToken]="updateWantMove$"
+                   (wantMoveChange)="setWantMove($event)"></q-move-source>
     <button *ngIf="secondsPerTurn === 40"
             mat-icon-button
             [disabled]="!myBoat.isMe || myBoat.ready"
@@ -113,28 +48,10 @@
       <mat-icon>play_arrow</mat-icon>
     </button>
 
-    <div id="maneuvers">
-      <div *ngFor="let m of maneuvers; let i = index"
-           (click)="setWantToken(i)"
-           [matTooltip]="m.title + ' - ' + (unusedTokens.maneuvers[i] || 0) + '%'"
-           [class.want]="wantManeuver === i"
-           [class]="m.class">
-        <img *ngIf="(unusedTokens.maneuvers[i] || 0) > 0"
-             class="maneuver"
-             draggable="true"
-             (dragstart)="dragManeuver(m.id)"
-             [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 100"
-             [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) + '%'"
-             src="./assets/images/arrow{{m.id}}.png">
-        <img *ngIf="(unusedTokens.maneuvers[i] || 0) > 100"
-             class="maneuver"
-             draggable="true"
-             (dragstart)="dragManeuver(m.id + 1)"
-             [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 200"
-             [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) - 100 + '%'"
-             src="./assets/images/arrow{{m.id + 1}}.png">
-      </div>
-    </div>
+    <q-maneuver-source id="maneuvers"
+                       (wantManeuverChange)="setWantToken($event)"
+                       [unusedTokens]="unusedTokens"
+                       [dragContext]="dragContext"></q-maneuver-source>
   </div>
 
   <div *ngIf="myBoat.inSZ"

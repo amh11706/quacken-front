@@ -1,0 +1,96 @@
+button {
+  margin-top: 4px;
+}
+
+div {
+  display: inline-block;
+  text-align: center;
+  font-size: 11px;
+  color: #eee;
+}
+
+mat-radio-button {
+  transform: scale(0.5);
+}
+
+mat-checkbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.cannontext {
+  margin-left: 4px;
+}
+
+:host ::ng-deep {
+  .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: rgb(146, 244, 66);
+  }
+
+  .mat-radio-button.mat-accent .mat-radio-inner-circle {
+    color: rgb(146, 244, 66);
+    background-color: rgb(146, 244, 66);
+  }
+
+  .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    background-color: rgba(235, 66, 66, 0.9);
+  }
+
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: rgba(235, 66, 66, 0.9);
+  }
+}
+
+.move {
+  position: relative;
+  background-color: rgba(95, 94, 94, 0.8);
+  width: 35px;
+  min-height: 25px;
+  max-height: 35px;
+  height: 11vh;
+  border: 1px solid black;
+  border-radius: 1px;
+}
+
+.move img {
+  height: 100%;
+  width: 100%;
+}
+
+.move1 {
+  background: url("/assets/images/arrow1empty.png") center/cover;
+}
+
+.move2 {
+  background: url("/assets/images/arrow2empty.png") center/cover;
+}
+
+.move3 {
+  background: url("/assets/images/arrow3empty.png") center/cover;
+}
+
+.cannons {
+  position: relative;
+  right: 12px;
+  width: 20px;
+  .bombslot {
+    position: relative;
+    top: -6px;
+    left: 0;
+  }
+}
+
+.bombempty {
+  background: url("/assets/images/cannonempty.png") 100% no-repeat;
+  padding-left: 25px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid black;
+  border-radius: 16px;
+}
+
+.bombmove {
+  background: url("/assets/images/cannon.png") center/cover;
+}

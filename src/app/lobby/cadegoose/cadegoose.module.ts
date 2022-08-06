@@ -30,6 +30,8 @@ import { RatingModule } from '../../settings/rating/rating.module';
 import { AdvancedMapComponent } from './advanced-map/advanced-map.component';
 import { ThreedRenderModule } from './threed-render/threed-render.module';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
+import { MoveSourceModule } from '../../boats/move-source/move-source.module';
+import { ManeuverSourceModule } from '../../boats/maneuver-source/maneuver-source.module';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { MapEditorModule } from '../../map-editor/map-editor.module';
     RatingModule,
     MapEditorModule,
     MoveInputModule,
+    MoveSourceModule,
+    ManeuverSourceModule,
   ],
   exports: [
     CadegooseComponent,

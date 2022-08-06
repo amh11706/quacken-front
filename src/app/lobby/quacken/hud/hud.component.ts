@@ -170,6 +170,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.turn = s.turn ?? this.turn;
       this.resetMoves();
       setTimeout(() => {
+        if (this.turn === 0) return;
         if (this.myBoat.moveLock > this.turn + 1) {
           this.ws.dispatchMessage({
             cmd: InCmd.ChatMessage,

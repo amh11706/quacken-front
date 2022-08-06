@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { InCmd, Internal, OutCmd } from '../../../ws-messages';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
@@ -37,7 +38,6 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     back: KeyActions.CBack,
   };
 
-  wantManeuver = 0;
   maneuvers = [
     { id: 4, class: 'move bombtoken', title: 'Chain Shot' },
     { id: 8, class: 'move', title: 'In-place Turn' },
@@ -47,16 +47,13 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   tokenStrings = ['', '', ''];
   lastTick = { tp: 0, attr: {} } as BoatTick;
-  wantMove = 2;
-  auto = true;
+  updateWantMove$ = new Subject<boolean>();
   protected group = 'l/cade';
 
   ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, () => {
-      this.wantMove = 2;
-      this.wantManeuver = 0;
-      this.auto = true;
+      this.updateWantMove$.next(true);
       this.localBoat.shots = [0, 0, 0, 0, 0, 0, 0, 0];
     }));
     this.subs.add(this.ws.subscribe(Internal.MyMoves, (moves: MoveMessage) => {
@@ -67,8 +64,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
       if (!t.attr) t.attr = {};
       this.lastTick = t;
       this.totalTokens.shots = t.tp;
-      this.totalTokens.maneuvers = Object.values(t.attr) as [number, number, number, number];
-      const hadMoves = this.totalTokens.moves;
+      for (let i = 0; i < this.maneuvers.length; i++) this.totalTokens.maneuvers[i] = t.attr[i] || 0;
       if (t.t) {
         this.totalTokens.moves = [0, 0, 0];
         for (let i = 0; i < t.t.length; i++) {
@@ -84,25 +80,15 @@ export class CadeHudComponent extends HudComponent implements OnInit {
         this.unusedTokens.moves = [...this.totalTokens.moves];
         this.unusedTokens.shots = this.totalTokens.shots;
       }
-
-      if (this.auto &&
-        (this.totalTokens.moves[0] !== hadMoves[0] ||
-          this.totalTokens.moves[1] !== hadMoves[1] ||
-          this.totalTokens.moves[2] !== hadMoves[2])
-      ) {
-        this.setAutoWant();
-      }
     }));
   }
 
-  changeWantMove(): void {
-    if (this.auto) this.setAutoWant();
-    else this.ws.send(OutCmd.WantMove, this.wantMove);
+  setWantMove(value: number): void {
+    this.ws.send(OutCmd.WantMove, value);
   }
 
   setWantToken(value: number): void {
-    this.wantManeuver = value;
-    this.ws.send(OutCmd.WantManeuver, this.wantManeuver);
+    this.ws.send(OutCmd.WantManeuver, value);
   }
 
   imReady(): void {
@@ -111,31 +97,6 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.myBoat.ready = true;
     this.lockTurn = this.turn + 1;
     this.ws.send(OutCmd.Ready, { ready: true, ...this.localBoat });
-  }
-
-  private setAutoWant() {
-    let min = 255;
-    for (const move of [1, 0, 2]) {
-      const haveMove = this.totalTokens.moves[move] || 0;
-      if (haveMove < min) {
-        min = haveMove;
-        this.wantMove = move + 1;
-      }
-    }
-    this.ws.send(OutCmd.WantMove, this.wantMove);
-  }
-
-  dragManeuver(token: number): void {
-    if (token >= 8) return this.drag(token);
-    this.dragCannon(8, token);
-  }
-
-  dragCannon(slot = 8, token = 1): void {
-    if (!token) return;
-    if (token > 5) token -= 2;
-    if (token < 4) token = 6;
-    this.dragContext.move = token;
-    this.dragContext.source = slot;
   }
 
   protected async sendShots(): Promise<void> {

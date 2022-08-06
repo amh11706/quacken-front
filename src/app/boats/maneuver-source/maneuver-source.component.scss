@@ -1,0 +1,46 @@
+.move {
+  position: relative;
+  background-color: rgba(95, 94, 94, 0.8);
+  width: 35px;
+  min-height: 25px;
+  max-height: 35px;
+  height: 11vh;
+  border: 1px solid black;
+  border-radius: 1px;
+}
+
+.move img {
+  height: 100%;
+  width: 100%;
+}
+
+.want {
+  border: 1px solid yellow;
+}
+
+.move {
+  margin-left: 3px;
+  height: 27px;
+  width: 27px;
+  overflow: hidden;
+}
+
+.bombtoken {
+  border-radius: 50%;
+}
+
+.maneuver {
+  position: absolute;
+  object-position: bottom;
+  object-fit: cover;
+  bottom: 0;
+  left: 0;
+  opacity: 0.7;
+  pointer-events: none;
+
+  &.usable {
+    cursor: grab;
+    opacity: 1;
+    pointer-events: all;
+  }
+}
