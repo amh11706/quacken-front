@@ -46,6 +46,8 @@ export class HudComponent implements OnInit, OnDestroy {
     bombRight: KeyActions.QBombRight,
     BombLeftStrict: KeyActions.QBombLeftStrict,
     BombRightStrict: KeyActions.QBombRightStrict,
+    tokenLeft: KeyActions.Noop,
+    tokenRight: KeyActions.Noop,
     prevSlot: KeyActions.QPrevSlot,
     nextSlot: KeyActions.QNextSlot,
     ready: KeyActions.QReady,

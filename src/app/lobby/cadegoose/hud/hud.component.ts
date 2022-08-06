@@ -19,6 +19,9 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     1: KeyActions.CLeft,
     2: KeyActions.CForward,
     3: KeyActions.CRight,
+    8: KeyActions.CTurnInPlace,
+    12: KeyActions.CDoubleForward,
+    16: KeyActions.CFlotsam,
   } as const;
 
   actions = {
@@ -26,6 +29,8 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     bombRight: KeyActions.CBombRight,
     BombLeftStrict: KeyActions.CBombLeftStrict,
     BombRightStrict: KeyActions.CBombRightStrict,
+    tokenLeft: KeyActions.CLeftChainshot,
+    tokenRight: KeyActions.CRightChainshot,
     prevSlot: KeyActions.CPrevSlot,
     nextSlot: KeyActions.CNextSlot,
     ready: KeyActions.CReady,
@@ -73,7 +78,12 @@ export class CadeHudComponent extends HudComponent implements OnInit {
           for (const count of tokens) this.totalTokens.moves[i] += count;
         }
       }
-      this.totalTokens = { ...this.totalTokens };
+      if (this.lastMoveReset >= this.turn) {
+        this.totalTokens = { ...this.totalTokens };
+      } else {
+        this.unusedTokens.moves = [...this.totalTokens.moves];
+        this.unusedTokens.shots = this.totalTokens.shots;
+      }
 
       if (this.auto &&
         (this.totalTokens.moves[0] !== hadMoves[0] ||

@@ -31,6 +31,11 @@ export const enum KeyActions {
   CBombLeftStrict,
   CBombRightStrict,
   CReady,
+  CTurnInPlace,
+  CDoubleForward,
+  CFlotsam,
+  CLeftChainshot,
+  CRightChainshot,
 
   // Sea battle
   SBShowStats = 300,
@@ -172,16 +177,21 @@ export const DefaultBindings: StaticKeyBindings = {
     {
       action: KeyActions.CBombLeftStrict,
       title: 'Bomb left strict',
-      bindings: ['Shift + A', 'Shift + Q'],
+      bindings: ['Shift + Q', NotActive],
       linkGroup: LinkGroups.BombLeftStrict,
     },
     {
       action: KeyActions.CBombRightStrict,
       title: 'Bomb right strict',
-      bindings: ['Shift + D', 'Shift + E'],
+      bindings: ['Shift + E', NotActive],
       linkGroup: LinkGroups.BombRightStrict,
     },
     { action: KeyActions.CReady, title: 'Ready', bindings: ['Space', NotActive], linkGroup: LinkGroups.Ready },
+    { action: KeyActions.CTurnInPlace, title: 'In-place turn', bindings: ['Shift + A', NotActive] },
+    { action: KeyActions.CDoubleForward, title: 'Double forward', bindings: ['Shift + X', NotActive] },
+    { action: KeyActions.CFlotsam, title: 'Flotsam', bindings: ['Shift + D', NotActive] },
+    { action: KeyActions.CRightChainshot, title: 'Left chainshot', bindings: ['Shift + C', NotActive] },
+    { action: KeyActions.CLeftChainshot, title: 'Right chainshot', bindings: ['Shift + Z', NotActive] },
   ],
   'Sea battle': [
     {

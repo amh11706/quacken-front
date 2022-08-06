@@ -30,10 +30,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     this._totalTokens = t;
     this.unusedTokens.moves = [...t.moves];
     this.unusedTokens.shots = t.shots;
-    if (this.locked) {
-      this.unusedTokensChange.next(this.unusedTokens);
-      return;
-    }
     this.checkMaxMoves();
     this.checkMaxShots();
   }
@@ -69,6 +65,8 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     bombRight: KeyActions.QBombRight,
     BombLeftStrict: KeyActions.QBombLeftStrict,
     BombRightStrict: KeyActions.QBombRightStrict,
+    tokenLeft: KeyActions.Noop,
+    tokenRight: KeyActions.Noop,
     prevSlot: KeyActions.QPrevSlot,
     nextSlot: KeyActions.QNextSlot,
     ready: KeyActions.QReady,
@@ -93,13 +91,14 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     this.subs.add(this.kbs.subscribe(this.actions.back, v => {
       if (this.locked || !v || !this.kbControls) return;
 
-      if (this.selected > 0 && this.input.moves[this.selected] === 0) {
-        this.eraseSlot(this.selected);
+      if (this.selected && !this.input.moves[this.selected] &&
+         !this.input.shots[this.selected * 2] && !this.input.shots[this.selected * 2 + 1]
+      ) {
         this.selected -= 1;
       } else if (this.selected === 0 && !this.input.moves[this.selected]) {
-        this.setBomb(0);
-        this.resetMoves();
+        return this.resetMoves();
       }
+
       this.eraseSlot(this.selected);
       this.checkMaxMoves();
       this.checkMaxShots();
@@ -107,23 +106,25 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.kbs.subscribe(this.actions.BombLeftStrict, v => {
-      if (!this.locked && v && this.kbControls) this.setBomb(this.selected + 1, true);
+      if (this.locked || !v || !this.kbControls) return;
+      this.setBomb(this.selected * 2, true);
     }));
 
     this.subs.add(this.kbs.subscribe(this.actions.BombRightStrict, v => {
-      if (!this.locked && v && this.kbControls) this.setBomb(this.selected + 5, true);
+      if (this.locked || !v || !this.kbControls) return;
+      this.setBomb(this.selected * 2 + 1, true);
     }));
 
     this.subs.add(this.kbs.subscribe(this.actions.bombLeft, v => {
       if (this.locked || !v || !this.kbControls) return;
-      if (this.input.moves[this.selected] === 0 && this.selected > 0) this.setBomb(this.selected);
-      else this.setBomb(this.selected + 1);
+      if (this.input.moves[this.selected] === 0 && this.selected > 0) this.setBomb(this.selected * 2 - 2);
+      else this.setBomb(this.selected * 2);
     }));
 
     this.subs.add(this.kbs.subscribe(this.actions.bombRight, v => {
       if (this.locked || !v || !this.kbControls) return;
-      if (this.input.moves[this.selected] === 0 && this.selected > 0) this.setBomb(this.selected + 4);
-      else this.setBomb(this.selected + 5);
+      if (this.input.moves[this.selected] === 0 && this.selected > 0) this.setBomb(this.selected * 2 - 1);
+      else this.setBomb(this.selected * 2 + 1);
     }));
 
     for (const [key, value] of Object.entries(this.moveKeys)) {
@@ -136,6 +137,16 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     this.subs.add(this.kbs.subscribe(this.actions.prevSlot, v => {
       if (v && this.selected > 0 && this.kbControls) this.selected--;
     }));
+    this.subs.add(this.kbs.subscribe(this.actions.tokenLeft, v => {
+      if (this.locked || !v || !this.kbControls) return;
+      this.dragContext.move = 4;
+      this.dropCannon(this.selected * 2);
+    }));
+    this.subs.add(this.kbs.subscribe(this.actions.tokenRight, v => {
+      if (this.locked || !v || !this.kbControls) return;
+      this.dragContext.move = 4;
+      this.dropCannon(this.selected * 2 + 1);
+    }));
   }
 
   ngOnDestroy(): void {
@@ -143,25 +154,17 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   private placeMove(move: number) {
-    if (this.locked || !this.kbControls) return;
-    const moves = this.input.moves;
-    if (move > 0 && this.blockedPosition === this.selected) {
-      if (this.selected < 3) {
-        this.blockedPosition++;
-        moves[this.selected + 1] = 0;
-      } else return;
-    }
-
-    moves[this.selected] = move;
-    if (move === 0) this.blockedPosition = this.selected;
-    if (this.selected < 3) this.selected += 1;
-    this.checkMaxMoves();
-    this.inputChange.emit(this.input);
+    this.dragContext.move = move;
+    this.drop({} as DragEvent, this.selected);
+    if (this.selected < 3) this.selected++;
   }
 
   private resetMoves(): void {
     for (const i in this.input.moves) this.input.moves[i] = 0;
     for (const i in this.input.shots) this.input.shots[i] = 0;
+    this.unusedTokens.moves = [...this._totalTokens.moves];
+    this.unusedTokens.maneuvers = [...this._totalTokens.maneuvers];
+    this.unusedTokens.shots = this._totalTokens.shots;
     this.blockedPosition = this._maxMoves === 4 ? 4 : 3;
     this.inputChange.emit(this.input);
   }
@@ -173,18 +176,8 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   setBomb(i: number, strict = false): void {
-    if (i === 0) {
-      this.input.shots = [0, 0, 0, 0, 0, 0, 0, 0];
-      this.checkMaxShots();
-      this.inputChange.emit(this.input);
-      return;
-    }
-
-    i--;
-    const side = Math.floor(i / 4);
-    let adjusted = (i % 4) * 2 + side;
-    if (!strict) while (this.input.shots[adjusted] === this.maxShots && adjusted < 6) adjusted += 2;
-    this.addShot({} as MouseEvent, adjusted);
+    if (!strict) if (this.input.shots[i] === this.maxShots && i < 6) i += 2;
+    this.addShot({ ctrlKey: strict } as MouseEvent, i);
   }
 
   addShot(e: MouseEvent, i: number): void {
@@ -195,9 +188,10 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       this.unusedTokens.shots = this._totalTokens.shots;
     }
     if (e.ctrlKey || e.metaKey) {
+      const setTo = oldShots === this.maxShots ? 0 : this.maxShots;
       for (const shot in this.input.shots) {
         if (e.shiftKey || (i % 2 === +shot % 2 && +shot >= i)) {
-          this.input.shots[shot] = this.maxShots;
+          this.input.shots[shot] = setTo;
         }
       }
       this.checkMaxShots();
@@ -277,7 +271,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   drop(ev: DragEvent, slot: number): void {
-    ev.preventDefault();
+    ev.preventDefault?.();
     if (this.dragContext.source > 7 && this.blockedPosition === slot) {
       for (let i = 3; i >= 0; i--) {
         if (!this.input.moves[i] && i !== slot) {
@@ -293,8 +287,12 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       this.blockedPosition = this.dragContext.source;
     }
 
-    if (this.dragContext.source < 4) moves[this.dragContext.source] = moves[slot] || 0;
+    const oldMove = moves[slot] || 0;
     moves[slot] = this.dragContext.move;
+    if (this.dragContext.source < 4) moves[this.dragContext.source] = oldMove;
+    else if (oldMove > 7 && oldMove < 12 && Math.floor(oldMove / 4) === Math.floor(this.dragContext.move / 4)) {
+      moves[slot] = (oldMove + 2) % 4 + 8;
+    }
     this.dragContext.source = 8;
     this.dragContext.move = 0;
     this.checkMaxMoves();
@@ -342,7 +340,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   private checkMaxShots() {
-    if (this.locked) return;
     this.unusedTokens.shots = this._totalTokens.shots;
     this.unusedTokens.maneuvers[0] = this._totalTokens.maneuvers[0];
     for (let i = 0; i < this.input.shots.length; i++) {
@@ -367,7 +364,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   checkMaxMoves(): void {
-    if (this.locked) return;
     this.unusedTokens.moves = [...this._totalTokens.moves];
     this.unusedTokens.maneuvers[1] = this._totalTokens.maneuvers[1];
     this.unusedTokens.maneuvers[2] = this._totalTokens.maneuvers[2];

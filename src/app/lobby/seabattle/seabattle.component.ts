@@ -31,6 +31,8 @@ export class SeabattleComponent extends CadegooseComponent {
     bombRight: KeyActions.SBBombRight,
     BombLeftStrict: KeyActions.SBBombLeftStrict,
     BombRightStrict: KeyActions.SBBombRightStrict,
+    tokenLeft: KeyActions.Noop,
+    tokenRight: KeyActions.Noop,
     prevSlot: KeyActions.SBPrevSlot,
     nextSlot: KeyActions.SBNextSlot,
     ready: KeyActions.Noop,
