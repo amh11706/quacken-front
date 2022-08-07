@@ -4,6 +4,29 @@ import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { InCmd, Internal, OutCmd } from '../../../ws-messages';
 import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
 
+export const CadeKeyActions = {
+  bombLeft: KeyActions.CBombLeft,
+  bombRight: KeyActions.CBombRight,
+  BombLeftStrict: KeyActions.CBombLeftStrict,
+  BombRightStrict: KeyActions.CBombRightStrict,
+  tokenLeft: KeyActions.CLeftChainshot,
+  tokenRight: KeyActions.CRightChainshot,
+  prevSlot: KeyActions.CPrevSlot,
+  nextSlot: KeyActions.CNextSlot,
+  ready: KeyActions.CReady,
+  back: KeyActions.CBack,
+};
+
+export const CadeMoveKeys: Record<number, KeyActions> = {
+  0: KeyActions.CBlank,
+  1: KeyActions.CLeft,
+  2: KeyActions.CForward,
+  3: KeyActions.CRight,
+  8: KeyActions.CTurnInPlace,
+  12: KeyActions.CDoubleForward,
+  16: KeyActions.CFlotsam,
+} as const;
+
 export interface MoveMessage {
   moves: number[];
   shots: number[];
@@ -15,28 +38,8 @@ export interface MoveMessage {
   styleUrls: ['./hud.component.scss'],
 })
 export class CadeHudComponent extends HudComponent implements OnInit {
-  moveKeys: Record<number, KeyActions> = {
-    0: KeyActions.CBlank,
-    1: KeyActions.CLeft,
-    2: KeyActions.CForward,
-    3: KeyActions.CRight,
-    8: KeyActions.CTurnInPlace,
-    12: KeyActions.CDoubleForward,
-    16: KeyActions.CFlotsam,
-  } as const;
-
-  actions = {
-    bombLeft: KeyActions.CBombLeft,
-    bombRight: KeyActions.CBombRight,
-    BombLeftStrict: KeyActions.CBombLeftStrict,
-    BombRightStrict: KeyActions.CBombRightStrict,
-    tokenLeft: KeyActions.CLeftChainshot,
-    tokenRight: KeyActions.CRightChainshot,
-    prevSlot: KeyActions.CPrevSlot,
-    nextSlot: KeyActions.CNextSlot,
-    ready: KeyActions.CReady,
-    back: KeyActions.CBack,
-  };
+  moveKeys = CadeMoveKeys;
+  actions = CadeKeyActions;
 
   maneuvers = [
     { id: 4, class: 'move bombtoken', title: 'Chain Shot' },

@@ -10,33 +10,14 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { InMessage, WsService } from '../../ws.service';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
-import { Clutter, Sync, Turn } from '../../lobby/quacken/boats/boats.component';
-import { Message } from '../../chat/chat.service';
 import { Boat } from '../../lobby/quacken/boats/boat';
 import { BoatTick } from '../../lobby/quacken/hud/hud.component';
 import { Lobby } from '../../lobby/lobby.component';
 import { AiRender, Points, AiData, AiBoatData } from './ai-render';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
-import { StatRow } from '../../lobby/cadegoose/stats/stats.component';
-import { BoatStatus } from '../../lobby/quacken/boats/convert';
 import { Penalties, PenaltyComponent, PenaltySummary } from './penalty/penalty.component';
 import { SettingsService } from '../../settings/settings.service';
-
-interface ParsedTurn {
-  turn: number;
-  index: number;
-  teams: {
-    score: number;
-    scoreChange: number;
-    sinks: Message[];
-  }[];
-  sync: Sync;
-  ticks: Record<number, BoatTick>;
-  moves: Record<number, { shots: [], moves: [] }>;
-  steps: BoatStatus[][];
-  cSteps: Clutter[][];
-  stats: Record<number, StatRow>;
-}
+import { ParsedTurn, ParseTurns } from './parse-turns';
 
 interface ScoreResponse {
   totals: PenaltySummary[]
@@ -83,61 +64,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     delete this.aiData;
     delete this.scores;
     this.selectAiBoat();
-    this.turns = [];
-    let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
-    let lastSync: Sync = { sync: [], cSync: [] };
-    let moves: Record<number, { shots: [], moves: [] }> = {};
-    let ticks: Record<number, BoatTick> = {};
-    for (let i = 0; i < messages.length; i++) {
-      const group = messages[i];
-      if (!group) continue;
-      const sinks: Message[][] = [[], []];
-      for (const m of group) {
-        switch (m.cmd) {
-          case InCmd.LobbyJoin:
-            lastSync = { sync: Object.values(m.data.boats), cSync: [] };
-            this.map = m.data.map;
-            break;
-          case InCmd.Moves:
-            moves[m.data.t] = { shots: m.data.s, moves: m.data.m };
-            break;
-          case InCmd.Sync:
-            lastSync = m.data;
-            break;
-          case InCmd.BoatTicks:
-            ticks = m.data;
-            break;
-          case InCmd.Turn:
-            // eslint-disable-next-line no-case-declarations
-            const turn: Turn = m.data;
-            // eslint-disable-next-line no-case-declarations
-            const parsed: ParsedTurn = {
-              ticks,
-              moves,
-              sync: lastSync,
-              turn: this.turns.length + 1,
-              index: i,
-              teams: turn.points.map((score, j) => {
-                const team = { score, scoreChange: score - (lastTurn.teams[j]?.score || 0), sinks: sinks[j] || [] };
-                if (team.scoreChange > this.maxScore) this.maxScore = team.scoreChange;
-                return team;
-              }),
-              steps: turn.steps,
-              cSteps: turn.cSteps,
-              stats: turn.stats,
-            };
-            moves = {};
-            ticks = {};
-            lastTurn = parsed;
-            this.turns.push(parsed);
-            break;
-          case InCmd.ChatMessage:
-            if (m.data?.from === '_sink') sinks[m.data.copy ? 0 : 1]?.push(m.data);
-            break;
-          default:
-        }
-      }
-    }
+    [this.turns, this.map, this.maxScore] = ParseTurns(messages);
     if (this.turns.length) void this.getScores();
   }
 

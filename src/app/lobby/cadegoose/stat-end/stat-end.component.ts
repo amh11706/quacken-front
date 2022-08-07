@@ -41,7 +41,7 @@ export class StatEndComponent implements OnChanges {
       }
     }
 
-    this.scores = Object.values(this.stats).sort((a, b) => b.score - a.score).map(el => {
+    this.scores = Object.values(this.stats).sort((a, b) => (b.score || 0) - (a.score || 0)).map(el => {
       return { ...el };
     });
     for (const row of this.scores) {

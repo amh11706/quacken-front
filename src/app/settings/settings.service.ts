@@ -15,6 +15,7 @@ export interface Setting {
 }
 
 export interface SettingPartial {
+  id?: number;
   value: number;
   data?: any;
   stream?: BehaviorSubject<number>;

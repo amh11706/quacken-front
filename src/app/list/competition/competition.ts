@@ -8,7 +8,7 @@ const BaseSettings = {
   jobberQuality: {
     id: 27,
     value: 105,
-    data: { Sail: 80, Carp: 80, Bilge: 80, Cannon: 60, Maneuver: 60 },
+    data: { Sail: 80, Carp: 80, Bilge: 80, Cannon: 80, Maneuver: 60 },
   },
   turnTime: { id: 30, value: 30 },
   turns: { id: 34, value: 60 },
@@ -29,59 +29,69 @@ interface Competition {
 }
 
 export const Competitions: Competition[] = [
-  // {
-  //   description: 'Black Flag Friends and Allies 1v1',
-  //   rounds: [
-  //     {
-  //       description: 'Loser bracket - Round 4',
-  //       games: [
-  //         {
-  //           ...BaseSettings,
-  //           name: { data: 'R4 - Loser', value: 0 },
-  //           map: { id: 18, value: 302, data: 'R4 - Loser' },
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       description: 'Loser bracket - Round 5',
-  //       games: [
-  //         {
-  //           ...BaseSettings,
-  //           name: { data: 'R5 - Loser', value: 0 },
-  //           map: { id: 18, value: 312, data: 'R5 - Loser' },
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       description: 'Loser bracket - Round 6',
-  //       games: [
-  //         {
-  //           ...BaseSettings,
-  //           name: { data: 'R6 - Loser', value: 0 },
-  //           map: { id: 18, value: 331, data: 'R6 - Loser' },
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       description: 'Loser bracket - Finals',
-  //       games: [
-  //         {
-  //           ...BaseSettings,
-  //           name: { data: 'Loser Finals - 1', value: 0 },
-  //           map: { id: 18, value: 317, data: 'Loser Finals - 1' },
-  //         },
-  //         {
-  //           ...BaseSettings,
-  //           name: { data: 'Loser Finals - 2', value: 0 },
-  //           map: { id: 18, value: 320, data: 'Loser Finals - 2' },
-  //         },
-  //         {
-  //           ...BaseSettings,
-  //           name: { data: 'Loser Finals - 3', value: 0 },
-  //           map: { id: 18, value: 321, data: 'Loser Finals - 3' },
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    description: 'Black Flag Friends and Allies 2v2',
+    rounds: [
+      {
+        description: 'Round 1',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'R1 - 1', value: 0 },
+            map: { id: 18, value: 385, data: 'R1 - 1' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'R1 - 2', value: 0 },
+            map: { id: 18, value: 367, data: 'R1 - 2' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'R1 - 3', value: 0 },
+            map: { id: 18, value: 398, data: 'R1 - 3' },
+          },
+        ],
+      },
+      // {
+      //   description: 'Loser bracket - Round 5',
+      //   games: [
+      //     {
+      //       ...BaseSettings,
+      //       name: { data: 'R5 - Loser', value: 0 },
+      //       map: { id: 18, value: 312, data: 'R5 - Loser' },
+      //     },
+      //   ],
+      // },
+      // {
+      //   description: 'Loser bracket - Round 6',
+      //   games: [
+      //     {
+      //       ...BaseSettings,
+      //       name: { data: 'R6 - Loser', value: 0 },
+      //       map: { id: 18, value: 331, data: 'R6 - Loser' },
+      //     },
+      //   ],
+      // },
+      // {
+      //   description: 'Loser bracket - Finals',
+      //   games: [
+      //     {
+      //       ...BaseSettings,
+      //       name: { data: 'Loser Finals - 1', value: 0 },
+      //       map: { id: 18, value: 317, data: 'Loser Finals - 1' },
+      //     },
+      //     {
+      //       ...BaseSettings,
+      //       name: { data: 'Loser Finals - 2', value: 0 },
+      //       map: { id: 18, value: 320, data: 'Loser Finals - 2' },
+      //     },
+      //     {
+      //       ...BaseSettings,
+      //       name: { data: 'Loser Finals - 3', value: 0 },
+      //       map: { id: 18, value: 321, data: 'Loser Finals - 3' },
+      //     },
+      //   ],
+      // },
+    ],
+  },
 ];

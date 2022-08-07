@@ -5,6 +5,7 @@ export type Team = 0 | 1 | 2 | 3 | 99 | 100;
 export class Boat {
   treasure = 0;
   damage = 0;
+  bilge = 0;
   pos = { x: 10, y: 10 };
   moves = [0, 0, 0, 0];
   shots: number[] = [];

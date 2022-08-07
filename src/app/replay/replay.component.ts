@@ -35,7 +35,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
   constructor(
     private location: Location,
-    private esc: EscMenuService,
+    public esc: EscMenuService,
     private ws: WsService,
     private ss: SettingsService,
     private fs: FriendsService,

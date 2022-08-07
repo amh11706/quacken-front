@@ -2,3 +2,59 @@
                [speed]="graphicSettings.speed.value"
                [mapScale]="graphicSettings.mapScale.value"
                [graphicSettings]="graphicSettings"></q-twod-render>
+
+               <div class="container noselect"
+     id="hud">
+  <div id="boatcontrol"
+       oncontextmenu="event.preventDefault()">
+    <div id="time">
+      <div id="timebar"
+           [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
+    </div>
+    <q-move-input id="moves"
+                  (inputChange)="sendMoves()"
+                  (unusedTokensChange)="unusedTokens = $event"
+                  [reset]="resetMoves$"
+                  [input]="localBoat"
+                  [serverInput]="localBoat"
+                  [kbControls]="kbControls"
+                  [totalTokens]="totalTokens"
+                  [dragContext]="dragContext"
+                  [actions]="actions"
+                  [moveKeys]="moveKeys"
+                  [maxMoves]="myBoat.maxMoves"
+                  [maxShots]="myBoat.maxShots"></q-move-input>
+    <div id="boatStats">
+      <div id="damage"
+           matTooltip="Damage: {{myBoat.getDamage()}}%">
+        <div id="damagebar"
+             [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
+      </div>
+      <div id="bilge"
+           matTooltip="Bilge: {{myBoat.bilge || 0}}%">
+        <div id="bilgebar"
+             [style.transform]="'translateX(' + myBoat.bilge + 'px)'"></div>
+      </div>
+    </div>
+
+    <q-move-source id="movesource"
+                   [totalTokens]="totalTokens"
+                   [unusedTokens]="unusedTokens"
+                   [dragContext]="dragContext"></q-move-source>
+    <button mat-icon-button
+            [disabled]="!myBoat.isMe || myBoat.ready"
+            id="hudReady"
+            (click)="imReady()">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+
+    <q-maneuver-source id="maneuvers"
+                       [unusedTokens]="unusedTokens"
+                       [dragContext]="dragContext"></q-maneuver-source>
+  </div>
+
+  <div id="chat">
+    <q-chat [disabled]="esc.open"></q-chat>
+  </div>
+</div>
+
