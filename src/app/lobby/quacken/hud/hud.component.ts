@@ -184,7 +184,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   protected resetMoves(): void {
-    if (!this.ws.connected || this.myBoat.moveLock > this.turn + 1 || !this.myBoat.isMe) return;
+    if (!this.ws.connected || !this.myBoat.isMe) return;
     if (this.turn <= this.lastMoveReset) return;
     if (this.myBoat.moveLock === this.turn + 1) this.myBoat.moveLock = 0;
     this.lastMoveReset = this.turn;

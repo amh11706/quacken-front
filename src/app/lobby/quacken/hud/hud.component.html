@@ -45,34 +45,28 @@
            (dragstart)="drag(3)">
     </div>
 
-    <p *ngIf="myBoat.moveLock > turn; else treasure">
-      Respawning in {{myBoat.moveLock - turn}} turn<span *ngIf="myBoat.moveLock > turn + 1">s</span>
-    </p>
-
-    <ng-template #treasure>
-      <div id="tokens">
-        <ng-container *ngIf="myBoat.type < 10">
-          <div id="treasurebox"
-               *ngIf="!weapons[myBoat.type]">
-            <img *ngIf="myBoat.getTreasure()"
-                 src="./assets/images/obstacle{{myBoat.getTreasure()}}.png">
-          </div>
-        </ng-container>
-
-        <div *ngIf="weapons[myBoat.type]"
-             class="token">
-          <img *ngIf="unusedTokens.shots"
-               (dragstart)="drag(6)"
-               [src]="'/assets/images/'+weapons[myBoat.type]+'.png'">
+    <div id="tokens">
+      <ng-container *ngIf="myBoat.type < 10">
+        <div id="treasurebox"
+             *ngIf="!weapons[myBoat.type]">
+          <img *ngIf="myBoat.getTreasure()"
+               src="./assets/images/obstacle{{myBoat.getTreasure()}}.png">
         </div>
-        <div *ngIf="tokens[myBoat.type]"
-             class="token">
-          <img *ngIf="myBoat.tokenPoints > 1 && myBoat.moves.indexOf(4) === -1"
-               [src]="'/assets/images/'+tokens[myBoat.type]+'.png'"
-               (dragstart)="drag(4)">
-        </div>
+      </ng-container>
+
+      <div *ngIf="weapons[myBoat.type]"
+           class="token">
+        <img *ngIf="unusedTokens.shots"
+             (dragstart)="drag(6)"
+             [src]="'/assets/images/'+weapons[myBoat.type]+'.png'">
       </div>
-    </ng-template>
+      <div *ngIf="tokens[myBoat.type]"
+           class="token">
+        <img *ngIf="myBoat.tokenPoints > 1 && myBoat.moves.indexOf(4) === -1"
+             [src]="'/assets/images/'+tokens[myBoat.type]+'.png'"
+             (dragstart)="drag(4)">
+      </div>
+    </div>
 
     <div id="buttons">
       <button *ngIf="!fs.allowInvite || !(myBoat.ready && turn === 0); else fstart"
