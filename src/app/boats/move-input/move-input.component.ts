@@ -282,7 +282,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     }
     if (this.locked || (this.dragContext.source > 7 && this.blockedPosition === slot)) return;
     const moves = this.input.moves;
-    if (this.dragContext.move === 0) this.blockedPosition = slot;
+    if (this.dragContext.move === 0 && this.maxMoves < 4) this.blockedPosition = slot;
     else if (this.dragContext.source < 4 && this.blockedPosition === slot) {
       this.blockedPosition = this.dragContext.source;
     }

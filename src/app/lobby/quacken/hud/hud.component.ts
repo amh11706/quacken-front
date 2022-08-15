@@ -89,7 +89,6 @@ export class HudComponent implements OnInit, OnDestroy {
   weapons = weapons;
   myBoat = new Boat('');
 
-  lockTurn = 1;
   turn = 0;
   lastMoveReset = 0;
   dragContext = { source: 8, move: 0 };
@@ -119,12 +118,8 @@ export class HudComponent implements OnInit, OnDestroy {
     void this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
     this.handleKeys();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
-      if (this.turn > 0 && this.ws.connected) this.lockTurn = b.moveLock ?? this.lockTurn;
       this.myBoat = b;
       this.resetMoves();
-      if (!b.isMe) {
-        this.lockTurn = this.maxTurn + 1;
-      }
     }));
     this.subs.add(this.ws.subscribe(Internal.ResetMoves, this.resetMoves.bind(this)));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
@@ -137,11 +132,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.lastMoveReset = 0;
       this.turn = m.turn ?? this.turn;
       this.myBoat.ready = false;
-      if (this.turn > 0 && this.myBoat.isMe && this.ws.connected) this.lockTurn = this.myBoat.moveLock || this.lockTurn;
-      else {
-        this.lockTurn = Math.max(this.turn + 1, this.myBoat.moveLock);
-        this.resetMoves();
-      }
+      this.resetMoves();
 
       if (m.seconds) {
         if (m.seconds > 20) m.seconds = 20;
@@ -153,16 +144,17 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.Turn, (turn: Turn) => {
+      const turnNumber = turn.turn + 1;
       this.stopTimer();
-      if (turn.turn <= this.maxTurn) {
-        this.turn = turn.turn ?? this.turn;
+      if (turnNumber <= this.maxTurn) {
+        this.turn = turnNumber;
         this.startTimer();
-        this.setTurn(this.maxTurn - turn.turn);
+        this.setTurn(this.maxTurn - turnNumber);
       } else {
         this.turn = 0;
         this.lastMoveReset = 0;
       }
-      if (turn.turn !== 1) this.lockTurn = Math.max(this.turn + 1, this.myBoat.moveLock);
+      if (turnNumber !== 1) this.myBoat.moveLock = Math.max(this.turn + 1, this.myBoat.moveLock);
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
@@ -171,18 +163,16 @@ export class HudComponent implements OnInit, OnDestroy {
       this.resetMoves();
       setTimeout(() => {
         if (this.turn === 0) return;
-        if (this.myBoat.moveLock > this.turn + 1) {
+        if (this.myBoat.moveLock > this.turn) {
           this.ws.dispatchMessage({
             cmd: InCmd.ChatMessage,
-            data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn) + ' turns.' },
+            data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn - 1) + ' turns.' },
           });
-        } else if (this.myBoat.moveLock === this.turn + 1) {
+        } else if (this.myBoat.moveLock === this.turn) {
           this.ws.dispatchMessage({
             cmd: InCmd.ChatMessage,
             data: { type: 1, message: 'Unlocking moves next turn.' },
           });
-        } else {
-          this.lockTurn = this.myBoat.isMe ? this.turn || this.lockTurn : this.maxTurn + 1;
         }
       }, 100);
     }));
@@ -196,8 +186,8 @@ export class HudComponent implements OnInit, OnDestroy {
   protected resetMoves(): void {
     if (!this.ws.connected || this.myBoat.moveLock > this.turn + 1 || !this.myBoat.isMe) return;
     if (this.turn <= this.lastMoveReset) return;
+    if (this.myBoat.moveLock === this.turn + 1) this.myBoat.moveLock = 0;
     this.lastMoveReset = this.turn;
-    this.lockTurn = this.turn || this.lockTurn;
     for (const i in this.serverBoat.moves) this.serverBoat.moves[i] = 0;
     for (const i in this.serverBoat.shots) this.serverBoat.shots[i] = 0;
     for (const i in this.serverBoatPending.moves) this.serverBoatPending.moves[i] = 0;
@@ -217,7 +207,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.myBoat.ready) return;
     this.stopTimer();
     this.myBoat.ready = true;
-    this.lockTurn = this.turn + 1;
+    this.myBoat.moveLock = this.turn + 1;
     this.ws.send(OutCmd.Ready);
   }
 

@@ -56,7 +56,6 @@ export class MoveSourceComponent implements OnDestroy {
   private setAutoWant(forceAuto = false) {
     if (forceAuto) this.auto = true;
     if (!this.auto) return;
-    const oldWantMove = this.wantMove;
     let min = 255;
     for (const move of [1, 0, 2]) {
       const haveMove = this._totalTokens?.moves[move] || 0;
@@ -65,6 +64,6 @@ export class MoveSourceComponent implements OnDestroy {
         this.wantMove = move + 1;
       }
     }
-    if (this.wantMove !== oldWantMove) this.wantMoveChange.emit(this.wantMove);
+    this.wantMoveChange.emit(this.wantMove);
   }
 }
