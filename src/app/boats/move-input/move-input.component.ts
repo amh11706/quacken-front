@@ -47,6 +47,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   private _maxMoves = 4;
   @Input() set maxMoves(v: number) {
     this._maxMoves = v;
+    console.log(v);
     this.blockedPosition = v === 4 ? 4 : 3;
   }
 
@@ -282,7 +283,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     }
     if (this.locked || (this.dragContext.source > 7 && this.blockedPosition === slot)) return;
     const moves = this.input.moves;
-    if (this.dragContext.move === 0 && this.maxMoves < 4) this.blockedPosition = slot;
+    if (this.dragContext.move === 0 && this._maxMoves < 4) this.blockedPosition = slot;
     else if (this.dragContext.source < 4 && this.blockedPosition === slot) {
       this.blockedPosition = this.dragContext.source;
     }
@@ -308,6 +309,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   dragendCannon(): void {
+    if (this.dragContext.source === 8) return;
     const shot = this.input.shots[this.dragContext.source] || 0;
     if (shot >= 6 || shot === 2) this.input.shots[this.dragContext.source] = 1;
     else this.input.shots[this.dragContext.source] = 0;
@@ -330,13 +332,11 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     } else {
       this.input.shots[slot] += oldShots >= 4 ? 2 : 1;
     }
-    // timeout to let dragend happen first
-    setTimeout(() => {
-      this.dragContext.source = 8;
-      this.dragContext.move = 0;
-      this.checkMaxShots();
-      setTimeout(() => this.inputChange.emit(this.input));
-    });
+    this.dragendCannon();
+    this.dragContext.source = 8;
+    this.dragContext.move = 0;
+    this.checkMaxShots();
+    setTimeout(() => this.inputChange.emit(this.input));
   }
 
   private checkMaxShots() {

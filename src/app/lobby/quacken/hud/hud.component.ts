@@ -160,13 +160,13 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
       this.myBoat.ready = false;
       this.turn = s.turn ?? this.turn;
-      this.resetMoves();
       setTimeout(() => {
-        if (this.turn === 0) return;
+        this.resetMoves();
+        if (this.turn === 0 || !this.myBoat.isMe) return;
         if (this.myBoat.moveLock > this.turn) {
           this.ws.dispatchMessage({
             cmd: InCmd.ChatMessage,
-            data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn - 1) + ' turns.' },
+            data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn) + ' turns.' },
           });
         } else if (this.myBoat.moveLock === this.turn) {
           this.ws.dispatchMessage({
