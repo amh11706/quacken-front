@@ -47,7 +47,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   private _maxMoves = 4;
   @Input() set maxMoves(v: number) {
     this._maxMoves = v;
-    console.log(v);
     this.blockedPosition = v === 4 ? 4 : 3;
   }
 

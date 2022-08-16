@@ -154,7 +154,9 @@ export class HudComponent implements OnInit, OnDestroy {
         this.turn = 0;
         this.lastMoveReset = 0;
       }
-      if (turnNumber !== 1) this.myBoat.moveLock = Math.max(this.turn + 1, this.myBoat.moveLock);
+      if (!this.myBoat.moveLock) {
+        this.myBoat.moveLock = turnNumber === 1 ? 0 : 99;
+      }
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
@@ -186,7 +188,7 @@ export class HudComponent implements OnInit, OnDestroy {
   protected resetMoves(): void {
     if (!this.ws.connected || !this.myBoat.isMe) return;
     if (this.turn <= this.lastMoveReset) return;
-    if (this.myBoat.moveLock === this.turn + 1) this.myBoat.moveLock = 0;
+    if (this.myBoat.moveLock === 99) this.myBoat.moveLock = 0;
     this.lastMoveReset = this.turn;
     for (const i in this.serverBoat.moves) this.serverBoat.moves[i] = 0;
     for (const i in this.serverBoat.shots) this.serverBoat.shots[i] = 0;
@@ -207,7 +209,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.myBoat.ready) return;
     this.stopTimer();
     this.myBoat.ready = true;
-    this.myBoat.moveLock = this.turn + 1;
+    this.myBoat.moveLock = 99;
     this.ws.send(OutCmd.Ready);
   }
 

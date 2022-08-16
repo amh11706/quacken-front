@@ -98,7 +98,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     if (this.myBoat.ready || (this.secondsPerTurn < 40 && this.turnSeconds > 0)) return;
     this.stopTimer();
     this.myBoat.ready = true;
-    this.myBoat.moveLock = this.turn + 1;
+    this.myBoat.moveLock = 99;
     this.ws.send(OutCmd.Ready, { ready: true, ...this.localBoat });
   }
 
