@@ -27,7 +27,7 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
   let maxScore = 0;
   let map = '';
   let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
-  let lastSync: Sync = { sync: [], cSync: [] };
+  let lastSync: Sync = { sync: [], cSync: [], turn: 0 };
   let moves: Record<number, { shots: [], moves: [] }> = {};
   let ticks: Record<number, BoatTick> = {};
   for (let i = 0; i < messages.length; i++) {
@@ -37,7 +37,7 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
     for (const m of group) {
       switch (m.cmd) {
         case InCmd.LobbyJoin:
-          lastSync = { sync: Object.values(m.data.boats), cSync: [] };
+          lastSync = { sync: Object.values(m.data.boats), cSync: [], turn: lastTurn.turn };
           map = m.data.map;
           break;
         case InCmd.Moves:

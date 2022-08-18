@@ -38,6 +38,7 @@ export interface Turn {
 export interface Sync {
   sync: BoatSync[];
   cSync: Clutter[];
+  turn: number;
 }
 
 @Component({

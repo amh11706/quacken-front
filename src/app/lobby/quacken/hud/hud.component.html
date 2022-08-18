@@ -20,7 +20,7 @@
                   [maxShots]="myBoat.maxShots"
                   [actions]="actions"
                   [moveKeys]="moveKeys"
-                  [locked]="!myBoat.isMe || myBoat.moveLock >= turn"></q-move-input>
+                  [locked]="!ws.connected || !myBoat.isMe || myBoat.moveLock >= turn"></q-move-input>
     <div id="damage">
       <div id="damagebar"
            [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>

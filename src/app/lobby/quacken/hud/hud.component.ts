@@ -7,7 +7,7 @@ import { KeyBindingService } from '../../../settings/key-binding/key-binding.ser
 import { SettingsService, SettingMap } from '../../../settings/settings.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Lobby } from '../../lobby.component';
-import { Turn } from '../boats/boats.component';
+import { Sync, Turn } from '../boats/boats.component';
 import { Boat } from '../boats/boat';
 import { WsService } from '../../../ws.service';
 import { Tokens } from '../../../boats/move-input/move-input.component';
@@ -107,7 +107,7 @@ export class HudComponent implements OnInit, OnDestroy {
   seconds$ = new BehaviorSubject<number>(76);
 
   constructor(
-    protected ws: WsService,
+    public ws: WsService,
     public fs: FriendsService,
     protected kbs: KeyBindingService,
     protected ss: SettingsService,
@@ -159,24 +159,26 @@ export class HudComponent implements OnInit, OnDestroy {
       }
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
+
+    this.subs.add(this.ws.subscribe(InCmd.Sync, (s: Sync) => {
       this.myBoat.ready = false;
       this.turn = s.turn ?? this.turn;
-      setTimeout(() => {
-        this.resetMoves();
-        if (this.turn === 0 || !this.myBoat.isMe) return;
-        if (this.myBoat.moveLock > this.turn) {
-          this.ws.dispatchMessage({
-            cmd: InCmd.ChatMessage,
-            data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn) + ' turns.' },
-          });
-        } else if (this.myBoat.moveLock === this.turn) {
-          this.ws.dispatchMessage({
-            cmd: InCmd.ChatMessage,
-            data: { type: 1, message: 'Unlocking moves next turn.' },
-          });
-        }
-      }, 100);
+      const myBoat = s.sync.find(boat => boat.id === this.myBoat.id);
+      if (myBoat) this.myBoat.moveLock = myBoat.ml;
+      if (this.myBoat.moveLock > this.maxTurn) return;
+      this.resetMoves();
+      if (this.turn === 0 || !this.myBoat.isMe) return;
+      if (this.myBoat.moveLock > this.turn) {
+        this.ws.dispatchMessage({
+          cmd: InCmd.ChatMessage,
+          data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn + 1) + ' turns.' },
+        });
+      } else if (this.myBoat.moveLock === this.turn) {
+        this.ws.dispatchMessage({
+          cmd: InCmd.ChatMessage,
+          data: { type: 1, message: 'Unlocking moves next turn.' },
+        });
+      }
     }));
   }
 
