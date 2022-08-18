@@ -104,7 +104,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t) => {
       for (let i = 0; i < this.flags.length; i++) {
         const flag = this.flags[i];
-        if (flag) flag.t = t.flags[i].t;
+        if (flag) flag.t = t.flags[i]?.t;
       }
       this.colorFlags();
     }));

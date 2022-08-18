@@ -119,7 +119,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Turn, async (t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
       const maxTurns = (await this.ss.get('l/cade', 'turns'))?.value;
-      this.roundGoing = (maxTurns && t.turn <= maxTurns) || false;
+      this.roundGoing = (maxTurns && t.turn < maxTurns) || false;
       this.statsOpen = false;
       if (this.roundGoing) return;
       this.es.lobbyContext.stats = t.stats;

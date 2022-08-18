@@ -210,7 +210,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     clearTimeout(this.animateTimeout3);
     delete this.animateTimeout;
     // first turn is only for starting the entry
-    if (turn.turn === 1) {
+    if (turn.turn === 0) {
       setTimeout(() => {
         for (const boat of this.boats) boat.ready = false;
         this.ws.dispatchMessage({ cmd: Internal.ResetMoves });

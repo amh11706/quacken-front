@@ -44,16 +44,21 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   @Input() seed = '';
   private _tick = 0;
   @Input() set tick(value: number) {
-    const i = Math.floor((value + 2) / 30) - 1;
-    this.activeTurn = this.turns[i];
+    for (const turn of this.turns) {
+      if (turn.index > value) {
+        if (turn === this.activeTurn) return;
+        this.activeTurn = turn;
+        break;
+      }
+    }
     const buttons = this.turnTab?.nativeElement.children;
     const buttons2 = this.penaltyBox?.nativeElement.children;
-    buttons?.[i >= 0 ? i : 0]?.scrollIntoView({ block: 'center' });
-    buttons2?.[i >= 0 ? i : 0]?.scrollIntoView({ block: 'center' });
+    buttons?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
+    buttons2?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
     if (value === this._tick) return;
     this._tick = value;
 
-    if (this.aiData && value % 30 === 28) void this.getMatchAi();
+    if (this.aiData && value + 2 === this.activeTurn?.index) void this.getMatchAi();
     else {
       delete this.aiData;
       this.selectAiBoat();
@@ -188,7 +193,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       scene.add(this.aiRender.object);
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, (boat: Boat) => {
-      this.clickBoat(boat, false);
+      this.clickBoat(boat);
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, (ticks: Record<number, BoatTick>) => {
       this.boatTicks = ticks;
