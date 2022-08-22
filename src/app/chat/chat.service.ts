@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
-import { InCmd } from '../ws-messages';
+import { ReplaySubject } from 'rxjs';
+import { InCmd, OutCmd } from '../ws-messages';
 
 import { WsService } from '../ws.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
@@ -30,6 +31,7 @@ export class ChatService {
   commandsComponent: any;
   commandHistory: string[] = [];
   messages: Message[] = [];
+  messages$ = new ReplaySubject<Message[]>(1);
   saveText = '';
   historyIndex = -1;
   commands: this['selectedCommand'][] = [];
@@ -42,6 +44,7 @@ export class ChatService {
     private kbs: KeyBindingService,
     sound: SoundService,
   ) {
+    this.messages$.next(this.messages);
     this.ws.subscribe(InCmd.ChatCommands, commands => {
       this.commands = commands.lobby;
       this.commands.push(...commands.global);
@@ -75,6 +78,7 @@ export class ChatService {
         message.time = time.format('lll');
         message.ago = time.fromNow();
       }
+      this.messages$.next(this.messages);
     });
     this.ws.connected$.subscribe(value => {
       if (!value) this.messages = [];
@@ -93,6 +97,14 @@ export class ChatService {
     this.ws.subscribe(InCmd.UnblockUser, (u: string) => {
       for (const m of this.messages) if (m.from === u) m.blocked = false;
     });
+  }
+
+  sendMessage(text: string): void {
+    this.ws.send(OutCmd.ChatMessage, text);
+  }
+
+  sendCommand(text: string): void {
+    this.ws.send(OutCmd.ChatCommand, text);
   }
 
   setTell(name: string): void {

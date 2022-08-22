@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { InCmd } from '../../ws-messages';
+import { InCmd, OutCmd } from '../../ws-messages';
 import { WsService } from '../../ws.service';
 import { Message } from '../chat.service';
 
@@ -31,6 +31,14 @@ export class FriendsService {
     this.handlePlayers();
     this.handleFriends();
     this.handleInvites();
+  }
+
+  addFriend(name: string): void {
+    this.ws.send(OutCmd.FriendAdd, name);
+  }
+
+  declineFriend(invite: Invite): void {
+    this.ws.send(OutCmd.FriendDecline, invite);
   }
 
   private tapMessages() {

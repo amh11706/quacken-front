@@ -1,60 +1,78 @@
-<q-twod-render #renderer
-               [speed]="graphicSettings.speed.value"
-               [mapScale]="graphicSettings.mapScale.value"
-               [graphicSettings]="graphicSettings"></q-twod-render>
+<q-lobby-wrapper></q-lobby-wrapper>
 
-               <div class="container noselect"
-     id="hud">
-  <div id="boatcontrol"
-       oncontextmenu="event.preventDefault()">
-    <div id="time">
-      <div id="timebar"
-           [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
-    </div>
-    <q-move-input id="moves"
-                  (inputChange)="sendMoves()"
-                  (unusedTokensChange)="unusedTokens = $event"
-                  [reset]="resetMoves$"
-                  [input]="localBoat"
-                  [serverInput]="localBoat"
-                  [kbControls]="kbControls"
-                  [totalTokens]="totalTokens"
-                  [dragContext]="dragContext"
-                  [actions]="actions"
-                  [moveKeys]="moveKeys"
-                  [maxMoves]="myBoat.maxMoves"
-                  [maxShots]="myBoat.maxShots"></q-move-input>
-    <div id="boatStats">
-      <div id="damage"
-           matTooltip="Damage: {{myBoat.getDamage()}}%">
-        <div id="damagebar"
-             [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
+<div id="replayMenu"
+     class="container"
+     [qDrag]="handle"
+     [bindToWindow]="true">
+  <div #handle
+       class="handle"></div>
+
+  <mat-tab-group [(selectedIndex)]="tabIndex">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>turn_right</mat-icon>
+      </ng-template>
+
+      <div #turnTab>
+        <button *ngFor="let turn of turns"
+                mat-button
+                [color]="turn === activeTurn ? 'primary' : undefined"
+                class="turn"
+                (click)="clickTurn(turn)">
+          Turn {{turn.turn}}<br>
+          <div class="sinks">
+            <div *ngFor="let team of turn.teams; let i = index; let odd = odd"
+                 [class.right]="odd">
+              <mat-icon *ngFor="let sink of team.sinks"
+                        [title]="sink.message">sailing</mat-icon>
+            </div>
+          </div>
+
+          <div class="points">
+            <div *ngFor="let team of turn.teams; let i = index"
+                 [style.backgroundColor]="teamColors[i]"
+                 [title]="team.scoreChange"
+                 [style.width]="50 * team.scoreChange / maxScore+ 'px'"></div>
+          </div>
+        </button>
       </div>
-      <div id="bilge"
-           matTooltip="Bilge: {{myBoat.bilge || 0}}%">
-        <div id="bilgebar"
-             [style.transform]="'translateX(' + myBoat.bilge + 'px)'"></div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>show_chart</mat-icon>
+      </ng-template>
+
+      <div #moveTab id="moveTab">
+        <ng-container *ngIf="activeMove; else noActiveMove">
+          <p>Your move {{activeMove.Moves.map(mapMoves).join('')}} is {{activeMove.tier}} based on available options.</p>
+          <p>Rating: {{activeMove.Score.toFixed(2)}}</p>
+          <p>Shot Incline: {{(activeMove.ShotsHit - activeMove.ShotsTaken).toFixed(2)}}</p>
+          <p>Point Incline: {{activeMove.PointGain.toFixed(2)}}</p>
+          <br>
+          <p *ngIf="activeMove.wreckedBy.length">Moves that wreck you ({{activeMove.wreckedBy.length}}): {{activeMove.wreckedBy.join(', ')}}</p>
+          <p *ngIf="activeMove.wrecks.length">Moves that you wreck ({{activeMove.wrecks.length}}): {{activeMove.wrecks.join(', ')}}</p>
+          <p *ngIf="activeMove.blockedBy.length">Moves that block you ({{activeMove.blockedBy.length}}): {{activeMove.blockedBy.join(', ')}}</p>
+          <p *ngIf="activeMove.blocks.length">Moves that you block ({{activeMove.blocks.length}}): {{activeMove.blocks.join(', ')}}</p>
+          <br>
+          <p>Your best moves: {{bestMoves.score.join(', ')}}</p>
+          <p>Your safest moves: {{bestMoves.safest.join(', ')}}</p>
+          <p>Your coverage moves: {{bestMoves.points.join(', ')}}</p>
+          <p>Your +shots moves: {{bestMoves.plusShots.join(', ')}}</p>
+        </ng-container>
+        <ng-template #noActiveMove>
+          <p>Enter boat moves then press the green arrow to analyze.</p>
+        </ng-template>
+<!--         
+        <button *ngFor="let move of moves"
+                mat-button
+                class="turn">
+          Moves: {{move.Moves.join('')}}<br>
+          Score: {{move.Score.toFixed(2)}}<br>
+          Shot Incline: {{(move.ShotsHit - move.ShotsTaken).toFixed(2)}}<br>
+          Point Incline: {{move.PointGain.toFixed(2)}}<br>
+        </button> -->
       </div>
-    </div>
-
-    <q-move-source id="movesource"
-                   [totalTokens]="totalTokens"
-                   [unusedTokens]="unusedTokens"
-                   [dragContext]="dragContext"></q-move-source>
-    <button mat-icon-button
-            [disabled]="!myBoat.isMe || myBoat.ready"
-            id="hudReady"
-            (click)="imReady()">
-      <mat-icon>play_arrow</mat-icon>
-    </button>
-
-    <q-maneuver-source id="maneuvers"
-                       [unusedTokens]="unusedTokens"
-                       [dragContext]="dragContext"></q-maneuver-source>
-  </div>
-
-  <div id="chat">
-    <q-chat [disabled]="esc.open"></q-chat>
-  </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
-

@@ -6,7 +6,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
 
-const ClientVersion = 30;
+const ClientVersion = 31;
 
 export interface InMessage {
   cmd: InCmd | Internal;
@@ -144,12 +144,13 @@ export class WsService {
 
   request(cmd: OutCmd, data?: unknown): Promise<any> {
     const message = { cmd, id: this.nextId, data };
-    this.outMessages$.next(message);
     this.sendRaw(JSON.stringify(message));
-    return new Promise((resolve) => {
+    const p = new Promise((resolve) => {
       this.requests.set(this.nextId, resolve);
       this.nextId++;
     });
+    this.outMessages$.next(message);
+    return p;
   }
 
   private sendRaw(data: string) {

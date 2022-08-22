@@ -2,8 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
-import { OutCmd } from '../../ws-messages';
-import { WsService } from '../../ws.service';
 import { ChatService } from '../chat.service';
 
 @Component({
@@ -16,7 +14,6 @@ export class InputComponent implements OnInit, OnDestroy {
   private subs = new Subscription();
 
   constructor(
-    private ws: WsService,
     public chat: ChatService,
     private kbs: KeyBindingService,
   ) { }
@@ -87,8 +84,8 @@ export class InputComponent implements OnInit, OnDestroy {
     }
     this.chat.historyIndex = -1;
 
-    if (text[0] !== '/') return this.ws.send(OutCmd.ChatMessage, text);
-    this.ws.send(OutCmd.ChatCommand, text);
+    if (text[0] !== '/') return this.chat.sendMessage(text);
+    this.chat.sendCommand(text);
 
     const firstSpace = text.indexOf(' ');
     const secondSpace = text.indexOf(' ', firstSpace + 1);

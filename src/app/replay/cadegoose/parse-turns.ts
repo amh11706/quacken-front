@@ -8,6 +8,7 @@ import { InMessage } from '../../ws.service';
 
 export interface ParsedTurn {
   turn: number;
+  rawTurn: Turn;
   index: number;
   teams: {
     score: number;
@@ -16,7 +17,7 @@ export interface ParsedTurn {
   }[];
   sync: Sync;
   ticks: Record<number, BoatTick>;
-  moves: Record<number, { shots: [], moves: [] }>;
+  moves: Record<number, { shots: number[], moves: number[] }>;
   steps: BoatStatus[][];
   cSteps: Clutter[][];
   stats: Record<number, StatRow>;
@@ -24,9 +25,11 @@ export interface ParsedTurn {
 
 export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, number] {
   const turns: ParsedTurn[] = [];
+  if (!messages?.length) return [turns, '', 0];
   let maxScore = 0;
   let map = '';
   let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
+  let lastTurnRaw: Turn | undefined;
   let lastSync: Sync = { sync: [], cSync: [], turn: 0 };
   let moves: Record<number, { shots: [], moves: [] }> = {};
   let ticks: Record<number, BoatTick> = {};
@@ -43,6 +46,12 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
         case InCmd.Moves:
           moves[m.data.t] = { shots: m.data.s, moves: m.data.m };
           break;
+        case InCmd.DelBoat:
+          lastSync.sync = lastSync.sync.filter(b => b.id !== m.data);
+          break;
+        case InCmd.NewBoat:
+          lastSync.sync.push(m.data);
+          break;
         case InCmd.Sync:
           lastSync = m.data;
           break;
@@ -58,6 +67,7 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
             moves,
             sync: lastSync,
             turn: turns.length + 1,
+            rawTurn: lastTurnRaw || turn,
             index: i,
             teams: turn.points.map((score, j) => {
               const team = { score, scoreChange: score - (lastTurn.teams[j]?.score || 0), sinks: sinks[j] || [] };
@@ -71,6 +81,7 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
           moves = {};
           ticks = {};
           lastTurn = parsed;
+          lastTurnRaw = turn;
           turns.push(parsed);
           break;
         case InCmd.ChatMessage:

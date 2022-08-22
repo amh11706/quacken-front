@@ -4,7 +4,7 @@
                                  [minBufferPx]="100"
                                  [maxBufferPx]="200"
                                  class="textbox">
-      <ng-container *cdkVirtualFor="let m of messages$">
+      <ng-container *cdkVirtualFor="let m of chat.messages$">
         <p *ngIf="!m.blocked"
            [style.backgroundColor]="colors[m.type]">
           <ng-container [ngSwitch]="m.type">

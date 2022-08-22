@@ -36,7 +36,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   constructor(
     private location: Location,
     public esc: EscMenuService,
-    private ws: WsService,
+    protected ws: WsService,
     private ss: SettingsService,
     private fs: FriendsService,
     private route: ActivatedRoute,
@@ -79,7 +79,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  private async getMatch(id: number) {
+  protected async getMatch(id: number): Promise<void> {
     this.tick = 0;
     this.id = id;
     clearInterval(this.tickInterval);

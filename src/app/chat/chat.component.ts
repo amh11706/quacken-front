@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { WsService } from '../ws.service';
 import { ChatService, Message } from './chat.service';
-import { InCmd, Internal, OutCmd } from '../ws-messages';
-import { Invite } from './friends/friends.service';
+import { FriendsService, Invite } from './friends/friends.service';
 import { CommandsComponent } from './commands/commands.component';
 
 @Component({
@@ -32,24 +30,19 @@ export class ChatComponent implements OnInit, OnDestroy {
     '#5d7563', // team chat
   ];
 
-  messages$ = new ReplaySubject<Message[]>(1);
-
   private subs = new Subscription();
   private scrolledToBottom = true;
 
   constructor(
-    private ws: WsService,
     public chat: ChatService,
+    private fs: FriendsService,
     private router: Router,
     private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
     if (!this.output) return;
-    this.subs.add(this.ws.subscribe(InCmd.ChatMessage, (m) => this.addMessage(m)));
-    this.subs.add(this.ws.subscribe(Internal.RefreshChat, () => this.addMessage()));
     const output = this.output;
-    this.messages$.next(this.chat.messages);
     setTimeout(() => {
       output.scrollTo({ bottom: 0 });
       setTimeout(() => {
@@ -57,6 +50,8 @@ export class ChatComponent implements OnInit, OnDestroy {
         el.scrollTop = el.scrollHeight;
       });
     }, 50);
+
+    this.subs.add(this.chat.messages$.subscribe(m => this.addMessage(m[m.length - 1])));
   }
 
   ngOnDestroy(): void {
@@ -71,13 +66,13 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   accept(inv: Invite): Promise<boolean> | void {
     inv.resolved = true;
-    if (inv.ty === 0) this.ws.send(OutCmd.FriendAdd, inv.f);
+    if (inv.ty === 0) this.fs.addFriend(inv.f);
     else return this.router.navigate(['lobby', inv.tg]);
   }
 
   decline(inv: Invite): void {
     inv.resolved = true;
-    this.ws.send(OutCmd.FriendDecline, inv);
+    this.fs.declineFriend(inv);
   }
 
   addMessage(message?: Message): void {
@@ -87,7 +82,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
     if (!this.output) return;
     const output = this.output;
-    this.messages$.next(this.chat.messages);
     const el = output.elementRef.nativeElement;
     if (this.scrolledToBottom) {
       setTimeout(() => {

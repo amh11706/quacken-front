@@ -16,6 +16,7 @@ import { BoatRender } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { Lobby } from '../../lobby.component';
 import { FlagColorOffsets } from '../canvas/canvas.component';
+import { Turn } from '../../quacken/boats/boats.component';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = '0' | '1' | '2' | '3';
@@ -33,7 +34,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
   @Input() safeZone = true;
-  @Input() myBoat = new Boat('');
+  private _myBoat = new Boat('');
+  get myBoat(): Boat { return this._myBoat; }
+  @Input() set myBoat(b: Boat) {
+    this._myBoat = b;
+    this.colorFlags();
+  }
+
   @Input() speed = 15;
   @Input() fishBoats = 0;
   @Input() set map(map: number[][]) { void this.fillMap(map, []); }
@@ -101,15 +108,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     GuBoat.widthOffset = this.mapWidth - 1;
-    this.sub.add(this.ws.subscribe(InCmd.Turn, (t) => {
-      for (let i = 0; i < this.flags.length; i++) {
-        const flag = this.flags[i];
-        if (flag) flag.t = t.flags[i]?.t;
-      }
-      this.colorFlags();
+    this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
+      this.colorFlags(t.flags);
     }));
     this.sub.add(this.ws.subscribe(Internal.CenterOnBoat, () => {
-      if (!this.myBoat.name) return;
+      if (!this.myBoat.isMe) return;
       this.frame?.nativeElement.dispatchEvent(new Event('dblclick'));
     }));
 
@@ -163,8 +166,14 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     return (this.mapWidth + this.mapHeight) * 32;
   }
 
-  colorFlags(): void {
+  colorFlags(flags?: Turn['flags']): void {
     if (this.flags.length === 0) return;
+    if (flags) {
+      for (let i = 0; i < this.flags.length; i++) {
+        const flag = this.flags[i];
+        if (flag) flag.t = flags[i]?.t ?? flag.t;
+      }
+    }
     for (const f of this.flags) {
       if (f.points === undefined) continue;
       const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
@@ -176,7 +185,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public addObstacles(
-    x: number, y: number, tile: number, flags: { t: number, points?: number, cs?: number[] }[],
+    x: number, y: number, tile: number, flags: Turn['flags'],
   ): void {
     const obstacle = new Point().fromPosition({ x, y });
     const pOffsetX = obstacle.x;
@@ -211,7 +220,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  async fillMap(map: number[][], flags: any[]): Promise<void> {
+  async fillMap(map: number[][], flags: Turn['flags']): Promise<void> {
     await Promise.all([this.wind.prom, this.whirl.prom, this.water.prom, this.sz.prom]);
     const wasLoaded = !!this.canvas;
     if (!this.canvas) {

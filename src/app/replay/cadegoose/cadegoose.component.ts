@@ -18,6 +18,7 @@ import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entr
 import { Penalties, PenaltyComponent, PenaltySummary } from './penalty/penalty.component';
 import { SettingsService } from '../../settings/settings.service';
 import { ParsedTurn, ParseTurns } from './parse-turns';
+import { GuBoat, Point } from '../../lobby/cadegoose/twod-render/gu-boats/gu-boat';
 
 interface ScoreResponse {
   totals: PenaltySummary[]
@@ -248,19 +249,22 @@ export class CadegooseComponent implements OnInit, OnDestroy {
 
   clickBoat(boat: Boat, center = true, selectAi = true): void {
     if (selectAi) this.selectAiBoat(this.aiData?.boats.find(b => b.id === boat.id), false);
-    if (this.activeBoat === boat) {
-      if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat });
-      return;
-    }
     if (this.activeBoat) {
       this.activeBoat.isMe = false;
-      this.activeBoat.render?.rebuildHeader();
+      this.activeBoat.render?.rebuildHeader?.();
     }
-    boat.isMe = true;
-    boat.render?.rebuildHeader();
-    this.activeBoat = boat;
+    if (this.activeBoat === boat) {
+      this.activeBoat = new Boat('');
+      this.activeBoat.render = {} as any;
+      (this.activeBoat.render as GuBoat).coords = { ...(boat.render as GuBoat)?.coords } as Point;
+    } else {
+      boat.isMe = true;
+      boat.render?.rebuildHeader();
+      this.activeBoat = boat;
+    }
+
     if (this.ws.fakeWs) {
-      this.ws.fakeWs.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
+      this.ws.fakeWs.dispatchMessage({ cmd: Internal.MyBoat, data: this.activeBoat });
       this.ws.fakeWs.sId = boat.id;
     }
     if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat });

@@ -119,7 +119,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.handleKeys();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       this.myBoat = b;
-      this.resetMoves();
+      this.resetMoves(true);
     }));
     this.subs.add(this.ws.subscribe(Internal.ResetMoves, this.resetMoves.bind(this)));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
@@ -185,9 +185,11 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
-  protected resetMoves(): void {
-    if (!this.ws.connected || !this.myBoat.isMe) return;
-    if (this.turn <= this.lastMoveReset) return;
+  protected resetMoves(force = false): void {
+    if (!force) {
+      if (!this.ws.connected || !this.myBoat.isMe) return;
+      if (this.turn <= this.lastMoveReset) return;
+    }
     if (this.myBoat.moveLock === 99) this.myBoat.moveLock = 0;
     this.lastMoveReset = this.turn;
     for (const i in this.serverBoat.moves) this.serverBoat.moves[i] = 0;
