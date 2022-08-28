@@ -7,7 +7,7 @@
   <div #handle
        class="handle"></div>
 
-  <mat-tab-group [(selectedIndex)]="tabIndex">
+  <mat-tab-group [(selectedIndex)]="tabIndex" (selectedIndexChange)="clickTurn()">
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon>turn_right</mat-icon>
@@ -49,6 +49,7 @@
           <p>Rating: {{activeMove.Score.toFixed(2)}}</p>
           <p>Shot Incline: {{(activeMove.ShotsHit - activeMove.ShotsTaken).toFixed(2)}}</p>
           <p>Point Incline: {{activeMove.PointGain.toFixed(2)}}</p>
+          <p>Rocks Eaten: {{activeMove.RocksBumped.toFixed(2)}}</p>
           <br>
           <p *ngIf="activeMove.wreckedBy.length">Moves that wreck you ({{activeMove.wreckedBy.length}}): {{activeMove.wreckedBy.join(', ')}}</p>
           <p *ngIf="activeMove.wrecks.length">Moves that you wreck ({{activeMove.wrecks.length}}): {{activeMove.wrecks.join(', ')}}</p>

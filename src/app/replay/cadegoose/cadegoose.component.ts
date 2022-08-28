@@ -71,7 +71,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     delete this.scores;
     this.selectAiBoat();
     [this.turns, this.map, this.maxScore] = ParseTurns(messages);
-    if (this.turns.length) void this.getScores();
+    // if (this.turns.length) void this.getScores();
   }
 
   private map?: string;
@@ -253,7 +253,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       this.activeBoat.isMe = false;
       this.activeBoat.render?.rebuildHeader?.();
     }
-    if (this.activeBoat === boat) {
+    if (this.activeBoat === boat && selectAi) {
       this.activeBoat = new Boat('');
       this.activeBoat.render = {} as any;
       (this.activeBoat.render as GuBoat).coords = { ...(boat.render as GuBoat)?.coords } as Point;

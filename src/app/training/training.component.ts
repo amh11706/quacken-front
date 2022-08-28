@@ -1,10 +1,12 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Scene } from 'three';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { TeamColorsCss } from '../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 import { GuBoat, Point } from '../lobby/cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../lobby/quacken/boats/boat';
+import { AiRender } from '../replay/cadegoose/ai-render';
 import { ParsedTurn, ParseTurns } from '../replay/cadegoose/parse-turns';
 import { SettingMap, SettingsService } from '../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../ws-messages';
@@ -32,6 +34,8 @@ class MoveNode {
   DamageTaken = 0;
   ShotsHit = 0;
   ShotsTaken = 0;
+  RocksBumped = 0;
+  OppRocksBumped = 0;
   PointGain = 0;
 
   tier: MoveTiers = MoveTiers.Poor;
@@ -76,6 +80,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
   maxScore = 0;
   teamColors = TeamColorsCss;
   myBoat = new Boat('');
+  private aiRender = new AiRender();
 
   constructor(
     private ws: WsService,
@@ -85,6 +90,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.aiRender.setMetric('EndBonus');
     if (this.lobbyWrapper) {
       this.ws.fakeWs = this.lobbyWrapper.ws;
       this.ws.fakeWs.user = this.ws.user;
@@ -96,7 +102,11 @@ export class TrainingComponent implements OnInit, OnDestroy {
       if (v) this.ws.send(OutCmd.BnavJoin);
     }));
     this.sub.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, this.clickBoat.bind(this)));
+    this.sub.add(this.ws.fakeWs?.subscribe(Internal.Boats, () => null));
     this.sub.add(this.ws.fakeWs?.outMessages$.subscribe(this.handleFakeWs.bind(this)));
+    this.sub.add(this.ws.fakeWs?.subscribe(Internal.Scene, (scene: Scene) => {
+      scene.add(this.aiRender.object);
+    }));
   }
 
   ngOnDestroy(): void {
@@ -183,6 +193,10 @@ export class TrainingComponent implements OnInit, OnDestroy {
         map: this.map,
         myBoat: this.myBoat.id,
       });
+
+      this.aiRender.setBoat({
+        pm: response.points,
+      } as any);
       this.rawMoves = {
         moves: new Map(Object.entries(response.nodes)),
         boat: this.myBoat,
@@ -197,10 +211,12 @@ export class TrainingComponent implements OnInit, OnDestroy {
   }
 
   clickTurn(turn?: ParsedTurn): void {
-    if (!turn) return;
-    this.activeTurn = turn;
+    this.activeTurn = turn ?? this.activeTurn;
     const buttons = this.turnTab?.nativeElement.children;
-    buttons?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
+    setTimeout(() => {
+      buttons?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
+    });
+    if (!turn) return;
     this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Turn, data: this.activeTurn?.rawTurn });
     this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Sync, data: turn.sync });
     const moves = [];
@@ -213,46 +229,68 @@ export class TrainingComponent implements OnInit, OnDestroy {
   }
 
   private parseMoves() {
-    console.log(this.rawMoves);
-    // negative score = bad for myBoat, good for opponent. move = opponent's move.
+    let myMoveScores: { index: number, score: number }[] = [];
+    const zeroMove = this.rawMoves.moves?.get('0000');
+    if (!zeroMove) return;
+    for (let i = 0; i < zeroMove.length; i++) {
+      let score = 0;
+      this.rawMoves.moves?.forEach(nodes => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const n = nodes[i]!;
+        score += (n.ShotsHit - n.ShotsTaken) + (n.PointGain) - n.RocksBumped;
+      });
+      myMoveScores.push({ index: i, score });
+    }
+    myMoveScores.sort((a, b) => b.score - a.score);
+    myMoveScores = myMoveScores.slice(0, myMoveScores.length / 4);
+    const myMoves = new Set<number>();
+    myMoveScores.forEach(m => myMoves.add(m.index));
+
     let moveScores: { score: number, move: string, mappedMove: string }[] = [];
     this.rawMoves.moves?.forEach((nodes, move) => {
       let score = 0;
-      nodes.forEach(n => {
-        score += (n.ShotsHit - n.ShotsTaken) + (n.PointGain) * 2;
+      nodes.forEach((n, i) => {
+        if (!myMoves.has(i)) return;
+        score += (n.ShotsHit - n.ShotsTaken) + (n.PointGain) + n.OppRocksBumped * 2;
       });
-      score /= nodes.length;
       moveScores.push({ move, mappedMove: move.split('').map(mapMoves).join(''), score });
     });
-    moveScores.sort((a, b) => b.score - a.score);
-    moveScores = moveScores.slice(moveScores.length * 3 / 4);
+    moveScores.sort((a, b) => a.score - b.score);
+    moveScores = moveScores.filter((s, i) => {
+      return i < 30 && (s.score < 10 || i < 10);
+    });
+    console.log(moveScores);
 
     this.moves = {};
-    for (const s of moveScores) {
+    moveScores.forEach((s, i) => {
       const nodes = this.rawMoves.moves?.get(s.move);
-      if (!nodes) continue;
+      if (!nodes) return;
+      const multiplier = (moveScores.length * 2 - i) / moveScores.length;
       for (const n of nodes) {
         const move = n.Moves.map(mapMoves).join('');
         if (!this.moves[move]) this.moves[move] = new MoveNode(n.Moves);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const myNode = this.moves[move]!;
-        myNode.ShotsHit += n.ShotsHit;
-        myNode.ShotsTaken += n.ShotsTaken;
-        myNode.PointGain += n.PointGain;
+        myNode.ShotsHit += n.ShotsHit * multiplier;
+        myNode.ShotsTaken += n.ShotsTaken * multiplier;
+        myNode.RocksBumped += n.RocksBumped;
+        myNode.PointGain += n.PointGain * multiplier;
         const shotIncline = n.ShotsHit - n.ShotsTaken;
         if (shotIncline >= this.myBoat.maxShots * 2) myNode.wrecks.push(s.mappedMove);
         if (shotIncline <= -this.myBoat.maxShots * 2) myNode.wreckedBy.push(s.mappedMove);
-        if (n.PointGain >= 4) myNode.blocks.push(s.mappedMove);
-        if (n.PointGain <= -4 * 2) myNode.blockedBy.push(s.mappedMove);
+        if (n.PointGain >= 3) myNode.blocks.push(s.mappedMove);
+        if (n.PointGain <= -3) myNode.blockedBy.push(s.mappedMove);
       }
-    }
+    });
 
     const moves = Object.values(this.moves);
     let maxScore = -100;
     for (const n of moves) {
-      n.ShotsHit /= moves.length;
-      n.ShotsTaken /= moves.length;
-      n.PointGain /= moves.length;
-      n.Score = (n.ShotsHit - n.ShotsTaken) + (n.PointGain) * 2 + 2;
+      n.ShotsHit /= moveScores.length;
+      n.ShotsTaken /= moveScores.length;
+      n.RocksBumped /= moveScores.length;
+      n.PointGain /= moveScores.length;
+      n.Score = (n.ShotsHit - n.ShotsTaken) + (n.PointGain) - n.RocksBumped + 5;
       if (n.Score > maxScore) maxScore = n.Score;
     }
 
