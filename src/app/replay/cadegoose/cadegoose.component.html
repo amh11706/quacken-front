@@ -1,5 +1,5 @@
 <mat-tab-group [(selectedIndex)]="tabIndex"
-               (selectedIndexChange)="tabChange()">
+               (selectedIndexChange)="centerButtons()">
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon>turn_right</mat-icon>
@@ -60,7 +60,7 @@
     </button>
   </mat-tab>
 
-  <!-- <mat-tab>
+  <mat-tab>
     <ng-template mat-tab-label>
       AI
     </ng-template>
@@ -155,7 +155,7 @@
         </ng-container>
       </ng-container>
     </div>
-  </mat-tab> -->
+  </mat-tab>
 
   <mat-tab>
     <ng-template mat-tab-label>

@@ -52,10 +52,8 @@ export class CadegooseComponent implements OnInit, OnDestroy {
         break;
       }
     }
-    const buttons = this.turnTab?.nativeElement.children;
-    const buttons2 = this.penaltyBox?.nativeElement.children;
-    buttons?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
-    buttons2?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
+    this.centerButtons();
+
     if (value === this._tick) return;
     this._tick = value;
 
@@ -221,8 +219,13 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (myBoat) this.clickBoat(myBoat);
   }
 
-  tabChange(): void {
-    if (this.tabIndex === 0 || this.tabIndex === 2) setTimeout(() => this.tick = this._tick);
+  centerButtons(): void {
+    setTimeout(() => {
+      const buttons = this.turnTab?.nativeElement.children;
+      const buttons2 = this.penaltyBox?.nativeElement.children;
+      buttons?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
+      buttons2?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
+    });
   }
 
   private updateBoat() {

@@ -61,7 +61,11 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     }));
     this.subs.add(this.ws.subscribe(Internal.MyMoves, (moves: MoveMessage) => {
       this.localBoat.moves = [...moves.moves];
-      if (moves.shots) this.localBoat.shots = [...moves.shots];
+      this.serverBoat.moves = [...moves.moves];
+      if (moves.shots) {
+        this.localBoat.shots = [...moves.shots];
+        this.serverBoat.shots = [...moves.shots];
+      }
     }));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
       if (!t.attr) t.attr = {};

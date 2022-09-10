@@ -25,26 +25,32 @@ const enum MoveTiers {
   Incredible = 'Incredible',
 }
 
+const shotNames = [
+  'Move 1 Left',
+  'Move 1 Right',
+  'Move 2 Left',
+  'Move 2 Right',
+  'Move 3 Left',
+  'Move 3 Right',
+  'Move 4 Left',
+  'Move 4 Right',
+];
+
 class MoveNode {
-  x = 0;
-  y = 0;
-  Face = 0;
-  MoveCount = 0;
   Score = 0;
-  DamageTaken = 0;
   ShotsHit = 0;
   ShotsTaken = 0;
   RocksBumped = 0;
-  OppRocksBumped = 0;
   PointGain = 0;
+  ShotsHitArray: number[] = [];
+  ShotsTakenArray: number[] = [];
 
   tier: MoveTiers = MoveTiers.Poor;
-  wreckedBy: string[] = [];
-  wrecks: string[] = [];
-  blockedBy: string[] = [];
-  blocks: string[] = [];
-
-  constructor(public Moves: number[]) { }
+  WreckedBy: string[] = [];
+  Wrecks: string[] = [];
+  BlockedBy: string[] = [];
+  Blocks: string[] = [];
+  Moves = '';
 }
 
 @Component({
@@ -63,7 +69,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
   turns: ParsedTurn[] = [];
   private moves: Record<string, MoveNode> = {};
   private rawMoves: {
-    moves?: Map<string, MoveNode[]>;
+    moves?: Map<string, MoveNode>;
     boat?: Boat;
     turn?: ParsedTurn;
   } = {};
@@ -74,6 +80,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
     points: [] as string[],
     score: [] as string[],
   };
+
+  missedShots: string[] = [];
 
   activeTurn?: ParsedTurn;
   activeMove?: MoveNode;
@@ -140,8 +148,12 @@ export class TrainingComponent implements OnInit, OnDestroy {
       tick.t[2][0] = 4;
       this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.BoatTick, data: tick });
     }
-    this.ws.fakeWs?.dispatchMessage({ cmd: Internal.ResetMoves, data: true });
-    setTimeout(() => this.myBoat.moveLock = -1);
+    setTimeout(() => {
+      this.myBoat.moveLock = -1;
+      if (this.myBoat.isMe) {
+        this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: this.activeTurn?.moves[this.myBoat.id] });
+      }
+    });
     delete this.activeMove;
   }
 
@@ -170,7 +182,15 @@ export class TrainingComponent implements OnInit, OnDestroy {
     switch (m.cmd) {
       case OutCmd.Moves:
       case OutCmd.Shots:
-        if (m.cmd === OutCmd.Moves) this.myBoat.moves = m.data;
+        m.data = [...m.data];
+        // eslint-disable-next-line no-case-declarations
+        const myMoves = this.activeTurn?.moves[this.myBoat.id];
+        if (m.cmd === OutCmd.Moves) {
+          this.myBoat.moves = m.data;
+          if (myMoves)myMoves.moves = m.data;
+        } else if (myMoves) {
+          myMoves.shots = m.data;
+        }
         this.ws.fakeWs?.dispatchMessage(m as unknown as InMessage);
         delete this.activeMove;
         break;
@@ -186,28 +206,37 @@ export class TrainingComponent implements OnInit, OnDestroy {
     if (!turn || !this.myBoat.isMe) return;
     turn.moves[this.myBoat.id] = moveMessage;
 
-    if (this.myBoat !== this.rawMoves.boat || this.activeTurn !== this.rawMoves.turn) {
-      const response = await this.ws.request(OutCmd.MatchTraining, {
-        sync: turn.sync.sync,
-        moves: turn.moves,
-        map: this.map,
-        myBoat: this.myBoat.id,
-      });
+    // if (this.myBoat !== this.rawMoves.boat || this.activeTurn !== this.rawMoves.turn) {
+    const response = await this.ws.request(OutCmd.MatchTraining, {
+      sync: turn.sync.sync,
+      moves: turn.moves,
+      map: this.map,
+      myBoat: this.myBoat.id,
+    });
 
-      this.aiRender.setBoat({
-        pm: response.points,
-      } as any);
-      this.rawMoves = {
-        moves: new Map(Object.entries(response.nodes)),
-        boat: this.myBoat,
-        turn: this.activeTurn,
-      };
-      this.parseMoves();
-    }
+    this.aiRender.setBoat({
+      pm: response.points,
+    } as any);
+    this.rawMoves = {
+      moves: new Map(Object.entries(response.nodes)),
+      boat: this.myBoat,
+      turn: this.activeTurn,
+    };
+    this.parseMoves();
+    // }
 
-    this.activeMove = this.moves[this.myBoat.moves.map(mapMoves).join('')];
-    this.myBoat.moves = this.activeMove?.Moves || this.myBoat.moves;
+    this.activeMove = this.moves[this.myBoat.moves.join('')];
+    this.updateShotsMissed();
     this.tabIndex = 1;
+  }
+
+  private updateShotsMissed() {
+    this.missedShots = [];
+    if (!this.activeMove) return;
+    const myShots = this.activeTurn?.moves[this.myBoat.id]?.shots;
+    this.activeMove.ShotsHitArray.forEach((s, i) => {
+      if (s && myShots?.[i] !== this.myBoat.maxShots) this.missedShots.push(shotNames[i] || '');
+    });
   }
 
   clickTurn(turn?: ParsedTurn): void {
@@ -229,85 +258,40 @@ export class TrainingComponent implements OnInit, OnDestroy {
   }
 
   private parseMoves() {
-    let myMoveScores: { index: number, score: number }[] = [];
-    const zeroMove = this.rawMoves.moves?.get('0000');
-    if (!zeroMove) return;
-    for (let i = 0; i < zeroMove.length; i++) {
-      let score = 0;
-      this.rawMoves.moves?.forEach(nodes => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const n = nodes[i]!;
-        score += (n.ShotsHit - n.ShotsTaken) + (n.PointGain) - n.RocksBumped;
-      });
-      myMoveScores.push({ index: i, score });
-    }
-    myMoveScores.sort((a, b) => b.score - a.score);
-    myMoveScores = myMoveScores.slice(0, myMoveScores.length / 4);
-    const myMoves = new Set<number>();
-    myMoveScores.forEach(m => myMoves.add(m.index));
-
-    let moveScores: { score: number, move: string, mappedMove: string }[] = [];
-    this.rawMoves.moves?.forEach((nodes, move) => {
-      let score = 0;
-      nodes.forEach((n, i) => {
-        if (!myMoves.has(i)) return;
-        score += (n.ShotsHit - n.ShotsTaken) + (n.PointGain) + n.OppRocksBumped * 2;
-      });
-      moveScores.push({ move, mappedMove: move.split('').map(mapMoves).join(''), score });
-    });
-    moveScores.sort((a, b) => a.score - b.score);
-    moveScores = moveScores.filter((s, i) => {
-      return i < 30 && (s.score < 10 || i < 10);
-    });
-    console.log(moveScores);
-
-    this.moves = {};
-    moveScores.forEach((s, i) => {
-      const nodes = this.rawMoves.moves?.get(s.move);
-      if (!nodes) return;
-      const multiplier = (moveScores.length * 2 - i) / moveScores.length;
-      for (const n of nodes) {
-        const move = n.Moves.map(mapMoves).join('');
-        if (!this.moves[move]) this.moves[move] = new MoveNode(n.Moves);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const myNode = this.moves[move]!;
-        myNode.ShotsHit += n.ShotsHit * multiplier;
-        myNode.ShotsTaken += n.ShotsTaken * multiplier;
-        myNode.RocksBumped += n.RocksBumped;
-        myNode.PointGain += n.PointGain * multiplier;
-        const shotIncline = n.ShotsHit - n.ShotsTaken;
-        if (shotIncline >= this.myBoat.maxShots * 2) myNode.wrecks.push(s.mappedMove);
-        if (shotIncline <= -this.myBoat.maxShots * 2) myNode.wreckedBy.push(s.mappedMove);
-        if (n.PointGain >= 3) myNode.blocks.push(s.mappedMove);
-        if (n.PointGain <= -3) myNode.blockedBy.push(s.mappedMove);
-      }
-    });
-
-    const moves = Object.values(this.moves);
     let maxScore = -100;
-    for (const n of moves) {
-      n.ShotsHit /= moveScores.length;
-      n.ShotsTaken /= moveScores.length;
-      n.RocksBumped /= moveScores.length;
-      n.PointGain /= moveScores.length;
-      n.Score = (n.ShotsHit - n.ShotsTaken) + (n.PointGain) - n.RocksBumped + 5;
+    this.rawMoves.moves?.forEach(n => {
+      n.Score = n.Score / 100 + 5;
+      n.ShotsHit /= 100;
+      n.ShotsTaken /= 100;
+      n.PointGain /= 100;
+      n.RocksBumped /= 100;
       if (n.Score > maxScore) maxScore = n.Score;
-    }
+    });
 
-    for (const n of moves) {
+    const moves: MoveNode[] = [];
+    this.rawMoves.moves?.forEach((n, m) => {
       if (n.Score >= maxScore * 0.9) n.tier = MoveTiers.Incredible;
       else if (n.Score >= maxScore * 0.8) n.tier = MoveTiers.Excellent;
       else if (n.Score >= maxScore * 0.6) n.tier = MoveTiers.Good;
       else if (n.Score >= maxScore * 0.4) n.tier = MoveTiers.Fine;
-    }
+      else n.tier = MoveTiers.Poor;
+
+      if (n.WreckedBy) n.WreckedBy = n.WreckedBy.map(m => m.split('').map(mapMoves).join(''));
+      if (n.Wrecks) n.Wrecks = n.Wrecks.map(m => m.split('').map(mapMoves).join(''));
+      if (n.BlockedBy) n.BlockedBy = n.BlockedBy.map(m => m.split('').map(mapMoves).join(''));
+      if (n.Blocks) n.Blocks = n.Blocks.map(m => m.split('').map(mapMoves).join(''));
+      n.Moves = m.split('').map(mapMoves).join('');
+      moves.push(n);
+      this.moves[m] = n;
+    });
 
     moves.sort((b, a) => a.Score - b.Score);
-    this.bestMoves.score = moves.slice(0, 4).map(m => m.Moves.map(mapMoves).join(''));
+    this.bestMoves.score = moves.slice(0, 4).map(m => m.Moves);
     moves.sort((b, a) => a.PointGain - b.PointGain);
-    this.bestMoves.points = moves.slice(0, 4).map(m => m.Moves.map(mapMoves).join(''));
+    this.bestMoves.points = moves.slice(0, 4).map(m => m.Moves);
     moves.sort((a, b) => a.ShotsTaken - b.ShotsTaken);
-    this.bestMoves.safest = moves.slice(0, 4).map(m => m.Moves.map(mapMoves).join(''));
+    this.bestMoves.safest = moves.slice(0, 4).map(m => m.Moves);
     moves.sort((b, a) => a.ShotsHit - a.ShotsTaken - b.ShotsHit + b.ShotsTaken);
-    this.bestMoves.plusShots = moves.slice(0, 4).map(m => m.Moves.map(mapMoves).join(''));
+    this.bestMoves.plusShots = moves.slice(0, 4).map(m => m.Moves);
   }
 }
