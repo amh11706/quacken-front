@@ -187,7 +187,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
         const myMoves = this.activeTurn?.moves[this.myBoat.id];
         if (m.cmd === OutCmd.Moves) {
           this.myBoat.moves = m.data;
-          if (myMoves)myMoves.moves = m.data;
+          if (myMoves) myMoves.moves = m.data;
         } else if (myMoves) {
           myMoves.shots = m.data;
         }
