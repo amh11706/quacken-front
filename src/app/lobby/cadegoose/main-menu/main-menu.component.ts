@@ -70,13 +70,13 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.firstJoin = false;
         this.es.activeTab = 0;
       }
+      // wait to make sure we parsed the lobby users first
       await new Promise((resolve) => setTimeout(resolve, 100));
       this.teams = m.players;
       this.ready = false;
       this.myTeam = 99;
       this.teamPlayers = [];
       for (let i = 0; i < m.points.length; i++) this.teamPlayers.push([]);
-      // wait to make sure we parsed the lobby users first
       for (const [id, p] of Object.entries(this.teams)) {
         this.setTeam(+id, p.t);
         if (+id === this.ws.sId) {
