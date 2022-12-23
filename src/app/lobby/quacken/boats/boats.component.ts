@@ -201,7 +201,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   protected handleTurn(turn: Turn): void {
     if (this.turn) {
-      console.log('got turn while in turn', this.turn);
+      // console.log('got turn while in turn', this.turn);
       return;
     }
     BoatRender.tweens.update(Infinity);
@@ -345,7 +345,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       }
       setTimeout(() => {
         this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
-        console.log('new boat refresh');
+        // console.log('new boat refresh');
         this.map?.dispatchEvent(new Event('dblclick'));
       });
       this.myBoat = boat;
