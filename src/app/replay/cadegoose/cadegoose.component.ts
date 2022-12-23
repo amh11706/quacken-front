@@ -74,7 +74,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
 
   private map?: string;
   teamColors = TeamColorsCss;
-  tabIndex = 2;
+  tabIndex = 1;
   turns: ParsedTurn[] = [];
   maxScore = 0;
   activeTurn?: ParsedTurn;
@@ -142,7 +142,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
 
   private subs = new Subscription();
 
-  constructor(private ws: WsService, private dialog: MatDialog, private ss: SettingsService) {
+  constructor(public ws: WsService, private dialog: MatDialog, private ss: SettingsService) {
     this.filteredShips = this.shipCtrl.valueChanges.pipe(
       startWith(null),
       map((ship: string | null) => ship ? this._filter(ship) : this.ships.slice()));
