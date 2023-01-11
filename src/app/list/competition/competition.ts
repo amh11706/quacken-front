@@ -8,7 +8,7 @@ const BaseSettings = {
   jobberQuality: {
     id: 27,
     value: 105,
-    data: { Sail: 80, Carp: 80, Bilge: 80, Cannon: 80, Maneuver: 60 },
+    data: { Sail: 100, Carp: 100, Bilge: 100, Cannon: 100, Maneuver: 0 },
   },
   turnTime: { id: 30, value: 30 },
   turns: { id: 34, value: 60 },
@@ -30,25 +30,25 @@ interface Competition {
 
 export const Competitions: Competition[] = [
   {
-    description: 'Black Flag Friends and Allies 2v2',
+    description: '2023 Sabotage 1v1 tournament',
     rounds: [
       {
-        description: 'Round 1',
+        description: 'Group stage',
         games: [
           {
             ...BaseSettings,
-            name: { data: 'R1 - 1', value: 0 },
-            map: { id: 18, value: 385, data: 'R1 - 1' },
+            name: { data: 'Match 1 (A, B)', value: 0 },
+            map: { id: 18, value: 462, data: 'SAB_1v1_I' },
           },
           {
             ...BaseSettings,
-            name: { data: 'R1 - 2', value: 0 },
-            map: { id: 18, value: 367, data: 'R1 - 2' },
+            name: { data: 'Match 2 (C, D)', value: 0 },
+            map: { id: 18, value: 454, data: '2023_G_R1' },
           },
           {
             ...BaseSettings,
-            name: { data: 'R1 - 3', value: 0 },
-            map: { id: 18, value: 398, data: 'R1 - 3' },
+            name: { data: 'Bo3 (E) game 1', value: 0 },
+            map: { id: 18, value: 464, data: 'SAB_1v1_III' },
           },
         ],
       },
