@@ -17,7 +17,7 @@ const BaseSettings = {
   spawnDelay: { id: 42, value: 1 },
   teams: { id: 43, value: 2 },
   fishBoats: { id: 45, value: 0 },
-  allowGuests: { id: 46, value: 1 },
+  allowGuests: { id: 46, value: 0 },
 };
 
 interface Competition {
