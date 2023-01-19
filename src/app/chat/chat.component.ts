@@ -22,7 +22,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     '#873600', // name with info message
     '#2874A6', // sent tell
     '#1A5276', // recieved tell
-    '#9933ff', // discord message
+    '#6600cc', // discord message
     '#873600', // last seen message
     '#873600', // invitiation
     'maroon', // alert/broadcast
