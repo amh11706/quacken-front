@@ -48,7 +48,17 @@ export const Competitions: Competition[] = [
           {
             ...BaseSettings,
             name: { data: 'Bo3 (E) game 1', value: 0 },
-            map: { id: 18, value: 464, data: 'SAB_1v1_III' },
+            map: { id: 18, value: 463, data: 'SAB_1v1_II' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'Bo3 (E) game 2', value: 0 },
+            map: { id: 18, value: 476, data: 'SAB_1v1_V' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'Bo3 (E) game 3', value: 0 },
+            map: { id: 18, value: 477, data: 'SAB_1v1_VI' },
           },
         ],
       },

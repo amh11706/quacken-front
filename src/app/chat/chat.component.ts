@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ChatService, Message } from './chat.service';
 import { FriendsService, Invite } from './friends/friends.service';
-import { CommandsComponent } from './commands/commands.component';
 
 @Component({
   selector: 'q-chat',
@@ -23,7 +22,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     '#873600', // name with info message
     '#2874A6', // sent tell
     '#1A5276', // recieved tell
-    '#873600', // command list
+    '#9933ff', // discord message
     '#873600', // last seen message
     '#873600', // invitiation
     'maroon', // alert/broadcast
@@ -76,10 +75,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   addMessage(message?: Message): void {
-    if (message?.type === 6 && !this.disabled) {
-      this.dialog.open(CommandsComponent, { data: message, height: '50vh' });
-      return;
-    }
+    // if (message?.type === 6 && !this.disabled) {
+    //   this.dialog.open(CommandsComponent, { data: message, height: '50vh' });
+    //   return;
+    // }
     if (!this.output) return;
     const output = this.output;
     const el = output.elementRef.nativeElement;

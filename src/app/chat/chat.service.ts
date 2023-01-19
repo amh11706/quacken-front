@@ -61,7 +61,7 @@ export class ChatService {
     });
 
     this.ws.subscribe(InCmd.ChatMessage, (message: Message) => {
-      if (message.type === 6) return;
+      // if (message.type === 6) return;
       if ((document.hidden && message.type === 5) || [8, 9].includes(message.type)) {
         void sound.play(Sounds.Notification);
       }
