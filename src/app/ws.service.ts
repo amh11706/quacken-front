@@ -5,6 +5,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { environment } from '../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
+import { AuthGuard } from './auth.guard';
 
 const ClientVersion = 36;
 
@@ -42,11 +43,12 @@ export class WsService {
   sId?: number;
   copy?: number;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private guard: AuthGuard) {
     this.subscribe(InCmd.Kick, (reason: string) => {
       this.close();
       WsService.reason = reason;
       window.localStorage.removeItem('token');
+      this.guard.triedPath = location.hash.substr(2);
       void this.router.navigate(['auth/login']);
     });
     this.subscribe(InCmd.NavigateTo, (path: string) => {
