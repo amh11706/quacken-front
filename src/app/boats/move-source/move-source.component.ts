@@ -33,10 +33,10 @@ export class MoveSourceComponent implements OnDestroy {
     maneuvers: [0, 0, 0, 0],
   };
 
+  @Input() wantMove = 2;
   @Output() wantMoveChange = new EventEmitter<number>();
 
   auto = true;
-  wantMove = 2;
   private subs = new Subscription();
 
   ngOnDestroy(): void {

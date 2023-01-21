@@ -24,6 +24,8 @@ export interface BoatTick {
   b: number;
   tp: number;
   attr: Record<number, number>;
+  wt: number;
+  wm: number;
 }
 
 @Component({

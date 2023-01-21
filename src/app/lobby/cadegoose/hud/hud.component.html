@@ -39,6 +39,7 @@
                    [dragContext]="dragContext"
                    [tokenStrings]="tokenStrings"
                    [updateWantToken]="updateWantMove$"
+                   [wantMove]="lastTick.wt"
                    (wantMoveChange)="setWantMove($event)"></q-move-source>
     <button *ngIf="secondsPerTurn === 40"
             mat-icon-button
@@ -50,6 +51,7 @@
 
     <q-maneuver-source id="maneuvers"
                        (wantManeuverChange)="setWantToken($event)"
+                       [wantManeuver]="lastTick.wm"
                        [unusedTokens]="unusedTokens"
                        [dragContext]="dragContext"></q-maneuver-source>
   </div>

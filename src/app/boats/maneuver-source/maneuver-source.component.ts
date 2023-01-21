@@ -21,7 +21,7 @@ export class ManeuverSourceComponent {
     maneuvers: [0, 0, 0, 0],
   };
 
-  wantManeuver = 0;
+  @Input() wantManeuver = 0;
   @Output() wantManeuverChange = new EventEmitter<number>();
 
   setWantToken(i: number): void {
