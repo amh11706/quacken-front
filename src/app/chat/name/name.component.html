@@ -31,7 +31,9 @@
 
 <mat-menu #nameMenu="matMenu">
   <ng-template matMenuContent>
-    <p *ngIf="message.from === 'Bot'; else notabot">It's a bot</p>
+    <button *ngIf="message.copy === 0; else notabot"
+            mat-menu-item
+            (click)="openProfile()">It's a bot</button>
     <ng-template #notabot>
       <button *ngIf="message.from !== 'Guest'"
               mat-menu-item
@@ -39,9 +41,10 @@
         Profile
       </button>
       <ng-container *ngIf="!offline">
-        <button mat-menu-item
-                (click)="sendTell()">
-          Send Tell
+        <button *ngFor="let cmd of chat.nameCommands"
+                mat-menu-item
+                (click)="sendCmd(cmd)">
+          {{cmd.title | titlecase}}
         </button>
         <ng-container *ngIf="ws.user?.name !== 'Guest'">
           <button *ngIf="!message.friend"
@@ -61,16 +64,6 @@
             Unblock
           </button>
         </ng-template>
-        <ng-container *ngIf="fs.allowInvite">
-          <button mat-menu-item
-                  (click)="invite()">
-            Invite to Lobby
-          </button>
-          <button mat-menu-item
-                  (click)="kick()">
-            Kick
-          </button>
-        </ng-container>
       </ng-container>
     </ng-template>
   </ng-template>

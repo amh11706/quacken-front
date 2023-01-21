@@ -1,6 +1,6 @@
 <input #name
        matInput
-       [placeholder]="value"
+       [placeholder]="value || 'name'"
        (focus)="myControl.setValue('')"
        [formControl]="myControl"
        [matAutocomplete]="auto">

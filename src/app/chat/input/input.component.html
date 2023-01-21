@@ -16,6 +16,8 @@
       <q-name-search *ngSwitchCase="'name'"
                      [onlineOnly]="true"
                      [(value)]="param.value"></q-name-search>
+      <q-name-search *ngSwitchCase="'nameany'"
+                     [(value)]="param.value"></q-name-search>
 
       <span *ngSwitchCase="'new'">new</span>
 

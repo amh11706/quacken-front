@@ -2,10 +2,11 @@ import { Component, Input } from '@angular/core';
 
 import { WsService } from '../../ws.service';
 import { OutCmd } from '../../ws-messages';
-import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { StatService } from '../../esc-menu/profile/stat.service';
 import { FriendsService } from '../friends/friends.service';
-import { ChatService, Message } from '../chat.service';
+import { ChatService, Message, Command } from '../chat.service';
+import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
+import { KeyActions } from '../../settings/key-binding/key-actions';
 
 @Component({
   selector: 'q-name',
@@ -21,7 +22,7 @@ export class NameComponent {
     public stat: StatService,
     public ws: WsService,
     public fs: FriendsService,
-    private es: EscMenuService,
+    private kbs: KeyBindingService,
   ) { }
 
   private getName(): string {
@@ -34,8 +35,14 @@ export class NameComponent {
     this.stat.openUser(this.message.from);
   }
 
-  sendTell(): void {
-    this.chat.sendTell(this.getName());
+  sendCmd(cmd: Command): void {
+    if (cmd.params.length <= 1) {
+      return this.ws.send(OutCmd.ChatCommand, `${cmd.base} ${this.getName()}`);
+    }
+    this.chat.selectedCommand = cmd;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    cmd.params[0]!.value = this.getName();
+    this.kbs.emitAction(KeyActions.FocusChat);
   }
 
   add(): void {
@@ -48,13 +55,5 @@ export class NameComponent {
 
   unblock(): void {
     this.ws.send(OutCmd.Unblock, this.message.from);
-  }
-
-  invite(): void {
-    this.ws.send(OutCmd.ChatCommand, '/invite ' + this.getName());
-  }
-
-  kick(): void {
-    this.ws.send(OutCmd.ChatCommand, '/kick ' + this.getName());
   }
 }

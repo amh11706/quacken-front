@@ -74,7 +74,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.fs.declineFriend(inv);
   }
 
-  addMessage(message?: Message): void {
+  addMessage(_message?: Message): void {
     // if (message?.type === 6 && !this.disabled) {
     //   this.dialog.open(CommandsComponent, { data: message, height: '50vh' });
     //   return;
