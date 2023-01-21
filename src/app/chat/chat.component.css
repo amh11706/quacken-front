@@ -1,6 +1,7 @@
 .chatbox {
   font-size: 14px;
   margin-right:5px;
+  min-width: 300px;
 }
 
 .output {
