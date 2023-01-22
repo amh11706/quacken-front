@@ -35,7 +35,7 @@
             </span>
 
             <span *ngSwitchCase="6">
-              {{m.from}} says "{{m.message}}"
+              {{m.from ? m.from + ' says "' + m.message + '"' : m.message}}
             </span>
 
             <span *ngSwitchCase="7">
