@@ -28,7 +28,7 @@
 
 <ng-template #cadeView
              let-settings="settings">
-  <mat-icon title="Jobber Quality ({{settings.jobberQuality.value}})"
+  <mat-icon title="Jobber Quality ({{settings.jobberQuality.data?.label || settings.jobberQuality.value}})"
             [style.color]="'rgb('+(255-settings.jobberQuality.value*2)+','+(settings.jobberQuality.value)*2+',0)'">
     show_chart
   </mat-icon>
