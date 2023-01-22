@@ -8,7 +8,14 @@ const BaseSettings = {
   jobberQuality: {
     id: 27,
     value: 105,
-    data: { Sail: 100, Carp: 100, Bilge: 100, Cannon: 100, Maneuver: 10 },
+    data: {
+      Sail: 100,
+      Carp: 100,
+      Bilge: 100,
+      Cannon: 100,
+      Maneuver: 10,
+      label: 'Sail: 100, Carp: 100, Bilge: 100, Cannon: 100, Maneuver: 10',
+    },
   },
   turnTime: { id: 30, value: 30 },
   turns: { id: 34, value: 60 },
