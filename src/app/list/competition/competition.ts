@@ -40,47 +40,42 @@ export const Competitions: Competition[] = [
     description: '2023 Sabotage 1v1 tournament',
     rounds: [
       {
-        description: 'Group stage',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'Match 1 (A, B)', value: 0 },
-            map: { id: 18, value: 462, data: 'SAB_1v1_I' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Match 2 (C, D)', value: 0 },
-            map: { id: 18, value: 454, data: '2023_G_R1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Bo3 (E) game 1', value: 0 },
-            map: { id: 18, value: 463, data: 'SAB_1v1_II' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Bo3 (E) game 2', value: 0 },
-            map: { id: 18, value: 476, data: 'SAB_1v1_V' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Bo3 (E) game 3', value: 0 },
-            map: { id: 18, value: 477, data: 'SAB_1v1_VI' },
-          },
-        ],
-      },
-      {
-        description: 'KO stage',
+        description: 'KO stage R32',
         games: [
           {
             ...BaseSettings,
             name: { data: 'KO R32 G1', value: 0 },
-            map: { id: 18, value: 481, data: '2023-Map4' },
+            map: { id: 18, value: 483, data: '2023-Map6' },
           },
           {
             ...BaseSettings,
+            name: { data: 'KO R32 G2', value: 0 },
+            map: { id: 18, value: 482, data: '2023-Map5' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'KO R32 G3', value: 0 },
+            map: { id: 18, value: 481, data: '2023-Map4' },
+          },
+        ],
+      },
+      {
+        description: 'KO stage R16',
+        games: [
+          {
+            ...BaseSettings,
             name: { data: 'KO R16 G1', value: 0 },
+            map: { id: 18, value: 480, data: '2023-Map3' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'KO R16 G2', value: 0 },
             map: { id: 18, value: 479, data: '2023-Map2' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'KO R16 G3', value: 0 },
+            map: { id: 18, value: 478, data: '2023-Map1' },
           },
         ],
       },
