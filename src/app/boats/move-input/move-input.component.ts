@@ -128,7 +128,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     }));
 
     for (const [key, value] of Object.entries(this.moveKeys)) {
-      this.subs.add(this.kbs.subscribe(value, v => { if (v) this.placeMove(+key); }));
+      this.subs.add(this.kbs.subscribe(value, v => { if (v && this.kbControls) this.placeMove(+key); }));
     }
 
     this.subs.add(this.kbs.subscribe(this.actions.nextSlot, v => {

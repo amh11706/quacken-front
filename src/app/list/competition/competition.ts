@@ -79,6 +79,26 @@ export const Competitions: Competition[] = [
           },
         ],
       },
+      {
+        description: 'QF',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'QF G1', value: 0 },
+            map: { id: 18, value: 487, data: '2023_KO_G7' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'QF G2', value: 0 },
+            map: { id: 18, value: 489, data: '2023_KO_G9' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'QF G3', value: 0 },
+            map: { id: 18, value: 491, data: '2023_KO_G10' },
+          },
+        ],
+      },
       // {
       //   description: 'Loser bracket - Round 6',
       //   games: [
