@@ -99,6 +99,31 @@ export const Competitions: Competition[] = [
           },
         ],
       },
+      {
+        description: 'Semi finals',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'SF G1', value: 0 },
+            map: { id: 18, value: 488, data: '2023_KO_G8' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'SF G2', value: 0 },
+            map: { id: 18, value: 492, data: '2023_KO_G11' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'SF G3', value: 0 },
+            map: { id: 18, value: 493, data: '2023_KO_G12' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'SF tie break', value: 0 },
+            map: { id: 18, value: 495, data: '2023_KO_G13' },
+          },
+        ],
+      },
       // {
       //   description: 'Loser bracket - Round 6',
       //   games: [

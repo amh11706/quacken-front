@@ -48,7 +48,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() set editor(e: MapEditor) { this.mapUtil.map = e; }
   @Input() set undo(u: (source: MapTile[][], target: MapTile[][]) => void) { this.mapUtil.undo = u; }
   @Input() set setTile(st: ((x: number, y: number, v: number) => MapTile | undefined) | 0) {
-    if (st) this.mapUtil.setTile = st;
+    this.mapUtil.setTile = st || undefined;
   }
 
   @Input() ctrlZoom = false;
