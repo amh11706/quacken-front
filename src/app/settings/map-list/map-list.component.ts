@@ -10,6 +10,18 @@ import { MapFilterComponent } from './map-filter/map-filter.component';
 import { Settings } from '../setting/settings';
 import { MapOption } from './map-card/map-card.component';
 
+const enum SortOptions {
+  AscendingAvgRating = 'Ascending Avg. Rating',
+  DescendingAvgRating = 'Descending Avg. Rating',
+  Newest = 'Newest',
+  Oldest = 'Oldest',
+  AscendingUser = 'Ascending User',
+  DescendingUser = 'Descending User',
+  AscendingMapName = 'Ascending Map Name',
+  DescendingMapName = 'Descending Map Name',
+  MapsYouRated = 'Maps You Rated',
+}
+
 @Component({
   selector: 'q-map-list',
   templateUrl: './map-list.component.html',
@@ -37,10 +49,11 @@ export class MapListComponent implements OnInit, OnDestroy {
   maplist = new ReplaySubject<MapOption[]>(1);
   selectedFilters: string[] = [];
   sortList = [
-    'Ascending Avg. Rating', 'Descending Avg. Rating',
-    'Ascending User', 'Descending User',
-    'Ascending Map Name', 'Descending Map Name',
-    'Maps You Rated',
+    SortOptions.AscendingAvgRating, SortOptions.DescendingAvgRating,
+    SortOptions.Newest, SortOptions.Oldest,
+    SortOptions.AscendingUser, SortOptions.DescendingUser,
+    SortOptions.AscendingMapName, SortOptions.DescendingMapName,
+    SortOptions.MapsYouRated,
   ];
 
   selectedSortOption = this.sortList[1] || '';
@@ -84,6 +97,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       ratingAverage: 0,
       ratingCount: 0,
       data: this.initMap(),
+      createdAt: new Date().toISOString(),
     });
   }
 
@@ -178,29 +192,35 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   sort(value: string): void {
     switch (value) {
-      case this.sortList[0]: this.maplist.next(this.servermapList.sort((n1, n2) =>
+      case SortOptions.AscendingAvgRating: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1
           ? -1
           : (n2.id <= 1 ? 1 : (n1.ratingAverage || Number.MIN_VALUE) - (n2.ratingAverage || Number.MIN_VALUE))));
         break;
-      case this.sortList[1]: this.maplist.next(this.servermapList.sort((n1, n2) =>
+      case SortOptions.DescendingAvgRating: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1
           ? -1
           : (n2.id <= 1 ? 1 : (n2.ratingAverage || Number.MIN_VALUE) - (n1.ratingAverage || Number.MIN_VALUE))));
         break;
-      case this.sortList[2]: this.maplist.next(this.servermapList.sort((n1, n2) =>
+      case SortOptions.AscendingUser: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n1.username.toLowerCase().localeCompare(n2.username.toLowerCase()))));
         break;
-      case this.sortList[3]: this.maplist.next(this.servermapList.sort((n1, n2) =>
+      case SortOptions.DescendingUser: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n2.username.toLowerCase().localeCompare(n1.username.toLowerCase()))));
         break;
-      case this.sortList[4]: this.maplist.next(this.servermapList.sort((n1, n2) =>
+      case SortOptions.Oldest: this.maplist.next(this.servermapList.sort((n1, n2) =>
+        n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n1.createdAt.localeCompare(n2.createdAt))));
+        break;
+      case SortOptions.Newest: this.maplist.next(this.servermapList.sort((n1, n2) =>
+        n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n2.createdAt.localeCompare(n1.createdAt))));
+        break;
+      case SortOptions.AscendingMapName: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n1.name.toLowerCase().localeCompare(n2.name.toLowerCase()))));
         break;
-      case this.sortList[5]: this.maplist.next(this.servermapList.sort((n1, n2) =>
+      case SortOptions.DescendingMapName: this.maplist.next(this.servermapList.sort((n1, n2) =>
         n1.id <= 1 ? -1 : (n2.id <= 1 ? 1 : n2.name.toLowerCase().localeCompare(n1.name.toLowerCase()))));
         break;
-      case this.sortList[6]: this.maplist.next(this.servermapList.sort((n1, n2) => {
+      case SortOptions.MapsYouRated: this.maplist.next(this.servermapList.sort((n1, n2) => {
         if (n1.id <= 1 || n1.ratingMine === 0) return -1;
         if (n2.id <= 1 || n2.ratingMine === 0) return 1;
         return (n2.ratingMine || Number.MIN_VALUE) - (n1.ratingMine || Number.MIN_VALUE);

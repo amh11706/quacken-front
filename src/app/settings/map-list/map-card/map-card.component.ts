@@ -16,6 +16,7 @@ export interface MapOption {
   ratingCount: number;
   ratingMine?: number;
   data?: number[][];
+  createdAt: string;
 }
 
 @Component({
