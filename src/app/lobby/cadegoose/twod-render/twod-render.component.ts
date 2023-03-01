@@ -196,7 +196,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       flag.pOffsetX = pOffsetX;
       flag.pOffsetY = pOffsetY;
       const flagObj = {
-        t: flags?.shift()?.t || 99,
+        t: flags?.shift()?.t ?? 99,
         points: tile - 21,
         zIndex: (pOffsetY - 23),
         sprite: flag,
