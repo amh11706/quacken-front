@@ -25,7 +25,7 @@ export interface SettingMap {
   [key: string]: SettingPartial | undefined;
 }
 
-type SettingList = (keyof typeof Settings)[];
+export type SettingList = (keyof typeof Settings)[];
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +38,7 @@ export class SettingsService {
   admin = true;
   lAdminSettings: SettingList = [];
   showMapChoice = false;
+  rankArea = 2;
 
   constructor(private ws: WsService) {
     ws.subscribe(InCmd.SettingSet, (s: Setting) => {
@@ -54,9 +55,10 @@ export class SettingsService {
     this.settings.set(group, settings);
   }
 
-  setLobbySettings(adminNames: SettingList, showMapChoice = false): void {
+  setLobbySettings(adminNames: SettingList, showMapChoice = false, rankArea = 2): void {
     this.lAdminSettings = adminNames;
     this.showMapChoice = showMapChoice;
+    this.rankArea = rankArea;
   }
 
   getGroup(group: string, update = false): Promise<SettingMap> {

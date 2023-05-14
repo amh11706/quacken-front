@@ -19,13 +19,14 @@ import { FlagColorOffsets } from '../canvas/canvas.component';
 import { Turn } from '../../quacken/boats/boats.component';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
-type index = '0' | '1' | '2' | '3';
+type index = 0 | 1 | 2 | 3;
 @Component({
   selector: 'q-twod-render',
   templateUrl: './twod-render.component.html',
   styleUrls: ['./twod-render.component.scss'],
 })
 export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
+  readonly rotationSeed = Math.random() * (Number.MAX_SAFE_INTEGER / 2) + 99999999;
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
   @ViewChild('frame') frame?: ElementRef<HTMLElement>;
@@ -34,6 +35,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
   @Input() safeZone = true;
+  @Input() showIsland = this.safeZone;
   private _myBoat = new Boat('');
   get myBoat(): Boat { return this._myBoat; }
   @Input() set myBoat(b: Boat) {
@@ -190,7 +192,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     const obstacle = new Point().fromPosition({ x, y });
     const pOffsetX = obstacle.x;
     const pOffsetY = obstacle.y;
-    const rand = this.ctrlZoom ? 0 : Math.floor(Math.random() * 4);
+    const rand = Math.floor(this.rotationSeed / (x + 1) / (y + 1)) % 4;
     if (tile >= 21 && tile <= 23) {
       const flag = new SpriteImage(FlagData);
       flag.pOffsetX = pOffsetX;
@@ -207,14 +209,14 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       const bigRock = new SpriteImage(BigRockData);
       bigRock.pOffsetX = pOffsetX;
       bigRock.pOffsetY = pOffsetY;
-      bigRock.orientation = BigRockData.orientations[rand.toString() as index];
+      bigRock.orientation = BigRockData.orientations[rand as index];
       bigRock.imgPosition = `-${bigRock.orientation.x}px -${bigRock.orientation.y}px`;
       this.obstacles.push({ t: tile, zIndex: (pOffsetY - 10), sprite: bigRock });
     } else if (tile === 51) {
       const smallRock = new SpriteImage(SmallRockData);
       smallRock.pOffsetX = pOffsetX;
       smallRock.pOffsetY = pOffsetY;
-      smallRock.orientation = SmallRockData.orientations[rand.toString() as index];
+      smallRock.orientation = SmallRockData.orientations[rand as index];
       smallRock.imgPosition = `-${smallRock.orientation.x}px -${smallRock.orientation.y}px`;
       this.obstacles.push({ t: tile, zIndex: (pOffsetY - 10), sprite: smallRock });
     }
@@ -240,7 +242,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       for (let x = 0; x < this.mapWidth; x++) {
         const xOffset = (x + y) * 32;
         const yOffset = (-x + y) * 24;
-        if (this.safeZone && (y > 32 || y < 3)) this.sz.draw(ctx, 0, xOffset, yOffset);
+        if (this.safeZone && (y > this.mapHeight - 4 || y < 3)) this.sz.draw(ctx, 0, xOffset, yOffset);
         else this.water.draw(ctx, 0, xOffset, yOffset);
         const tile = map[y]?.[x];
         if (!tile) continue;

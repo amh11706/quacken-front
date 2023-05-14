@@ -22,7 +22,7 @@ export class CustomMapComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     if (!this.setting) console.error('CustomMapComponent requires setting input');
-    const m = await this.ws.request(this.setting.cmd);
+    const m = await this.ws.request(this.setting.cmd, this.setting.data);
     for (const i of m) i.label = i.name + ' (' + i.username + ')';
     this.data = m;
     this.loading = false;

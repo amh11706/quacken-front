@@ -13,6 +13,7 @@ import { Boat } from '../../quacken/boats/boat';
 import { Turn } from '../../quacken/boats/boats.component';
 import { Lobby } from '../../lobby.component';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
+import { BoatSetting, Settings } from '../../../settings/setting/settings';
 
 interface TeamMessage {
   id: number;
@@ -32,10 +33,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   teamColors = TeamColorsCss;
   teamNames = TeamNames;
   // eslint-disable-next-line no-sparse-arrays
-  boatTitles = [, , , , , , , , , , , , , ,
-    'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
-    'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate',
-  ];
+  boatTitles = (Settings.nextCadeBoat as BoatSetting).titles;
 
   links = links;
   teamPlayers: Message[][] = [];

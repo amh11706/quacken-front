@@ -2,8 +2,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { Settings } from '../../settings/setting/settings';
-import { SettingsService } from '../../settings/settings.service';
+import { SettingList, SettingsService } from '../../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { WsService } from '../../ws.service';
@@ -17,7 +16,7 @@ import { Boat } from '../quacken/boats/boat';
 import { TwodRenderComponent } from './twod-render/twod-render.component';
 import { MapEditor, MapTile } from '../../map-editor/map-editor.component';
 
-const ownerSettings: (keyof typeof Settings)[] = [
+const ownerSettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',
   'cadeTurnTime', 'cadeTurns',
   'enableBots', 'botDifficulty',
@@ -84,18 +83,18 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     super(ws, ss, fs, es);
 
     this.group = 'l/cade';
+    this.ss.setLobbySettings(ownerSettings, this.showMapChoice);
   }
 
   ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
-    this.ss.setLobbySettings(ownerSettings, this.showMapChoice);
     this.es.setLobby(this.menuComponent, this.lobby);
     this.es.open = true;
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
     this.sub.add(this.ws.subscribe(Internal.OpenAdvanced, () => {
       this.mapSeed = this.lobby?.seed;
-      this.advancedMapOpen = true;
+      this.advancedMapOpen = !this.advancedMapOpen;
     }));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
       if (this.lobby) this.lobby.stats = t.stats;

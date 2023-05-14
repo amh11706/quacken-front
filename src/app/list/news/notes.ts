@@ -5,6 +5,16 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 06 May 2023',
+    points: [
+      'New game mode: "Flag Games"!',
+      'Two variations: Take the enemy flags to your base, or plant flags in the enemy base.',
+      'Four new boat classes: Sniper, Builder, Healer, and Bomber.',
+      'Flotsam now drops before the winds and whirls act.',
+      'Dropping flotsam on a boat now immediately affects the boat.',
+    ],
+  },
+  {
     title: 'Release 06 April 2022',
     points: [
       'Mini cade update.',

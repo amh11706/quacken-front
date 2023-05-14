@@ -53,7 +53,7 @@
      (mouseleave)="showPlayers = false">
   {{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}
   <div class="playerList"
-  (click)="$event.stopPropagation()"
+       (click)="$event.stopPropagation()"
        [class.visible]="showPlayers">
     <div *ngFor="let p of lobby.players"
          class="playerName">
@@ -65,7 +65,7 @@
 
 <p class="settingsView">
   <ng-container
-                *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView, SeaBattle: cadeView}[lobby.type]; context: {settings: lobby.group}">
+                *ngTemplateOutlet="{Quacken: quackenView, Spades: spadesView, CadeGoose: cadeView, SeaBattle: cadeView, FlagGames: cadeView}[lobby.type]; context: {settings: lobby.group}">
   </ng-container>
 </p>
 

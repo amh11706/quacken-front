@@ -50,6 +50,7 @@ interface CheckboxSetting extends BaseSetting {
 export interface CustomMapSetting extends BaseSetting {
   readonly type: 'customMap' | 'tileSet' | 'structureSet',
   readonly cmd: OutCmd,
+  readonly data?: any,
 }
 
 export type Setting = ButtonSetting | BoatSetting | SliderSetting | OptionSetting | CheckboxSetting | CustomMapSetting;
@@ -59,7 +60,9 @@ type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'spee
   'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' |
   'cadeMap' | 'cadeTeams' | 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
   'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked' |
-  'renderMode' | 'fishBoats' | 'allowGuests';
+  'renderMode' | 'fishBoats' | 'allowGuests' |
+  'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' | 'flagTurns' |
+  'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagNextBoat';
 
 export const Settings: Record<SettingName, Setting> = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
@@ -171,7 +174,7 @@ export const Settings: Record<SettingName, Setting> = {
     admin: true, id: 45, group: 'l/cade', name: 'fishBoats', type: 'checkbox', label: 'Fish boat names',
   },
   cadeMap: {
-    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Map', cmd: OutCmd.CgMapList,
+    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Map', cmd: OutCmd.CgMapList, data: 2,
   },
   cadeTeams: {
     admin: true, id: 43, group: 'l/cade', name: 'teams', type: 'slider', label: 'Teams', min: 2, max: 4, step: 1,
@@ -240,5 +243,67 @@ export const Settings: Record<SettingName, Setting> = {
   },
   updateLinked: {
     id: 33, group: 'controls', type: 'checkbox', label: 'Update linked settings', name: 'updateLinked',
+  },
+
+  flagMap: {
+    admin: true, id: 47, group: 'l/flaggames', name: 'map', type: 'customMap', label: 'Map', cmd: OutCmd.CgMapList, data: 4,
+  },
+  flagMaxPlayers: {
+    admin: true, id: 48, group: 'l/flaggames', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40, step: 1,
+  },
+  flagPublicMode: {
+    admin: true,
+    id: 49,
+    group: 'l/flaggames',
+    name: 'publicMode',
+    type: 'option',
+    label: 'Lobby Privacy',
+    options: [
+      'Public', 'Public Application', 'Invite Only',
+    ],
+  },
+  flagHotEntry: {
+    admin: true, id: 50, group: 'l/flaggames', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an entry is in progress',
+  },
+  flagJobberQuality: {
+    // eslint-disable-next-line object-property-newline
+    admin: true, id: 51, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 105, step: 5, name: 'jobberQuality',
+    stepLabels: { 105: 'Advanced' },
+    advancedComponent: JobberQualityComponent,
+    setLabel: (s) => {
+      if (!s.data) s.data = { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
+      delete s.data.label;
+      if (s.value > 100) s.data.label = Object.entries(s.data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
+    },
+  },
+  flagTurnTime: {
+    // eslint-disable-next-line object-property-newline
+    admin: true, id: 52, group: 'l/flaggames', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 40, step: 5,
+    stepLabels: { 40: 'Unlimited' },
+  },
+  flagTurns: {
+    admin: true, id: 53, group: 'l/flaggames', name: 'turns', type: 'slider', label: 'Turns', min: 1, max: 10, step: 1,
+  },
+  flagSpawnDelay: {
+    admin: true, id: 54, group: 'l/flaggames', name: 'spawnDelay', type: 'slider', label: 'Spawn Delay', min: 0, max: 10, step: 1,
+  },
+  flagFishBoats: {
+    admin: true, id: 55, group: 'l/flaggames', name: 'fishBoats', type: 'checkbox', label: 'Fish boat names',
+  },
+  flagAllowGuests: {
+    admin: true, id: 56, group: 'l/flaggames', name: 'allowGuests', type: 'checkbox', label: 'Allow Guests',
+  },
+  flagNextBoat: {
+    id: 57,
+    group: 'boats',
+    name: 'flag',
+    type: 'boat',
+    trigger: OutCmd.NextBoat,
+    titles: [, , , , , , , , , , , , , , ,
+      'Healer', 'Builder', 'Bomber', 'Sniper',
+    ],
+    groups: [
+      { name: 'Next Ship', options: [15, 16, 17, 18] },
+    ],
   },
 };

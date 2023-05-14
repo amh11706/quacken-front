@@ -7,6 +7,7 @@ import { SpadesModule } from './spades/spades.module';
 import { CadegooseModule } from './cadegoose/cadegoose.module';
 import { SeabattleModule } from './seabattle/seabattle.module';
 import { LobbyRoutingModule } from './lobby-routing.module';
+import { FlaggamesModule } from './flaggames/flaggames.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { LobbyRoutingModule } from './lobby-routing.module';
     SpadesModule,
     CadegooseModule,
     SeabattleModule,
+    FlaggamesModule,
   ],
   exports: [LobbyComponent],
 })

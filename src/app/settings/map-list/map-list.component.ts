@@ -40,6 +40,8 @@ export class MapListComponent implements OnInit, OnDestroy {
     }
   }
 
+  @Input() rankArea = 2;
+
   search = '';
   selectedMap: SettingPartial = { value: 0 };
   private servermapList: MapOption[] = [];
@@ -73,7 +75,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       generatedMap.description = l.seed;
     }));
     this.initGenerated();
-    this.servermapList.push(...await this.ws.request(OutCmd.CgMapList));
+    this.servermapList.push(...await this.ws.request(OutCmd.CgMapList, this.rankArea));
     this.filteredMapList = this.servermapList;
     this.sort(this.selectedSortOption);
     this.initFilters();
