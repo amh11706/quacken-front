@@ -35,6 +35,7 @@ export class Boat {
   spinDeg = 90;
   render?: BoatRender;
   crunchDir = -1;
+  maneuvers: {id: number, name: string, class: string, directional?: boolean}[] = [];
 
   constructor(
     public name: string,

@@ -3,6 +3,7 @@ import { Subject, Subscription } from 'rxjs';
 
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
+import { Maneuver } from '../../lobby/quacken/boats/convert';
 
 export interface Tokens {
   moves: [number, number, number],
@@ -41,9 +42,10 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     maneuvers: [0, 0, 0, 0],
   };
 
-  @Input() dragContext = { source: 8, move: 0 };
+  @Input() dragContext = { source: 8, move: 0, type: 'move' };
   @Input() private cannonForce = false;
   @Input() locked = true;
+  @Input() maneuvers: Maneuver[] = [];
   private _maxMoves = 4;
   @Input() set maxMoves(v: number) {
     this._maxMoves = v;
@@ -229,9 +231,11 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       const token = move > 7 ? Math.round(move / 4) - 1 : 0;
       let wantToken = (ev.button + 1 + token) % 4;
       let points = this.unusedTokens.maneuvers[wantToken] || 0;
-      while (wantToken !== 0 && points < 100) {
+      let attempts = 0;
+      while (attempts < 3 && wantToken !== 0 && points < 100) {
         wantToken = (ev.button + 1 + wantToken) % 4;
         points = this.unusedTokens.maneuvers[wantToken] || 0;
+        attempts++;
       }
       if (wantToken > 0) {
         const maneuver = wantToken * 4 + 4;
@@ -241,15 +245,22 @@ export class MoveInputComponent implements OnInit, OnDestroy {
         return;
       }
     }
-    if ((move === 0 && slot === this.blockedPosition) || move > 11) return;
+    if ((move === 0 && slot === this.blockedPosition)) return;
+    if (move > 7) {
+      const rounded = Math.floor(move / 4) * 4;
+      const maneuver = this.maneuvers.find(m => m.id === rounded);
+      if (!maneuver?.directional) return;
+    }
     if (move > 7) {
       moves[slot] = (move + 2) % 4 + 8;
     } else {
       let wantMove = (ev.button + 1 + move) % 4;
       let tokens = this.unusedTokens.moves[wantMove - 1] || 0;
-      while (wantMove !== 0 && tokens <= 0) {
+      let attempts = 0;
+      while (attempts < 3 && wantMove !== 0 && tokens <= 0) {
         wantMove = (ev.button + 1 + wantMove) % 4;
         tokens = this.unusedTokens.moves[wantMove - 1] || 0;
+        attempts++;
       }
       moves[slot] = wantMove;
     }
@@ -260,6 +271,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   drag(move: number, slot = 8): void {
     this.dragContext.move = move;
     this.dragContext.source = slot;
+    this.dragContext.type = 'move';
   }
 
   dragCannon(slot = 8, token = this.input.shots[slot]): void {
@@ -268,6 +280,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     if (token < 4) token = 6;
     this.dragContext.move = token;
     this.dragContext.source = slot;
+    this.dragContext.type = 'shot';
   }
 
   drop(ev: DragEvent, slot: number): void {

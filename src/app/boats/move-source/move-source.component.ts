@@ -9,7 +9,7 @@ import { Tokens } from '../move-input/move-input.component';
 })
 export class MoveSourceComponent implements OnDestroy {
   @Input() tokenStrings = ['', '', ''];
-  @Input() dragContext = { source: 8, move: 0 };
+  @Input() dragContext = { source: 8, move: 0, type: 'move' };
   private _totalTokens?: Tokens;
   @Input() set totalTokens(t: Tokens) {
     if (
@@ -46,6 +46,7 @@ export class MoveSourceComponent implements OnDestroy {
   drag(move: number): void {
     this.dragContext.move = move;
     this.dragContext.source = 8;
+    this.dragContext.type = move === 6 ? 'shot' : 'move';
   }
 
   changeWantMove(): void {

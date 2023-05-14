@@ -11,6 +11,7 @@
                   (unusedTokensChange)="unusedTokens = $event"
                   [reset]="resetMoves$"
                   [input]="localBoat"
+                  [maneuvers]="myBoat.maneuvers"
                   [kbControls]="kbControls"
                   [serverInput]="serverBoat"
                   [totalTokens]="totalTokens"
@@ -51,6 +52,7 @@
 
     <q-maneuver-source id="maneuvers"
                        (wantManeuverChange)="setWantToken($event)"
+                       [maneuvers]="myBoat.maneuvers"
                        [wantManeuver]="lastTick.wm"
                        [unusedTokens]="unusedTokens"
                        [dragContext]="dragContext"></q-maneuver-source>

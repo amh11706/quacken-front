@@ -1,6 +1,6 @@
 <div *ngFor="let m of maneuvers; let i = index"
      (click)="setWantToken(i)"
-     [matTooltip]="m.title + ' - ' + (unusedTokens.maneuvers[i] || 0) + '%'"
+     [matTooltip]="m.name + ' - ' + (unusedTokens.maneuvers[i] || 0) + '%'"
      [class.want]="wantManeuver === i"
      [class]="m.class">
   <img *ngIf="(unusedTokens.maneuvers[i] || 0) > 0"

@@ -93,7 +93,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   turn = 0;
   lastMoveReset = 0;
-  dragContext = { source: 8, move: 0 };
+  dragContext = { source: 8, move: 0, type: 'move' };
   resetMoves$ = new Subject<void>();
   protected subs = new Subscription();
   protected group = 'l/quacken';

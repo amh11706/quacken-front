@@ -12,6 +12,13 @@ export interface BoatStatus {
   cd?: number;
 }
 
+export interface Maneuver {
+  id: number;
+  name: string;
+  class: string;
+  directional?: boolean;
+}
+
 export interface BoatSync extends BoatStatus {
   oId?: number;
   team?: Team;
@@ -27,6 +34,7 @@ export interface BoatSync extends BoatStatus {
   mMoves: number;
   inSq: number;
   dShot?: number;
+  mvr?: Maneuver[];
 }
 
 export function boatToSync(boat: Boat): BoatSync {
@@ -74,4 +82,5 @@ export function syncToBoat(boat: Boat, sBoat: BoatSync): void {
   boat.influence = sBoat.inSq !== undefined ? Math.sqrt(sBoat.inSq) : boat.influence;
   boat.maxShots = sBoat.dShot || 1;
   boat.type = sBoat.ty;
+  boat.maneuvers = sBoat.mvr || [];
 }

@@ -7,12 +7,12 @@ import { Tokens } from '../move-input/move-input.component';
   styleUrls: ['./maneuver-source.component.scss'],
 })
 export class ManeuverSourceComponent {
-  @Input() dragContext = { source: 8, move: 0 };
+  @Input() dragContext = { source: 8, move: 0, type: 'move' };
   @Input() maneuvers = [
-    { id: 4, class: 'move bombtoken', title: 'Chain Shot' },
-    { id: 8, class: 'move', title: 'In-place Turn' },
-    { id: 12, class: 'move', title: 'Double Forward' },
-    { id: 16, class: 'move', title: 'Flotsam' },
+    { id: 4, class: 'move bombtoken', name: 'Chain Shot' },
+    { id: 8, class: 'move', name: 'In-place Turn', directional: true },
+    { id: 12, class: 'move', name: 'Double Forward' },
+    { id: 16, class: 'move', name: 'Flotsam' },
   ];
 
   @Input() unusedTokens: Tokens = {
@@ -32,5 +32,7 @@ export class ManeuverSourceComponent {
   dragManeuver(token: number): void {
     this.dragContext.move = token;
     this.dragContext.source = 8;
+    const floored = Math.floor(token / 4) * 4;
+    this.dragContext.type = this.maneuvers.find((m) => m.id === floored)?.class === 'move' ? 'move' : 'shot';
   }
 }

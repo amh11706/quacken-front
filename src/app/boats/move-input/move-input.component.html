@@ -5,7 +5,7 @@
        (dragstart)="dragCannon(i*2)"
        (dragend)="dragendCannon()"
        [draggable]="input.shots[i*2]"
-       (dragover)="this.dragContext.move < 4 || this.dragContext.move >= 8"
+       (dragover)="this.dragContext.type !== 'shot'"
        (mouseup)="addShot($event, i*2)">
     <div class="bombslot token{{input.shots[i*2]}}"
          [class.unconfirmedShots]="!serverInput.shots[i*2] !== !input.shots[i*2]"
@@ -21,7 +21,7 @@
        (dragstart)="dragCannon(i*2+1)"
        (dragend)="dragendCannon()"
        [draggable]="input.shots[i*2+1]"
-       (dragover)="this.dragContext.move < 4 || this.dragContext.move >= 8"
+       (dragover)="this.dragContext.type !== 'shot'"
        (mouseup)="addShot($event, i*2+1)">
     <div class="bombslot token{{input.shots[i*2+1]}}"
          [class.blocked]="locked"
@@ -40,7 +40,7 @@
        (drop)="drop($event, i)"
        (mouseup)="clickTile($event, i)"
        (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
-       (dragover)="this.dragContext.move >= 4 && this.dragContext.move < 8">
+       (dragover)="this.dragContext.type !== 'move'">
     <img *ngIf="move || i === blockedPosition"
          src="./assets/images/arrow{{move}}.png"
          draggable="true"
