@@ -9,12 +9,12 @@
        (dragstart)="dragManeuver(m.id)"
        [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 100"
        [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) + '%'"
-       src="./assets/images/arrow{{m.id}}.png">
+       [src]="getManeuverIcon(m.id)">
   <img *ngIf="(unusedTokens.maneuvers[i] || 0) > 100"
        class="maneuver"
        draggable="true"
        (dragstart)="dragManeuver(m.id + 1)"
        [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 200"
        [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) - 100 + '%'"
-       src="./assets/images/arrow{{m.id + 1}}.png">
+       [src]="getManeuverIcon(m.id+1)">
 </div>

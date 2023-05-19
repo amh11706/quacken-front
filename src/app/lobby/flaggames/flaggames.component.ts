@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
+import { MapTile } from '../../map-editor/map-editor.component';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { SettingList, SettingsService } from '../../settings/settings.service';
@@ -45,7 +46,7 @@ export class FlaggamesComponent extends CadegooseComponent {
     tokenRight: KeyActions.Noop,
     prevSlot: KeyActions.SBPrevSlot,
     nextSlot: KeyActions.SBNextSlot,
-    ready: KeyActions.Noop,
+    ready: KeyActions.SBReady,
     back: KeyActions.SBBack,
   };
 
@@ -60,5 +61,20 @@ export class FlaggamesComponent extends CadegooseComponent {
 
     this.group = 'l/flaggames';
     this.ss.setLobbySettings(ownerSettings, true, 4);
+  }
+
+  private redrawDebounce = 0;
+
+  setTile(x: number, y: number, v: number): MapTile | void {
+    if (this.advancedMapOpen) return super.setTile(x, y, v);
+    if (this.lobby?.turn === 0) return; // Don't allow editing before the game starts.
+
+    const row = this.map[y];
+    if (!row) return;
+    row[x] = v;
+    window.clearTimeout(this.redrawDebounce);
+    this.redrawDebounce = window.setTimeout(() => {
+      this.renderer?.fillMap(this.map, this.lobby?.flags);
+    }, 100);
   }
 }

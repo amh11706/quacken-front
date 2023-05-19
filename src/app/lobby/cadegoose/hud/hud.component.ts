@@ -51,7 +51,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   tokenStrings = ['', '', ''];
   lastTick = { tp: 0, attr: {} } as BoatTick;
   updateWantMove$ = new Subject<boolean>();
-  protected group = 'l/cade';
+  group = 'l/cade';
 
   ngOnInit(): void {
     super.ngOnInit();

@@ -12,7 +12,7 @@
          [class.blocked]="locked"></div>
     <div *ngIf="maxShots === 2"
          class="bombslot"
-         [class.token1]="input.shots[i*2] === 2 || (input.shots[i*2] || 0) > 5"
+         [class.token1]="input.shots[i*2] === 2 || (input.shots[i*2] || 0)%4 > 1"
          [class.unconfirmedShots]="!(2-(serverInput.shots[i*2] || 0)) !== !(2-(input.shots[i*2]|| 0))"
          [class.blocked]="locked"></div>
   </div>
@@ -28,7 +28,7 @@
          [class.unconfirmedShots]="!serverInput.shots[i*2+1] !== !input.shots[i*2+1]"></div>
     <div *ngIf="maxShots === 2"
          class="bombslot"
-         [class.token1]="input.shots[i*2+1] === 2 || (input.shots[i*2+1] || 0) > 5"
+         [class.token1]="input.shots[i*2+1] === 2 || (input.shots[i*2+1] || 0)%4 > 1"
          [class.blocked]="locked"
          [class.unconfirmedShots]="!(2-(serverInput.shots[i*2+1] || 0)) !== !(2-(input.shots[i*2+1] || 0))"></div>
   </div>
@@ -42,7 +42,7 @@
        (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
        (dragover)="this.dragContext.type !== 'move'">
     <img *ngIf="move || i === blockedPosition"
-         src="./assets/images/arrow{{move}}.png"
+         [src]="getManeuverIcon(move)"
          draggable="true"
          (dragstart)="drag(move, i)"
          (dragend)="dragEnd()">

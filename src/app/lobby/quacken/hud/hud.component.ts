@@ -34,6 +34,7 @@ export interface BoatTick {
   styleUrls: ['./hud.component.scss'],
 })
 export class HudComponent implements OnInit, OnDestroy {
+  @Input() group = 'l/quacken';
   @Input() kbControls = 1;
   @Input() moveKeys: Record<number, KeyActions> = {
     0: KeyActions.QBlank,
@@ -96,7 +97,6 @@ export class HudComponent implements OnInit, OnDestroy {
   dragContext = { source: 8, move: 0, type: 'move' };
   resetMoves$ = new Subject<void>();
   protected subs = new Subscription();
-  protected group = 'l/quacken';
   protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
   protected get maxTurn(): number { return this.lobbySettings.turns?.value || 90; }
   get secondsPerTurn(): number { return this.lobbySettings.turnTime?.value || 30; }

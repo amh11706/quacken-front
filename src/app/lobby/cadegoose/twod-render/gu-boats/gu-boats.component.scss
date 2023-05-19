@@ -81,7 +81,7 @@ q-sprite-img {
   to { transform: translate(var(--tranX,0), var(--tranY,0)) rotate(360deg);}
 }
 @keyframes move { 
-  to { transform: translate(var(--tranX,0), var(--tranY,0)) rotate(360deg); }
+  to { transform: translate(var(--tranX,0), var(--tranY,0)) rotate(360deg) scale(var(--scale, 1)); }
 }
 @keyframes smoke {
   from { background-position-x: 0; }
@@ -99,6 +99,7 @@ q-sprite-img {
 .shot.dis1 { --movetime: .3s; --distance: 1; }
 .shot.dis2 { --movetime: .5s; --distance: 2; }
 .shot.dis3, .shot.dis4 { --movetime: 0.7s; --distance: 3; }
+.size28 .shot.dis4, .size29 .shot.dis4, .size28 .shot.dis5, .size29 .shot.dis5 { --movetime: 0.7s; --distance: 4; }
 
 // speed set from html
 .shot.double { top: 10px; --delay: calc(var(--speed) * .2s) }
@@ -125,13 +126,18 @@ q-sprite-img {
 .size1 .shot { background-image: url("/assets/clutter/cannonball_small.png"); }
 .size2 .shot { background-image: url("/assets/clutter/cannonball_medium.png"); }
 .size3 .shot { background-image: url("/assets/clutter/cannonball_large.png"); }
+.size28 .shot { background-image: url("/assets/clutter/cannonball_long.png"); }
+.size29 .shot { background-image: url("/assets/clutter/cannonball_long_gold.png"); }
+.size36 .shot { background-image: url("/assets/clutter/cannonball_healing.png"); }
+.size37 .shot { background-image: url("/assets/clutter/cannonball_healing_gold.png"); }
 .size4 .shot, .size6 .shot { background-image: url("/assets/clutter/chain_cannonball.png"); }
 .size5 .shot, .size7 .shot { background-image: url("/assets/clutter/flaming_cannonball.png"); }
-.shot.dis4 { animation-name: move, splash !important; animation-timing-function: linear, steps(13); }
+.shot.dis4, .shot.dis5 { animation-name: move, splash !important; animation-timing-function: linear, steps(13); }
 .smoke { animation: smoke calc(var(--speed) * 1s) steps(18) both; }
-.size1 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
+.smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
 .size2 .smoke, .size4 .smoke, .size5 .smoke, .size6 .smoke, .size7 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }
 .size3 .smoke { --endX: -960px; animation-timing-function: steps(24); background-image: url("/assets/clutter/explode_large.png"); }
+.size20 .shot, .size21 .shot { --scale: 4; --delay: calc(var(--distance) * 0.15s * var(--speed)) }
 
 .shot.dir0, .shot.dir1 { --tranY: calc(0px - var(--distance) * 24px) }
 .shot.dir2, .shot.dir3 { --tranY: calc(var(--distance) * 24px) }
@@ -150,7 +156,7 @@ q-sprite-img {
   to { transform: rotate(var(--rotate, 0)) scale(var(--scaleX), var(--scaleY)); opacity: 0 }
 }
 
-.clutter12 .clutterimg, .clutter8 .clutterimg { 
+.clutter12 .clutterimg, .clutter8 .clutterimg, .clutter20 .clutterimg, .clutter21 .clutterimg { 
   background-image: url("/assets/clutter/wave.png");
   position: absolute;
   opacity: 0;
@@ -162,10 +168,12 @@ q-sprite-img {
   animation-timing-function: ease-out;
   animation-fill-mode: forwards;
 }
-.clutter12 .clutterimg.dir0 { bottom: -48px; right: -64px; --scaleX: 1; --scaleY: -1; }
-.clutter12 .clutterimg.dir1 { bottom: -48px; left: 0; --scaleX: -1; --scaleY: -1; }
-.clutter12 .clutterimg.dir2 { top: 0; left: 0; --scaleX: -1; --scaleY: 1 }
-.clutter12 .clutterimg.dir3 { top: 0; right: -64px; --scaleX: 1; --scaleY: 1; }
+
+.clutter20 .clutterimg, .clutter21 .clutterimg { animation-delay: 0; animation-duration: calc(var(--speed, 1) * 0.4s); }
+.clutter12 .clutterimg.dir0, .clutter20 .clutterimg.dir0, .clutter21 .clutterimg.dir0 { bottom: -48px; right: -64px; --scaleX: 1; --scaleY: -1; }
+.clutter12 .clutterimg.dir1, .clutter20 .clutterimg.dir1, .clutter21 .clutterimg.dir1 { bottom: -48px; left: 0; --scaleX: -1; --scaleY: -1; }
+.clutter12 .clutterimg.dir2, .clutter20 .clutterimg.dir2, .clutter21 .clutterimg.dir2 { top: 0; left: 0; --scaleX: -1; --scaleY: 1 }
+.clutter12 .clutterimg.dir3, .clutter20 .clutterimg.dir3, .clutter21 .clutterimg.dir3 { top: 0; right: -64px; --scaleX: 1; --scaleY: 1; }
 
 .clutter8 .clutterimg { background-image: url("/assets/clutter/wave2.png"); top: -24px; left: -32px; }
 .clutter8 .clutterimg.dir0 { --scaleX: 1; --scaleY: 1; }

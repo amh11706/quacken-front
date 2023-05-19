@@ -3,10 +3,10 @@
      class="clutter clutter{{obj.t}}"
      [style.transform]="'translate(' + obj.coords.x + 'px, ' + obj.coords.y  + 'px)'">
 
-  <div *ngIf="obj.t >= 8"
+  <div *ngIf="!obj.dis || obj.t === 20 || obj.t === 21"
        class="clutterimg dir{{obj.dir}}"></div>
 
-  <div *ngIf="obj.t < 8"
+  <div *ngIf="obj.dis"
        class="size{{obj.t}}">
     <div class="shot"
          class="dir{{obj.dir}} dis{{obj.dis}}"></div>

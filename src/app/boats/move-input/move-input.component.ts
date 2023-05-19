@@ -4,6 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { Maneuver } from '../../lobby/quacken/boats/convert';
+import { getManeuverIcon } from '../maneuver-source/maneuver-source.component';
 
 export interface Tokens {
   moves: [number, number, number],
@@ -75,6 +76,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     back: KeyActions.QBack,
   };
 
+  getManeuverIcon = getManeuverIcon;
   blockedPosition = 3;
   selected = 0;
   private subs = new Subscription();
@@ -201,9 +203,12 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       return;
     }
     if (e.shiftKey) {
-      const points = this.unusedTokens.maneuvers[0];
+      const index = this.maneuvers.findIndex(m => m.class === 'move bombtoken');
+      const maneuver = this.maneuvers[index];
+      if (!maneuver) return;
+      const points = this.unusedTokens.maneuvers[index] ?? 0;
       if (points >= 100) {
-        this.dragCannon(8, points === 200 ? 5 : 4);
+        this.dragCannon(8, points === 200 ? maneuver.id + 1 : maneuver.id);
         this.dropCannon(i);
         return;
       }
@@ -228,7 +233,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     const moves = this.input.moves;
     const move = moves[slot] || 0;
     if (ev.shiftKey) {
-      const token = move > 7 ? Math.round(move / 4) - 1 : 0;
+      const token = move > 7 ? this.maneuvers.findIndex(m => m.id === move) : 0;
       let wantToken = (ev.button + 1 + token) % 4;
       let points = this.unusedTokens.maneuvers[wantToken] || 0;
       let attempts = 0;
@@ -238,7 +243,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
         attempts++;
       }
       if (wantToken > 0) {
-        const maneuver = wantToken * 4 + 4;
+        const maneuver = this.maneuvers[wantToken]?.id || 0;
         moves[slot] = points === 200 ? maneuver + 1 : maneuver;
         this.checkMaxMoves();
         this.inputChange.emit(this.input);
@@ -276,8 +281,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
 
   dragCannon(slot = 8, token = this.input.shots[slot]): void {
     if (!token) return;
-    if (token > 5) token -= 2;
-    if (token < 4) token = 6;
     this.dragContext.move = token;
     this.dragContext.source = slot;
     this.dragContext.type = 'shot';
@@ -323,7 +326,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   dragendCannon(): void {
     if (this.dragContext.source === 8) return;
     const shot = this.input.shots[this.dragContext.source] || 0;
-    if (shot >= 6 || shot === 2) this.input.shots[this.dragContext.source] = 1;
+    if ((shot >= 6 || shot === 2) && this.maxShots > 1) this.input.shots[this.dragContext.source] = 1;
     else this.input.shots[this.dragContext.source] = 0;
     this.checkMaxShots();
     this.inputChange.emit(this.input);
@@ -336,13 +339,11 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       for (const s in this.input.shots) this.input.shots[s] = 0;
       this.unusedTokens.shots = this._totalTokens.shots;
     }
-    const isChain = this.dragContext.move !== 6;
+    const isChain = this.dragContext.move >= 4;
     if (isChain) {
-      this.input.shots[slot] = oldShots ? this.dragContext.move + 2 : this.dragContext.move;
-    } else if (oldShots === 2 || oldShots >= 6) {
-      return;
+      this.input.shots[slot] = this.dragContext.move;
     } else {
-      this.input.shots[slot] += oldShots >= 4 ? 2 : 1;
+      this.input.shots[slot] = oldShots ? this.maxShots : 1;
     }
     this.dragendCannon();
     this.dragContext.source = 8;
@@ -359,10 +360,12 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       if (shot === 0) continue;
       const usingManeuver = shot >= 4;
       if (usingManeuver) {
-        const points = this.unusedTokens.maneuvers[0];
+        const rounded = Math.floor(shot / 4) * 4;
+        const index = this.maneuvers.findIndex(m => m.id === rounded);
+        const points = this.unusedTokens.maneuvers[index] || 0;
         if (points === 200) this.input.shots[i] |= 0b1;
         else if (points < 100) this.input.shots[i] = 0;
-        this.unusedTokens.maneuvers[0] -= points - points % 100;
+        this.unusedTokens.maneuvers[index] -= points - points % 100;
         if (shot < 6) continue;
         shot = 1;
       }
@@ -391,7 +394,8 @@ export class MoveInputComponent implements OnInit, OnDestroy {
         continue;
       }
       if (move > 7) {
-        const maneuver = Math.floor(move / 4 - 1);
+        const rounded = Math.floor(move / 4) * 4;
+        const maneuver = this.maneuvers.findIndex(m => m.id === rounded);
         const points = this.unusedTokens.maneuvers[maneuver] || 0;
         if (points === 200) this.input.moves[i] |= 0b1;
         else if (points < 100) this.input.moves[i] = 0;
