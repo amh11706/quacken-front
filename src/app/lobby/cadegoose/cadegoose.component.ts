@@ -52,7 +52,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     settingsOpen: false,
   };
 
-  graphicSettings = {
+  graphicSettings: SettingMap = {
     mapScale: { value: 50 },
     speed: { value: 10 },
     water: { value: 1 },

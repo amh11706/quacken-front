@@ -5,7 +5,7 @@ import { Settings } from '../../settings/setting/settings';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { WsService } from '../../ws.service';
-import { SettingsService, SettingPartial, SettingMap } from '../../settings/settings.service';
+import { SettingsService, SettingMap } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
@@ -37,11 +37,11 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
   map: number[][] = [];
   controlSettings: SettingMap = { kbControls: { value: 1 } };
-  lobbySettings = { fishBoats: { value: 0 } } as SettingMap;
-  graphicSettings = {
-    mapScale: { value: 50 } as SettingPartial,
-    speed: { value: 10 } as SettingPartial,
-    renderMode: { value: -1 } as SettingPartial,
+  lobbySettings: SettingMap = { fishBoats: { value: 0 } };
+  graphicSettings: SettingMap = {
+    mapScale: { value: 50 },
+    speed: { value: 10 },
+    renderMode: { value: -1 },
   };
 
   myBoat = new Boat('');
@@ -87,7 +87,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
     if (graphicSettings.mapScale && graphicSettings.speed) this.graphicSettings = graphicSettings as this['graphicSettings'];
     if (controlSettings.kbControls) this.controlSettings = controlSettings as this['controlSettings'];
-    this.sub.add(this.graphicSettings.renderMode.stream?.subscribe(() => {
+    this.sub.add(this.graphicSettings.renderMode?.stream?.subscribe(() => {
       setTimeout(() => {
         this.setMapB64(this._lobby?.map || '');
         this.ws.send(OutCmd.Sync);

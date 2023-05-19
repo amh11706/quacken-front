@@ -1,7 +1,7 @@
-<q-map [speed]="graphicSettings.speed.value"
-	   [mapScale]="graphicSettings.mapScale.value"
-	   [myBoat]="myBoat"
-	   [map]="lobby?.map || ''"></q-map>
+<q-map [speed]="graphicSettings.speed?.value ?? 10"
+       [mapScale]="graphicSettings.mapScale?.value ?? 50"
+       [myBoat]="myBoat"
+       [map]="lobby?.map || ''"></q-map>
 
 <q-hud [kbControls]="controlSettings.kbControls?.value ?? 0"></q-hud>
 <q-entry-status></q-entry-status>

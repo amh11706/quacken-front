@@ -1,15 +1,15 @@
 <q-twod-render #renderer
-               *ngIf="graphicSettings.renderMode.value === 0"
+               *ngIf="graphicSettings.renderMode?.value === 0"
                [hoveredTeam]="hoveredTeam"
-               [speed]="graphicSettings.speed.value"
-               [mapScale]="graphicSettings.mapScale.value"
+               [speed]="graphicSettings.speed?.value ?? 10"
+               [mapScale]="graphicSettings.mapScale?.value ?? 50"
                [mapHeight]="mapHeight"
                [mapWidth]="mapWidth"
                [safeZone]="false"
                [graphicSettings]="graphicSettings"
                [myBoat]="myBoat"></q-twod-render>
 <q-threed-render #renderer
-                 *ngIf="graphicSettings.renderMode.value === 1"
+                 *ngIf="graphicSettings.renderMode?.value === 1"
                  [hoveredTeam]="hoveredTeam"
                  [mapHeight]="mapHeight"
                  [mapWidth]="mapWidth"

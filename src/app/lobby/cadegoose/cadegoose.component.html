@@ -1,10 +1,10 @@
 <div #background>
   <q-twod-render #renderer
-                 *ngIf="graphicSettings.renderMode.value === 0"
+                 *ngIf="graphicSettings.renderMode?.value === 0"
                  [hoveredTeam]="hoveredTeam"
-                 [speed]="graphicSettings.speed.value"
-                 [mapScale]="graphicSettings.mapScale.value"
-                 [fishBoats]="lobbySettings.fishBoats?.value || 0"
+                 [speed]="graphicSettings.speed?.value ?? 10"
+                 [mapScale]="graphicSettings.mapScale?.value ?? 50"
+                 [fishBoats]="lobbySettings.fishBoats?.value ?? 0"
                  [ctrlZoom]="advancedMapOpen"
                  [setTile]="advancedMapOpen ? setTile.bind(this) : 0"
                  [undo]="undo"
@@ -13,7 +13,7 @@
                  [graphicSettings]="graphicSettings"
                  [myBoat]="myBoat"></q-twod-render>
   <q-threed-render #renderer
-                   *ngIf="graphicSettings.renderMode.value === 1"
+                   *ngIf="graphicSettings.renderMode?.value === 1"
                    [hoveredTeam]="hoveredTeam"
                    [graphicSettings]="graphicSettings"></q-threed-render>
 
