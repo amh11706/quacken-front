@@ -25,7 +25,7 @@ export class Pos {
 export class MapComponent {
   @Input() map?: MapEditor;
   @Input() undo?: (source: MapTile[][], target: MapTile[][]) => void;
-  @Input() setTile?: (x: number, y: number, v: number) => MapTile | undefined;
+  @Input() setTile?: (x: number, y: number, v: number) => MapTile | void;
   titles = Titles;
 
   painting = false;

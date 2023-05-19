@@ -23,6 +23,7 @@ export interface Clutter {
   dbl?: number;
   tm?: number;
   tf?: number;
+  u?: { x: number, y: number, v: number }[];
 }
 
 export interface Turn {

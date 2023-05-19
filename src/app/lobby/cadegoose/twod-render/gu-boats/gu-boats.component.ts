@@ -55,6 +55,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
+  @Input() setTile?: (x: number, y: number, v: number) => void;
   clutter: MovableClutter[] = [];
   teamColors = TeamColorsCss;
   moveTransition = (transition?: number): string => {
@@ -93,6 +94,8 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     this.image.load('/assets/clutter/cannonball_small.png');
     this.image.load('/assets/clutter/cannonball_medium.png');
     this.image.load('/assets/clutter/cannonball_large.png');
+    this.image.load('/assets/clutter/cannonball_healing.png');
+    this.image.load('/assets/clutter/cannonball_healing_gold.png');
     this.image.load('/assets/clutter/chain_cannonball.png');
     this.image.load('/assets/clutter/flaming_cannonball.png');
     this.image.load('/assets/clutter/explode_small.png');
@@ -129,6 +132,12 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     if (updates.length === 0) return Promise.resolve();
     const startTime = new Date().valueOf();
     for (const u of updates) {
+      if (u.u && this.setTile) {
+        setTimeout(() => {
+          if (!u.u || !this.setTile) return;
+          for (const t of u.u) this.setTile(t.x, t.y, t.v);
+        }, 12000 / this.speed);
+      }
       const oldClutter = u.id && this.clutter.find(c => c.id === u.id);
       if (oldClutter) {
         Object.assign(oldClutter, u);

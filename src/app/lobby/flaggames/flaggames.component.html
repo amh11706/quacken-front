@@ -8,9 +8,10 @@
                  [mapHeight]="mapHeight"
                  [mapWidth]="mapWidth"
                  [ctrlZoom]="advancedMapOpen"
-                 [setTile]="advancedMapOpen ? setTile : 0"
+                 [setTile]="setTile.bind(this)"
                  [undo]="undo"
                  [editor]="editor"
+                 [lobby]="lobby"
                  [showIsland]="false"
                  [graphicSettings]="graphicSettings"
                  [myBoat]="myBoat"></q-twod-render>
@@ -37,4 +38,5 @@
 
 <q-cade-hud [moveKeys]="moveKeys"
             [actions]="actions"
+            [group]="'l/flaggames'"
             [kbControls]="controlSettings.kbControls?.value || 0"></q-cade-hud>

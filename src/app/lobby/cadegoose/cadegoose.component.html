@@ -6,9 +6,10 @@
                  [mapScale]="graphicSettings.mapScale.value"
                  [fishBoats]="lobbySettings.fishBoats?.value || 0"
                  [ctrlZoom]="advancedMapOpen"
-                 [setTile]="advancedMapOpen ? setTile : 0"
+                 [setTile]="advancedMapOpen ? setTile.bind(this) : 0"
                  [undo]="undo"
                  [editor]="editor"
+                 [lobby]="lobby"
                  [graphicSettings]="graphicSettings"
                  [myBoat]="myBoat"></q-twod-render>
   <q-threed-render #renderer
