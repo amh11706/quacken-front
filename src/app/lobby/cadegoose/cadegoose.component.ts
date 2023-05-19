@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
-import { SettingList, SettingsService } from '../../settings/settings.service';
+import { SettingList, SettingMap, SettingsService } from '../../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { WsService } from '../../ws.service';
@@ -60,7 +60,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     renderMode: { value: -1 },
   };
 
-  controlSettings = { lockAngle: { value: 0 }, kbControls: { value: 0 } };
+  controlSettings: SettingMap = { lockAngle: { value: 0 }, kbControls: { value: 0 } };
   hoveredTeam = -1;
   statOpacity = 0;
   mapHeight = 36;

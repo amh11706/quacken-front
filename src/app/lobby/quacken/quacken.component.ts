@@ -36,7 +36,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   map: number[][] = [];
-  controlSettings = { kbControls: { value: 1 } as SettingPartial };
+  controlSettings: SettingMap = { kbControls: { value: 1 } };
   lobbySettings = { fishBoats: { value: 0 } } as SettingMap;
   graphicSettings = {
     mapScale: { value: 50 } as SettingPartial,

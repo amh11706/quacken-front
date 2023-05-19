@@ -3,5 +3,5 @@
 	   [myBoat]="myBoat"
 	   [map]="lobby?.map || ''"></q-map>
 
-<q-hud [kbControls]="controlSettings.kbControls.value"></q-hud>
+<q-hud [kbControls]="controlSettings.kbControls?.value ?? 0"></q-hud>
 <q-entry-status></q-entry-status>
