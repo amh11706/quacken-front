@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
+import { ComponentType } from '@angular/cdk/portal';
 import { SettingList, SettingMap, SettingsService } from '../../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
@@ -35,7 +36,7 @@ export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy 
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('renderer', { static: false }) renderer?: TwodRenderComponent;
-  protected menuComponent = MainMenuComponent;
+  protected menuComponent = MainMenuComponent as ComponentType<any>;
   private pendingChanges: MapTile[] = [];
   editor: MapEditor = {
     selected: 50,

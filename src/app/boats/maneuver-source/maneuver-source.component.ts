@@ -29,6 +29,7 @@ const enum Maneuver {
   RepairSelf = 40,
   RepairSelfGold = 41,
   DropFlag = 44,
+  DropFlagGold = 45,
 }
 
 const ManeuverIcons = {
@@ -59,6 +60,7 @@ const ManeuverIcons = {
   [Maneuver.RepairSelf]: './assets/images/arrow12.png',
   [Maneuver.RepairSelfGold]: './assets/images/arrow13.png',
   [Maneuver.DropFlag]: './assets/images/obstacle21.png',
+  [Maneuver.DropFlagGold]: './assets/images/obstacle22.png',
 };
 
 export function getManeuverIcon(id: number): string {

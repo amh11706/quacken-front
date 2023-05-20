@@ -67,7 +67,7 @@ export class FlaggamesComponent extends CadegooseComponent {
 
   setTile(x: number, y: number, v: number): MapTile | void {
     if (this.advancedMapOpen) return super.setTile(x, y, v);
-    if (this.lobby?.turn === 0) return; // Don't allow editing before the game starts.
+    if (this.lobby?.turn === 0) return; // Don't allow clutter based editing before the game starts.
 
     const row = this.map[y];
     if (!row) return;

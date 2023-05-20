@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { FriendsService } from '../../../chat/friends/friends.service';
+import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Settings, BoatSetting } from '../../../settings/setting/settings';
+import { SettingsService } from '../../../settings/settings.service';
+import { SoundService } from '../../../sound.service';
+import { WsService } from '../../../ws.service';
 import { MainMenuComponent } from '../../cadegoose/main-menu/main-menu.component';
+import { FgHelpComponent } from '../fg-help/fg-help.component';
 
 @Component({
   selector: 'q-fg-main-menu',
@@ -8,5 +15,20 @@ import { MainMenuComponent } from '../../cadegoose/main-menu/main-menu.component
   styleUrls: ['./fg-main-menu.component.scss'],
 })
 export class FgMainMenuComponent extends MainMenuComponent {
+  constructor(
+    ws: WsService,
+    fs: FriendsService,
+    es: EscMenuService,
+    ss: SettingsService,
+    sound: SoundService,
+    private dialog: MatDialog,
+  ) {
+    super(ws, fs, es, ss, sound);
+  }
+
   boatTitles = (Settings.flagNextBoat as BoatSetting).titles;
+
+  openHelp(): void {
+    this.dialog.open(FgHelpComponent, { maxWidth: '600px', maxHeight: '80%' });
+  }
 }

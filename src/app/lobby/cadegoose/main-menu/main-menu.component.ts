@@ -32,7 +32,6 @@ interface TeamMessage {
 export class MainMenuComponent implements OnInit, OnDestroy {
   teamColors = TeamColorsCss;
   teamNames = TeamNames;
-  // eslint-disable-next-line no-sparse-arrays
   boatTitles = (Settings.nextCadeBoat as BoatSetting).titles;
 
   links = links;

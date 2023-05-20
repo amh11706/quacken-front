@@ -184,4 +184,10 @@ q-sprite-img {
 .clutter16 .clutterimg { background-image: url("/assets/clutter/flotsam.png"); }
 .clutter17 .clutterimg { background-image: url("/assets/clutter/flaming_flotsam.png"); }
 
-.clutter17 .clutterimg {animation: floatsam 1.5s ease-in-out infinite; }
+.clutter17 .clutterimg { animation: floatsam 1.5s ease-in-out infinite; }
+
+.clutter24 .clutterimg, .clutter25 .clutterimg { 
+  background: url("/assets/images/powderkeg.png") center/cover no-repeat;
+  scale: 0.2;
+}
+.clutter25 .clutterimg { background-image: url("/assets/images/powderkeg_gold.png"); }
