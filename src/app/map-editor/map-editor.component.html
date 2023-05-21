@@ -1,27 +1,30 @@
-
 <div #background
      class="noselect"
      id="background"
      oncontextmenu="event.preventDefault()">
-  <q-twod-render *ngIf="editor.selectedTile.group === 'cgmaps' && editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length"
-      [map]="editor.selectedTile.data"
-      [editor]="editor"
-      [undo]="undo"
-      [ctrlZoom]="true"
-      [setTile]="setTile">
+  <q-twod-render *ngIf="settings() && editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length; else oldRender"
+                 [map]="editor.selectedTile.data"
+                 [editor]="editor"
+                 [undo]="undo"
+                 [mapWidth]="settings()?.width ?? 20"
+                 [mapHeight]="settings()?.height ?? 36"
+                 [showIsland]="settings()?.showIsland ?? false"
+                 [ctrlZoom]="true"
+                 [setTile]="setTile">
   </q-twod-render>
 
-  <div *ngIf="editor.selectedTile.group !== 'cgmaps'" 
-      [qDrag]="background"
-       id="mapframe">
-    <q-map *ngIf="editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length"
-           [map]="editor"
-           [undo]="undo"
-           [setTile]="setTile">
-    </q-map>
-    <q-structure-map *ngIf="editor.structures"
-                     [map]="editor"></q-structure-map>
-  </div>
+  <ng-template #oldRender>
+    <div [qDrag]="background"
+         id="mapframe">
+      <q-map *ngIf="editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length"
+             [map]="editor"
+             [undo]="undo"
+             [setTile]="setTile">
+      </q-map>
+      <q-structure-map *ngIf="editor.structures"
+                       [map]="editor"></q-structure-map>
+    </div>
+  </ng-template>
 </div>
 
 <q-obstacles *ngIf="!editor.structures"

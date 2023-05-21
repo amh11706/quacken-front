@@ -62,7 +62,7 @@ type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'spee
   'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked' |
   'renderMode' | 'fishBoats' | 'allowGuests' |
   'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' | 'flagTurns' |
-  'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagNextBoat';
+  'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagNextBoat' | 'flagRespawn';
 
 export const Settings: Record<SettingName, Setting> = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
@@ -229,7 +229,7 @@ export const Settings: Record<SettingName, Setting> = {
     name: 'createType',
     type: 'option',
     options: [
-      'Quacken', 'Spades', 'Cadesim', 'Sea Battle',
+      'Quacken', 'Spades', 'Cadesim', 'Sea Battle', 'Capture the Flag',
     ],
   },
   turnTime: {
@@ -305,5 +305,8 @@ export const Settings: Record<SettingName, Setting> = {
     groups: [
       { name: 'Next Ship', options: [15, 16, 17, 18] },
     ],
+  },
+  flagRespawn: {
+    admin: true, id: 58, group: 'l/flaggames', name: 'flagRespawn', type: 'checkbox', label: 'Respawn 2pt Flags',
   },
 };

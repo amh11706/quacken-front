@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
@@ -27,7 +27,7 @@ type FlagMap = Map<string, Turn['flags'][0]>
   templateUrl: './twod-render.component.html',
   styleUrls: ['./twod-render.component.scss'],
 })
-export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   readonly rotationSeed = Math.random() * (Number.MAX_SAFE_INTEGER / 2) + 99999999;
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
@@ -111,7 +111,6 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    GuBoat.widthOffset = this.mapWidth - 1;
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
       if (this.lobby) this.lobby.flags = t.flags;
       const flagMap: FlagMap = new Map();
@@ -131,6 +130,15 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stats = Stats();
     this.fps?.nativeElement.appendChild(this.stats.dom);
     this.stats.dom.style.position = 'relative';
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.mapHeight || changes.mapWidth) {
+      delete this.canvas;
+      GuBoat.widthOffset = this.mapWidth - 1;
+      this.canvasElement!.nativeElement.width = this.getWidth();
+      this.canvasElement!.nativeElement.height = this.getHeight();
+    }
   }
 
   ngOnDestroy(): void {
@@ -290,13 +298,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   mousedown(event: MouseEvent): void {
-    if (this.lobby?.turn !== 0) return;
+    if (this.lobby?.turn) return;
     const p = this.extractCoord(event);
     this.mapUtil.clickTile(event, p.x, p.y);
   }
 
   mouseup(event: MouseEvent): void {
-    if (this.lobby?.turn !== 0) return;
+    if (this.lobby?.turn) return;
     const p = this.extractCoord(event);
     this.mapUtil.mouseUp(event, p.x, p.y);
   }

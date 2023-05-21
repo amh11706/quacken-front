@@ -15,25 +15,23 @@
      id="tiles">
   <div #handle
        id="handle"></div>
-     <div *ngIf="map.selectedTile.group === 'cgmaps'">
-          <img *ngFor="let obstacle of cadeObstacles; let i = index"
-          [title]="cadeTitles[i]"
-          draggable="false"
-          src="./assets/images/obstacle{{obstacle}}.png"
-          (click)="map.selected = obstacle"> 
-     </div>
-     <div *ngIf="map.selectedTile.group !== 'cgmaps'">
-          <img *ngFor="let obstacle of obstacles; let i = index"
-          [title]="titles[i]"
-          draggable="false"
-          src="./assets/images/obstacle{{obstacle}}.png"
-          (click)="map.selected = obstacle"> 
-     </div>
-  <ng-container *ngIf="map.selectedTile.group === 'cgmaps'">
+  <div *ngIf="map.selectedTile.group === 'cgmaps' || map.selectedTile.group === 'fgmaps'; else quacken">
+    <img *ngFor="let obstacle of cadeObstacles; let i = index"
+         [title]="cadeTitles[i]"
+         draggable="false"
+         src="./assets/images/obstacle{{obstacle}}.png"
+         (click)="map.selected = obstacle">
     <img *ngFor="let flag of [21, 22, 23]"
          title="Flag"
          draggable="false"
          src="./assets/images/obstacle{{flag}}.png"
          (click)="map.selected = flag">
-  </ng-container>
+  </div>
+  <ng-template #quacken>
+    <img *ngFor="let obstacle of obstacles; let i = index"
+         [title]="titles[i]"
+         draggable="false"
+         src="./assets/images/obstacle{{obstacle}}.png"
+         (click)="map.selected = obstacle">
+  </ng-template>
 </div>

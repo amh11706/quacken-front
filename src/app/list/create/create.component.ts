@@ -16,7 +16,7 @@ export const Descriptions = {
   SeaBattle: SbDesc,
 };
 
-const groups = ['quacken', 'spades', 'cade', 'cade'];
+const groups = ['quacken', 'spades', 'cade', 'cade', 'flaggames'];
 
 @Component({
   selector: 'q-create',
@@ -33,6 +33,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     ['turnTime', 'playTo', 'watchers'],
     ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
     ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
+    ['flagMaxPlayers', 'flagHotEntry', 'flagPublicMode', 'flagAllowGuests'],
   ];
 
   private sub = new Subscription();

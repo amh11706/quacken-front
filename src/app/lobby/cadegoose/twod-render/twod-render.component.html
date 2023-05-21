@@ -15,8 +15,6 @@
         <div
              [style.transform]="'translate(50%, 50%) translate(' + -getXOff(myBoat) + 'px, ' + -getYOff(myBoat) + 'px)'">
           <canvas id="mapCanvas"
-                  [width]="getWidth()"
-                  [height]="getHeight()"
                   (mousedown)="mousedown($event)"
                   (mouseup)="mouseup($event)"
                   (mousemove)="mousemove($event)"
@@ -24,12 +22,12 @@
 
           <ng-container *ngFor="let obstacle of obstacles;">
             <q-sprite-img class="obstacle"
-                [render]="obstacle.sprite"
-                [style.zIndex]="obstacle.zIndex"
-                [style.top]="obstacle.sprite.pOffsetY + 'px'"
-                [style.left]="obstacle.sprite.pOffsetX + 'px'"></q-sprite-img>
-          </ng-container>        
-          
+                          [render]="obstacle.sprite"
+                          [style.zIndex]="obstacle.zIndex"
+                          [style.top]="obstacle.sprite.pOffsetY + 'px'"
+                          [style.left]="obstacle.sprite.pOffsetX + 'px'"></q-sprite-img>
+          </ng-container>
+
           <q-gu-boats [showIsland]="showIsland"
                       [hoveredTeam]="hoveredTeam"
                       [speed]="speed"

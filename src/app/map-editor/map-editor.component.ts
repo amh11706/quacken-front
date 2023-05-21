@@ -14,7 +14,7 @@ export interface MapTile {
   x: number; y: number; v: number;
 }
 
-export type MapGroups = 'maps' | 'cgmaps' | 'tile_sets' | 'tiles' | 'structure_sets' | 'structures' | 'tmaps' | 'tmap_sets';
+export type MapGroups = 'maps' | 'cgmaps' | 'fgmaps' | 'tile_sets' | 'tiles' | 'structure_sets' | 'structures' | 'tmaps' | 'tmap_sets';
 
 export interface StructureData {
   group: number;
@@ -46,6 +46,7 @@ export interface DBTile {
   settings?: any;
   error?: string;
   tags: string[];
+  rankArea?: number;
 }
 
 export interface MapEditor {
@@ -61,6 +62,12 @@ export interface MapEditor {
   tileSettings?: boolean;
 }
 
+interface RenderSetting {
+  width: number;
+  height: number;
+  showIsland: boolean;
+}
+
 @Component({
   selector: 'q-map-editor',
   templateUrl: './map-editor.component.html',
@@ -70,6 +77,19 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;
   @Input()
   private sub = new Subscription();
+
+  renderSettings: Partial<Record<MapGroups, RenderSetting>> = {
+    cgmaps: {
+      width: 20,
+      height: 36,
+      showIsland: true,
+    },
+    fgmaps: {
+      width: 31,
+      height: 41,
+      showIsland: false,
+    },
+  }
 
   editor: MapEditor = {
     selected: 50,
@@ -124,6 +144,10 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     this.es.setLobby();
   }
 
+  settings(): RenderSetting | undefined {
+    return this.renderSettings[this.editor.selectedTile.group];
+  }
+
   private saveSession = () => {
     window.localStorage.setItem(this.ws.user?.id + '-editor', JSON.stringify(
       this.editor,
@@ -176,8 +200,8 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
     const newTile: any = {};
     Object.assign(newTile, tile);
-    await this.ws.request(OutCmd.MapSave, newTile);
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Saved.' } });
+    const message = await this.ws.request(OutCmd.MapSave, newTile);
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: message ?? 'Saved.' } });
     tile.unsaved = false;
   }
 
@@ -196,8 +220,9 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   }
 
   setTile = (x: number, y: number, v: number): { x: number, y: number, v: number } | undefined => {
-    if (this.editor.selectedTile.group === 'cgmaps') {
-      if (x < 0 || x > 19 || y < 3 || y > 32) return;
+    const settings = this.settings();
+    if (settings) {
+      if (x < 0 || x >= settings.width || y < 3 || y >= settings.height - 3) return;
     } else {
       if (x < 0 || x > 24 || y < 0 || y > 48) return;
     }

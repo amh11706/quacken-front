@@ -35,6 +35,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     tmap_sets: 'Challenge Set',
     structure_sets: 'Structure Set',
     cgmaps: 'Map',
+    fgmaps: 'Flag Capture Map',
   };
 
   types = [
@@ -307,6 +308,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private buildMap(type: MapGroups): number[][] {
     const types = {
       cgmaps: { x: 20, y: 36 },
+      fgmaps: { x: 31, y: 41 },
       maps: { x: 25, y: 52 },
       tmaps: { x: 25, y: 52 },
       tiles: { x: 8, y: 8 },
@@ -338,6 +340,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     if (this.selected === 'new') {
       tile.data = this.buildMap(tile.group);
       tile.weight = 1;
+      if (tile.group === 'cgmaps') tile.rankArea = 2;
+      else if (tile.group === 'fgmaps') tile.rankArea = 4;
     }
 
     if (tile.unsaved) {
