@@ -165,7 +165,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   setTile(x: number, y: number, v: number): MapTile | void {
-    if (x < 0 || x >= this.mapWidth || y < 3 || y > 32) return;
+    if (x < 0 || x >= this.mapWidth || y < 3 || y > this.mapHeight - 4) return;
     const oldTile = { x, y, v: this.map[y]?.[x] || 0 };
     if (oldTile.v === v) return;
     this.mapDataDebounce.next();

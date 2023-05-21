@@ -28,7 +28,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     if (!l) return;
     this._lobby = l;
     if (l.map) this.setMapB64(l.map);
-    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.Lobby, data: l }));
+    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.Lobby, data: l }), 100);
   }
 
   get lobby(): Lobby | undefined {

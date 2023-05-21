@@ -20,6 +20,8 @@ import { Turn } from '../../quacken/boats/boats.component';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = 0 | 1 | 2 | 3;
+
+type FlagMap = Map<string, Turn['flags'][0]>
 @Component({
   selector: 'q-twod-render',
   templateUrl: './twod-render.component.html',
@@ -84,11 +86,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private canvas?: CanvasRenderingContext2D | null;
 
   obstacles: { t: number, points?: number, cs?: number[], zIndex: number, sprite: SpriteImage }[] = [];
-  flags: { t: number, points?: number, cs?: number[], zIndex: number, sprite: SpriteImage }[] = [];
+  flags: { x: number, y: number, t: number, points?: number, cs?: number[], zIndex: number, sprite: SpriteImage }[] = [];
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
-  getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x || this.getWidth() / 2;
-  getYOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.y || this.getHeight() / 2;
+  getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x ?? this.getWidth() / 2;
+  getYOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.y ?? this.getHeight() / 2;
 
   moveTransition = (transition: number): string => {
     switch (transition) {
@@ -111,7 +113,10 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     GuBoat.widthOffset = this.mapWidth - 1;
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
-      this.colorFlags(t.flags);
+      if (this.lobby) this.lobby.flags = t.flags;
+      const flagMap: FlagMap = new Map();
+      for (const f of t.flags) flagMap.set(`${f.x},${f.y}`, f);
+      this.colorFlags(flagMap);
     }));
     this.sub.add(this.ws.subscribe(Internal.CenterOnBoat, () => {
       if (!this.myBoat.isMe) return;
@@ -168,12 +173,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     return (this.mapWidth + this.mapHeight) * 32;
   }
 
-  colorFlags(flags?: Turn['flags']): void {
+  colorFlags(flags?: FlagMap): void {
     if (this.flags.length === 0) return;
     if (flags) {
-      for (let i = 0; i < this.flags.length; i++) {
-        const flag = this.flags[i];
-        if (flag) flag.t = flags[i]?.t ?? flag.t;
+      for (const flag of this.flags) {
+        if (flag) flag.t = flags.get(`${flag.x},${flag.y}`)?.t ?? flag.t;
       }
     }
     for (const f of this.flags) {
@@ -187,7 +191,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public addObstacle(
-    x: number, y: number, tile: number, flags: Turn['flags'],
+    x: number, y: number, tile: number, flags: FlagMap,
   ): void {
     const obstacle = new Point().fromPosition({ x, y });
     const pOffsetX = obstacle.x;
@@ -198,10 +202,12 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
       flag.pOffsetX = pOffsetX;
       flag.pOffsetY = pOffsetY;
       const flagObj = {
-        t: flags?.shift()?.t ?? 99,
+        t: flags.get(`${x},${y}`)?.t ?? 99,
         points: tile - 21,
         zIndex: (pOffsetY - 23),
         sprite: flag,
+        x,
+        y,
       };
       this.obstacles.push(flagObj);
       this.flags.push(flagObj);
@@ -223,6 +229,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async fillMap(map: number[][], flags: Turn['flags']): Promise<void> {
+    const flagMap: FlagMap = new Map();
+    for (const f of flags) flagMap.set(`${f.x},${f.y}`, f);
     await Promise.all([this.wind.prom, this.whirl.prom, this.water.prom, this.sz.prom]);
     const wasLoaded = !!this.canvas;
     if (!this.canvas) {
@@ -246,7 +254,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnDestroy {
         else this.water.draw(ctx, 0, xOffset, yOffset);
         const tile = map[y]?.[x];
         if (!tile) continue;
-        else if ((tile >= 21 && tile <= 23) || tile === 50 || tile === 51) this.addObstacle(x, y, tile, flags);
+        else if ((tile >= 21 && tile <= 23) || tile === 50 || tile === 51) this.addObstacle(x, y, tile, flagMap);
         else if (tile > 8) this.whirl.draw(ctx, tile - 9, xOffset, yOffset);
         else if (tile > 4) this.wind.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
       }

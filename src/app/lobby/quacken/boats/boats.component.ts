@@ -122,6 +122,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.clutter = [];
       const clutter = m.clutter || [];
       this.handleUpdate(clutter, 0);
+      setTimeout(() => {
+        this.handleTurn(m as any);
+      }, 100);
     }));
     this.subs.add(this.ws.subscribe(InCmd.NewBoat, (boat: BoatSync) => this.setBoats([boat], false)));
     this.subs.add(this.ws.subscribe(InCmd.DelBoat, (id: number) => this.deleteBoat(id)));
@@ -201,7 +204,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   }
 
   protected handleTurn(turn: Turn): void {
-    if (this.turn) {
+    if (this.turn || !turn.steps) {
       // console.log('got turn while in turn', this.turn);
       return;
     }

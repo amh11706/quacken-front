@@ -168,8 +168,10 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   }
 
   protected handleTurn(turn: Turn): void {
-    this.flagData = turn.flags;
-    this.setHeaderFlags(turn.flags);
+    if (turn.flags) {
+      this.flagData = turn.flags;
+      this.setHeaderFlags(turn.flags);
+    }
     super.handleTurn(turn);
   }
 
