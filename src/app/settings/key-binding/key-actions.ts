@@ -105,10 +105,10 @@ export type StaticKeyBindings = DeepReadonly<KeyBindings>;
 export const DefaultBindings: StaticKeyBindings = {
   Global: [
     { action: KeyActions.ToggleEscMenu, title: 'Toggle escape menu', bindings: ['Escape', NotActive] },
-    { action: KeyActions.OpenLobby, title: 'Open lobby menu', bindings: ['l', NotActive] },
-    { action: KeyActions.OpenSettings, title: 'Open settings', bindings: ['o', NotActive] },
-    { action: KeyActions.OpenInventory, title: 'Open inventory', bindings: ['i', NotActive] },
-    { action: KeyActions.OpenProfile, title: 'Open profile', bindings: ['p', NotActive] },
+    { action: KeyActions.OpenLobby, title: 'Open lobby menu', bindings: ['Ctrl + l', NotActive] },
+    { action: KeyActions.OpenSettings, title: 'Open settings', bindings: ['Ctrl + o', NotActive] },
+    { action: KeyActions.OpenInventory, title: 'Open inventory', bindings: ['Ctrl + i', NotActive] },
+    { action: KeyActions.OpenProfile, title: 'Open profile', bindings: ['Ctrl + p', NotActive] },
     { action: KeyActions.FocusChat, title: 'Focus chat', bindings: ['t', 'Enter'] },
     { action: KeyActions.LeaveLobby, title: 'Leave lobby', bindings: ['Ctrl + b', NotActive] },
     { action: KeyActions.Logout, title: 'Log out', bindings: ['Ctrl + l', NotActive] },
