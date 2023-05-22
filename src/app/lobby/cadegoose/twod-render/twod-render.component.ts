@@ -130,14 +130,18 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     this.stats = Stats();
     this.fps?.nativeElement.appendChild(this.stats.dom);
     this.stats.dom.style.position = 'relative';
+    this.resize();
+  }
+
+  private resize() {
+    GuBoat.widthOffset = this.mapWidth - 1;
+    this.canvasElement!.nativeElement.width = this.getWidth();
+    this.canvasElement!.nativeElement.height = this.getHeight();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.mapHeight || changes.mapWidth) {
-      delete this.canvas;
-      GuBoat.widthOffset = this.mapWidth - 1;
-      this.canvasElement!.nativeElement.width = this.getWidth();
-      this.canvasElement!.nativeElement.height = this.getHeight();
+      this.resize();
     }
   }
 
@@ -246,14 +250,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     }
     if (!this.canvas) return;
     const ctx = this.canvas;
+    ctx.save();
     if (wasLoaded) {
       ctx.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
-    } else {
-      ctx.translate(0, this.mapWidth * 24 - 24);
     }
+    ctx.translate(0, this.mapWidth * 24 - 24);
     this.obstacles = [];
     this.flags = [];
-    ctx.save();
     for (let y = 0; y < this.mapHeight; y++) {
       for (let x = 0; x < this.mapWidth; x++) {
         const xOffset = (x + y) * 32;
