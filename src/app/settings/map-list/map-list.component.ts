@@ -67,6 +67,7 @@ export class MapListComponent implements OnInit, OnDestroy {
   constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
 
   async ngOnInit(): Promise<void> {
+    if (this.rankArea === 4) this.setting = Settings.flagMap;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async l => {
       const settingValue = (await this.ss.get(this.setting.group, this.setting.name))?.value || 0;
       if (settingValue > 1 || !l.map || !this.servermapList[0]) return;

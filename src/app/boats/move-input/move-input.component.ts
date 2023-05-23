@@ -257,7 +257,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       if (!maneuver?.directional) return;
     }
     if (move > 7) {
-      moves[slot] = (move + 2) % 4 + 8;
+      moves[slot] = (move + 2) % 4 + Math.floor(move / 4) * 4;
     } else {
       let wantMove = (ev.button + 1 + move) % 4;
       let tokens = this.unusedTokens.moves[wantMove - 1] || 0;

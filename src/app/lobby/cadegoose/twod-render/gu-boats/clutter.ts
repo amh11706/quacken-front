@@ -32,7 +32,7 @@ export class MovableClutter implements Clutter {
     else this.transitions = [3, 2];
   }
 
-  updatePos(startTime: number, x: number, y: number): Promise<void>[] {
+  updatePos(startTime: number, x: number, y: number): Promise<void[]> {
     const p = [
       new Promise<void | { x: number, y: number }>(resolve => {
         if (startTime && this.transitions[0]) {
@@ -69,6 +69,6 @@ export class MovableClutter implements Clutter {
       }),
     ];
 
-    return p;
+    return Promise.all(p);
   }
 }

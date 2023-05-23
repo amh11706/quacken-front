@@ -267,7 +267,7 @@ export const Settings: Record<SettingName, Setting> = {
   },
   flagJobberQuality: {
     // eslint-disable-next-line object-property-newline
-    admin: true, id: 51, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 105, step: 5, name: 'jobberQuality',
+    admin: true, id: 51, group: 'l/flaggames', type: 'slider', label: 'Jobber Quality', min: 5, max: 105, step: 5, name: 'jobberQuality',
     stepLabels: { 105: 'Advanced' },
     advancedComponent: JobberQualityComponent,
     setLabel: (s) => {

@@ -114,7 +114,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1): Promise<void> {
     const old = this.secondsPerTurn;
-    await this.ss.get('l/cade', 'turnTime');
+    await this.ss.get(this.group, 'turnTime');
     super.setTurn(turn, sec + this.secondsPerTurn - old);
   }
 

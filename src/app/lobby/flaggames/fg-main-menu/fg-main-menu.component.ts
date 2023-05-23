@@ -24,11 +24,12 @@ export class FgMainMenuComponent extends MainMenuComponent {
     private dialog: MatDialog,
   ) {
     super(ws, fs, es, ss, sound);
+    this.group = 'l/flaggames';
   }
 
   boatTitles = (Settings.flagNextBoat as BoatSetting).titles;
 
   openHelp(): void {
-    this.dialog.open(FgHelpComponent, { maxWidth: '600px', maxHeight: '80%' });
+    this.dialog.open(FgHelpComponent, { maxWidth: '600px', maxHeight: '80vh' });
   }
 }
