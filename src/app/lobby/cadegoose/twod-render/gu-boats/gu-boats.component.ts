@@ -141,8 +141,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       const oldClutter = u.id && this.clutter.find(c => c.id === u.id);
       if (oldClutter) {
         Object.assign(oldClutter, u, { p: oldClutter.p });
-        oldClutter.setTransitions();
-        oldClutter.updatePos(startTime, u.x, u.y).then(() => oldClutter.p = u.p);
+        void oldClutter.updatePos(startTime, u.x, u.y).then(() => oldClutter.p = u.p);
       } else {
         this.clutter.push(new MovableClutter(u));
       }

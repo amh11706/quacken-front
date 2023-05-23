@@ -18,6 +18,7 @@ export class MovableClutter implements Clutter {
   private pos: { x: number, y: number };
   private transitions: [number, number] = [1, 1];
   coords: Point;
+  private activeMovement: Promise<void[]> | undefined;
 
   constructor(c: Clutter) {
     Object.assign(this, c);
@@ -33,6 +34,10 @@ export class MovableClutter implements Clutter {
   }
 
   updatePos(startTime: number, x: number, y: number): Promise<void[]> {
+    if (this.activeMovement) {
+      return this.activeMovement.then(() => this.updatePos(startTime, x, y));
+    }
+    this.setTransitions();
     const p = [
       new Promise<void | { x: number, y: number }>(resolve => {
         if (startTime && this.transitions[0]) {
@@ -69,6 +74,8 @@ export class MovableClutter implements Clutter {
       }),
     ];
 
-    return Promise.all(p);
+    this.activeMovement = Promise.all(p);
+    void this.activeMovement.then(() => delete this.activeMovement);
+    return this.activeMovement;
   }
 }
