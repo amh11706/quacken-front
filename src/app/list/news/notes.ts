@@ -5,12 +5,13 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
-    title: 'Release 21 May 2023',
+    title: 'Release 23 May 2023',
     points: [
       'New game mode! Capture the flag.',
       'Two variations: Take the enemy flags to your base, or plant flags in the enemy base.',
       'Four new boat classes: Sniper, Builder, Healer, and Bomber.',
       'Sea battle now ends when only one team is left rather than on first sink.',
+      'Selected maneuver is now more likely to generate faster',
       'Flotsam now drops before the winds and whirls act.',
       'Dropping flotsam on a boat now immediately affects the boat.',
       'Quacken lobby type temporarily removed.',

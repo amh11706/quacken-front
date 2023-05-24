@@ -6,7 +6,7 @@ import { Internal } from '../../../../ws-messages';
 import { Sounds, SoundService } from '../../../../sound.service';
 import { ImageService } from '../../../../image.service';
 import { GuBoat } from './gu-boat';
-import { BoatService, checkSZ } from '../../boat.service';
+import { BoatService } from '../../boat.service';
 import { TeamColorsCss } from '../../cade-entry-status/cade-entry-status.component';
 import { MovableClutter } from './clutter';
 
@@ -48,9 +48,9 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   private _hoveredTeam = -1;
   @Input() map?: HTMLElement;
-  protected checkSZ = (pos: { x: number, y: number }): boolean => {
+  @Input() checkSZ = (pos: { x: number, y: number }): boolean => {
     if (!this.showIsland) return false;
-    return checkSZ(pos);
+    return pos.y > 32 || pos.y < 3;
   }
 
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;

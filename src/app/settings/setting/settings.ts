@@ -62,7 +62,7 @@ type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'spee
   'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked' |
   'renderMode' | 'fishBoats' | 'allowGuests' |
   'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' | 'flagTurns' |
-  'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagNextBoat' | 'flagRespawn';
+  'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagNextBoat' | 'flagRespawn' | 'flagSteal';
 
 export const Settings: Record<SettingName, Setting> = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
@@ -300,7 +300,7 @@ export const Settings: Record<SettingName, Setting> = {
     type: 'boat',
     trigger: OutCmd.NextBoat,
     titles: [, , , , , , , , , , , , , , ,
-      'Healer', 'Builder', 'Bomber', 'Sniper',
+      'Healer', 'Sniper', 'Bomber', 'Builder',
     ],
     groups: [
       { name: 'Next Ship', options: [15, 16, 17, 18] },
@@ -308,5 +308,8 @@ export const Settings: Record<SettingName, Setting> = {
   },
   flagRespawn: {
     admin: true, id: 58, group: 'l/flaggames', name: 'flagRespawn', type: 'checkbox', label: 'Respawn 2pt Flags',
+  },
+  flagSteal: {
+    admin: true, id: 59, group: 'l/flaggames', name: 'flagSteal', type: 'checkbox', label: 'Stealable flags on sink',
   },
 };

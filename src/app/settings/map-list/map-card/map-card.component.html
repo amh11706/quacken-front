@@ -1,7 +1,9 @@
 <mat-card *ngIf="map && map.data"
           class="flex-container">
   <div class="flex-item1">
-    <q-canvas [map]="map.data"></q-canvas>
+    <q-canvas [map]="map.data"
+              [mapWidth]="width"
+              [mapHeight]="height"></q-canvas>
   </div>
   <ng-container *ngIf="map.id > 1 else generatedTemp">
     <div *ngIf="map.ratingMine"

@@ -16,7 +16,7 @@ const ownerSettings: SettingList = [
   'flagHotEntry', 'flagPublicMode',
   'flagSpawnDelay', 'flagMap',
   'flagFishBoats', 'flagAllowGuests',
-  'flagRespawn',
+  'flagRespawn', 'flagSteal',
 ];
 
 @Component({
@@ -50,6 +50,10 @@ export class FlaggamesComponent extends CadegooseComponent {
     ready: KeyActions.SBReady,
     back: KeyActions.SBBack,
   };
+
+  checkSZ = (pos: { x: number, y: number }): boolean => {
+    return pos.y < 3 || pos.y > this.mapHeight - 4;
+  }
 
   constructor(
     ws: WsService,

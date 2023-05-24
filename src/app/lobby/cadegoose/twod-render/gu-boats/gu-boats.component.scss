@@ -34,7 +34,7 @@ q-sprite-img {
 .boat {
   width: 64px;
   height: 48px;
-  transition: opacity calc(var(--speed) * 1s) linear;
+  transition: opacity calc(var(--speed) * 1s) calc(var(--speed) * 1s) linear;
 }
 
 .influence {

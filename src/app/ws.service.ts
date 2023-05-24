@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
 import { AuthGuard } from './auth.guard';
 
-const ClientVersion = 43;
+const ClientVersion = 44;
 
 export interface InMessage {
   cmd: InCmd | Internal;

@@ -7,7 +7,7 @@ import { InCmd, Internal } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
 import { MapEditor, MapTile } from '../../../map-editor/map-editor.component';
 import { Boat } from '../../quacken/boats/boat';
-import { Sprite, SpriteImage } from './sprite';
+import { JsonSprite, Sprite, SpriteImage } from './sprite';
 import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
 import { FlagData } from './objects/flags';
@@ -15,11 +15,20 @@ import { GuBoat, Point, Position } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { Lobby } from '../../lobby.component';
-import { FlagColorOffsets } from '../canvas/canvas.component';
 import { Turn } from '../../quacken/boats/boats.component';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = 0 | 1 | 2 | 3;
+
+export const FlagColorOffsets: Readonly<Record<number, number>> = {
+  0: 0,
+  1: 3,
+  2: 15,
+  3: 18,
+  98: 6,
+  99: 9,
+  100: 12,
+};
 
 type FlagMap = Map<string, Turn['flags'][0]>
 @Component({
@@ -71,22 +80,40 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     showFps: { value: 0 },
   };
 
+  protected drawRocks = false;
+  @Input() checkSZ = (pos: { x: number, y: number }): boolean => {
+    if (!this.showIsland) return false;
+    return pos.y > 32 || pos.y < 3;
+  }
+
   private frameRequested = true;
   private frameTarget = 0;
   private alive = true;
   private stats?: Stats;
 
-  private water = new Sprite('cell', 64, 48, [[128, 0]]);
-  private sz = new Sprite('safezone', 64, 48, [[128, 0]]);
-  private wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
-  private whirl = new Sprite('whirl2', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0], [320, 0], [384, 0], [448, 0], [256, 0]]);
+  private static water = new Sprite('cell', 64, 48, [[128, 0]]);
+  private static sz = new Sprite('safezone', 64, 48, [[128, 0]]);
+  private static wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
+  private static whirl = new Sprite('whirl2', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0], [320, 0], [384, 0], [448, 0], [256, 0]]);
+  private static rock = new JsonSprite(BigRockData);
+  private static smallRock = new JsonSprite(SmallRockData);
+  private static flag = new Sprite('buoy', 50, 69, [
+    [50, 0], [50, 69], [50, 138],
+    [100, 0], [100, 69], [100, 138],
+    [0, 0], [0, 69], [0, 138],
+    [250, 0], [250, 69], [250, 138],
+    [200, 0], [200, 69], [200, 138],
+  ]);
 
   private wheelDebounce?: number;
   private sub = new Subscription();
-  private canvas?: CanvasRenderingContext2D | null;
+  protected canvas?: CanvasRenderingContext2D | null;
 
   obstacles: { t: number, points?: number, cs?: number[], zIndex: number, sprite: SpriteImage }[] = [];
-  flags: { x: number, y: number, t: number, points?: number, cs?: number[], zIndex: number, sprite: SpriteImage }[] = [];
+  flags: {
+    x: number, y: number, t: number, points?: number, cs?: number[], zIndex: number, sprite: SpriteImage
+  }[] = [];
+
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
   getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x ?? this.getWidth() / 2;
@@ -133,10 +160,12 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     this.resize();
   }
 
-  private resize() {
+  protected resize(): void {
     GuBoat.widthOffset = this.mapWidth - 1;
-    this.canvasElement!.nativeElement.width = this.getWidth();
-    this.canvasElement!.nativeElement.height = this.getHeight();
+    if (this.canvasElement) {
+      this.canvasElement.nativeElement.width = this.getWidth();
+      this.canvasElement.nativeElement.height = this.getHeight();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -183,6 +212,10 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   getWidth(): number {
     return (this.mapWidth + this.mapHeight) * 32;
+  }
+
+  protected getScale(): number {
+    return 1;
   }
 
   colorFlags(flags?: FlagMap): void {
@@ -243,7 +276,12 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   async fillMap(map: number[][], flags: Turn['flags']): Promise<void> {
     const flagMap: FlagMap = new Map();
     for (const f of flags) flagMap.set(`${f.x},${f.y}`, f);
-    await Promise.all([this.wind.prom, this.whirl.prom, this.water.prom, this.sz.prom]);
+    await Promise.all([
+      TwodRenderComponent.wind.prom,
+      TwodRenderComponent.whirl.prom,
+      TwodRenderComponent.water.prom,
+      TwodRenderComponent.sz.prom,
+    ]);
     const wasLoaded = !!this.canvas;
     if (!this.canvas) {
       this.canvas = this.canvasElement?.nativeElement.getContext('2d');
@@ -251,6 +289,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     if (!this.canvas) return;
     const ctx = this.canvas;
     ctx.save();
+    ctx.scale(this.getScale(), this.getScale());
     if (wasLoaded) {
       ctx.clearRect(0, -(this.mapWidth * 24 - 24), this.getWidth(), this.getHeight());
     }
@@ -261,13 +300,23 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
       for (let x = 0; x < this.mapWidth; x++) {
         const xOffset = (x + y) * 32;
         const yOffset = (-x + y) * 24;
-        if (this.safeZone && (y > this.mapHeight - 4 || y < 3)) this.sz.draw(ctx, 0, xOffset, yOffset);
-        else this.water.draw(ctx, 0, xOffset, yOffset);
+        if (this.safeZone && (y > this.mapHeight - 4 || y < 3)) TwodRenderComponent.sz.draw(ctx, 0, xOffset, yOffset);
+        else TwodRenderComponent.water.draw(ctx, 0, xOffset, yOffset);
         const tile = map[y]?.[x];
         if (!tile) continue;
-        else if ((tile >= 21 && tile <= 23) || tile === 50 || tile === 51) this.addObstacle(x, y, tile, flagMap);
-        else if (tile > 8) this.whirl.draw(ctx, tile - 9, xOffset, yOffset);
-        else if (tile > 4) this.wind.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
+
+        else if ((tile >= 21 && tile <= 23) || tile === 50 || tile === 51) {
+          if (!this.drawRocks) this.addObstacle(x, y, tile, flagMap);
+          else if (tile >= 50) {
+            const rand = Math.floor(this.rotationSeed / (x + 1) / (y + 1)) % 4;
+            if (tile === 50) TwodRenderComponent.rock.draw(ctx, rand, xOffset, yOffset);
+            else if (tile === 51) TwodRenderComponent.smallRock.draw(ctx, rand, xOffset, yOffset);
+          } else {
+            const offset = FlagColorOffsets[99] ?? 9;
+            TwodRenderComponent.flag.draw(ctx, tile - 21 + offset, xOffset + 7, yOffset - 33);
+          }
+        } else if (tile > 8) TwodRenderComponent.whirl.draw(ctx, tile - 9, xOffset, yOffset);
+        else if (tile > 4) TwodRenderComponent.wind.draw(ctx, (tile - 1) % 4, xOffset, yOffset);
       }
     }
     ctx.restore();
