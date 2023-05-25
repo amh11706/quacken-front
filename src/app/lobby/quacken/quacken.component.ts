@@ -66,6 +66,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.es.setLobby(undefined, 'quacken');
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
+    this.sub.add(this.ws.subscribe(Internal.SetMap, (m: string) => this.setMapB64(m)));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) setTimeout(async () => this.lobbySettings = await this.ss.getGroup(this.group, true), 1000);
     }));

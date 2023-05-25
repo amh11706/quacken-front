@@ -92,10 +92,14 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.es.setLobby(this.menuComponent, this.lobby);
     this.es.open = true;
 
-    this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
+    this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
+      this.myBoat = b;
+      this.advancedMapOpen = false;
+    }));
+    this.sub.add(this.ws.subscribe(Internal.SetMap, (m: string) => this.setMapB64(m)));
     this.sub.add(this.ws.subscribe(Internal.OpenAdvanced, () => {
       this.mapSeed = this.lobby?.seed;
-      this.advancedMapOpen = !this.advancedMapOpen;
+      if (this.lobby?.turn === 0) this.advancedMapOpen = !this.advancedMapOpen;
     }));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
       if (this.lobby) this.lobby.stats = t.stats;

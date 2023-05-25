@@ -32,6 +32,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   private id = 0;
   tick = 0;
   seed = '';
+  private lobbyMessage?: InMessage;
 
   constructor(
     private location: Location,
@@ -103,10 +104,12 @@ export class ReplayComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.fakeMessages();
       this.ss.admin = true;
-      const join = this.messages[0]?.shift();
-      if (!join) return;
-      join.cmd = InCmd.Turn;
-      const firstSync = { cmd: InCmd.Sync, data: { sync: Object.values(join.data?.boats), flags: join.data.flags } };
+      this.lobbyMessage = this.messages[0]?.shift();
+      if (!this.lobbyMessage) return;
+      const firstSync = {
+        cmd: InCmd.Sync,
+        data: { sync: Object.values(this.lobbyMessage.data?.boats), flags: this.lobbyMessage.data.flags },
+      };
       this.messages[0]?.push(firstSync);
       this.checkMessage(firstSync);
       setTimeout(() => {
@@ -209,7 +212,9 @@ export class ReplayComponent implements OnInit, OnDestroy {
         this.fakeMessages(true);
         break;
       }
-      this.fakeWs.dispatchMessage({ cmd: Internal.RefreshChat });
+      if (this.lobbyMessage) {
+        this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
+      }
     } else this.sendSync();
 
     while (value > this.tick) {
@@ -230,7 +235,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       }
       if (!skipTurn) continue;
 
-      this.fakeWs.dispatchMessage?.({ cmd: Internal.ResetBoats });
+      this.fakeWs.dispatchMessage?.({ cmd: Internal.ResetBoats, data: true });
       this.fakeWs.dispatchMessage?.(m);
     }
   }

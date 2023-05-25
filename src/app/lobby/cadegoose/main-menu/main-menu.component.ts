@@ -47,6 +47,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   private subs = new Subscription();
   private firstJoin = true;
   protected group = 'l/cade';
+  private lobby?: Lobby;
 
   constructor(
     public ws: WsService,
@@ -60,6 +61,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
+      this.lobby = m;
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
       this.roundGoing = (maxTurns && m.turn && m.turn <= maxTurns) || false;
@@ -119,9 +121,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Turn, async (t: Turn) => {
       for (const p of Object.values(this.teams)) p.r = false;
       const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
-      this.roundGoing = (maxTurns && t.turn < maxTurns) || false;
+      this.roundGoing = (maxTurns && t.turn && t.turn < maxTurns) || false;
       this.statsOpen = false;
       if (this.roundGoing) return;
+      if (this.lobby) this.lobby.turn = 0;
       this.es.lobbyContext.stats = t.stats;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat = new Boat('');

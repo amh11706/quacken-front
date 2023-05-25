@@ -4,7 +4,6 @@ export const enum Internal {
   MyBoat,
   ResetMoves,
   Time,
-  RefreshChat,
   ResetBoats,
   Boats,
   MyMoves,
@@ -12,6 +11,7 @@ export const enum Internal {
   BoatClicked,
   Scene,
   OpenAdvanced,
+  SetMap,
 }
 
 export const enum OutCmd {
