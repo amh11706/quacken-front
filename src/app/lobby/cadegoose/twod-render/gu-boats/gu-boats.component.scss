@@ -126,8 +126,8 @@ q-sprite-img {
 .size1 .shot { background-image: url("/assets/clutter/cannonball_small.png"); }
 .size2 .shot { background-image: url("/assets/clutter/cannonball_medium.png"); }
 .size3 .shot { background-image: url("/assets/clutter/cannonball_large.png"); }
-.size28 .shot { background-image: url("/assets/clutter/cannonball_long.png"); }
-.size29 .shot { background-image: url("/assets/clutter/cannonball_long_gold.png"); }
+.size28 .shot { background-image: url("/assets/clutter/cannonball_long.png"); --scale: 1.5; }
+.size29 .shot { background-image: url("/assets/clutter/cannonball_long_gold.png"); --scale: 2; }
 .size36 .shot { background-image: url("/assets/clutter/cannonball_healing.png"); }
 .size37 .shot { background-image: url("/assets/clutter/cannonball_healing_gold.png"); }
 .size4 .shot, .size6 .shot { background-image: url("/assets/clutter/chain_cannonball.png"); }

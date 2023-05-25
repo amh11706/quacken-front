@@ -7,7 +7,20 @@ import { SettingsService } from '../../../settings/settings.service';
 import { SoundService } from '../../../sound.service';
 import { WsService } from '../../../ws.service';
 import { MainMenuComponent } from '../../cadegoose/main-menu/main-menu.component';
+import { Stat } from '../../cadegoose/stats/stats.component';
 import { FgHelpComponent } from '../fg-help/fg-help.component';
+
+export const FgColumns = [
+  { stat: Stat.PointsScored, title: 'Flags Returned' },
+  { stat: Stat.PointsContested, title: 'Flags Captured' },
+  { stat: Stat.RocksBumped, title: 'Flags Stolen' },
+  { stat: Stat.Kills, title: 'Enemies Sank' },
+  { stat: Stat.Assists, title: 'Assists' },
+  { stat: Stat.Deaths, title: 'Times Sank' },
+  { stat: Stat.ShotsHit, title: 'Shots Hit' },
+  { stat: Stat.ShotsFired, title: 'Fired' },
+  { stat: Stat.ShotsTaken, title: 'Taken' },
+];
 
 @Component({
   selector: 'q-fg-main-menu',
@@ -15,6 +28,8 @@ import { FgHelpComponent } from '../fg-help/fg-help.component';
   styleUrls: ['./fg-main-menu.component.scss'],
 })
 export class FgMainMenuComponent extends MainMenuComponent {
+  columns = FgColumns;
+
   constructor(
     ws: WsService,
     fs: FriendsService,

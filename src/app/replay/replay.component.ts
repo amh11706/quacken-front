@@ -213,6 +213,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
         break;
       }
       if (this.lobbyMessage) {
+        // reset the map because it could have changed in capture the flag mode
         this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
       }
     } else this.sendSync();

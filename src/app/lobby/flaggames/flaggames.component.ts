@@ -7,7 +7,7 @@ import { KeyBindingService } from '../../settings/key-binding/key-binding.servic
 import { SettingList, SettingsService } from '../../settings/settings.service';
 import { WsService } from '../../ws.service';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
-import { FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
+import { FgColumns, FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 
 export const FgDesc = 'Flag games: Plant flags in the enemy base to score points!';
 const ownerSettings: SettingList = [
@@ -25,6 +25,7 @@ const ownerSettings: SettingList = [
   styleUrls: ['./flaggames.component.scss'],
 })
 export class FlaggamesComponent extends CadegooseComponent {
+  columns = FgColumns;
   protected menuComponent = FgMainMenuComponent;
   mapHeight = 41;
   mapWidth = 31;

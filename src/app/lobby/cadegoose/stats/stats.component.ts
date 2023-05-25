@@ -15,6 +15,7 @@ export const enum Stat {
   ShotsTaken,
   PointsContested,
   PointsScored,
+  RocksBumped = 10,
 }
 
 @Component({
@@ -31,7 +32,7 @@ export class StatsComponent implements OnChanges {
   teamColors = TeamColorsCss;
   teamNames = TeamNames;
 
-  columns = [
+  @Input() columns = [
     { stat: Stat.PointsScored, title: 'Points Scored' },
     { stat: Stat.PointsContested, title: 'Contested' },
     { stat: Stat.Kills, title: 'Enemies Sank' },

@@ -282,10 +282,12 @@ export const Settings: Record<SettingName, Setting> = {
     stepLabels: { 40: 'Unlimited' },
   },
   flagTurns: {
-    admin: true, id: 53, group: 'l/flaggames', name: 'turns', type: 'slider', label: 'Turns', min: 1, max: 10, step: 1,
+    admin: true, id: 53, group: 'l/flaggames', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5,
   },
   flagSpawnDelay: {
-    admin: true, id: 54, group: 'l/flaggames', name: 'spawnDelay', type: 'slider', label: 'Spawn Delay', min: 0, max: 10, step: 1,
+    // eslint-disable-next-line object-property-newline
+    admin: true, id: 54, group: 'l/flaggames', name: 'spawnDelay', type: 'slider', label: 'Spawn Delay', min: 0, max: 5, step: 1,
+    stepLabels: { 5: 'No Respawn' },
   },
   flagFishBoats: {
     admin: true, id: 55, group: 'l/flaggames', name: 'fishBoats', type: 'checkbox', label: 'Fish boat names',
