@@ -3,7 +3,8 @@
     <q-stat-end [stats]="es.lobbyContext?.stats"
                 (closeStats)="statsOpen = false"
                 [columns]="columns"
-                [rating]=false></q-stat-end>
+                (rateMap)="submitRating($event)"
+                [rating]=true></q-stat-end>
   </div>
   <ng-template #teams>
     <h2>Match Settings</h2>
