@@ -5,7 +5,7 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
-    title: 'Release 23 May 2023',
+    title: 'Release 27 May 2023',
     points: [
       'New game mode! Capture the flag.',
       'Two variations: Take the enemy flags to your base, or plant flags in the enemy base.',
