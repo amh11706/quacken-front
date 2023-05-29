@@ -8,7 +8,7 @@ export const Notes: Note[] = [
     title: 'Release 27 May 2023',
     points: [
       'New game mode! Capture the flag.',
-      'Two variations: Take the enemy flags to your base, or plant flags in the enemy base.',
+      'Two variations: Take the enemy flags to your base, or plant flags to defend.',
       'Four new boat classes: Sniper, Builder, Healer, and Bomber.',
       'Sea battle now ends when only one team is left rather than on first sink.',
       'Selected maneuver is now more likely to generate faster',
