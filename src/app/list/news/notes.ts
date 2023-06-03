@@ -5,6 +5,15 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 04 June 2023',
+    points: [
+      'Capture the flag adjustments.',
+      'Boats carrying a 2 point flag now get 1 less move per turn.',
+      'Bomber boat can no longer pick up flags.',
+      'Kicked boats will now drop their flags.',
+    ],
+  },
+  {
     title: 'Release 27 May 2023',
     points: [
       'New game mode! Capture the flag.',

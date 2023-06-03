@@ -52,12 +52,14 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   lastTick = { tp: 0, attr: {} } as BoatTick;
   updateWantMove$ = new Subject<boolean>();
   group = 'l/cade';
+  maxMoves = 3;
 
   ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(Internal.MyBoat, () => {
       this.updateWantMove$.next(true);
       this.localBoat.shots = [0, 0, 0, 0, 0, 0, 0, 0];
+      this.updateMaxMoves();
     }));
     this.subs.add(this.ws.subscribe(Internal.MyMoves, (moves: MoveMessage) => {
       this.localBoat.moves = [...moves.moves];
@@ -67,6 +69,11 @@ export class CadeHudComponent extends HudComponent implements OnInit {
         this.serverBoat.shots = [...moves.shots];
       }
     }));
+
+    this.subs.add(this.ws.subscribe(InCmd.Turn, () => {
+      this.updateMaxMoves();
+    }));
+
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
       if (!t.attr) t.attr = {};
       this.lastTick = t;
@@ -87,7 +94,12 @@ export class CadeHudComponent extends HudComponent implements OnInit {
         this.unusedTokens.moves = [...this.totalTokens.moves];
         this.unusedTokens.shots = this.totalTokens.shots;
       }
+      this.updateMaxMoves();
     }));
+  }
+
+  private updateMaxMoves(): void {
+    this.maxMoves = this.lastTick.attr[255] ?? 0 > this.turn ? this.myBoat.maxMoves - 1 : this.myBoat.maxMoves;
   }
 
   setWantMove(value: number): void {
