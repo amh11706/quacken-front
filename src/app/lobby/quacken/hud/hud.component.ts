@@ -36,6 +36,7 @@ export interface BoatTick {
 export class HudComponent implements OnInit, OnDestroy {
   @Input() group = 'l/quacken';
   @Input() kbControls = 1;
+  @Input() shiftSpecials = 0;
   @Input() moveKeys: Record<number, KeyActions> = {
     0: KeyActions.QBlank,
     1: KeyActions.QLeft,

@@ -32,7 +32,8 @@
          [statOpacity]="statOpacity"
          [stats]="lobby?.stats"
          [myTeam]="myBoat.team"></q-stats>
-<q-cade-hud [kbControls]="controlSettings.kbControls?.value || 0"></q-cade-hud>
+<q-cade-hud [kbControls]="controlSettings.kbControls?.value || 0"
+            [shiftSpecials]="controlSettings.shiftSpecials?.value || 0"></q-cade-hud>
 
 <div [hidden]="!advancedMapOpen"
      id="advancedMap"

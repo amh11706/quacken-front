@@ -55,6 +55,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
 
   @Input() maxShots = 2;
   @Input() kbControls = 0;
+  @Input() shiftSpecials = 0;
   @Input() private moveKeys: Record<number, KeyActions> = {
     0: KeyActions.QBlank,
     1: KeyActions.QLeft,
@@ -202,7 +203,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       this.inputChange.emit(this.input);
       return;
     }
-    if (e.shiftKey) {
+    if (e.shiftKey && this.shiftSpecials) {
       const index = this.maneuvers.findIndex(m => m.class === 'move bombtoken');
       const maneuver = this.maneuvers[index];
       if (!maneuver) return;
@@ -232,7 +233,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     if (this.locked || slot === this.blockedPosition) return;
     const moves = this.input.moves;
     const move = moves[slot] || 0;
-    if (ev.shiftKey) {
+    if (ev.shiftKey && this.shiftSpecials) {
       const token = move > 7 ? this.maneuvers.findIndex(m => m.id === move) : 0;
       let wantToken = (ev.button + 1 + token) % 4;
       let points = this.unusedTokens.maneuvers[wantToken] || 0;

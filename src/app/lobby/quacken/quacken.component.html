@@ -3,5 +3,6 @@
        [myBoat]="myBoat"
        [map]="lobby?.map || ''"></q-map>
 
-<q-hud [kbControls]="controlSettings.kbControls?.value ?? 0"></q-hud>
+<q-hud [kbControls]="controlSettings.kbControls?.value ?? 0"
+       [shiftSpecials]="controlSettings.shiftSpecials?.value ?? 0"></q-hud>
 <q-entry-status></q-entry-status>

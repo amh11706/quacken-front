@@ -60,7 +60,7 @@ type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'spee
   'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' |
   'cadeMap' | 'cadeTeams' | 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
   'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked' |
-  'renderMode' | 'fishBoats' | 'allowGuests' |
+  'renderMode' | 'fishBoats' | 'allowGuests' | 'shiftSpecials' |
   'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' | 'flagTurns' |
   'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagNextBoat' | 'flagRespawn' | 'flagSteal';
 
@@ -213,6 +213,9 @@ export const Settings: Record<SettingName, Setting> = {
   },
   kbControls: {
     id: 11, group: 'controls', type: 'checkbox', label: 'Enable keyboard move entry', name: 'kbControls',
+  },
+  shiftSpecials: {
+    id: 65, group: 'controls', type: 'checkbox', label: 'Shift click for maneuvers', name: 'shiftSpecials',
   },
   alwaysChat: {
     id: 41, group: 'controls', type: 'checkbox', label: 'Always focus chat', name: 'alwaysChat',
