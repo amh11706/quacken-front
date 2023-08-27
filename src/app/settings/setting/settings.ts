@@ -123,8 +123,8 @@ export const Settings: Record<SettingName, Setting> = {
   },
   cadeTurnTime: {
     // eslint-disable-next-line object-property-newline
-    admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 40, step: 5,
-    stepLabels: { 40: 'Unlimited' },
+    admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 65, step: 5,
+    stepLabels: { 65: 'Unlimited' },
   },
   cadeTurns: { admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5 },
   enableBots: {
@@ -281,8 +281,8 @@ export const Settings: Record<SettingName, Setting> = {
   },
   flagTurnTime: {
     // eslint-disable-next-line object-property-newline
-    admin: true, id: 52, group: 'l/flaggames', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 40, step: 5,
-    stepLabels: { 40: 'Unlimited' },
+    admin: true, id: 52, group: 'l/flaggames', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 65, step: 5,
+    stepLabels: { 65: 'Unlimited' },
   },
   flagTurns: {
     admin: true, id: 53, group: 'l/flaggames', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5,
