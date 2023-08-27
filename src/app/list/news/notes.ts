@@ -5,6 +5,15 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 27 August 2023',
+    points: [
+      'Max turn time increased to 60 seconds.',
+      'New setting to enable shift click to place maneuvers.',
+      'More contrast between your boat color and your team color.',
+      'Water now uses more variations.',
+    ],
+  },
+  {
     title: 'Release 04 June 2023',
     points: [
       'Capture the flag adjustments.',

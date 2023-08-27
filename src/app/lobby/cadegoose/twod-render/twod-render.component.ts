@@ -91,8 +91,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   private alive = true;
   private stats?: Stats;
 
-  private static water = new Sprite('cell', 64, 48, [[128, 0]]);
-  private static sz = new Sprite('safezone', 64, 48, [[128, 0]]);
+  private static water = new Sprite('cell', 64, 48, [[0, 0], [64, 0], [128, 0], [192, 0], [256, 0]]);
+  private static sz = new Sprite('safezone', 64, 48, [[0, 0], [64, 0], [128, 0], [192, 0], [256, 0]]);
   private static wind = new Sprite('wind', 64, 48, [[192, 0], [0, 0], [64, 0], [128, 0]]);
   private static whirl = new Sprite('whirl2', 64, 48, [[64, 0], [128, 0], [192, 0], [0, 0], [320, 0], [384, 0], [448, 0], [256, 0]]);
   private static rock = new JsonSprite(BigRockData);
@@ -300,8 +300,9 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
       for (let x = 0; x < this.mapWidth; x++) {
         const xOffset = (x + y) * 32;
         const yOffset = (-x + y) * 24;
-        if (this.safeZone && (y > this.mapHeight - 4 || y < 3)) TwodRenderComponent.sz.draw(ctx, 0, xOffset, yOffset);
-        else TwodRenderComponent.water.draw(ctx, 0, xOffset, yOffset);
+        const rand = Math.floor(this.rotationSeed / (x + 1) / (y + 1)) % 5;
+        if (this.safeZone && (y > this.mapHeight - 4 || y < 3)) TwodRenderComponent.sz.draw(ctx, rand, xOffset, yOffset);
+        else TwodRenderComponent.water.draw(ctx, rand, xOffset, yOffset);
         const tile = map[y]?.[x];
         if (!tile) continue;
 
