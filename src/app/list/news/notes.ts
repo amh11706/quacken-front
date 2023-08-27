@@ -11,6 +11,7 @@ export const Notes: Note[] = [
       'New setting to enable shift click to place maneuvers.',
       'More contrast between your boat color and your team color.',
       'Water now uses more variations.',
+      'Private lobbies are now slightly more private.',
     ],
   },
   {
