@@ -43,7 +43,7 @@
                    [updateWantToken]="updateWantMove$"
                    [wantMove]="lastTick.wt"
                    (wantMoveChange)="setWantMove($event)"></q-move-source>
-    <button *ngIf="secondsPerTurn === 40"
+    <button *ngIf="secondsPerTurn === maxSeconds"
             mat-icon-button
             [disabled]="!myBoat.isMe || myBoat.ready"
             id="hudReady"

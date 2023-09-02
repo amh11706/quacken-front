@@ -105,6 +105,7 @@ export class HudComponent implements OnInit, OnDestroy {
   private timeInterval?: number;
   private minutes = 0;
   private seconds = 0;
+  readonly maxSeconds = 65
   protected turnSeconds = 0;
   public blockedPosition = 3;
   seconds$ = new BehaviorSubject<number>(76);
@@ -261,7 +262,7 @@ export class HudComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.secondsPerTurn === 40) {
+    if (this.secondsPerTurn === this.maxSeconds) {
       this.seconds = turn === this.maxTurn ? turn : turn + 1;
       this.minutes = 0;
       this.turnSeconds = this.secondsPerTurn;
@@ -293,7 +294,7 @@ export class HudComponent implements OnInit, OnDestroy {
   private tickTimer() {
     if (this.turn === 0) return this.stopTimer();
     // unlimited time
-    if (this.secondsPerTurn === 40) return;
+    if (this.secondsPerTurn === this.maxSeconds) return;
     if (this.turnSeconds < 1 || this.minutes + this.seconds === 0) {
       this.myBoat.ready = false;
       this.imReady();
