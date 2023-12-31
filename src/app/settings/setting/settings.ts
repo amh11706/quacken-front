@@ -57,7 +57,7 @@ export type Setting = ButtonSetting | BoatSetting | SliderSetting | OptionSettin
 
 type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'speed' | 'lockAngle' | 'water' | 'showFps' |
   'maxFps' | 'spawnSide' | 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'soundMaster' |
-  'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' |
+  'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' |
   'cadeMap' | 'cadeTeams' | 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
   'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked' |
   'renderMode' | 'fishBoats' | 'allowGuests' | 'shiftSpecials' |
@@ -126,6 +126,7 @@ export const Settings: Record<SettingName, Setting> = {
     admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 65, step: 5,
     stepLabels: { 65: 'Unlimited' },
   },
+  cadeShowStats: { id: 66, group: 'l/cade', name: 'showStats', type: 'checkbox', label: 'Show stats during a match' },
   cadeTurns: { admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5 },
   enableBots: {
     admin: true,

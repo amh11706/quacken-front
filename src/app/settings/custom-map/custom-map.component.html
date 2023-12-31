@@ -1,11 +1,12 @@
-<label>{{setting.label}}</label>
-<ng-select *ngIf="settingValue"
-           [(ngModel)]="settingValue.value"
-           appendTo="body"
-           class="setting"
-           [items]="data"
-           [loading]="loading"
-           bindValue="id"
-           (change)="preSave()"
-           [disabled]="disabled">
-</ng-select>
+<label>{{setting.label}}
+  <ng-select *ngIf="settingValue"
+             [(ngModel)]="settingValue.value"
+             appendTo="body"
+             class="setting"
+             [items]="data"
+             [loading]="loading"
+             bindValue="id"
+             (change)="preSave()"
+             [disabled]="disabled">
+  </ng-select>
+</label>

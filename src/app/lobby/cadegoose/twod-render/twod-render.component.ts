@@ -301,8 +301,9 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
         const xOffset = (x + y) * 32;
         const yOffset = (-x + y) * 24;
         const rand = Math.floor(this.rotationSeed / (x + 1) / (y + 1)) % 5;
-        if (this.safeZone && (y > this.mapHeight - 4 || y < 3)) TwodRenderComponent.sz.draw(ctx, rand, xOffset, yOffset);
-        else TwodRenderComponent.water.draw(ctx, rand, xOffset, yOffset);
+        if (this.safeZone && (y > this.mapHeight - 4 || y < 3)) {
+          TwodRenderComponent.sz.draw(ctx, rand, xOffset, yOffset);
+        } else TwodRenderComponent.water.draw(ctx, rand, xOffset, yOffset);
         const tile = map[y]?.[x];
         if (!tile) continue;
 

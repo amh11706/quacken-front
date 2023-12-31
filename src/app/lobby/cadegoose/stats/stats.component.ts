@@ -44,9 +44,9 @@ export class StatsComponent implements OnChanges {
   ];
 
   ngOnChanges(): void {
+    this.teams = [];
     if (!this.stats) return;
 
-    this.teams = [];
     for (const row of Object.values(this.stats)) {
       const s = [...row.stats];
       const shotsFired = s[Stat.ShotsFired];
