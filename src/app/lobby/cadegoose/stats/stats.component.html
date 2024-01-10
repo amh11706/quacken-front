@@ -8,11 +8,11 @@
     <table>
       <tr>
         <th>{{teamNames[i]}}</th>
-        <th *ngFor="let c of columns">{{c.title}}</th>
+        <th *ngFor="let c of (showExtra ? extraColumns : columns)">{{c.title}}</th>
       </tr>
       <tr *ngFor="let r of team">
         <td>{{r.user}}</td>
-        <td *ngFor="let c of columns">{{r.stats[c.stat]}}</td>
+        <td *ngFor="let c of (showExtra ? extraColumns : columns)">{{r.stats[c.stat]}}</td>
       </tr>
     </table>
   </div>

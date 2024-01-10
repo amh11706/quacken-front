@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { WsService } from '../../../ws.service';
 import { TeamColorsCss } from '../cade-entry-status/cade-entry-status.component';
-import { Stat, StatRow } from '../stats/stats.component';
+import { extraColumns, Stat, StatRow } from '../stats/stats.component';
 
 @Component({
   selector: 'q-stat-end',
@@ -29,6 +29,9 @@ export class StatEndComponent implements OnChanges {
     { stat: Stat.ShotsFired, title: 'Fired' },
     { stat: Stat.ShotsTaken, title: 'Taken' },
   ];
+
+  extraColumns = extraColumns;
+  showExtra = false;
 
   constructor(private ws: WsService) { }
 

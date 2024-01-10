@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MoveInputModule } from '../../boats/move-input/move-input.module';
 import { NameModule } from '../../chat/name/name.module';
 import { SettingsModule } from '../../settings/settings.module';
@@ -50,6 +51,7 @@ import { ManeuverSourceModule } from '../../boats/maneuver-source/maneuver-sourc
     MatTooltipModule,
     MatExpansionModule,
     MatSliderModule,
+    MatButtonToggleModule,
     MatFormFieldModule,
     MatInputModule,
     MatMenuModule,

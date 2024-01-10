@@ -15,8 +15,39 @@ export const enum Stat {
   ShotsTaken,
   PointsContested,
   PointsScored,
+
   RocksBumped = 10,
+  ShotsFriendly,
+  ShotsFriendlyTaken,
+  ShotsMissed,
+  WhirlSpins,
+  WindRides,
+
+  LeftUsed,
+  ForwardUsed,
+  RightUsed,
+  DoubleForwardUsed,
+  TurnInSpotUsed,
+  ChainshotUsed,
+  FlotsamUsed,
 }
+
+export const extraColumns = [
+  { stat: Stat.ShotsFriendly, title: 'Friendly Fire' },
+  { stat: Stat.ShotsFriendlyTaken, title: 'Taken' },
+  { stat: Stat.ShotsMissed, title: 'Shots Missed' },
+  { stat: Stat.RocksBumped, title: 'Rock Bumps' },
+  { stat: Stat.WhirlSpins, title: 'Whirl Spins' },
+  { stat: Stat.WindRides, title: 'Wind Rides' },
+
+  // { stat: Stat.LeftUsed, title: 'Lefts' },
+  // { stat: Stat.ForwardUsed, title: 'Forwards' },
+  // { stat: Stat.RightUsed, title: 'Rights' },
+  // { stat: Stat.DoubleForwardUsed, title: 'Double Forwards' },
+  // { stat: Stat.TurnInSpotUsed, title: 'TiS' },
+  // { stat: Stat.ChainshotUsed, title: 'Chainshots' },
+  // { stat: Stat.FlotsamUsed, title: 'Flotsams' },
+];
 
 @Component({
   selector: 'q-stats',
@@ -28,6 +59,7 @@ export class StatsComponent implements OnChanges {
   @Input() myTeam?: number;
   @Input() hoveredTeam?: number;
   @Input() statOpacity?: number;
+  @Input() showExtra = false;
   teams: StatRow[][] = [];
   teamColors = TeamColorsCss;
   teamNames = TeamNames;
@@ -42,6 +74,8 @@ export class StatsComponent implements OnChanges {
     { stat: Stat.ShotsFired, title: 'Fired' },
     { stat: Stat.ShotsTaken, title: 'Taken' },
   ];
+
+  extraColumns = extraColumns;
 
   ngOnChanges(): void {
     this.teams = [];

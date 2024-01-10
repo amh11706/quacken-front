@@ -30,6 +30,7 @@
 <q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
          [hoveredTeam]="hoveredTeam"
          [statOpacity]="statOpacity"
+         [showExtra]="showExtraStats"
          [stats]="lobby?.stats"
          [myTeam]="myBoat.team"></q-stats>
 <q-cade-hud [kbControls]="controlSettings.kbControls?.value || 0"

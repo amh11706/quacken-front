@@ -72,6 +72,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   private mapDataDebounce = new Subject();
   protected joinMessage = CadeDesc;
   protected statAction = KeyActions.CShowStats;
+  protected statExtraAction = KeyActions.CShowExtraStats;
+  showExtraStats = false;
   protected showMapChoice = true;
 
   constructor(
@@ -105,7 +107,14 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       if (this.lobby) this.lobby.stats = t.stats;
       this.advancedMapOpen = false;
     }));
-    this.sub.add(this.kbs.subscribe(this.statAction, v => this.statOpacity = v ? 1 : 0));
+    this.sub.add(this.kbs.subscribe(this.statAction, v => {
+      this.showExtraStats = false;
+      this.statOpacity = v ? 1 : 0;
+    }));
+    this.sub.add(this.kbs.subscribe(this.statExtraAction, v => {
+      this.showExtraStats = true;
+      this.statOpacity = v ? 1 : 0;
+    }));
     this.sub.add(this.mapDebounce.pipe(debounceTime(100)).subscribe(seed => {
       this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
     }));

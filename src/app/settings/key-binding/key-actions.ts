@@ -36,6 +36,7 @@ export const enum KeyActions {
   CFlotsam,
   CLeftChainshot,
   CRightChainshot,
+  CShowExtraStats,
 
   // Sea battle
   SBShowStats = 300,
@@ -119,6 +120,11 @@ export const DefaultBindings: StaticKeyBindings = {
       title: 'Show stats',
       bindings: ['Tab', NotActive],
       linkGroup: LinkGroups.ShowStats,
+    },
+    {
+      action: KeyActions.CShowExtraStats,
+      title: 'Show extra stats',
+      bindings: ['Shift + Tab', NotActive],
     },
     {
       action: KeyActions.CLeft,
