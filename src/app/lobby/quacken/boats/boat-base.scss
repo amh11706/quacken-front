@@ -48,16 +48,30 @@
   width: 25%;
   height: 8px;
   background-color: transparent;
+  color: white;
+  font-size: 7px;
 }
 
 .left {
   background-color: #b9cef1;
+
+  &::after {
+    content: "L";
+  }
 }
 .forward {
   background-color: #97c469;
+  
+  &::after {
+    content: "F";
+  }
 }
 .right {
   background-color: #ff9d55;
+  
+  &::after {
+    content: "R";
+  }
 }
 .obscured {
   background-color: rgb(202, 197, 197);
