@@ -51,7 +51,7 @@
 <div class="playerCount"
      (mouseover)="lobby.players.length && showPlayers = true"
      (mouseleave)="showPlayers = false">
-  {{lobby.players.length}} / {{lobby.group.maxPlayers?.value}}
+  {{lobby.players.length}} / {{lobby.group.maxPlayers?.value || '∞'}}
   <div class="playerList"
        (click)="$event.stopPropagation()"
        [class.visible]="showPlayers">

@@ -1,33 +1,9 @@
-.settingsView {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  div {
-    padding: 4px;
-  }
-}
-
-.cardTitle {
-  color: rgb(219, 216, 13) !important;
-}
-
-.inProgress {
-  opacity: 0.5;
-}
-
-.playerName {
-  text-align: center;
-  margin-top: 4px;
-  color: #ddd;
-}
-
 .playerCount {
   position: relative;
 }
 
-.playerList {
+.teamList {
+  z-index: 1000;
   opacity: 0;
   pointer-events: none;
   position: absolute;
@@ -44,5 +20,14 @@
   &.visible {
     opacity: 1;
     pointer-events: initial;
+  }
+
+  td {
+    padding: 0 4px;
+  }
+
+  q-name {
+    display: block;
+    margin: 4px 0;
   }
 }

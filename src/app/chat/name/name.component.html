@@ -1,15 +1,15 @@
 <span *ngIf="message.from !== ws.user?.name || (message.from === 'Guest' && message.copy !== ws.copy); else you"
       [matMenuTriggerFor]="nameMenu">
   <span [class.friend]="message.friend"
-        [class.bot]="message.from.indexOf('Bot') === 0"
-        [class.admin]="message.admin >= 3"
+        [class.bot]="message.from?.indexOf('Bot') === 0"
+        [class.admin]="message.admin && message.admin >= 3"
         [class.blocked]="message.blocked">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
 </span>
 
 <ng-template #you>
   <span class="you"
-        [class.admin]="message.admin >= 3"
+        [class.admin]="message.admin && message.admin >= 3"
         title="you"
         [matMenuTriggerFor]="youMenu">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>

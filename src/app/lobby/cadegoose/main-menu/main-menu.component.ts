@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Message } from '../../../chat/chat.service';
+import { Message, TeamImages } from '../../../chat/chat.service';
 import { FriendsService } from '../../../chat/friends/friends.service';
 import { WsService } from '../../../ws.service';
 import { InCmd, Internal, OutCmd } from '../../../ws-messages';
@@ -17,7 +17,7 @@ import { BoatSetting, Settings } from '../../../settings/setting/settings';
 
 interface TeamMessage {
   id: number;
-  t: number;
+  t: keyof typeof TeamImages;
   r: boolean;
   b: number;
   s: number;

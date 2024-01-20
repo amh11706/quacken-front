@@ -31,7 +31,7 @@ export class StatEndComponent implements OnChanges {
   ];
 
   extraColumns = extraColumns;
-  showExtra = false;
+  showExtra = 0;
 
   constructor(private ws: WsService) { }
 

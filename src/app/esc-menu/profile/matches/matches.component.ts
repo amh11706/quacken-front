@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import moment from 'moment';
+import { TeamImages } from '../../../chat/chat.service';
 
 import { OutCmd } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
 import { StatService } from '../stat.service';
+import { TeamPlayer } from './teams/teams.component';
+
+const Results = ['N/A', 'Loss', 'Draw', 'Win'];
 
 interface Match {
   matchId: number;
@@ -16,6 +20,10 @@ interface Match {
   createdAt: number;
   createdAtString: string;
   lobby: string;
+  team: keyof typeof TeamImages;
+  result: keyof typeof Results;
+  players: TeamPlayer[];
+  teams: TeamPlayer[][];
 }
 
 @Component({
@@ -25,6 +33,8 @@ interface Match {
 })
 export class MatchesComponent implements OnInit {
   matches: Match[][] = [[], [], [], []];
+  teamImages = TeamImages;
+  results = Results;
 
   constructor(
     public ws: WsService,
@@ -43,6 +53,7 @@ export class MatchesComponent implements OnInit {
     for (const m of matches) {
       if (m.createdAt > newest.createdAt) newest = m;
       m.createdAtString = moment(m.createdAt, 'X').format('lll');
+      m.teams = this.parseTeams(m.players);
       this.matches[m.rankArea - 1]?.push(m);
     }
     this.stat.group = (newest.rankArea ?? 2) - 1;
@@ -50,6 +61,17 @@ export class MatchesComponent implements OnInit {
     if (!this.matches[this.stat.group]?.length) {
       for (let i = 0; i < this.matches.length; i++) if (this.matches[i]?.length) this.stat.group = i;
     }
+  }
+
+  private parseTeams(players: TeamPlayer[]): TeamPlayer[][] {
+    const teams: TeamPlayer[][] = [];
+    for (const p of players) {
+      if (p.team >= 99) continue;
+      const team = teams[p.team] ?? [];
+      team.push(p);
+      teams[p.team] = team;
+    }
+    return teams;
   }
 
   openMatch(m: Match): void {

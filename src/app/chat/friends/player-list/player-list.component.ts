@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TeamImages } from '../../chat.service';
 import { FriendsService } from '../friends.service';
 
 @Component({
@@ -7,5 +8,7 @@ import { FriendsService } from '../friends.service';
   styleUrls: ['./player-list.component.scss'],
 })
 export class PlayerListComponent {
+  teamImages = TeamImages;
+
   constructor(public fs: FriendsService) { }
 }

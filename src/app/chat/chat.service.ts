@@ -9,10 +9,18 @@ import { KeyActions } from '../settings/key-binding/key-actions';
 import { Sounds, SoundService } from '../sound.service';
 moment.locale('en-GB');
 
+export const TeamImages = {
+  0: { title: 'Defenders', src: 'assets/images/icon_defend1.png' },
+  1: { title: 'Attackers', src: 'assets/images/icon_attack1.png' },
+  2: { title: '2nd Attackers', src: 'assets/images/icon_attack2.png' },
+  3: { title: '3rd Attackers', src: 'assets/images/icon_attack3.png' },
+  99: { title: 'Watchers', src: 'assets/images/watch.png' },
+};
+
 export interface Message {
   type: number;
   message?: any;
-  team?: number;
+  team?: keyof typeof TeamImages;
   op?: boolean;
   from: string;
   copy?: number;

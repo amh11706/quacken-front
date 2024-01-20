@@ -9,22 +9,9 @@
   <ng-container *ngFor="let m of fs.lobby">
     <div class="lobbyPlayer">
       <ng-container *ngIf="m.team !== undefined">
-        <ng-container [ngSwitch]="m.team">
-          <ng-container *ngSwitchCase="0">
-            <img class="team"
-                 title="Defender"
-                 src="assets/images/icon_defend1.png">
-          </ng-container>
-          <ng-container *ngSwitchCase="99">
-            <img title="Watcher"
-                 src="assets/images/watch.png">
-          </ng-container>
-          <ng-container *ngSwitchDefault>
-            <img class="team"
-                 title="Attacker"
-                 src="assets/images/icon_attack{{m.team}}.png">
-          </ng-container>
-        </ng-container>
+        <img class="team"
+             [title]="teamImages[m.team].title"
+             [src]="teamImages[m.team].src">
       </ng-container>
       <q-name [message]="m"></q-name>
       <mat-icon *ngIf="m.op"

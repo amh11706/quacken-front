@@ -1,12 +1,5 @@
 #matches {
-    text-align: center;
-}
-
-#selection {
-    position: relative;
-    overflow-y: auto;
-    padding-bottom: 24px;
-    padding-top: 8px;
+  text-align: center;
 }
 
 form {
@@ -14,23 +7,43 @@ form {
 }
 
 table {
-    border-collapse: collapse;
-    margin: auto;
+  border-collapse: collapse;
+  margin: auto;
+  margin-bottom: 24px;
+  margin-top: 8px;
 }
 
-th {
-    position: sticky;
-    top: -12px;
+thead th {
+  position: sticky;
+  top: -1px;
+  background-color: grey;
+  z-index: 1000;
 }
 
 td,
 th {
-    word-wrap: break-word;
-    max-width: 148px;
-    padding: 4px 8px;
-    border: 1px solid grey;
+  word-wrap: break-word;
+  max-width: 148px;
+  padding: 4px 8px;
+  border: 1px solid grey;
 }
 
 mat-form-field {
-    margin: 8px 16px;
+  margin: 8px 16px;
+}
+
+.result0 {
+  color: grey;
+}
+
+.result1 {
+  color: red;
+}
+
+.result2 {
+  color: darkorange;
+}
+
+.result3 {
+  color: green;
 }

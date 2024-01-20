@@ -25,6 +25,7 @@ import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.componen
 import { MatchesComponent } from './profile/matches/matches.component';
 import { FriendsModule } from '../chat/friends/friends.module';
 import { MapListModule } from '../settings/map-list/map-list.module';
+import { TeamsComponent } from './profile/matches/teams/teams.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { MapListModule } from '../settings/map-list/map-list.module';
     ProfileComponent,
     LogoutConfirmComponent,
     MatchesComponent,
+    TeamsComponent,
   ],
   imports: [
     CommonModule,

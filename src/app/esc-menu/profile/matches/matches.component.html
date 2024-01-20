@@ -16,21 +16,31 @@
     <!-- </mat-form-field> -->
   </form>
 
-  <div id="selection">
-    <table>
+  <table>
+    <thead>
       <tr>
         <th>Lobby</th>
         <th>Date</th>
         <th>Score</th>
+        <th>Result</th>
+        <th>Team</th>
+        <th>Players</th>
         <th>View</th>
       </tr>
-      <tr *ngFor="let row of matches[stat.group]">
-        <td>{{row.lobby}}</td>
-        <td>{{row.createdAtString}}</td>
-        <td>{{row.score}}</td>
-        <td><button mat-raised-button
-                  (click)="openMatch(row)">Open</button></td>
-      </tr>
-    </table>
-  </div>
+    </thead>
+    <tr *ngFor="let row of matches[stat.group]">
+      <td>{{row.lobby}}</td>
+      <td>{{row.createdAtString}}</td>
+      <td>{{row.score}}</td>
+      <td class="result{{row.result}}">{{results[row.result]}}</td>
+      <td><img [src]="teamImages[row.team].src"
+             [title]="teamImages[row.team].title"></td>
+      <td>
+        <q-team-view [teams]="row.teams"
+                     [playerLength]="row.players.length"></q-team-view>
+      </td>
+      <td><button mat-raised-button
+                (click)="openMatch(row)">Open</button></td>
+    </tr>
+  </table>
 </div>

@@ -14,7 +14,7 @@ import { KeyActions } from '../../settings/key-binding/key-actions';
   styleUrls: ['./name.component.css'],
 })
 export class NameComponent {
-  @Input() message: Message = {} as Message;
+  @Input() message: Partial<Message> = {} as Message;
   @Input() offline = false;
 
   constructor(
@@ -28,11 +28,11 @@ export class NameComponent {
   private getName(): string {
     let name = this.message.from;
     if (name === 'Guest') name += `(${this.message.copy})`;
-    return name;
+    return name ?? '';
   }
 
   openProfile(): void {
-    this.stat.openUser(this.message.from);
+    if (this.message.from) this.stat.openUser(this.message.from);
   }
 
   sendCmd(cmd: Command): void {
