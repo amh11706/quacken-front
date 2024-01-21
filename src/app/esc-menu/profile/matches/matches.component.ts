@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import moment from 'moment';
-import { TeamImages } from '../../../chat/chat.service';
+import * as dayjs from 'dayjs';
 
+import { TeamImages } from '../../../chat/chat.service';
 import { OutCmd } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
 import { StatService } from '../stat.service';
@@ -52,7 +52,7 @@ export class MatchesComponent implements OnInit {
     let newest = { createdAt: 0 } as Match;
     for (const m of matches) {
       if (m.createdAt > newest.createdAt) newest = m;
-      m.createdAtString = moment(m.createdAt, 'X').format('lll');
+      m.createdAtString = dayjs.unix(m.createdAt).format('D MMM YYYY HH:mm');
       m.teams = this.parseTeams(m.players);
       this.matches[m.rankArea - 1]?.push(m);
     }

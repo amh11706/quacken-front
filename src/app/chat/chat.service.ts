@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import moment from 'moment';
 import { ReplaySubject } from 'rxjs';
+import * as dayjs from 'dayjs';
+import * as relativeTime from 'dayjs/plugin/relativeTime';
 import { InCmd, OutCmd } from '../ws-messages';
 
 import { WsService } from '../ws.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { Sounds, SoundService } from '../sound.service';
-moment.locale('en-GB');
+
+dayjs.extend(relativeTime);
 
 export const TeamImages = {
   0: { title: 'Defenders', src: 'assets/images/icon_defend1.png' },
@@ -93,8 +95,8 @@ export class ChatService {
         this.commandHistory = this.commandHistory.filter(entry => entry !== command);
         this.commandHistory.push(command);
       } else if (message.type === 7 && message.time) {
-        const time = moment.unix(+message.time);
-        message.time = time.format('lll');
+        const time = dayjs.unix(+message.time);
+        message.time = time.format('D MMM YYYY HH:mm');
         message.ago = time.fromNow();
       }
       this.messages$.next(this.messages);
