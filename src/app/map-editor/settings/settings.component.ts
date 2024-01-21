@@ -56,7 +56,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   success = '';
   pending = false;
   shown?: DBTile;
-  showFileUpload = false;
 
   constructor(protected socket: WsService) { }
 

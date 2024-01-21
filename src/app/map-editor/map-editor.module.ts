@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
@@ -27,7 +27,6 @@ import { MapEditorRoutingModule } from './map-editor-routing.module';
 import { TmapSetComponent } from './tmap-set/tmap-set.component';
 import { EntityEditorComponent } from './entity-editor/entity-editor.component';
 import { WinConditionsComponent } from './entity-editor/win-conditions/win-conditions.component';
-import { FileImportModule } from './file-import/file-import.module';
 import { TagsComponent } from './tags/tags.component';
 
 @NgModule({
@@ -49,6 +48,7 @@ import { TagsComponent } from './tags/tags.component';
     CommonModule,
     MapEditorRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     QdragModule,
     ChatModule,
     MatButtonModule,
@@ -61,7 +61,6 @@ import { TagsComponent } from './tags/tags.component';
     MatAutocompleteModule,
     MatChipsModule,
     TwodRenderModule,
-    FileImportModule,
   ],
   providers: [TitleCasePipe],
   exports: [MapEditorComponent, ObstaclesComponent],

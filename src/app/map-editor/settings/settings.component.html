@@ -86,12 +86,6 @@
       </button>
 
       <button mat-raised-button
-        [disabled]="pending || selected !== 'new'"
-        (click)="showFileUpload=true">
-        {{map.tileSettings ? 'Close' : 'Import'}}
-      </button>
-
-      <button mat-raised-button
           [disabled]="pending || selected === 'new' && !map.tileSettings"
           (click)="edit()">
         {{map.tileSettings ? 'Close' : 'Enter Editor'}}
@@ -104,7 +98,3 @@
        id="success">{{success}}</p>
   </div>
 </div>
-
-<q-file-import *ngIf="showFileUpload"
-  [(showFileUpload)]="showFileUpload"
-  [mapData]="mapData"></q-file-import>
