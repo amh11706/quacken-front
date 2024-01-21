@@ -81,21 +81,21 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "quacken2:build"
+            "buildTarget": "quacken2:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "quacken2:build:production"
+              "buildTarget": "quacken2:build:production"
             },
             "dev": {
-              "browserTarget": "quacken2:build:dev"
+              "buildTarget": "quacken2:build:dev"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "quacken2:build"
+            "buildTarget": "quacken2:build"
           }
         },
         "test": {
