@@ -51,7 +51,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   @Input() checkSZ = (pos: { x: number, y: number }): boolean => {
     if (!this.showIsland) return false;
     return pos.y > 32 || pos.y < 3;
-  }
+  };
 
   @Input() getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   @Input() getY = (p: { x: number, y: number }): number => (p.y - p.x + 19) * 24;
@@ -67,7 +67,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       case 4: return 6 / this.speed + 's linear';
       default: return '';
     }
-  }
+  };
 
   constructor(ws: WsService, sound: SoundService, private image: ImageService) {
     super(ws, sound);
@@ -80,7 +80,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
       GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
       for (const boat of this.boats) {
-        this.render(boat)?.updateTeam?.(boat);
+        void this.render(boat)?.updateTeam?.(boat);
       }
     }));
     void this.sound.load(Sounds.CannonFireBig);

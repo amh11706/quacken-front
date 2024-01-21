@@ -47,6 +47,7 @@ export class MatchesComponent implements OnInit {
 
   async fetchMatches(name = this.stat.target): Promise<void> {
     this.stat.target = name;
+    void this.stat.refresh();
     this.matches = [[], [], [], []];
     const matches = await this.ws.request(OutCmd.MatchesUser, this.stat.target);
     let newest = { createdAt: 0 } as Match;

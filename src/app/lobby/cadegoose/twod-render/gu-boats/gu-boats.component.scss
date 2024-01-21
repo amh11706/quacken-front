@@ -132,7 +132,7 @@ q-sprite-img {
 .size37 .shot { background-image: url("/assets/clutter/cannonball_healing_gold.png"); }
 .size4 .shot, .size6 .shot { background-image: url("/assets/clutter/chain_cannonball.png"); }
 .size5 .shot, .size7 .shot { background-image: url("/assets/clutter/flaming_cannonball.png"); }
-.shot.dis4, .shot.dis5 { animation-name: move, splash !important; animation-timing-function: linear, steps(13); }
+.shot.dis4, .shot.dis5 { animation-name: move, splash; animation-timing-function: linear, steps(13); }
 .smoke { animation: smoke calc(var(--speed) * 1s) steps(18) both; }
 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
 .size2 .smoke, .size4 .smoke, .size5 .smoke, .size6 .smoke, .size7 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }

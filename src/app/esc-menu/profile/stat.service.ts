@@ -60,7 +60,7 @@ export class StatService {
   target = '';
 
   id = 0;
-  group = 0;
+  group = 1;
   leaders: Leader[] = [];
   columns: Column[] = [];
   rankLeaders?: { tier: RankLeader[], xp: RankLeader[] };
@@ -73,12 +73,24 @@ export class StatService {
 
   groupStats?: { [key: number]: Stat[] };
   userRanks: UserRank[] = [];
+
+  winLoss: {
+    wins: number;
+    losses: number;
+    winsVsMe?: number;
+    lossesVsMe?: number;
+  } = { wins: 0, losses: 0 };
+
   constructor(
     private ws: WsService,
     private fs: FriendsService,
     private es: EscMenuService,
     private kbs: KeyBindingService,
   ) { }
+
+  async updateWinLoss(): Promise<void> {
+    this.winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group + 1 });
+  }
 
   openUser(name: string, open = true): void {
     this.target = name;
@@ -117,6 +129,7 @@ export class StatService {
 
       this.fillGroupStats(stats);
     }
+    return this.updateWinLoss();
   }
 
   private fillGroupStats(stats: Stat[]) {

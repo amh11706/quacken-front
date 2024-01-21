@@ -63,6 +63,7 @@
             "allowAsStatement": true
           }
         ],
+        "no-use-before-define": "off",
         "semi": [
           "error",
           "always"

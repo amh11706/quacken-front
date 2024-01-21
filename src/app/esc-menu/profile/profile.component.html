@@ -9,8 +9,8 @@
 
       <form>
         <!-- <mat-form-field floatLabel="never"> -->
-          <q-name-search [value]="stat.target"
-                         (valueChange)="showUser($event)"></q-name-search>
+        <q-name-search [value]="stat.target"
+                       (valueChange)="showUser($event)"></q-name-search>
         <!-- </mat-form-field> -->
       </form>
 
@@ -34,6 +34,7 @@
 
         <mat-form-field>
           <mat-select [(value)]="stat.group"
+                      (valueChange)="stat.updateWinLoss()"
                       placeholder="Category">
             <mat-option [value]="0">Quacken</mat-option>
             <mat-option [value]="1">Cadesim</mat-option>
@@ -41,6 +42,16 @@
             <mat-option [value]="3">Capture the Flag</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <ng-container *ngIf="stat.group >= 1">
+          <h4>Win/Loss last 30 days:</h4>
+          <p>{{stat.winLoss.wins}} - {{stat.winLoss.losses}}</p>
+
+          <ng-container *ngIf="stat.winLoss.winsVsMe || stat.winLoss.lossesVsMe">
+            <h4>Win/Loss vs you:</h4>
+            <p>{{stat.winLoss.winsVsMe}} - {{stat.winLoss.lossesVsMe}}</p>
+          </ng-container>
+        </ng-container>
 
         <table *ngIf="stat.groupStats">
           <tr *ngFor="let s of stat.groupStats[stat.group]"

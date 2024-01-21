@@ -5,10 +5,10 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
-    title: 'Release TBD',
+    title: 'Release 21 January 2024',
     points: [
       'Match history reworked; It now shows results and team info.',
-      // 'Profile page now includes w/l last 30 days and vs you (if it's not your profile).',
+      'Profile page now includes w/l last 30 days and vs you (if it\'s not your profile).',
       // 'Map creators can now see a list of matches using their map. Viewable from the map editor.',
       // 'New "Map Browser" page to view highlighted maps and creators.',
       'Leaderboards now only show players who have played in the last 30 days.',
