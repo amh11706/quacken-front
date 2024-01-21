@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { Scene } from 'three';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { startWith, map } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -136,7 +136,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     [this.ships[1]!, { ...this.ships[1]! }, { ...this.ships[1]! }, { ...this.ships[1]! }];
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  shipCtrl = new FormControl();
+  shipCtrl = new UntypedFormControl();
   filteredShips: Observable<{ value: number, label: string }[]>;
   @ViewChild('shipInput') shipInput?: ElementRef<HTMLInputElement>;
 

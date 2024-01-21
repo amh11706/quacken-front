@@ -1,7 +1,7 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { TitleCasePipe } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
@@ -18,7 +18,7 @@ export class TagsComponent {
   removable = true;
   @Output() chipChange = new EventEmitter<boolean>();
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagCtrl = new FormControl();
+  tagCtrl = new UntypedFormControl();
   filteredTags: Observable<string[]>;
   tags: string[] = [];
   allTags: string[] = ['1v1', '2v2', '3v3', '4v4+', 'Brigs', 'Cage', 'Frigs', 'Maze', 'Practice'];

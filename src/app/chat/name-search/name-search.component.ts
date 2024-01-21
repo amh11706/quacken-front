@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, debounceTime, mergeMap } from 'rxjs/operators';
 import { OutCmd } from '../../ws-messages';
@@ -16,7 +16,7 @@ export class NameSearchComponent implements OnInit {
   @Output() valueChange = new EventEmitter<string>();
   @Input() onlineOnly = false;
   searchedNames?: Observable<string[]>;
-  myControl = new FormControl();
+  myControl = new UntypedFormControl();
 
   constructor(
     private ws: WsService,
