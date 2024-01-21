@@ -42,7 +42,8 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(InCmd.LobbyUpdate, update => {
       for (let i = 0; i < this.lobbies.length; i++) {
         const lobby = this.lobbies[i];
-        if (update.id === lobby?.id) {
+        if (!lobby) continue;
+        if (update.id === lobby.id) {
           Object.assign(lobby, update);
           return;
         }

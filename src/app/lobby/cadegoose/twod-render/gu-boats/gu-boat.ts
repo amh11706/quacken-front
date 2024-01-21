@@ -104,7 +104,7 @@ export class GuBoat extends BoatRender {
 
     prom = new Promise(resolve => {
       sail.onload = () => {
-        const canvas = document.createElement('canvas');
+        const canvas = (document as any).createElement('canvas') as HTMLCanvasElement;
         canvas.width = sail.width;
         canvas.height = sail.height;
         const ctx = canvas.getContext('2d');
@@ -119,7 +119,7 @@ export class GuBoat extends BoatRender {
           }
         }
         ctx.putImageData(data, 0, 0);
-        canvas.toBlob(blob => resolve(URL.createObjectURL(blob)));
+        canvas.toBlob((blob) => blob && resolve(URL.createObjectURL(blob)));
       };
     });
     GuBoat.teamImages.set(which + team, prom);

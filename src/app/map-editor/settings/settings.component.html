@@ -88,13 +88,13 @@
       <button mat-raised-button
         [disabled]="pending || selected !== 'new'"
         (click)="showFileUpload=true">
-        {{map?.tileSettings ? 'Close' : 'Import'}}
+        {{map.tileSettings ? 'Close' : 'Import'}}
       </button>
 
       <button mat-raised-button
-          [disabled]="pending || selected === 'new' && !map?.tileSettings"
+          [disabled]="pending || selected === 'new' && !map.tileSettings"
           (click)="edit()">
-        {{map?.tileSettings ? 'Close' : 'Enter Editor'}}
+        {{map.tileSettings ? 'Close' : 'Enter Editor'}}
       </button>
     </div>
 
