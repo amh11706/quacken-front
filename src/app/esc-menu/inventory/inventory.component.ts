@@ -1,6 +1,6 @@
 import { Component, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 import { WsService } from '../../ws.service';
 import { SplitComponent } from './split/split.component';

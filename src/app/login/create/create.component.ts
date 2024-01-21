@@ -1,7 +1,7 @@
 import { Component, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 import { environment } from '../../../environments/environment';
 import { TermsComponent } from '../terms/terms.component';

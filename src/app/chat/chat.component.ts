@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ChatService, Message } from './chat.service';
 import { FriendsService, Invite } from './friends/friends.service';
 

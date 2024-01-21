@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Subscription } from 'rxjs';
 import { NotActive } from '../key-actions';
 import { KeyBindingEditMode } from '../key-binding.component';
