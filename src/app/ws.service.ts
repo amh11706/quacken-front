@@ -84,7 +84,7 @@ export class WsService {
     }
     this.token = token;
     if (token === 'guest') this.user = { id: 0, name: 'Guest', admin: 0 };
-    else this.user = this.tokenParser.decodeToken(token);
+    else this.user = this.tokenParser.decodeToken(token) || undefined;
 
     this.socket = new WebSocket(environment.ws);
 
