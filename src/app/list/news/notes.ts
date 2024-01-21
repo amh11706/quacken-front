@@ -5,6 +5,21 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release TBD',
+    points: [
+      'Match history reworked; It now shows results and team info.',
+      // 'Profile page now includes w/l last 30 days and vs you (if it's not your profile).',
+      // 'Map creators can now see a list of matches using their map. Viewable from the map editor.',
+      // 'New "Map Browser" page to view highlighted maps and creators.',
+      'Leaderboards now only show players who have played in the last 30 days.',
+      'New setting to show the moves of boats on your team.',
+      'Added a bunch of new statistics visible during a match. Shift + Tab to show (if enabled).',
+      'Fixed map sort by rating so maps with only 1 rating are not at the top.',
+      'Fixed AI thinking rocks taste good.',
+      'Fixed AI sometimes ignoring the main cluster.',
+    ],
+  },
+  {
     title: 'Release 27 August 2023',
     points: [
       'Max turn time increased to 60 seconds.',
