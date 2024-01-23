@@ -43,6 +43,14 @@ export class Boat {
     public isMe = false,
   ) { }
 
+  resetMoves(): Boat {
+    this.moves = [0, 0, 0, 0];
+    this.shots = [0, 0, 0, 0, 0, 0, 0, 0];
+    this.bomb = 0;
+    this.ready = false;
+    return this;
+  }
+
   draw(offsetX = 0, offsetY = 0): Boat {
     this.offsetX = offsetX;
     this.offsetY = offsetY;
@@ -110,7 +118,7 @@ export class Boat {
 
   checkSZ = (pos: { x: number, y: number }): boolean => {
     return pos.y > 48 && pos.y < 52 && pos.x >= 0 && pos.x < 25;
-  }
+  };
 
   private enterSZ() {
     this.enteringSZ = true;

@@ -59,7 +59,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   clutter: Clutter[] = [];
   szFade = ', opacity .8s linear .7s';
-  moveNames = ['', 'left', 'forward', 'right', 'obscured', 'overmove'];
   titles = ['', ', Cuttle Cake', ', Taco Locker', ', Pea Pod', ', Fried Egg'];
 
   myBoat = new Boat('');
@@ -88,7 +87,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       case 4: return '.1s linear';
       default: return '';
     }
-  }
+  };
 
   @Input() rotateTransition = (b: Boat): string => {
     if (b.rotateTransition === 1) {
@@ -101,7 +100,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       '1s ease', // duck poo
       '.2s ease', // defenduck spin
     ][b.rotateTransition] || '';
-  }
+  };
 
   constructor(protected ws: WsService) { }
 
@@ -190,18 +189,14 @@ export class BoatsComponent implements OnInit, OnDestroy {
       TWEEN.update(Infinity);
       BoatRender.tweens.update(Infinity);
       if (this.step >= 0 || this.turn) {
-        for (const boat of this.boats) {
-          boat.moves = [0, 0, 0, 0];
-          boat.bomb = 0;
-          boat.ready = false;
-        }
+        for (const boat of this.boats) boat.resetMoves();
       }
       this.ws.send(OutCmd.Sync);
       this.step = -1;
     } else {
       this.ws.dispatchMessage({ cmd: Internal.ResetMoves });
     }
-  }
+  };
 
   protected handleTurn(turn: Turn): void {
     if (this.turn || !turn.steps) {
@@ -241,10 +236,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   }
 
   protected resetBoats(): void {
-    for (const boat of this.boats) {
-      boat.moves = [0, 0, 0, 0];
-      boat.bomb = 0;
-    }
+    for (const boat of this.boats) boat.resetMoves();
     setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves }));
   }
 
@@ -309,7 +301,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         boat.ready = false;
       }
     }
-  }
+  };
 
   protected sortBoats(): void {
     this.boats.sort((a, b) => {

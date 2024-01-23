@@ -42,7 +42,7 @@
                <div class="movebar"
                     [class.ready]="boat.ready">
                     <div *ngFor="let move of boat.moves; let i=index"
-                         class="movebarslice {{moveNames[move]}}">
+                         class="movebarslice move{{move}}">
                          <ng-container *ngIf="weapons[boat.type]">
                               <mat-icon *ngIf="boat.bomb === i+5"
                                         class="bomb">arrow_right

@@ -1,62 +1,65 @@
 <div style="--speed: {{10/speed}};">
-<div *ngFor="let obj of clutter"
-     class="clutter clutter{{obj.t}}"
-     [style.transform]="'translate(' + obj.coords.x + 'px, ' + obj.coords.y  + 'px)'">
+  <div *ngFor="let obj of clutter"
+       class="clutter clutter{{obj.t}}"
+       [style.transform]="'translate(' + obj.coords.x + 'px, ' + obj.coords.y  + 'px)'">
 
-  <div *ngIf="!obj.dis || obj.t >= 20 && obj.t <= 23"
-       class="clutterimg dir{{obj.dir}}" [class.popped]="obj.p"></div>
+    <div *ngIf="!obj.dis || obj.t >= 20 && obj.t <= 23"
+         class="clutterimg dir{{obj.dir}}"
+         [class.popped]="obj.p"></div>
 
-  <div *ngIf="obj.dis"
-       class="size{{obj.t}}">
-    <div class="shot"
-         class="dir{{obj.dir}} dis{{obj.dis}}"></div>
-    <div *ngIf="obj.dbl"
-         class="dir{{obj.dir}} dis{{obj.dis}}"
-         class="shot double"></div>
-    <div class="smoke"></div>
+    <div *ngIf="obj.dis"
+         class="size{{obj.t}}">
+      <div class="shot"
+           class="dir{{obj.dir}} dis{{obj.dis}}"></div>
+      <div *ngIf="obj.dbl"
+           class="dir{{obj.dir}} dis{{obj.dis}}"
+           class="shot double"></div>
+      <div class="smoke"></div>
+    </div>
   </div>
-</div>
 
-<img *ngIf="showIsland"
-     id="island"
-     src="/assets/images/alkaid_island.png">
+  <img *ngIf="showIsland"
+       id="island"
+       src="/assets/images/alkaid_island.png">
 
-<div *ngFor="let boat of boats; trackBy: trackBoatBy"
-     class="boat"
-     [style.color]="teamColors[boat.team || 0]"
-     [class.sameteam]="boat.team === myBoat.team"
-     [style.zIndex]="render(boat).coords?.y"
-     [style.opacity]="boat.opacity"
-     [style.transform]="'translate(' + render(boat).coords?.x + 'px, ' + render(boat).coords?.y  + 'px)'">
-  <div class="boatheader"
-       *ngIf="boat.name || boat.isMe">
-    <span class="boattitle"
-          [class.isme]="boat.isMe">
-      {{!fishBoats || hoveredTeam === boat.team ? boat.title : boat.name}}
-    </span>
+  <div *ngFor="let boat of boats; trackBy: trackBoatBy"
+       class="boat"
+       [style.color]="teamColors[boat.team || 0]"
+       [class.sameteam]="boat.team === myBoat.team"
+       [style.zIndex]="render(boat).coords?.y"
+       [style.opacity]="boat.opacity"
+       [style.transform]="'translate(' + render(boat).coords?.x + 'px, ' + render(boat).coords?.y  + 'px)'">
+    <div class="boatheader"
+         *ngIf="boat.name || boat.isMe">
+      <span class="boattitle"
+            [class.isme]="boat.isMe">
+        {{!fishBoats || hoveredTeam === boat.team ? boat.title : boat.name}}
+      </span>
 
-    <div class="movebar"
-         [class.ready]="boat.ready">
-      <div *ngFor="let move of boat.moves"
-           class="movebarslice {{moveNames[move] ?? 'maneuver'}}">
+      <div class="movebar"
+           [class.ready]="boat.ready">
+        <div *ngFor="let move of boat.moves; let i = index"
+             [class.moveLeftShot]="boat.shots[i*2]"
+             [class.moveRightShot]="boat.shots[i*2+1]"
+             class="movebarslice move{{move}}">
+        </div>
+      </div>
+
+      <div class="flags">
+        <div *ngFor="let flag of render(boat).flags"
+             [style.backgroundPositionX]="flag.offset"></div>
       </div>
     </div>
 
-    <div class="flags">
-      <div *ngFor="let flag of render(boat).flags"
-           [style.backgroundPositionX]="flag.offset"></div>
-    </div>
+    <div [style.opacity]="boat.team === hoveredTeam ? 1 : 0"
+         [style.borderColor]="teamColors[boat.team || 0]"
+         [style.width]="boat.influence*92 + 'px'"
+         [style.height]="boat.influence*92 + 'px'"
+         class="influence"></div>
+
+    <q-sprite-img [render]="render(boat)"
+                  (click)="clickBoat(boat)"
+                  (mouseenter)="hoveredTeam = boat.team || 0;"
+                  (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
   </div>
-
-  <div [style.opacity]="boat.team === hoveredTeam ? 1 : 0"
-       [style.borderColor]="teamColors[boat.team || 0]"
-       [style.width]="boat.influence*92 + 'px'"
-       [style.height]="boat.influence*92 + 'px'"
-       class="influence"></div>
-
-  <q-sprite-img [render]="render(boat)"
-                (click)="clickBoat(boat)"
-                (mouseenter)="hoveredTeam = boat.team || 0;"
-                (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
-</div>
 </div>

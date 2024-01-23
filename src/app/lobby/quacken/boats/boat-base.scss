@@ -34,9 +34,8 @@
 }
 
 .movebar {
-  box-sizing: content-box;
-  width: 48px;
-  height: 8px;
+  width: 50px;
+  height: 12px;
   margin: auto;
   margin-top: 5px;
   border: 1px solid black;
@@ -46,37 +45,47 @@
 .movebarslice {
   float: left;
   width: 25%;
-  height: 8px;
+  height: 10px;
   background-color: transparent;
-  color: white;
-  font-size: 7px;
+  color: black;
+  font-size: 6px;
+  padding-top: 2px;
 }
 
-.left {
+.moveLeftShot {
+  border-bottom: 2px solid red;
+}
+
+.moveRightShot {
+  border-top: 2px solid red;
+  padding-top: 0;
+}
+
+.move1 {
   background-color: #b9cef1;
 
   &::after {
     content: "L";
   }
 }
-.forward {
+.move2 {
   background-color: #97c469;
   
   &::after {
     content: "F";
   }
 }
-.right {
+.move3 {
   background-color: #ff9d55;
   
   &::after {
     content: "R";
   }
 }
-.obscured {
+.move4 {
   background-color: rgb(202, 197, 197);
 }
-.overmove {
+.move5 {
   background-color: red;
 }
 
