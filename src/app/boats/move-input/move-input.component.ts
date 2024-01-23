@@ -234,10 +234,12 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     const moves = this.input.moves;
     const move = moves[slot] || 0;
     if (ev.shiftKey && this.shiftSpecials) {
-      const token = move > 7 ? this.maneuvers.findIndex(m => m.id === move) : 0;
+      const moveAdjusted = Math.floor(move / 4) * 4;
+      const token = move > 7 ? this.maneuvers.findIndex(m => m.id === moveAdjusted) : 0;
       let wantToken = (ev.button + 1 + token) % 4;
       let points = this.unusedTokens.maneuvers[wantToken] || 0;
       let attempts = 0;
+      console.log(token, wantToken, ev.button);
       while (attempts < 3 && wantToken !== 0 && points < 100) {
         wantToken = (ev.button + 1 + wantToken) % 4;
         points = this.unusedTokens.maneuvers[wantToken] || 0;
@@ -246,10 +248,12 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       if (wantToken > 0) {
         const maneuver = this.maneuvers[wantToken]?.id || 0;
         moves[slot] = points === 200 ? maneuver + 1 : maneuver;
-        this.checkMaxMoves();
-        this.inputChange.emit(this.input);
-        return;
+      } else {
+        moves[slot] = 0;
       }
+      this.checkMaxMoves();
+      this.inputChange.emit(this.input);
+      return;
     }
     if ((move === 0 && slot === this.blockedPosition)) return;
     if (move > 7) {
