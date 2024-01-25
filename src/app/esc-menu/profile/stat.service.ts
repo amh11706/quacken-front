@@ -94,10 +94,12 @@ export class StatService {
     this.winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group + 1 });
   }
 
+  emitTab(): void {
+    this.profileTabChange$.next(this.profileTab);
+  }
+
   setTab(tab: number): void {
-    if (tab === this.profileTab) return;
     this.profileTab = tab;
-    this.profileTabChange$.next(tab);
   }
 
   openUser(name: string, open = true): void {

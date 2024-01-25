@@ -9,7 +9,7 @@
 }
 
 :host ::ng-deep .cdk-virtual-scroll-content-wrapper {
-  contain: none;
+  padding-bottom: 200px;
 }
 
 form {

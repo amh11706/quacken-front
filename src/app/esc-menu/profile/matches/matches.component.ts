@@ -70,6 +70,7 @@ export class MatchesComponent implements OnInit {
       void this.stat.refresh();
     }
     const matches = await this.ws.request(OutCmd.MatchesUser, this.stat.target);
+    if (!matches) return;
     // matches.push(...matches);
     // matches.push(...matches);
     // matches.push(...matches);

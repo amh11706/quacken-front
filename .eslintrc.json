@@ -69,6 +69,7 @@
           "always"
         ],
         "require-await": "error",
+        "import/no-unresolved":"off",
         "import/order": [
           "error",
           {

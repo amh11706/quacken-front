@@ -1,5 +1,5 @@
 <mat-tab-group [(selectedIndex)]="stat.profileTab"
-               (selectedIndexChange)="stat.setTab($event)">
+               (animationDone)="stat.emitTab()">
   <mat-tab label="Profile">
     <div id="stats">
       <button mat-icon-button
