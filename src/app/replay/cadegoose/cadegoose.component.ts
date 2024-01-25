@@ -93,7 +93,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   randomMap = '';
   scores?: ScoreResponse;
   maxPenalty = 0;
-  Penalties = Penalties
+  Penalties = Penalties;
 
   penaltyColors = [
     'white',

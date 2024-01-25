@@ -113,7 +113,7 @@ export class KeyBindingService {
     }
 
     this.emitKey(e, key);
-  }
+  };
 
   private handleKeyUp = (e: KeyboardEvent) => {
     if (!this.ws.connected) return;
@@ -121,7 +121,7 @@ export class KeyBindingService {
     const key = this.getKey(e);
 
     this.emitKey(e, key, false);
-  }
+  };
 
   private addAction(key: string, action: KeyActions) {
     if (key === NotActive) return;

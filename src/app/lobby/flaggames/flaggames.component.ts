@@ -54,7 +54,7 @@ export class FlaggamesComponent extends CadegooseComponent {
 
   checkSZ = (pos: { x: number, y: number }): boolean => {
     return pos.y < 3 || pos.y > this.mapHeight - 4;
-  }
+  };
 
   constructor(
     ws: WsService,
@@ -80,7 +80,7 @@ export class FlaggamesComponent extends CadegooseComponent {
     row[x] = v;
     window.clearTimeout(this.redrawDebounce);
     this.redrawDebounce = window.setTimeout(() => {
-      this.renderer?.fillMap(this.map, this.lobby?.flags);
+      void this.renderer?.fillMap(this.map, this.lobby?.flags);
     }, 100);
   }
 }

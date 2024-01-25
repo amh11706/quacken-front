@@ -105,7 +105,7 @@ export class HudComponent implements OnInit, OnDestroy {
   private timeInterval?: number;
   private minutes = 0;
   private seconds = 0;
-  readonly maxSeconds = 65
+  readonly maxSeconds = 65;
   protected turnSeconds = 0;
   public blockedPosition = 3;
   seconds$ = new BehaviorSubject<number>(76);

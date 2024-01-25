@@ -89,7 +89,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
       height: 41,
       showIsland: false,
     },
-  }
+  };
 
   editor: MapEditor = {
     selected: 50,
@@ -152,7 +152,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     window.localStorage.setItem(this.ws.user?.id + '-editor', JSON.stringify(
       this.editor,
     ));
-  }
+  };
 
   openGuide(): void {
     this.es.open = true;
@@ -162,7 +162,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   resetUndos = (): void => {
     this.editor.selectedTile.undos = [];
     this.editor.selectedTile.redos = [];
-  }
+  };
 
   private handleKeys() {
     this.sub.add(this.kbs.subscribe(KeyActions.Save, v => {
@@ -217,7 +217,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     }
 
     target.push(buffer);
-  }
+  };
 
   setTile = (x: number, y: number, v: number): { x: number, y: number, v: number } | undefined => {
     const settings = this.settings();
@@ -231,9 +231,9 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     tile.unsaved = true;
     const oldTile = { x, y, v: tile.data[y][x] };
     tile.data[y][x] = v;
-    this.renderer?.fillMap(tile.data, []);
+    void this.renderer?.fillMap(tile.data, []);
     return oldTile;
-  }
+  };
 
   openSettings(): void {
     this.editor.settingsOpen = true;

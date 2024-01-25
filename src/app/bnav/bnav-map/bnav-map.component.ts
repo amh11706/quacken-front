@@ -82,7 +82,7 @@ export class BnavMapComponent implements OnInit, OnDestroy {
     if (ob.f > 1) [relativeX, relativeY] = [-relativeX, -relativeY];
 
     this.positionChange.emit(`${relativeX},${relativeY},${relativeFace}`);
-  }
+  };
 
   clickTile(x: number, y: number): void {
     const b = this.theirBoat;

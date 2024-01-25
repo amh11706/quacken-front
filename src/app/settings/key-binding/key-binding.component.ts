@@ -58,7 +58,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
         const b: KeyBindingEditMode = {
           ...defaultGroupBiindings,
           bindings: [...activeBindings],
-          activeBindings: activeBindings,
+          activeBindings,
           defaultBindings: defaultGroupBiindings.bindings,
           update: new Subject(),
           group: k,

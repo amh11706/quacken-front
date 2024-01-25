@@ -125,7 +125,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
 
       for (const boat of boats) {
         if (!(this._boats[-boat.id]?.render === boat.render || this._boats[boat.id]?.render === boat.render)) {
-          boat.render?.dispose();
+          void boat.render?.dispose();
           delete boat.render;
           continue;
         }

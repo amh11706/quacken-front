@@ -50,7 +50,7 @@ export class QdragDirective implements OnInit, OnDestroy {
       this.offsetX += window.innerWidth - box.right - this.rightGap;
       this.bindWindow(true);
     } else this.bindWindow();
-  }
+  };
 
   private bindWindow(skipRight = false) {
     if (!this.qDrag) return;
@@ -83,7 +83,7 @@ export class QdragDirective implements OnInit, OnDestroy {
     event.preventDefault();
     const active = document.activeElement;
     if (active instanceof HTMLElement && active.id !== 'textinput') active.blur();
-  }
+  };
 
   private touchStart = (event: TouchEvent) => {
     const touch = event.touches[0];
@@ -93,7 +93,7 @@ export class QdragDirective implements OnInit, OnDestroy {
     document.addEventListener('touchmove', this.touchMove);
     document.addEventListener('touchcancel', this.touchEnd);
     document.addEventListener('touchend', this.touchEnd);
-  }
+  };
 
   private onMove = (event: MouseEvent) => {
     this.offsetX += (event.clientX - this.startX) / this.scale;
@@ -101,7 +101,7 @@ export class QdragDirective implements OnInit, OnDestroy {
     this.startX = event.clientX;
     this.startY = event.clientY;
     this.updateTransform();
-  }
+  };
 
   private touchMove = (event: TouchEvent) => {
     const touch = event.touches[0];
@@ -111,18 +111,18 @@ export class QdragDirective implements OnInit, OnDestroy {
     this.startX = touch.clientX;
     this.startY = touch.clientY;
     this.updateTransform();
-  }
+  };
 
   private onUp = () => {
     document.removeEventListener('mousemove', this.onMove);
     document.removeEventListener('mouseup', this.onUp);
     if (this.bindToWindow !== undefined) this.bindWindow();
-  }
+  };
 
   private touchEnd = () => {
     document.removeEventListener('touchmove', this.touchMove);
     document.removeEventListener('touchcancel', this.touchEnd);
     document.removeEventListener('touchend', this.touchEnd);
     if (this.bindToWindow !== undefined) this.bindWindow();
-  }
+  };
 }

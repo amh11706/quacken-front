@@ -55,7 +55,7 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
     if (el instanceof HTMLDivElement) {
       el.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
     }
-  }
+  };
 
   private handleScroll = (e: WheelEvent) => {
     if (!this.map || e.ctrlKey) return;
@@ -67,5 +67,5 @@ export class ObstaclesComponent implements OnInit, OnDestroy {
     } else {
       this.map.selected = scroll[current - 1] || scroll[scroll.length - 1] || this.map.selected;
     }
-  }
+  };
 }

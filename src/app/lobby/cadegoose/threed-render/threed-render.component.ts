@@ -194,11 +194,11 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
     this.mouseMoved = true;
-  }
+  };
 
   private click = () => {
     this.bs.findClick(this.rayCaster.ray);
-  }
+  };
 
   protected updateIntersects(): void {
     if (!this.mouseMoved && this.hoveredTeam === -1) return;
@@ -221,13 +221,13 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.render();
     this.updateIntersects();
     this.requestRender();
-  }
+  };
 
   private requestRender = () => {
     if (!this.alive || this.frameRequested) return;
     this.frameRequested = true;
     this.ngZone.runOutsideAngular(() => window.requestAnimationFrame(this.animate));
-  }
+  };
 
   private render = () => {
     if (!this.alive || !this.controls) return;
@@ -264,7 +264,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.controls?.update();
     this.stats?.update();
     // console.log(this.renderer.info.memory)
-  }
+  };
 
   private onWindowResize = () => {
     this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -272,7 +272,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.requestRender();
-  }
+  };
 
   private buildWater() {
     const waterGeometry = new PlaneBufferGeometry(10000, 10000);

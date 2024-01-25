@@ -99,7 +99,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   }
 
   private updateMaxMoves(): void {
-    this.maxMoves = this.lastTick.attr[255] ?? 0 > this.turn ? this.myBoat.maxMoves - 1 : this.myBoat.maxMoves;
+    this.maxMoves = this.lastTick.attr[255] ?? this.turn < 0 ? this.myBoat.maxMoves - 1 : this.myBoat.maxMoves;
   }
 
   setWantMove(value: number): void {

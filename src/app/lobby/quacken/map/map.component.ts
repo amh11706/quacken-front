@@ -39,7 +39,7 @@ export class MapComponent implements OnDestroy {
       case 4: return '.1s linear';
       default: return '';
     }
-  }
+  };
 
   constructor(
     private ss: SettingsService,

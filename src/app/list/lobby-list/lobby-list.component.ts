@@ -25,7 +25,7 @@ export class LobbyListComponent implements OnInit, OnDestroy {
   note = Notes[0] as Note;
   private sub = new Subscription();
   @Input() message: Message = {} as Message;
-  competitions = Competitions
+  competitions = Competitions;
 
   constructor(
     public stat: StatService,

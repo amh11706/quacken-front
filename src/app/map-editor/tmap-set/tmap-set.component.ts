@@ -22,7 +22,7 @@ export class TmapSetComponent extends TileSetComponent {
       return map.id !== msg.id;
     });
     this.map.selectedTile = this.map.tmaps[0] || { id: null, name: '', undos: [], redos: [] } as unknown as DBTile;
-  }
+  };
 
   select(tile: DBTile): void {
     if (!tile.settings) tile.settings = {};

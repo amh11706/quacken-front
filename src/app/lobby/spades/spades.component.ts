@@ -227,9 +227,9 @@ export class SpadesComponent implements OnInit, OnDestroy {
   }
 
   private getCard(id: number): Card {
-    if (id < 0) return { id: id, suit: 4, value: 2 };
+    if (id < 0) return { id, suit: 4, value: 2 };
     return {
-      id: id,
+      id,
       suit: 3 - Math.floor(id / 13),
       value: (id + 1) % 13,
     };

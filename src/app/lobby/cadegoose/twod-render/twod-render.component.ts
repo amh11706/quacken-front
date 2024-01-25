@@ -84,7 +84,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   @Input() checkSZ = (pos: { x: number, y: number }): boolean => {
     if (!this.showIsland) return false;
     return pos.y > 32 || pos.y < 3;
-  }
+  };
 
   private frameRequested = true;
   private frameTarget = 0;
@@ -128,7 +128,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
       case 4: return '.1s linear';
       default: return '';
     }
-  }
+  };
 
   constructor(
     private ss: SettingsService,
@@ -198,13 +198,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     this.stats?.update();
     this.frameRequested = false;
     this.requestRender();
-  }
+  };
 
   private requestRender = () => {
     if (!this.alive || this.frameRequested) return;
     this.frameRequested = true;
     window.requestAnimationFrame(this.animate);
-  }
+  };
 
   getHeight(): number {
     return (this.mapWidth + this.mapHeight) * 24;

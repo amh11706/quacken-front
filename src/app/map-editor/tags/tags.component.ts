@@ -22,7 +22,7 @@ export class TagsComponent {
   filteredTags: Observable<string[]>;
   tags: string[] = [];
   allTags: string[] = ['1v1', '2v2', '3v3', '4v4+', 'Brigs', 'Cage', 'Frigs', 'Maze', 'Practice'];
-  titleCasePipe=new TitleCasePipe()
+  titleCasePipe = new TitleCasePipe();
   constructor() {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
