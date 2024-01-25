@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import * as dayjs from 'dayjs';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
 import { InCmd, OutCmd } from '../ws-messages';
@@ -42,15 +42,14 @@ export interface Command {
   providedIn: 'root',
 })
 export class ChatService {
-  commandsComponent: any;
   commandHistory: string[] = [];
   messages: Message[] = [];
-  messages$ = new ReplaySubject<Message[]>(1);
+  messages$ = new BehaviorSubject<Message[]>([]);
   saveText = '';
   historyIndex = -1;
-  commands: Command[] = [];
+  commands$ = new BehaviorSubject<Command[]>([]);
+  selectedCommand$ = new BehaviorSubject<Command>({ params: [] } as any);
   nameCommands: Command[] = [];
-  selectedCommand: Command = { params: [] } as any;
 
   constructor(
     private ws: WsService,
@@ -59,15 +58,16 @@ export class ChatService {
   ) {
     this.messages$.next(this.messages);
     this.ws.subscribe(InCmd.ChatCommands, commands => {
-      this.commands = commands.lobby;
-      this.commands.push(...commands.global);
-      if (commands.lobbyAdmin) this.commands.push(...commands.lobbyAdmin);
+      const lobbyCommands = commands.lobby as Command[];
+      lobbyCommands.push(...commands.global);
+      if (commands.lobbyAdmin) lobbyCommands.push(...commands.lobbyAdmin);
 
       let cmdFound = false;
-      for (const cmd of this.commands) {
-        if (cmd.base === this.selectedCommand.base) {
-          Object.assign(cmd, this.selectedCommand);
-          this.selectedCommand = cmd;
+      const selectedCommand = this.selectedCommand$.getValue();
+      for (const cmd of lobbyCommands) {
+        if (cmd.base === selectedCommand.base) {
+          Object.assign(cmd, selectedCommand);
+          this.selectedCommand$.next(cmd);
           cmdFound = true;
           continue;
         }
@@ -77,8 +77,9 @@ export class ChatService {
           return { name: p, value: p === 'new' ? p : '' };
         });
       }
-      if (!cmdFound) this.selectedCommand = this.commands[0] ?? this.selectedCommand;
-      this.nameCommands = this.commands.filter(cmd => cmd.params[0]?.name === 'name');
+      if (!cmdFound) this.selectedCommand$.next(lobbyCommands[0] ?? selectedCommand);
+      this.nameCommands = lobbyCommands.filter(cmd => cmd.params[0]?.name === 'name');
+      this.commands$.next(lobbyCommands);
     });
 
     this.ws.subscribe(InCmd.ChatMessage, (message: Message) => {
@@ -129,16 +130,13 @@ export class ChatService {
   }
 
   setTell(name: string): void {
-    const param = this.selectedCommand.params.find(p => p.name === 'message');
+    let selectedCommand = this.selectedCommand$.getValue();
+    const param = selectedCommand.params.find(p => p.name === 'message');
     if (param?.value) this.commandHistory.push(param.value);
-    this.selectedCommand = this.commands.find(cmd => cmd.base === '/tell') || this.selectedCommand;
-    const newParam = this.selectedCommand.params[0];
+    selectedCommand = this.commands$.getValue().find(cmd => cmd.base === '/tell') || selectedCommand;
+    const newParam = selectedCommand.params[0];
     if (newParam) newParam.value = name;
-    this.kbs.emitAction(KeyActions.FocusChat);
-  }
-
-  sendTell(friend: string): void {
-    this.setTell(friend);
+    this.selectedCommand$.next(selectedCommand);
     this.kbs.emitAction(KeyActions.FocusChat);
   }
 }

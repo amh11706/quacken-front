@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
@@ -8,6 +8,7 @@ import { ChatService } from '../chat.service';
   selector: 'q-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent implements OnInit, OnDestroy {
   @Input() disabled = false;
@@ -20,7 +21,10 @@ export class InputComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {
-      if (!v && !this.disabled) this.focusChat();
+      console.log('focus', v);
+      if (v && !this.disabled) {
+        this.focusChat();
+      }
     }));
   }
 
@@ -29,7 +33,7 @@ export class InputComponent implements OnInit, OnDestroy {
   }
 
   handleKey(e: KeyboardEvent): void {
-    const param = this.chat.selectedCommand.params.find(p => p.name === 'message');
+    const param = this.chat.selectedCommand$.getValue().params.find(p => p.name === 'message');
     if (e.key === 'Enter') {
       this.sendInput(e);
     } else if (e.key === 'ArrowUp') {
@@ -59,7 +63,9 @@ export class InputComponent implements OnInit, OnDestroy {
   }
 
   focusChat(): void {
-    setTimeout(() => document.getElementById('message')?.focus());
+    setTimeout(() => {
+      document.getElementById('message')?.focus();
+    });
   }
 
   blurChat(): void {
@@ -68,8 +74,9 @@ export class InputComponent implements OnInit, OnDestroy {
 
   sendInput(e: Event): void {
     e.preventDefault();
-    let text = this.chat.selectedCommand.base;
-    for (const param of this.chat.selectedCommand.params) {
+    const selectedCommand = this.chat.selectedCommand$.getValue();
+    let text = selectedCommand.base;
+    for (const param of selectedCommand.params) {
       if (!param.name) continue;
       const value = param.value;
       if (param.name === 'message') {

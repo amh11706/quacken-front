@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Router } from '@angular/router';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { ChatService, Message } from './chat.service';
 import { FriendsService, Invite } from './friends/friends.service';
 
@@ -11,6 +10,7 @@ import { FriendsService, Invite } from './friends/friends.service';
   selector: 'q-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport, { static: true }) output?: CdkVirtualScrollViewport;
@@ -36,7 +36,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     public chat: ChatService,
     private fs: FriendsService,
     private router: Router,
-    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -75,10 +74,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   addMessage(_message?: Message): void {
-    // if (message?.type === 6 && !this.disabled) {
-    //   this.dialog.open(CommandsComponent, { data: message, height: '50vh' });
-    //   return;
-    // }
     if (!this.output) return;
     const output = this.output;
     const el = output.elementRef.nativeElement;

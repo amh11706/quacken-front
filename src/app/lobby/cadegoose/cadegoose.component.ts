@@ -147,7 +147,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   ngAfterViewInit(): void {
-    this.renderer?.fillMap(this.map, this.lobby?.flags);
+    void this.renderer?.fillMap(this.map, this.lobby?.flags);
   }
 
   ngOnDestroy(): void {
@@ -156,7 +156,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   protected setMapB64(map: string): void {
     super.setMapB64(map);
-    this.renderer?.fillMap(this.map, this.lobby?.flags);
+    void this.renderer?.fillMap(this.map, this.lobby?.flags);
     this.editor.selectedTile.data = this.map;
   }
 
@@ -176,7 +176,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     }
 
     target.push(buffer);
-  }
+  };
 
   setTile(x: number, y: number, v: number): MapTile | void {
     if (x < 0 || x >= this.mapWidth || y < 3 || y > this.mapHeight - 4) return;

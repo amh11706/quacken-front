@@ -15,6 +15,7 @@ export const TierTitles = [
   selector: 'q-leaders',
   templateUrl: './leaders.component.html',
   styleUrls: ['./leaders.component.css'],
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeadersComponent {
   @Input() name?: string;

@@ -10,12 +10,11 @@ import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-t
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { QdragModule } from '../../qdrag/qdrag.module';
 
-import { FriendsComponent } from './friends.component';
 import { NameModule } from '../name/name.module';
 import { PlayerListComponent } from './player-list/player-list.component';
 
 @NgModule({
-  declarations: [FriendsComponent, PlayerListComponent],
+  declarations: [PlayerListComponent],
   imports: [
     CommonModule,
     MatIconModule,
@@ -27,6 +26,6 @@ import { PlayerListComponent } from './player-list/player-list.component';
     QdragModule,
     NameModule,
   ],
-  exports: [FriendsComponent, PlayerListComponent],
+  exports: [PlayerListComponent],
 })
 export class FriendsModule { }

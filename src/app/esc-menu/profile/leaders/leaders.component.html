@@ -25,14 +25,14 @@
   </mat-form-field>
 
   <div id="selection">
-    <table *ngIf="!stat.rankLeaders">
+    <table *ngIf="stat.id % 100 !== 99">
       <tr>
         <th>Position</th>
         <th>Name</th>
         <th>Value</th>
         <th *ngFor="let c of stat.columns">{{c.title}}</th>
       </tr>
-      <tr *ngFor="let row of stat.leaders; let i = index"
+      <tr *ngFor="let row of stat.leaders$ | async; let i = index"
         [ngStyle]="{'background-color': (row.from === name) ? 'rgb(44, 44, 44)' : 'transparent'}">
         <td>{{i+1}}</td>
         <td>
@@ -43,7 +43,7 @@
       </tr>
     </table>
 
-    <ng-container *ngIf="stat.rankLeaders">
+    <ng-container *ngIf="stat.rankLeaders$ | async">
       <h4>Top Tier</h4>
       <table>
         <tr>
@@ -52,7 +52,7 @@
           <th>Level</th>
           <th>Tier</th>
         </tr>
-        <tr *ngFor="let row of stat.rankLeaders.tier; let i = index"
+        <tr *ngFor="let row of (stat.rankLeaders$ | async)?.tier; let i = index"
           [ngStyle]="{'background-color': (row.from === name) ? 'rgb(44, 44, 44)' : 'transparent'}">
           <td>{{i+1}}</td>
           <td>
@@ -71,7 +71,7 @@
           <th>Level</th>
           <th>Tier</th>
         </tr>
-        <tr *ngFor="let row of stat.rankLeaders.xp; let i = index"
+        <tr *ngFor="let row of (stat.rankLeaders$ | async)?.xp; let i = index"
           [ngStyle]="{'background-color': (row.from === name) ? 'rgb(44, 44, 44)' : 'transparent'}">
           <td>{{i+1}}</td>
           <td>

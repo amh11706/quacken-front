@@ -1,17 +1,19 @@
 <div *ngIf="!disabled"
-     class="col{{chat.selectedCommand.params.length + 1}}">
-  <ng-select [(ngModel)]="chat.selectedCommand"
-             (change)="focusChat()"
+     class="col{{((chat.selectedCommand$ | async)?.params?.length || 0) + 1}}">
+  <ng-select [ngModel]="chat.selectedCommand$ | async"
+             (change)="focusChat(); chat.selectedCommand$.next($event)"
              appendTo="body"
-             [items]="chat.commands"
+             [items]="chat.commands$ | async"
              [clearable]="false"
              bindLabel="title">
-             <ng-template ng-option-tmp let-item="item">
-              <p id="options" title="{{item.help}}">{{item.title}}</p>
-             </ng-template>
+    <ng-template ng-option-tmp
+                 let-item="item">
+      <p id="options"
+         title="{{item.help}}">{{item.title}}</p>
+    </ng-template>
   </ng-select>
 
-  <ng-container *ngFor="let param of chat.selectedCommand.params">
+  <ng-container *ngFor="let param of (chat.selectedCommand$ | async)?.params">
     <ng-container [ngSwitch]="param.name">
       <q-name-search *ngSwitchCase="'name'"
                      [onlineOnly]="true"
@@ -32,6 +34,7 @@
              [(ngModel)]="param.value">
     </ng-container>
   </ng-container>
-  <button mat-button id="send"
+  <button mat-button
+          id="send"
           (click)="sendInput($event)">Send</button>
 </div>

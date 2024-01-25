@@ -1,12 +1,12 @@
-<mat-card>
-  <p *ngIf="fs.lobby.length > 1; else alone"
+<mat-card *ngIf="fs.lobby$ | async as lobby">
+  <p *ngIf="lobby.length > 1; else alone"
      class="empty">
-    There are {{fs.lobby.length}} players in this lobby:
+    There are {{lobby.length}} players in this lobby:
   </p>
   <ng-template #alone>
     <p class="empty">You are alone here.</p>
   </ng-template>
-  <ng-container *ngFor="let m of fs.lobby">
+  <ng-container *ngFor="let m of lobby">
     <div class="lobbyPlayer">
       <ng-container *ngIf="m.team !== undefined">
         <img class="team"

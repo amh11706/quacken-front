@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { MatSort } from '@angular/material/sort';
@@ -32,6 +32,7 @@ interface Match {
   selector: 'q-matches',
   templateUrl: './matches.component.html',
   styleUrls: ['./matches.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MatchesComponent implements OnInit {
   matches: Match[][] = [[], [], [], []];
@@ -45,6 +46,7 @@ export class MatchesComponent implements OnInit {
   constructor(
     public ws: WsService,
     public stat: StatService,
+    private cd: ChangeDetectorRef,
   ) {
     this.dataSource.filterPredicate = (data: Match, filter: string) => {
       if (data.lobby.toLowerCase().indexOf(filter) !== -1) return true;
@@ -70,7 +72,6 @@ export class MatchesComponent implements OnInit {
       void this.stat.refresh();
     }
     const matches = await this.ws.request(OutCmd.MatchesUser, this.stat.target);
-    if (!matches) return;
     // matches.push(...matches);
     // matches.push(...matches);
     // matches.push(...matches);
@@ -80,6 +81,7 @@ export class MatchesComponent implements OnInit {
     // matches.push(...matches);
     // matches.push(...matches);
     this.matches = [[], [], [], []];
+    if (!matches) return this.updateDataSource();
     let newest = { createdAt: 0 } as Match;
     for (const m of matches) {
       if (m.createdAt > newest.createdAt) newest = m;
@@ -107,6 +109,7 @@ export class MatchesComponent implements OnInit {
       }
       this.dataSource.sort = this.sort || null;
     });
+    this.cd.detectChanges();
   }
 
   private parseTeams(players: TeamPlayer[]): TeamPlayer[][] {

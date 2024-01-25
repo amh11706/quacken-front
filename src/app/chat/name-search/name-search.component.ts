@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, debounceTime, mergeMap } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { FriendsService } from '../friends/friends.service';
   selector: 'q-name-search',
   templateUrl: './name-search.component.html',
   styleUrls: ['./name-search.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NameSearchComponent implements OnInit {
   @Input() value = '';
@@ -34,7 +35,7 @@ export class NameSearchComponent implements OnInit {
 
   private searchName(search: string): Promise<string[]> {
     if (search.length < 2) {
-      const nameTemp = [...this.fs.lobby.map(m => m.from), ...this.fs.friends];
+      const nameTemp = [...this.fs.lobby$.getValue().map(m => m.from), ...this.fs.friends];
       if (!this.onlineOnly) nameTemp.push(...this.fs.offline);
       const names = new Map(nameTemp.map(n => [n, undefined]));
 

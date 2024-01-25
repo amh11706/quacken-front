@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { WsService } from '../../ws.service';
 import { OutCmd } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
@@ -63,9 +63,9 @@ export class StatService {
 
   id = 0;
   group = 1;
-  leaders: Leader[] = [];
+  leaders$ = new BehaviorSubject<Leader[]>([]);
+  rankLeaders$ = new BehaviorSubject<{ tier: RankLeader[], xp: RankLeader[] }>({ tier: [], xp: [] });
   columns: Column[] = [];
-  rankLeaders?: { tier: RankLeader[], xp: RankLeader[] };
 
   groups = {
     0: 'Quacken',
@@ -153,7 +153,7 @@ export class StatService {
   }
 
   changeGroup(): Promise<void> | void {
-    this.leaders = [];
+    this.leaders$.next([]);
     if (this.id % 100 === 99) {
       this.id = this.group * 100 + 99;
       return this.getRankLeaders();
@@ -161,28 +161,28 @@ export class StatService {
   }
 
   private async getRankLeaders() {
-    this.rankLeaders = await this.ws.request(OutCmd.RanksTop, this.group + 1);
-    if (!this.rankLeaders) return;
+    const rankLeaders = await this.ws.request(OutCmd.RanksTop, this.group + 1);
+    if (!rankLeaders) return;
 
-    for (const l of this.rankLeaders.tier) {
+    for (const l of rankLeaders.tier) {
       l.from = l.userName;
       l.friend = this.fs.isFriend(l.userName);
     }
-    for (const l of this.rankLeaders.xp) {
+    for (const l of rankLeaders.xp) {
       l.from = l.userName;
       l.friend = this.fs.isFriend(l.userName);
     }
+    this.rankLeaders$.next(rankLeaders);
   }
 
   async refreshLeaders(): Promise<void> {
-    this.leaders = [];
-    delete this.rankLeaders;
+    this.leaders$.next([]);
+    this.rankLeaders$.next({ tier: [], xp: [] });
     if (!this.id) return;
     this.group = Math.floor(this.id / 100);
     if (this.id % 100 === 99) return this.getRankLeaders();
 
     const leaders = await this.ws.request(OutCmd.StatsTop, this.id);
-    this.leaders = leaders;
     if (!leaders || !leaders.length) return;
 
     if (leaders[0].seed) this.columns = mapColumns;
@@ -191,5 +191,6 @@ export class StatService {
       l.from = l.name;
       l.friend = this.fs.isFriend(l.name);
     }
+    this.leaders$.next(leaders);
   }
 }

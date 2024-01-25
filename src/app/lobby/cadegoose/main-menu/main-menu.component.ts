@@ -77,17 +77,19 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.myTeam = 99;
       this.teamPlayers = [];
       for (let i = 0; i < m.points.length; i++) this.teamPlayers.push([]);
+      const lobby = this.fs.lobby$.getValue();
       for (const [id, p] of Object.entries(this.teams)) {
         this.setTeam(+id, p.t);
         if (+id === this.ws.sId) {
           this.ready = p.r;
           this.myTeam = p.t;
         }
-        const user = this.fs.lobby.find((mes) => mes.sId === +id);
+        const user = lobby.find((mes) => mes.sId === +id);
         if (!user) return;
         user.team = p.t;
         user.op = p.a;
       }
+      this.fs.lobby$.next(lobby);
     }));
     this.subs.add(this.ws.subscribe(InCmd.Team, (m: TeamMessage) => {
       this.teams[m.id] = m;
@@ -96,7 +98,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.ready = m.r;
       }
       this.setTeam(m.id, m.t);
-      const user = this.fs.lobby.find((mes) => mes.sId === m.id);
+      const lobby = this.fs.lobby$.getValue();
+      const user = lobby.find((mes) => mes.sId === m.id);
       if (!user) return;
       user.team = m.t;
       user.op = m.a;
@@ -104,6 +107,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.ss.admin = m.a;
         this.fs.allowInvite = m.a;
       }
+      this.fs.lobby$.next(lobby);
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, (m: Message) => {
       if (m.sId) this.removeUser(m.sId);
@@ -191,7 +195,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   private setTeam(id: number, team: number) {
     this.resetUser(id);
     if (team === 99) return;
-    let user = this.fs.lobby.find((m) => m.sId === id);
+    let user = this.fs.lobby$.getValue().find((m) => m.sId === id);
     if (!user) return;
 
     user = { ...user };

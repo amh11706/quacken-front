@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { WsService } from '../../ws.service';
 import { OutCmd } from '../../ws-messages';
@@ -12,6 +12,7 @@ import { KeyActions } from '../../settings/key-binding/key-actions';
   selector: 'q-name',
   templateUrl: './name.component.html',
   styleUrls: ['./name.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NameComponent {
   @Input() message: Partial<Message> = {} as Message;
@@ -39,10 +40,10 @@ export class NameComponent {
     if (cmd.params.length <= 1) {
       return this.ws.send(OutCmd.ChatCommand, `${cmd.base} ${this.getName()}`);
     }
-    this.chat.selectedCommand = cmd;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     cmd.params[0]!.value = this.getName();
     this.kbs.emitAction(KeyActions.FocusChat);
+    this.chat.selectedCommand$.next(cmd);
   }
 
   add(): void {
