@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
+import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
+import { MatSort } from '@angular/material/sort';
 
 import { TeamImages } from '../../../chat/chat.service';
 import { OutCmd } from '../../../ws-messages';
@@ -21,7 +23,7 @@ interface Match {
   createdAtString: string;
   lobby: string;
   team: keyof typeof TeamImages;
-  result: keyof typeof Results;
+  result: number;
   players: TeamPlayer[];
   teams: TeamPlayer[][];
 }
@@ -36,20 +38,39 @@ export class MatchesComponent implements OnInit {
   teamImages = TeamImages;
   results = Results;
 
+  dataSource = new TableVirtualScrollDataSource<Match>();
+  displayedColumns = ['lobby', 'createdAtString', 'score', 'result', 'team', 'players', 'view'];
+  @ViewChild(MatSort) sort?: MatSort;
+
   constructor(
     public ws: WsService,
     public stat: StatService,
-  ) { }
+  ) {
+    this.dataSource.filterPredicate = (data: Match, filter: string) => {
+      if (data.lobby.toLowerCase().indexOf(filter) !== -1) return true;
+      if (data.createdAtString.toLowerCase().indexOf(filter) !== -1) return true;
+      if (data.score.toString().indexOf(filter) !== -1) return true;
+      if ((Results[data.result] as string).toLowerCase().indexOf(filter) !== -1) return true;
+      for (const p of data.players) {
+        if (p.from.toLowerCase().indexOf(filter) !== -1) return true;
+      }
+      return false;
+    };
+  }
 
   ngOnInit(): void {
-    void this.fetchMatches();
+    this.stat.profileTabChange$.subscribe(value => {
+      if (value === 4) void this.fetchMatches();
+    });
   }
 
   async fetchMatches(name = this.stat.target): Promise<void> {
-    this.stat.target = name;
-    void this.stat.refresh();
-    this.matches = [[], [], [], []];
+    if (name !== this.stat.target) {
+      this.stat.target = name;
+      void this.stat.refresh();
+    }
     const matches = await this.ws.request(OutCmd.MatchesUser, this.stat.target);
+    this.matches = [[], [], [], []];
     let newest = { createdAt: 0 } as Match;
     for (const m of matches) {
       if (m.createdAt > newest.createdAt) newest = m;
@@ -62,6 +83,21 @@ export class MatchesComponent implements OnInit {
     if (!this.matches[this.stat.group]?.length) {
       for (let i = 0; i < this.matches.length; i++) if (this.matches[i]?.length) this.stat.group = i;
     }
+    this.updateDataSource();
+  }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  updateDataSource(): void {
+    this.dataSource.data = this.matches[this.stat.group] || [];
+    setTimeout(() => {
+      if (!this.dataSource.sort) {
+        this.sort?.sort({ id: 'createdAtString', start: 'desc', disableClear: false });
+      }
+      this.dataSource.sort = this.sort || null;
+    });
   }
 
   private parseTeams(players: TeamPlayer[]): TeamPlayer[][] {
@@ -77,5 +113,13 @@ export class MatchesComponent implements OnInit {
 
   openMatch(m: Match): void {
     window.open('/#/replay/' + m.matchId, '_blank');
+  }
+
+  imgSrc(team: keyof typeof TeamImages): string {
+    return this.teamImages[team].src;
+  }
+
+  imgTitle(team: keyof typeof TeamImages): string {
+    return this.teamImages[team].title;
   }
 }

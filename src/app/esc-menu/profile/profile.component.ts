@@ -39,12 +39,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   showLeaders(s: Stat): void {
     void this.stat.openLeaders(s.id);
-    this.stat.profileTab = 3;
+    this.stat.setTab(3);
   }
 
   showRankLeaders(rank: UserRank): void {
     void this.stat.openLeaders(rank.rankArea * 100 - 1);
-    this.stat.profileTab = 3;
+    this.stat.setTab(3);
   }
 
   reset(): void {

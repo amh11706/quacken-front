@@ -239,7 +239,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       let wantToken = (ev.button + 1 + token) % 4;
       let points = this.unusedTokens.maneuvers[wantToken] || 0;
       let attempts = 0;
-      console.log(token, wantToken, ev.button);
       while (attempts < 3 && wantToken !== 0 && points < 100) {
         wantToken = (ev.button + 1 + wantToken) % 4;
         points = this.unusedTokens.maneuvers[wantToken] || 0;

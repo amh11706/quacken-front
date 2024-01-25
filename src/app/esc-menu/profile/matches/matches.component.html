@@ -1,7 +1,11 @@
 <div id="matches">
+  <form>
+    <q-name-search [value]="stat.target"
+                   (valueChange)="fetchMatches($event)"></q-name-search>
+  </form>
   <mat-form-field>
     <mat-select [(value)]="stat.group"
-                (valueChange)="stat.changeGroup()"
+                (valueChange)="stat.changeGroup(); updateDataSource()"
                 placeholder="Category">
       <mat-option [value]="0">Quacken ({{matches[0]?.length}})</mat-option>
       <mat-option [value]="1">Cadesim ({{matches[1]?.length}})</mat-option>
@@ -9,38 +13,93 @@
       <mat-option [value]="3">Capture the Flag ({{matches[3]?.length}})</mat-option>
     </mat-select>
   </mat-form-field>
-  <form *ngIf="ws.user?.admin">
-    <!-- <mat-form-field floatLabel="never"> -->
-    <q-name-search [value]="stat.target"
-                   (valueChange)="fetchMatches($event)"></q-name-search>
-    <!-- </mat-form-field> -->
-  </form>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Lobby</th>
-        <th>Date</th>
-        <th>Score</th>
-        <th>Result</th>
-        <th>Team</th>
-        <th>Players</th>
-        <th>View</th>
-      </tr>
-    </thead>
-    <tr *ngFor="let row of matches[stat.group]">
-      <td>{{row.lobby}}</td>
-      <td>{{row.createdAtString}}</td>
-      <td>{{row.score}}</td>
-      <td class="result{{row.result}}">{{results[row.result]}}</td>
-      <td><img [src]="teamImages[row.team].src"
-             [title]="teamImages[row.team].title"></td>
-      <td>
-        <q-team-view [teams]="row.teams"
-                     [playerLength]="row.players.length"></q-team-view>
-      </td>
-      <td><button mat-raised-button
-                (click)="openMatch(row)">Open</button></td>
-    </tr>
-  </table>
+  <mat-form-field>
+    <input matInput
+           (keyup)="applyFilter($any($event.target).value)"
+           placeholder="Filter">
+  </mat-form-field>
+
+  <cdk-virtual-scroll-viewport *ngIf="matches[stat.group]?.length"
+                               id="matchesTable"
+                               [footerHeight]="200"
+                               [footerEnabled]="true"
+                               [tvsItemSize]="52">
+    <table mat-table
+           matSort
+           matSortStart="desc"
+           [dataSource]="dataSource">
+      <tr mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      <ng-container matColumnDef="lobby">
+        <th mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef>Lobby</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.lobby}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAtString">
+        <th mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef>Date</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.createdAtString}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="score">
+        <th mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef>Score</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.score}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="result">
+        <th mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef>Result</th>
+        <td mat-cell
+            *matCellDef="let element"
+            class="result{{element.result}}">
+          {{results[element.result]}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="team">
+        <th mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef>Team</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <img [src]="imgSrc(element.team)"
+               [title]="imgTitle(element.team)">
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="players">
+        <th mat-header-cell
+            mat-sort-header
+            *matHeaderCellDef>Players</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <q-team-view [teams]="element.teams"
+                       [playerLength]="element.players.length"></q-team-view>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="view">
+        <th mat-header-cell
+            *matHeaderCellDef>View</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <button mat-raised-button
+                  (click)="openMatch(element)">Open</button>
+        </td>
+      </ng-container>
+    </table>
+  </cdk-virtual-scroll-viewport>
 </div>

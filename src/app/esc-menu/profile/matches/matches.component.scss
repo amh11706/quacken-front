@@ -1,5 +1,11 @@
 #matches {
   text-align: center;
+  height: 100%;
+  padding-top: 18px;
+}
+
+#matchesTable {
+  height: calc(100% - 130px);
 }
 
 form {
@@ -7,25 +13,18 @@ form {
 }
 
 table {
+  max-width: 800px;
+  min-width: 0;
+  margin: 0 auto;
+  margin-bottom: 50px;
   border-collapse: collapse;
-  margin: auto;
-  margin-bottom: 24px;
-  margin-top: 8px;
-}
-
-thead th {
-  position: sticky;
-  top: -1px;
-  background-color: grey;
-  z-index: 1000;
 }
 
 td,
 th {
   word-wrap: break-word;
-  max-width: 148px;
-  padding: 4px 8px;
-  border: 1px solid grey;
+  text-align: center;
+  overflow: visible;
 }
 
 mat-form-field {

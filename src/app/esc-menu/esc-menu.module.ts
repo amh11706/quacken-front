@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
-
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
@@ -13,7 +14,11 @@ import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/mat
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
+
+import { MatSortModule } from '@angular/material/sort';
 import { ProfileComponent } from './profile/profile.component';
 import { EscMenuComponent } from './esc-menu.component';
 import { InventoryModule } from './inventory/inventory.module';
@@ -52,6 +57,10 @@ import { TeamsComponent } from './profile/matches/teams/teams.component';
     MatTooltipModule,
     MatExpansionModule,
     MatCardModule,
+    MatTableModule,
+    ScrollingModule,
+    TableVirtualScrollModule,
+    MatSortModule,
     ChatModule,
     InventoryModule,
     NameModule,

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { Subject } from 'rxjs';
 import { WsService } from '../../ws.service';
 import { OutCmd } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
@@ -57,6 +58,7 @@ const mapColumns: Column[] = [
 })
 export class StatService {
   profileTab = 0;
+  profileTabChange$ = new Subject<number>();
   target = '';
 
   id = 0;
@@ -92,6 +94,12 @@ export class StatService {
     this.winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group + 1 });
   }
 
+  setTab(tab: number): void {
+    if (tab === this.profileTab) return;
+    this.profileTab = tab;
+    this.profileTabChange$.next(tab);
+  }
+
   openUser(name: string, open = true): void {
     this.target = name;
     void this.refresh();
@@ -99,7 +107,7 @@ export class StatService {
       this.kbs.emitAction(KeyActions.OpenProfile);
       this.es.open = true;
     }
-    this.profileTab = 0;
+    this.setTab(0);
   }
 
   openUserMatches(open = true): void {
@@ -108,7 +116,7 @@ export class StatService {
       this.kbs.emitAction(KeyActions.OpenProfile);
       this.es.open = true;
     }
-    this.profileTab = 4;
+    this.setTab(4);
   }
 
   openLeaders(id: number): Promise<void> {
