@@ -8,6 +8,10 @@
   height: calc(100% - 130px);
 }
 
+:host ::ng-deep .cdk-virtual-scroll-content-wrapper {
+  contain: none;
+}
+
 form {
   margin-bottom: 8px;
 }
@@ -16,8 +20,6 @@ table {
   max-width: 800px;
   min-width: 0;
   margin: 0 auto;
-  margin-bottom: 50px;
-  border-collapse: collapse;
 }
 
 td,
