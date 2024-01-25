@@ -91,21 +91,24 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       this.fs.lobby$.next(lobby);
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Team, (m: TeamMessage) => {
-      this.teams[m.id] = m;
-      if (m.id === this.ws.sId) {
-        this.myTeam = m.t;
-        this.ready = m.r;
-      }
-      this.setTeam(m.id, m.t);
+    this.subs.add(this.ws.subscribe(InCmd.Team, (m: TeamMessage | TeamMessage[]) => {
+      if (!Array.isArray(m)) m = [m];
       const lobby = this.fs.lobby$.getValue();
-      const user = lobby.find((mes) => mes.sId === m.id);
-      if (!user) return;
-      user.team = m.t;
-      user.op = m.a;
-      if (user.sId === this.ws.sId) {
-        this.ss.admin = m.a;
-        this.fs.allowInvite = m.a;
+      for (const t of m) {
+        this.teams[t.id] = t;
+        if (t.id === this.ws.sId) {
+          this.myTeam = t.t;
+          this.ready = t.r;
+        }
+        this.setTeam(t.id, t.t);
+        const user = lobby.find((mes) => mes.sId === t.id);
+        if (!user) return;
+        user.team = t.t;
+        user.op = t.a;
+        if (user.sId === this.ws.sId) {
+          this.ss.admin = t.a;
+          this.fs.allowInvite = t.a;
+        }
       }
       this.fs.lobby$.next(lobby);
     }));
