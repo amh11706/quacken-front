@@ -6,6 +6,7 @@ import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-m
 import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+import { LetDirective } from '@ngrx/component';
 import { FlaggamesComponent } from './flaggames.component';
 import { FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
@@ -36,6 +37,7 @@ import { FgHelpComponent } from './fg-help/fg-help.component';
     MatIconModule,
     MatTooltipModule,
     MapEditorModule,
+    LetDirective,
   ],
   exports: [
     FlaggamesComponent,

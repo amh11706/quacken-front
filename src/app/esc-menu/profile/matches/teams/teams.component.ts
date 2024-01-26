@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TeamImages } from '../../../../chat/chat.service';
 
 export interface TeamPlayer {
@@ -10,6 +10,7 @@ export interface TeamPlayer {
   selector: 'q-team-view',
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeamsComponent {
   @Input() teams: TeamPlayer[][] = [];

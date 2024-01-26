@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 
 import { Item } from '../inventory.component';
@@ -7,6 +7,7 @@ import { Item } from '../inventory.component';
   selector: 'q-split',
   templateUrl: './split.component.html',
   styleUrls: ['./split.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SplitComponent {
   quantity = 0;

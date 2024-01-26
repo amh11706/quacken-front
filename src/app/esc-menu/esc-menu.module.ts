@@ -19,6 +19,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 import { MatSortModule } from '@angular/material/sort';
 
+import { LetDirective } from '@ngrx/component';
 import { ProfileComponent } from './profile/profile.component';
 import { EscMenuComponent } from './esc-menu.component';
 import { InventoryModule } from './inventory/inventory.module';
@@ -67,6 +68,7 @@ import { TeamsComponent } from './profile/matches/teams/teams.component';
     SettingsModule,
     FriendsModule,
     MapListModule,
+    LetDirective,
   ],
   exports: [EscMenuComponent],
 })

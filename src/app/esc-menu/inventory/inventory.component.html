@@ -26,25 +26,25 @@
            (keyup)="searchBounce(searchInput.value)">
   </mat-form-field>
 
-  <p *ngIf="!inv?.filtered; else items"
-     class="empty">Loading...</p>
-  <ng-template #items>
-    <div class="content">
-      <div class="item"
-           *ngFor="let i of inv?.filtered"
-           [title]="i.n"
-           [class.dropable]="i.q < 250 && i.s !== dragging?.s && dragging?.id === i.id"
-           [class.new]="i.f"
-           (mouseenter)="i.f = false"
-           (dblclick)="clickStack(i)"
-           (dragstart)="dragging = i"
-           (dragend)="dragging = undefined"
-           (drop)="drop($event, i)"
-           draggable="true"
-           (dragover)="i.q < 250 && dragging?.s !== i.s ? $event.preventDefault() : null">
-        <img [src]="'/assets/items/'+i.id+'.png'">
-        <span class="quantity">{{i.q}}</span>
-      </div>
+  <div *ngIf="inventory$ | async as inv; else loading"
+       class="content">
+    <div class="item"
+         *ngFor="let i of inv"
+         [title]="i.n"
+         [class.dropable]="i.q < 250 && i.s !== dragging?.s && dragging?.id === i.id"
+         [class.new]="i.f"
+         (mouseenter)="i.f = false"
+         (dblclick)="clickStack(i)"
+         (dragstart)="dragging = i"
+         (dragend)="dragging = undefined"
+         (drop)="drop($event, i)"
+         draggable="true"
+         (dragover)="i.q < 250 && dragging?.s !== i.s ? $event.preventDefault() : null">
+      <img [src]="'/assets/items/'+i.id+'.png'">
+      <span class="quantity">{{i.q}}</span>
     </div>
+  </div>
+  <ng-template #loading>
+    <p class="empty">Loading...</p>
   </ng-template>
 </div>

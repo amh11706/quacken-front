@@ -165,7 +165,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.LobbyJoin, data: join?.data });
     setTimeout(() => {
       this.clickTurn(this.turns[0]);
-      this.esc.open = false;
+      this.esc.open$.next(false);
     }, 100);
 
     if (!match.data) return;

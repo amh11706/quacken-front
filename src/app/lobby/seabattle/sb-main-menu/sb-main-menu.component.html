@@ -7,7 +7,8 @@
   </div>
   <ng-template #teams>
     <h2>Match Settings</h2>
-    <div id="flexmenu">
+    <div id="flexmenu"
+         *ngrxLet="es.open$ as open">
       <div class="teamwrap"
            *ngFor="let team of teamPlayers; let i = index">
         <div class="team"
@@ -22,17 +23,18 @@
         </div>
         <br>
         <button mat-raised-button
-                [disabled]="!es.open"
+                [disabled]="!open"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
       </div>
 
       <div id="buttons">
         <button mat-raised-button
-                [disabled]="!es.open"
+                [disabled]="!open"
                 color="accent"
                 id="ready"
                 [class.cancel]="ready"
-                (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' : 'Ready'}}</button>
+                (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
+          'Ready'}}</button>
         <q-setting *ngIf="ss.admin"
                    name="startNew"
                    id="start"></q-setting>

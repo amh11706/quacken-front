@@ -1,16 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
+import { BehaviorSubject } from 'rxjs';
 import { WsService } from '../../ws.service';
 
 @Component({
   selector: 'q-logout-confirm',
   templateUrl: './logout-confirm.component.html',
   styleUrls: ['./logout-confirm.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogoutConfirmComponent implements OnInit, OnDestroy {
-  seconds = 10;
+  seconds$ = new BehaviorSubject<number>(10);
   private ticker?: number;
 
   constructor(
@@ -21,8 +23,9 @@ export class LogoutConfirmComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.ticker = window.setInterval(() => {
-      if (this.seconds === 0) void this.logout();
-      else this.seconds--;
+      const seconds = this.seconds$.getValue();
+      if (seconds === 0) void this.logout();
+      else this.seconds$.next(seconds - 1);
     }, 1000);
   }
 

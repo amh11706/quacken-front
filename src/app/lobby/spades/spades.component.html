@@ -45,6 +45,6 @@
 <div class="container noselect"
      id="hud">
   <div id="chat">
-    <q-chat [disabled]="es.open"></q-chat>
+    <q-chat [disabled]="(es.open$ | async) || false"></q-chat>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { SettingsService } from './settings.service';
 import { WsService } from '../ws.service';
@@ -9,6 +9,7 @@ import { Sounds, SoundService } from '../sound.service';
   selector: 'q-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent {
   links = [

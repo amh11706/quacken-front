@@ -7,11 +7,11 @@
   </div>
   <ng-template #teams>
     <h2 style="font-size: 20px;">Team Selection</h2>
-    <div id="flexmenu">
+    <div id="flexmenu" *ngrxLet="es.open$ as open">
       <div class="teamwrap"
            *ngFor="let team of teamPlayers; let i = index">
         <button mat-raised-button
-                [disabled]="!es.open || !ws.connected"
+                [disabled]="!open || !ws.connected"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>
         <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
@@ -54,13 +54,13 @@
                 (click)="shuffleTeams()">Shuffle Teams</button>
         <br>
         <button mat-raised-button
-                [disabled]="!es.open || !ws.connected"
+                [disabled]="!open || !ws.connected"
                 color="accent"
                 id="ready"
                 [class.cancel]="ready"
                 (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
           'Ready'}}</button>
-        <ng-container *ngIf="es.open && ws.connected">
+        <ng-container *ngIf="open && ws.connected">
           <q-setting *ngIf="ss.admin"
                      name="startNew"
                      id="start"></q-setting>

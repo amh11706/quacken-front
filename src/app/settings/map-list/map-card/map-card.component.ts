@@ -58,6 +58,6 @@ export class MapCardComponent {
 
   openAdvanced(): void {
     this.ws.dispatchMessage({ cmd: Internal.OpenAdvanced });
-    this.es.open = false;
+    this.es.open$.next(false);
   }
 }

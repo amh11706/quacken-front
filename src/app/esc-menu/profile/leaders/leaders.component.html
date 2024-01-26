@@ -14,12 +14,12 @@
       <mat-option [value]="3">Capture the Flag</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field *ngIf="stat.groupStats">
+  <mat-form-field *ngIf="stat.groupStats$ | async as groupStats">
     <mat-select [(value)]="stat.id"
                 (valueChange)="stat.openLeaders($event)"
                 placeholder="Statistic">
       <mat-option [value]="stat.group*100 + 99">Rank Leaders</mat-option>
-      <mat-option *ngFor="let s of stat.groupStats[stat.group]"
+      <mat-option *ngFor="let s of groupStats[stat.group]"
                   [value]="s.id">{{s.name}}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -43,7 +43,7 @@
       </tr>
     </table>
 
-    <ng-container *ngIf="stat.rankLeaders$ | async">
+    <ng-container *ngIf="stat.rankLeaders$ | async as rankLeaders">
       <h4>Top Tier</h4>
       <table>
         <tr>
@@ -52,7 +52,7 @@
           <th>Level</th>
           <th>Tier</th>
         </tr>
-        <tr *ngFor="let row of (stat.rankLeaders$ | async)?.tier; let i = index"
+        <tr *ngFor="let row of rankLeaders.tier; let i = index"
           [ngStyle]="{'background-color': (row.from === name) ? 'rgb(44, 44, 44)' : 'transparent'}">
           <td>{{i+1}}</td>
           <td>

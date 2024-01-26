@@ -1,5 +1,5 @@
-import { Component, OnDestroy, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 import { WsService } from '../../ws.service';
@@ -34,6 +34,7 @@ interface InvUpdate {
   selector: 'q-inventory',
   templateUrl: './inventory.component.html',
   styleUrls: ['./inventory.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InventoryComponent implements OnDestroy {
   private _id?: number;
@@ -47,6 +48,7 @@ export class InventoryComponent implements OnDestroy {
     return this._id;
   }
 
+  inventory$ = new BehaviorSubject<Item[] | undefined>(undefined);
   inv?: Inventory;
   dragging?: Item;
 
@@ -69,6 +71,7 @@ export class InventoryComponent implements OnDestroy {
     if (!this.id) return;
     this.ws.send(OutCmd.InventoryCmd, { cmd: 'o', id: this.id });
     this.subs.add(this.ws.subscribe(InCmd.IntentoryOpen, (i: Inventory) => {
+      this.inventory$.next(i.items);
       this.inv = i;
       this.inv.filtered = i.items;
       this.sort(i.sort);

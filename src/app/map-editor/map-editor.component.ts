@@ -155,7 +155,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   };
 
   openGuide(): void {
-    this.es.open = true;
+    this.es.open$.next(true);
     this.es.activeTab = 0;
   }
 

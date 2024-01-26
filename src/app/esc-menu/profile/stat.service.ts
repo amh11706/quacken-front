@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 import { WsService } from '../../ws.service';
 import { OutCmd } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
@@ -53,6 +53,12 @@ const mapColumns: Column[] = [
   { title: 'Seed', property: 'seed' },
 ];
 
+const placeholderRank = {
+  name: 'Loading...',
+  rankArea: 0,
+  level: 0,
+} as UserRank;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -64,7 +70,7 @@ export class StatService {
   id = 0;
   group = 1;
   leaders$ = new BehaviorSubject<Leader[]>([]);
-  rankLeaders$ = new BehaviorSubject<{ tier: RankLeader[], xp: RankLeader[] }>({ tier: [], xp: [] });
+  rankLeaders$ = new ReplaySubject<{ tier: RankLeader[], xp: RankLeader[] }>(1);
   columns: Column[] = [];
 
   groups = {
@@ -73,8 +79,8 @@ export class StatService {
     2: 'Sea Battle',
   };
 
-  groupStats?: { [key: number]: Stat[] };
-  userRanks: UserRank[] = [];
+  groupStats$ = new BehaviorSubject<Record<number, Stat[]>>({});
+  userRanks: UserRank[] = [placeholderRank];
 
   winLoss: {
     wins: number;
@@ -107,7 +113,7 @@ export class StatService {
     void this.refresh();
     if (open) {
       this.kbs.emitAction(KeyActions.OpenProfile);
-      this.es.open = true;
+      this.es.open$.next(true);
     }
     this.setTab(0);
   }
@@ -116,7 +122,7 @@ export class StatService {
     void this.refresh();
     if (open) {
       this.kbs.emitAction(KeyActions.OpenProfile);
-      this.es.open = true;
+      this.es.open$.next(true);
     }
     this.setTab(4);
   }
@@ -127,7 +133,7 @@ export class StatService {
   }
 
   async refresh(): Promise<void> {
-    this.userRanks = [];
+    this.userRanks = [placeholderRank];
     this.userRanks = await this.ws.request(OutCmd.RanksUser, this.target);
     if (this.userRanks !== undefined) {
       for (const rank of this.userRanks) {
@@ -143,13 +149,14 @@ export class StatService {
   }
 
   private fillGroupStats(stats: Stat[]) {
-    this.groupStats = {};
+    const groupStats: Record<number, Stat[]> = {};
     for (const s of stats) {
       const group = Math.floor(s.id / 100);
-      const arr = this.groupStats[group] || [];
-      if (!arr.length) this.groupStats[group] = arr;
+      const arr = groupStats[group] || [];
+      if (!arr.length) groupStats[group] = arr;
       arr.push(s);
     }
+    this.groupStats$.next(groupStats);
   }
 
   changeGroup(): Promise<void> | void {

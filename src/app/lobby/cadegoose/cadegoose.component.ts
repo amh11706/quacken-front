@@ -93,7 +93,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage } });
     this.es.setLobby(this.menuComponent, this.lobby);
-    this.es.open = true;
+    this.es.open$.next(true);
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       this.myBoat = b;

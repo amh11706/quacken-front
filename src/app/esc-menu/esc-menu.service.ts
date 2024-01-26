@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { WsService } from '../ws.service';
@@ -8,7 +9,7 @@ import { WsService } from '../ws.service';
   providedIn: 'root',
 })
 export class EscMenuService {
-  open = false;
+  open$ = new BehaviorSubject(false);
   lobbyComponent: any;
   activeTab = 1;
   lobbyTab = 0;
@@ -20,11 +21,11 @@ export class EscMenuService {
     kbs: KeyBindingService,
   ) {
     this.ws.connected$.subscribe(v => {
-      if (!v) this.open = false;
+      if (!v) this.open$.next(false);
     });
 
     kbs.subscribe(KeyActions.ToggleEscMenu, v => {
-      if (v) this.open = !this.open;
+      if (v) this.toggle();
     });
     kbs.subscribe(KeyActions.OpenLobby, v => {
       if (v) this.openTab(this.lobbyComponent);
@@ -46,12 +47,16 @@ export class EscMenuService {
     });
   }
 
+  toggle() {
+    this.open$.next(!this.open$.value);
+  }
+
   private openTab(tab: number) {
-    if (this.open && this.activeTab === tab) {
-      this.open = false;
+    if (this.open$.getValue() && this.activeTab === tab) {
+      this.open$.next(false);
       return;
     }
-    this.open = true;
+    this.open$.next(true);
     this.activeTab = tab;
   }
 
@@ -59,7 +64,7 @@ export class EscMenuService {
     this.activeTab = -1;
     this.lobbyComponent = component;
     this.lobbyContext = context;
-    if (!this.lobbyComponent) this.open = false;
+    if (!this.lobbyComponent) this.open$.next(false);
   }
 
   private logout() {
@@ -70,6 +75,6 @@ export class EscMenuService {
 
   leave(): void {
     void this.router.navigateByUrl('/list');
-    this.open = false;
+    this.open$.next(false);
   }
 }

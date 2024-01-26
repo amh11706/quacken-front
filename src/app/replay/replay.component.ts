@@ -113,7 +113,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       this.messages[0]?.push(firstSync);
       this.checkMessage(firstSync);
       setTimeout(() => {
-        this.esc.open = false;
+        this.esc.open$.next(false);
       });
       setTimeout(() => { // temporary fix for starting replay
         this.playTo(Number(this.route.snapshot.queryParams.tick));

@@ -5,6 +5,7 @@ import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/
 import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 
+import { LetDirective } from '@ngrx/component';
 import { ChatModule } from '../../chat/chat.module';
 import { NameModule } from '../../chat/name/name.module';
 import { QdragModule } from '../../qdrag/qdrag.module';
@@ -34,6 +35,7 @@ import { ThreedRenderModule } from '../cadegoose/threed-render/threed-render.mod
     SettingsModule,
     QuackenModule,
     NameModule,
+    LetDirective,
   ],
   exports: [SeabattleComponent],
 })

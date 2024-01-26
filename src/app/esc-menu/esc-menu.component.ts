@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { WsService } from '../ws.service';
@@ -13,6 +13,7 @@ import { SettingsService } from '../settings/settings.service';
   selector: 'q-esc-menu',
   templateUrl: './esc-menu.component.html',
   styleUrls: ['./esc-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EscMenuComponent {
   ProfileComponent = ProfileComponent;
@@ -35,7 +36,7 @@ export class EscMenuComponent {
 
   leave(): void {
     void this.router.navigateByUrl('/list');
-    this.es.open = false;
+    this.es.open$.next(false);
   }
 
   openDiscord(): void {

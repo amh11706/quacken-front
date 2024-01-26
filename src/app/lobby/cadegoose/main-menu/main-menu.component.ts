@@ -118,7 +118,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (!this.roundGoing && this.ws.connected) {
         this.myBoat.isMe = false;
-        this.es.open = true;
+        this.es.open$.next(true);
         this.es.activeTab = 0;
         return;
       }
@@ -138,7 +138,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       if (!this.roundGoing && this.ws.connected) {
-        this.es.open = true;
+        this.es.open$.next(true);
         this.es.activeTab = 0;
         this.es.lobbyTab = 0;
       }
@@ -152,18 +152,18 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   }
 
   private gotBoat() {
-    this.es.open = false;
+    this.es.open$.next(false);
     this.ready = false;
     for (const p of Object.values(this.teams)) p.r = false;
   }
 
   toggleReady(): void {
     if (this.myBoat.isMe) {
-      this.es.open = false;
+      this.es.open$.next(false);
       return;
     }
     if (this.myTeam === 99) {
-      this.es.open = false;
+      this.es.open$.next(false);
       return;
     }
     this.ready = !this.ready;

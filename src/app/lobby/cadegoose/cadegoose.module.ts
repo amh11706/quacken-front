@@ -14,6 +14,7 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { LetDirective } from '@ngrx/component';
 import { MoveInputModule } from '../../boats/move-input/move-input.module';
 import { NameModule } from '../../chat/name/name.module';
 import { SettingsModule } from '../../settings/settings.module';
@@ -67,6 +68,7 @@ import { ManeuverSourceModule } from '../../boats/maneuver-source/maneuver-sourc
     MoveInputModule,
     MoveSourceModule,
     ManeuverSourceModule,
+    LetDirective,
   ],
   exports: [
     CadegooseComponent,

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { startWith, debounceTime, mergeMap } from 'rxjs/operators';
+import { debounceTime, mergeMap } from 'rxjs/operators';
 import { OutCmd } from '../../ws-messages';
 import { WsService } from '../../ws.service';
 import { FriendsService } from '../friends/friends.service';
@@ -27,7 +27,6 @@ export class NameSearchComponent implements OnInit {
   ngOnInit(): void {
     this.searchedNames = this.myControl.valueChanges
       .pipe(
-        startWith(''),
         debounceTime(300),
         mergeMap(value => this.searchName(value)),
       );

@@ -21,7 +21,7 @@
                  title="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
               {{rank.level}}
             </div>
-            <div [title]="rank.title">
+            <div [title]="rank.title || ''">
               <div class="badgetitle">{{titles[rank.name] || rank.name}}</div>
               <mat-progress-bar mode="determinate"
                                 color="accent"
@@ -52,8 +52,8 @@
           </ng-container>
         </ng-container>
 
-        <table *ngIf="stat.groupStats">
-          <tr *ngFor="let s of stat.groupStats[stat.group]"
+        <table *ngIf="stat.groupStats$ | async as groupStats">
+          <tr *ngFor="let s of groupStats[stat.group]"
               class="stat"
               (click)="showLeaders(s)">
             <td>{{s.name}}</td>

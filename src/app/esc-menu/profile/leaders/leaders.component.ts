@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { StatService } from '../stat.service';
 
 export const TierTitles = [
@@ -15,7 +15,7 @@ export const TierTitles = [
   selector: 'q-leaders',
   templateUrl: './leaders.component.html',
   styleUrls: ['./leaders.component.css'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LeadersComponent {
   @Input() name?: string;
