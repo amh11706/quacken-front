@@ -65,59 +65,63 @@
   </mat-tab>
 
   <mat-tab label="Friends">
-    <mat-expansion-panel expanded>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Online
-        </mat-panel-title>
-        <mat-panel-description>
-          ({{fs.friends.length}})
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <ng-template matExpansionPanelContent>
-        <div *ngFor="let friend of fs.friends"
-             class="online"
-             [matMenuTriggerFor]="onlineMenu"
-             [matMenuTriggerData]="{friend: friend}">
-          {{friend}}
-        </div>
-      </ng-template>
-    </mat-expansion-panel>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Offline
-        </mat-panel-title>
-        <mat-panel-description>
-          ({{fs.offline.length}})
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <ng-template matExpansionPanelContent>
-        <div *ngFor="let friend of fs.offline"
-             class="offline"
-             [matMenuTriggerFor]="offlineMenu"
-             [matMenuTriggerData]="{friend: friend}">
-          {{friend}}
-        </div>
-      </ng-template>
-    </mat-expansion-panel>
+    <div id="friends">
+      <mat-expansion-panel expanded>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Online
+          </mat-panel-title>
+          <mat-panel-description>
+            ({{fs.friends.length}})
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+          <div *ngFor="let friend of fs.friends"
+               class="online"
+               [matMenuTriggerFor]="onlineMenu"
+               [matMenuTriggerData]="{friend: friend}">
+            {{friend}}
+          </div>
+        </ng-template>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Offline
+          </mat-panel-title>
+          <mat-panel-description>
+            ({{fs.offline.length}})
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+          <div *ngFor="let friend of fs.offline"
+               class="offline"
+               [matMenuTriggerFor]="offlineMenu"
+               [matMenuTriggerData]="{friend: friend}">
+            {{friend}}
+          </div>
+        </ng-template>
+      </mat-expansion-panel>
+    </div>
   </mat-tab>
 
   <mat-tab label="Blocked">
-    <p *ngIf="!fs.blocked.length; else blockCount"
-       class="empty">
-      No blocked players. Hooray!
-    </p>
-    <ng-template #blockCount>
-      <p class="empty">
-        {{fs.blocked.length}} blocked player<span *ngIf="fs.blocked.length > 1">s</span>.
+    <div id="blocked">
+      <p *ngIf="!fs.blocked.length; else blockCount"
+         class="empty">
+        No blocked players. Hooray!
       </p>
-    </ng-template>
-    <div *ngFor="let blocked of fs.blocked"
-         class="lobbyPlayer offline"
-         [matMenuTriggerFor]="blockedMenu"
-         [matMenuTriggerData]="{blocked: blocked}">
-      {{blocked}}
+      <ng-template #blockCount>
+        <p class="empty">
+          {{fs.blocked.length}} blocked player<span *ngIf="fs.blocked.length > 1">s</span>.
+        </p>
+      </ng-template>
+      <div *ngFor="let blocked of fs.blocked"
+           class="lobbyPlayer offline"
+           [matMenuTriggerFor]="blockedMenu"§
+           [matMenuTriggerData]="{blocked: blocked}">
+        {{blocked}}
+      </div>
     </div>
   </mat-tab>
 

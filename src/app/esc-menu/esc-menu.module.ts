@@ -20,6 +20,7 @@ import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 import { MatSortModule } from '@angular/material/sort';
 
 import { LetDirective } from '@ngrx/component';
+import { MatLegacyChipsModule } from '@angular/material/legacy-chips';
 import { ProfileComponent } from './profile/profile.component';
 import { EscMenuComponent } from './esc-menu.component';
 import { InventoryModule } from './inventory/inventory.module';
@@ -58,6 +59,7 @@ import { TeamsComponent } from './profile/matches/teams/teams.component';
     MatTooltipModule,
     MatExpansionModule,
     MatCardModule,
+    MatLegacyChipsModule,
     MatTableModule,
     ScrollingModule,
     TableVirtualScrollModule,

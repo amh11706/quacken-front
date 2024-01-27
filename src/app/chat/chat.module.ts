@@ -11,6 +11,7 @@ import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/m
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
+import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import { NameSearchComponent } from './name-search/name-search.component';
 import { InputComponent } from './input/input.component';
 import { QdragModule } from '../qdrag/qdrag.module';
@@ -30,6 +31,7 @@ import { NameModule } from './name/name.module';
     MatDialogModule,
     MatAutocompleteModule,
     MatTooltipModule,
+    MatLegacyInputModule,
     NgSelectModule,
     NameModule,
     QdragModule,

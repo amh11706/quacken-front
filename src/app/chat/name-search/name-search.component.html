@@ -1,15 +1,20 @@
-<input #name
-       matInput
-       [placeholder]="value || 'name'"
-       (focus)="myControl.setValue('')"
-       [formControl]="myControl"
-       [matAutocomplete]="auto">
-<mat-autocomplete #auto="matAutocomplete"
-                  [panelWidth]="'200px'"
-                  (optionSelected)="valueChange.emit($event.option.value); name.blur()"
-                  [autoActiveFirstOption]="true">
-  <mat-option *ngFor="let option of searchedNames | async"
-              [value]="option">
-    {{option}}
-  </mat-option>
-</mat-autocomplete>
+<mat-form-field [appearance]="'fill'">
+  <mat-label>Player name</mat-label>
+  <input #name
+         matInput
+         [value]="value"
+         (focus)="myControl.setValue('')"
+         (blur)="myControl.setValue(value)"
+         [formControl]="myControl"
+         [matAutocomplete]="auto">
+  <mat-icon matSuffix>search</mat-icon>
+  <mat-autocomplete #auto="matAutocomplete"
+                    [autoSelectActiveOption]="true"
+                    (optionSelected)="valueChange.emit($event.option.value); name.blur()"
+                    [autoActiveFirstOption]="true">
+    <mat-option *ngFor="let option of searchedNames | async"
+                [value]="option">
+      {{option}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

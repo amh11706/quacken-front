@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { WsService } from '../../ws.service';
 import { OutCmd } from '../../ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
@@ -8,6 +8,9 @@ import { Message } from '../../chat/chat.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { EscMenuService } from '../esc-menu.service';
+
+const StatColumns = ['position', 'name', 'value'];
+const StatColumnsWithReplay = [...StatColumns, 'replay'];
 
 export interface Stat {
   id: number;
@@ -22,6 +25,7 @@ interface Leader extends Message {
   details?: string;
   clean?: boolean;
   seed?: string;
+  matchId?: number;
 }
 
 interface RankLeader extends Message {
@@ -42,17 +46,6 @@ export interface UserRank {
   title: string;
 }
 
-export interface Column {
-  title: string;
-  property: keyof Leader;
-}
-
-const mapColumns: Column[] = [
-  { title: 'Details', property: 'details' },
-  { title: 'Fresh Seed', property: 'clean' },
-  { title: 'Seed', property: 'seed' },
-];
-
 const placeholderRank = {
   name: 'Loading...',
   rankArea: 0,
@@ -69,9 +62,8 @@ export class StatService {
 
   id = 0;
   group = 1;
-  leaders$ = new BehaviorSubject<Leader[]>([]);
-  rankLeaders$ = new ReplaySubject<{ tier: RankLeader[], xp: RankLeader[] }>(1);
-  columns: Column[] = [];
+  leaders$ = new BehaviorSubject<Leader[] | null>(null);
+  rankLeaders$ = new BehaviorSubject<{ tier: RankLeader[], xp: RankLeader[] } | null>(null);
 
   groups = {
     0: 'Quacken',
@@ -81,6 +73,7 @@ export class StatService {
 
   groupStats$ = new BehaviorSubject<Record<number, Stat[]>>({});
   userRanks: UserRank[] = [placeholderRank];
+  columns = StatColumns;
 
   winLoss: {
     wins: number;
@@ -160,7 +153,7 @@ export class StatService {
   }
 
   changeGroup(): Promise<void> | void {
-    this.leaders$.next([]);
+    this.leaders$.next(null);
     if (this.id % 100 === 99) {
       this.id = this.group * 100 + 99;
       return this.getRankLeaders();
@@ -183,17 +176,17 @@ export class StatService {
   }
 
   async refreshLeaders(): Promise<void> {
-    this.leaders$.next([]);
-    this.rankLeaders$.next({ tier: [], xp: [] });
+    this.leaders$.next(null);
+    this.rankLeaders$.next(null);
+    this.columns = StatColumns;
     if (!this.id) return;
     this.group = Math.floor(this.id / 100);
     if (this.id % 100 === 99) return this.getRankLeaders();
 
-    const leaders = await this.ws.request(OutCmd.StatsTop, this.id);
+    const leaders = await this.ws.request<Leader[]>(OutCmd.StatsTop, this.id);
     if (!leaders || !leaders.length) return;
 
-    if (leaders[0].seed) this.columns = mapColumns;
-    else this.columns = [];
+    if (leaders[0]?.matchId) this.columns = StatColumnsWithReplay;
     for (const l of leaders) {
       l.from = l.name;
       l.friend = this.fs.isFriend(l.name);

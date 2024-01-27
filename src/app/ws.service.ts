@@ -144,10 +144,10 @@ export class WsService {
     if (this.connected || force) this.sendRaw(JSON.stringify(message));
   }
 
-  request(cmd: OutCmd, data?: unknown): Promise<any> {
+  request<t = any>(cmd: OutCmd, data?: unknown): Promise<t> {
     const message = { cmd, id: this.nextId, data };
     this.sendRaw(JSON.stringify(message));
-    const p = new Promise((resolve) => {
+    const p = new Promise<t>((resolve) => {
       this.requests.set(this.nextId, resolve);
       this.nextId++;
     });

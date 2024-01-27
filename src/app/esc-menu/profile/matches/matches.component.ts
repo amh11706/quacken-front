@@ -3,6 +3,8 @@ import * as dayjs from 'dayjs';
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { MatSort } from '@angular/material/sort';
 
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatLegacyChipInputEvent } from '@angular/material/legacy-chips';
 import { TeamImages } from '../../../chat/chat.service';
 import { OutCmd } from '../../../ws-messages';
 import { WsService } from '../../../ws.service';
@@ -28,6 +30,17 @@ interface Match {
   teams: TeamPlayer[][];
 }
 
+function searchMatch(match: Match, term: string): boolean {
+  if (match.lobby.toLowerCase().indexOf(term) !== -1) return true;
+  if (match.createdAtString.toLowerCase().indexOf(term) !== -1) return true;
+  if (match.score.toString().indexOf(term) !== -1) return true;
+  if ((Results[match.result] as string).toLowerCase().indexOf(term) !== -1) return true;
+  for (const p of match.players) {
+    if (p.from.toLowerCase().indexOf(term) !== -1) return true;
+  }
+  return false;
+}
+
 @Component({
   selector: 'q-matches',
   templateUrl: './matches.component.html',
@@ -42,6 +55,8 @@ export class MatchesComponent implements OnInit {
   dataSource = new TableVirtualScrollDataSource<Match>();
   displayedColumns = ['lobby', 'createdAtString', 'score', 'result', 'team', 'players', 'view'];
   @ViewChild(MatSort) sort?: MatSort;
+  searchTerms: string[] = [];
+  separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(
     public ws: WsService,
@@ -49,14 +64,13 @@ export class MatchesComponent implements OnInit {
     private cd: ChangeDetectorRef,
   ) {
     this.dataSource.filterPredicate = (data: Match, filter: string) => {
-      if (data.lobby.toLowerCase().indexOf(filter) !== -1) return true;
-      if (data.createdAtString.toLowerCase().indexOf(filter) !== -1) return true;
-      if (data.score.toString().indexOf(filter) !== -1) return true;
-      if ((Results[data.result] as string).toLowerCase().indexOf(filter) !== -1) return true;
-      for (const p of data.players) {
-        if (p.from.toLowerCase().indexOf(filter) !== -1) return true;
+      if (!searchMatch(data, filter)) return false;
+
+      for (const term of this.searchTerms) {
+        if (term === filter) continue;
+        if (!searchMatch(data, term)) return false;
       }
-      return false;
+      return true;
     };
   }
 
@@ -98,7 +112,7 @@ export class MatchesComponent implements OnInit {
   }
 
   applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase() || this.searchTerms[0] || '';
   }
 
   updateDataSource(): void {
@@ -133,5 +147,21 @@ export class MatchesComponent implements OnInit {
 
   imgTitle(team: keyof typeof TeamImages): string {
     return this.teamImages[team].title;
+  }
+
+  addSearchTerm(event: MatLegacyChipInputEvent): void {
+    const value = (event.value || '').trim().toLowerCase();
+    if (value) {
+      this.searchTerms.push(value);
+    }
+    event.chipInput?.clear();
+    this.applyFilter(this.searchTerms[0] || '');
+  }
+
+  removeSearchTerm(index: number): void {
+    if (index >= 0) {
+      this.searchTerms.splice(index, 1);
+    }
+    this.applyFilter(this.searchTerms[0] || '');
   }
 }

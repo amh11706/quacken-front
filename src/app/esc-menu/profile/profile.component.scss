@@ -6,6 +6,10 @@
   height: 100%;
 }
 
+#friends, #blocked {
+  padding-top: 18px;
+}
+
 .refresh {
   position: absolute;
   top: 8px;
@@ -115,8 +119,7 @@ mat-expansion-panel {
 .empty {
   text-align: center;
   color: #bbb;
-  padding: 8px 16px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
 .online,

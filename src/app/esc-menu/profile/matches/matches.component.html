@@ -1,24 +1,36 @@
 <div id="matches">
-  <form>
-    <q-name-search [value]="stat.target"
-                   (valueChange)="fetchMatches($event)"></q-name-search>
-  </form>
-  <mat-form-field>
-    <mat-select [(value)]="stat.group"
-                (valueChange)="stat.changeGroup(); updateDataSource()"
-                placeholder="Category">
-      <mat-option [value]="0">Quacken ({{matches[0]?.length}})</mat-option>
-      <mat-option [value]="1">Cadesim ({{matches[1]?.length}})</mat-option>
-      <mat-option [value]="2">Sea Battle ({{matches[2]?.length}})</mat-option>
-      <mat-option [value]="3">Capture the Flag ({{matches[3]?.length}})</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <q-name-search [value]="stat.target"
+                 (valueChange)="fetchMatches($event)"></q-name-search>
+  <div>
+    <mat-form-field>
+      <mat-select [(value)]="stat.group"
+                  (valueChange)="stat.changeGroup(); updateDataSource()"
+                  placeholder="Category">
+        <mat-option [value]="0">Quacken ({{matches[0]?.length}})</mat-option>
+        <mat-option [value]="1">Cadesim ({{matches[1]?.length}})</mat-option>
+        <mat-option [value]="2">Sea Battle ({{matches[2]?.length}})</mat-option>
+        <mat-option [value]="3">Capture the Flag ({{matches[3]?.length}})</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <mat-form-field>
-    <input matInput
-           (keyup)="applyFilter($any($event.target).value)"
-           placeholder="Filter">
-  </mat-form-field>
+    <mat-form-field class="tag-list">
+      <mat-label>Filter</mat-label>
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let term of searchTerms; let i = index"
+                  (removed)="removeSearchTerm(i)"
+                  [removable]="true">
+          {{term}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input matInput
+               [matChipInputFor]="chipList"
+               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+               [matChipInputAddOnBlur]="true"
+               (matChipInputTokenEnd)="addSearchTerm($event)"
+               (keyup)="applyFilter($any($event.target).value)">
+      </mat-chip-list>
+    </mat-form-field>
+  </div>
 
   <cdk-virtual-scroll-viewport *ngIf="matches[stat.group]?.length"
                                id="matchesTable"
@@ -28,6 +40,7 @@
     <table mat-table
            matSort
            matSortStart="desc"
+           matSortDisableClear="true"
            [dataSource]="dataSource">
       <tr mat-header-row
           *matHeaderRowDef="displayedColumns; sticky: true"></tr>

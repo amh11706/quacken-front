@@ -25,21 +25,19 @@
   </mat-form-field>
 
   <div id="selection">
-    <table *ngIf="stat.id % 100 !== 99">
+    <table *ngIf="stat.leaders$ | async as leaders">
       <tr>
         <th>Position</th>
         <th>Name</th>
         <th>Value</th>
-        <th *ngFor="let c of stat.columns">{{c.title}}</th>
       </tr>
-      <tr *ngFor="let row of stat.leaders$ | async; let i = index"
+      <tr *ngFor="let row of leaders; let i = index"
         [ngStyle]="{'background-color': (row.from === name) ? 'rgb(44, 44, 44)' : 'transparent'}">
         <td>{{i+1}}</td>
         <td>
           <q-name [message]="row"></q-name>
         </td>
         <td>{{row.value}}</td>
-        <td *ngFor="let c of stat.columns">{{row[c.property]}}</td>
       </tr>
     </table>
 
@@ -71,7 +69,7 @@
           <th>Level</th>
           <th>Tier</th>
         </tr>
-        <tr *ngFor="let row of (stat.rankLeaders$ | async)?.xp; let i = index"
+        <tr *ngFor="let row of rankLeaders.xp; let i = index"
           [ngStyle]="{'background-color': (row.from === name) ? 'rgb(44, 44, 44)' : 'transparent'}">
           <td>{{i+1}}</td>
           <td>
