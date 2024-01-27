@@ -3,17 +3,13 @@ import { Router } from '@angular/router';
 import { Subject, Subscription, ReplaySubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from '../auth.guard';
+import { InMessage, InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes } from './ws-request-types';
+import { SendCmdInputless, SendCmdInputs } from './ws-send-types';
 
 const ClientVersion = 53;
-
-export interface InMessage {
-  cmd: InCmd | Internal;
-  id?: number;
-  data?: any;
-}
 
 export interface TokenUser {
   id: number;
@@ -138,16 +134,20 @@ export class WsService {
     delete this.socket;
   }
 
-  send(cmd: OutCmd, data?: unknown, force = false): void {
+  send<T extends SendCmdInputless>(cmd: T): void;
+  send<T extends keyof SendCmdInputs>(cmd: T, data: SendCmdInputs[T], force?: boolean): void;
+  send<T extends keyof SendCmdInputs>(cmd: T, data?: SendCmdInputs[T], force = false): void {
     const message = { cmd, data };
     this.outMessages$.next(message);
     if (this.connected || force) this.sendRaw(JSON.stringify(message));
   }
 
-  request<t = any>(cmd: OutCmd, data?: unknown): Promise<t> {
+  request<T extends InputlessCmds>(cmd: T): Promise<OutCmdReturnTypes[T]>;
+  request<T extends InputCmds>(cmd: T, data: OutCmdInputTypes[T]): Promise<OutCmdReturnTypes[T]>;
+  request<T extends OutCmd>(cmd: T, data?: OutCmdInputTypes[T]): Promise<OutCmdReturnTypes[T]> {
     const message = { cmd, id: this.nextId, data };
     this.sendRaw(JSON.stringify(message));
-    const p = new Promise<t>((resolve) => {
+    const p = new Promise<OutCmdReturnTypes[T]>((resolve) => {
       this.requests.set(this.nextId, resolve);
       this.nextId++;
     });

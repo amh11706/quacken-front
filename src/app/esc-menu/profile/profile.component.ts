@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { WsService } from '../../ws.service';
-import { OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { OutCmd } from '../../ws/ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { ChatService } from '../../chat/chat.service';
 import { TierTitles } from './leaders/leaders.component';
-import { StatService, Stat, UserRank } from './stat.service';
+import { StatService } from './stat.service';
+import { Stat, UserRank } from './types';
 
 @Component({
   selector: 'q-profile',

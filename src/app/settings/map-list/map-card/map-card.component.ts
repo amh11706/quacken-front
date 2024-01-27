@@ -1,23 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { WsService } from '../../../ws.service';
-import { Internal, OutCmd } from '../../../ws-messages';
+import { WsService } from '../../../ws/ws.service';
+import { Internal, OutCmd } from '../../../ws/ws-messages';
 import { SettingsService } from '../../settings.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
-
-export interface MapOption {
-  id: number
-  description: string,
-  name: string,
-  released: boolean
-  userId: number
-  username: string,
-  tags?: string[],
-  ratingAverage: number;
-  ratingCount: number;
-  ratingMine?: number;
-  data?: number[][];
-  createdAt: string;
-}
+import { MapOption } from './types';
 
 @Component({
   selector: 'q-map-card',

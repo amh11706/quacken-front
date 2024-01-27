@@ -11,12 +11,13 @@ import Stats from 'three/examples/jsm/libs/stats.module';
 import { Sky } from 'three/examples/jsm/objects/Sky';
 import * as TWEEN from '@tweenjs/tween.js';
 import { Subscription } from 'rxjs';
-import { Internal } from '../../../ws-messages';
-import { WsService } from '../../../ws.service';
-import { SettingMap } from '../../../settings/settings.service';
-import { Boat, Team } from '../../quacken/boats/boat';
+import { Internal } from '../../../ws/ws-messages';
+import { WsService } from '../../../ws/ws.service';
+import { Boat } from '../../quacken/boats/boat';
 import { BoatRender } from '../boat-render';
 import { BoatService, flagMats } from '../boat.service';
+import { SettingMap } from '../../../settings/types';
+import { Team } from '../../quacken/boats/types';
 
 const sunSettings = {
   turbidity: 20,

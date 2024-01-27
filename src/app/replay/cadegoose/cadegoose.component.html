@@ -82,7 +82,7 @@
         <button *ngFor="let boat of aiData.boats"
                 mat-icon-button
                 [color]="boat === activeAiBoat ? 'primary' : undefined"
-                [title]="boat.boat?.name"
+                [title]="boat.name"
                 (click)="selectAiBoat(boat)">
           <mat-icon>sailing</mat-icon>
         </button><br>

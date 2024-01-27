@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { WsService } from '../../ws.service';
-import { OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { OutCmd } from '../../ws/ws-messages';
 import { StatService } from '../../esc-menu/profile/stat.service';
 import { FriendsService } from '../friends/friends.service';
-import { ChatService, Message, Command } from '../chat.service';
+import { ChatService, Command } from '../chat.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
+import { ChatMessage } from '../types';
 
 @Component({
   selector: 'q-name',
@@ -15,7 +16,7 @@ import { KeyActions } from '../../settings/key-binding/key-actions';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NameComponent {
-  @Input() message: Partial<Message> = {} as Message;
+  @Input() message: Partial<ChatMessage> = {};
   @Input() offline = false;
 
   constructor(
@@ -47,14 +48,14 @@ export class NameComponent {
   }
 
   add(): void {
-    this.ws.send(OutCmd.FriendInvite, this.message.from);
+    if (this.message.from) this.ws.send(OutCmd.FriendInvite, this.message.from);
   }
 
   block(): void {
-    this.ws.send(OutCmd.Block, this.message.from);
+    if (this.message.from) this.ws.send(OutCmd.Block, this.message.from);
   }
 
   unblock(): void {
-    this.ws.send(OutCmd.Unblock, this.message.from);
+    if (this.message.from) this.ws.send(OutCmd.Unblock, this.message.from);
   }
 }

@@ -1,16 +1,17 @@
 import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { SettingsService, SettingMap } from '../../settings/settings.service';
+import { SettingsService } from '../../settings/settings.service';
 import { FriendsService } from '../../chat/friends/friends.service';
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 import { Settings } from '../../settings/setting/settings';
-import { InCmd, OutCmd } from '../../ws-messages';
+import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { TimerComponent } from './timer/timer.component';
 import { spots } from './spot/spot.component';
 import { Card } from './card/card.component';
 import { Lobby } from '../lobby.component';
+import { SettingMap } from '../../settings/types';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'watchers', 'turnTime', 'playTo',

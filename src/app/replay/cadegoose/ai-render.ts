@@ -1,32 +1,6 @@
 import { Object3D, PlaneBufferGeometry, Mesh, BoxHelper, CanvasTexture, MeshBasicMaterial, Group } from 'three';
-import { Boat } from '../../lobby/quacken/boats/boat';
 import { BoatService } from '../../lobby/cadegoose/boat.service';
-
-export interface Points {
-  Shoot: number[][];
-  GetShot: number[];
-  BoatAt: number[];
-  Total: number[];
-  Flags: number[];
-  Claims: number[];
-  EndBonus: number;
-}
-
-export interface AiBoatData {
-  id: number;
-  claim: { x: number, y: number };
-  boat?: Boat;
-  moveOptions: number[][];
-  shots: number[];
-  pm: Record<string, Points>;
-}
-
-export interface AiData {
-  boats: AiBoatData[];
-  claims: { x: number, y: number, size: number }[];
-  map?: string;
-  flags?: any[];
-}
+import { AiBoatData, Points } from './types';
 
 const Colors = {
   Shoot: 'rgba(0, 255, 0, %d)',

@@ -1,29 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { InCmd, OutCmd } from '../ws-messages';
+import { InCmd, OutCmd } from '../ws/ws-messages';
 
-import { WsService } from '../ws.service';
+import { WsService } from '../ws/ws.service';
 import { Settings } from './setting/settings';
-
-export interface Setting {
-  id: number;
-  name: string;
-  title: string;
-  group: string;
-  value: number;
-  data?: any;
-}
-
-export interface SettingPartial {
-  id?: number;
-  value: number;
-  data?: any;
-  stream?: BehaviorSubject<number>;
-}
-
-export interface SettingMap {
-  [key: string]: SettingPartial | undefined;
-}
+import { Setting, SettingMap, SettingPartial } from './types';
 
 export type SettingList = (keyof typeof Settings)[];
 
@@ -72,7 +53,8 @@ export class SettingsService {
       ready = new Subject<SettingMap>();
       this.ready.set(group, ready);
 
-      void this.ws.request(OutCmd.SettingGetGroup, group).then((m: Setting[]) => {
+      void this.ws.request(OutCmd.SettingGetGroup, group).then(m => {
+        if (!m) return;
         let localSettings = this.settings.get(group);
         if (!localSettings) {
           localSettings = {};

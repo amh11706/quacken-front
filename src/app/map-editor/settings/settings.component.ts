@@ -2,10 +2,10 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { OutCmd } from '../../ws-messages';
-import { WsService } from '../../ws.service';
-import { MapEditor, DBTile, MapGroups } from '../map-editor.component';
+import { OutCmd } from '../../ws/ws-messages';
+import { WsService } from '../../ws/ws.service';
 import { TagsComponent } from '../tags/tags.component';
+import { MapEditor, DBTile, MapGroups } from '../types';
 
 @Component({
   selector: 'q-settings',
@@ -124,7 +124,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  private gotList(list: { [key: string]: DBTile[] }) {
+  private gotList(list?: { [key: string]: DBTile[] }) {
+    if (!list) return;
     this.mapData = list;
     const tile = this.shown;
     this.options = list[tile?.group ?? 'maps'] ?? this.options;
@@ -138,7 +139,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleTileSet(tileSet: DBTile[]) {
+  private handleTileSet(tileSet?: DBTile[]) {
     delete this.map.structures;
     delete this.map.structureSet;
     delete this.map.tmaps;
@@ -148,12 +149,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.tileSet = this.shown || this.map.selectedTile;
     this.map.tileSet.data = [[]];
 
-    for (const t of tileSet) {
-      if (!t.type) t.type = 0;
-      if (!tiles[t.type]) tiles[t.type] = [t];
-      else tiles[t.type]?.push(t);
+    if (tileSet) {
+      for (const t of tileSet) {
+        if (!t.type) t.type = 0;
+        if (!tiles[t.type]) tiles[t.type] = [t];
+        else tiles[t.type]?.push(t);
+      }
     }
-    this.map.selectedTile = tileSet[0] || {
+    this.map.selectedTile = tileSet?.[0] || {
       id: null, name: '', undos: [], redos: [], tags: [],
     } as unknown as DBTile;
     const tile = this.map.selectedTile;
@@ -162,7 +165,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.settingsOpen = false;
   }
 
-  private handleStructureSet(structureSet: DBTile[]) {
+  private handleStructureSet(structureSet?: DBTile[]) {
     delete this.map.tiles;
     delete this.map.tileSet;
     delete this.map.tmaps;
@@ -170,7 +173,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.structures = structureSet;
     this.map.structureSet = this.shown || this.map.selectedTile;
     this.map.structureSet.data = [[]];
-    this.map.selectedTile = structureSet[0] || {
+    this.map.selectedTile = structureSet?.[0] || {
       id: null, name: '', undos: [], redos: [], tags: [],
     } as unknown as DBTile;
     const tile = this.map.selectedTile;
@@ -179,7 +182,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.settingsOpen = false;
   }
 
-  private handleTMapSet(tmaps: DBTile[]) {
+  private handleTMapSet(tmaps?: DBTile[]) {
     delete this.map.tiles;
     delete this.map.tileSet;
     delete this.map.structures;
@@ -187,7 +190,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.map.tmaps = tmaps;
     this.map.tmapSet = this.shown || this.map.selectedTile;
     this.map.tmapSet.data = [[]];
-    this.map.selectedTile = tmaps[0] || {
+    this.map.selectedTile = tmaps?.[0] || {
       id: null, name: '', undos: [], redos: [], tags: [],
     } as unknown as DBTile;
     const tile = this.map.selectedTile;
@@ -197,7 +200,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   // Fetched data
-  private gotMap(map: DBTile) {
+  private gotMap(map?: DBTile) {
     delete this.map.tiles;
     delete this.map.tileSet;
     delete this.map.structures;
@@ -205,15 +208,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
     delete this.map.tmaps;
     delete this.map.tmapSet;
     const tile = this.shown || this.map.selectedTile;
-    tile.data = map.data || tile.data;
-    tile.undos = map.undos || [];
-    tile.redos = map.redos || [];
+    tile.data = map?.data || tile.data;
+    tile.undos = map?.undos || [];
+    tile.redos = map?.redos || [];
     this.map.selectedTile = tile;
     this.map.settingsOpen = false;
   }
 
   // Create or save
-  private handleMap(msg: DBTile) {
+  private handleMap(msg?: DBTile) {
     this.pending = false;
     this.error = (msg && msg.error) || '';
     if (this.error) return;

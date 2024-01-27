@@ -3,15 +3,17 @@ import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from '../chat/chat.service';
-import { SettingMap, SettingsService } from '../settings/settings.service';
-import { InCmd, Internal, OutCmd } from '../ws-messages';
-import { WsService, InMessage } from '../ws.service';
+import { SettingsService } from '../settings/settings.service';
+import { InCmd, Internal, OutCmd } from '../ws/ws-messages';
+import { WsService } from '../ws/ws.service';
 import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
 import { FriendsService } from '../chat/friends/friends.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
-import { BoatSync } from '../lobby/quacken/boats/convert';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
+import { BoatSync } from '../lobby/quacken/boats/types';
+import { SettingMap } from '../settings/types';
+import { InMessage } from '../ws/ws-request-types';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
@@ -86,19 +88,18 @@ export class ReplayComponent implements OnInit, OnDestroy {
     clearInterval(this.tickInterval);
     this.tickInterval = 0;
     const match = await this.ws.request(OutCmd.MatchData, +id);
-    if (!match) return;
+    if (!match?.data) return;
     this.messages = match.data.messages;
     this.seed = match.data.seed;
 
     const settings = match.data.settings;
-    for (const group in settings) {
+    for (const [group, setting] of Object.entries(settings)) {
       if (!settings.hasOwnProperty(group)) continue;
-      const settingGroup = settings[group];
       if (!this.graphicSettings) {
-        this.graphicSettings = settingGroup;
-        if (!settings[group].turnTime.value) settingGroup.turnTime.value = 10;
+        this.graphicSettings = setting;
+        if (!setting.turnTime?.value) setting.turnTime = { value: 10 };
       }
-      this.ss.setFakeSettings(group, settingGroup);
+      this.ss.setFakeSettings(group, setting);
     }
 
     setTimeout(() => {

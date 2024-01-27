@@ -1,27 +1,8 @@
-import { Message } from '../../chat/chat.service';
-import { StatRow } from '../../lobby/cadegoose/stats/stats.component';
-import { Sync, Clutter, Turn } from '../../lobby/quacken/boats/boats.component';
-import { BoatStatus } from '../../lobby/quacken/boats/convert';
-import { BoatTick } from '../../lobby/quacken/hud/hud.component';
-import { InCmd } from '../../ws-messages';
-import { InMessage } from '../../ws.service';
-
-export interface ParsedTurn {
-  turn: number;
-  rawTurn: Turn;
-  index: number;
-  teams: {
-    score: number;
-    scoreChange: number;
-    sinks: Message[];
-  }[];
-  sync: Sync;
-  ticks: Record<number, BoatTick>;
-  moves: Record<number, { shots: number[], moves: number[] }>;
-  steps: BoatStatus[][];
-  cSteps: Clutter[][];
-  stats: Record<number, StatRow>;
-}
+import { InCmd } from '../../ws/ws-messages';
+import { InMessage } from '../../ws/ws-request-types';
+import { ParsedTurn } from '../../lobby/cadegoose/types';
+import { Turn, Sync, BoatTick } from '../../lobby/quacken/boats/types';
+import { Message } from '../../chat/types';
 
 export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, number] {
   const turns: ParsedTurn[] = [];

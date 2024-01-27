@@ -1,4 +1,4 @@
-import { SettingMap } from '../../settings/settings.service';
+import { SettingMap } from '../../settings/types';
 
 // const BaseSettings = {
 //   createType: { value: 2 },

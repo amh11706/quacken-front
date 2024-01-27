@@ -9,6 +9,6 @@ import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALO
 export class MessageComponent {
   constructor(
     public dialogRef: MatDialogRef<MessageComponent>,
-    @Inject(MAT_DIALOG_DATA) public message: string,
+    @Inject(MAT_DIALOG_DATA) public message = '',
   ) { }
 }

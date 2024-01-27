@@ -5,30 +5,13 @@ import { MatSort } from '@angular/material/sort';
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatLegacyChipInputEvent } from '@angular/material/legacy-chips';
-import { TeamImages } from '../../../chat/chat.service';
-import { OutCmd } from '../../../ws-messages';
-import { WsService } from '../../../ws.service';
+import { OutCmd } from '../../../ws/ws-messages';
+import { WsService } from '../../../ws/ws.service';
 import { StatService } from '../stat.service';
-import { TeamPlayer } from './teams/teams.component';
+import { TeamImages } from '../../../lobby/cadegoose/types';
+import { Match, TeamPlayer } from '../types';
 
 const Results = ['N/A', 'Loss', 'Draw', 'Win'];
-
-interface Match {
-  matchId: number;
-  rank: number;
-  score: number;
-  xp: number;
-  tier: number;
-  level: number;
-  rankArea: number;
-  createdAt: number;
-  createdAtString: string;
-  lobby: string;
-  team: keyof typeof TeamImages;
-  result: number;
-  players: TeamPlayer[];
-  teams: TeamPlayer[][];
-}
 
 function searchMatch(match: Match, term: string): boolean {
   if (match.lobby.toLowerCase().indexOf(term) !== -1) return true;

@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { Settings, SliderSetting } from '../setting/settings';
-import { Setting, SettingsService } from '../settings.service';
+import { SettingsService } from '../settings.service';
+import { Setting } from '../types';
 
 interface JobberSetting extends Setting {
   data: {

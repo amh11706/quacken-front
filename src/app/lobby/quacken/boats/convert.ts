@@ -1,41 +1,5 @@
-import { Boat, Team } from './boat';
-
-export interface BoatStatus {
-  id: number;
-  x: number;
-  y: number;
-  t: number;
-  tf?: number;
-  tm?: number;
-  s?: number;
-  c?: number;
-  cd?: number;
-}
-
-export interface Maneuver {
-  id: number;
-  name: string;
-  class: string;
-  directional?: boolean;
-}
-
-export interface BoatSync extends BoatStatus {
-  oId?: number;
-  team?: Team;
-  inSZ: boolean;
-  n: string;
-  ti?: string;
-  f: number;
-  b: number;
-  tp: number;
-  ty: number;
-  ml: number;
-  mDamage: number;
-  mMoves: number;
-  inSq: number;
-  dShot?: number;
-  mvr?: Maneuver[];
-}
+import { Boat } from './boat';
+import { BoatSync } from './types';
 
 export function boatToSync(boat: Boat): BoatSync {
   return {

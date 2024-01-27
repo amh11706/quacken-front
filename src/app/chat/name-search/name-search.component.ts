@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { debounceTime, mergeMap } from 'rxjs/operators';
-import { OutCmd } from '../../ws-messages';
-import { WsService } from '../../ws.service';
+import { OutCmd } from '../../ws/ws-messages';
+import { WsService } from '../../ws/ws.service';
 import { FriendsService } from '../friends/friends.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class NameSearchComponent implements OnInit {
       );
   }
 
-  private searchName(search: string): Promise<string[]> {
+  private async searchName(search: string): Promise<string[]> {
     if (search.length < 2) {
       const nameTemp = [...this.fs.lobby$.getValue().map(m => m.from), ...this.fs.friends];
       if (!this.onlineOnly) nameTemp.push(...this.fs.offline);
@@ -40,6 +40,7 @@ export class NameSearchComponent implements OnInit {
 
       return Promise.resolve(Array.from(names.keys()));
     }
-    return this.ws.request(this.onlineOnly ? OutCmd.SearchNamesOnline : OutCmd.SearchNames, search);
+    const names = await this.ws.request(this.onlineOnly ? OutCmd.SearchNamesOnline : OutCmd.SearchNames, search);
+    return names || [];
   }
 }

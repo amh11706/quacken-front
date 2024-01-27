@@ -7,22 +7,18 @@ import { TeamColorsCss } from '../lobby/cadegoose/cade-entry-status/cade-entry-s
 import { GuBoat, Point } from '../lobby/cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../lobby/quacken/boats/boat';
 import { AiRender } from '../replay/cadegoose/ai-render';
-import { ParsedTurn, ParseTurns } from '../replay/cadegoose/parse-turns';
-import { SettingMap, SettingsService } from '../settings/settings.service';
-import { InCmd, Internal, OutCmd } from '../ws-messages';
-import { InMessage, WsService } from '../ws.service';
+import { ParseTurns } from '../replay/cadegoose/parse-turns';
+import { SettingsService } from '../settings/settings.service';
+import { InCmd, Internal, OutCmd } from '../ws/ws-messages';
+import { WsService } from '../ws/ws.service';
 import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
+import { AiBoatData, MoveNode, MoveTiers } from '../replay/cadegoose/types';
+import { ParsedTurn } from '../lobby/cadegoose/types';
+import { SettingMap } from '../settings/types';
+import { InMessage } from '../ws/ws-request-types';
 
 function mapMoves(m: number | string): string {
   return ['_', 'L', 'F', 'R'][+m] || 'S';
-}
-
-const enum MoveTiers {
-  Poor = 'Poor',
-  Fine = 'Fine',
-  Good = 'Good',
-  Excellent = 'Excellent',
-  Incredible = 'Incredible',
 }
 
 const shotNames = [
@@ -35,23 +31,6 @@ const shotNames = [
   'Move 4 Left',
   'Move 4 Right',
 ];
-
-class MoveNode {
-  Score = 0;
-  ShotsHit = 0;
-  ShotsTaken = 0;
-  RocksBumped = 0;
-  PointGain = 0;
-  ShotsHitArray: number[] = [];
-  ShotsTakenArray: number[] = [];
-
-  tier: MoveTiers = MoveTiers.Poor;
-  WreckedBy: string[] = [];
-  Wrecks: string[] = [];
-  BlockedBy: string[] = [];
-  Blocks: string[] = [];
-  Moves = '';
-}
 
 @Component({
   selector: 'q-training',
@@ -159,8 +138,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
 
   private async getMatch(id: number) {
     const match = await this.ws.request(OutCmd.MatchData, +id);
-    if (!match) return;
-    [this.turns, this.map, this.maxScore] = ParseTurns(match.data?.messages);
+    if (!match || !match.data) return;
+    [this.turns, this.map, this.maxScore] = ParseTurns(match.data.messages);
     const join = match.data?.messages[0]?.[0];
     this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.LobbyJoin, data: join?.data });
     setTimeout(() => {
@@ -170,9 +149,9 @@ export class TrainingComponent implements OnInit, OnDestroy {
 
     if (!match.data) return;
     const settings = match.data.settings;
-    for (const group in settings) {
+    for (const [group, setting] of Object.entries(settings)) {
       if (!settings.hasOwnProperty(group)) continue;
-      const settingGroup: SettingMap = settings[group];
+      const settingGroup: SettingMap = setting;
       if (settingGroup.turnTime) settingGroup.turnTime.value = 40;
       this.ss.setFakeSettings(group, settingGroup);
     }
@@ -213,10 +192,11 @@ export class TrainingComponent implements OnInit, OnDestroy {
       map: this.map,
       myBoat: this.myBoat.id,
     });
+    if (!response) return;
 
     this.aiRender.setBoat({
       pm: response.points,
-    } as any);
+    } as AiBoatData);
     this.rawMoves = {
       moves: new Map(Object.entries(response.nodes)),
       boat: this.myBoat,

@@ -1,6 +1,6 @@
 import { Mesh, MeshPhongMaterial, Scene, SphereGeometry, Vector3 } from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
-import { Clutter } from '../../quacken/boats/boats.component';
+import { Clutter } from '../../quacken/boats/types';
 
 const decodeX = [0, 1, 0, -1];
 const decodeY = [-1, 0, 1, 0];

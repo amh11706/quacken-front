@@ -1,8 +1,8 @@
 /* eslint-disable no-sparse-arrays */
-import { OutCmd } from '../../ws-messages';
+import { OutCmd } from '../../ws/ws-messages';
 import { BotSettingComponent } from '../bot-setting/bot-setting.component';
 import { JobberQualityComponent } from '../jobber-quality/jobber-quality.component';
-import { SettingPartial } from '../settings.service';
+import { SettingPartial } from '../types';
 
 interface BaseSetting {
   readonly type: string;
@@ -12,18 +12,17 @@ interface BaseSetting {
   readonly group: string;
   readonly name: string;
   readonly advancedComponent?: any;
-  readonly trigger?: OutCmd;
+  readonly trigger?: OutCmd.NextBoat | OutCmd.SpawnSide | OutCmd.ChatCommand;
 }
 
 interface ButtonSetting extends BaseSetting {
   readonly type: 'button',
-  readonly trigger: OutCmd;
+  readonly trigger?: OutCmd.NextBoat | OutCmd.SpawnSide | OutCmd.ChatCommand;
   readonly data: string;
 }
 
 export interface BoatSetting extends BaseSetting {
   readonly type: 'boat',
-  readonly trigger: OutCmd;
   readonly titles: readonly (string | undefined)[];
   readonly groups: readonly { name: string, options: readonly number[] }[];
 }
@@ -40,7 +39,6 @@ export interface SliderSetting extends BaseSetting {
 export interface OptionSetting extends BaseSetting {
   readonly type: 'option',
   readonly options: readonly string[];
-  readonly trigger?: OutCmd;
 }
 
 interface CheckboxSetting extends BaseSetting {
@@ -53,7 +51,8 @@ export interface CustomMapSetting extends BaseSetting {
   readonly data?: any,
 }
 
-export type Setting = ButtonSetting | BoatSetting | SliderSetting | OptionSetting | CheckboxSetting | CustomMapSetting;
+export type SettingInput = ButtonSetting | BoatSetting | SliderSetting | OptionSetting | CheckboxSetting |
+  CustomMapSetting;
 
 type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'speed' | 'lockAngle' | 'water' | 'showFps' |
   'maxFps' | 'spawnSide' | 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'soundMaster' |
@@ -65,7 +64,7 @@ type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'spee
   'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' | 'flagTurns' |
   'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagNextBoat' | 'flagRespawn' | 'flagSteal';
 
-export const Settings: Record<SettingName, Setting> = {
+export const Settings: Record<SettingName, SettingInput> = {
   startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
   nextBoat: {
     id: 1,

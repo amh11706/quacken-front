@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
-import { InCmd, Internal } from '../../../ws-messages';
+import { InCmd, Internal } from '../../../ws/ws-messages';
 import { EntryStatusComponent } from '../../quacken/entry-status/entry-status.component';
-import { Turn } from '../../quacken/boats/boats.component';
 import { Lobby } from '../../lobby.component';
+import { Turn } from '../../quacken/boats/types';
 
 export const TeamColors: Readonly<[number, number, number][]> = [
   [146, 236, 30], // green

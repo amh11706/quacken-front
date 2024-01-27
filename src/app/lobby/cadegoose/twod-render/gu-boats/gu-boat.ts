@@ -1,12 +1,13 @@
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as TWEEN from '@tweenjs/tween.js';
 
-import { Boat, Team } from '../../../../lobby/quacken/boats/boat';
+import { Boat } from '../../../../lobby/quacken/boats/boat';
 import { BoatTypes } from '../../../../lobby/quacken/boats/boat-types';
 import { SpriteData, Orientation } from '../sprite';
 import { Boats } from './objects';
 import { BoatRender, moveEase } from '../../boat-render';
 import { TeamColors } from '../../cade-entry-status/cade-entry-status.component';
+import { Team } from '../../../quacken/boats/types';
 
 // pixel coordinates relative to top left of canvas
 export class Point {

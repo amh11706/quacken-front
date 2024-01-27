@@ -1,36 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Component, Input, OnChanges } from '@angular/core';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
-
-export interface StatRow {
-  user: string; team: number; stats: (string | number)[]; score: number;
-}
-
-export const enum Stat {
-  Kills,
-  Assists,
-  Deaths,
-  ShotsHit,
-  ShotsFired,
-  ShotsTaken,
-  PointsContested,
-  PointsScored,
-
-  RocksBumped = 10,
-  ShotsFriendly,
-  ShotsFriendlyTaken,
-  ShotsMissed,
-  WhirlSpins,
-  WindRides,
-
-  LeftUsed,
-  ForwardUsed,
-  RightUsed,
-  DoubleForwardUsed,
-  TurnInSpotUsed,
-  ChainshotUsed,
-  FlotsamUsed,
-}
+import { Stat, StatRow } from './types';
 
 export const extraColumns = [
   { stat: Stat.ShotsFriendly, title: 'Friendly Fire' },

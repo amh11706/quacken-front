@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { InCmd, OutCmd } from '../../ws-messages';
-import { WsService } from '../../ws.service';
-import { Message } from '../chat.service';
-
-export interface Invite {
-  f: string;
-  a: number;
-  ty: number;
-  tg: number;
-  resolved: boolean;
-}
+import { InCmd, OutCmd } from '../../ws/ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { ChatMessage, Invite } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +12,7 @@ export class FriendsService {
   allowInvite = false;
   fakeFs?: FriendsService;
 
-  lobby$ = new BehaviorSubject<Message[]>([]);
+  lobby$ = new BehaviorSubject<ChatMessage[]>([]);
   friends: string[] = [];
   offline: string[] = [];
   blocked: string[] = [];
@@ -43,7 +35,7 @@ export class FriendsService {
   }
 
   private tapMessages() {
-    this.ws.subscribe(InCmd.ChatMessage, (m: Message) => {
+    this.ws.subscribe(InCmd.ChatMessage, (m: ChatMessage) => {
       m.friend = this.isFriend(m.from);
       m.blocked = this.isBlocked(m.from);
     });
@@ -63,14 +55,14 @@ export class FriendsService {
   }
 
   private handlePlayers() {
-    this.ws.subscribe(InCmd.PlayerList, (r: Message[]) => {
+    this.ws.subscribe(InCmd.PlayerList, (r: ChatMessage[]) => {
       for (const m of r) {
         m.friend = this.isFriend(m.from);
         m.blocked = this.isBlocked(m.from);
       }
       this.lobby$.next(r);
     });
-    this.ws.subscribe(InCmd.PlayerAdd, (m: Message) => {
+    this.ws.subscribe(InCmd.PlayerAdd, (m: ChatMessage) => {
       m.friend = this.isFriend(m.from);
       m.blocked = this.isBlocked(m.from);
       const lobby = this.lobby$.getValue();
@@ -81,7 +73,7 @@ export class FriendsService {
       m.message = 'has joined the lobby.';
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: m });
     });
-    this.ws.subscribe(InCmd.PlayerRemove, (m: Message) => {
+    this.ws.subscribe(InCmd.PlayerRemove, (m: ChatMessage) => {
       const lobby = this.lobby$.getValue().filter(n => m.from !== n.from || m.copy !== n.copy);
       this.lobby$.next(lobby);
       if (m.copy === 0) return;
@@ -110,17 +102,17 @@ export class FriendsService {
       this.offline = r.offline || [];
       this.blocked = r.blocked || [];
     });
-    this.ws.subscribe(InCmd.FriendOnline, (u: Message) => {
+    this.ws.subscribe(InCmd.FriendOnline, (u: ChatMessage) => {
       this.friends.push(u.from);
       this.offline = this.offline.filter(f => f !== u.from);
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 0, type: 3, message: 'has logged on.' } });
     });
-    this.ws.subscribe(InCmd.FriendOffline, (u: Message) => {
+    this.ws.subscribe(InCmd.FriendOffline, (u: ChatMessage) => {
       this.offline.push(u.from);
       this.friends = this.friends.filter(f => f !== u.from);
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 0, type: 3, message: 'has logged off.' } });
     });
-    this.ws.subscribe(InCmd.FriendAdd, (u: Message) => {
+    this.ws.subscribe(InCmd.FriendAdd, (u: ChatMessage) => {
       this.friends.push(u.from);
       this.invites = this.invites.filter(i => i.ty !== 0 || i.f !== u.from);
       for (const n of this.lobby$.getValue()) if (n.from === u.from) n.friend = true;
@@ -129,7 +121,7 @@ export class FriendsService {
         data: { ...u, copy: 0, type: 3, message: 'has been added to your friend list.' },
       });
     });
-    this.ws.subscribe(InCmd.FriendRemove, (u: Message) => {
+    this.ws.subscribe(InCmd.FriendRemove, (u: ChatMessage) => {
       this.friends = this.friends.filter(f => f !== u.from);
       this.offline = this.offline.filter(f => f !== u.from);
       for (const n of this.lobby$.getValue()) if (n.from === u.from) n.friend = false;

@@ -2,31 +2,22 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription, BehaviorSubject, Subject } from 'rxjs';
 
 import { FriendsService } from '../../../chat/friends/friends.service';
-import { InCmd, Internal, OutCmd } from '../../../ws-messages';
+import { InCmd, Internal, OutCmd } from '../../../ws/ws-messages';
 import { KeyBindingService } from '../../../settings/key-binding/key-binding.service';
-import { SettingsService, SettingMap } from '../../../settings/settings.service';
+import { SettingsService } from '../../../settings/settings.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Lobby } from '../../lobby.component';
-import { Sync, Turn } from '../boats/boats.component';
 import { Boat } from '../boats/boat';
-import { WsService } from '../../../ws.service';
+import { WsService } from '../../../ws/ws.service';
 import { Tokens } from '../../../boats/move-input/move-input.component';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
+import { BoatTick, Turn, Sync } from '../boats/types';
+import { SettingMap } from '../../../settings/types';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
   '', '', '', 'spin',
 ];
-
-export interface BoatTick {
-  t: [number[], number[], number[]];
-  d: number;
-  b: number;
-  tp: number;
-  attr: Record<number, number>;
-  wt: number;
-  wm: number;
-}
 
 @Component({
   selector: 'q-hud',
@@ -216,7 +207,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
     this.myBoat.ready = true;
     this.myBoat.moveLock = 99;
-    this.ws.send(OutCmd.Ready);
+    this.ws.send(OutCmd.Ready, undefined);
   }
 
   start(): void {
@@ -232,7 +223,7 @@ export class HudComponent implements OnInit, OnDestroy {
     void this.sendShots();
     if (this.arrayEqual(this.serverBoatPending.moves, this.localBoat.moves)) return;
     this.serverBoatPending.moves = [...this.localBoat.moves];
-    this.serverBoat.moves = await this.ws.request(OutCmd.Moves, this.localBoat.moves);
+    this.serverBoat.moves = await this.ws.request(OutCmd.Moves, this.localBoat.moves) || this.serverBoat.moves;
   }
 
   protected async sendShots(): Promise<void> {
@@ -240,7 +231,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.serverBoatPending.shots = [...this.localBoat.shots];
     for (let i = 0; i < this.localBoat.shots.length; i++) {
       if (this.localBoat.shots[i]) {
-        await this.ws.request(OutCmd.Bomb, [1, 5, 2, 6, 3, 7, 4, 8][i]);
+        await this.ws.request(OutCmd.Bomb, [1, 5, 2, 6, 3, 7, 4, 8][i] || 0);
         this.serverBoat.shots = [0, 0, 0, 0, 0, 0, 0, 0];
         this.serverBoat.shots[i] = 1;
         return;

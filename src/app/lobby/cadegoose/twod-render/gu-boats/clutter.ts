@@ -1,7 +1,7 @@
 import * as TWEEN from '@tweenjs/tween.js';
-import { Clutter } from '../../../../lobby/quacken/boats/boats.component';
 import { BoatRender, moveEase } from '../../boat-render';
 import { Point } from './gu-boat';
+import { Clutter } from '../../../quacken/boats/types';
 
 export class MovableClutter implements Clutter {
   id?: number;

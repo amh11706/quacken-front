@@ -4,10 +4,11 @@ import { Subscription } from 'rxjs';
 import { CadeDesc } from '../../lobby/cadegoose/cadegoose.component';
 import { QuackenDesc } from '../../lobby/quacken/quacken.component';
 import { SbDesc } from '../../lobby/seabattle/seabattle.component';
-import { SettingMap, SettingsService } from '../../settings/settings.service';
+import { SettingsService } from '../../settings/settings.service';
 import { Settings } from '../../settings/setting/settings';
-import { InCmd, OutCmd } from '../../ws-messages';
-import { WsService } from '../../ws.service';
+import { InCmd, OutCmd } from '../../ws/ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { SettingMap } from '../../settings/types';
 
 export const Descriptions = {
   Quacken: QuackenDesc,

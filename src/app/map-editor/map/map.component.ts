@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Titles } from '../obstacles/obstacles.component';
-import { MapEditor, MapTile } from '../map-editor.component';
+import { MapEditor, MapTile } from '../types';
 
 const MAX_UNDOS = 100;
 

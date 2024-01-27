@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
-import { WsService } from '../ws.service';
+import { WsService } from '../ws/ws.service';
 import { EscMenuService } from './esc-menu.service';
 import { ProfileComponent } from './profile/profile.component';
 import { InventoryComponent } from './inventory/inventory.component';

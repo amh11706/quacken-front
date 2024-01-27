@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { OutCmd } from '../../ws-messages';
-import { WsService } from '../../ws.service';
-import { DBTile, MapEditor, MapGroups } from '../map-editor.component';
+import { OutCmd } from '../../ws/ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { MapEditor, DBTile, MapGroups } from '../types';
 
 export const TileTypes = [
   'Head',
@@ -93,7 +93,7 @@ export class TileSetComponent implements OnInit, OnDestroy {
     this.pending = true;
     const map = {
       group: this.group + 's',
-      weight: tile.weight,
+      weight: tile.weight ?? 0,
       id: tile.id,
     };
     await this.ws.request(OutCmd.WeightSave, map);
@@ -109,6 +109,6 @@ export class TileSetComponent implements OnInit, OnDestroy {
       id: tile.id,
     };
     const msg = await this.ws.request(OutCmd.MapDelete, map);
-    this.handleDelete(msg);
+    if (msg) this.handleDelete(msg);
   }
 }

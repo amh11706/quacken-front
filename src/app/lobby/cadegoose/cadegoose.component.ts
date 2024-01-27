@@ -3,19 +3,20 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 import { ComponentType } from '@angular/cdk/portal';
-import { SettingList, SettingMap, SettingsService } from '../../settings/settings.service';
-import { InCmd, Internal, OutCmd } from '../../ws-messages';
+import { SettingList, SettingsService } from '../../settings/settings.service';
+import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { MainMenuComponent } from './main-menu/main-menu.component';
-import { Turn } from '../quacken/boats/boats.component';
 import { QuackenComponent } from '../quacken/quacken.component';
 import { Boat } from '../quacken/boats/boat';
 import { TwodRenderComponent } from './twod-render/twod-render.component';
-import { MapEditor, MapTile } from '../../map-editor/map-editor.component';
+import { MapTile, MapEditor } from '../../map-editor/types';
+import { SettingMap } from '../../settings/types';
+import { Turn } from '../quacken/boats/types';
 
 const ownerSettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',

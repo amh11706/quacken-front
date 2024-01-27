@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { WsService } from '../../../ws.service';
+import { WsService } from '../../../ws/ws.service';
 import { TeamColorsCss } from '../cade-entry-status/cade-entry-status.component';
-import { extraColumns, Stat, StatRow } from '../stats/stats.component';
+import { extraColumns } from '../stats/stats.component';
+import { StatRow, Stat } from '../stats/types';
 
 @Component({
   selector: 'q-stat-end',

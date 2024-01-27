@@ -1,10 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { TeamImages } from '../../../../chat/chat.service';
-
-export interface TeamPlayer {
-  from: string;
-  team: keyof typeof TeamImages;
-}
+import { TeamImages } from '../../../../lobby/cadegoose/types';
+import { TeamPlayer } from '../../types';
 
 @Component({
   selector: 'q-team-view',

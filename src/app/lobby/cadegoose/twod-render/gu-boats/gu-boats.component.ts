@@ -1,14 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { WsService } from '../../../../ws.service';
+import { WsService } from '../../../../ws/ws.service';
 import { Boat } from '../../../../lobby/quacken/boats/boat';
-import { Turn, Clutter } from '../../../../lobby/quacken/boats/boats.component';
-import { Internal } from '../../../../ws-messages';
+import { Internal } from '../../../../ws/ws-messages';
 import { Sounds, SoundService } from '../../../../sound.service';
 import { ImageService } from '../../../../image.service';
 import { GuBoat } from './gu-boat';
 import { BoatService } from '../../boat.service';
 import { TeamColorsCss } from '../../cade-entry-status/cade-entry-status.component';
 import { MovableClutter } from './clutter';
+import { Clutter, Turn } from '../../../quacken/boats/types';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 3,

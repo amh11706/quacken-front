@@ -2,9 +2,9 @@ import { Component, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/c
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 import { SplitComponent } from './split/split.component';
-import { InCmd, OutCmd } from '../../ws-messages';
+import { InCmd, OutCmd } from '../../ws/ws-messages';
 
 export interface Item {
   s: number;
@@ -64,7 +64,7 @@ export class InventoryComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
-    this.ws.send(OutCmd.InventoryCmd, { cmd: 'c', id: this.id });
+    if (this.id) this.ws.send(OutCmd.InventoryCmd, { cmd: 'c', id: this.id });
   }
 
   private doSubs() {
@@ -80,7 +80,7 @@ export class InventoryComponent implements OnDestroy {
       if (this.inv) this.inv.currency = q;
     }));
     this.subs.add(this.ws.connected$.subscribe(v => {
-      if (!v) return;
+      if (!v || !this.id) return;
       this.ws.send(OutCmd.InventoryCmd, { cmd: 'o', id: this.id });
     }));
 
@@ -115,16 +115,16 @@ export class InventoryComponent implements OnDestroy {
   }
 
   clickStack(i: Item): void {
-    if (i.q < 2) return;
+    if (i.q < 2 || !this.id) return;
     const dialog = this.dialog.open(SplitComponent, { data: i });
     dialog.afterClosed().subscribe(value => {
-      if (!value) return;
+      if (!value || !this.id) return;
       this.ws.send(OutCmd.InventoryCmd, { cmd: 's', id: this.id, data: { id: i.s, quantity: value } });
     });
   }
 
   drop(e: DragEvent, i: Item): void {
-    if (!this.dragging) return;
+    if (!this.dragging || !this.id) return;
     e.preventDefault();
     if (i.id !== this.dragging.id || i.q >= 250) return;
     this.ws.send(OutCmd.InventoryCmd, { cmd: 'cb', id: this.id, data: { from: this.dragging.s, to: i.s } });
@@ -132,6 +132,7 @@ export class InventoryComponent implements OnDestroy {
   }
 
   sort(by: 's' | 'id' | 't' | 'q' | 'n' | 'f', send = true): void {
+    if (!this.id) return;
     if (send) this.ws.send(OutCmd.InventoryCmd, { cmd: 'sort', id: this.id, data: by });
     if (!this.inv) return;
     this.inv.filtered.sort((a, b) => {

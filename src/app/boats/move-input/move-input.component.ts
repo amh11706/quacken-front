@@ -3,8 +3,8 @@ import { Subject, Subscription } from 'rxjs';
 
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
-import { Maneuver } from '../../lobby/quacken/boats/convert';
 import { getManeuverIcon } from '../maneuver-source/maneuver-source.component';
+import { Maneuver } from '../../lobby/quacken/boats/types';
 
 export interface Tokens {
   moves: [number, number, number],

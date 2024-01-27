@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
-import { InCmd, Internal, OutCmd } from '../../../ws-messages';
-import { HudComponent, BoatTick } from '../../quacken/hud/hud.component';
+import { InCmd, Internal, OutCmd } from '../../../ws/ws-messages';
+import { HudComponent } from '../../quacken/hud/hud.component';
+import { BoatTick } from '../../quacken/boats/types';
 
 export const CadeKeyActions = {
   bombLeft: KeyActions.CBombLeft,
@@ -121,7 +122,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   protected async sendShots(): Promise<void> {
     if (this.arrayEqual(this.serverBoatPending.shots, this.localBoat.shots)) return;
     this.serverBoatPending.shots = [...this.localBoat.shots];
-    this.serverBoat.shots = await this.ws.request(OutCmd.Shots, this.localBoat.shots);
+    this.serverBoat.shots = await this.ws.request(OutCmd.Shots, this.localBoat.shots) || this.serverBoat.shots;
   }
 
   async setTurn(turn: number, sec: number = this.secondsPerTurn - 1): Promise<void> {

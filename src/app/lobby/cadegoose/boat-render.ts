@@ -2,9 +2,10 @@ import * as TWEEN from '@tweenjs/tween.js';
 import * as THREE from 'three';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Vector3, Euler } from 'three';
-import { Boat, Team } from '../quacken/boats/boat';
+import { Boat } from '../quacken/boats/boat';
 import { JobQueue } from './job-queue';
 import { TeamColors } from './cade-entry-status/cade-entry-status.component';
+import { Team } from '../quacken/boats/types';
 
 function headerColor(boat: Boat): string {
   let color = TeamColors[boat.team || 0];

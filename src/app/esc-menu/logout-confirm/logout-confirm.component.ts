@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
 import { BehaviorSubject } from 'rxjs';
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 
 @Component({
   selector: 'q-logout-confirm',

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
-import { WsService } from '../../ws.service';
-import { OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { OutCmd } from '../../ws/ws-messages';
 import { MessageComponent } from './message/message.component';
 
 @Component({
@@ -23,7 +23,7 @@ export class AccountComponent {
     this.pending = true;
     const res = await this.ws.request(OutCmd.ChangePass, { newPassword: newPass, password });
     this.pending = false;
-    const message = res === 'Success' ? 'Password changed!' : res;
+    const message = res === 'Success' ? 'Password changed!' : res || 'Error';
     this.dialog.open(MessageComponent, { data: message });
   }
 
@@ -31,7 +31,7 @@ export class AccountComponent {
     this.pending = true;
     const res = await this.ws.request(OutCmd.ChangeName, { name, password });
     this.pending = false;
-    const message = res === 'Success' ? 'Name changed! This will take effect next time you log in.' : res;
+    const message = res === 'Success' ? 'Name changed! This will take effect next time you log in.' : res || 'Error';
     if (res === 'Success') window.localStorage.removeItem('token');
     this.dialog.open(MessageComponent, { data: message });
   }
@@ -40,7 +40,7 @@ export class AccountComponent {
     this.pending = true;
     const res = await this.ws.request(OutCmd.ChangeEmail, { email, password });
     this.pending = false;
-    const message = res === 'Success' ? 'Email changed!' : res;
+    const message = res === 'Success' ? 'Email changed!' : res || 'Error';
     this.dialog.open(MessageComponent, { data: message });
   }
 
@@ -53,7 +53,7 @@ export class AccountComponent {
       window.localStorage.removeItem('token');
       await this.router.navigate(['auth/login']);
     }
-    const message = res === 'Success' ? 'Account deleted.' : res;
+    const message = res === 'Success' ? 'Account deleted.' : res || 'Error';
     this.dialog.open(MessageComponent, { data: message });
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { SettingMap, SettingsService } from './settings/settings.service';
+import { SettingsService } from './settings/settings.service';
+import { SettingMap } from './settings/types';
 
 /* eslint no-unused-vars: "off" */
 export enum Sounds {

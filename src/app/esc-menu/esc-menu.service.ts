@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
-import { WsService } from '../ws.service';
+import { WsService } from '../ws/ws.service';
 
 @Injectable({
   providedIn: 'root',

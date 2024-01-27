@@ -2,11 +2,10 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Message } from '../../chat/chat.service';
 import { StatService } from '../../esc-menu/profile/stat.service';
 import { Lobby } from '../../lobby/lobby.component';
-import { InCmd, OutCmd } from '../../ws-messages';
-import { WsService } from '../../ws.service';
+import { InCmd, OutCmd } from '../../ws/ws-messages';
+import { WsService } from '../../ws/ws.service';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { CreateComponent } from '../create/create.component';
 import { EditorErrorComponent } from '../editor-error/editor-error.component';
@@ -14,6 +13,7 @@ import { NewsComponent } from '../news/news.component';
 import { Note, Notes } from '../news/notes';
 import { Competitions } from '../competition/competition';
 import { CompetitionComponent } from '../competition/competition.component';
+import { Message } from '../../chat/types';
 
 @Component({
   selector: 'q-lobby-list',

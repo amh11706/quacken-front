@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { DBTile } from '../map-editor.component';
 import { TileSetComponent } from '../tile-set/tile-set.component';
+import { DBTile } from '../types';
 
 @Component({
   selector: 'q-tmap-set',

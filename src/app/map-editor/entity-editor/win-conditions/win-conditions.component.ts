@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { DBTile } from '../../map-editor.component';
+import { DBTile } from '../../types';
 
 @Component({
   selector: 'q-win-conditions',

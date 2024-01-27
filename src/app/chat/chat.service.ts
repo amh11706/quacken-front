@@ -2,37 +2,15 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as dayjs from 'dayjs';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
-import { InCmd, OutCmd } from '../ws-messages';
+import { InCmd, OutCmd } from '../ws/ws-messages';
 
-import { WsService } from '../ws.service';
+import { WsService } from '../ws/ws.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { Sounds, SoundService } from '../sound.service';
+import { ChatMessage } from './types';
 
 dayjs.extend(relativeTime);
-
-export const TeamImages = {
-  0: { title: 'Defenders', src: 'assets/images/icon_defend1.png' },
-  1: { title: 'Attackers', src: 'assets/images/icon_attack1.png' },
-  2: { title: '2nd Attackers', src: 'assets/images/icon_attack2.png' },
-  3: { title: '3rd Attackers', src: 'assets/images/icon_attack3.png' },
-  99: { title: 'Watchers', src: 'assets/images/watch.png' },
-};
-
-export interface Message {
-  type: number;
-  message?: any;
-  team?: keyof typeof TeamImages;
-  op?: boolean;
-  from: string;
-  copy?: number;
-  sId?: number;
-  friend?: boolean;
-  blocked?: boolean;
-  time?: number | string;
-  ago?: string;
-  admin: number;
-}
 
 export interface Command {
     base: string, title: string, params: { name: string, value: string }[], help: string
@@ -43,8 +21,8 @@ export interface Command {
 })
 export class ChatService {
   commandHistory: string[] = [];
-  messages: Message[] = [];
-  messages$ = new BehaviorSubject<Message[]>([]);
+  messages: ChatMessage[] = [];
+  messages$ = new BehaviorSubject<ChatMessage[]>([]);
   saveText = '';
   historyIndex = -1;
   commands$ = new BehaviorSubject<Command[]>([]);
@@ -82,7 +60,7 @@ export class ChatService {
       this.commands$.next(lobbyCommands);
     });
 
-    this.ws.subscribe(InCmd.ChatMessage, (message: Message) => {
+    this.ws.subscribe(InCmd.ChatMessage, (message: ChatMessage) => {
       // if (message.type === 6) return;
       if ((document.hidden && message.type === 5) || [8, 9].includes(message.type)) {
         void sound.play(Sounds.Notification);

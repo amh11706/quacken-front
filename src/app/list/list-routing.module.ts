@@ -14,10 +14,6 @@ const routes: Routes = [
         component: LobbyListComponent,
       },
       {
-        path: 'bnav',
-        loadChildren: () => import('../bnav/bnav.module').then(m => m.BnavModule),
-      },
-      {
         path: 'lobby/:id',
         loadChildren: () => import('../lobby/lobby.module').then(m => m.LobbyModule),
       },

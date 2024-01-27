@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { TileSetComponent } from '../tile-set/tile-set.component';
-import { DBTile } from '../map-editor.component';
+import { DBTile } from '../types';
 
 @Component({
   selector: 'q-structure-set',

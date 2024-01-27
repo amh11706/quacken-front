@@ -1,14 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { toBlob } from 'html-to-image';
-
-export interface PenaltySummary {
-  name: string,
-  map: string,
-  penalties: number[],
-  turns: { turn: number, quantity: number }[][],
-  total: number,
-}
+import { PenaltySummary } from '../types';
 
 export const Penalties = [
   { title: 'Rock bump', value: 2500 },

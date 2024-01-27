@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TeamImages } from '../../chat.service';
 import { FriendsService } from '../friends.service';
+import { TeamImages } from '../../../lobby/cadegoose/types';
 
 @Component({
   selector: 'q-player-list',

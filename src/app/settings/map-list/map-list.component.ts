@@ -3,12 +3,13 @@ import { ReplaySubject, Subscription } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { Internal, OutCmd } from '../../ws-messages';
-import { WsService } from '../../ws.service';
-import { SettingPartial, SettingsService } from '../settings.service';
+import { Internal, OutCmd } from '../../ws/ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { SettingsService } from '../settings.service';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { Settings } from '../setting/settings';
-import { MapOption } from './map-card/map-card.component';
+import { SettingPartial } from '../types';
+import { MapOption } from './map-card/types';
 
 const enum SortOptions {
   AscendingAvgRating = 'Ascending Avg. Rating',
@@ -122,7 +123,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       generatedMap.description = l.seed;
     }));
     this.initGenerated();
-    this.servermapList.push(...await this.ws.request(OutCmd.CgMapList, this.rankArea));
+    this.servermapList.push(...(await this.ws.request(OutCmd.CgMapList, this.rankArea) || []));
     this.filteredMapList = this.servermapList;
     this.sort(this.selectedSortOption);
     this.initFilters();

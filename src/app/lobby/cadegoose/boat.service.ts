@@ -7,16 +7,15 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import { WsService } from '../../ws.service';
-import { OutCmd, Internal } from '../../ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { OutCmd, Internal } from '../../ws/ws-messages';
 import { Sounds, SoundService } from '../../sound.service';
-import { BoatsComponent, Clutter, Turn } from '../quacken/boats/boats.component';
+import { BoatsComponent } from '../quacken/boats/boats.component';
 import { Cannonball } from './clutter/cannonball';
 import { BoatRender } from './boat-render';
 import { JobQueue } from './job-queue';
-import { BoatSync, BoatStatus } from '../quacken/boats/convert';
 import { ObstacleConfig } from './threed-render/threed-render.component';
-import { Team } from '../quacken/boats/boat';
+import { Team, BoatSync, Turn, BoatStatus, Clutter } from '../quacken/boats/types';
 
 export const flagMats: Record<Team, Material> = {
   0: new MeshStandardMaterial({ color: 'green', side: DoubleSide }),

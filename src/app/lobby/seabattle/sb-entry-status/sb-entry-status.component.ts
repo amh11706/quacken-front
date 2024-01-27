@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { InCmd, Internal } from '../../../ws-messages';
-import { Stat, StatRow } from '../../cadegoose/stats/stats.component';
+import { InCmd, Internal } from '../../../ws/ws-messages';
 import { Lobby } from '../../lobby.component';
-import { Turn } from '../../quacken/boats/boats.component';
 import { CadeEntryStatusComponent } from '../../cadegoose/cade-entry-status/cade-entry-status.component';
+import { StatRow, Stat } from '../../cadegoose/stats/types';
+import { Turn } from '../../quacken/boats/types';
 
 @Component({
   selector: 'q-sb-entry-status',

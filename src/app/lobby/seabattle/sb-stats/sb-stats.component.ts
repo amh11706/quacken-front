@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Stat, StatsComponent } from '../../cadegoose/stats/stats.component';
+import { StatsComponent } from '../../cadegoose/stats/stats.component';
+import { Stat } from '../../cadegoose/stats/types';
 
 export const SB_STATS = [
   { stat: Stat.ShotsHit, title: 'Shots Hit' },

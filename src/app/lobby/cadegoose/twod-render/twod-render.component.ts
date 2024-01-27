@@ -2,10 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit,
 import { Subscription } from 'rxjs';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
-import { SettingsService, SettingMap } from '../../../settings/settings.service';
-import { InCmd, Internal } from '../../../ws-messages';
-import { WsService } from '../../../ws.service';
-import { MapEditor, MapTile } from '../../../map-editor/map-editor.component';
+import { SettingsService } from '../../../settings/settings.service';
+import { InCmd, Internal } from '../../../ws/ws-messages';
+import { WsService } from '../../../ws/ws.service';
 import { Boat } from '../../quacken/boats/boat';
 import { JsonSprite, Sprite, SpriteImage } from './sprite';
 import { BigRockData } from './objects/big_rock';
@@ -15,7 +14,9 @@ import { GuBoat, Point, Position } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { Lobby } from '../../lobby.component';
-import { Turn } from '../../quacken/boats/boats.component';
+import { MapEditor, MapTile } from '../../../map-editor/types';
+import { SettingMap } from '../../../settings/types';
+import { Turn } from '../../quacken/boats/types';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = 0 | 1 | 2 | 3;

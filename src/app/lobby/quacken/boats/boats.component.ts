@@ -2,45 +2,14 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import * as TWEEN from '@tweenjs/tween.js';
 
-import { InCmd, Internal, OutCmd } from '../../../ws-messages';
-import { WsService } from '../../../ws.service';
-import { Boat, Team } from './boat';
-import { BoatStatus, BoatSync, boatToSync, syncToBoat } from './convert';
+import { InCmd, Internal, OutCmd } from '../../../ws/ws-messages';
+import { WsService } from '../../../ws/ws.service';
+import { Boat } from './boat';
+import { boatToSync, syncToBoat } from './convert';
 import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
-import { StatRow } from '../../cadegoose/stats/stats.component';
 import { BoatRender } from '../../cadegoose/boat-render';
-
-export interface Clutter {
-  id?: number;
-  t: number;
-  x: number;
-  y: number;
-  d?: number;
-  p?: boolean;
-  dir?: number;
-  dis?: number;
-  dbl?: number;
-  tm?: number;
-  tf?: number;
-  u?: { x: number, y: number, v: number }[];
-}
-
-export interface Turn {
-  turn: number;
-  steps: BoatStatus[][];
-  cSteps: Clutter[][];
-  treasure: number[];
-  points: number[];
-  flags: { x: number, y: number, t: Team, p: number, cs: number[] }[];
-  stats: Record<number, StatRow>;
-}
-
-export interface Sync {
-  sync: BoatSync[];
-  cSync: Clutter[];
-  turn: number;
-}
+import { Clutter, Turn, BoatSync, Sync } from './types';
 
 @Component({
   selector: 'q-boats',

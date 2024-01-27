@@ -1,6 +1,5 @@
 import { BoatRender } from '../../cadegoose/boat-render';
-
-export type Team = 0 | 1 | 2 | 3 | 99 | 100;
+import { Team } from './types';
 
 export class Boat {
   treasure = 0;

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { TileTypes } from '../tile-set/tile-set.component';
-import { MapEditor } from '../map-editor.component';
+import { MapEditor } from '../types';
 
 @Component({
   selector: 'q-structure-map',

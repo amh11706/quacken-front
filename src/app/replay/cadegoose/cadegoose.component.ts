@@ -8,29 +8,20 @@ import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/
 import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent } from '@angular/material/legacy-autocomplete';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
-import { InMessage, WsService } from '../../ws.service';
-import { InCmd, Internal, OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
 import { Boat } from '../../lobby/quacken/boats/boat';
-import { BoatTick } from '../../lobby/quacken/hud/hud.component';
 import { Lobby } from '../../lobby/lobby.component';
-import { AiRender, Points, AiData, AiBoatData } from './ai-render';
+import { AiRender } from './ai-render';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
-import { Penalties, PenaltyComponent, PenaltySummary } from './penalty/penalty.component';
+import { Penalties, PenaltyComponent } from './penalty/penalty.component';
 import { SettingsService } from '../../settings/settings.service';
-import { ParsedTurn, ParseTurns } from './parse-turns';
+import { ParseTurns } from './parse-turns';
 import { GuBoat, Point } from '../../lobby/cadegoose/twod-render/gu-boats/gu-boat';
-
-interface ScoreResponse {
-  totals: PenaltySummary[]
-  turns: number[][][]
-}
-
-enum ClaimOption {
-  MinPoints,
-  DuplicateDeterence,
-  RockValue,
-  WindValue,
-}
+import { ParsedTurn } from '../../lobby/cadegoose/types';
+import { BoatTick } from '../../lobby/quacken/boats/types';
+import { InMessage } from '../../ws/ws-request-types';
+import { AiBoatData, AiData, ClaimOptions, Points, ScoreResponse } from './types';
 
 @Component({
   selector: 'q-replay-cadegoose',
@@ -106,14 +97,13 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     'lime',
   ];
 
-  claimOptions = {
-    [ClaimOption.MinPoints]: 70,
-    [ClaimOption.DuplicateDeterence]: 80,
-    [ClaimOption.RockValue]: 50,
-    [ClaimOption.WindValue]: 75,
+  claimOptions: ClaimOptions = {
+    MinPoints: 70,
+    DuplicateDeterence: 80,
+    RockValue: 50,
+    WindValue: 75,
   };
 
-  ClaimOption = ClaimOption;
   ships = [
     { value: 27, label: 'Grand Frigate' },
     { value: 26, label: 'War Frigate' },
@@ -275,6 +265,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   }
 
   async getScores(): Promise<void> {
+    if (!this.map) return;
     this.scores = await this.ws.request(OutCmd.MatchScore, {
       turns: this.turns,
       map: this.map,
@@ -346,14 +337,17 @@ export class CadegooseComponent implements OnInit, OnDestroy {
         lastBoatFound = true;
         this.activeAiBoat = boat;
       }
-      boat.boat = this.boats.find(b => b.id === boat.id);
+      boat.name = this.boats.find(b => b.id === boat.id)?.name || '';
     }
     if (lastBoatFound) this.selectAiBoat(this.activeAiBoat);
   }
 
   selectAiBoat(boat?: AiBoatData, clickBoat = true): void {
     this.activeAiBoat = boat;
-    if (clickBoat && boat?.boat) this.clickBoat(boat.boat, false, false);
+    if (clickBoat && boat) {
+      const boatRender = this.boats.find(b => b.id === boat.id);
+      if (boatRender) this.clickBoat(boatRender, false, false);
+    }
     this.aiRender.setBoat(boat);
     this.aiRender.setClaims(this.aiData?.claims || []);
   }

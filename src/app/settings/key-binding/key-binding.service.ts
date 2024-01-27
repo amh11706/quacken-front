@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../settings.service';
 import { DefaultBindings, KeyActions, KeyBindings, NotActive, StaticKeyBindings } from './key-actions';
 

@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Internal, InCmd } from '../../../ws-messages';
-import { WsService } from '../../../ws.service';
+import { Internal, InCmd } from '../../../ws/ws-messages';
+import { WsService } from '../../../ws/ws.service';
 import { Lobby } from '../../lobby.component';
-import { Turn } from '../boats/boats.component';
+import { Turn } from '../boats/types';
 
 @Component({
   selector: 'q-entry-status',

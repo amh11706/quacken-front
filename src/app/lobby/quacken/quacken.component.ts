@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Settings } from '../../settings/setting/settings';
-import { InCmd, Internal, OutCmd } from '../../ws-messages';
+import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
-import { WsService } from '../../ws.service';
-import { SettingsService, SettingMap } from '../../settings/settings.service';
+import { WsService } from '../../ws/ws.service';
+import { SettingsService } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { Lobby } from '../lobby.component';
+import { SettingMap } from '../../settings/types';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',

@@ -2,12 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { WsService } from '../ws.service';
+import { WsService } from '../ws/ws.service';
 import { SettingsService } from '../settings/settings.service';
-import { Clutter } from './quacken/boats/boats.component';
-import { InCmd, OutCmd } from '../ws-messages';
-import { StatRow } from './cadegoose/stats/stats.component';
-import { BoatSync } from './quacken/boats/convert';
+import { InCmd, OutCmd } from '../ws/ws-messages';
+import { StatRow } from './cadegoose/stats/types';
+import { BoatSync, Clutter } from './quacken/boats/types';
 
 export interface Lobby {
   owner: boolean;
@@ -57,7 +56,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
       this.lobby = l;
     }));
     this.sub.add(this.ws.connected$.subscribe(v => {
-      if (!v) return;
+      if (!v || !this.id) return;
       if (!this.sent) this.ws.send(OutCmd.LobbyJoin, this.id);
       this.sent = true;
     }));

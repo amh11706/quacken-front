@@ -3,8 +3,9 @@ import { Subscription } from 'rxjs';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Router } from '@angular/router';
-import { ChatService, Message } from './chat.service';
-import { FriendsService, Invite } from './friends/friends.service';
+import { ChatService } from './chat.service';
+import { FriendsService } from './friends/friends.service';
+import { Invite, Message } from './types';
 
 @Component({
   selector: 'q-chat',

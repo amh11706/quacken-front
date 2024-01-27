@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WsService } from '../ws.service';
+import { WsService } from '../ws/ws.service';
 
 @Component({
   selector: 'q-lobby-list',

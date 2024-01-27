@@ -6,7 +6,7 @@ import { AuthGuard } from '../../auth.guard';
 import { environment } from '../../../environments/environment';
 import { PrivacyComponent } from '../privacy/privacy.component';
 import { TermsComponent } from '../terms/terms.component';
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 
 @Component({
   selector: 'q-login-form',

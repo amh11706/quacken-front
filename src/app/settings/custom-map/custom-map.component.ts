@@ -1,8 +1,14 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { SettingPartial } from '../settings.service';
-import { WsService } from '../../../app/ws.service';
+import { WsService } from '../../ws/ws.service';
 import { CustomMapSetting } from '../setting/settings';
+import { SettingPartial } from '../types';
+import { OutCmd } from '../../ws/ws-messages';
+import { MapOption } from '../map-list/map-card/types';
+
+interface DropdownMapOption extends MapOption {
+  label: string;
+}
 
 @Component({
   selector: 'q-custom-map',
@@ -15,14 +21,15 @@ export class CustomMapComponent implements OnInit {
   @Input() disabled = false;
   @Output() save = new EventEmitter();
 
-  data: { id: number, name: string, label: string, username: string }[] = [];
+  data: DropdownMapOption[] = [];
   loading = true;
 
   constructor(private ws: WsService) { }
 
   async ngOnInit(): Promise<void> {
     if (!this.setting) console.error('CustomMapComponent requires setting input');
-    const m = await this.ws.request(this.setting.cmd, this.setting.data);
+    const m = await this.ws.request(OutCmd.MapList) as DropdownMapOption[] | undefined;
+    if (!m) return;
     for (const i of m) i.label = i.name + ' (' + i.username + ')';
     this.data = m;
     this.loading = false;

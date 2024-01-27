@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef } from '@angular/core';
-
-import { MapEditor } from '../map-editor.component';
+import { MapEditor } from '../types';
 
 export const Titles = [
   'Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg',

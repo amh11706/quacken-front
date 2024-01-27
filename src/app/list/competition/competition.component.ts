@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 import { Competitions } from './competition';
-import { InCmd, OutCmd } from '../../ws-messages';
-import { SettingMap } from '../../settings/settings.service';
+import { InCmd, OutCmd } from '../../ws/ws-messages';
+import { SettingMap } from '../../settings/types';
 
 @Component({
   selector: 'q-competition',

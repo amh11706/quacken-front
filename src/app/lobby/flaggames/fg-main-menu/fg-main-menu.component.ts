@@ -5,10 +5,10 @@ import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Settings, BoatSetting } from '../../../settings/setting/settings';
 import { SettingsService } from '../../../settings/settings.service';
 import { SoundService } from '../../../sound.service';
-import { WsService } from '../../../ws.service';
+import { WsService } from '../../../ws/ws.service';
 import { MainMenuComponent } from '../../cadegoose/main-menu/main-menu.component';
-import { Stat } from '../../cadegoose/stats/stats.component';
 import { FgHelpComponent } from '../fg-help/fg-help.component';
+import { Stat } from '../../cadegoose/stats/types';
 
 export const FgColumns = [
   { stat: Stat.PointsScored, title: 'Flags Returned' },

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { MapEditor } from '../map-editor.component';
+import { MapEditor } from '../types';
 
 @Component({
   selector: 'q-entity-editor',

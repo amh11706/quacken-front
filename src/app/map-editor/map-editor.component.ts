@@ -2,65 +2,14 @@
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { WsService } from '../ws.service';
+import { WsService } from '../ws/ws.service';
 import { GuideComponent } from './guide/guide.component';
-import { InCmd, OutCmd } from '../ws-messages';
+import { InCmd, OutCmd } from '../ws/ws-messages';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { TwodRenderComponent } from '../lobby/cadegoose/twod-render/twod-render.component';
-
-export interface MapTile {
-  x: number; y: number; v: number;
-}
-
-export type MapGroups = 'maps' | 'cgmaps' | 'fgmaps' | 'tile_sets' | 'tiles' | 'structure_sets' | 'structures' | 'tmaps' | 'tmap_sets';
-
-export interface StructureData {
-  group: number;
-  type: number;
-  density: number;
-  x1: number;
-  x2: number;
-  y1: number;
-  y2: number;
-}
-
-export interface DBTile {
-  id: number;
-  name: string;
-  data?: any[];
-  unsaved?: boolean;
-  description?: string;
-  type: number;
-  group: MapGroups;
-  tile_set?: number;
-  tmap_set?: number;
-  structure_set?: number;
-  released?: boolean;
-  weight?: number;
-  undos: MapTile[][];
-  redos: MapTile[][];
-  activeFeature?: StructureData;
-  activeGroup?: number;
-  settings?: any;
-  error?: string;
-  tags: string[];
-  rankArea?: number;
-}
-
-export interface MapEditor {
-  selected: number;
-  selectedTile: DBTile;
-  tileSet?: DBTile;
-  tiles?: DBTile[][];
-  tmapSet?: DBTile;
-  tmaps?: DBTile[];
-  structureSet?: DBTile;
-  structures?: DBTile[];
-  settingsOpen: boolean;
-  tileSettings?: boolean;
-}
+import { MapGroups, MapEditor, MapTile, DBTile } from './types';
 
 interface RenderSetting {
   width: number;
@@ -198,7 +147,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
       tile.group = 'tmaps';
       tile.tmap_set = this.editor.tmapSet.id;
     }
-    const newTile: any = {};
+    const newTile = {} as DBTile;
     Object.assign(newTile, tile);
     const message = await this.ws.request(OutCmd.MapSave, newTile);
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: message ?? 'Saved.' } });

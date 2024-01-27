@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { WsService } from '../../../ws.service';
-import { InCmd, OutCmd } from '../../../ws-messages';
+import { WsService } from '../../../ws/ws.service';
+import { InCmd, OutCmd } from '../../../ws/ws-messages';
 import { Lobby } from '../../lobby.component';
 
 interface Player {
@@ -122,7 +122,7 @@ export class SpotComponent implements OnInit, OnDestroy {
 
   kick(spot: number): void { this.ws.send(OutCmd.Kick, spot); }
 
-  ready(): void { this.ws.send(OutCmd.Ready); }
+  ready(): void { this.ws.send(OutCmd.Ready, undefined); }
 
   showCards(): void {
     this.offerBlind = false;

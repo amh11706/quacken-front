@@ -1,50 +1,16 @@
 import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Subject } from 'rxjs';
-import { WsService } from '../../ws.service';
-import { OutCmd } from '../../ws-messages';
+import { WsService } from '../../ws/ws.service';
+import { OutCmd } from '../../ws/ws-messages';
 import { FriendsService } from '../../chat/friends/friends.service';
-import { Message } from '../../chat/chat.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { EscMenuService } from '../esc-menu.service';
+import { UserRank, Leader, RankLeader, Stat, WinLoss } from './types';
 
 const StatColumns = ['position', 'name', 'value'];
 const StatColumnsWithReplay = [...StatColumns, 'replay'];
-
-export interface Stat {
-  id: number;
-  name: string;
-  value: number;
-  suffix?: number;
-}
-
-interface Leader extends Message {
-  name: string;
-  value: number;
-  details?: string;
-  clean?: boolean;
-  seed?: string;
-  matchId?: number;
-}
-
-interface RankLeader extends Message {
-  userName: string;
-  level: number;
-  tier: number;
-}
-
-export interface UserRank {
-  name: string;
-  level: number;
-  tier: number;
-  rankArea: number;
-  xp: number;
-  nextXp: number;
-  prevXp: number;
-  progress: number;
-  title: string;
-}
 
 const placeholderRank = {
   name: 'Loading...',
@@ -75,12 +41,7 @@ export class StatService {
   userRanks: UserRank[] = [placeholderRank];
   columns = StatColumns;
 
-  winLoss: {
-    wins: number;
-    losses: number;
-    winsVsMe?: number;
-    lossesVsMe?: number;
-  } = { wins: 0, losses: 0 };
+  winLoss: WinLoss = { wins: 0, losses: 0 };
 
   constructor(
     private ws: WsService,
@@ -90,7 +51,8 @@ export class StatService {
   ) { }
 
   async updateWinLoss(): Promise<void> {
-    this.winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group + 1 });
+    const winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group + 1 });
+    this.winLoss = winLoss || { wins: 0, losses: 0 };
   }
 
   emitTab(): void {
@@ -127,7 +89,7 @@ export class StatService {
 
   async refresh(): Promise<void> {
     this.userRanks = [placeholderRank];
-    this.userRanks = await this.ws.request(OutCmd.RanksUser, this.target);
+    this.userRanks = await this.ws.request(OutCmd.RanksUser, this.target) || [];
     if (this.userRanks !== undefined) {
       for (const rank of this.userRanks) {
         rank.progress = (rank.xp - (rank.prevXp || 0)) * 100 / (rank.nextXp - (rank.prevXp || 0));
@@ -136,7 +98,7 @@ export class StatService {
       }
       const stats = await this.ws.request(OutCmd.StatsUser, this.target);
 
-      this.fillGroupStats(stats);
+      this.fillGroupStats(stats || []);
     }
     return this.updateWinLoss();
   }
@@ -183,7 +145,7 @@ export class StatService {
     this.group = Math.floor(this.id / 100);
     if (this.id % 100 === 99) return this.getRankLeaders();
 
-    const leaders = await this.ws.request<Leader[]>(OutCmd.StatsTop, this.id);
+    const leaders = await this.ws.request(OutCmd.StatsTop, this.id);
     if (!leaders || !leaders.length) return;
 
     if (leaders[0]?.matchId) this.columns = StatColumnsWithReplay;

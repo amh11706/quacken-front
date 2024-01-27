@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 import { ChatService } from '../../chat/chat.service';
 import { FriendsService } from '../../chat/friends/friends.service';
 

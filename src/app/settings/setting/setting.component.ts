@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
-import { WsService } from '../../ws.service';
+import { WsService } from '../../ws/ws.service';
 import { AdvancedComponent } from '../advanced/advanced.component';
-import { SettingsService, SettingMap, SettingPartial } from '../settings.service';
+import { SettingsService } from '../settings.service';
 
-import { Setting, Settings } from './settings';
+import { SettingInput, Settings } from './settings';
+import { SettingMap, SettingPartial } from '../types';
 
 export const links: Record<number, string> = {
   14: 'smsloop/smsloop',
@@ -43,7 +44,7 @@ export class SettingComponent {
 
   @Output() valueChange = new EventEmitter<number>();
 
-  setting = {} as Setting;
+  setting = {} as SettingInput;
   group: SettingMap = {};
   settingValue = {} as SettingPartial;
   getShipLink = getShipLink;
@@ -98,6 +99,7 @@ export class SettingComponent {
 
   send(): void {
     if (this.setting.type !== 'button') return;
+    if (!this.setting.trigger) return;
     this.ws.send(this.setting.trigger, this.setting.data);
   }
 

@@ -1,19 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Message, TeamImages } from '../../../chat/chat.service';
 import { FriendsService } from '../../../chat/friends/friends.service';
-import { WsService } from '../../../ws.service';
-import { InCmd, Internal, OutCmd } from '../../../ws-messages';
+import { WsService } from '../../../ws/ws.service';
+import { InCmd, Internal, OutCmd } from '../../../ws/ws-messages';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { links } from '../../../settings/setting/setting.component';
-import { SettingPartial, SettingsService } from '../../../settings/settings.service';
+import { SettingsService } from '../../../settings/settings.service';
 import { Sounds, SoundService } from '../../../sound.service';
 import { Boat } from '../../quacken/boats/boat';
-import { Turn } from '../../quacken/boats/boats.component';
 import { Lobby } from '../../lobby.component';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 import { BoatSetting, Settings } from '../../../settings/setting/settings';
+import { Message } from '../../../chat/types';
+import { SettingPartial } from '../../../settings/types';
+import { Turn } from '../../quacken/boats/types';
+import { TeamImages } from '../types';
 
 interface TeamMessage {
   id: number;
@@ -208,7 +210,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   }
 
   updateJobbers(v: number | null): void {
-    this.ws.send(OutCmd.SetMyJobbers, v);
+    this.ws.send(OutCmd.SetMyJobbers, v ?? 100);
   }
 
   public plural(length: number): string {
