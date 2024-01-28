@@ -1,8 +1,8 @@
 <div *ngIf="setting.type === 'boat'"
      class="setting boat">
   <mat-select *ngIf="settingValue"
-              [(ngModel)]="settingValue.value"
-              (selectionChange)="save()">
+              [value]="settingValue.stream | async"
+              (selectionChange)="save($event.value)">
     <mat-select-trigger>
       <img *ngIf="settingValue.value !== undefined"
            [src]="getShipLink(settingValue.value)"
@@ -25,8 +25,8 @@
      class="setting">
   <mat-form-field>
     <mat-label>{{setting.label}}</mat-label>
-    <mat-select [(value)]="settingValue.value"
-                (selectionChange)="save()"
+    <mat-select [value]="settingValue.value"
+                (selectionChange)="save($event.value)"
                 [disabled]="setting.admin && !ss.admin">
       <mat-option *ngFor="let option of setting.options; let i = index"
                   [value]="i">{{option}}</mat-option>
@@ -53,9 +53,9 @@
   <mat-slider [min]="setting.min"
               [max]="setting.max"
               [step]="setting.step"
-              [value]="settingValue.value"
+              [value]="settingValue.stream | async"
               [disabled]="setting.admin && !ss.admin"
-              (input)="settingValue.value=$event.value || 0; save()">
+              (input)="save($event.value || 0)">
   </mat-slider>
   <mat-icon *ngIf="setting.advancedComponent"
             title="Advanced"
@@ -64,8 +64,8 @@
 
 <div *ngIf="setting.type === 'checkbox'"
      class="setting">
-  <mat-checkbox [(ngModel)]="settingValue.value"
-                (change)="save()"
+  <mat-checkbox [checked]="!!(settingValue.stream | async)"
+                (change)="save(+$event.checked)"
                 [disabled]="setting.admin && !ss.admin || false">
     <span [innerHTML]="setting.label"></span>
   </mat-checkbox>
@@ -74,7 +74,7 @@
 <div *ngIf="setting.type === 'customMap'"
      class="setting">
   <q-custom-map [settingValue]="settingValue"
-                (save)="save()"
+                (save)="save($event)"
                 [setting]="setting"
                 [disabled]="setting.admin && !ss.admin || false">
   </q-custom-map>

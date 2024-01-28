@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 import { WsService } from '../../ws/ws.service';
@@ -34,8 +34,8 @@ export function getShipLink(id: number): string {
   selector: 'q-setting',
   templateUrl: './setting.component.html',
   styleUrls: ['./setting.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class SettingComponent {
   @Input() set name(value: keyof typeof Settings) {
     this.setting = Settings[value] || {};
@@ -50,12 +50,19 @@ export class SettingComponent {
   getShipLink = getShipLink;
   private debounce?: number;
 
-  constructor(public ss: SettingsService, private ws: WsService, private dialog: MatDialog) { }
+  constructor(
+    public ss: SettingsService,
+    private ws: WsService,
+    private dialog: MatDialog,
+    private cd: ChangeDetectorRef,
+  ) { }
 
   private async fetch() {
+    if (!this.setting.name) return;
     this.group[this.setting.name] = { value: 0 };
     if (this.setting.group) this.group = await this.ss.getGroup(this.setting.group);
     this.settingValue = this.group[this.setting.name] ?? this.settingValue;
+    this.cd.detectChanges();
   }
 
   openAdvanced(): void {
@@ -70,7 +77,7 @@ export class SettingComponent {
       if (value !== 'true') return;
       // only assign the value if the user clicked save.
       Object.assign(this.settingValue, copy);
-      this.save();
+      this.save(copy.value);
     });
   }
 
@@ -103,8 +110,10 @@ export class SettingComponent {
     this.ws.send(this.setting.trigger, this.setting.data);
   }
 
-  save(): void {
+  save(value: number): void {
     const newSetting = this.settingValue;
+    if (value !== newSetting.value) newSetting.stream?.next(value);
+    newSetting.value = value;
     if (this.setting.type === 'slider') {
       if (newSetting.value > this.setting.max) newSetting.value = this.setting.max;
       else if (newSetting.value < this.setting.min) newSetting.value = this.setting.min;

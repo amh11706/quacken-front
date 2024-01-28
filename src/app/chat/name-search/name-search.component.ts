@@ -13,9 +13,14 @@ import { FriendsService } from '../friends/friends.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NameSearchComponent implements OnInit {
-  @Input() value = '';
+  @Input() set value(v: string) {
+    this.myControl.setValue(v);
+  }
+
   @Output() valueChange = new EventEmitter<string>();
   @Input() onlineOnly = false;
+  @Input() matInput = true;
+  @Input() clearOnFocus = true;
   searchedNames?: Observable<string[]>;
   myControl = new UntypedFormControl();
 

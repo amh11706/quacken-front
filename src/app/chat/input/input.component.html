@@ -17,8 +17,12 @@
     <ng-container [ngSwitch]="param.name">
       <q-name-search *ngSwitchCase="'name'"
                      [onlineOnly]="true"
+                     [matInput]="false"
+                     [clearOnFocus]="false"
                      [(value)]="param.value"></q-name-search>
       <q-name-search *ngSwitchCase="'nameany'"
+                     [matInput]="false"
+                     [clearOnFocus]="false"
                      [(value)]="param.value"></q-name-search>
 
       <span *ngSwitchCase="'new'">new</span>

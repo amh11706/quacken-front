@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { FriendsService } from '../../../chat/friends/friends.service';
 import { WsService } from '../../../ws/ws.service';
@@ -19,6 +19,7 @@ import { Lobby, TeamMessage } from '../types';
   selector: 'q-main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainMenuComponent implements OnInit, OnDestroy {
   teamColors = TeamColorsCss;
@@ -26,7 +27,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   boatTitles = (Settings.nextCadeBoat as BoatSetting).titles;
 
   links = links;
-  teamPlayers: Message[][] = [];
+  teamPlayers$ = new BehaviorSubject<Message[][]>([]);
   teams: { [key: number]: TeamMessage } = {};
   myBoat = new Boat('');
   myTeam = 99;
@@ -42,7 +43,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   constructor(
     public ws: WsService,
-    private fs: FriendsService,
+    public fs: FriendsService,
     public es: EscMenuService,
     public ss: SettingsService,
     private sound: SoundService,
@@ -66,17 +67,19 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.teams = m.players;
       this.ready = false;
       this.myTeam = 99;
-      this.teamPlayers = [];
-      for (let i = 0; i < m.points.length; i++) this.teamPlayers.push([]);
+      const teamPlayers = [];
+      for (let i = 0; i < m.points.length; i++) teamPlayers.push([]);
+      this.teamPlayers$.next(teamPlayers);
+
       const lobby = this.fs.lobby$.getValue();
       for (const [id, p] of Object.entries(this.teams)) {
-        this.setTeam(+id, p.t);
+        this.setTeam(+id, p.t, false);
         if (+id === this.ws.sId) {
           this.ready = p.r;
           this.myTeam = p.t;
         }
         const user = lobby.find((mes) => mes.sId === +id);
-        if (!user) return;
+        if (!user) continue;
         user.team = p.t;
         user.op = p.a;
       }
@@ -91,9 +94,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
           this.myTeam = t.t;
           this.ready = t.r;
         }
-        this.setTeam(t.id, t.t);
+        this.setTeam(t.id, t.t, false);
         const user = lobby.find((mes) => mes.sId === t.id);
-        if (!user) return;
+        if (!user) continue;
         user.team = t.t;
         user.op = t.a;
         if (user.sId === this.ws.sId) {
@@ -101,6 +104,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
           this.fs.allowInvite = t.a;
         }
       }
+      this.teamPlayers$.next([...this.teamPlayers$.getValue()]);
       this.fs.lobby$.next(lobby);
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, m => {
@@ -180,22 +184,27 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     delete this.teams[id];
   }
 
-  private resetUser(id: number) {
-    this.teamPlayers = this.teamPlayers.map(team => {
-      return team.filter((m) => m.sId !== id);
-    });
+  private resetUser(id: number, broadcast = true) {
+    const teamPlayers = this.teamPlayers$.getValue();
+    for (const index in teamPlayers) {
+      const team = teamPlayers[index];
+      if (!team) continue;
+      teamPlayers[index] = team.filter((m) => m.sId !== id);
+    }
+    if (broadcast) this.teamPlayers$.next(teamPlayers);
   }
 
-  private setTeam(id: number, team: number) {
-    this.resetUser(id);
+  private setTeam(id: number, team: number, broadcast = true) {
+    this.resetUser(id, broadcast);
     if (team === 99) return;
     let user = this.fs.lobby$.getValue().find((m) => m.sId === id);
     if (!user) return;
 
     user = { ...user };
     user.message = this.teams[id];
-    while (this.teamPlayers.length <= team) this.teamPlayers.push([]);
-    this.teamPlayers[team]?.push(user);
+    const teamPlayers = this.teamPlayers$.getValue();
+    while (teamPlayers.length <= team) teamPlayers.push([]);
+    teamPlayers[team]?.push(user);
   }
 
   updateJobbers(v: number | null): void {

@@ -21,7 +21,6 @@ export class InputComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {
-      console.log('focus', v);
       if (v && !this.disabled) {
         this.focusChat();
       }

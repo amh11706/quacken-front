@@ -19,7 +19,7 @@ export class CustomMapComponent implements OnInit {
   @Input() settingValue?: SettingPartial;
   @Input() setting!: CustomMapSetting;
   @Input() disabled = false;
-  @Output() save = new EventEmitter();
+  @Output() save = new EventEmitter<number>();
 
   data: DropdownMapOption[] = [];
   loading = true;
@@ -40,6 +40,6 @@ export class CustomMapComponent implements OnInit {
     if (!setting) return;
     const selected = this.data.find(el => el.id === +setting.value);
     setting.data = selected?.label || 'Generated';
-    this.save.emit();
+    this.save.emit(+setting.value);
   }
 }

@@ -1,9 +1,10 @@
-<mat-form-field [appearance]="'fill'">
+<mat-form-field *ngIf="matInput; else nonMat"
+                [appearance]="'fill'">
   <mat-label>Player name</mat-label>
   <input #name
          matInput
          [value]="value"
-         (focus)="myControl.setValue('')"
+         (focus)="clearOnFocus && myControl.setValue('')"
          (blur)="myControl.setValue(value)"
          [formControl]="myControl"
          [matAutocomplete]="auto">
@@ -18,3 +19,21 @@
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
+
+<ng-template #nonMat>
+  <input #name
+         [value]="value"
+         (focus)="clearOnFocus && myControl.setValue('')"
+         (blur)="myControl.setValue(value)"
+         [formControl]="myControl"
+         [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete"
+                    [autoSelectActiveOption]="true"
+                    (optionSelected)="valueChange.emit($event.option.value); name.blur()"
+                    [autoActiveFirstOption]="true">
+    <mat-option *ngFor="let option of searchedNames | async"
+                [value]="option">
+      {{option}}
+    </mat-option>
+  </mat-autocomplete>
+</ng-template>

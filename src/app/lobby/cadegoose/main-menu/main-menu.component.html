@@ -7,66 +7,69 @@
   </div>
   <ng-template #teams>
     <h2 style="font-size: 20px;">Team Selection</h2>
-    <div id="flexmenu" *ngrxLet="es.open$ as open">
-      <div class="teamwrap"
-           *ngFor="let team of teamPlayers; let i = index">
-        <button mat-raised-button
-                [disabled]="!open || !ws.connected"
-                (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
-        <br>
-        <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
-        <div class="team"
-             [style.borderColor]="teamColors[i]">
-          <div *ngFor="let m of team"
-               class="lobbyPlayer"
-               [class.ready]="m.message.r">
-            <q-name [message]="m"></q-name>
-            <img *ngIf="m.sId === ws.sId && ws.connected; else boatImage"
-                 [matMenuTriggerFor]="jobbers"
-                 src="./assets/boats/{{links[m.message.b]}}.png"
-                 [class.lowjobbers]="m.message.jq < 100"
-                 [title]="boatTitles[m.message.b] + ' ' + m.message.jq + '%'">
-            <mat-menu #jobbers="matMenu">
-              <mat-card class="jobberSelect"
-                        (click)="$event.stopPropagation()">
-                <span>Your Jobber Quality ({{myJobbers}}%)</span><br>
-                <mat-slider [value]="myJobbers"
-                            (valueChange)="updateJobbers($event)"
-                            (input)="myJobbers = $event.value || 0"
-                            max="100"
-                            step="5"></mat-slider>
-              </mat-card>
-            </mat-menu>
-            <ng-template #boatImage>
-              <img src="./assets/boats/{{links[m.message.b]}}.png"
+    <div *ngrxLet="teamPlayers$ as teamPlayers">
+      <div id="flexmenu"
+           *ngrxLet="es.open$ as open">
+        <div class="teamwrap"
+             *ngFor="let team of teamPlayers; let i = index">
+          <button mat-raised-button
+                  [disabled]="!open || (ws.connected$ | async) === false"
+                  (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
+          <br>
+          <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
+          <div class="team"
+               [style.borderColor]="teamColors[i]">
+            <div *ngFor="let m of team"
+                 class="lobbyPlayer"
+                 [class.ready]="m.message.r">
+              <q-name [message]="m"></q-name>
+              <img *ngIf="m.sId === ws.sId && ws.connected; else boatImage"
+                   [matMenuTriggerFor]="jobbers"
+                   src="./assets/boats/{{links[m.message.b]}}.png"
                    [class.lowjobbers]="m.message.jq < 100"
                    [title]="boatTitles[m.message.b] + ' ' + m.message.jq + '%'">
-            </ng-template>
-            <span id="spawn"
-                  [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' : 'I'}}</span>
+              <mat-menu #jobbers="matMenu">
+                <mat-card class="jobberSelect"
+                          (click)="$event.stopPropagation()">
+                  <span>Your Jobber Quality ({{myJobbers}}%)</span><br>
+                  <mat-slider [value]="myJobbers"
+                              (valueChange)="updateJobbers($event)"
+                              (input)="myJobbers = $event.value || 0"
+                              max="100"
+                              step="5"></mat-slider>
+                </mat-card>
+              </mat-menu>
+              <ng-template #boatImage>
+                <img src="./assets/boats/{{links[m.message.b]}}.png"
+                     [class.lowjobbers]="m.message.jq < 100"
+                     [title]="boatTitles[m.message.b] + ' ' + m.message.jq + '%'">
+              </ng-template>
+              <span id="spawn"
+                    [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' : 'I'}}</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div id="buttons">
-        <button *ngIf="ss.admin && !roundGoing && ws.connected"
-                mat-raised-button
-                (click)="shuffleTeams()">Shuffle Teams</button>
-        <br>
-        <button mat-raised-button
-                [disabled]="!open || !ws.connected"
-                color="accent"
-                id="ready"
-                [class.cancel]="ready"
-                (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
-          'Ready'}}</button>
-        <ng-container *ngIf="open && ws.connected">
-          <q-setting *ngIf="ss.admin"
-                     name="startNew"
-                     id="start"></q-setting>
-          <q-setting name="nextCadeBoat"></q-setting>
-          <q-setting name="spawnSide"></q-setting>
-        </ng-container>
+        <div id="buttons">
+          <button *ngIf="ss.admin && !roundGoing && (ws.connected$ | async)"
+                  mat-raised-button
+                  (click)="shuffleTeams()">Shuffle Teams</button>
+          <br>
+          <button mat-raised-button
+                  [disabled]="!open || (ws.connected$ | async) === false"
+                  color="accent"
+                  id="ready"
+                  [class.cancel]="ready"
+                  (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
+            'Ready'}}</button>
+          <ng-container *ngIf="open && (ws.connected$ | async)">
+            <q-setting *ngIf="ss.admin"
+                       name="startNew"
+                       id="start"></q-setting>
+            <q-setting name="nextCadeBoat"></q-setting>
+            <q-setting name="spawnSide"></q-setting>
+          </ng-container>
+        </div>
       </div>
     </div>
   </ng-template>

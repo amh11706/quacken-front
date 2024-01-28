@@ -9,36 +9,38 @@
     <h2>Match Settings</h2>
     <div id="flexmenu"
          *ngrxLet="es.open$ as open">
-      <div class="teamwrap"
-           *ngFor="let team of teamPlayers; let i = index">
-        <div class="team"
-             [style.borderColor]="teamColors[i]">
-          <div *ngFor="let m of team"
-               class="lobbyPlayer"
-               [class.ready]="m.message.r">
-            <q-name [message]="m"></q-name>
-            <img src="./assets/boats/{{links[m.message.b]}}.png"
-                 [title]="boatTitles[m.message.b]">
+      <div *ngrxLet="teamPlayers$ as teamPlayers">
+        <div class="teamwrap"
+             *ngFor="let team of teamPlayers; let i = index">
+          <div class="team"
+               [style.borderColor]="teamColors[i]">
+            <div *ngFor="let m of team"
+                 class="lobbyPlayer"
+                 [class.ready]="m.message.r">
+              <q-name [message]="m"></q-name>
+              <img src="./assets/boats/{{links[m.message.b]}}.png"
+                   [title]="boatTitles[m.message.b]">
+            </div>
           </div>
+          <br>
+          <button mat-raised-button
+                  [disabled]="!open"
+                  (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
         </div>
-        <br>
-        <button mat-raised-button
-                [disabled]="!open"
-                (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
-      </div>
 
-      <div id="buttons">
-        <button mat-raised-button
-                [disabled]="!open"
-                color="accent"
-                id="ready"
-                [class.cancel]="ready"
-                (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
-          'Ready'}}</button>
-        <q-setting *ngIf="ss.admin"
-                   name="startNew"
-                   id="start"></q-setting>
-        <q-setting name="nextCadeBoat"></q-setting>
+        <div id="buttons">
+          <button mat-raised-button
+                  [disabled]="!open"
+                  color="accent"
+                  id="ready"
+                  [class.cancel]="ready"
+                  (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
+            'Ready'}}</button>
+          <q-setting *ngIf="ss.admin"
+                     name="startNew"
+                     id="start"></q-setting>
+          <q-setting name="nextCadeBoat"></q-setting>
+        </div>
       </div>
     </div>
   </ng-template>
