@@ -5,30 +5,7 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { WsService } from '../../ws/ws.service';
 import { SplitComponent } from './split/split.component';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
-
-export interface Item {
-  s: number;
-  id: number;
-  t: number;
-  q: number;
-  n: string;
-  f: boolean;
-}
-
-interface Inventory {
-  id: number;
-  userId: number;
-  items: Item[];
-  filtered: Item[];
-  sort: keyof Item;
-  currency: number;
-}
-
-interface InvUpdate {
-  del?: number[];
-  new?: Item[];
-  update?: { id: number, quantity: number }[];
-}
+import { Item, Inventory } from '../profile/types';
 
 @Component({
   selector: 'q-inventory',
@@ -70,13 +47,13 @@ export class InventoryComponent implements OnDestroy {
   private doSubs() {
     if (!this.id) return;
     this.ws.send(OutCmd.InventoryCmd, { cmd: 'o', id: this.id });
-    this.subs.add(this.ws.subscribe(InCmd.IntentoryOpen, (i: Inventory) => {
+    this.subs.add(this.ws.subscribe(InCmd.IntentoryOpen, i => {
       this.inventory$.next(i.items);
       this.inv = i;
       this.inv.filtered = i.items;
       this.sort(i.sort);
     }));
-    this.subs.add(this.ws.subscribe(InCmd.InventoryCoin, (q: number) => {
+    this.subs.add(this.ws.subscribe(InCmd.InventoryCoin, q => {
       if (this.inv) this.inv.currency = q;
     }));
     this.subs.add(this.ws.connected$.subscribe(v => {
@@ -84,7 +61,7 @@ export class InventoryComponent implements OnDestroy {
       this.ws.send(OutCmd.InventoryCmd, { cmd: 'o', id: this.id });
     }));
 
-    this.subs.add(this.ws.subscribe(InCmd.InventoryUpdate, (u: InvUpdate) => {
+    this.subs.add(this.ws.subscribe(InCmd.InventoryUpdate, u => {
       if (!this.inv) return;
       if (u.update) {
         for (const update of u.update) {

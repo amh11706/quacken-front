@@ -150,7 +150,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     const newTile = {} as DBTile;
     Object.assign(newTile, tile);
     const message = await this.ws.request(OutCmd.MapSave, newTile);
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: message ?? 'Saved.' } });
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: message ?? 'Saved.', from: '', admin: 0 } });
     tile.unsaved = false;
   }
 

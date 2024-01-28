@@ -3,7 +3,6 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { StatService } from '../../esc-menu/profile/stat.service';
-import { Lobby } from '../../lobby/lobby.component';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
@@ -14,6 +13,7 @@ import { Note, Notes } from '../news/notes';
 import { Competitions } from '../competition/competition';
 import { CompetitionComponent } from '../competition/competition.component';
 import { Message } from '../../chat/types';
+import { Lobby } from '../../lobby/cadegoose/types';
 
 @Component({
   selector: 'q-lobby-list',

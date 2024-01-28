@@ -63,3 +63,27 @@ export interface Match {
   players: TeamPlayer[];
   teams: TeamPlayer[][];
 }
+
+export interface Item {
+  s: number;
+  id: number;
+  t: number;
+  q: number;
+  n: string;
+  f: boolean;
+}
+
+export interface Inventory {
+  id: number;
+  userId: number;
+  items: Item[];
+  filtered: Item[];
+  sort: keyof Item;
+  currency: number;
+}
+
+export interface InvUpdate {
+  del?: number[];
+  new?: Item[];
+  update?: { id: number, quantity: number }[];
+}

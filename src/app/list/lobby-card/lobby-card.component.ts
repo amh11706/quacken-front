@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Descriptions } from '../create/create.component';
-import { Lobby } from '../../lobby/lobby.component';
+import { Lobby } from '../../lobby/cadegoose/types';
 
 @Component({
   selector: 'q-lobby-card',

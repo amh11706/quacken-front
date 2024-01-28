@@ -3,16 +3,8 @@ import { Subscription } from 'rxjs';
 
 import { WsService } from '../../../ws/ws.service';
 import { InCmd, OutCmd } from '../../../ws/ws-messages';
-import { Lobby } from '../../lobby.component';
-
-interface Player {
-  sId: number;
-  name: string;
-  slot: number;
-  bid: number;
-  tricks: number;
-  ready: boolean;
-}
+import { Lobby } from '../../cadegoose/types';
+import { Player } from '../types';
 
 export const spots = ['south', 'west', 'north', 'east'];
 
@@ -55,13 +47,13 @@ export class SpotComponent implements OnInit, OnDestroy {
   constructor(public ws: WsService) { }
 
   ngOnInit(): void {
-    this.sub.add(this.ws.subscribe(InCmd.Cards, (c: number[]) => {
+    this.sub.add(this.ws.subscribe(InCmd.Cards, c => {
       for (const p of this.lobby.players) p.ready = false;
       const card = c[0];
       if (card && card >= 0) this.offerBlind = false;
     }));
 
-    this.sub.add(this.ws.subscribe(InCmd.Sit, (p: Player) => {
+    this.sub.add(this.ws.subscribe(InCmd.Sit, p => {
       Object.assign(this.lobby.players[p.slot], p);
       if (p.sId === this.ws.sId) {
         this.lobby.sitting = p.slot;
@@ -80,10 +72,10 @@ export class SpotComponent implements OnInit, OnDestroy {
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.OfferBlind, () => this.offerBlind = true));
-    this.sub.add(this.ws.subscribe(InCmd.Ready, (p: number) => this.lobby.players[p].ready = true));
-    this.sub.add(this.ws.subscribe(InCmd.Take, (p: number) => this.lobby.players[p].tricks++));
+    this.sub.add(this.ws.subscribe(InCmd.Ready, p => this.lobby.players[p].ready = true));
+    this.sub.add(this.ws.subscribe(InCmd.Take, p => this.lobby.players[p].tricks++));
 
-    this.sub.add(this.ws.subscribe(InCmd.Bidding, (p: number) => {
+    this.sub.add(this.ws.subscribe(InCmd.Bidding, p => {
       const delay = this.lobby.played.length === 4 ? 1500 : 0;
       setTimeout(() => {
         this.lobby.playingP = 0;

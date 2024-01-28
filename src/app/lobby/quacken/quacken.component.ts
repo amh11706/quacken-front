@@ -8,8 +8,8 @@ import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
-import { Lobby } from '../lobby.component';
 import { SettingMap } from '../../settings/types';
+import { Lobby } from '../cadegoose/types';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
@@ -62,12 +62,12 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc } });
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc, from: '', admin: 0 } });
     this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby(undefined, 'quacken');
 
-    this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
-    this.sub.add(this.ws.subscribe(Internal.SetMap, (m: string) => this.setMapB64(m)));
+    this.sub.add(this.ws.subscribe(Internal.MyBoat, b => this.myBoat = b));
+    this.sub.add(this.ws.subscribe(Internal.SetMap, m => this.setMapB64(m)));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) setTimeout(async () => this.lobbySettings = await this.ss.getGroup(this.group, true), 1000);
     }));

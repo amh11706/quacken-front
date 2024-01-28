@@ -1,8 +1,8 @@
 import { InCmd } from '../../ws/ws-messages';
-import { InMessage } from '../../ws/ws-request-types';
 import { ParsedTurn } from '../../lobby/cadegoose/types';
 import { Turn, Sync, BoatTick } from '../../lobby/quacken/boats/types';
 import { Message } from '../../chat/types';
+import { InMessage } from '../../ws/ws-subscribe-types';
 
 export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, number] {
   const turns: ParsedTurn[] = [];
@@ -12,7 +12,7 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
   let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
   let lastTurnRaw: Turn | undefined;
   let lastSync: Sync = { sync: [], cSync: [], turn: 0 };
-  let moves: Record<number, { shots: [], moves: [] }> = {};
+  let moves: Record<number, { shots: number[], moves: number[] }> = {};
   let ticks: Record<number, BoatTick> = {};
   for (let i = 0; i < messages.length; i++) {
     const group = messages[i];
@@ -21,11 +21,13 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
     for (const m of group) {
       switch (m.cmd) {
         case InCmd.LobbyJoin:
-          lastSync = { sync: Object.values(m.data.boats), cSync: [], turn: lastTurn.turn };
-          map = m.data.map;
+          lastSync = { sync: Object.values(m.data.boats || {}), cSync: [], turn: lastTurn.turn };
+          map = m.data.map || '';
           break;
         case InCmd.Moves:
-          moves[m.data.t] = { shots: m.data.s, moves: m.data.m };
+          Array.isArray(m.data)
+            ? m.data.forEach(m => moves[m.t] = { shots: m.s || [], moves: m.m })
+            : moves[m.data.t] = { shots: m.data.s || [], moves: m.data.m };
           break;
         case InCmd.DelBoat:
           lastSync.sync = lastSync.sync.filter(b => b.id !== m.data);

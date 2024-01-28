@@ -22,7 +22,7 @@ export class SettingsService {
   rankArea = 2;
 
   constructor(private ws: WsService) {
-    ws.subscribe(InCmd.SettingSet, (s: Setting) => {
+    ws.subscribe(InCmd.SettingSet, s => {
       const group = this.settings.get(s.group);
       const setting = group?.[s.name];
       if (setting) {

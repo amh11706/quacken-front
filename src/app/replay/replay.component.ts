@@ -13,7 +13,8 @@ import { KeyActions } from '../settings/key-binding/key-actions';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { BoatSync } from '../lobby/quacken/boats/types';
 import { SettingMap } from '../settings/types';
-import { InMessage } from '../ws/ws-request-types';
+import { InMessage } from '../ws/ws-subscribe-types';
+import { Lobby } from '../lobby/cadegoose/types';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
@@ -34,7 +35,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   private id = 0;
   tick = 0;
   seed = '';
-  private lobbyMessage?: InMessage;
+  private lobbyMessage?: { cmd: InCmd.LobbyJoin, data: Lobby };
 
   constructor(
     private location: Location,
@@ -47,7 +48,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage } });
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage, from: '', admin: 0 } });
     if (this.lobbyWrapper) {
       this.fakeChat = this.lobbyWrapper.chat;
       this.fakeWs = this.lobbyWrapper.ws;
@@ -105,11 +106,12 @@ export class ReplayComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.fakeMessages();
       this.ss.admin = true;
-      this.lobbyMessage = this.messages[0]?.shift();
+      const m = this.messages[0]?.shift();
+      if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m;
       if (!this.lobbyMessage) return;
-      const firstSync = {
+      const firstSync: InMessage = {
         cmd: InCmd.Sync,
-        data: { sync: Object.values(this.lobbyMessage.data?.boats), flags: this.lobbyMessage.data.flags },
+        data: { sync: Object.values(this.lobbyMessage.data?.boats || {}) },
       };
       this.messages[0]?.push(firstSync);
       this.checkMessage(firstSync);
@@ -209,11 +211,11 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
         if (i > value || !syncFound) continue;
         this.tick = i;
-        this.fakeWs.dispatchMessage({ cmd: Internal.ResetBoats });
+        this.fakeWs.dispatchMessage({ cmd: Internal.ResetBoats, data: undefined });
         this.fakeMessages(true);
         break;
       }
-      if (this.lobbyMessage) {
+      if (this.lobbyMessage?.data.map) {
         // reset the map because it could have changed in capture the flag mode
         this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
       }
@@ -237,7 +239,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       }
       if (!skipTurn) continue;
 
-      this.fakeWs.dispatchMessage?.({ cmd: Internal.ResetBoats, data: true });
+      this.fakeWs.dispatchMessage?.({ cmd: Internal.ResetBoats, data: undefined });
       this.fakeWs.dispatchMessage?.(m);
     }
   }

@@ -146,7 +146,6 @@ export const enum InCmd {
   Sit,
   PlayTo,
   Take,
-  Score,
   Scores,
   Over,
   OfferBlind,

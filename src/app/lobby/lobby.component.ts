@@ -5,24 +5,7 @@ import { Subscription } from 'rxjs';
 import { WsService } from '../ws/ws.service';
 import { SettingsService } from '../settings/settings.service';
 import { InCmd, OutCmd } from '../ws/ws-messages';
-import { StatRow } from './cadegoose/stats/types';
-import { BoatSync, Clutter } from './quacken/boats/types';
-
-export interface Lobby {
-  owner: boolean;
-  players: any;
-  playing?: boolean;
-  scores?: number[];
-  map?: string;
-  boats?: { [key: string]: BoatSync };
-  treasure?: number[];
-  clutter?: Clutter[];
-  turn?: number;
-  seconds?: number;
-  stats?: Record<number, StatRow>;
-  type: 'Quacken' | 'Spades' | 'CadeGoose';
-  [key: string]: any;
-}
+import { Lobby } from './cadegoose/types';
 
 @Component({
   selector: 'q-lobby',

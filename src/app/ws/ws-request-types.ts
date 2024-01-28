@@ -5,13 +5,8 @@ import { DBTile } from '../map-editor/types';
 import { AiData, MatchAiRequest, MoveNode, Points, ScoreResponse } from '../replay/cadegoose/types';
 import { MapOption } from '../settings/map-list/map-card/types';
 import { Setting, SettingMap } from '../settings/types';
-import { InCmd, Internal, OutCmd } from './ws-messages';
-
-export interface InMessage {
-  cmd: InCmd | Internal;
-  id?: number;
-  data?: any;
-}
+import { OutCmd } from './ws-messages';
+import { InMessage } from './ws-subscribe-types';
 
 type EmptyCmdBody = {
   [cmd: string]: undefined;

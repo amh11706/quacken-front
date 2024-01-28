@@ -10,8 +10,8 @@ import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { TimerComponent } from './timer/timer.component';
 import { spots } from './spot/spot.component';
 import { Card } from './card/card.component';
-import { Lobby } from '../lobby.component';
 import { SettingMap } from '../../settings/types';
+import { Lobby } from '../cadegoose/types';
 
 const ownerSettings: (keyof typeof Settings)[] = [
   'watchers', 'turnTime', 'playTo',
@@ -24,7 +24,7 @@ const ownerSettings: (keyof typeof Settings)[] = [
 })
 export class SpadesComponent implements OnInit, OnDestroy {
   @ViewChild(TimerComponent, { static: false }) timer?: TimerComponent;
-  private _lobby: Lobby = { owner: false, type: 'Spades', players: [{}, {}, {}, {}] };
+  private _lobby: Lobby = { id: 0, owner: false, type: 'Spades', players: [{}, {}, {}, {}] };
   @Input() set lobby(l: Lobby) {
     if (!l) return;
     if (!l.played) l.played = [];
@@ -78,7 +78,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     this.es.setLobby(1);
     this.ss.setLobbySettings(ownerSettings);
 
-    this.sub.add(this.ws.subscribe(InCmd.Cards, (c: number[]) => {
+    this.sub.add(this.ws.subscribe(InCmd.Cards, c => {
       if (!(this.lobby.played.length === 4)) this.setCards(c);
       else setTimeout(() => this.setCards(c), 2000);
       this.lobby.playing = true;
@@ -86,7 +86,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
       this.selected = [];
     }));
 
-    this.sub.add(this.ws.subscribe(InCmd.PlayTo, (p: number) => {
+    this.sub.add(this.ws.subscribe(InCmd.PlayTo, p => {
       this.lobby.playTo = p;
     }));
 
@@ -95,7 +95,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
       this.lobby.playing = true;
     }));
 
-    this.sub.add(this.ws.subscribe(InCmd.Playing, (p: { id: number, quantity: number }) => {
+    this.sub.add(this.ws.subscribe(InCmd.Playing, p => {
       this.timer?.go(this.settings.turnTime?.value);
       this.lobby.bidding = 0;
       this.lobby.playingP = p.id;
@@ -116,7 +116,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.sub.add(this.ws.subscribe(InCmd.Card, (p: { id: number, position: number }) => {
+    this.sub.add(this.ws.subscribe(InCmd.Card, p => {
       const c = this.getCard(p.id);
       const sitting = this.lobby.sitting > -1 ? this.lobby.sitting : 0;
       c.position = spots[(4 + p.position - sitting) % 4];
@@ -152,7 +152,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
       }, 1000);
     }));
 
-    this.sub.add(this.ws.subscribe(InCmd.Score, (p: number[]) => {
+    this.sub.add(this.ws.subscribe(InCmd.Scores, p => {
       this.lobby.scores = p;
       this.lobby.spadeBroke = false;
       for (const player of this.lobby.players) {

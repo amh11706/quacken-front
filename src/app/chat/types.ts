@@ -1,5 +1,9 @@
 import { TeamImages } from '../lobby/cadegoose/types';
 
+export interface Command {
+  base: string, title: string, params: { name: string, value: string }[], help: string
+}
+
 export interface Message {
   type: number;
   message?: any;

@@ -11,17 +11,16 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { WsService } from '../../ws/ws.service';
 import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
 import { Boat } from '../../lobby/quacken/boats/boat';
-import { Lobby } from '../../lobby/lobby.component';
 import { AiRender } from './ai-render';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 import { Penalties, PenaltyComponent } from './penalty/penalty.component';
 import { SettingsService } from '../../settings/settings.service';
 import { ParseTurns } from './parse-turns';
 import { GuBoat, Point } from '../../lobby/cadegoose/twod-render/gu-boats/gu-boat';
-import { ParsedTurn } from '../../lobby/cadegoose/types';
+import { Lobby, ParsedTurn } from '../../lobby/cadegoose/types';
 import { BoatTick } from '../../lobby/quacken/boats/types';
-import { InMessage } from '../../ws/ws-request-types';
 import { AiBoatData, AiData, ClaimOptions, Points, ScoreResponse } from './types';
+import { InMessage } from '../../ws/ws-subscribe-types';
 
 @Component({
   selector: 'q-replay-cadegoose',
@@ -184,7 +183,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, (boat: Boat) => {
       this.clickBoat(boat);
     }));
-    this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, (ticks: Record<number, BoatTick>) => {
+    this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, ticks => {
       this.boatTicks = ticks;
       for (const boat of this.boats) boat.damage = ticks[boat.id]?.d || 0;
       this.updateBoat();
@@ -219,8 +218,10 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   }
 
   private updateBoat() {
-    if (!this.activeBoat || !this.boatTicks[this.activeBoat.id]) return;
-    this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.BoatTick, data: this.boatTicks[this.activeBoat.id] });
+    if (!this.activeBoat) return;
+    const ticks = this.boatTicks[this.activeBoat.id];
+    if (!ticks) return;
+    this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.BoatTick, data: ticks });
     setTimeout(() => {
       if (!this.activeBoat) return;
       this.ws.fakeWs?.dispatchMessage({
@@ -260,7 +261,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       this.ws.fakeWs.dispatchMessage({ cmd: Internal.MyBoat, data: this.activeBoat });
       this.ws.fakeWs.sId = boat.id;
     }
-    if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat });
+    if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat, data: undefined });
     if (this.boatTicks[boat.id]) this.updateBoat();
   }
 

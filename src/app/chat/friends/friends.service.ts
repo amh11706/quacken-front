@@ -42,15 +42,15 @@ export class FriendsService {
   }
 
   private handleBlocks() {
-    this.ws.subscribe(InCmd.BlockUser, (m: string) => {
+    this.ws.subscribe(InCmd.BlockUser, m => {
       this.blocked.push(m);
       for (const n of this.lobby$.getValue()) if (n.from === m) n.blocked = true;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been blocked.' } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been blocked.', admin: 0 } });
     });
-    this.ws.subscribe(InCmd.UnblockUser, (m: string) => {
+    this.ws.subscribe(InCmd.UnblockUser, m => {
       this.blocked = this.blocked.filter(n => m !== n);
       for (const n of this.lobby$.getValue()) if (n.from === m) n.blocked = false;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been unblocked.' } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been unblocked.', admin: 0 } });
     });
   }
 
@@ -73,7 +73,7 @@ export class FriendsService {
       m.message = 'has joined the lobby.';
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: m });
     });
-    this.ws.subscribe(InCmd.PlayerRemove, (m: ChatMessage) => {
+    this.ws.subscribe(InCmd.PlayerRemove, m => {
       const lobby = this.lobby$.getValue().filter(n => m.from !== n.from || m.copy !== n.copy);
       this.lobby$.next(lobby);
       if (m.copy === 0) return;
@@ -84,14 +84,14 @@ export class FriendsService {
   }
 
   private handleInvites() {
-    this.ws.subscribe(InCmd.InviteAdd, (u: Invite) => {
+    this.ws.subscribe(InCmd.InviteAdd, u => {
       this.invites.push(u);
       // let message = u.f;
       // if (u.ty === 0) message += ' has requested to add you as a friend.';
       // else message += ' has invited you to join their lobby.';
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 8, message: u, from: u.f, admin: u.a } });
     });
-    this.ws.subscribe(InCmd.InviteRemove, (u: Invite) => {
+    this.ws.subscribe(InCmd.InviteRemove, u => {
       this.invites = this.invites.filter(i => i.tg !== u.tg || i.ty !== u.ty);
     });
   }
@@ -102,17 +102,17 @@ export class FriendsService {
       this.offline = r.offline || [];
       this.blocked = r.blocked || [];
     });
-    this.ws.subscribe(InCmd.FriendOnline, (u: ChatMessage) => {
+    this.ws.subscribe(InCmd.FriendOnline, u => {
       this.friends.push(u.from);
       this.offline = this.offline.filter(f => f !== u.from);
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 0, type: 3, message: 'has logged on.' } });
     });
-    this.ws.subscribe(InCmd.FriendOffline, (u: ChatMessage) => {
+    this.ws.subscribe(InCmd.FriendOffline, u => {
       this.offline.push(u.from);
       this.friends = this.friends.filter(f => f !== u.from);
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 0, type: 3, message: 'has logged off.' } });
     });
-    this.ws.subscribe(InCmd.FriendAdd, (u: ChatMessage) => {
+    this.ws.subscribe(InCmd.FriendAdd, u => {
       this.friends.push(u.from);
       this.invites = this.invites.filter(i => i.ty !== 0 || i.f !== u.from);
       for (const n of this.lobby$.getValue()) if (n.from === u.from) n.friend = true;
@@ -121,7 +121,7 @@ export class FriendsService {
         data: { ...u, copy: 0, type: 3, message: 'has been added to your friend list.' },
       });
     });
-    this.ws.subscribe(InCmd.FriendRemove, (u: ChatMessage) => {
+    this.ws.subscribe(InCmd.FriendRemove, u => {
       this.friends = this.friends.filter(f => f !== u.from);
       this.offline = this.offline.filter(f => f !== u.from);
       for (const n of this.lobby$.getValue()) if (n.from === u.from) n.friend = false;

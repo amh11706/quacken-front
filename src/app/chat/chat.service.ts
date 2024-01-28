@@ -8,13 +8,9 @@ import { WsService } from '../ws/ws.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { Sounds, SoundService } from '../sound.service';
-import { ChatMessage } from './types';
+import { ChatMessage, Command } from './types';
 
 dayjs.extend(relativeTime);
-
-export interface Command {
-    base: string, title: string, params: { name: string, value: string }[], help: string
-  }
 
 @Injectable({
   providedIn: 'root',
@@ -84,17 +80,17 @@ export class ChatService {
       if (!value) this.messages = [];
     });
 
-    this.ws.subscribe(InCmd.FriendAdd, (u: string) => {
-      for (const m of this.messages) if (m.from === u) m.friend = true;
+    this.ws.subscribe(InCmd.FriendAdd, u => {
+      for (const m of this.messages) if (m.from === u.from) m.friend = true;
     });
-    this.ws.subscribe(InCmd.FriendRemove, (u: string) => {
-      for (const m of this.messages) if (m.from === u) m.friend = false;
+    this.ws.subscribe(InCmd.FriendRemove, u => {
+      for (const m of this.messages) if (m.from === u.from) m.friend = false;
     });
 
-    this.ws.subscribe(InCmd.BlockUser, (u: string) => {
+    this.ws.subscribe(InCmd.BlockUser, u => {
       for (const m of this.messages) if (m.from === u) m.blocked = true;
     });
-    this.ws.subscribe(InCmd.UnblockUser, (u: string) => {
+    this.ws.subscribe(InCmd.UnblockUser, u => {
       for (const m of this.messages) if (m.from === u) m.blocked = false;
     });
   }

@@ -15,7 +15,7 @@ import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
 import { AiBoatData, MoveNode, MoveTiers } from '../replay/cadegoose/types';
 import { ParsedTurn } from '../lobby/cadegoose/types';
 import { SettingMap } from '../settings/types';
-import { InMessage } from '../ws/ws-request-types';
+import { MoveMessageIncoming } from '../lobby/quacken/boats/types';
 
 function mapMoves(m: number | string): string {
   return ['_', 'L', 'F', 'R'][+m] || 'S';
@@ -83,7 +83,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
       this.ws.fakeWs.user = this.ws.user;
     }
 
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Welcome to 1v1 training.' } });
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Welcome to 1v1 training.', from: '', admin: 0 } });
     this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id' || 0))));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) this.ws.send(OutCmd.BnavJoin);
@@ -130,7 +130,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.myBoat.moveLock = -1;
       if (this.myBoat.isMe) {
-        this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: this.activeTurn?.moves[this.myBoat.id] });
+        const myMoves = this.activeTurn?.moves[this.myBoat.id];
+        if (myMoves) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
       }
     });
     delete this.activeMove;
@@ -141,7 +142,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     if (!match || !match.data) return;
     [this.turns, this.map, this.maxScore] = ParseTurns(match.data.messages);
     const join = match.data?.messages[0]?.[0];
-    this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.LobbyJoin, data: join?.data });
+    if (join) this.ws.fakeWs?.dispatchMessage({ ...join });
     setTimeout(() => {
       this.clickTurn(this.turns[0]);
       this.esc.open$.next(false);
@@ -170,11 +171,11 @@ export class TrainingComponent implements OnInit, OnDestroy {
         } else if (myMoves) {
           myMoves.shots = m.data;
         }
-        this.ws.fakeWs?.dispatchMessage(m as unknown as InMessage);
+        // this.ws.fakeWs?.dispatchMessage(m as InMessage<InCmd.Moves>);
         delete this.activeMove;
         break;
       case OutCmd.Ready:
-        this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Sync, data: this.activeTurn?.sync });
+        if (this.activeTurn?.sync) this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Sync, data: this.activeTurn?.sync });
         void this.imReady(m.data);
         break;
     }
@@ -226,11 +227,12 @@ export class TrainingComponent implements OnInit, OnDestroy {
       buttons?.[(this.activeTurn?.turn || 1) - 1]?.scrollIntoView({ block: 'center' });
     });
     if (!turn) return;
-    this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Turn, data: this.activeTurn?.rawTurn });
+    const rawTurn = this.activeTurn?.rawTurn;
+    if (rawTurn) this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Turn, data: rawTurn });
     this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Sync, data: turn.sync });
-    const moves = [];
+    const moves: MoveMessageIncoming[] = [];
     for (const [id, m] of Object.entries(this.activeTurn?.moves || {})) {
-      moves.push({ t: id, m: m.moves, s: m.shots });
+      moves.push({ t: +id, m: m.moves, s: m.shots });
     }
 
     this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Moves, data: moves });

@@ -6,8 +6,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from '../../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
 import { AuthGuard } from '../auth.guard';
-import { InMessage, InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes } from './ws-request-types';
+import { InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes } from './ws-request-types';
 import { SendCmdInputless, SendCmdInputs } from './ws-send-types';
+import { InMessage, SubscribeData } from './ws-subscribe-types';
 
 const ClientVersion = 53;
 
@@ -47,15 +48,15 @@ export class WsService {
       this.guard.triedPath = location.hash.substr(2);
       void this.router.navigate(['auth/login']);
     });
-    this.subscribe(InCmd.NavigateTo, (path: string) => {
+    this.subscribe(InCmd.NavigateTo, path => {
       void this.router.navigate([path]);
     });
-    this.subscribe(InCmd.SessionId, (id: number) => {
+    this.subscribe(InCmd.SessionId, id => {
       this.sId = id;
       this.connected = true;
       this.connected$.next(true);
     });
-    this.subscribe(InCmd.Copy, (copy: number) => {
+    this.subscribe(InCmd.Copy, copy => {
       this.copy = copy;
     });
     this.subscribe(InCmd.Reload, () => {
@@ -63,7 +64,7 @@ export class WsService {
       if (lastReload && +lastReload > new Date().valueOf() - 30000) {
         this.dispatchMessage({
           cmd: InCmd.ChatMessage,
-          data: { type: 0, message: 'Outdated client. Please clear your cache then refresh the page.' },
+          data: { type: 0, message: 'Outdated client. Please clear your cache then refresh the page.', from: '', admin: 0 },
         });
         this.close();
         return;
@@ -94,14 +95,14 @@ export class WsService {
       this.connected = false;
       this.dispatchMessage({
         cmd: InCmd.ChatMessage,
-        data: { type: 1, message: 'Connection closed, attempting to reconnect...' },
+        data: { type: 1, message: 'Connection closed, attempting to reconnect...', from: '', admin: 0 },
       });
       this.timeOut = window.setTimeout(() => this.connect(), 5000);
     };
   }
 
-  subscribe(
-    cmd: InCmd | Internal, next?: (value: any) => void, error?: (e: any) => void, complete?: () => void,
+  subscribe<T extends keyof SubscribeData>(
+    cmd: T, next?: (value: SubscribeData[T]) => void, error?: (e: any) => void, complete?: () => void,
   ): Subscription {
     const sub = this.messages.get(cmd);
     if (sub && sub.observers.length) return sub.subscribe(next, error, complete);

@@ -1,6 +1,32 @@
 import { Message } from '../../chat/types';
-import { BoatStatus, BoatTick, Clutter, Sync, Turn } from '../quacken/boats/types';
+import { BoatStatus, BoatSync, BoatTick, Clutter, Sync, Turn } from '../quacken/boats/types';
 import { StatRow } from './stats/types';
+
+export interface Lobby {
+  id: number;
+  owner: boolean;
+  players: any;
+  playing?: boolean;
+  scores?: number[];
+  map?: string;
+  boats?: { [key: string]: BoatSync };
+  treasure?: number[];
+  clutter?: Clutter[];
+  turn?: number;
+  seconds?: number;
+  stats?: Record<number, StatRow>;
+  type: 'Quacken' | 'Spades' | 'CadeGoose';
+  [key: string]: any;
+}
+
+export interface TeamMessage {
+  id: number;
+  t: keyof typeof TeamImages;
+  r: boolean;
+  b: number;
+  s: number;
+  a: boolean;
+}
 
 export interface ParsedTurn {
   turn: number;

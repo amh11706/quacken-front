@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
-
-import { Item } from '../inventory.component';
+import { Item } from '../../profile/types';
 
 @Component({
   selector: 'q-split',

@@ -4,8 +4,14 @@ import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Vector3, Euler } from 'three';
 import { Boat } from '../quacken/boats/boat';
 import { JobQueue } from './job-queue';
-import { TeamColors } from './cade-entry-status/cade-entry-status.component';
 import { Team } from '../quacken/boats/types';
+
+export const TeamColors: Readonly<[number, number, number][]> = [
+  [146, 236, 30], // green
+  [236, 30, 30], // red
+  [255, 165, 0], // orange
+  [255, 0, 255], // magenta
+];
 
 function headerColor(boat: Boat): string {
   let color = TeamColors[boat.team || 0];

@@ -4,10 +4,10 @@ import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
 import { StatService } from '../../esc-menu/profile/stat.service';
 import { FriendsService } from '../friends/friends.service';
-import { ChatService, Command } from '../chat.service';
+import { ChatService } from '../chat.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
-import { ChatMessage } from '../types';
+import { ChatMessage, Command } from '../types';
 
 @Component({
   selector: 'q-name',

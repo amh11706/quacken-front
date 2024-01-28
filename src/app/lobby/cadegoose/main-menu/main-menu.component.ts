@@ -9,22 +9,11 @@ import { links } from '../../../settings/setting/setting.component';
 import { SettingsService } from '../../../settings/settings.service';
 import { Sounds, SoundService } from '../../../sound.service';
 import { Boat } from '../../quacken/boats/boat';
-import { Lobby } from '../../lobby.component';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 import { BoatSetting, Settings } from '../../../settings/setting/settings';
 import { Message } from '../../../chat/types';
 import { SettingPartial } from '../../../settings/types';
-import { Turn } from '../../quacken/boats/types';
-import { TeamImages } from '../types';
-
-interface TeamMessage {
-  id: number;
-  t: keyof typeof TeamImages;
-  r: boolean;
-  b: number;
-  s: number;
-  a: boolean;
-}
+import { Lobby, TeamMessage } from '../types';
 
 @Component({
   selector: 'q-main-menu',
@@ -62,7 +51,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
-    this.subs.add(this.ws.subscribe(Internal.Lobby, async (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, async m => {
       this.lobby = m;
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
@@ -93,7 +82,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       this.fs.lobby$.next(lobby);
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Team, (m: TeamMessage | TeamMessage[]) => {
+    this.subs.add(this.ws.subscribe(InCmd.Team, m => {
       if (!Array.isArray(m)) m = [m];
       const lobby = this.fs.lobby$.getValue();
       for (const t of m) {
@@ -114,10 +103,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       this.fs.lobby$.next(lobby);
     }));
-    this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, (m: Message) => {
+    this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, m => {
       if (m.sId) this.removeUser(m.sId);
     }));
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, b => {
       if (!this.roundGoing && this.ws.connected) {
         this.myBoat.isMe = false;
         this.es.open$.next(true);
@@ -127,7 +116,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
       this.myBoat = b;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Turn, async (t: Turn) => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, async t => {
       for (const p of Object.values(this.teams)) p.r = false;
       const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
       this.roundGoing = (maxTurns && t.turn && t.turn < maxTurns) || false;

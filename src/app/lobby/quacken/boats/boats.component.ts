@@ -6,10 +6,9 @@ import { InCmd, Internal, OutCmd } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
 import { Boat } from './boat';
 import { boatToSync, syncToBoat } from './convert';
-import { Lobby } from '../../lobby.component';
 import { weapons } from '../hud/hud.component';
 import { BoatRender } from '../../cadegoose/boat-render';
-import { Clutter, Turn, BoatSync, Sync } from './types';
+import { Clutter, Turn, BoatSync, Sync, MoveMessageIncoming } from './types';
 
 @Component({
   selector: 'q-boats',
@@ -77,7 +76,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
     this.subs.add(this.ws.subscribe(Internal.ResetBoats, () => this.resetBoats()));
-    this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
       if (!m.boats) return;
       clearTimeout(this.animateTimeout);
       clearTimeout(this.animateTimeout2);
@@ -94,8 +93,8 @@ export class BoatsComponent implements OnInit, OnDestroy {
         this.handleTurn(m as any);
       }, 100);
     }));
-    this.subs.add(this.ws.subscribe(InCmd.NewBoat, (boat: BoatSync) => this.setBoats([boat], false)));
-    this.subs.add(this.ws.subscribe(InCmd.DelBoat, (id: number) => this.deleteBoat(id)));
+    this.subs.add(this.ws.subscribe(InCmd.NewBoat, boat => this.setBoats([boat], false)));
+    this.subs.add(this.ws.subscribe(InCmd.DelBoat, id => this.deleteBoat(id)));
     this.subs.add(this.ws.subscribe(InCmd.Moves, s => this.handleMoves(s)));
     this.subs.add(this.ws.subscribe(InCmd.Ready, id => {
       const boat = this._boats[id];
@@ -105,9 +104,9 @@ export class BoatsComponent implements OnInit, OnDestroy {
       const boat = this._boats[b.t];
       if (boat) boat.bomb = b.m;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Turn, (t) => this.handleTurn(t)));
+    this.subs.add(this.ws.subscribe(InCmd.Turn, t => this.handleTurn(t)));
     this.subs.add(this.ws.subscribe(InCmd.Sync, this.syncBoats));
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, b => this.myBoat = b));
   }
 
   ngOnDestroy(): void {
@@ -119,7 +118,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  protected handleMoves(s: { t: number, m: number[], s?: number[] }): void {
+  protected handleMoves(s: MoveMessageIncoming | MoveMessageIncoming[]): void {
     if (Array.isArray(s)) {
       for (const part of s) this.handleMoves(part);
       return;
@@ -163,7 +162,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       this.ws.send(OutCmd.Sync);
       this.step = -1;
     } else {
-      this.ws.dispatchMessage({ cmd: Internal.ResetMoves });
+      this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined });
     }
   };
 
@@ -181,7 +180,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     if (turn.turn === 0) {
       setTimeout(() => {
         for (const boat of this.boats) boat.ready = false;
-        this.ws.dispatchMessage({ cmd: Internal.ResetMoves });
+        this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined });
       }, 1000);
       return;
     }
@@ -206,7 +205,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
   protected resetBoats(): void {
     for (const boat of this.boats) boat.resetMoves();
-    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves }));
+    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined }));
   }
 
   protected playTurn(): void {
@@ -309,7 +308,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         continue;
       }
       setTimeout(() => {
-        this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
+        if (boat) this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
         // console.log('new boat refresh');
         this.map?.dispatchEvent(new Event('dblclick'));
       });

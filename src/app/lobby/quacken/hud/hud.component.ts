@@ -6,12 +6,10 @@ import { InCmd, Internal, OutCmd } from '../../../ws/ws-messages';
 import { KeyBindingService } from '../../../settings/key-binding/key-binding.service';
 import { SettingsService } from '../../../settings/settings.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
-import { Lobby } from '../../lobby.component';
 import { Boat } from '../boats/boat';
 import { WsService } from '../../../ws/ws.service';
 import { Tokens } from '../../../boats/move-input/move-input.component';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
-import { BoatTick, Turn, Sync } from '../boats/types';
 import { SettingMap } from '../../../settings/types';
 
 export const weapons = [
@@ -112,17 +110,17 @@ export class HudComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     void this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
     this.handleKeys();
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
+    this.subs.add(this.ws.subscribe(Internal.MyBoat, b => {
       this.myBoat = b;
       this.resetMoves(true);
     }));
     this.subs.add(this.ws.subscribe(Internal.ResetMoves, this.resetMoves.bind(this)));
-    this.subs.add(this.ws.subscribe(InCmd.BoatTick, (t: BoatTick) => {
+    this.subs.add(this.ws.subscribe(InCmd.BoatTick, t => {
       this.myBoat.damage = t.d;
       this.totalTokens.shots = t.tp >= 2 ? 1 : 0;
     }));
 
-    this.subs.add(this.ws.subscribe(Internal.Lobby, (m: Lobby) => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
       if (m.map === undefined) return;
       this.lastMoveReset = 0;
       this.turn = m.turn ?? this.turn;
@@ -138,7 +136,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);
     }));
 
-    this.subs.add(this.ws.subscribe(InCmd.Turn, (turn: Turn) => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, turn => {
       const turnNumber = turn.turn + 1;
       this.stopTimer();
       if (turnNumber <= this.maxTurn) {
@@ -153,7 +151,7 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
     }));
 
-    this.subs.add(this.ws.subscribe(InCmd.Sync, (s: Sync) => {
+    this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
       this.myBoat.ready = false;
       this.turn = s.turn ?? this.turn;
       const myBoat = s.sync.find(boat => boat.id === this.myBoat.id);
@@ -164,12 +162,12 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.myBoat.moveLock > this.turn) {
         this.ws.dispatchMessage({
           cmd: InCmd.ChatMessage,
-          data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn + 1) + ' turns.' },
+          data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn + 1) + ' turns.', from: '', admin: 0 },
         });
       } else if (this.myBoat.moveLock === this.turn) {
         this.ws.dispatchMessage({
           cmd: InCmd.ChatMessage,
-          data: { type: 1, message: 'Unlocking moves next turn.' },
+          data: { type: 1, message: 'Unlocking moves next turn.', from: '', admin: 0 },
         });
       }
     }));

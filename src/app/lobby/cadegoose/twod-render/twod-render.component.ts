@@ -13,10 +13,10 @@ import { FlagData } from './objects/flags';
 import { GuBoat, Point, Position } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
-import { Lobby } from '../../lobby.component';
 import { MapEditor, MapTile } from '../../../map-editor/types';
 import { SettingMap } from '../../../settings/types';
 import { Turn } from '../../quacken/boats/types';
+import { Lobby } from '../types';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = 0 | 1 | 2 | 3;
