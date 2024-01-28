@@ -40,7 +40,7 @@
 <div class="item">
   <button mat-raised-button
           color="accent"
-          [disabled]="!ss.admin"
+          [disabled]="(ss.admin$ | async) === false"
           (click)="selectMap(-1)"
           matTooltip="Random User Map">Random</button>
 </div>
@@ -53,7 +53,7 @@
               [map]="m"
               [width]="rankArea === 2 ? 20 : 31"
               [height]="rankArea === 2 ? 36 : 41"
-              [disabled]="!ss.admin"
+              [disabled]="(ss.admin$ | async) === false"
               [description]="m.description"
               [class.selected]="m.id === selectedMap.value"
               (selectedMap)="selectMap($event)"></q-map-card>

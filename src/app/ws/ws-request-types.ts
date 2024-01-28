@@ -38,6 +38,7 @@ type OutCmdInputs = {
   [OutCmd.MatchAi]: MatchAiRequest;
 
   [OutCmd.CgMapList]: number;
+  [OutCmd.MapList]: number;
   [OutCmd.MapDelete]: { group: string, type: number, id: number };
   [OutCmd.WeightSave]: { group: string, weight: number, id: number };
   [OutCmd.MapCreate]: DBTile;
@@ -46,6 +47,8 @@ type OutCmdInputs = {
   [OutCmd.TMapSetGet]: number;
   [OutCmd.TileSetGet]: number;
   [OutCmd.StructureSetGet]: number;
+  [OutCmd.TileSetList]: undefined;
+  [OutCmd.StructureSetList]: undefined;
 }
 
 export type OutCmdInputTypes = OutCmdInputs & EmptyCmdBody;
@@ -77,7 +80,9 @@ type OutCmdReturns = {
   [OutCmd.MatchAi]: AiData;
 
   [OutCmd.CgMapList]: MapOption[];
-  [OutCmd.MapList]: MapOption[];
+  [OutCmd.MapList]: DBTile[];
+  [OutCmd.TileSetList]: DBTile[];
+  [OutCmd.StructureSetList]: DBTile[];
   [OutCmd.MapDelete]: DBTile;
   [OutCmd.MapSave]: DBTile;
   [OutCmd.MapCreate]: DBTile;

@@ -31,7 +31,7 @@
       <mat-card-actions class="flex-subitem2">
         <button mat-raised-button
                 color="accent"
-                [disabled]="!ss.admin"
+                [disabled]="(ss.admin$ | async) === false"
                 color="accent"
                 (click)="selectMap(map.id)">Select</button>
       </mat-card-actions>
@@ -51,7 +51,7 @@
       <mat-label>Previous seeds:</mat-label>
       <mat-form-field>
         <mat-select (selectionChange)="updateSeed($event.value)"
-                    [disabled]="!ss.admin">
+                    [disabled]="(ss.admin$ | async) === false">
           <mat-option *ngFor="let seed of seeds"
                       [value]="seed">{{seed}}</mat-option>
         </mat-select>
@@ -60,11 +60,11 @@
     <mat-card-actions class="flex-subitem2">
       <button mat-raised-button
               color="accent"
-              [disabled]="!ss.admin"
+              [disabled]="(ss.admin$ | async) === false"
               (click)="openAdvanced()">Advanced</button>
       <button mat-raised-button
               color="accent"
-              [disabled]="!ss.admin"
+              [disabled]="(ss.admin$ | async) === false"
               (click)="selectMap(0)">Randomize</button>
     </mat-card-actions>
   </div>

@@ -40,10 +40,11 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   private firstJoin = true;
   protected group = 'l/cade';
   private lobby?: Lobby;
+  streams = { open: this.es.open$, teamPlayers: this.teamPlayers$ };
 
   constructor(
     public ws: WsService,
-    public fs: FriendsService,
+    private fs: FriendsService,
     public es: EscMenuService,
     public ss: SettingsService,
     private sound: SoundService,
@@ -100,7 +101,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         user.team = t.t;
         user.op = t.a;
         if (user.sId === this.ws.sId) {
-          this.ss.admin = t.a;
+          this.ss.admin$.next(t.a);
           this.fs.allowInvite = t.a;
         }
       }

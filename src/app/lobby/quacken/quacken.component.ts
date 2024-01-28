@@ -77,7 +77,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
     this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
-    this.ss.admin = true;
+    this.ss.admin$.next(true);
     this.es.setLobby();
   }
 

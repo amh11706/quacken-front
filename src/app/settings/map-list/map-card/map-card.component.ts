@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { WsService } from '../../../ws/ws.service';
 import { Internal, OutCmd } from '../../../ws/ws-messages';
 import { SettingsService } from '../../settings.service';
@@ -9,8 +9,8 @@ import { MapOption } from './types';
   selector: 'q-map-card',
   templateUrl: './map-card.component.html',
   styleUrls: ['./map-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class MapCardComponent {
   @Input() map?: MapOption;
   @Input() width = 20;

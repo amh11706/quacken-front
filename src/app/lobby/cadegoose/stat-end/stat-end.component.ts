@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { WsService } from '../../../ws/ws.service';
 import { TeamColorsCss } from '../cade-entry-status/cade-entry-status.component';
 import { extraColumns } from '../stats/stats.component';
@@ -8,6 +8,7 @@ import { StatRow, Stat } from '../stats/types';
   selector: 'q-stat-end',
   templateUrl: './stat-end.component.html',
   styleUrls: ['./stat-end.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatEndComponent implements OnChanges {
   Number = Number;

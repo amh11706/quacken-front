@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { WsService } from '../../ws/ws.service';
@@ -9,6 +9,7 @@ import { MessageComponent } from './message/message.component';
   selector: 'q-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent {
   pending = false;

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ReplaySubject, Subscription } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -73,8 +73,8 @@ const SortCompare: Record<SortOptions, (n1: MapOption, n2: MapOption) => number>
   selector: 'q-map-list',
   templateUrl: './map-list.component.html',
   styleUrls: ['./map-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class MapListComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport, { static: true }) mapViewport?: CdkVirtualScrollViewport;
   @Input() set visible(v: boolean) {
@@ -111,7 +111,12 @@ export class MapListComponent implements OnInit, OnDestroy {
   private setting = Settings.cadeMap;
   private subs = new Subscription();
 
-  constructor(private bottomSheet: MatBottomSheet, public ws: WsService, public ss: SettingsService) { }
+  constructor(
+    private bottomSheet: MatBottomSheet,
+     public ws: WsService,
+     public ss: SettingsService,
+     private cd: ChangeDetectorRef,
+  ) { }
 
   async ngOnInit(): Promise<void> {
     if (this.rankArea === 4) this.setting = Settings.flagMap;
@@ -121,6 +126,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       const generatedMap = this.servermapList[0];
       generatedMap.data = this.b64ToArray(l.map);
       generatedMap.description = l.seed;
+      this.cd.detectChanges();
     }));
     this.initGenerated();
     this.servermapList.push(...(await this.ws.request(OutCmd.CgMapList, this.rankArea) || []));

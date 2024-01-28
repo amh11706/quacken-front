@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Subject } from 'rxjs';
 
@@ -22,6 +22,7 @@ type KeyBindingsEditMode = Record<keyof KeyBindings, KeyBindingEditMode[]>;
   selector: 'q-key-binding',
   templateUrl: './key-binding.component.html',
   styleUrls: ['./key-binding.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeyBindingComponent implements OnInit, OnDestroy {
   actions = new KeyBindings() as KeyBindingsEditMode;
@@ -37,6 +38,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     private ss: SettingsService,
     private dialog: MatDialog,
     el: ElementRef<HTMLElement>,
+    private cd: ChangeDetectorRef,
   ) {
     this.changedElements = el.nativeElement.getElementsByClassName('changed');
     this.notDefaultElements = el.nativeElement.getElementsByClassName('notdefault');
@@ -117,7 +119,9 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.changed = !!this.changedElements.length;
       this.notDefault = !!this.notDefaultElements.length;
+      this.cd.detectChanges();
     });
+    this.cd.detectChanges();
   }
 
   async save(): Promise<void> {
@@ -136,18 +140,17 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
       if (!this.actions.hasOwnProperty(key)) continue;
       const k = key as keyof KeyBindings;
       const set = this.actions[k];
-      for (let i = 0; i < set.length; i++) {
-        const binding = set[i];
-        if (!binding) continue;
-        binding.activeBindings = [...binding.bindings];
+      this.actions[k] = set.map(b => {
+        b.activeBindings = [...b.bindings];
         toActivate[k].push({
-          action: binding.action,
-          bindings: [...binding.bindings],
-          title: binding.title,
-          linkGroup: binding.linkGroup,
+          action: b.action,
+          bindings: [...b.bindings],
+          title: b.title,
+          linkGroup: b.linkGroup,
         });
-        toSave[binding.action] = binding.bindings;
-      }
+        toSave[b.action] = b.bindings;
+        return { ...b };
+      });
     }
     void this.ss.save({
       id: 32,
@@ -169,10 +172,14 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
   cancel(): void {
     for (const k in this.actions) {
       if (!this.actions.hasOwnProperty(k)) continue;
-      for (const binding of this.actions[k as keyof KeyBindings]) {
-        binding.bindings = [...binding.activeBindings];
-        binding.update.next();
-      }
+      const bindings = this.actions[k as keyof KeyBindings];
+      this.actions[k as keyof KeyBindings] = bindings.map(b => {
+        b.update.next();
+        return {
+          ...b,
+          bindings: [...b.activeBindings],
+        };
+      });
     }
 
     this.setTakenKeys();
@@ -181,8 +188,9 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
 
   setDefaults(): void {
     if (this.changed) this.cancel();
-    for (const binding of this.actions[this.group]) {
+    this.actions[this.group] = this.actions[this.group].map(binding => {
       let changed = false;
+
       for (let i = 0; i < binding.bindings.length; i++) {
         const defaultBinding = binding.defaultBindings[i];
         if (!defaultBinding || defaultBinding === binding.bindings[i]) continue;
@@ -195,7 +203,8 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
         }
       }
       if (changed) binding.update.next();
-    }
+      return { ...binding };
+    });
 
     this.updateChanged();
 

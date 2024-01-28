@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { Settings, SliderSetting } from '../setting/settings';
 import { SettingsService } from '../settings.service';
 import { Setting } from '../types';
@@ -17,6 +17,7 @@ interface JobberSetting extends Setting {
   selector: 'q-jobber-quality',
   templateUrl: './jobber-quality.component.html',
   styleUrls: ['./jobber-quality.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JobberQualityComponent {
   JobberSetting = Settings.jobberQuality as SliderSetting;

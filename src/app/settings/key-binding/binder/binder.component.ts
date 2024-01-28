@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, TemplateRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Subscription } from 'rxjs';
 import { NotActive } from '../key-actions';
@@ -9,6 +9,7 @@ import { KeyBindingService } from '../key-binding.service';
   selector: 'q-binder',
   templateUrl: './binder.component.html',
   styleUrls: ['./binder.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BinderComponent implements OnDestroy {
   private _binding?: KeyBindingEditMode;

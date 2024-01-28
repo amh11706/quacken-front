@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { Subscription } from 'rxjs';
 import { CadeDesc } from '../../lobby/cadegoose/cadegoose.component';
@@ -23,6 +23,7 @@ const groups = ['quacken', 'spades', 'cade', 'cade', 'flaggames'];
   selector: 'q-create',
   templateUrl: './create.component.html',
   styleUrls: ['./create.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateComponent implements OnInit, OnDestroy {
   created = false;

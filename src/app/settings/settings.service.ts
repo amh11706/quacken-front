@@ -16,7 +16,7 @@ export class SettingsService {
   private ready = new Map<string, Subject<SettingMap>>();
 
   tabIndex = 1;
-  admin = true;
+  admin$ = new BehaviorSubject(true);
   lAdminSettings: SettingList = [];
   showMapChoice = false;
   rankArea = 2;

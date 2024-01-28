@@ -173,7 +173,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
 
     this.ss.setLobbySettings([]);
     this.fs.allowInvite = false;
-    this.ss.admin = true;
+    this.ss.admin$.next(true);
   }
 
   timeUp(): void {

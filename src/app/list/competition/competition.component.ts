@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
@@ -11,6 +11,7 @@ import { SettingMap } from '../../settings/types';
   selector: 'q-competition',
   templateUrl: './competition.component.html',
   styleUrls: ['./competition.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompetitionComponent implements OnInit, OnDestroy {
   created = false;

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 import { getShipLink } from '../setting/setting.component';
 import { BoatSetting, OptionSetting, Settings } from '../setting/settings';
@@ -16,6 +16,7 @@ interface BotSetting extends Setting {
   selector: 'q-bot-setting',
   templateUrl: './bot-setting.component.html',
   styleUrls: ['./bot-setting.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BotSettingComponent {
   BotSetting = Settings.enableBots as OptionSetting;

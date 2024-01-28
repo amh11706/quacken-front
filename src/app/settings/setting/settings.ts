@@ -47,7 +47,7 @@ interface CheckboxSetting extends BaseSetting {
 
 export interface CustomMapSetting extends BaseSetting {
   readonly type: 'customMap' | 'tileSet' | 'structureSet',
-  readonly cmd: OutCmd,
+  readonly cmd: OutCmd.MapList | OutCmd.CgMapList | OutCmd.TileSetList | OutCmd.StructureSetList,
   readonly data?: any,
 }
 

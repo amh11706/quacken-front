@@ -25,7 +25,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.ss.admin = false;
+    this.ss.admin$.next(false);
     this.sub.add(this.route.paramMap.subscribe(params => {
       if (this.sent) return;
       const id = +(params.get('id') || 0);
@@ -47,6 +47,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
-    this.ss.admin = true;
+    this.ss.admin$.next(true);
   }
 }

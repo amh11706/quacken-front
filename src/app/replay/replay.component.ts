@@ -105,7 +105,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.fakeMessages();
-      this.ss.admin = true;
+      this.ss.admin$.next(true);
       const m = this.messages[0]?.shift();
       if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m;
       if (!this.lobbyMessage) return;

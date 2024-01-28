@@ -1,6 +1,6 @@
 <mat-checkbox [(ngModel)]="advanced"
               (change)="updateAdvanced()"
-              [disabled]="JobberSetting.admin && !ss.admin || false">
+              [disabled]="(JobberSetting.admin === true) && (ss.admin$ | async) === false">
   <span>Advanced</span>
 </mat-checkbox>
 
@@ -11,7 +11,7 @@
               [max]="100"
               [step]="JobberSetting.step"
               [value]="setting.value"
-              [disabled]="JobberSetting.admin && !ss.admin"
+              [disabled]="JobberSetting.admin && (ss.admin$ | async) === false"
               (input)="setting.value=$event.value || 0">
   </mat-slider>
 </div>
@@ -24,7 +24,7 @@
                 [max]="105"
                 [step]="5"
                 [value]="setting.data[slider]"
-                [disabled]="JobberSetting.admin && !ss.admin"
+                [disabled]="JobberSetting.admin && (ss.admin$ | async) === false"
                 (input)="setting.data[slider]=$event.value || 0">
     </mat-slider>
   </div>
