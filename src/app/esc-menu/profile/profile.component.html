@@ -8,10 +8,8 @@
         <mat-icon>refresh</mat-icon>
       </button>
 
-      <form>
-        <q-name-search [value]="stat.target"
-                       (valueChange)="showUser($event)"></q-name-search>
-      </form>
+      <q-name-search [value]="stat.target"
+                     (valueChange)="showUser($event)"></q-name-search>
 
       <div id="selection">
         <div class="badges">
@@ -52,13 +50,40 @@
           </ng-container>
         </ng-container>
 
-        <table *ngIf="stat.groupStats$ | async as groupStats">
-          <tr *ngFor="let s of groupStats[stat.group]"
-              class="stat"
-              (click)="showLeaders(s)">
-            <td>{{s.name}}</td>
-            <td>{{s.value || '-'}}<span *ngIf="s.suffix && s.value"> {{s.suffix}}</span></td>
-          </tr>
+        <table *ngIf="stat.groupStats$ | async as groupStats"
+               mat-table
+               [dataSource]="groupStats[stat.group] || []">
+          <tr mat-header-row
+              *matHeaderRowDef="['name', 'value', 'replay']; sticky: true"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: ['name', 'value', 'replay'];"></tr>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell
+                *matHeaderCellDef>Name</th>
+            <td mat-cell
+                *matCellDef="let s">{{s.name}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="value">
+            <th mat-header-cell
+                *matHeaderCellDef>Value</th>
+            <td mat-cell
+                *matCellDef="let s">{{s.value || '-'}}<span *ngIf="s.suffix && s.value"> {{s.suffix}}</span></td>
+          </ng-container>
+
+          <ng-container matColumnDef="replay">
+            <th mat-header-cell
+                *matHeaderCellDef>Replay</th>
+            <td mat-cell
+                *matCellDef="let s">
+              <button mat-icon-button
+                      *ngIf="s.matchId"
+                      (click)="stat.openReplay(s)">
+                <mat-icon>play_arrow</mat-icon>
+              </button>
+            </td>
+          </ng-container>
         </table>
       </div>
     </div>
@@ -118,7 +143,8 @@
       </ng-template>
       <div *ngFor="let blocked of fs.blocked"
            class="lobbyPlayer offline"
-           [matMenuTriggerFor]="blockedMenu"§
+           [matMenuTriggerFor]="blockedMenu"
+           §
            [matMenuTriggerData]="{blocked: blocked}">
         {{blocked}}
       </div>

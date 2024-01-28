@@ -1,9 +1,8 @@
 #stats {
-  position: relative;
-  padding: 18px 0 0 0;
   color: #eee;
   text-align: center;
   height: 100%;
+  overflow-y: scroll;
 }
 
 #friends, #blocked {
@@ -12,10 +11,15 @@
 
 .refresh {
   position: absolute;
-  top: 8px;
+  top: 4px;
   right: 8px;
   cursor: pointer;
   color: #fff;
+}
+
+q-name-search {
+  display: block;
+  margin-top: 18px;
 }
 
 mat-tab-group {
@@ -94,15 +98,23 @@ h2 {
 }
 
 table {
-  border-collapse: collapse;
   margin: auto;
+  width: 400px;
+  min-width: 0;
+  max-width: 95%;
+}
+
+td, th {
+  word-wrap: break-word;
+  max-width: 200px;
+  text-align: center;
+}
+
+th {
+  top: -18px;
 }
 
 td {
-  word-wrap: break-word;
-  max-width: 200px;
-  padding: 8px 16px;
-  border: 1px solid grey;
   cursor: pointer;
 }
 

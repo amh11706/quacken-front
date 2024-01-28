@@ -1,7 +1,8 @@
 #leaders {
   color: #eee;
   text-align: center;
-  padding-top: 18px;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 .refresh {
@@ -25,33 +26,24 @@ h2 {
   padding-top: 8px;
 }
 
-button {
-  margin-bottom: 8px;
-}
-
 table {
-  border-collapse: collapse;
   margin: auto;
-}
-
-th {
-  position: sticky;
-  top: -1px;
-  background-color: grey;
+  width: 400px;
+  max-width: 95%;
+  min-width: 0;
 }
 
 td, th {
   word-wrap: break-word;
+  text-align: center;
   max-width: 148px;
-  padding: 4px 8px;
-  border: 1px solid grey;
 }
 
 mat-form-field {
-  margin: 8px 16px;
+  margin: 0 16px;
+  margin-top: 18px;
 }
 
 .nameRow{
   background-color: red;
-
 }

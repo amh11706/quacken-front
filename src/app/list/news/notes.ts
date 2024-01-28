@@ -5,6 +5,15 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release TBD',
+    points: [
+      'You can now see replays of any player.',
+      'Stat leaderboards now have a link to the replay where the record was achieved.',
+      'Added search and sort to the match history page.',
+      'Joining and shuffling teams no longer causes player list shuffling.',
+    ],
+  },
+  {
     title: 'Release 21 January 2024',
     points: [
       'Match history reworked; It now shows results and team info.',

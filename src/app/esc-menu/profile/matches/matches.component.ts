@@ -120,10 +120,6 @@ export class MatchesComponent implements OnInit {
     return teams;
   }
 
-  openMatch(m: Match): void {
-    window.open('/#/replay/' + m.matchId, '_blank');
-  }
-
   imgSrc(team: keyof typeof TeamImages): string {
     return this.teamImages[team].src;
   }
