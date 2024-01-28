@@ -182,7 +182,7 @@ export class GuBoat extends BoatRender {
             .repeat(1).yoyo(true)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
-            .onUpdate(() => console.log)
+            // .onUpdate(() => console.log)
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)

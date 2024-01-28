@@ -24,7 +24,7 @@ const placeholderRank = {
 export class StatService {
   profileTab = 0;
   profileTabChange$ = new Subject<number>();
-  target = '';
+  target = this.ws.user?.name || '';
 
   id = 0;
   group = 1;
@@ -63,8 +63,10 @@ export class StatService {
     this.profileTabChange$.next(this.profileTab);
   }
 
-  setTab(tab: number): void {
+  async setTab(tab: number): Promise<void> {
+    if (this.profileTab === tab) return;
     this.profileTab = tab;
+    await this.profileTabChange$.toPromise();
   }
 
   openUser(name: string, open = true): void {
@@ -74,16 +76,15 @@ export class StatService {
       this.kbs.emitAction(KeyActions.OpenProfile);
       this.es.open$.next(true);
     }
-    this.setTab(0);
+    void this.setTab(0);
   }
 
   openUserMatches(open = true): void {
     void this.refresh();
     if (open) {
       this.kbs.emitAction(KeyActions.OpenProfile);
-      this.es.open$.next(true);
     }
-    this.setTab(4);
+    void this.setTab(4);
   }
 
   openLeaders(id: number): Promise<void> {

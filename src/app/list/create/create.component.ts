@@ -64,7 +64,14 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   createLobby(): void {
     this.createGroup.createType = this.settings.createType ?? this.createGroup.createType;
-    this.ws.send(OutCmd.LobbyCreate, this.createGroup);
+    const group: SettingMap = {};
+    for (const [key, value] of Object.entries(this.createGroup)) {
+      if (!value) continue;
+      const copy = { ...value };
+      delete copy.stream;
+      if (value?.value !== undefined) group[key] = copy;
+    }
+    this.ws.send(OutCmd.LobbyCreate, group);
     this.created = true;
   }
 

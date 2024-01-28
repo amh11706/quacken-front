@@ -41,12 +41,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   showLeaders(s: Stat): void {
     void this.stat.openLeaders(s.id);
-    this.stat.setTab(3);
+    void this.stat.setTab(3);
   }
 
   showRankLeaders(rank: UserRank): void {
     void this.stat.openLeaders(rank.rankArea * 100 - 1);
-    this.stat.setTab(3);
+    void this.stat.setTab(3);
   }
 
   reset(): void {
@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   showUser(name: string): void {
-    this.stat.openUser(name || this.ws.user?.name || '');
+    this.stat.openUser(name || this.ws.user?.name || '', false);
   }
 
   sendTell(friend: string): void {

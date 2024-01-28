@@ -121,7 +121,7 @@ export class WsService {
     }
     const sub = this.messages.get(message.cmd);
     if (sub) sub.next(message.data);
-    else console.log('Unhandled message:', message);
+    else console.info('Unhandled message:', message.cmd);
   }
 
   close(): void {

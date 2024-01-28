@@ -40,6 +40,7 @@ export class MatchesComponent implements OnInit {
   @ViewChild(MatSort) sort?: MatSort;
   searchTerms: string[] = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
+  private viewLoaded = false;
 
   constructor(
     public ws: WsService,
@@ -59,11 +60,13 @@ export class MatchesComponent implements OnInit {
 
   ngOnInit(): void {
     this.stat.profileTabChange$.subscribe(value => {
-      if (value === 4) void this.fetchMatches();
+      this.viewLoaded = value === 4;
+      if (this.viewLoaded) void this.fetchMatches();
     });
   }
 
   async fetchMatches(name = this.stat.target): Promise<void> {
+    if (!this.viewLoaded) return;
     if (name !== this.stat.target) {
       this.stat.target = name;
       void this.stat.refresh();
