@@ -4,14 +4,14 @@
   <input #name
          matInput
          [value]="value"
-         (focus)="clearOnFocus && myControl.setValue('')"
-         (blur)="myControl.setValue(value)"
+         (blur)="blur()"
          [formControl]="myControl"
          [matAutocomplete]="auto">
   <mat-icon matSuffix>search</mat-icon>
   <mat-autocomplete #auto="matAutocomplete"
                     [autoSelectActiveOption]="true"
-                    (optionSelected)="valueChange.emit($event.option.value); name.blur()"
+                    (opened)="clearOnFocus && myControl.setValue('')"
+                    (optionSelected)="value = $event.option.value"
                     [autoActiveFirstOption]="true">
     <mat-option *ngFor="let option of searchedNames | async"
                 [value]="option">
@@ -23,13 +23,13 @@
 <ng-template #nonMat>
   <input #name
          [value]="value"
-         (focus)="clearOnFocus && myControl.setValue('')"
-         (blur)="myControl.setValue(value)"
+         (blur)="blur()"
          [formControl]="myControl"
          [matAutocomplete]="auto">
   <mat-autocomplete #auto="matAutocomplete"
                     [autoSelectActiveOption]="true"
-                    (optionSelected)="valueChange.emit($event.option.value); name.blur()"
+                    (opened)="clearOnFocus && myControl.setValue('')"
+                    (optionSelected)="valueChange.emit($event.option.value)"
                     [autoActiveFirstOption]="true">
     <mat-option *ngFor="let option of searchedNames | async"
                 [value]="option">

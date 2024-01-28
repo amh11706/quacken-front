@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { debounceTime, mergeMap } from 'rxjs/operators';
+import { debounceTime, mergeMap, startWith } from 'rxjs/operators';
 import { OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { FriendsService } from '../friends/friends.service';
@@ -13,8 +13,15 @@ import { FriendsService } from '../friends/friends.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NameSearchComponent implements OnInit {
+  private _value = '';
   @Input() set value(v: string) {
     this.myControl.setValue(v);
+    if (v !== this._value) this.valueChange.emit(v);
+    this._value = v;
+  }
+
+  get value(): string {
+    return this._value;
   }
 
   @Output() valueChange = new EventEmitter<string>();
@@ -32,20 +39,29 @@ export class NameSearchComponent implements OnInit {
   ngOnInit(): void {
     this.searchedNames = this.myControl.valueChanges
       .pipe(
+        startWith(''),
         debounceTime(300),
         mergeMap(value => this.searchName(value)),
       );
   }
 
+  blur(): void {
+    if (this.clearOnFocus) this.myControl.setValue(this.value);
+    else this.value = this.myControl.value;
+  }
+
   private async searchName(search: string): Promise<string[]> {
-    if (search.length < 2) {
+    let names: string[] | undefined = [];
+    if (search.length >= 2) {
+      names = await this.ws.request(this.onlineOnly ? OutCmd.SearchNamesOnline : OutCmd.SearchNames, search);
+    }
+    if (!names?.length) {
       const nameTemp = [...this.fs.lobby$.getValue().map(m => m.from), ...this.fs.friends];
       if (!this.onlineOnly) nameTemp.push(...this.fs.offline);
       const names = new Map(nameTemp.map(n => [n, undefined]));
 
       return Promise.resolve(Array.from(names.keys()));
     }
-    const names = await this.ws.request(this.onlineOnly ? OutCmd.SearchNamesOnline : OutCmd.SearchNames, search);
-    return names || [];
+    return names;
   }
 }
