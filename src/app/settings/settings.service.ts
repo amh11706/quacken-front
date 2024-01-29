@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { InCmd, OutCmd } from '../ws/ws-messages';
 
 import { WsService } from '../ws/ws.service';
@@ -13,9 +13,9 @@ interface LocalSettings extends Map<SettingGroup, SettingMap<SettingGroup>> {
   set<T extends SettingGroup>(group: T, settings: SettingMap<T>): this;
 }
 
-interface LocalSettingsReady extends Map<SettingGroup, Subject<SettingMap<SettingGroup>>> {
-  get<T extends SettingGroup>(group: T): Subject<SettingMap<T>>;
-  set<T extends SettingGroup>(group: T, subject: Subject<SettingMap<T>>): this;
+interface LocalSettingsReady extends Map<SettingGroup, Promise<SettingMap<SettingGroup>>> {
+  get<T extends SettingGroup>(group: T): Promise<SettingMap<T>>;
+  set<T extends SettingGroup>(group: T, subject: Promise<SettingMap<T>>): this;
 }
 
 @Injectable({
@@ -76,35 +76,27 @@ export class SettingsService {
   }
 
   getGroup<T extends SettingGroup>(group: T, update = false): Promise<SettingMap<T>> {
-    if (!update) {
-      const settings = this.settings.get(group);
-      if (settings) return Promise.resolve(settings);
-    }
-
     let ready = this.ready.get(group);
-    if (!ready) {
-      ready = new Subject();
-      this.ready.set(group, ready);
+    if (!ready || update) {
+      ready = new Promise(resolve => {
+        void this.ws.request(OutCmd.SettingGetGroup, group).then(mu => {
+          if (!mu) return;
+          const m = mu as DBSetting<T>[];
+          const localSettings = this.prefetch(group);
 
-      void this.ws.request(OutCmd.SettingGetGroup, group).then(mu => {
-        if (!mu) return;
-        const m = mu as DBSetting<T>[];
-        const localSettings = this.settings.get(group) || this.prefetch(group);
-
-        for (const setting of m) {
-          const oldSetting = localSettings[setting.name];
-          if (oldSetting) {
-            oldSetting.data = setting.data;
-            oldSetting.value = setting.value;
-          } else localSettings[setting.name] = new Setting(setting);
-        }
-        ready?.next?.(localSettings);
-        this.ready.delete(group);
+          for (const setting of m) {
+            const oldSetting = localSettings[setting.name];
+            if (oldSetting) {
+              oldSetting.data = setting.data;
+              oldSetting.value = setting.value;
+            } else localSettings[setting.name] = new Setting(setting);
+          }
+          resolve(localSettings);
+        });
+        this.ready.set(group, ready);
       });
     }
-    return new Promise(resolve => {
-      ready?.subscribe(v => resolve(v));
-    });
+    return ready;
   }
 
   async get<T extends SettingGroup>(group: T, name: ServerSettingGroup[T]): Promise<Setting | undefined> {
