@@ -12,9 +12,10 @@ import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { BoatSync } from '../lobby/quacken/boats/types';
-import { SettingMap } from '../settings/types';
+import { ServerSettingMap } from '../settings/types';
 import { InMessage } from '../ws/ws-subscribe-types';
 import { Lobby } from '../lobby/cadegoose/types';
+import { SettingGroup } from '../settings/setting/settings';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
@@ -30,7 +31,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
   private fakeWs: WsService = {} as any;
   private fakeChat: ChatService = {} as any;
-  graphicSettings?: SettingMap;
+  graphicSettings?: ServerSettingMap<'l/cade'>;
   private boats: BoatSync[] = [];
   private id = 0;
   tick = 0;
@@ -97,10 +98,10 @@ export class ReplayComponent implements OnInit, OnDestroy {
     for (const [group, setting] of Object.entries(settings)) {
       if (!settings.hasOwnProperty(group)) continue;
       if (!this.graphicSettings) {
-        this.graphicSettings = setting;
-        if (!setting.turnTime?.value) setting.turnTime = { value: 10 };
+        this.graphicSettings = setting as ServerSettingMap<'l/cade'>;
+        if (!setting.turnTime?.value) setting.turnTime = { id: 0, name: 'turnTime', group: group as SettingGroup, value: 10 };
       }
-      this.ss.setFakeSettings(group, setting);
+      this.ss.setFakeSettings(group as SettingGroup, setting);
     }
 
     setTimeout(() => {

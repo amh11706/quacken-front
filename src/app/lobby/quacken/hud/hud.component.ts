@@ -10,7 +10,7 @@ import { Boat } from '../boats/boat';
 import { WsService } from '../../../ws/ws.service';
 import { Tokens } from '../../../boats/move-input/move-input.component';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
-import { SettingMap } from '../../../settings/types';
+import { SettingGroup } from '../../../settings/setting/settings';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -23,7 +23,7 @@ export const weapons = [
   styleUrls: ['./hud.component.scss'],
 })
 export class HudComponent implements OnInit, OnDestroy {
-  @Input() group = 'l/quacken';
+  @Input() group = 'l/quacken' as SettingGroup;
   @Input() kbControls = 1;
   @Input() shiftSpecials = 0;
   @Input() moveKeys: Record<number, KeyActions> = {
@@ -87,7 +87,7 @@ export class HudComponent implements OnInit, OnDestroy {
   dragContext = { source: 8, move: 0, type: 'move' };
   resetMoves$ = new Subject<void>();
   protected subs = new Subscription();
-  protected lobbySettings: SettingMap = { turns: { value: 90 }, turnTime: { value: 30 } };
+  protected lobbySettings = this.ss.prefetch('l/cade');
   protected get maxTurn(): number { return this.lobbySettings.turns?.value || 90; }
   get secondsPerTurn(): number { return this.lobbySettings.turnTime?.value || 30; }
 

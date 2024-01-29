@@ -5,10 +5,10 @@ import { CadeDesc } from '../../lobby/cadegoose/cadegoose.component';
 import { QuackenDesc } from '../../lobby/quacken/quacken.component';
 import { SbDesc } from '../../lobby/seabattle/seabattle.component';
 import { SettingsService } from '../../settings/settings.service';
-import { Settings } from '../../settings/setting/settings';
+import { ServerSettingGroup, SettingGroup, SettingName } from '../../settings/setting/settings';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
-import { SettingMap } from '../../settings/types';
+import { ServerSettingMap } from '../../settings/types';
 
 export const Descriptions = {
   Quacken: QuackenDesc,
@@ -27,10 +27,10 @@ const groups = ['quacken', 'spades', 'cade', 'cade', 'flaggames'];
 })
 export class CreateComponent implements OnInit, OnDestroy {
   created = false;
-  settings: SettingMap = {};
-  createGroup: SettingMap = {};
+  settings = this.ss.prefetch('l/create');
+  createGroup = this.ss.prefetch('l/create');
   idDescriptions = Object.values(Descriptions);
-  typeSettings: (keyof typeof Settings)[][] = [
+  typeSettings: SettingName[][] = [
     ['maxPlayers', 'hotEntry', 'publicMode'],
     ['turnTime', 'playTo', 'watchers'],
     ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
@@ -64,18 +64,15 @@ export class CreateComponent implements OnInit, OnDestroy {
 
   createLobby(): void {
     this.createGroup.createType = this.settings.createType ?? this.createGroup.createType;
-    const group: SettingMap = {};
-    for (const [key, value] of Object.entries(this.createGroup)) {
-      if (!value) continue;
-      const copy = { ...value };
-      delete copy.stream;
-      if (value?.value !== undefined) group[key] = copy;
-    }
+    const group = {} as ServerSettingMap;
+    Object.entries(this.createGroup).forEach(([key, value]) => {
+      if (value) group[key as ServerSettingGroup[SettingGroup]] = value.toDBSetting();
+    });
     this.ws.send(OutCmd.LobbyCreate, group);
     this.created = true;
   }
 
   async changeType(): Promise<void> {
-    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType?.value || 0], true);
+    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType?.value || 0] as SettingGroup, true);
   }
 }

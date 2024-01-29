@@ -14,8 +14,8 @@ import { WsService } from '../ws/ws.service';
 import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
 import { AiBoatData, MoveNode, MoveTiers } from '../replay/cadegoose/types';
 import { ParsedTurn } from '../lobby/cadegoose/types';
-import { SettingMap } from '../settings/types';
 import { MoveMessageIncoming } from '../lobby/quacken/boats/types';
+import { SettingGroup } from '../settings/setting/settings';
 
 function mapMoves(m: number | string): string {
   return ['_', 'L', 'F', 'R'][+m] || 'S';
@@ -151,10 +151,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
     if (!match.data) return;
     const settings = match.data.settings;
     for (const [group, setting] of Object.entries(settings)) {
-      if (!settings.hasOwnProperty(group)) continue;
-      const settingGroup: SettingMap = setting;
-      if (settingGroup.turnTime) settingGroup.turnTime.value = 40;
-      this.ss.setFakeSettings(group, settingGroup);
+      if (setting.turnTime) setting.turnTime.value = 65;
+      this.ss.setFakeSettings(group as SettingGroup, setting);
     }
   }
 

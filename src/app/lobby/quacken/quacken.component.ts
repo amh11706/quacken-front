@@ -1,17 +1,16 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { Settings } from '../../settings/setting/settings';
+import { SettingName } from '../../settings/setting/settings';
 import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
-import { SettingMap } from '../../settings/types';
 import { Lobby } from '../cadegoose/types';
 
-const ownerSettings: (keyof typeof Settings)[] = [
+const ownerSettings: SettingName[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
   'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen',
 ];
@@ -36,18 +35,14 @@ export class QuackenComponent implements OnInit, OnDestroy {
     return this._lobby;
   }
 
+  protected group: 'l/quacken' | 'l/cade' | 'l/flaggames' = 'l/quacken';
   map: number[][] = [];
-  controlSettings: SettingMap = { kbControls: { value: 1 } };
-  lobbySettings: SettingMap = { fishBoats: { value: 0 } };
-  graphicSettings: SettingMap = {
-    mapScale: { value: 50 },
-    speed: { value: 10 },
-    renderMode: { value: -1 },
-  };
+  controlSettings = this.ss.prefetch('controls');
+  lobbySettings = this.ss.prefetch(this.group);
+  graphicSettings = this.ss.prefetch('graphics');
 
   myBoat = new Boat('');
   protected sub = new Subscription();
-  protected group = 'l/quacken';
 
   protected mapHeight = 52;
   protected mapWidth = 25;
@@ -89,7 +84,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
     if (graphicSettings.mapScale && graphicSettings.speed) this.graphicSettings = graphicSettings as this['graphicSettings'];
     if (controlSettings.kbControls) this.controlSettings = controlSettings as this['controlSettings'];
-    this.sub.add(this.graphicSettings.renderMode?.stream?.subscribe(() => {
+    this.sub.add(this.graphicSettings.renderMode?.stream.subscribe(() => {
       setTimeout(() => {
         this.setMapB64(this._lobby?.map || '');
         this.ws.send(OutCmd.Sync);

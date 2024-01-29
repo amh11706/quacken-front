@@ -15,8 +15,9 @@ import { QuackenComponent } from '../quacken/quacken.component';
 import { Boat } from '../quacken/boats/boat';
 import { TwodRenderComponent } from './twod-render/twod-render.component';
 import { MapTile, MapEditor } from '../../map-editor/types';
-import { SettingMap } from '../../settings/types';
 import { Turn } from '../quacken/boats/types';
+import { SettingMap } from '../../settings/types';
+import { SettingGroup } from '../../settings/setting/settings';
 
 const ownerSettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',
@@ -55,15 +56,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     settingsOpen: false,
   };
 
-  graphicSettings: SettingMap = {
-    mapScale: { value: 50 },
-    speed: { value: 10 },
-    water: { value: 1 },
-    showFps: { value: 0 },
-    renderMode: { value: -1 },
-  };
-
-  controlSettings: SettingMap = { lockAngle: { value: 0 }, kbControls: { value: 0 } };
+  graphicSettings = this.ss.prefetch('graphics');
+  controlSetting = this.ss.prefetch('controls');
   hoveredTeam = -1;
   statOpacity = 0;
   mapHeight = 36;
@@ -88,6 +82,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     super(ws, ss, fs, es);
 
     this.group = 'l/cade';
+    this.lobbySettings = this.ss.prefetch(this.group) as SettingMap<SettingGroup>;
     this.ss.setLobbySettings(ownerSettings, this.showMapChoice);
   }
 

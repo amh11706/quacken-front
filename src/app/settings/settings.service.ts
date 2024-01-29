@@ -3,17 +3,27 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { InCmd, OutCmd } from '../ws/ws-messages';
 
 import { WsService } from '../ws/ws.service';
-import { Settings } from './setting/settings';
-import { Setting, SettingMap, SettingPartial } from './types';
+import { ServerSettingGroup, SettingGroup, SettingName, SettingValues } from './setting/settings';
+import { DBSetting, SettingMap, Setting, ServerSettingMap } from './types';
 
-export type SettingList = (keyof typeof Settings)[];
+export type SettingList = SettingName[];
+
+interface LocalSettings extends Map<SettingGroup, SettingMap<SettingGroup>> {
+  get<T extends SettingGroup>(group: T): SettingMap<T>;
+  set<T extends SettingGroup>(group: T, settings: SettingMap<T>): this;
+}
+
+interface LocalSettingsReady extends Map<SettingGroup, Subject<SettingMap<SettingGroup>>> {
+  get<T extends SettingGroup>(group: T): Subject<SettingMap<T>>;
+  set<T extends SettingGroup>(group: T, subject: Subject<SettingMap<T>>): this;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class SettingsService {
-  private settings = new Map<string, SettingMap>();
-  private ready = new Map<string, Subject<SettingMap>>();
+  private settings: LocalSettings = new Map();
+  private ready: LocalSettingsReady = new Map();
 
   tabIndex = 1;
   admin$ = new BehaviorSubject(true);
@@ -27,13 +37,20 @@ export class SettingsService {
       const setting = group?.[s.name];
       if (setting) {
         setting.value = s.value;
-        setting.stream?.next?.(s.value);
+        setting.data = s.data;
       }
     });
   }
 
-  setFakeSettings(group: string, settings: SettingMap): void {
-    this.settings.set(group, settings);
+  setFakeSettings<T extends SettingGroup>(group: T, settings: ServerSettingMap<T>): void {
+    const settingGroup = {} as SettingMap<T>;
+    for (const [name, value] of Object.entries(settings)) {
+      const n = name as ServerSettingGroup[T];
+      settingGroup[n] = new Setting(
+        { id: 0, name: n, group: group as SettingGroup, value: (value as DBSetting).value },
+      );
+    }
+    this.settings.set(group, settingGroup);
   }
 
   setLobbySettings(adminNames: SettingList, showMapChoice = false, rankArea = 2): void {
@@ -42,7 +59,23 @@ export class SettingsService {
     this.rankArea = rankArea;
   }
 
-  getGroup(group: string, update = false): Promise<SettingMap> {
+  prefetch<T extends SettingGroup>(group: T): SettingMap<T> {
+    const settings = this.settings.get(group);
+    if (settings) return settings;
+
+    const newSettings = {} as SettingMap<T>;
+    for (const s of SettingValues) {
+      if (s.group === group) {
+        newSettings[s.name as ServerSettingGroup[T]] = new Setting(
+          { id: s.id, name: s.name, group, value: s.default ?? 0 },
+        );
+      }
+    }
+    this.settings.set(group, newSettings);
+    return newSettings;
+  }
+
+  getGroup<T extends SettingGroup>(group: T, update = false): Promise<SettingMap<T>> {
     if (!update) {
       const settings = this.settings.get(group);
       if (settings) return Promise.resolve(settings);
@@ -50,44 +83,41 @@ export class SettingsService {
 
     let ready = this.ready.get(group);
     if (!ready) {
-      ready = new Subject<SettingMap>();
+      ready = new Subject();
       this.ready.set(group, ready);
 
-      void this.ws.request(OutCmd.SettingGetGroup, group).then(m => {
-        if (!m) return;
-        let localSettings = this.settings.get(group);
-        if (!localSettings) {
-          localSettings = {};
-          this.settings.set(group, localSettings);
-        }
+      void this.ws.request(OutCmd.SettingGetGroup, group).then(mu => {
+        if (!mu) return;
+        const m = mu as DBSetting<T>[];
+        const localSettings = this.settings.get(group) || this.prefetch(group);
 
         for (const setting of m) {
           const oldSetting = localSettings[setting.name];
           if (oldSetting) {
-            Object.assign(oldSetting, setting);
-            oldSetting.stream?.next?.(setting.value);
-          } else localSettings[setting.name] = { ...setting, stream: new BehaviorSubject(setting.value) };
+            oldSetting.data = setting.data;
+            oldSetting.value = setting.value;
+          } else localSettings[setting.name] = new Setting(setting);
         }
         ready?.next?.(localSettings);
         this.ready.delete(group);
       });
     }
-    return new Promise<SettingMap>(resolve => {
+    return new Promise(resolve => {
       ready?.subscribe(v => resolve(v));
     });
   }
 
-  async get(group: string, name: string): Promise<SettingPartial | undefined> {
+  async get<T extends SettingGroup>(group: T, name: ServerSettingGroup[T]): Promise<Setting | undefined> {
     const settings = await this.getGroup(group);
     return Promise.resolve(settings[name]);
   }
 
-  async save(setting: Setting): Promise<void> {
+  async save(setting: DBSetting): Promise<void> {
     this.ws.send(OutCmd.SettingSet, setting);
     const oldSetting = await this.get(setting.group, setting.name);
     if (oldSetting) {
-      Object.assign(oldSetting, setting);
-      oldSetting.stream?.next?.(setting.value);
+      oldSetting.data = setting.data;
+      oldSetting.value = setting.value;
     }
   }
 }

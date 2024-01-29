@@ -3,9 +3,9 @@ import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entr
 import { getShipLink } from '../setting/setting.component';
 import { BoatSetting, OptionSetting, Settings } from '../setting/settings';
 import { SettingsService } from '../settings.service';
-import { Setting } from '../types';
+import { DBSetting } from '../types';
 
-interface BotSetting extends Setting {
+interface BotSetting extends DBSetting {
   data: {
     padExtra: number[],
     custom: number[][],

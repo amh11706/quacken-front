@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { SettingsService } from './settings/settings.service';
-import { SettingMap } from './settings/types';
 
 /* eslint no-unused-vars: "off" */
 export enum Sounds {
@@ -48,10 +47,10 @@ const SoundFiles: Record<Sounds, SoundFile> = {
 })
 export class SoundService {
   private loaded = new Map<Sounds, Promise<AudioBuffer>>();
-  private settings: SettingMap = {};
+  private settings = this.ss.prefetch('sounds');
   private ctx = new AudioContext();
 
-  constructor(ss: SettingsService) {
+  constructor(private ss: SettingsService) {
     void ss.getGroup('sounds').then(settings => this.settings = settings);
   }
 

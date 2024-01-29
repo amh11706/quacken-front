@@ -12,7 +12,7 @@
               mat-raised-button
               [disabled]="created"
               (click)="createLobby(game)">
-        {{game.name?.data || 'Game ' + i}}
+        {{$any(game).name?.data || 'Game ' + i}}
       </button>
     </div>
   </mat-card>

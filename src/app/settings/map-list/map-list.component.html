@@ -55,6 +55,6 @@
               [height]="rankArea === 2 ? 36 : 41"
               [disabled]="(ss.admin$ | async) === false"
               [description]="m.description"
-              [class.selected]="m.id === selectedMap.value"
+              [class.selected]="m.id === selectedMap?.value"
               (selectedMap)="selectMap($event)"></q-map-card>
 </cdk-virtual-scroll-viewport>

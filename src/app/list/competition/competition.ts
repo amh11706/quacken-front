@@ -1,4 +1,4 @@
-import { SettingMap } from '../../settings/types';
+import { ServerSettingMap } from '../../settings/types';
 
 // const BaseSettings = {
 //   createType: { value: 2 },
@@ -31,7 +31,7 @@ interface Competition {
   description: string,
   rounds: {
     description: string,
-    games: SettingMap[]
+    games: ServerSettingMap<'l/cade'>[]
   }[],
 }
 

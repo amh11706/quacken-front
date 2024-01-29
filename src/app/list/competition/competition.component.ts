@@ -5,7 +5,7 @@ import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dia
 import { WsService } from '../../ws/ws.service';
 import { Competitions } from './competition';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
-import { SettingMap } from '../../settings/types';
+import { ServerSettingMap } from '../../settings/types';
 
 @Component({
   selector: 'q-competition',
@@ -32,8 +32,8 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  createLobby(c: SettingMap): void {
+  createLobby(c: ServerSettingMap<'l/cade'>): void {
     this.created = true;
-    this.ws.send(OutCmd.LobbyCreate, c);
+    this.ws.send(OutCmd.LobbyCreate, c as ServerSettingMap);
   }
 }

@@ -16,8 +16,8 @@ import { WsService } from '../../../ws/ws.service';
 import { Boat } from '../../quacken/boats/boat';
 import { BoatRender } from '../boat-render';
 import { BoatService, flagMats } from '../boat.service';
-import { SettingMap } from '../../../settings/types';
 import { Team } from '../../quacken/boats/types';
+import { SettingsService } from '../../../settings/settings.service';
 
 const sunSettings = {
   turbidity: 20,
@@ -67,12 +67,8 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
   @Input() safeZone = true;
-  @Input() graphicSettings: SettingMap = {
-    mapScale: { value: 50 },
-    speed: { value: 10 },
-    water: { value: 1 },
-    showFps: { value: 0 },
-  };
+  @Input() graphicSettings = this.ss.prefetch('graphics');
+  @Input() controlSettings = this.ss.prefetch('controls');
 
   @Input() hoveredTeam = -1;
   private alive = true;
@@ -104,6 +100,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private bs: BoatService,
     private ws: WsService,
+    private ss: SettingsService,
     private ngZone: NgZone,
   ) {
     void bs.setScene(this.scene, this.loadObj, this.camera);
@@ -238,7 +235,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     TWEEN.update(time);
     BoatRender.tweens.update(time);
 
-    this.controls.mouseButtons.RIGHT = this.graphicSettings.lockAngle ? MOUSE.PAN : MOUSE.ROTATE;
+    this.controls.mouseButtons.RIGHT = this.controlSettings.lockAngle ? MOUSE.PAN : MOUSE.ROTATE;
     if (time - this.lastFrame > 50 && this.slowFrames < 50) this.slowFrames++;
     else if (this.slowFrames > 0) this.slowFrames /= 2;
     this.lastFrame = time;

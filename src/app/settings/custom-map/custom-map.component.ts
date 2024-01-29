@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy
 
 import { WsService } from '../../ws/ws.service';
 import { CustomMapSetting } from '../setting/settings';
-import { SettingPartial } from '../types';
+import { Setting } from '../types';
 import { MapOption } from '../map-list/map-card/types';
 
 interface DropdownMapOption extends MapOption {
@@ -16,7 +16,7 @@ interface DropdownMapOption extends MapOption {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomMapComponent implements OnInit {
-  @Input() settingValue?: SettingPartial;
+  @Input() settingValue?: Setting;
   @Input() setting!: CustomMapSetting;
   @Input() disabled = false;
   @Output() save = new EventEmitter<number>();
@@ -38,7 +38,7 @@ export class CustomMapComponent implements OnInit {
   preSave(map?: MapOption): void {
     const setting = this.settingValue;
     if (!setting) return;
-    if (map?.id !== setting.value) setting.stream?.next(map?.id || 0);
+    if (map?.id !== setting.value) setting.value = map?.id || 0;
     setting.value = map?.id || 0;
     const selected = this.data.find(el => el.id === +setting.value);
     setting.data = selected?.label || 'Generated';

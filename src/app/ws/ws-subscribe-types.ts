@@ -2,7 +2,7 @@ import { Scene } from 'three';
 import { Boat } from '../lobby/quacken/boats/boat';
 import { BoatSync, BoatTick, MoveMessage, MoveMessageIncoming, Sync, Turn } from '../lobby/quacken/boats/types';
 import { InCmd, Internal } from './ws-messages';
-import { Setting } from '../settings/types';
+import { DBSetting } from '../settings/types';
 import { Lobby, TeamMessage } from '../lobby/cadegoose/types';
 import { Player } from '../lobby/spades/types';
 import { Command, Invite, Message } from '../chat/types';
@@ -47,7 +47,7 @@ export type SubscribeData = {
   [InCmd.BlockUser]: string;
   [InCmd.UnblockUser]: string;
 
-  [InCmd.SettingSet]: Setting;
+  [InCmd.SettingSet]: DBSetting;
   [InCmd.IntentoryOpen]: Inventory;
   [InCmd.InventoryUpdate]: InvUpdate;
   [InCmd.InventoryCoin]: number;

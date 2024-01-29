@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { Settings, SliderSetting } from '../setting/settings';
 import { SettingsService } from '../settings.service';
-import { Setting } from '../types';
+import { DBSetting } from '../types';
 
-interface JobberSetting extends Setting {
+interface JobberSetting extends DBSetting {
   data: {
     Sail: number;
     Carp: number;

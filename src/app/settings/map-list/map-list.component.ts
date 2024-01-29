@@ -7,8 +7,8 @@ import { Internal, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../settings.service';
 import { MapFilterComponent } from './map-filter/map-filter.component';
-import { Settings } from '../setting/settings';
-import { SettingPartial } from '../types';
+import { ServerSettingGroup, Settings } from '../setting/settings';
+import { Setting } from '../types';
 import { MapOption } from './map-card/types';
 
 const enum SortOptions {
@@ -79,7 +79,7 @@ export class MapListComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport, { static: true }) mapViewport?: CdkVirtualScrollViewport;
   @Input() set visible(v: boolean) {
     if (!v) return;
-    const i = this.filteredMapList.findIndex(m => m.id === this.selectedMap.value);
+    const i = this.filteredMapList.findIndex(m => m.id === this.selectedMap?.value);
     if (i !== -1) {
       setTimeout(() => {
         this.mapViewport?.scrollToIndex(i);
@@ -90,7 +90,7 @@ export class MapListComponent implements OnInit, OnDestroy {
   @Input() rankArea = 2;
 
   search = '';
-  selectedMap: SettingPartial = { value: 0 };
+  selectedMap?: Setting;
   private servermapList: MapOption[] = [];
   private filteredMapList: MapOption[] = [];
   private mapHeight = 36;
@@ -108,7 +108,7 @@ export class MapListComponent implements OnInit, OnDestroy {
   selectedSortOption = this.sortList[1] || SortOptions.DescendingAvgRating;
   private tagList: string[] = [];
   private userList: string[] = [];
-  private setting = Settings.cadeMap;
+  private setting: typeof Settings['cadeMap'] | typeof Settings['flagMap'] = Settings.cadeMap;
   private subs = new Subscription();
 
   constructor(
@@ -121,7 +121,7 @@ export class MapListComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     if (this.rankArea === 4) this.setting = Settings.flagMap;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async l => {
-      const settingValue = (await this.ss.get(this.setting.group, this.setting.name))?.value || 0;
+      const settingValue = (await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']))?.value || 0;
       if (settingValue > 1 || !l.map || !this.servermapList[0]) return;
       const generatedMap = this.servermapList[0];
       generatedMap.data = this.b64ToArray(l.map);
@@ -134,7 +134,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.sort(this.selectedSortOption);
     this.initFilters();
     this.maplist.next(this.filteredMapList);
-    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name) ?? this.selectedMap;
+    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']) ?? this.selectedMap;
   }
 
   ngOnDestroy(): void {
@@ -216,7 +216,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       group: this.setting.group,
       data: map.username ? `${map.name} (${map.username})` : 'Generated',
     });
-    this.selectedMap.value = map.id;
+    if (this.selectedMap) this.selectedMap.value = map.id;
     if (id < 0) this.visible = true;
   }
 

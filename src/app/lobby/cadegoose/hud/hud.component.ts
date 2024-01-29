@@ -4,6 +4,7 @@ import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { InCmd, Internal, OutCmd } from '../../../ws/ws-messages';
 import { HudComponent } from '../../quacken/hud/hud.component';
 import { BoatTick } from '../../quacken/boats/types';
+import { SettingGroup } from '../../../settings/setting/settings';
 
 export const CadeKeyActions = {
   bombLeft: KeyActions.CBombLeft,
@@ -52,7 +53,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   tokenStrings = ['', '', ''];
   lastTick = { tp: 0, attr: {} } as BoatTick;
   updateWantMove$ = new Subject<boolean>();
-  group = 'l/cade';
+  group = 'l/cade' as SettingGroup;
   maxMoves = 3;
 
   ngOnInit(): void {

@@ -4,7 +4,8 @@ import { BoatSync } from '../lobby/quacken/boats/types';
 import { DBTile } from '../map-editor/types';
 import { AiData, MatchAiRequest, MoveNode, Points, ScoreResponse } from '../replay/cadegoose/types';
 import { MapOption } from '../settings/map-list/map-card/types';
-import { Setting, SettingMap } from '../settings/types';
+import { SettingGroup } from '../settings/setting/settings';
+import { DBSetting, ServerSettingMap } from '../settings/types';
 import { OutCmd } from './ws-messages';
 import { InMessage } from './ws-subscribe-types';
 
@@ -65,7 +66,7 @@ type OutCmdReturns = {
   [OutCmd.SearchNames]: string[];
   [OutCmd.SearchNamesOnline]: string[];
 
-  [OutCmd.SettingGetGroup]: Setting[];
+  [OutCmd.SettingGetGroup]: DBSetting[];
 
   [OutCmd.ChangePass]: string;
   [OutCmd.ChangeName]: string;
@@ -75,7 +76,9 @@ type OutCmdReturns = {
   [OutCmd.Shots]: number[];
 
   [OutCmd.MatchTraining]: { points: Record<number, Points>, nodes: Record<string, MoveNode> };
-  [OutCmd.MatchData]: { data?: { messages: InMessage[][], settings: SettingMap[], seed: string } };
+  [OutCmd.MatchData]: {
+    data?: { messages: InMessage[][], settings: Record<SettingGroup, ServerSettingMap>, seed: string }
+  };
   [OutCmd.MatchScore]: ScoreResponse;
   [OutCmd.MatchAi]: AiData;
 

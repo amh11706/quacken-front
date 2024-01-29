@@ -1,6 +1,6 @@
 import { Invite } from '../chat/types';
 import { MoveMessage } from '../lobby/quacken/boats/types';
-import { Setting, SettingMap } from '../settings/types';
+import { ServerSettingMap, DBSetting } from '../settings/types';
 import { OutCmd } from './ws-messages';
 
 export type SendCmdInputs = {
@@ -18,8 +18,8 @@ export type SendCmdInputs = {
   [OutCmd.ChatMessage]: string;
   [OutCmd.LobbyJoin]: number;
   [OutCmd.LobbyApply]: number;
-  [OutCmd.SettingSet]: Setting;
-  [OutCmd.LobbyCreate]: SettingMap;
+  [OutCmd.SettingSet]: DBSetting;
+  [OutCmd.LobbyCreate]: ServerSettingMap;
 
   [OutCmd.Block]: string;
   [OutCmd.Unblock]: string;

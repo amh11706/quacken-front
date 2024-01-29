@@ -1,8 +1,8 @@
 <q-twod-render #renderer
                *ngIf="graphicSettings.renderMode?.value === 0"
                [hoveredTeam]="hoveredTeam"
-               [speed]="graphicSettings.speed?.value ?? 10"
-               [mapScale]="graphicSettings.mapScale?.value ?? 50"
+               [speed]="graphicSettings.speed.value"
+               [mapScale]="graphicSettings.mapScale.value"
                [mapHeight]="mapHeight"
                [mapWidth]="mapWidth"
                [safeZone]="false"
@@ -29,5 +29,5 @@
 
 <q-cade-hud [moveKeys]="moveKeys"
             [actions]="actions"
-            [kbControls]="controlSettings.kbControls?.value || 0"
-            [shiftSpecials]="controlSettings.shiftSpecials?.value || 0"></q-cade-hud>
+            [kbControls]="controlSettings.kbControls.value || 0"
+            [shiftSpecials]="controlSettings.shiftSpecials.value || 0"></q-cade-hud>

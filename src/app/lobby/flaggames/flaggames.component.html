@@ -2,9 +2,9 @@
   <q-twod-render #renderer
                  *ngIf="graphicSettings.renderMode?.value === 0"
                  [hoveredTeam]="hoveredTeam"
-                 [speed]="graphicSettings.speed?.value ?? 10"
-                 [mapScale]="graphicSettings.mapScale?.value ?? 50"
-                 [fishBoats]="lobbySettings.fishBoats?.value ?? 0"
+                 [speed]="graphicSettings.speed.value"
+                 [mapScale]="graphicSettings.mapScale.value"
+                 [fishBoats]="lobbySettings.fishBoats.value"
                  [mapHeight]="mapHeight"
                  [mapWidth]="mapWidth"
                  [ctrlZoom]="advancedMapOpen"
@@ -41,5 +41,5 @@
 <q-cade-hud [moveKeys]="moveKeys"
             [actions]="actions"
             [group]="'l/flaggames'"
-            [kbControls]="controlSettings.kbControls?.value || 0"
-            [shiftSpecials]="controlSettings.shiftSpecials?.value || 0"></q-cade-hud>
+            [kbControls]="controlSettings.kbControls.value"
+            [shiftSpecials]="controlSettings.shiftSpecials.value"></q-cade-hud>

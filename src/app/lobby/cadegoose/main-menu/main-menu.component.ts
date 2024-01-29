@@ -10,9 +10,9 @@ import { SettingsService } from '../../../settings/settings.service';
 import { Sounds, SoundService } from '../../../sound.service';
 import { Boat } from '../../quacken/boats/boat';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
-import { BoatSetting, Settings } from '../../../settings/setting/settings';
+import { BoatSetting, SettingGroup, Settings } from '../../../settings/setting/settings';
 import { Message } from '../../../chat/types';
-import { SettingPartial } from '../../../settings/types';
+import { Setting } from '../../../settings/types';
 import { Lobby, TeamMessage } from '../types';
 
 @Component({
@@ -35,10 +35,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   ready = false;
   statsOpen = false;
   roundGoing = false;
-  mapId: SettingPartial = { value: 0 };
+  mapId: Setting = new Setting('cadeMap', 0);
   private subs = new Subscription();
   private firstJoin = true;
-  protected group = 'l/cade';
+  protected group = 'l/cade' as SettingGroup;
   private lobby?: Lobby;
   streams = { open: this.es.open$, teamPlayers: this.teamPlayers$ };
 

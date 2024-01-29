@@ -4,16 +4,15 @@ import { Subscription } from 'rxjs';
 import { SettingsService } from '../../settings/settings.service';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { WsService } from '../../ws/ws.service';
-import { Settings } from '../../settings/setting/settings';
+import { SettingName } from '../../settings/setting/settings';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { TimerComponent } from './timer/timer.component';
 import { spots } from './spot/spot.component';
 import { Card } from './card/card.component';
-import { SettingMap } from '../../settings/types';
 import { Lobby } from '../cadegoose/types';
 
-const ownerSettings: (keyof typeof Settings)[] = [
+const ownerSettings: SettingName[] = [
   'watchers', 'turnTime', 'playTo',
 ];
 
@@ -58,7 +57,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     return this._lobby;
   }
 
-  settings: SettingMap = {};
+  settings = this.ss.prefetch('l/spades');
 
   cards: Card[] = [];
   private select = 1;

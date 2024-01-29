@@ -5,8 +5,8 @@ import { WsService } from '../../ws/ws.service';
 import { AdvancedComponent } from '../advanced/advanced.component';
 import { SettingsService } from '../settings.service';
 
-import { SettingInput, Settings } from './settings';
-import { SettingMap, SettingPartial } from '../types';
+import { SettingGroup, SettingInput, SettingName, Settings } from './settings';
+import { SettingMap, Setting } from '../types';
 
 export const links: Record<number, string> = {
   14: 'smsloop/smsloop',
@@ -37,7 +37,7 @@ export function getShipLink(id: number): string {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingComponent {
-  @Input() set name(value: keyof typeof Settings) {
+  @Input() set name(value: SettingName) {
     this.setting = Settings[value] || {};
     void this.fetch();
   }
@@ -45,8 +45,8 @@ export class SettingComponent {
   @Output() valueChange = new EventEmitter<number>();
 
   setting = {} as SettingInput;
-  group: SettingMap = {};
-  settingValue = {} as SettingPartial;
+  group = {} as SettingMap<SettingGroup>;
+  settingValue = {} as Setting;
   getShipLink = getShipLink;
   private debounce?: number;
 
@@ -59,14 +59,13 @@ export class SettingComponent {
 
   private async fetch() {
     if (!this.setting.name) return;
-    this.group[this.setting.name] = { value: 0 };
     if (this.setting.group) this.group = await this.ss.getGroup(this.setting.group);
     this.settingValue = this.group[this.setting.name] ?? this.settingValue;
     this.cd.detectChanges();
   }
 
   openAdvanced(): void {
-    const copy: SettingPartial = JSON.parse(JSON.stringify(this.settingValue));
+    const copy = this.settingValue.clone();
     this.dialog.open(AdvancedComponent, {
       data: {
         component: this.setting.advancedComponent,
@@ -76,7 +75,8 @@ export class SettingComponent {
     }).afterClosed().subscribe((value: string) => {
       if (value !== 'true') return;
       // only assign the value if the user clicked save.
-      Object.assign(this.settingValue, copy);
+      this.settingValue.data = copy.data;
+      this.settingValue.value = copy.value;
       this.save(copy.value);
     });
   }
@@ -112,7 +112,7 @@ export class SettingComponent {
 
   save(value: number): void {
     const newSetting = this.settingValue;
-    if (value !== newSetting.value) newSetting.stream?.next(value);
+    if (value !== newSetting.value) newSetting.value = value;
     newSetting.value = value;
     if (this.setting.type === 'slider') {
       if (newSetting.value > this.setting.max) newSetting.value = this.setting.max;

@@ -69,6 +69,7 @@
                 [disabled]="setting.admin && (ss.admin$ | async) === false">
     <span [innerHTML]="setting.label"></span>
   </mat-checkbox>
+  <mat-icon [color]="'primary'">check_circle</mat-icon>
 </div>
 
 <div *ngIf="setting.type === 'customMap'"

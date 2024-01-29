@@ -14,7 +14,6 @@ import { GuBoat, Point, Position } from './gu-boats/gu-boat';
 import { BoatRender } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { MapEditor, MapTile } from '../../../map-editor/types';
-import { SettingMap } from '../../../settings/types';
 import { Turn } from '../../quacken/boats/types';
 import { Lobby } from '../types';
 
@@ -74,12 +73,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   }
 
   get mapScale(): number { return this._mapScale; }
-  @Input() graphicSettings: SettingMap = {
-    mapScale: { value: 50 },
-    speed: { value: 10 },
-    water: { value: 1 },
-    showFps: { value: 0 },
-  };
+  @Input() graphicSettings = this.ss.prefetch('graphics');
 
   protected drawRocks = false;
   @Input() checkSZ = (pos: { x: number, y: number }): boolean => {
@@ -187,9 +181,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
       this.requestRender();
       return;
     }
-    if (this.graphicSettings.maxFps) {
-      this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
-    }
+    this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
 
     BoatRender.speed = this.speed;
     if (BoatRender.tweens.getAll().length) {

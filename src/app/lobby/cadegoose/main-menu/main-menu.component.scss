@@ -29,6 +29,7 @@
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.3);
   overflow-y: auto;
+  margin-bottom: 8px;
 }
 
 .lobbyPlayer {
@@ -50,38 +51,28 @@
   border-color: lime;
 }
 
-#buttons {
-  width: 100%;
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 16px;
 
-  q-setting {
-    position: relative;
-    top: 4px;
-    margin: 6px;
-  }
-  mat-icon {
+  button {
+    min-width: auto;
     position: relative;
     top: -4px;
   }
 }
 
-#ready {
-  margin-bottom: 4px;
-}
-
-#ready.cancel {
+.cancel {
   background: maroon;
-}
-
-#start {
-  display: inline-block;
-  top: 0 !important;
 }
 
 q-name {
   padding-right: 8px;
 }
 
-#spawn {
+.spawn {
   padding-left: 8px;
 }
 
@@ -98,8 +89,4 @@ q-name {
 .lowjobbers {
   border: 1px solid orange;
   border-radius: 5px;
-}
-
-::ng-deep.mat-menu-content {
-  padding: 0 !important;
 }

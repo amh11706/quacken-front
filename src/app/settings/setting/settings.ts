@@ -2,15 +2,15 @@
 import { OutCmd } from '../../ws/ws-messages';
 import { BotSettingComponent } from '../bot-setting/bot-setting.component';
 import { JobberQualityComponent } from '../jobber-quality/jobber-quality.component';
-import { SettingPartial } from '../types';
+import { Setting } from '../types';
 
 interface BaseSetting {
-  readonly type: string;
+  readonly default?: number;
   readonly admin?: boolean;
   readonly label?: string;
   readonly id: number;
-  readonly group: string;
-  readonly name: string;
+  readonly group: SettingGroup;
+  readonly name: ServerSettingGroup[SettingGroup];
   readonly advancedComponent?: any;
   readonly trigger?: OutCmd.NextBoat | OutCmd.SpawnSide | OutCmd.ChatCommand;
 }
@@ -33,7 +33,7 @@ export interface SliderSetting extends BaseSetting {
   readonly max: number,
   readonly step: number,
   readonly stepLabels?: Record<number, string>;
-  readonly setLabel?: (s: SettingPartial) => void;
+  readonly setLabel?: (s: Setting) => void;
 }
 
 export interface OptionSetting extends BaseSetting {
@@ -54,18 +54,50 @@ export interface CustomMapSetting extends BaseSetting {
 export type SettingInput = ButtonSetting | BoatSetting | SliderSetting | OptionSetting | CheckboxSetting |
   CustomMapSetting;
 
-type SettingName = 'startNew' | 'nextBoat' | 'nextCadeBoat' | 'mapScale' | 'speed' | 'lockAngle' | 'water' | 'showFps' |
-  'maxFps' | 'spawnSide' | 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'soundMaster' |
-  'soundNotify' | 'soundShip' | 'soundAlert' | 'cadePublicMode' | 'cadeMaxPlayers' | 'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' |
-  'cadeMap' | 'cadeTeams' | 'cadeShowMoves' |
-  'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' |
-  'kbControls' | 'alwaysChat' | 'customMap' | 'hideMoves' | 'createType' | 'turnTime' | 'playTo' | 'watchers' | 'updateLinked' |
-  'renderMode' | 'fishBoats' | 'allowGuests' | 'shiftSpecials' |
-  'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' | 'flagTurns' |
-  'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagNextBoat' | 'flagRespawn' | 'flagSteal';
+export type SettingGroup = keyof ServerSettingGroup;
 
-export const Settings: Record<SettingName, SettingInput> = {
-  startNew: { admin: true, type: 'button', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' } as ButtonSetting,
+type ClientSettingGroup = {
+  internal: 'startNew',
+  boats: 'nextBoat' | 'nextCadeBoat' | 'spawnSide' | 'flagNextBoat',
+  graphics: 'mapScale' | 'speed' | 'water' | 'showFps' | 'maxFps' | 'renderMode',
+  controls: 'lockAngle' | 'kbControls' | 'alwaysChat' | 'shiftSpecials' | 'updateLinked',
+  sounds: 'soundMaster' | 'soundNotify' | 'soundShip' | 'soundAlert',
+  'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' | 'customMap' | 'hideMoves',
+  'l/cade': 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'cadePublicMode' | 'cadeMaxPlayers' |
+    'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' | 'cadeMap' | 'cadeTeams' | 'cadeShowMoves' | 'cadeRated' | 'fishBoats' | 'allowGuests',
+  'l/create': 'createType',
+  'l/spades': 'turnTime' | 'playTo' | 'watchers',
+  'l/flaggames': 'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' |
+    'flagTurns' | 'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagRespawn' | 'flagSteal',
+};
+
+export type ServerSettingGroup = {
+  internal: '',
+  boats: 'quacken' | 'cade' | 'flag' | 'spawnSide',
+  graphics: 'mapScale' | 'speed' | 'water' | 'showFps' | 'maxFps' | 'renderMode',
+  controls: 'lockAngle' | 'kbControls' | 'alwaysChat' | 'shiftSpecials' | 'updateLinked' | 'bindings',
+  sounds: 'master' | 'notification' | 'ship' | 'alert',
+  'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' | 'customMap' | 'hideMoves',
+  'l/cade': 'jobberQuality' | 'turnTime' | 'turns' | 'bots' | 'botDifficulty' | 'publicMode' | 'maxPlayers' | 'spawnDelay' |
+    'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'rated' | 'fishBoats' | 'allowGuests',
+  'l/create': 'createType',
+  'l/spades': 'turnTime' | 'playTo' | 'watchers',
+  'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
+    'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
+}
+
+export type SettingName = ClientSettingGroup[SettingGroup];
+
+export type SettingGroupFromClientName<T extends SettingName> = {
+  [K in SettingGroup]: T extends ClientSettingGroup[K] ? K : never
+}[SettingGroup];
+
+type SettingList = {
+  [K in SettingName]: SettingInput & { group: SettingGroupFromClientName<K> }
+}
+
+export const Settings: SettingList = {
+  startNew: { id: 0, name: '', admin: true, type: 'button', group: 'internal', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' },
   nextBoat: {
     id: 1,
     group: 'boats',
@@ -92,12 +124,12 @@ export const Settings: Record<SettingName, SettingInput> = {
       { name: 'Next Ship', options: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27] },
     ],
   },
-  mapScale: { id: 2, group: 'graphics', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1, name: 'mapScale' },
-  speed: { id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 1, name: 'speed' },
-  water: { id: 31, group: 'graphics', name: 'water', type: 'checkbox', label: 'Animated Water' },
-  showFps: { id: 29, group: 'graphics', name: 'showFps', type: 'checkbox', label: 'Show FPS' },
-  maxFps: { id: 28, group: 'graphics', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 15, max: 240, step: 15 },
-  renderMode: { id: 44, group: 'graphics', name: 'renderMode', type: 'option', label: 'Render Mode', options: ['2D', '3D'] },
+  mapScale: { id: 2, group: 'graphics', type: 'slider', label: 'Map Scale', min: 15, max: 100, step: 1, name: 'mapScale', default: 50 },
+  speed: { id: 3, group: 'graphics', type: 'slider', label: 'Animate Speed', min: 10, max: 50, step: 1, name: 'speed', default: 10 },
+  water: { id: 31, group: 'graphics', name: 'water', type: 'checkbox', label: 'Animated Water', default: 1 },
+  showFps: { id: 29, group: 'graphics', name: 'showFps', type: 'checkbox', label: 'Show FPS', default: 0 },
+  maxFps: { id: 28, group: 'graphics', name: 'maxFps', type: 'slider', label: 'Max FPS', min: 15, max: 240, step: 15, default: 60 },
+  renderMode: { id: 44, group: 'graphics', name: 'renderMode', type: 'option', label: 'Render Mode', options: ['2D', '3D'], default: -1 },
   lockAngle: { id: 22, group: 'controls', name: 'lockAngle', type: 'checkbox', label: 'Lock camera rotation' },
   spawnSide: {
     id: 21,
@@ -125,6 +157,7 @@ export const Settings: Record<SettingName, SettingInput> = {
     // eslint-disable-next-line object-property-newline
     admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 65, step: 5,
     stepLabels: { 65: 'Unlimited' },
+    default: 30,
   },
   cadeShowStats: {
     admin: true,
@@ -136,7 +169,8 @@ export const Settings: Record<SettingName, SettingInput> = {
     options: ['Disabled', 'Players only', 'Watchers only', 'Everyone'],
   },
   cadeShowMoves: { admin: true, id: 67, group: 'l/cade', name: 'showMoves', type: 'checkbox', label: 'Show team moves' },
-  cadeTurns: { admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5 },
+  cadeRated: { admin: true, id: 68, group: 'l/cade', name: 'rated', type: 'checkbox', label: 'Rated' },
+  cadeTurns: { admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5, default: 60 },
   enableBots: {
     admin: true,
     id: 35,
@@ -244,9 +278,10 @@ export const Settings: Record<SettingName, SettingInput> = {
     options: [
       'Quacken', 'Spades', 'Cadesim', 'Sea Battle', 'Capture the Flag',
     ],
+    default: 2,
   },
   turnTime: {
-    admin: true, id: 15, group: 'l/spades', type: 'slider', label: 'Turn Time', min: 5, max: 30, step: 1, name: 'turnTime',
+    admin: true, id: 15, group: 'l/spades', type: 'slider', label: 'Turn Time', min: 5, max: 30, step: 1, name: 'turnTime', default: 15,
   },
   playTo: {
     admin: true, id: 16, group: 'l/spades', type: 'slider', label: 'Play To', min: 250, max: 1000, step: 50, name: 'playTo',
@@ -293,9 +328,10 @@ export const Settings: Record<SettingName, SettingInput> = {
     // eslint-disable-next-line object-property-newline
     admin: true, id: 52, group: 'l/flaggames', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 65, step: 5,
     stepLabels: { 65: 'Unlimited' },
+    default: 30,
   },
   flagTurns: {
-    admin: true, id: 53, group: 'l/flaggames', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5,
+    admin: true, id: 53, group: 'l/flaggames', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5, default: 60,
   },
   flagSpawnDelay: {
     // eslint-disable-next-line object-property-newline
@@ -328,3 +364,5 @@ export const Settings: Record<SettingName, SettingInput> = {
     admin: true, id: 59, group: 'l/flaggames', name: 'flagSteal', type: 'checkbox', label: 'Stealable flags on sink',
   },
 };
+
+export const SettingValues = Object.values(Settings);

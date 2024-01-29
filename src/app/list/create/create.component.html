@@ -2,7 +2,7 @@
   <h2 id="create">Lobby Type: <q-setting name="createType"
                (valueChange)="changeType()"></q-setting>
   </h2>
-  <p>{{idDescriptions[settings.createType?.value || 0]}}</p>
+  <p>{{idDescriptions[settings.createType.value || 0]}}</p>
   <div id="lsettings">
     <q-setting *ngFor="let setting of typeSettings[settings.createType?.value || 0]"
                [name]="setting"></q-setting>
