@@ -14,6 +14,7 @@ import { BoatSetting, SettingGroup, Settings } from '../../../settings/setting/s
 import { Message } from '../../../chat/types';
 import { Setting } from '../../../settings/types';
 import { Lobby, TeamMessage } from '../types';
+import { MoveMessageIncoming } from '../../quacken/boats/types';
 
 @Component({
   selector: 'q-main-menu',
@@ -56,7 +57,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.Lobby, async m => {
       this.lobby = m;
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
-      const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
+      const maxTurns = m.maxTurns || 60;
       this.roundGoing = (maxTurns && m.turn && m.turn <= maxTurns) || false;
       if (!m.players) return;
       if (this.firstJoin) {
@@ -83,6 +84,13 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         if (!user) continue;
         user.team = p.t;
         user.op = p.a;
+      }
+      if (m.myMoves) {
+        const ms = m.myMoves as MoveMessageIncoming;
+        this.ws.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: ms.m, shots: ms.s || [] } });
+      }
+      if (m.moves) {
+        this.ws.dispatchMessage({ cmd: InCmd.Moves, data: m.moves as MoveMessageIncoming[] });
       }
       this.fs.lobby$.next(lobby);
     }));
