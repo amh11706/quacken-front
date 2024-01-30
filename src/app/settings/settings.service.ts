@@ -9,7 +9,7 @@ import { DBSetting, SettingMap, Setting, ServerSettingMap } from './types';
 export type SettingList = SettingName[];
 
 interface LocalSettings extends Map<SettingGroup, SettingMap<SettingGroup>> {
-  get<T extends SettingGroup>(group: T): SettingMap<T>;
+  get<T extends SettingGroup>(group: T): SettingMap<T> | undefined;
   set<T extends SettingGroup>(group: T, settings: SettingMap<T>): this;
 }
 

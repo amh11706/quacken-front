@@ -25,7 +25,7 @@
      class="setting">
   <mat-form-field>
     <mat-label>{{setting.label}}</mat-label>
-    <mat-select [value]="settingValue.value"
+    <mat-select [value]="settingValue.stream | async"
                 (selectionChange)="save($event.value)"
                 [disabled]="setting.admin && (ss.admin$ | async) === false">
       <mat-option *ngFor="let option of setting.options; let i = index"
@@ -69,7 +69,10 @@
                 [disabled]="setting.admin && (ss.admin$ | async) === false">
     <span [innerHTML]="setting.label"></span>
   </mat-checkbox>
-  <mat-icon [color]="'primary'">check_circle</mat-icon>
+  <mat-icon *ngIf="settingValue.data?.icon as icon"
+            [matTooltip]="icon.text"
+            [matTooltipPosition]="'above'"
+            [color]="icon.color">{{icon.name}}</mat-icon>
 </div>
 
 <div *ngIf="setting.type === 'customMap'"
