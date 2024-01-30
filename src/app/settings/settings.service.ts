@@ -93,8 +93,8 @@ export class SettingsService {
           }
           resolve(localSettings);
         });
-        this.ready.set(group, ready);
       });
+      this.ready.set(group, ready);
     }
     return ready;
   }

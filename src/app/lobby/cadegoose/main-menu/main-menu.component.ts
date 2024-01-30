@@ -41,7 +41,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   private firstJoin = true;
   protected group = 'l/cade' as SettingGroup;
   private lobby?: Lobby;
-  streams = { open: this.es.open$, teamPlayers: this.teamPlayers$ };
 
   constructor(
     public ws: WsService,
