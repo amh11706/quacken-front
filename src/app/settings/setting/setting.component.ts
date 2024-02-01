@@ -37,6 +37,7 @@ export function getShipLink(id: number): string {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingComponent {
+  @Input() disabled = false;
   @Input() set name(value: SettingName) {
     this.setting = Settings[value] || {};
     void this.fetch();

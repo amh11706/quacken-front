@@ -55,7 +55,8 @@
             <button *ngIf="(ss.admin$ | async) && !roundGoing && (ws.connected$ | async)"
                     mat-raised-button
                     (click)="shuffleTeams()">Shuffle Teams</button>
-            <q-setting name="cadeRated"></q-setting>
+            <q-setting name="cadeRated"
+                       [disabled]="roundGoing"></q-setting>
           </div>
           <div class="settingRow">
             <button mat-raised-button
@@ -63,8 +64,8 @@
                     color="accent"
                     id="ready"
                     [class.cancel]="ready"
-                    (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
-              'Ready'}}</button>
+                    (click)="toggleReady()">{{readyText()}}
+            </button>
             <q-setting *ngIf="ss.admin$ | async"
                        name="startNew"></q-setting>
             <q-setting name="nextCadeBoat"></q-setting>

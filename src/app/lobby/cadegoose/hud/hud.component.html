@@ -45,9 +45,11 @@
                    (wantMoveChange)="setWantMove($event)"></q-move-source>
     <button *ngIf="secondsPerTurn === maxSeconds"
             mat-icon-button
-            [disabled]="!myBoat.isMe || myBoat.ready"
+            [color]="'accent'"
+            [disabled]="!myBoat.isMe"
+            [class.ready]="!myBoat.ready"
             id="hudReady"
-            (click)="imReady()">
+            (click)="toggleReady()">
       <mat-icon>play_arrow</mat-icon>
     </button>
 

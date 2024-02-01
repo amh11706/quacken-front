@@ -219,8 +219,15 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.ws.send(OutCmd.SetMyJobbers, v ?? 100);
   }
 
-  public plural(length: number): string {
+  plural(length: number): string {
     if (length === 1) return length + ' player';
     return length + ' players';
+  }
+
+  readyText(): string {
+    if (this.myBoat.isMe) return 'Close';
+    if (this.myTeam === 99) return 'Spectate';
+    if (this.ready) return 'Not Ready';
+    return 'Ready';
   }
 }

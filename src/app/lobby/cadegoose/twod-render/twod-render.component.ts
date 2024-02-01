@@ -270,10 +270,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     const flagMap: FlagMap = new Map();
     for (const f of flags) flagMap.set(`${f.x},${f.y}`, f);
     await Promise.all([
-      TwodRenderComponent.wind.prom,
-      TwodRenderComponent.whirl.prom,
-      TwodRenderComponent.water.prom,
-      TwodRenderComponent.sz.prom,
+      TwodRenderComponent.wind,
+      TwodRenderComponent.whirl,
+      TwodRenderComponent.water,
+      TwodRenderComponent.sz,
+      TwodRenderComponent.rock,
+      TwodRenderComponent.smallRock,
+      TwodRenderComponent.flag,
     ]);
     const wasLoaded = !!this.canvas;
     if (!this.canvas) {

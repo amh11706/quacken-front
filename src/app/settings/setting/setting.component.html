@@ -27,7 +27,7 @@
     <mat-label>{{setting.label}}</mat-label>
     <mat-select [value]="settingValue.stream | async"
                 (selectionChange)="save($event.value)"
-                [disabled]="setting.admin && (ss.admin$ | async) === false">
+                [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
       <mat-option *ngFor="let option of setting.options; let i = index"
                   [value]="i">{{option}}</mat-option>
     </mat-select>
@@ -54,7 +54,7 @@
               [max]="setting.max"
               [step]="setting.step"
               [value]="settingValue.stream | async"
-              [disabled]="setting.admin && (ss.admin$ | async) === false"
+              [disabled]="disabled || setting.admin && (ss.admin$ | async) === false"
               (input)="save($event.value || 0)">
   </mat-slider>
   <mat-icon *ngIf="setting.advancedComponent"
@@ -66,7 +66,7 @@
      class="setting">
   <mat-checkbox [checked]="!!(settingValue.stream | async)"
                 (change)="save(+$event.checked)"
-                [disabled]="setting.admin && (ss.admin$ | async) === false">
+                [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
     <span [innerHTML]="setting.label"></span>
   </mat-checkbox>
   <mat-icon *ngIf="settingValue.data?.icon as icon"
@@ -80,6 +80,6 @@
   <q-custom-map [settingValue]="settingValue"
                 (save)="save($event)"
                 [setting]="setting"
-                [disabled]="(setting.admin === true) && (ss.admin$ | async) === false">
+                [disabled]="disabled || (setting.admin === true) && (ss.admin$ | async) === false">
   </q-custom-map>
 </div>

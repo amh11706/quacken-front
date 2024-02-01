@@ -72,7 +72,7 @@ export type SubscribeData = {
 
   [InCmd.OfferBlind]: undefined;
   [InCmd.Over]: undefined;
-  [InCmd.Ready]: number;
+  [InCmd.Ready]: { id: number, ready: boolean } | number;
   [InCmd.Bidding]: number;
   [InCmd.Take]: number;
   [InCmd.PlayTo]: number;

@@ -10,7 +10,7 @@ export function getTileImage(tile: string): Promise<HTMLImageElement> {
 
 export class Sprite {
   private img?: HTMLImageElement;
-  prom: Promise<any>;
+  private prom: Promise<HTMLImageElement>;
 
   constructor(
     private name: string,
@@ -19,6 +19,10 @@ export class Sprite {
     private positions: [number, number][],
   ) {
     this.prom = getTileImage(name).then(img => this.img = img);
+  }
+
+  then<T>(cb: (i: HTMLImageElement) => T): Promise<T> {
+    return this.prom.then(cb);
   }
 
   draw(ctx: CanvasRenderingContext2D, index: number, x = 0, y = 0): void {
@@ -65,11 +69,15 @@ export class SpriteImage {
 }
 
 export class JsonSprite {
-  img?: HTMLImageElement;
-  prom: Promise<any>;
+  private img?: HTMLImageElement;
+  private prom: Promise<HTMLImageElement>;
 
   constructor(public data: SpriteData) {
     this.prom = getTileImage(data.name).then(img => this.img = img);
+  }
+
+  then<T>(cb: (i: HTMLImageElement) => T): Promise<T> {
+    return this.prom.then(cb);
   }
 
   draw(ctx: CanvasRenderingContext2D, index: number, x = 0, y = 0): void {

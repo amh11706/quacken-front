@@ -96,9 +96,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.NewBoat, boat => this.setBoats([boat], false)));
     this.subs.add(this.ws.subscribe(InCmd.DelBoat, id => this.deleteBoat(id)));
     this.subs.add(this.ws.subscribe(InCmd.Moves, s => this.handleMoves(s)));
-    this.subs.add(this.ws.subscribe(InCmd.Ready, id => {
-      const boat = this._boats[id];
-      if (boat) boat.ready = true;
+    this.subs.add(this.ws.subscribe(InCmd.Ready, m => {
+      if (typeof m === 'number') return;
+      const boat = this._boats[m.id];
+      if (boat) boat.ready = m.ready;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Bomb, b => {
       const boat = this._boats[b.t];

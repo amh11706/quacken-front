@@ -112,14 +112,6 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.ws.send(OutCmd.WantManeuver, value);
   }
 
-  imReady(): void {
-    if (this.myBoat.ready || (this.secondsPerTurn < 40 && this.turnSeconds > 0)) return;
-    this.stopTimer();
-    this.myBoat.ready = true;
-    this.myBoat.moveLock = 99;
-    this.ws.send(OutCmd.Ready, { ready: true, ...this.localBoat });
-  }
-
   protected async sendShots(): Promise<void> {
     if (this.arrayEqual(this.serverBoatPending.shots, this.localBoat.shots)) return;
     this.serverBoatPending.shots = [...this.localBoat.shots];

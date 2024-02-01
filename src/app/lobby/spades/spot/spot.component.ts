@@ -72,7 +72,7 @@ export class SpotComponent implements OnInit, OnDestroy {
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.OfferBlind, () => this.offerBlind = true));
-    this.sub.add(this.ws.subscribe(InCmd.Ready, p => this.lobby.players[p].ready = true));
+    this.sub.add(this.ws.subscribe(InCmd.Ready, p => this.lobby.players[+p].ready = true));
     this.sub.add(this.ws.subscribe(InCmd.Take, p => this.lobby.players[p].tricks++));
 
     this.sub.add(this.ws.subscribe(InCmd.Bidding, p => {
