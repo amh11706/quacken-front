@@ -11,6 +11,13 @@ $loginWidth: 500px;
   background-color: rgba(66, 66, 66, 0.85);
 }
 
+mat-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 button {
   border-bottom: 1px solid grey;
   transition: 0.2s;
@@ -44,7 +51,7 @@ p {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .link {
