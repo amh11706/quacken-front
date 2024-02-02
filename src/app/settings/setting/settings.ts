@@ -97,7 +97,7 @@ type SettingList = {
 }
 
 export const Settings: SettingList = {
-  startNew: { id: 0, name: '', admin: true, type: 'button', group: 'internal', label: 'New Round', trigger: OutCmd.ChatCommand, data: '/start new' },
+  startNew: { id: 0, name: '', admin: true, type: 'button', group: 'internal', label: 'Force Start', trigger: OutCmd.ChatCommand, data: '/start new' },
   nextBoat: {
     id: 1,
     group: 'boats',

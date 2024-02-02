@@ -144,6 +144,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.es.open$.next(true);
         this.es.activeTab = 0;
         this.es.lobbyTab = 0;
+        this.teamPlayers$.next(this.teamPlayers$.getValue());
       }
     }));
 

@@ -7,9 +7,12 @@ export const Notes: Note[] = [
   {
     title: 'Release TBD',
     points: [
+      'New checkbox to make a match rated or unrated.',
       'You can now see replays of any player.',
       'Stat leaderboards now have a link to the replay where the record was achieved.',
       'Added search and sort to the match history page.',
+      'Rejoining a lobby no longer erases your moves.',
+      'You can now toggle back to unready with unlimited time enabled.',
       'Joining and shuffling teams no longer causes player list shuffling.',
     ],
   },

@@ -51,17 +51,33 @@
   border-color: lime;
 }
 
+.settings {
+  width: 100%;
+}
+
 .settingRow {
+  margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   column-gap: 16px;
+  min-height: 50px;
 
   button {
     min-width: auto;
     position: relative;
     top: -4px;
   }
+
+  q-setting {
+    min-width: 90px;
+    width: min-content;
+  }
+}
+
+.readyButton {
+  width: 100px;
 }
 
 .cancel {

@@ -22,7 +22,7 @@
 </div>
 
 <div *ngIf="setting.type === 'option'"
-     class="setting">
+     class="setting select">
   <mat-form-field>
     <mat-label>{{setting.label}}</mat-label>
     <mat-select [value]="settingValue.stream | async"
@@ -34,6 +34,7 @@
   </mat-form-field>
   <mat-icon *ngIf="setting.advancedComponent"
             title="Advanced"
+            class="advanced"
             (click)="openAdvanced()">settings</mat-icon>
 </div>
 
@@ -47,7 +48,7 @@
 </div>
 
 <div *ngIf="setting.type === 'slider'"
-     class="setting">
+     class="setting slider">
   <span class="label">{{setting.label}} ({{setting.stepLabels?.[settingValue.value] ||
     settingValue.value}})</span>
   <mat-slider [min]="setting.min"
@@ -59,6 +60,7 @@
   </mat-slider>
   <mat-icon *ngIf="setting.advancedComponent"
             title="Advanced"
+            class="advanced"
             (click)="openAdvanced()">settings</mat-icon>
 </div>
 
@@ -67,16 +69,16 @@
   <mat-checkbox [checked]="!!(settingValue.stream | async)"
                 (change)="save(+$event.checked)"
                 [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
-    <span [innerHTML]="setting.label"></span>
+    <span class="checkbox-text">{{setting.label}}</span>&nbsp;
+    <mat-icon *ngIf="settingValue.data?.icon as icon"
+              [matTooltip]="icon.text"
+              [matTooltipPosition]="'above'"
+              [color]="icon.color">{{icon.name}}</mat-icon>
   </mat-checkbox>
-  <mat-icon *ngIf="settingValue.data?.icon as icon"
-            [matTooltip]="icon.text"
-            [matTooltipPosition]="'above'"
-            [color]="icon.color">{{icon.name}}</mat-icon>
 </div>
 
 <div *ngIf="setting.type === 'customMap'"
-     class="setting">
+     class="setting select">
   <q-custom-map [settingValue]="settingValue"
                 (save)="save($event)"
                 [setting]="setting"
