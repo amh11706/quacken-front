@@ -45,7 +45,6 @@ export class RestoreComponent implements OnInit, OnDestroy {
     this.pending = true;
     this.http.post<any>(this.path + 'restore', JSON.stringify(this.user)).subscribe(
       () => {
-        this.pending = false;
         this.back();
         this.err = 'Account restored. You can now log in with the email address you provided.';
         if (this.errComponent) this.dialog.open(this.errComponent);
@@ -53,7 +52,7 @@ export class RestoreComponent implements OnInit, OnDestroy {
       (err: unknown) => {
         this.pending = false;
         if (!(err instanceof HttpErrorResponse)) return;
-        this.err = err.error;
+        this.err = typeof err.error === 'string' ? err.error : 'Server error. Try again later.';
         if (this.errComponent) this.dialog.open(this.errComponent);
       },
     );

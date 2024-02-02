@@ -15,6 +15,7 @@ import { WsService } from '../../ws/ws.service';
 })
 export class LoginFormComponent implements AfterViewInit {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
+  defaultServerError = 'Server error. Try again later.';
 
   user = {
     email: '',
@@ -48,16 +49,17 @@ export class LoginFormComponent implements AfterViewInit {
 
   login(): void {
     this.pending = true;
-    this.http.post<any>(this.path + 'login', JSON.stringify(this.user))
+    this.http.post<string>(this.path + 'login', JSON.stringify(this.user))
       .subscribe(
-        resp => {
-          this.pending = false;
+        async resp => {
           window.localStorage.setItem('token', resp);
-          void this.router.navigate([this.guard.triedPath || 'list']);
           this.guard.triedPath = '';
-        },
-        () => {
+          await this.router.navigate([this.guard.triedPath || 'list']);
           this.pending = false;
+        },
+        (err) => {
+          this.pending = false;
+          this.errMessage = this.getErrorMessage(err);
           if (this.errComponent) this.dialog.open(this.errComponent);
         },
       );
@@ -65,6 +67,13 @@ export class LoginFormComponent implements AfterViewInit {
 
   createAccount(): void {
     void this.router.navigate(['auth/create']);
+  }
+
+  private getErrorMessage(err: unknown): string {
+    if (!(err instanceof HttpErrorResponse)) return this.defaultServerError;
+    if (err.status === 403) return 'Invalid email or password';
+    if (typeof err.error === 'string') return err.error;
+    return this.defaultServerError;
   }
 
   guestLogin(): void {

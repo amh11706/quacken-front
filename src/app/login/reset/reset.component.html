@@ -1,32 +1,40 @@
 <div id="logincontainer">
   <div id="logo"><img src="/assets/gclogo.png"></div>
   <p>Powered by superquacken.com</p>
-  <form id="loginform"
-        ngNativeValidate
-        (ngSubmit)="reset()"
-        #loginForm="ngForm">
-    <mat-form-field>
-      <input [(ngModel)]="password"
-             name="password"
-             matInput
-             qAutoSelect
-             type="password"
-             minlength="6"
-             placeholder="New Password"
-             autocomplete="new-password"
-             required>
-    </mat-form-field>
+  <div id="loginWrapper">
+    <form id="loginform"
+          ngNativeValidate
+          (ngSubmit)="reset()"
+          #loginForm="ngForm">
+      <mat-form-field>
+        <input [(ngModel)]="password"
+               name="password"
+               matInput
+               qAutoSelect
+               type="password"
+               minlength="6"
+               placeholder="New Password"
+               autocomplete="new-password"
+               required>
+      </mat-form-field>
 
-    <button [disabled]="pending"
-            type="submit"
-            class="login"
-            mat-stroked-button
-            color="accent">Reset Password</button>
-    <p>
-      <span class="link"
-            (click)="back()">Back to login</span>.
-    </p>
-  </form>
+      <button [disabled]="pending"
+              type="submit"
+              class="login"
+              mat-stroked-button
+              color="accent">Reset Password</button>
+      <p>
+        <span class="link"
+              (click)="back()">Back to login</span>.
+      </p>
+    </form>
+    <div *ngIf="pending"
+         class="spinner">
+      <mat-spinner style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                   mode="indeterminate">
+      </mat-spinner>
+    </div>
+  </div>
 </div>
 
 <ng-template #error>

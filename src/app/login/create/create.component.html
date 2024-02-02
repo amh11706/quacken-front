@@ -1,58 +1,66 @@
 <div id="logincontainer">
   <div id="logo"><img src="/assets/gclogo.png"></div>
   <p>Powered by superquacken.com</p>
-  <form id="loginform"
-        ngNativeValidate
-        (ngSubmit)="create()"
-        #loginForm="ngForm">
-    <mat-form-field>
-      <input [(ngModel)]="user.email"
-             name="email"
-             type="email"
-             matInput
-             qAutoSelect
-             placeholder="Email"
-             autocomplete="username"
-             required>
-    </mat-form-field>
-    <mat-form-field>
-      <input [(ngModel)]="user.password"
-             name="password"
-             matInput
-             qAutoSelect
-             type="password"
-             minlength="6"
-             placeholder="Password"
-             autocomplete="new-password"
-             required>
-    </mat-form-field>
-    <mat-form-field>
-      <input [(ngModel)]="user.name"
-             name="name"
-             matInput
-             qAutoSelect
-             minlength="2"
-             maxlength="16"
-             placeholder="Display Name"
-             autocomplete="nickname"
-             required>
-    </mat-form-field>
-    <p id="terms">By creating an account, you agree to our
-      <span class="link"
-            (click)="showTerms()">terms of use</span>
-      and
-      <span class="link"
-            (click)="showPrivacy()">privacy policy</span>.
-    </p>
-    <button [disabled]="pending"
-            type="submit"
-            mat-stroked-button
-            color="accent">Create Account</button>
-    <p>
-      <span class="link"
-            (click)="back()">Back to login</span>.
-    </p>
-  </form>
+  <div id="loginWrapper">
+    <form id="loginform"
+          ngNativeValidate
+          (ngSubmit)="create()"
+          #loginForm="ngForm">
+      <mat-form-field>
+        <input [(ngModel)]="user.email"
+               name="email"
+               type="email"
+               matInput
+               qAutoSelect
+               placeholder="Email"
+               autocomplete="username"
+               required>
+      </mat-form-field>
+      <mat-form-field>
+        <input [(ngModel)]="user.password"
+               name="password"
+               matInput
+               qAutoSelect
+               type="password"
+               minlength="6"
+               placeholder="Password"
+               autocomplete="new-password"
+               required>
+      </mat-form-field>
+      <mat-form-field>
+        <input [(ngModel)]="user.name"
+               name="name"
+               matInput
+               qAutoSelect
+               minlength="2"
+               maxlength="16"
+               placeholder="Display Name"
+               autocomplete="nickname"
+               required>
+      </mat-form-field>
+      <p id="terms">By creating an account, you agree to our
+        <span class="link"
+              (click)="showTerms()">terms of use</span>
+        and
+        <span class="link"
+              (click)="showPrivacy()">privacy policy</span>.
+      </p>
+      <button [disabled]="pending"
+              type="submit"
+              mat-stroked-button
+              color="accent">Create Account</button>
+      <p>
+        <span class="link"
+              (click)="back()">Back to login</span>.
+      </p>
+    </form>
+    <div *ngIf="pending"
+         class="spinner">
+      <mat-spinner style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                   mode="indeterminate">
+      </mat-spinner>
+    </div>
+  </div>
 </div>
 
 <ng-template #error>

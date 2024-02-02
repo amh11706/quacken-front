@@ -42,14 +42,13 @@ export class CreateComponent {
     this.http.post<any>(this.path + 'create', JSON.stringify(this.user))
       .subscribe(
         resp => {
-          this.pending = false;
           window.localStorage.setItem('token', resp);
           void this.router.navigate(['list']);
         },
         (err: unknown) => {
           this.pending = false;
           if (!(err instanceof HttpErrorResponse)) return;
-          this.err = err.error;
+          this.err = typeof err.error === 'string' ? err.error : 'Server error. Please try again later.';
           if (this.errComponent) this.dialog.open(this.errComponent);
         },
       );

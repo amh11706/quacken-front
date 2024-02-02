@@ -6,8 +6,9 @@ import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/materia
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
-
 import { HttpClientModule } from '@angular/common/http';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 import { LoginComponent } from './login.component';
 import { CreateComponent } from './create/create.component';
 import { PrivacyComponent } from './privacy/privacy.component';
@@ -37,6 +38,7 @@ import { LoginFormComponent } from './login-form/login-form.component';
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     AutoSelectModule,
   ],
 })

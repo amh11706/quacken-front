@@ -1,51 +1,59 @@
 <div id="logincontainer">
   <div id="logo"><img src="/assets/gclogo.png"></div>
   <p>Powered by superquacken.com</p>
-  <form id="loginform"
-        ngNativeValidate
-        (ngSubmit)="login()"
-        #loginForm="ngForm">
-    <mat-form-field>
-      <input [(ngModel)]="user.email"
-             name="email"
-             matInput
-             qAutoSelect
-             placeholder="Email"
-             autocomplete="username"
-             required>
-    </mat-form-field>
-    <mat-form-field>
-      <input [(ngModel)]="user.password"
-             name="password"
-             matInput
-             qAutoSelect
-             type="password"
-             minlength="6"
-             placeholder="Password"
-             autocomplete="current-password"
-             required>
-    </mat-form-field>
-    <p id="terms">By logging in, you agree to our
-      <span class="link"
-            (click)="showTerms()">terms of use</span>
-      and
-      <span class="link"
-            (click)="showPrivacy()">privacy policy</span>.
-    </p>
-    <button [disabled]="pending"
-            class="login"
-            type="submit"
-            mat-stroked-button
-            color="accent">Log in</button>
-    <p>
-      No account?
-      <span class="link"
-            (click)="createAccount()">Create one</span>
-      or
-      <span class="link"
-            (click)="guestLogin()">play as a guest</span>.
-    </p>
-  </form>
+  <div id="loginWrapper">
+    <form id="loginform"
+          ngNativeValidate
+          (ngSubmit)="login()"
+          #loginForm="ngForm">
+      <mat-form-field>
+        <input [(ngModel)]="user.email"
+               name="email"
+               matInput
+               qAutoSelect
+               placeholder="Email"
+               autocomplete="username"
+               required>
+      </mat-form-field>
+      <mat-form-field>
+        <input [(ngModel)]="user.password"
+               name="password"
+               matInput
+               qAutoSelect
+               type="password"
+               minlength="6"
+               placeholder="Password"
+               autocomplete="current-password"
+               required>
+      </mat-form-field>
+      <p id="terms">By logging in, you agree to our
+        <span class="link"
+              (click)="showTerms()">terms of use</span>
+        and
+        <span class="link"
+              (click)="showPrivacy()">privacy policy</span>.
+      </p>
+      <button [disabled]="pending"
+              class="login"
+              type="submit"
+              mat-stroked-button
+              color="accent">Log in</button>
+      <p>
+        No account?
+        <span class="link"
+              (click)="createAccount()">Create one</span>
+        or
+        <span class="link"
+              (click)="guestLogin()">play as a guest</span>.
+      </p>
+    </form>
+    <div *ngIf="pending"
+         class="spinner">
+      <mat-spinner style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+                   mode="indeterminate">
+      </mat-spinner>
+    </div>
+  </div>
 </div>
 
 <ng-template #error>
@@ -53,7 +61,7 @@
     <p>{{errMessage || 'Wrong email or password.'}}</p>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button *ngIf="!errMessage"
+    <button *ngIf="errMessage !== defaultServerError"
             mat-raised-button
             [disabled]="pending"
             (click)="sendReset()">

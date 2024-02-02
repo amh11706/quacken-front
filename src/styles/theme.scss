@@ -32,3 +32,4 @@ $theme: mat.define-dark-theme(
 // that you are using.
 @include mat.all-legacy-component-themes($theme);
 @include mat.table-theme($theme);
+@include mat.progress-spinner-theme($theme);

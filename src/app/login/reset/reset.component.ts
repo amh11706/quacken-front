@@ -48,13 +48,12 @@ export class ResetComponent implements OnInit, OnDestroy {
       password: this.password, token: this.token,
     })).subscribe(
       () => {
-        this.pending = false;
         this.back();
       },
       (err: unknown) => {
         this.pending = false;
         if (!(err instanceof HttpErrorResponse)) return;
-        this.err = err.error;
+        this.err = typeof err.error === 'string' ? err.error : 'Server error. Try again later.';
         if (this.errComponent) this.dialog.open(this.errComponent);
       },
     );
