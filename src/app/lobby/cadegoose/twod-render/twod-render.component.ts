@@ -371,4 +371,9 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
       void this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', title: '', group: 'graphics' });
     }, 1000);
   }
+
+  fpsOffsetChange(event: { x: number, y: number }): void {
+    this.graphicSettings.showFps.data = event;
+    this.graphicSettings.showFps.emit();
+  }
 }

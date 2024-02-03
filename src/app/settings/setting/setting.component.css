@@ -23,9 +23,9 @@ mat-checkbox span {
 mat-icon {
   position: relative; 
   top: 3px;
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
 
   &.advanced {
     position: absolute;

@@ -4,7 +4,7 @@
      (wheel)="scroll($event)"
      oncontextmenu="event.preventDefault();"
      [style.backgroundSize]="mapScale*64 + 'px'"
-     [style.backgroundPosition]="'calc(50vw + ' + (drag.offsetX - getXOff(myBoat))*mapScale + 'px) calc(50vh + ' + (drag.offsetY - getYOff(myBoat))*mapScale + 'px)'">
+     [style.backgroundPosition]="'calc(50vw + ' + (drag.offset.x - getXOff(myBoat))*mapScale + 'px) calc(50vh + ' + (drag.offset.y - getYOff(myBoat))*mapScale + 'px)'">
   <!-- mapframe receives the offset transform, map receives the rotate transform.
  	This allows them to be altered independent of each other -->
   <div id="mapcenter">
@@ -46,5 +46,10 @@
 </div>
 
 <div #fps
-     [hidden]="!graphicSettings.showFps.value"
-     id="fps"></div>
+     id="fps"
+     [qDrag]="fps"
+     [bindToWindow]="true"
+     [offset]="graphicSettings.showFps.data"
+     (offsetChange)="fpsOffsetChange($event)"
+     [hidden]="!graphicSettings.showFps.value">
+</div>

@@ -33,7 +33,7 @@ export interface SliderSetting extends BaseSetting {
   readonly max: number,
   readonly step: number,
   readonly stepLabels?: Record<number, string>;
-  readonly setLabel?: (s: Setting) => void;
+  readonly setLabel?: (s: Setting) => string | { label: string };
 }
 
 export interface OptionSetting extends BaseSetting {
@@ -148,9 +148,10 @@ export const Settings: SettingList = {
     stepLabels: { 105: 'Advanced' },
     advancedComponent: JobberQualityComponent,
     setLabel: (s) => {
-      if (!s.data) s.data = { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
-      delete s.data.label;
-      if (s.value > 100) s.data.label = Object.entries(s.data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
+      const data = s.data ?? { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
+      delete data.label;
+      if (s.value > 100) data.label = Object.entries(data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
+      return data;
     },
   },
   cadeTurnTime: {
@@ -319,9 +320,10 @@ export const Settings: SettingList = {
     stepLabels: { 105: 'Advanced' },
     advancedComponent: JobberQualityComponent,
     setLabel: (s) => {
-      if (!s.data) s.data = { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
-      delete s.data.label;
-      if (s.value > 100) s.data.label = Object.entries(s.data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
+      const data = s.data ?? { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
+      delete data.label;
+      if (s.value > 100) data.label = Object.entries(data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
+      return data;
     },
   },
   flagTurnTime: {

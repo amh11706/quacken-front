@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { InCmd, OutCmd } from '../ws/ws-messages';
 
 import { WsService } from '../ws/ws.service';
@@ -36,19 +37,19 @@ export class SettingsService {
       const group = this.settings.get(s.group);
       const setting = group?.[s.name];
       if (setting) {
-        setting.value = s.value;
         setting.data = s.data;
+        setting.setServerValue(s.value);
       }
     });
   }
 
   setFakeSettings<T extends SettingGroup>(group: T, settings: ServerSettingMap<T>): void {
-    const settingGroup = {} as SettingMap<T>;
-    for (const [name, value] of Object.entries(settings)) {
-      const n = name as ServerSettingGroup[T];
-      settingGroup[n] = new Setting(
-        { id: 0, name: n, group: group as SettingGroup, value: (value as DBSetting).value },
-      );
+    const settingGroup = this.prefetch(group);
+    for (const [name, value] of Object.entries<DBSetting>(settings)) {
+      const s = settingGroup[name as ServerSettingGroup[T]];
+      if (!s) continue;
+      s.data = value.data;
+      s.setServerValue(value.value);
     }
     this.settings.set(group, settingGroup);
   }
@@ -65,11 +66,12 @@ export class SettingsService {
 
     const newSettings = {} as SettingMap<T>;
     for (const s of SettingValues) {
-      if (s.group === group) {
-        newSettings[s.name as ServerSettingGroup[T]] = new Setting(
-          { id: s.id, name: s.name, group, value: s.default ?? 0 },
-        );
-      }
+      if (s.group !== group) continue;
+      const setting = new Setting(this, s);
+      newSettings[s.name as ServerSettingGroup[T]] = setting;
+      setting.userStream.pipe(debounceTime(750)).subscribe(() => {
+        this.save(setting.toDBSetting());
+      });
     }
     this.settings.set(group, newSettings);
     return newSettings;
@@ -88,8 +90,8 @@ export class SettingsService {
             const oldSetting = localSettings[setting.name];
             if (oldSetting) {
               oldSetting.data = setting.data;
-              oldSetting.value = setting.value;
-            } else localSettings[setting.name] = new Setting(setting);
+              oldSetting.setServerValue(setting.value);
+            }
           }
           resolve(localSettings);
         });
@@ -104,12 +106,7 @@ export class SettingsService {
     return Promise.resolve(settings[name]);
   }
 
-  async save(setting: DBSetting): Promise<void> {
+  save(setting: DBSetting): void {
     this.ws.send(OutCmd.SettingSet, setting);
-    const oldSetting = await this.get(setting.group, setting.name);
-    if (oldSetting) {
-      oldSetting.data = setting.data;
-      oldSetting.value = setting.value;
-    }
   }
 }

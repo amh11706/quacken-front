@@ -12,7 +12,6 @@ import { Boat } from '../../quacken/boats/boat';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 import { BoatSetting, SettingGroup, Settings } from '../../../settings/setting/settings';
 import { Message } from '../../../chat/types';
-import { Setting } from '../../../settings/types';
 import { Lobby, TeamMessage } from '../types';
 import { MoveMessageIncoming } from '../../quacken/boats/types';
 
@@ -36,7 +35,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   ready = false;
   statsOpen = false;
   roundGoing = false;
-  mapId: Setting = new Setting('cadeMap', 0);
+  settings = this.ss.prefetch('l/cade');
   private subs = new Subscription();
   private firstJoin = true;
   protected group = 'l/cade' as SettingGroup;
@@ -50,7 +49,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     private sound: SoundService,
   ) { }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async m => {
@@ -147,8 +146,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.teamPlayers$.next(this.teamPlayers$.getValue());
       }
     }));
-
-    this.mapId = await this.ss.get(this.group, 'map') ?? this.mapId;
   }
 
   submitRating(value: number): void {

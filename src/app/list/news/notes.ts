@@ -12,8 +12,9 @@ export const Notes: Note[] = [
       'Stat leaderboards now have a link to the replay where the record was achieved.',
       'Added search and sort to the match history page.',
       'Rejoining a lobby no longer erases your moves.',
-      'You can now toggle back to unready with unlimited time enabled.',
+      'You can now toggle back to unready when unlimited time is enabled.',
       'Joining and shuffling teams no longer causes player list shuffling.',
+      'FPS display can now be dragged around in addition to turning it on or off from the graphic settings.',
     ],
   },
   {

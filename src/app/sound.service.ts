@@ -39,7 +39,7 @@ const SoundFiles: Record<Sounds, SoundFile> = {
   [Sounds.CannonSplash2]: { file: 'cannonball_splash2.ogg', group: SoundGroups.Ship, minDelay: 100, volume: 0.7 },
   [Sounds.RockDamage]: { file: 'rock_damage.ogg', group: SoundGroups.Ship, minDelay: 100 },
   [Sounds.Sink]: { file: 'ship_sunk.ogg', group: SoundGroups.Ship, minDelay: 500 },
-  [Sounds.Notification]: { file: 'notification.mp3', group: SoundGroups.Notification, minDelay: 1500 },
+  [Sounds.Notification]: { file: 'notification.mp3', group: SoundGroups.Notification, minDelay: 1500, volume: 5 },
 };
 
 @Injectable({
