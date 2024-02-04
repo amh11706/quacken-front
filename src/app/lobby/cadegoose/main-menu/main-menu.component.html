@@ -53,12 +53,12 @@
         <ng-container *ngIf="open && (ws.connected$ | async)">
           <div class="settingRow">
             <button mat-raised-button
-                    [disabled]="!open || (ws.connected$ | async) === false"
+                    [disabled]="!open || ((teamPlayers$ | async)?.length || 0) < 2"
                     color="accent"
                     class="readyButton"
                     [class.cancel]="ready"
                     (click)="toggleReady()">{{readyText()}}</button>
-            <button *ngIf="(ss.admin$ | async) && !roundGoing && (ws.connected$ | async)"
+            <button *ngIf="(ss.admin$ | async) && !roundGoing"
                     mat-raised-button
                     (click)="shuffleTeams()">Shuffle Teams</button>
             <q-setting *ngIf="(ss.admin$ | async) && (settings.rated.stream | async) === 0"
