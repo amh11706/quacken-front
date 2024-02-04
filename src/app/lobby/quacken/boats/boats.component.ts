@@ -150,7 +150,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.blurred = document.hidden;
 
     if (this.blurred) {
-      if (!this.turn) return;
+      if (!this.turn || BoatRender.paused) return;
       clearTimeout(this.animateTimeout);
       clearTimeout(this.animateTimeout2);
       clearTimeout(this.animateTimeout3);
