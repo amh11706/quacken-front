@@ -195,7 +195,8 @@ export class HudComponent implements OnInit, OnDestroy {
   private handleKeys() {
     if (this.actions.ready) {
       this.subs.add(this.kbs.subscribe(this.actions.ready, v => {
-        if (v && this.kbControls) this.toggleReady();
+        if (!v || !this.kbControls || this.lobbySettings.turnTime.value !== 65) return;
+        this.toggleReady();
       }));
     }
   }
@@ -212,7 +213,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
     this.myBoat.ready = true;
     this.myBoat.moveLock += 100;
-    this.ws.send(OutCmd.Ready, { ready: false, ...this.localBoat });
+    this.ws.send(OutCmd.Ready, { ready: true, ...this.localBoat });
   }
 
   start(): void {
