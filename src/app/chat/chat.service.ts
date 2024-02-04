@@ -24,6 +24,7 @@ export class ChatService {
   commands$ = new BehaviorSubject<Command[]>([]);
   selectedCommand$ = new BehaviorSubject<Command>({ params: [] } as any);
   nameCommands: Command[] = [];
+  commandParams = new Map<string, { name: string, value: string }>();
 
   constructor(
     private ws: WsService,
@@ -48,7 +49,8 @@ export class ChatService {
         cmd.title = cmd.base.substring(1);
         const params = cmd.params as any as string;
         cmd.params = params.replace(/[[\]<>]/g, '').split(' ').map(p => {
-          return { name: p, value: p === 'new' ? p : '' };
+          if (!this.commandParams.has(p)) this.commandParams.set(p, { name: p, value: p === 'new' ? p : '' });
+          return this.commandParams.get(p)!;
         });
       }
       if (!cmdFound) this.selectedCommand$.next(lobbyCommands[0] ?? selectedCommand);
