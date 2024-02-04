@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Tween } from '@tweenjs/tween.js';
 import { WsService } from '../../../../ws/ws.service';
 import { Boat } from '../../../../lobby/quacken/boats/boat';
 import { Internal } from '../../../../ws/ws-messages';
@@ -9,6 +10,7 @@ import { BoatService } from '../../boat.service';
 import { TeamColorsCss } from '../../cade-entry-status/cade-entry-status.component';
 import { MovableClutter } from './clutter';
 import { Clutter, Turn } from '../../../quacken/boats/types';
+import { BoatRender } from '../../boat-render';
 
 const FlagColorOffsets: Record<number, number> = {
   0: 3,
@@ -157,7 +159,11 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
         if (u.dbl) void this.sound.play(Sounds.CannonSplash2, 10000 / this.speed);
       }
     }
-    return new Promise(resolve => setTimeout(resolve, step % 2 === 1 ? 7000 / this.speed : 0));
+    if (step % 2 !== 1) return Promise.resolve();
+    return new Promise(resolve => {
+      const start = new Date().valueOf();
+      new Tween({}, BoatRender.tweens).to({}, 7000 / this.speed).onComplete(() => resolve()).start(start);
+    });
   }
 
   protected setHeaderFlags(flags: Turn['flags']): void {

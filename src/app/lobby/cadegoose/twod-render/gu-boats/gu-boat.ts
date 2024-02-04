@@ -72,6 +72,7 @@ export class GuBoat extends BoatRender {
 
   protected _update(animate: boolean, boat: Boat): Promise<any> {
     const startTime = animate ? new Date().valueOf() : 0;
+    BoatRender.tweenProgress = startTime;
     const promises: Promise<any>[] = [];
 
     if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y ||
@@ -88,6 +89,15 @@ export class GuBoat extends BoatRender {
       void this.updateTeam(boat);
     }
 
+    if (!promises.length && startTime) {
+      // add an empty tween promise to let pause and play work
+      promises.push(new Promise(resolve => {
+        new TWEEN.Tween({}, BoatRender.tweens)
+          .to({}, 5000 / BoatRender.speed)
+          .onComplete(resolve)
+          .start(startTime);
+      }));
+    }
     return Promise.all(promises);
   }
 

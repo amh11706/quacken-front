@@ -21,7 +21,7 @@
                   [moveKeys]="moveKeys"
                   [maxMoves]="maxMoves"
                   [maxShots]="myBoat.maxShots"
-                  [locked]="!myBoat.isMe || myBoat.moveLock >= turn"></q-move-input>
+                  [locked]="!myBoat.isMe || myBoat.moveLock >= turn || (ws.connected$ | async) !== true"></q-move-input>
     <div id="boatStats">
       <div id="damage"
            matTooltip="Damage: {{myBoat.getDamage()}}%">

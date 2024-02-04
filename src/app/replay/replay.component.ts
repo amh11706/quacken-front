@@ -16,6 +16,7 @@ import { ServerSettingMap } from '../settings/types';
 import { InMessage } from '../ws/ws-subscribe-types';
 import { Lobby } from '../lobby/cadegoose/types';
 import { SettingGroup } from '../settings/setting/settings';
+import { BoatRender } from '../lobby/cadegoose/boat-render';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
@@ -26,6 +27,7 @@ const joinMessage = 'Match replay: Use the replay controls to see a previous mat
 })
 export class ReplayComponent implements OnInit, OnDestroy {
   @ViewChild(LobbyWrapperComponent, { static: true }) private lobbyWrapper?: LobbyWrapperComponent;
+  animationPlayState = 'paused';
   tickInterval = 0;
   messages: InMessage[][] = [];
   private sub = new Subscription();
@@ -151,12 +153,15 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   togglePlay(): void {
+    BoatRender.paused = !!this.tickInterval;
     if (this.tickInterval) {
+      this.animationPlayState = 'paused';
       clearInterval(this.tickInterval);
       this.tickInterval = 0;
       return;
     }
 
+    this.animationPlayState = 'running';
     if (this.tick + 1 === this.messages.length) {
       this.playTo(0);
     }

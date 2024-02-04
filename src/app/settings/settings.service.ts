@@ -101,7 +101,7 @@ export class SettingsService {
     return ready;
   }
 
-  async get<T extends SettingGroup>(group: T, name: ServerSettingGroup[T]): Promise<Setting | undefined> {
+  async get<T extends SettingGroup>(group: T, name: ServerSettingGroup[T]): Promise<Setting> {
     const settings = await this.getGroup(group);
     return Promise.resolve(settings[name]);
   }

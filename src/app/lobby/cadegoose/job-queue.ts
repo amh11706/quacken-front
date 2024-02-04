@@ -7,8 +7,10 @@ export class JobQueue {
   private restart?: () => void;
   done = new Promise<void>(resolve => this._done = resolve);
   private _done?: () => void;
+  private cancel?: () => void;
+  private cancelPromise = new Promise<void>(resolve => this.cancel = resolve);
 
-  constructor(private jobTimeout = 5000) {
+  constructor(private jobTimeout = 0) {
     void this.doJobs();
   }
 
@@ -22,7 +24,9 @@ export class JobQueue {
   clearJobs(): void {
     this.jobs = this.jobs.filter(job => !job.cancellable);
     if (this.jobs.length) console.log('saved', this.jobs.length, 'jobs');
-    this.done = new Promise<void>(resolve => this._done = resolve);
+    this.done = new Promise(resolve => this._done = resolve);
+    this.cancel?.();
+    this.cancelPromise = new Promise(resolve => this.cancel = resolve);
   }
 
   private async getJob(): Promise<Job> {
@@ -33,10 +37,12 @@ export class JobQueue {
   private async doJobs() {
     while (true) {
       const job = await this.getJob();
-      await Promise.race([
-        job.f(),
-        new Promise<void>(resolve => setTimeout(resolve, this.jobTimeout)),
-      ]);
+      const promises = [job.f(), this.cancelPromise];
+
+      if (this.jobTimeout > 0) {
+        promises.push(new Promise(resolve => setTimeout(resolve, this.jobTimeout)));
+      }
+      await Promise.race(promises);
       if (!this.jobs.length) {
         this._done?.();
         this.done = new Promise<void>(resolve => this._done = resolve);

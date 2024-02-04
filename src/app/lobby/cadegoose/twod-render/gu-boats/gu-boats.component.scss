@@ -141,6 +141,7 @@ q-sprite-img {
 
 .shot {
   background-position: center;
+  animation-play-state: var(--playState, running);
   animation-duration: calc(var(--speed) * var(--movetime)), calc(var(--speed) * .5s);
   animation-delay: var(--delay, 0s), calc(var(--movetime) * var(--speed) + var(--delay, 0s));
   animation-fill-mode: forwards;

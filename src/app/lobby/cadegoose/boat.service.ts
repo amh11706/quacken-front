@@ -7,6 +7,7 @@ import {
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 
+import { Tween } from '@tweenjs/tween.js';
 import { WsService } from '../../ws/ws.service';
 import { OutCmd, Internal } from '../../ws/ws-messages';
 import { Sounds, SoundService } from '../../sound.service';
@@ -206,10 +207,13 @@ export class BoatService extends BoatsComponent implements OnDestroy {
         });
       }
     }
-    void this.worker.addJob(() => {
+    void this.worker.addJob(async () => {
       delete this.turn;
       this.step = -1;
-      return new Promise(resolve => setTimeout(resolve, 30000 / this.speed));
+      await new Promise<void>(resolve => {
+        const start = new Date().valueOf();
+        new Tween({}, BoatRender.tweens).to({}, 30000 / this.speed).onComplete(() => resolve()).start(start);
+      });
     });
     void this.worker.addJob(() => {
       this.ws.send(OutCmd.Sync);
@@ -219,16 +223,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   private _playTurn(step: number) {
     if (!this.turn) return;
     if (step === 4) this.resetBoats();
-    if (step % 2 === 0) this.handleUpdate(this.turn?.cSteps[step] || [], step);
-    else this.handleUpdate(this.turn?.cSteps[step]?.filter(c => c.id) || [], step);
-    const turnPart = this.turn.steps[step] || [];
-    if (!turnPart.length) {
-      return new Promise<void>(resolve => {
-        setTimeout(resolve, 5000 / this.speed);
-      });
-    }
-
     const promises: Promise<any>[] = [];
+    if (step % 2 === 0) promises.push(this.handleUpdate(this.turn?.cSteps[step] || [], step));
+    else promises.push(this.handleUpdate(this.turn?.cSteps[step]?.filter(c => c.id) || [], step));
+    const turnPart = this.turn.steps[step] || [];
+
     const updates = new Map<number, BoatStatus>();
     for (const u of turnPart) updates.set(u.id, u);
 
@@ -237,7 +236,11 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       const u = updates.get(boat.id);
       boat.crunchDir = -1;
       boat.imageOpacity = 1;
-      if (!u) continue;
+      if (!u) {
+        const p = boat.render.update(true);
+        if (p) promises.push(p);
+        continue;
+      };
       if (u.c) {
         boat.addDamage(u.c - 1, u.cd);
         if (u.cd === 100) void this.sound.play(Sounds.Sink, 10000 / this.speed);
@@ -261,14 +264,15 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     return Promise.all(promises);
   }
 
-  protected handleUpdate(updates: Clutter[], _: number): void {
-    if (!this.scene) return;
+  protected handleUpdate(updates: Clutter[], _: number): Promise<void> {
+    if (!this.scene) return Promise.resolve();
     Cannonball.speed = this.speed;
     for (const u of updates) {
       if (u.t > 4) continue;
       new Cannonball(this.scene, u).start();
       if (u.dbl) new Cannonball(this.scene, u).start(2000 / this.speed);
     }
+    return Promise.resolve();
   }
 
   private updateCam(br: BoatRender) {

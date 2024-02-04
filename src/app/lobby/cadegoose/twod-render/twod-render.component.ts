@@ -83,6 +83,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   private frameRequested = true;
   private frameTarget = 0;
+  private lastFrame = 0;
   private alive = true;
   private stats?: Stats;
 
@@ -176,6 +177,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   private animate = () => {
     const t = new Date().valueOf();
+    if (!this.lastFrame) this.lastFrame = t;
     if (t < this.frameTarget) {
       this.frameRequested = false;
       this.requestRender();
@@ -184,12 +186,15 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
 
     BoatRender.speed = this.speed;
-    if (BoatRender.tweens.getAll().length) {
-      BoatRender.tweens.update(t);
+    // progress 0 means no animations are running, so we can skip the update
+    if (!BoatRender.paused && BoatRender.tweenProgress > 0) {
+      BoatRender.tweenProgress += (t - this.lastFrame);
+      BoatRender.tweens.update(BoatRender.tweenProgress);
       this.cd.detectChanges();
     }
     this.stats?.update();
     this.frameRequested = false;
+    this.lastFrame = t;
     this.requestRender();
   };
 

@@ -51,6 +51,8 @@ export const moveEase: any[] = [
 export class BoatRender {
   private static circle?: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>;
   static tweens = new TWEEN.Group();
+  static tweenProgress = 0;
+  static paused = false;
   static speed = 10;
   static updateCam: (br: BoatRender) => void;
   static myLastPos = { x: 0, z: 0 };

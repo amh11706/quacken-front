@@ -11,6 +11,7 @@ export const Notes: Note[] = [
       'You can now see replays of any player.',
       'Stat leaderboards now have a link to the replay where the record was achieved.',
       'Added search and sort to the match history page.',
+      'Pausing a replay now pauses the animation, not just the timer.',
       'Rejoining a lobby no longer erases your moves.',
       'You can now toggle back to unready when unlimited time is enabled.',
       'Joining and shuffling teams no longer causes player list shuffling.',
