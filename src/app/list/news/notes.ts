@@ -27,6 +27,8 @@ export const Notes: Note[] = [
       'Profile page now includes w/l last 30 days and vs you (if it\'s not your profile).',
       // 'Map creators can now see a list of matches using their map. Viewable from the map editor.',
       // 'New "Map Browser" page to view highlighted maps and creators.',
+      // 'Added a way to delete maps.',
+      // 'Added sort by popularity to the map browser.',
       'Leaderboards now only show players who have played in the last 30 days.',
       'New setting to show the moves of boats on your team.',
       'Added a bunch of new statistics visible during a match. Shift + Tab to show (if enabled).',

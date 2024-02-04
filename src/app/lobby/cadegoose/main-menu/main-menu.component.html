@@ -12,6 +12,7 @@
       <div class="teamwrap"
            *ngFor="let team of teamPlayers$ | async; let i = index">
         <button mat-raised-button
+                *ngIf="!roundGoing || (settings.hotEntry.stream | async) === 1"
                 [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>

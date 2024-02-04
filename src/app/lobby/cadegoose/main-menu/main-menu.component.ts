@@ -163,7 +163,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.es.open$.next(false);
       return;
     }
-    if (this.myTeam === 99 || this.roundGoing) {
+    if (this.myTeam === 99) {
       this.es.open$.next(false);
       return;
     }
