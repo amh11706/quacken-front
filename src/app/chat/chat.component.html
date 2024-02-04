@@ -6,7 +6,8 @@
                                  class="textbox">
       <ng-container *cdkVirtualFor="let m of chat.messages$">
         <p *ngIf="!m.blocked"
-           [style.backgroundColor]="colors[m.type]">
+           [style.backgroundColor]="colors[m.type]"
+           [title]="m.receivedTime">
           <ng-container [ngSwitch]="m.type">
             <span *ngSwitchCase="0">{{m.message}}</span>
             <span *ngSwitchCase="1"

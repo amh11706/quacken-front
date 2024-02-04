@@ -12,10 +12,12 @@ export const Notes: Note[] = [
       'Stat leaderboards now have a link to the replay where the record was achieved.',
       'Added search and sort to the match history page.',
       'Pausing a replay now pauses the animation, not just the timer.',
-      'Rejoining a lobby no longer erases your moves.',
       'You can now toggle back to unready when unlimited time is enabled.',
+      'Rejoining a lobby no longer erases your moves.',
       'Joining and shuffling teams no longer causes player list shuffling.',
       'FPS display can now be dragged around in addition to turning it on or off from the graphic settings.',
+      'Chat commands now have a timestamp on hover.',
+      'Chat commands now persist entered text in a more natural way.',
     ],
   },
   {

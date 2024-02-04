@@ -20,6 +20,7 @@ export interface ChatMessage extends Message {
   blocked?: boolean;
   time?: number | string;
   ago?: string;
+  receivedTime?: string;
 }
 
 export interface Invite {
