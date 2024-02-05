@@ -12,7 +12,7 @@ import { MovableClutter } from './clutter';
 import { Clutter, Turn } from '../../../quacken/boats/types';
 import { BoatRender } from '../../boat-render';
 
-const FlagColorOffsets: Record<number, number> = {
+export const FlagColorOffsets: Readonly<Record<number, number>> = {
   0: 3,
   1: 6,
   2: 15,

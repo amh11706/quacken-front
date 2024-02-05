@@ -7,6 +7,7 @@ import { SpriteData, Orientation } from '../sprite';
 import { Boats } from './objects';
 import { BoatRender, TeamColors, moveEase } from '../../boat-render';
 import { Team } from '../../../quacken/boats/types';
+import { FlagColorOffsets } from './gu-boats.component';
 
 // pixel coordinates relative to top left of canvas
 export class Point {
@@ -64,6 +65,13 @@ export class GuBoat extends BoatRender {
 
   showInfluence(): void {
     // .
+  }
+
+  rebuildHeader(): void {
+    for (const f of this.flags) {
+      const team = this.boat.isMe ? 98 : f.t;
+      f.offset = 220 - ((FlagColorOffsets[team] ?? 9) + f.p) * 10 + 'px';
+    }
   }
 
   updateMoves(): BoatRender {
