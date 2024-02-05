@@ -1,6 +1,6 @@
 <div class="chatbox">
   <div class="output">
-    <cdk-virtual-scroll-viewport (wheel)="scrolled()" [itemSize]="25"
+    <cdk-virtual-scroll-viewport (wheel)="scrolled($event)" [itemSize]="25"
                                  [minBufferPx]="100"
                                  [maxBufferPx]="200"
                                  class="textbox">

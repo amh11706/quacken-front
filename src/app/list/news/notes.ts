@@ -16,6 +16,7 @@ export const Notes: Note[] = [
       'Rejoining a lobby no longer erases your moves.',
       'Joining and shuffling teams no longer causes player list shuffling.',
       'FPS display can now be dragged around in addition to turning it on or off from the graphic settings.',
+      'Chat now scrolls smoothly.',
       'Chat commands now have a timestamp on hover.',
       'Chat commands now persist entered text in a more natural way.',
     ],

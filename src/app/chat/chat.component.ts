@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Router } from '@angular/router';
+import { Group, Tween } from '@tweenjs/tween.js';
 import { ChatService } from './chat.service';
 import { FriendsService } from './friends/friends.service';
 import { Invite, Message } from './types';
@@ -47,6 +48,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         const el = output.elementRef.nativeElement;
         el.scrollTop = el.scrollHeight;
+        this.scrollTarget = el.scrollTop;
       });
     }, 50);
 
@@ -57,10 +59,30 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  scrolled(): void {
+  private scrollTarget = 0;
+  private isScrolling = false;
+  private tweenGroup = new Group();
+
+  private updateTween(): void {
+    if (!this.isScrolling) return;
+    this.tweenGroup.update();
+    if (this.tweenGroup.getAll().length) requestAnimationFrame(() => this.updateTween());
+    else this.isScrolling = false;
+  }
+
+  scrolled(event: WheelEvent): void {
     const el = this.output?.elementRef.nativeElement;
     if (!el) return;
-    this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 100;
+    event.preventDefault();
+    this.scrollTarget += event.deltaY * 0.5;
+    if (this.scrollTarget < 0) this.scrollTarget = 0;
+    if (this.scrollTarget > el.scrollHeight - el.clientHeight) this.scrollTarget = el.scrollHeight - el.clientHeight;
+    this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 80;
+
+    this.tweenGroup.removeAll();
+    new Tween(el, this.tweenGroup).to({ scrollTop: this.scrollTarget }, 100).start();
+    this.isScrolling = true;
+    this.updateTween();
   }
 
   accept(inv: Invite): Promise<boolean> | void {
@@ -83,6 +105,7 @@ export class ChatComponent implements OnInit, OnDestroy {
         output.scrollTo({ bottom: 0 });
         setTimeout(() => {
           el.scrollTop = el.scrollHeight;
+          this.scrollTarget = el.scrollTop;
         });
       });
     }
