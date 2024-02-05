@@ -181,7 +181,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       scene.add(this.aiRender.object);
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, (boat: Boat) => {
-      this.clickBoat(boat);
+      this.clickBoat(boat, true);
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, ticks => {
       this.boatTicks = ticks;
@@ -248,6 +248,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       this.activeBoat.render?.rebuildHeader?.();
     }
     if (this.activeBoat === boat && selectAi) {
+      center = false;
       this.activeBoat = new Boat('');
       this.activeBoat.render = {} as any;
       (this.activeBoat.render as GuBoat).coords = { ...(boat.render as GuBoat)?.coords } as Point;
