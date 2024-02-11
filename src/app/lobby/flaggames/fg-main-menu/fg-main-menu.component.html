@@ -13,7 +13,8 @@
       <div class="teamwrap"
            *ngFor="let team of teamPlayers$ | async; let i = index">
         <button mat-raised-button
-                [disabled]="!open || !ws.connected"
+                *ngIf="!roundGoing || (settings.hotEntry.stream | async) === 1"
+                [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>
         <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
@@ -48,28 +49,30 @@
         </div>
       </div>
 
-      <div id="buttons">
-        <button *ngIf="(ss.admin$ | async) && !roundGoing && ws.connected"
-                mat-raised-button
-                (click)="shuffleTeams()">Shuffle Teams</button>
-        <br>
-        <button mat-raised-button
-                [disabled]="!open"
-                color="accent"
-                id="ready"
-                [class.cancel]="ready"
-                (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
-          'Ready'}}</button>
-        <q-setting *ngIf="ss.admin$ | async"
-                   name="startNew"
-                   id="start"></q-setting>
-        <q-setting name="flagNextBoat"></q-setting>
-        <button mat-icon-button
-                [matTooltip]="'About this game mode'"
-                [matTooltipPosition]="'above'"
-                (click)="openHelp()">
-          <mat-icon>info</mat-icon>
-        </button>
+      <div class="settings">
+        <div class="settingRow">
+          <button mat-raised-button
+                  [disabled]="!open || ((teamPlayers$ | async)?.length || 0) < 2"
+                  color="accent"
+                  class="readyButton"
+                  [class.cancel]="ready"
+                  (click)="toggleReady()">{{readyText()}}</button>
+          <button *ngIf="(ss.admin$ | async) && !roundGoing"
+                  mat-raised-button
+                  (click)="shuffleTeams()">Shuffle Teams</button>
+          <q-setting *ngIf="(ss.admin$ | async) && (settings.rated.stream | async) === 0"
+                     name="startNew"></q-setting>
+        </div>
+        <div class="settingRow">
+          <q-setting id="flagNextBoat"
+                     name="flagNextBoat"></q-setting>
+          <button mat-icon-button
+                  [matTooltip]="'About this game mode'"
+                  [matTooltipPosition]="'above'"
+                  (click)="openHelp()">
+            <mat-icon>info</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   </ng-template>

@@ -6,7 +6,7 @@
                 [rating]=false></q-stat-end>
   </div>
   <ng-template #teams>
-    <h2>Match Settings</h2>
+    <h2>Team Selection</h2>
     <div id="flexmenu"
          *ngrxLet="es.open$ as open">
       <div class="teamwrap"
@@ -23,22 +23,24 @@
         </div>
         <br>
         <button mat-raised-button
-                [disabled]="!open"
+                *ngIf="!roundGoing"
+                [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
       </div>
 
-      <div id="buttons">
-        <button mat-raised-button
-                [disabled]="!open"
-                color="accent"
-                id="ready"
-                [class.cancel]="ready"
-                (click)="toggleReady()">{{myBoat.isMe ? 'Close' : myTeam === 99 ? 'Spectate' : ready ? 'Not Ready' :
-          'Ready'}}</button>
-        <q-setting *ngIf="ss.admin$ | async"
-                   name="startNew"
-                   id="start"></q-setting>
-        <q-setting name="nextCadeBoat"></q-setting>
+      <div class="settings">
+        <div class="settingRow">
+          <button mat-raised-button
+                  [disabled]="!open || ((teamPlayers$ | async)?.length || 0) < 2"
+                  color="accent"
+                  class="readyButton"
+                  [class.cancel]="ready"
+                  (click)="toggleReady()">{{readyText()}}</button>
+          <q-setting *ngIf="ss.admin$ | async"
+                     name="startNew"
+                     id="start"></q-setting>
+          <q-setting name="nextCadeBoat"></q-setting>
+        </div>
       </div>
     </div>
   </ng-template>
