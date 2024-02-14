@@ -51,13 +51,12 @@ export class LoginFormComponent implements AfterViewInit {
     this.pending = true;
     this.http.post<string>(this.path + 'login', JSON.stringify(this.user))
       .subscribe(
-        async resp => {
+        resp => {
           window.localStorage.setItem('token', resp);
           this.guard.triedPath = '';
-          await this.router.navigate([this.guard.triedPath || 'list']);
-          this.pending = false;
+          void this.router.navigate([this.guard.triedPath || 'list']);
         },
-        (err) => {
+        (err: unknown) => {
           this.pending = false;
           this.errMessage = this.getErrorMessage(err);
           if (this.errComponent) this.dialog.open(this.errComponent);
