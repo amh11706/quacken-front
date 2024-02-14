@@ -69,7 +69,7 @@ export class SettingsService {
       if (s.group !== group) continue;
       const setting = new Setting(this, s);
       newSettings[s.name as ServerSettingGroup[T]] = setting;
-      setting.userStream.pipe(debounceTime(750)).subscribe(() => {
+      setting.userStream.pipe(debounceTime(500)).subscribe(() => {
         this.save(setting.toDBSetting());
       });
     }
