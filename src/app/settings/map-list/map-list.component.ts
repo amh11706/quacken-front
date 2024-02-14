@@ -8,7 +8,6 @@ import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../settings.service';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { ServerSettingGroup, Settings } from '../setting/settings';
-import { Setting } from '../types';
 import { MapOption } from './map-card/types';
 
 const enum SortOptions {
@@ -90,7 +89,6 @@ export class MapListComponent implements OnInit, OnDestroy {
   @Input() rankArea = 2;
 
   search = '';
-  selectedMap?: Setting;
   private servermapList: MapOption[] = [];
   private filteredMapList: MapOption[] = [];
   private mapHeight = 36;
@@ -110,6 +108,7 @@ export class MapListComponent implements OnInit, OnDestroy {
   private userList: string[] = [];
   private setting: typeof Settings['cadeMap'] | typeof Settings['flagMap'] = Settings.cadeMap;
   private subs = new Subscription();
+  selectedMap = this.ss.prefetch(this.setting.group).map;
 
   constructor(
     private bottomSheet: MatBottomSheet,
@@ -134,7 +133,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.sort(this.selectedSortOption);
     this.initFilters();
     this.maplist.next(this.filteredMapList);
-    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']) ?? this.selectedMap;
+    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']);
   }
 
   ngOnDestroy(): void {
@@ -208,6 +207,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     const maps = this.filteredMapList.length < 1 ? this.servermapList : this.filteredMapList;
     const map = id < 0 ? maps[Math.floor(Math.random() * maps.length)] : maps.find(m => m.id === id);
     if (!map) return;
+
     void this.ss.save({
       id: this.setting.id,
       name: this.setting.name,
@@ -216,7 +216,6 @@ export class MapListComponent implements OnInit, OnDestroy {
       group: this.setting.group,
       data: map.username ? `${map.name} (${map.username})` : 'Generated',
     });
-    if (this.selectedMap) this.selectedMap.value = map.id;
     if (id < 0) this.visible = true;
   }
 

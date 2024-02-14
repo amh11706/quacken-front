@@ -46,6 +46,7 @@
 </div>
 
 <cdk-virtual-scroll-viewport id="maps"
+                             *ngrxLet="selectedMap.stream as selectedMap"
                              [itemSize]="273"
                              [minBufferPx]="600"
                              [maxBufferPx]="900">
@@ -55,6 +56,6 @@
               [height]="rankArea === 2 ? 36 : 41"
               [disabled]="(ss.admin$ | async) === false"
               [description]="m.description"
-              [class.selected]="m.id === selectedMap?.value"
+              [class.selected]="m.id === selectedMap"
               (selectedMap)="selectMap($event)"></q-map-card>
 </cdk-virtual-scroll-viewport>

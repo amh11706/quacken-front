@@ -14,6 +14,7 @@ import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/lega
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 
+import { LetDirective } from '@ngrx/component';
 import { RatingModule } from '../rating/rating.module';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { MapCardComponent } from './map-card/map-card.component';
@@ -44,6 +45,7 @@ import { CanvasModule } from '../../lobby/cadegoose/canvas/canvas.module';
     CanvasModule,
     ScrollingModule,
     RatingModule,
+    LetDirective,
   ],
   exports: [MapListComponent],
 })
