@@ -66,7 +66,7 @@ export type SubscribeData = {
   [InCmd.Moves]: MoveMessageIncoming[] | MoveMessageIncoming;
   [InCmd.BoatTicks]: Record<number, BoatTick>;
   [InCmd.BoatTick]: BoatTick;
-  [InCmd.NewBoat]: BoatSync;
+  [InCmd.NewBoat]: BoatSync | BoatSync[];
   [InCmd.DelBoat]: number;
   [InCmd.Bomb]: { t: number, m: number };
 

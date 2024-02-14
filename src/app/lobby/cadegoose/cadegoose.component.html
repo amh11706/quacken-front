@@ -23,8 +23,7 @@
              [background]="background">
 </q-obstacles>
 
-<q-cade-entry-status (keydown.Tab)="statOpacity = 1"
-                     (hoveredTeam)="hoveredTeam = $event"
+<q-cade-entry-status (hoveredTeam)="hoveredTeam = $event"
                      [myTeam]="myBoat.team"></q-cade-entry-status>
 
 <q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"

@@ -131,14 +131,24 @@ export class ReplayComponent implements OnInit, OnDestroy {
     this.fakeWs.dispatchMessage({ cmd: InCmd.Sync, data: { sync: this.boats } });
   }
 
+  private addBoat(b: BoatSync | BoatSync[]): void {
+    if (Array.isArray(b)) {
+      const boatMap = new Set(b.map(b2 => b2.id));
+      this.boats = this.boats.filter(b2 => !boatMap.has(b2.id));
+      this.boats.push(...b);
+      return;
+    }
+    this.boats = this.boats.filter(b2 => b2.id !== b.id);
+    this.boats.push(b);
+  }
+
   protected checkMessage(m: InMessage): void {
     switch (m.cmd) {
       case InCmd.Sync:
         this.boats = [...m.data.sync];
         break;
       case InCmd.NewBoat:
-        this.boats = this.boats.filter(b => b.id !== m.data.id);
-        this.boats.push(m.data);
+        this.addBoat(m.data);
         break;
       case InCmd.DelBoat:
         this.boats = this.boats.filter(b => b.id !== m.data);

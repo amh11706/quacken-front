@@ -33,7 +33,7 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
           lastSync.sync = lastSync.sync.filter(b => b.id !== m.data);
           break;
         case InCmd.NewBoat:
-          lastSync.sync.push(m.data);
+          lastSync.sync.push(...Array.isArray(m.data) ? m.data : [m.data]);
           break;
         case InCmd.Sync:
           lastSync = m.data;

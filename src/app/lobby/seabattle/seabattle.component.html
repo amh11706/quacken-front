@@ -17,8 +17,7 @@
                  [safeZone]="false"
                  [graphicSettings]="graphicSettings"></q-threed-render>
 
-<q-sb-entry-status (keydown.Tab)="statOpacity = 1"
-                   (hoveredTeam)="hoveredTeam = $event"
+<q-sb-entry-status (hoveredTeam)="hoveredTeam = $event"
                    [myTeam]="myBoat.team"></q-sb-entry-status>
 
 <q-sb-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"

@@ -93,7 +93,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
         this.handleTurn(m as any);
       }, 100);
     }));
-    this.subs.add(this.ws.subscribe(InCmd.NewBoat, boat => this.setBoats([boat], false)));
+    this.subs.add(this.ws.subscribe(InCmd.NewBoat, boat => this.setBoats(Array.isArray(boat) ? boat : [boat], false)));
     this.subs.add(this.ws.subscribe(InCmd.DelBoat, id => this.deleteBoat(id)));
     this.subs.add(this.ws.subscribe(InCmd.Moves, s => this.handleMoves(s)));
     this.subs.add(this.ws.subscribe(InCmd.Ready, m => {

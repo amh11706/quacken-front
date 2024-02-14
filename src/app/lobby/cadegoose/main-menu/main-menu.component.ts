@@ -28,7 +28,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   links = links;
   teamPlayers$ = new BehaviorSubject<Message[][]>([]);
-  teams: { [key: number]: TeamMessage } = {};
+  players: { [key: number]: TeamMessage } = {};
   myBoat = new Boat('');
   myTeam = 99;
   myJobbers = 100;
@@ -64,7 +64,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       // wait to make sure we parsed the lobby users first
       await new Promise((resolve) => setTimeout(resolve, 100));
-      this.teams = m.players;
+      this.players = m.players;
       this.ready = false;
       this.myTeam = 99;
       const teamPlayers = [];
@@ -72,7 +72,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.teamPlayers$.next(teamPlayers);
 
       const lobby = this.fs.lobby$.getValue();
-      for (const [id, p] of Object.entries(this.teams)) {
+      for (const [id, p] of Object.entries(this.players)) {
         this.setTeam(+id, p.t, false);
         if (+id === this.ws.sId) {
           this.ready = p.r;
@@ -94,9 +94,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.Team, m => {
       if (!Array.isArray(m)) m = [m];
+      else this.teamPlayers$.next(Array(this.teamPlayers$.getValue().length).fill([]));
       const lobby = this.fs.lobby$.getValue();
       for (const t of m) {
-        this.teams[t.id] = t;
+        this.players[t.id] = t;
         if (t.id === this.ws.sId) {
           this.myTeam = t.t;
           this.ready = t.r;
@@ -128,7 +129,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.myBoat = b;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, async t => {
-      for (const p of Object.values(this.teams)) p.r = false;
+      for (const p of Object.values(this.players)) p.r = false;
       const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
       this.roundGoing = (maxTurns && t.turn && t.turn < maxTurns) || false;
       this.statsOpen = false;
@@ -146,6 +147,16 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.teamPlayers$.next(this.teamPlayers$.getValue());
       }
     }));
+    this.subs.add(this.settings.teams.stream.subscribe((v) => {
+      const teamPlayers = this.teamPlayers$.getValue();
+      if (v < teamPlayers.length) {
+        teamPlayers.length = v;
+        this.teamPlayers$.next(teamPlayers);
+        return;
+      }
+      while (teamPlayers.length < v) teamPlayers.push([]);
+      this.teamPlayers$.next(teamPlayers);
+    }));
   }
 
   submitRating(value: number): void {
@@ -155,7 +166,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   private gotBoat() {
     this.es.open$.next(false);
     this.ready = false;
-    for (const p of Object.values(this.teams)) p.r = false;
+    for (const p of Object.values(this.players)) p.r = false;
   }
 
   toggleReady(): void {
@@ -187,7 +198,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   private removeUser(id: number) {
     this.resetUser(id);
-    delete this.teams[id];
+    delete this.players[id];
   }
 
   private resetUser(id: number, broadcast = true) {
@@ -207,7 +218,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     if (!user) return;
 
     user = { ...user };
-    user.message = this.teams[id];
+    user.message = this.players[id];
     const teamPlayers = this.teamPlayers$.getValue();
     while (teamPlayers.length <= team) teamPlayers.push([]);
     teamPlayers[team]?.push(user);
