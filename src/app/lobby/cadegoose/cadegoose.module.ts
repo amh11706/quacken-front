@@ -77,6 +77,7 @@ import { ManeuverSourceModule } from '../../boats/maneuver-source/maneuver-sourc
     MainMenuComponent,
     CadeEntryStatusComponent,
     StatEndComponent,
+    AdvancedMapComponent,
   ],
 })
 export class CadegooseModule { }

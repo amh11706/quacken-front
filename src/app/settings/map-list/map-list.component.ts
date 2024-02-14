@@ -68,6 +68,12 @@ const SortCompare: Record<SortOptions, (n1: MapOption, n2: MapOption) => number>
   [SortOptions.MapsYouRated]: (n1: MapOption, n2: MapOption) => compareProperty(n1, n2, -1, 'ratingMine'),
 };
 
+const MapSizes = {
+  2: { width: 20, height: 36, safeZone: true },
+  3: { width: 25, height: 25, safeZone: false },
+  4: { width: 31, height: 41, safeZone: true },
+};
+
 @Component({
   selector: 'q-map-list',
   templateUrl: './map-list.component.html',
@@ -91,8 +97,9 @@ export class MapListComponent implements OnInit, OnDestroy {
   search = '';
   private servermapList: MapOption[] = [];
   private filteredMapList: MapOption[] = [];
-  private mapHeight = 36;
-  private mapWidth = 20;
+  mapHeight = 36;
+  mapWidth = 20;
+  safeZone = true;
   maplist = new ReplaySubject<MapOption[]>(1);
   selectedFilters: string[] = [];
   sortList = [
@@ -119,6 +126,10 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     if (this.rankArea === 4) this.setting = Settings.flagMap;
+    const mapSize = MapSizes[this.rankArea as keyof typeof MapSizes] || MapSizes[2];
+    this.mapHeight = mapSize.height;
+    this.mapWidth = mapSize.width;
+    this.safeZone = mapSize.safeZone;
     this.subs.add(this.ws.subscribe(Internal.Lobby, async l => {
       const settingValue = (await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']))?.value || 0;
       if (settingValue > 1 || !l.map || !this.servermapList[0]) return;

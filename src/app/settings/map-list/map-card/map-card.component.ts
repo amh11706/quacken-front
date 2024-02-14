@@ -15,6 +15,7 @@ export class MapCardComponent {
   @Input() map?: MapOption;
   @Input() width = 20;
   @Input() height = 36;
+  @Input() safeZone = true;
   @Input() disabled = false;
   @Input() set description(d: string) {
     if (this.map && this.map?.id > 0) return;

@@ -52,8 +52,9 @@
                              [maxBufferPx]="900">
   <q-map-card *cdkVirtualFor="let m of maplist"
               [map]="m"
-              [width]="rankArea === 2 ? 20 : 31"
-              [height]="rankArea === 2 ? 36 : 41"
+              [width]="mapWidth"
+              [height]="mapHeight"
+              [safeZone]="safeZone"
               [disabled]="(ss.admin$ | async) === false"
               [description]="m.description"
               [class.selected]="m.id === selectedMap"

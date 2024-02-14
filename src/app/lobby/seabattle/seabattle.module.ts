@@ -18,6 +18,7 @@ import { SbEntryStatusComponent } from './sb-entry-status/sb-entry-status.compon
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
 import { SeabattleComponent } from './seabattle.component';
 import { ThreedRenderModule } from '../cadegoose/threed-render/threed-render.module';
+import { MapEditorModule } from '../../map-editor/map-editor.module';
 
 @NgModule({
   declarations: [SeabattleComponent, SbEntryStatusComponent, SbStatsComponent, SbMainMenuComponent],
@@ -36,6 +37,8 @@ import { ThreedRenderModule } from '../cadegoose/threed-render/threed-render.mod
     QuackenModule,
     NameModule,
     LetDirective,
+    CadegooseModule,
+    MapEditorModule,
   ],
   exports: [SeabattleComponent],
 })

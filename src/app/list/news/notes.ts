@@ -12,6 +12,7 @@ export const Notes: Note[] = [
       'Stat leaderboards now have a link to the replay where the record was achieved.',
       'Added search and sort to the match history page.',
       'Pausing a replay now pauses the animation, not just the timer.',
+      'Custom maps now work in sea battle.',
       'You can now toggle back to unready when unlimited time is enabled.',
       'Rejoining a lobby no longer erases your moves.',
       'Joining and shuffling teams no longer causes player list shuffling.',
