@@ -54,7 +54,7 @@ export type SubscribeData = {
 
   [InCmd.PlayerAdd]: Message;
   [InCmd.PlayerRemove]: Message;
-  [InCmd.PlayerList]: Message[];
+  [InCmd.PlayerList]: Record<number, Message>;
   [InCmd.LobbyList]: Lobby[];
   [InCmd.LobbyUpdate]: Lobby;
   [InCmd.LobbyRemove]: number;
@@ -62,7 +62,7 @@ export type SubscribeData = {
   [InCmd.LobbyJoin]: Lobby;
   [InCmd.Sync]: Sync;
   [InCmd.Turn]: Turn;
-  [InCmd.Team]: TeamMessage | TeamMessage[];
+  [InCmd.Team]: TeamMessage | Record<number, TeamMessage>;
   [InCmd.Moves]: MoveMessageIncoming[] | MoveMessageIncoming;
   [InCmd.BoatTicks]: Record<number, BoatTick>;
   [InCmd.BoatTick]: BoatTick;

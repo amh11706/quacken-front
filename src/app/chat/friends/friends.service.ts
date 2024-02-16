@@ -55,12 +55,13 @@ export class FriendsService {
   }
 
   private handlePlayers() {
-    this.ws.subscribe(InCmd.PlayerList, (r: ChatMessage[]) => {
-      for (const m of r) {
+    this.ws.subscribe(InCmd.PlayerList, (r: Record<number, ChatMessage>) => {
+      const users = Object.values(r);
+      for (const m of users) {
         m.friend = this.isFriend(m.from);
         m.blocked = this.isBlocked(m.from);
       }
-      this.lobby$.next(r);
+      this.lobby$.next(users);
     });
     this.ws.subscribe(InCmd.PlayerAdd, (m: ChatMessage) => {
       m.friend = this.isFriend(m.from);

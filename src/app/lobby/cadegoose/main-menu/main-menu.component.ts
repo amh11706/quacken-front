@@ -93,10 +93,11 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.fs.lobby$.next(lobby);
     }));
     this.subs.add(this.ws.subscribe(InCmd.Team, m => {
-      if (!Array.isArray(m)) m = [m];
+      if ('id' in m) m = { [m.id]: m };
+      // we either get one team message or all of them, so we can reset the array if we got all of them
       else this.teamPlayers$.next(Array(this.teamPlayers$.getValue().length).fill([]));
       const lobby = this.fs.lobby$.getValue();
-      for (const t of m) {
+      for (const t of Object.values(m)) {
         this.players[t.id] = t;
         if (t.id === this.ws.sId) {
           this.myTeam = t.t;
