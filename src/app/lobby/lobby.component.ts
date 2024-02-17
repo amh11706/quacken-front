@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { WsService } from '../ws/ws.service';
 import { SettingsService } from '../settings/settings.service';
@@ -13,7 +13,7 @@ import { Lobby } from './cadegoose/types';
   styleUrls: ['./lobby.component.css'],
 })
 export class LobbyComponent implements OnInit, OnDestroy {
-  lobby?: Lobby;
+  lobby = new BehaviorSubject<Lobby | undefined>(undefined);
   id?: number;
   private sub = new Subscription();
   private sent = false;
@@ -36,7 +36,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     }));
     this.sub.add(this.ws.subscribe(InCmd.LobbyJoin, l => {
       this.sent = false;
-      this.lobby = l;
+      this.lobby.next(l);
     }));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v || !this.id) return;

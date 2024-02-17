@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { StatService } from '../../esc-menu/profile/stat.service';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
@@ -21,7 +21,7 @@ import { Lobby } from '../../lobby/cadegoose/types';
   styleUrls: ['./lobby-list.component.scss'],
 })
 export class LobbyListComponent implements OnInit, OnDestroy {
-  lobbies: Lobby[] = [];
+  lobbies = new BehaviorSubject<Lobby[]>([]);
   note = Notes[0] as Note;
   private sub = new Subscription();
   @Input() message: Message = {} as Message;
@@ -37,21 +37,24 @@ export class LobbyListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(InCmd.LobbyList, lobbies => {
-      this.lobbies = lobbies;
+      this.lobbies.next(lobbies);
     }));
     this.sub.add(this.ws.subscribe(InCmd.LobbyUpdate, update => {
-      for (let i = 0; i < this.lobbies.length; i++) {
-        const lobby = this.lobbies[i];
+      const lobbies = this.lobbies.getValue();
+      for (let i = 0; i < lobbies.length; i++) {
+        const lobby = lobbies[i];
         if (!lobby) continue;
         if (update.id === lobby.id) {
-          Object.assign(lobby, update);
+          lobbies[i] = update;
+          this.lobbies.next(lobbies);
           return;
         }
       }
-      this.lobbies.push(update);
+      lobbies.push(update);
+      this.lobbies.next(lobbies);
     }));
     this.sub.add(this.ws.subscribe(InCmd.LobbyRemove, id => {
-      this.lobbies = this.lobbies.filter(l => l.id !== id);
+      this.lobbies.next(this.lobbies.getValue().filter(l => l.id !== id));
     }));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v) return;

@@ -7,7 +7,9 @@ import { FriendsService } from '../friends/friends.service';
 import { ChatService } from '../chat.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
-import { ChatMessage, Command } from '../types';
+import { Command } from '../types';
+import { TierTitles } from '../../esc-menu/profile/leaders/leaders.component';
+import { TeamMessage } from '../../lobby/cadegoose/types';
 
 @Component({
   selector: 'q-name',
@@ -16,8 +18,9 @@ import { ChatMessage, Command } from '../types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NameComponent {
-  @Input() message: Partial<ChatMessage> = {};
+  @Input() message: Partial<TeamMessage> = {};
   @Input() offline = false;
+  tierTitles = TierTitles;
 
   constructor(
     public chat: ChatService,

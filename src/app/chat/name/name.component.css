@@ -1,3 +1,9 @@
+@import './tier-colors.scss';
+
+:host {
+  position: relative;
+}
+
 span {
   cursor: pointer;
 }
@@ -15,7 +21,11 @@ span {
 }
 
 .admin {
-  text-shadow: -0.5px -0.5px 0 goldenrod, 0.5px -0.5px 0 goldenrod, -0.5px 0.5px 0 goldenrod, 0.5px 0.5px 0 goldenrod;
+  text-shadow:
+    -0.5px -0.5px 0 goldenrod,
+    0.5px -0.5px 0 goldenrod,
+    -0.5px 0.5px 0 goldenrod,
+    0.5px 0.5px 0 goldenrod;
 }
 
 .bot {
@@ -26,4 +36,21 @@ p {
   color: #ddd;
   padding: 0 8px;
   margin: 0;
+}
+
+.hasTier {
+  padding-right: 14px;
+}
+
+.tier {
+  display: inline-block;
+  position: absolute;
+  top: 48%;
+  transform: translateY(-50%);
+  margin-left: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border-width: 5px;
+  border-style: solid;
 }

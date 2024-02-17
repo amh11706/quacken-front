@@ -1,9 +1,9 @@
-<div *ngIf="!lobby"
+<div *ngIf="(lobby | async) === undefined"
      id="background">
   <p>Loading...</p>
 </div>
 
-<ng-container *ngIf="lobby"
+<ng-container *ngIf="lobby | async as lobby"
               [ngSwitch]="lobby.type">
   <q-quacken *ngSwitchCase="'Quacken'"
              [lobby]="lobby"></q-quacken>

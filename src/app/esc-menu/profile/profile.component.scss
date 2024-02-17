@@ -1,3 +1,5 @@
+@import '../../chat/name/tier-colors.scss';
+
 #stats {
   color: #eee;
   text-align: center;
@@ -64,37 +66,10 @@ h2 {
   width: 70px;
   height: 70px;
   margin-bottom: 8px;
-  border: 3px solid #555;
+  border-width: 3px;
+  border-style: solid;
   border-radius: 50%;
   line-height: 64px;
-}
-
-.Jolly {
-  border-color: Orange;
-}
-
-.Ace {
-  border-color: Purple;
-}
-
-.Diamond {
-  border-color: aqua;
-}
-
-.Platinum {
-  border-color: white;
-}
-
-.Gold {
-  border-color: gold;
-}
-
-.Silver {
-  border-color: silver;
-}
-
-.Bronze {
-  border-color: brown;
 }
 
 table {

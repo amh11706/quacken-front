@@ -61,10 +61,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       // wait to make sure we parsed the lobby users first
       await new Promise((resolve) => setTimeout(resolve, 100));
-      this.ready = false;
-      this.myTeam = 99;
       const teamPlayers = this.teamPlayers$.getValue();
-      for (let i = 0; i < m.points.length; i++) teamPlayers.push([]);
+      while (teamPlayers.length < m.points.length) teamPlayers.push([]);
       this.teamPlayers$.next(teamPlayers);
 
       if (m.myMoves) {
@@ -96,7 +94,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.myBoat = b;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, async t => {
-      for (const p of this.fs.lobby$.getValue()) p.r = false;
       const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
       this.roundGoing = (maxTurns && t.turn && t.turn < maxTurns) || false;
       this.statsOpen = false;
@@ -140,7 +137,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       this.setTeam(user.sId, t.t ?? 99, false);
     }
-    this.teamPlayers$.next(this.teamPlayers$.getValue());
+    this.teamPlayers$.next([...this.teamPlayers$.getValue()]);
   }
 
   submitRating(value: number): void {

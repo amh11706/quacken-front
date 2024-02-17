@@ -1,18 +1,27 @@
 <span *ngIf="message.from !== ws.user?.name || (message.from === 'Guest' && message.copy !== ws.copy); else you"
-      [matMenuTriggerFor]="nameMenu">
+      [matMenuTriggerFor]="nameMenu"
+      [class.hasTier]="message.ti !== undefined">
   <span [class.friend]="message.friend"
         [class.bot]="message.from?.indexOf('Bot') === 0"
         [class.admin]="message.admin && message.admin >= 3"
         [class.blocked]="message.blocked">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
+  <div *ngIf="message.ti !== undefined"
+       [title]="tierTitles[message.ti] + ' (' + message.sc + ')'"
+       class="tier {{tierTitles[message.ti]}}"></div>
 </span>
 
 <ng-template #you>
-  <span class="you"
-        [class.admin]="message.admin && message.admin >= 3"
-        title="you"
-        [matMenuTriggerFor]="youMenu">{{message.from}}</span>
-  <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
+  <span [class.hasTier]="message.ti !== undefined">
+    <span class="you"
+          [class.admin]="message.admin && message.admin >= 3"
+          title="you"
+          [matMenuTriggerFor]="youMenu">{{message.from}}</span>
+    <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
+    <div *ngIf="message.ti !== undefined"
+         [title]="tierTitles[message.ti] + ' (' + message.sc + ')'"
+         class="tier {{tierTitles[message.ti]}}"></div>
+  </span>
 </ng-template>
 
 <ng-template #guest>
