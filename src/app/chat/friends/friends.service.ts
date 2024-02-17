@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { ChatMessage, Invite } from '../types';
+import { TeamMessage } from '../../lobby/cadegoose/types';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class FriendsService {
   allowInvite = false;
   fakeFs?: FriendsService;
 
-  lobby$ = new BehaviorSubject<ChatMessage[]>([]);
+  lobby$ = new BehaviorSubject<TeamMessage[]>([]);
   friends: string[] = [];
   offline: string[] = [];
   blocked: string[] = [];
@@ -45,12 +46,12 @@ export class FriendsService {
     this.ws.subscribe(InCmd.BlockUser, m => {
       this.blocked.push(m);
       for (const n of this.lobby$.getValue()) if (n.from === m) n.blocked = true;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been blocked.', admin: 0 } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been blocked.' } });
     });
     this.ws.subscribe(InCmd.UnblockUser, m => {
       this.blocked = this.blocked.filter(n => m !== n);
       for (const n of this.lobby$.getValue()) if (n.from === m) n.blocked = false;
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been unblocked.', admin: 0 } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been unblocked.' } });
     });
   }
 
@@ -61,13 +62,13 @@ export class FriendsService {
         m.friend = this.isFriend(m.from);
         m.blocked = this.isBlocked(m.from);
       }
-      this.lobby$.next(users);
+      this.lobby$.next(users as TeamMessage[]);
     });
     this.ws.subscribe(InCmd.PlayerAdd, (m: ChatMessage) => {
       m.friend = this.isFriend(m.from);
       m.blocked = this.isBlocked(m.from);
       const lobby = this.lobby$.getValue();
-      lobby.push(m);
+      lobby.push(m as TeamMessage);
       this.lobby$.next(lobby);
       if (m.copy === 0) return;
       m.type = 3;
@@ -90,7 +91,7 @@ export class FriendsService {
       // let message = u.f;
       // if (u.ty === 0) message += ' has requested to add you as a friend.';
       // else message += ' has invited you to join their lobby.';
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 8, message: u, from: u.f, admin: u.a } });
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 8, message: u, from: u.f } });
     });
     this.ws.subscribe(InCmd.InviteRemove, u => {
       this.invites = this.invites.filter(i => i.tg !== u.tg || i.ty !== u.ty);

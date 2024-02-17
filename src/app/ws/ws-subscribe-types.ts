@@ -62,7 +62,7 @@ export type SubscribeData = {
   [InCmd.LobbyJoin]: Lobby;
   [InCmd.Sync]: Sync;
   [InCmd.Turn]: Turn;
-  [InCmd.Team]: TeamMessage | Record<number, TeamMessage>;
+  [InCmd.Team]: TeamMessage;
   [InCmd.Moves]: MoveMessageIncoming[] | MoveMessageIncoming;
   [InCmd.BoatTicks]: Record<number, BoatTick>;
   [InCmd.BoatTick]: BoatTick;

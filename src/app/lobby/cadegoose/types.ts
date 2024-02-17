@@ -1,4 +1,4 @@
-import { Message } from '../../chat/types';
+import { ChatMessage, Message } from '../../chat/types';
 import { BoatStatus, BoatSync, BoatTick, Clutter, Sync, Turn } from '../quacken/boats/types';
 import { StatRow } from './stats/types';
 
@@ -19,13 +19,13 @@ export interface Lobby {
   [key: string]: any;
 }
 
-export interface TeamMessage {
-  id: number;
+export interface TeamMessage extends ChatMessage {
   t: keyof typeof TeamImages;
   r: boolean;
   b: number;
   s: number;
   a: boolean;
+  jq: number;
 }
 
 export interface ParsedTurn {

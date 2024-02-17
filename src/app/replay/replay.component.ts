@@ -51,7 +51,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage, from: '', admin: 0 } });
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage, from: '' } });
     if (this.lobbyWrapper) {
       this.fakeChat = this.lobbyWrapper.chat;
       this.fakeWs = this.lobbyWrapper.ws;

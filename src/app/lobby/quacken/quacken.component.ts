@@ -57,7 +57,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc, from: '', admin: 0 } });
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc, from: '' } });
     this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby(undefined, 'quacken');
 

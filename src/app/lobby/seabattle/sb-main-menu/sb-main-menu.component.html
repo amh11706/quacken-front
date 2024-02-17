@@ -15,10 +15,10 @@
              [style.borderColor]="teamColors[i]">
           <div *ngFor="let m of team"
                class="lobbyPlayer"
-               [class.ready]="m.message.r">
+               [class.ready]="m.r">
             <q-name [message]="m"></q-name>
-            <img src="./assets/boats/{{links[m.message.b]}}.png"
-                 [title]="boatTitles[m.message.b]">
+            <img src="./assets/boats/{{links[m.b]}}.png"
+                 [title]="boatTitles[m.b]">
           </div>
         </div>
         <br>

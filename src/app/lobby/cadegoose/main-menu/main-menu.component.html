@@ -21,13 +21,13 @@
              [style.borderColor]="teamColors[i]">
           <div *ngFor="let m of team"
                class="lobbyPlayer"
-               [class.ready]="m.message.r">
+               [class.ready]="m.r">
             <q-name [message]="m"></q-name>
             <img *ngIf="m.sId === ws.sId && ws.connected; else boatImage"
                  [matMenuTriggerFor]="jobbers"
-                 src="./assets/boats/{{links[m.message.b]}}.png"
-                 [class.lowjobbers]="m.message.jq < 100"
-                 [title]="boatTitles[m.message.b] + ' ' + m.message.jq + '%'">
+                 src="./assets/boats/{{links[m.b]}}.png"
+                 [class.lowjobbers]="m.jq < 100"
+                 [title]="boatTitles[m.b] + ' ' + m.jq + '%'">
             <mat-menu #jobbers="matMenu">
               <mat-card class="jobberSelect"
                         (click)="$event.stopPropagation()">
@@ -40,12 +40,12 @@
               </mat-card>
             </mat-menu>
             <ng-template #boatImage>
-              <img src="./assets/boats/{{links[m.message.b]}}.png"
-                   [class.lowjobbers]="m.message.jq < 100"
-                   [title]="boatTitles[m.message.b] + ' ' + m.message.jq + '%'">
+              <img src="./assets/boats/{{links[m.b]}}.png"
+                   [class.lowjobbers]="m.jq < 100"
+                   [title]="boatTitles[m.b] + ' ' + m.jq + '%'">
             </ng-template>
             <span class="spawn"
-                  [title]="m.message.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.message.s ? 'O' : 'I'}}</span>
+                  [title]="m.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.s ? 'O' : 'I'}}</span>
           </div>
         </div>
       </div>

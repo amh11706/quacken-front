@@ -1,5 +1,3 @@
-import { TeamImages } from '../lobby/cadegoose/types';
-
 export interface Command {
   base: string, title: string, params: { name: string, value: string }[], help: string
 }
@@ -7,12 +5,10 @@ export interface Command {
 export interface Message {
   type: number;
   message?: any;
-  team?: keyof typeof TeamImages;
-  op?: boolean;
   from: string;
   copy?: number;
   sId?: number;
-  admin: number;
+  admin?: number;
 }
 
 export interface ChatMessage extends Message {

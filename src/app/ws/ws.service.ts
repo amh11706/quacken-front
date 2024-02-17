@@ -64,7 +64,7 @@ export class WsService {
       if (lastReload && +lastReload > new Date().valueOf() - 30000) {
         this.dispatchMessage({
           cmd: InCmd.ChatMessage,
-          data: { type: 0, message: 'Outdated client. Please clear your cache then refresh the page.', from: '', admin: 0 },
+          data: { type: 0, message: 'Outdated client. Please clear your cache then refresh the page.', from: '' },
         });
         this.close();
         return;
@@ -95,7 +95,7 @@ export class WsService {
       this.connected = false;
       this.dispatchMessage({
         cmd: InCmd.ChatMessage,
-        data: { type: 1, message: 'Connection closed, attempting to reconnect...', from: '', admin: 0 },
+        data: { type: 1, message: 'Connection closed, attempting to reconnect...', from: '' },
       });
       this.timeOut = window.setTimeout(() => this.connect(), 5000);
     };

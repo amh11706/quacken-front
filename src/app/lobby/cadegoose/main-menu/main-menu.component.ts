@@ -11,7 +11,6 @@ import { Sounds, SoundService } from '../../../sound.service';
 import { Boat } from '../../quacken/boats/boat';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 import { BoatSetting, SettingGroup, Settings } from '../../../settings/setting/settings';
-import { Message } from '../../../chat/types';
 import { Lobby, TeamMessage } from '../types';
 import { MoveMessageIncoming } from '../../quacken/boats/types';
 
@@ -27,8 +26,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   boatTitles = (Settings.nextCadeBoat as BoatSetting).titles;
 
   links = links;
-  teamPlayers$ = new BehaviorSubject<Message[][]>([]);
-  players: { [key: number]: TeamMessage } = {};
+  teamPlayers$ = new BehaviorSubject<TeamMessage[][]>([]);
+  players: TeamMessage[] = [];
   myBoat = new Boat('');
   myTeam = 99;
   myJobbers = 100;
@@ -57,32 +56,18 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       const maxTurns = m.maxTurns || 60;
       this.roundGoing = (maxTurns && m.turn && m.turn <= maxTurns) || false;
-      if (!m.players) return;
       if (this.firstJoin) {
         this.firstJoin = false;
         this.es.activeTab = 0;
       }
       // wait to make sure we parsed the lobby users first
       await new Promise((resolve) => setTimeout(resolve, 100));
-      this.players = m.players;
       this.ready = false;
       this.myTeam = 99;
       const teamPlayers = [];
       for (let i = 0; i < m.points.length; i++) teamPlayers.push([]);
       this.teamPlayers$.next(teamPlayers);
 
-      const lobby = this.fs.lobby$.getValue();
-      for (const [id, p] of Object.entries(this.players)) {
-        this.setTeam(+id, p.t, false);
-        if (+id === this.ws.sId) {
-          this.ready = p.r;
-          this.myTeam = p.t;
-        }
-        const user = lobby.find((mes) => mes.sId === +id);
-        if (!user) continue;
-        user.team = p.t;
-        user.op = p.a;
-      }
       if (m.myMoves) {
         const ms = m.myMoves as MoveMessageIncoming;
         this.ws.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: ms.m, shots: ms.s || [] } });
@@ -90,31 +75,14 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (m.moves) {
         this.ws.dispatchMessage({ cmd: InCmd.Moves, data: m.moves as MoveMessageIncoming[] });
       }
-      this.fs.lobby$.next(lobby);
+    }));
+    this.subs.add(this.ws.subscribe(InCmd.PlayerList, r => {
+      this.teamPlayers$.next(Array(this.teamPlayers$.getValue().length).fill([]));
+      this.players = Object.values(r) as TeamMessage[];
+      this.updatePlayers(this.players);
     }));
     this.subs.add(this.ws.subscribe(InCmd.Team, m => {
-      if ('id' in m) m = { [m.id]: m };
-      // we either get one team message or all of them, so we can reset the array if we got all of them
-      else this.teamPlayers$.next(Array(this.teamPlayers$.getValue().length).fill([]));
-      const lobby = this.fs.lobby$.getValue();
-      for (const t of Object.values(m)) {
-        this.players[t.id] = t;
-        if (t.id === this.ws.sId) {
-          this.myTeam = t.t;
-          this.ready = t.r;
-        }
-        this.setTeam(t.id, t.t, false);
-        const user = lobby.find((mes) => mes.sId === t.id);
-        if (!user) continue;
-        user.team = t.t;
-        user.op = t.a;
-        if (user.sId === this.ws.sId) {
-          this.ss.admin$.next(t.a);
-          this.fs.allowInvite = t.a;
-        }
-      }
-      this.teamPlayers$.next([...this.teamPlayers$.getValue()]);
-      this.fs.lobby$.next(lobby);
+      this.updatePlayers([m]);
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, m => {
       if (m.sId) this.removeUser(m.sId);
@@ -158,6 +126,23 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       while (teamPlayers.length < v) teamPlayers.push([]);
       this.teamPlayers$.next(teamPlayers);
     }));
+  }
+
+  private updatePlayers(players: TeamMessage[]) {
+    for (const t of players) {
+      const user = this.players.find((mes) => mes.sId === t.sId);
+      if (!user?.sId) continue;
+      Object.assign(user, t);
+      if (t.sId === this.ws.sId) {
+        this.myTeam = t.t ?? 99;
+        this.ready = t.r ?? false;
+        this.ss.admin$.next(t.a ?? false);
+        this.fs.allowInvite = t.a ?? false;
+      }
+      this.setTeam(user.sId, t.t ?? 99, false);
+    }
+    this.teamPlayers$.next([...this.teamPlayers$.getValue()]);
+    this.fs.lobby$.next(this.players);
   }
 
   submitRating(value: number): void {
@@ -219,10 +204,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     if (!user) return;
 
     user = { ...user };
-    user.message = this.players[id];
     const teamPlayers = this.teamPlayers$.getValue();
     while (teamPlayers.length <= team) teamPlayers.push([]);
-    teamPlayers[team]?.push(user);
+    teamPlayers[team]?.push(user as TeamMessage);
   }
 
   updateJobbers(v: number | null): void {

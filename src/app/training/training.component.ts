@@ -83,7 +83,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
       this.ws.fakeWs.user = this.ws.user;
     }
 
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Welcome to 1v1 training.', from: '', admin: 0 } });
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Welcome to 1v1 training.', from: '' } });
     this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id' || 0))));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) this.ws.send(OutCmd.BnavJoin);

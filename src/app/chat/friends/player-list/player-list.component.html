@@ -8,13 +8,13 @@
   </ng-template>
   <ng-container *ngFor="let m of lobby">
     <div class="lobbyPlayer">
-      <ng-container *ngIf="m.team !== undefined">
+      <ng-container *ngIf="m.t !== undefined">
         <img class="team"
-             [title]="teamImages[m.team].title"
-             [src]="teamImages[m.team].src">
+             [title]="teamImages[m.t].title"
+             [src]="teamImages[m.t].src">
       </ng-container>
       <q-name [message]="m"></q-name>
-      <mat-icon *ngIf="m.op"
+      <mat-icon *ngIf="m.a"
                 [inline]="true"
                 title="Opped">star</mat-icon>
     </div>
