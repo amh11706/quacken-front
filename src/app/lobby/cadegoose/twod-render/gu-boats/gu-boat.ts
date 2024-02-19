@@ -89,7 +89,6 @@ export class GuBoat extends BoatRender {
       promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
     }
 
-    console.log('boat.face', boat.face, 'this.rotateDeg', this.rotateDeg, 'transition', boat.rotateTransition, 'opacity', boat.imageOpacity);
     if (!startTime || boat.face !== this.rotateDeg || boat.imageOpacity === 0) {
       promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, boat.imageOpacity));
     }
@@ -201,7 +200,6 @@ export class GuBoat extends BoatRender {
             .repeat(1).yoyo(true)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
-            // .onUpdate(() => console.log)
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
           new TWEEN.Tween(this.pos, BoatRender.tweens)
