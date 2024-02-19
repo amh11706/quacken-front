@@ -27,6 +27,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   links = links;
   teamPlayers$ = new BehaviorSubject<TeamMessage[][]>([]);
+  teamRanks: number[] = [];
   myBoat = new Boat('');
   myTeam = 99;
   myJobbers = 100;
@@ -50,7 +51,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
-    this.subs.add(this.ws.subscribe(Internal.Lobby, async m => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
       this.lobby = m;
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       const maxTurns = m.maxTurns || 60;
@@ -59,8 +60,6 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.firstJoin = false;
         this.es.activeTab = 0;
       }
-      // wait to make sure we parsed the lobby users first
-      await new Promise((resolve) => setTimeout(resolve, 100));
       const teamPlayers = this.teamPlayers$.getValue();
       while (teamPlayers.length < m.points.length) teamPlayers.push([]);
       this.teamPlayers$.next(teamPlayers);
@@ -123,6 +122,14 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     }));
   }
 
+  private updateRanks() {
+    const teamPlayers = this.teamPlayers$.getValue();
+    this.teamRanks = Array(teamPlayers.length).fill(0);
+    teamPlayers.forEach((team, i) => {
+      team.forEach((p) => this.teamRanks[i] += p.sc ?? 0);
+    });
+  }
+
   private updatePlayers(players: TeamMessage[]) {
     const fsPlayers = this.fs.lobby$.getValue();
     for (const t of players) {
@@ -137,6 +144,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       }
       this.setTeam(user.sId, t.t ?? 99, false);
     }
+    this.updateRanks();
     this.teamPlayers$.next([...this.teamPlayers$.getValue()]);
   }
 

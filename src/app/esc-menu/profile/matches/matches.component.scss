@@ -1,3 +1,5 @@
+@import '../../../chat/name/tier-colors.scss';
+
 #matches {
   text-align: center;
   height: 100%;
@@ -32,6 +34,10 @@ th {
 
 mat-form-field {
   margin: 0 16px;
+}
+
+.lobby-cell {
+  width: 120px;
 }
 
 .tag-list {

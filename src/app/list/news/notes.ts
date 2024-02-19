@@ -5,8 +5,11 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
-    title: 'Release TBD',
+    title: 'Release 19 February 2024',
     points: [
+      'The great (rank) reset!',
+      'Rank is now based on win/loss rather than score.',
+      'Teams must be within 100 points of each other to be ranked.',
       'New checkbox to make a match rated or unrated.',
       'You can now see replays of any player.',
       'Stat leaderboards now have a link to the replay where the record was achieved.',

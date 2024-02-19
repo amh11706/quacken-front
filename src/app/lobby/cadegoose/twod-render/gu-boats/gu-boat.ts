@@ -89,6 +89,7 @@ export class GuBoat extends BoatRender {
       promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
     }
 
+    console.log('boat.face', boat.face, 'this.rotateDeg', this.rotateDeg, 'transition', boat.rotateTransition, 'opacity', boat.imageOpacity);
     if (!startTime || boat.face !== this.rotateDeg || boat.imageOpacity === 0) {
       promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, boat.imageOpacity));
     }
@@ -232,6 +233,7 @@ export class GuBoat extends BoatRender {
   protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number): Promise<any>[] {
     const promises: Promise<any>[] = [];
 
+    // normal rotation
     if (startTime && (transition || !opacity)) {
       promises.push(new Promise(resolve => {
         if (transition === 1 || transition === 4) {
@@ -249,6 +251,7 @@ export class GuBoat extends BoatRender {
       }).then(() => this.rotateDeg = face));
     }
 
+    // sink animation
     if (startTime && transition > 1 && transition !== 4) {
       promises.push(new Promise<void>(resolve => {
         const delay = 2000 / BoatRender.speed;

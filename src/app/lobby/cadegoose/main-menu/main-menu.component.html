@@ -16,7 +16,7 @@
                 [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>
-        <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
+        <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}, Rank sum: {{teamRanks[i] || 0}}</p>
         <div class="team"
              [style.borderColor]="teamColors[i]">
           <div *ngFor="let m of team"
@@ -62,7 +62,7 @@
             <button *ngIf="(ss.admin$ | async) && !roundGoing"
                     mat-raised-button
                     (click)="shuffleTeams()">Shuffle Teams</button>
-            <q-setting *ngIf="(ss.admin$ | async) && (settings.rated.stream | async) === 0"
+            <q-setting *ngIf="(ss.admin$ | async)"
                        name="startNew"></q-setting>
           </div>
           <div class="settingRow">

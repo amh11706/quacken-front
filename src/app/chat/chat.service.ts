@@ -76,7 +76,7 @@ export class ChatService {
         message.time = time.format('D MMM YYYY HH:mm');
         message.ago = time.fromNow();
       }
-      message.receivedTime = dayjs().format('D MMM YYYY HH:mm');
+      message.receivedTime = dayjs().format('HH:mm:ss');
       this.messages$.next(this.messages);
     });
     this.ws.connected$.subscribe(value => {

@@ -52,6 +52,7 @@
             mat-sort-header
             *matHeaderCellDef>Lobby</th>
         <td mat-cell
+            class="lobby-cell"
             *matCellDef="let element">{{element.lobby}}</td>
       </ng-container>
 
@@ -63,12 +64,14 @@
             *matCellDef="let element">{{element.createdAtString}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="score">
+      <ng-container matColumnDef="rank">
         <th mat-header-cell
             mat-sort-header
-            *matHeaderCellDef>Score</th>
+            *matHeaderCellDef>Rank</th>
         <td mat-cell
-            *matCellDef="let element">{{element.score}}</td>
+            class="tier {{element.rank > 0 && tierTitles[element.tier]}}"
+            [title]="element.rank > 0 ? tierTitles[element.tier] : 'Unranked'"
+            *matCellDef="let element">{{element.rank}}</td>
       </ng-container>
 
       <ng-container matColumnDef="result">
