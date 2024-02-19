@@ -81,7 +81,6 @@ export class MatchesComponent implements OnInit {
     if (!this.viewLoaded) return;
     if (name !== this.stat.target) {
       this.stat.target = name;
-      void this.stat.refresh();
     }
     const matches = await this.ws.request(OutCmd.MatchesUser, this.stat.target);
     // matches.push(...matches);

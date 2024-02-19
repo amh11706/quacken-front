@@ -75,8 +75,8 @@ export class StatService {
     if (open) {
       this.kbs.emitAction(KeyActions.OpenProfile);
       this.es.open$.next(true);
+      void this.setTab(0);
     }
-    void this.setTab(0);
   }
 
   openUserMatches(open = true): void {
