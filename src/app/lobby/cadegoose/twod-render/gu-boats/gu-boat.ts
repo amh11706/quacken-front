@@ -282,7 +282,7 @@ export class GuBoat extends BoatRender {
     }
 
     if (!startTime) {
-      this.rotateDeg = face % 360;
+      this.rotateDeg = face;
       this.updateImage();
     }
 
