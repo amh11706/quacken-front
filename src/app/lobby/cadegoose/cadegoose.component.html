@@ -24,6 +24,7 @@
 </q-obstacles>
 
 <q-cade-entry-status (hoveredTeam)="hoveredTeam = $event"
+                     (click)="showExtraStats = !showExtraStats"
                      [myTeam]="myBoat.team"></q-cade-entry-status>
 
 <q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
