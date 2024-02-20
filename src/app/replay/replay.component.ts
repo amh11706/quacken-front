@@ -183,6 +183,8 @@ export class ReplayComponent implements OnInit, OnDestroy {
   nextTurn(): void {
     if (this.tickInterval) {
       this.togglePlay();
+      BoatRender.tweens.update(Infinity);
+      BoatRender.tweens.removeAll();
       this.togglePlay();
     }
     // setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));

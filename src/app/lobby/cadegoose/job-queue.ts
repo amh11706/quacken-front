@@ -1,5 +1,7 @@
+interface JobContext { active: boolean; }
+
 interface Job {
-  f: (() => PromiseLike<void>) | (() => void); cancellable: boolean;
+  f: ((ctx: JobContext) => PromiseLike<void>) | ((ctx: JobContext) => void); cancellable: boolean;
 }
 
 export class JobQueue {
@@ -14,7 +16,7 @@ export class JobQueue {
     void this.doJobs();
   }
 
-  addJob(f: (() => PromiseLike<void>) | (() => void), cancellable = true): Promise<void> {
+  addJob(f: Job['f'], cancellable = true): Promise<void> {
     this.jobs.push({ f, cancellable });
     this.restart?.();
     delete this.restart;
@@ -37,12 +39,14 @@ export class JobQueue {
   private async doJobs() {
     while (true) {
       const job = await this.getJob();
-      const promises = [job.f(), this.cancelPromise];
+      const ctx = { active: true };
+      const promises = [job.f(ctx), this.cancelPromise];
 
       if (this.jobTimeout > 0) {
         promises.push(new Promise(resolve => setTimeout(resolve, this.jobTimeout)));
       }
       await Promise.race(promises);
+      ctx.active = false;
       if (!this.jobs.length) {
         this._done?.();
         this.done = new Promise<void>(resolve => this._done = resolve);
