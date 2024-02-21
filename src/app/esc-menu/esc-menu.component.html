@@ -10,24 +10,26 @@
             'width':'30px'
         }">menu</mat-icon>
 </button>
-<div id="backgroundframe" *ngrxLet="es.open$ as open"
+<div id="backgroundframe"
+     *ngrxLet="es.open$ as open"
      [class.open]="es.open$ | async">
   <div id="side-menu">
     <div id="menuButtons">
-      <button mat-button
-              [disabled]="!open"
-              class="discord"
-              (click)="openDiscord()"
-              matTooltip="Open Discord Server"></button>
-      <button mat-button
-              id="lobbyButton"
-              matTooltip="Return to Lobby"
-              [disabled]="!open"
-              *ngIf="es.lobbyContext || es.lobbyComponent"
-              class="action"
-              (click)="leave()">
+      <a mat-button
+         [disabled]="!open"
+         class="discord"
+         href="https://discord.gg/UVAPZFYrUW"
+         target="_top"
+         matTooltip="Open Discord Server"></a>
+      <a mat-button
+         id="lobbyButton"
+         href="/#/list"
+         matTooltip="Return to Lobby"
+         [disabled]="!open"
+         *ngIf="es.lobbyContext || es.lobbyComponent"
+         class="action">
         <mat-icon>cancel</mat-icon>
-      </button>
+      </a>
       <button mat-button
               id="logoutButton"
               matTooltip="Logout"

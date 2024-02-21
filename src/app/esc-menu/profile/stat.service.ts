@@ -7,7 +7,7 @@ import { FriendsService } from '../../chat/friends/friends.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { EscMenuService } from '../esc-menu.service';
-import { UserRank, Leader, RankLeader, Stat, WinLoss, Match } from './types';
+import { UserRank, Leader, RankLeader, Stat, WinLoss } from './types';
 
 const StatColumns = ['position', 'name', 'value'];
 const StatColumnsWithReplay = [...StatColumns, 'replay'];
@@ -53,10 +53,6 @@ export class StatService {
   async updateWinLoss(): Promise<void> {
     const winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group + 1 });
     this.winLoss = winLoss || { wins: 0, losses: 0 };
-  }
-
-  openReplay(m: Match): void {
-    window.open('/#/replay/' + m.matchId, '_blank');
   }
 
   emitTab(): void {

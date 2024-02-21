@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { Router } from '@angular/router';
 import { WsService } from '../ws/ws.service';
 import { EscMenuService } from './esc-menu.service';
 import { ProfileComponent } from './profile/profile.component';
@@ -25,21 +24,11 @@ export class EscMenuComponent {
     public ss: SettingsService,
     public ws: WsService,
     private dialog: MatDialog,
-    private router: Router,
   ) {
     this.es.activeTab = 0;
   }
 
   logout(): void {
     this.dialog.open(LogoutConfirmComponent, { width: '90%', maxWidth: '300px' });
-  }
-
-  leave(): void {
-    void this.router.navigateByUrl('/list');
-    this.es.open$.next(false);
-  }
-
-  openDiscord(): void {
-    window.open('https://discord.gg/UVAPZFYrUW', '_blank');
   }
 }

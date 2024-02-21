@@ -1,13 +1,11 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
-import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { StatService } from '../../esc-menu/profile/stat.service';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { CreateComponent } from '../create/create.component';
-import { EditorErrorComponent } from '../editor-error/editor-error.component';
 import { NewsComponent } from '../news/news.component';
 import { Note, Notes } from '../news/notes';
 import { Competitions } from '../competition/competition';
@@ -31,7 +29,6 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     public stat: StatService,
     public ws: WsService,
     private dialog: MatDialog,
-    private router: Router,
     public es: EscMenuService,
   ) { }
 
@@ -71,8 +68,10 @@ export class LobbyListComponent implements OnInit, OnDestroy {
   }
 
   join(l: Lobby, e: MouseEvent): void {
-    if (e.ctrlKey || !l.group.publicMode?.value) void this.router.navigate(['lobby', l.id]);
-    else this.ws.send(OutCmd.LobbyApply, l.id);
+    if (l.group.publicMode?.value && !e.ctrlKey) {
+      e.preventDefault();
+      this.ws.send(OutCmd.LobbyApply, l.id);
+    }
   }
 
   createLobby(): void {
@@ -81,11 +80,6 @@ export class LobbyListComponent implements OnInit, OnDestroy {
 
   openCompetitions(): void {
     this.dialog.open(CompetitionComponent, { maxHeight: '90vh' });
-  }
-
-  openEditor(): void {
-    if (this.ws.user?.id) void this.router.navigate(['editor']);
-    else this.dialog.open(EditorErrorComponent);
   }
 
   openNews(): void {

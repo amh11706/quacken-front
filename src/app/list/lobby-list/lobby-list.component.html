@@ -9,12 +9,12 @@
         <p>...</p>
       </button>
 
-      <button mat-button
-              class="card"
-              (click)="openEditor()">
+      <a mat-button
+         class="card"
+         href="/#/editor">
         <h3 class="cardTitle">Enter Map Editor</h3>
         <p>Make maps for you and other players to use!</p>
-      </button>
+      </a>
 
       <button mat-button
               class="card"
@@ -38,12 +38,13 @@
         <span id="competition">👑</span>
       </button>
 
-      <button mat-button
-              *ngFor="let l of lobbies | async"
-              (click)="join(l, $event)"
-              class="card">
+      <a mat-button
+         *ngFor="let l of lobbies | async"
+         (click)="join(l, $event)"
+         [href]="'/#/lobby/' + l.id"
+         class="card">
         <q-lobby-card [lobby]="l"></q-lobby-card>
-      </button>
+      </a>
     </div>
 
     <q-chat [disabled]="(es.open$ | async) || false"></q-chat>

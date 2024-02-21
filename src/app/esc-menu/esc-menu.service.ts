@@ -73,7 +73,7 @@ export class EscMenuService {
     void this.router.navigate(['auth/login']);
   }
 
-  leave(): void {
+  private leave(): void {
     void this.router.navigateByUrl('/list');
     this.open$.next(false);
   }

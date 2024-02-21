@@ -61,10 +61,11 @@
             *matHeaderCellDef>Replay</th>
         <td mat-cell
             *matCellDef="let element">
-          <button mat-icon-button
-                  (click)="stat.openReplay(element)">
+          <a mat-icon-button
+             [href]="'/#/replay/' + element.matchId"
+             target="_top">
             <mat-icon>play_arrow</mat-icon>
-          </button>
+          </a>
         </td>
       </ng-container>
     </table>

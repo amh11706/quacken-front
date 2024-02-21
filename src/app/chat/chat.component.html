@@ -58,10 +58,18 @@
                 </span>
               </ng-template>
               <ng-container *ngIf="!m.message.resolved">
-                <button mat-raised-button
-                        color="accent"
-                        class="accept"
-                        (click)="accept(m.message)">Accept</button>
+                <a mat-raised-button
+                   *ngIf="m.message.ty !== 0; else acceptButton"
+                   [href]="'/#/lobby/' + m.message.tg"
+                   color="accent"
+                   class="accept"
+                   (click)="accept(m.message)">Accept</a>
+                <ng-template #acceptButton>
+                  <button mat-raised-button
+                          color="accent"
+                          class="accept"
+                          (click)="accept(m.message)">Accept</button>
+                </ng-template>
                 <button mat-raised-button
                         (click)="decline(m.message)">Decline</button>
               </ng-container>

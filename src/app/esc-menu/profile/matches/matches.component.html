@@ -112,8 +112,9 @@
             *matHeaderCellDef>View</th>
         <td mat-cell
             *matCellDef="let element">
-          <button mat-raised-button
-                  (click)="stat.openReplay(element)">Open</button>
+          <a mat-raised-button
+             [href]="'/#/replay/' + element.matchId"
+             target="_blank">Open</a>
         </td>
       </ng-container>
     </table>

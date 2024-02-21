@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChild, Input, ChangeDetectionStrategy
 import { Subscription } from 'rxjs';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { Router } from '@angular/router';
 import { Group, Tween } from '@tweenjs/tween.js';
 import { ChatService } from './chat.service';
 import { FriendsService } from './friends/friends.service';
@@ -37,7 +36,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   constructor(
     public chat: ChatService,
     private fs: FriendsService,
-    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -92,7 +90,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   accept(inv: Invite): Promise<boolean> | void {
     inv.resolved = true;
     if (inv.ty === 0) this.fs.addFriend(inv.f);
-    else return this.router.navigate(['lobby', inv.tg]);
   }
 
   decline(inv: Invite): void {
