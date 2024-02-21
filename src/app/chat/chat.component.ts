@@ -48,7 +48,6 @@ export class ChatComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         const el = output.elementRef.nativeElement;
         el.scrollTop = el.scrollHeight;
-        this.scrollTarget = el.scrollTop;
       });
     }, 50);
 
@@ -70,6 +69,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     else this.isScrolling = false;
   }
 
+  scrolledAny(event: Event): void {
+    const el = event.target as HTMLElement;
+    this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 35;
+    if (!this.isScrolling) this.scrollTarget = el.scrollTop;
+  }
+
   scrolled(event: WheelEvent): void {
     const el = this.output?.elementRef.nativeElement;
     if (!el) return;
@@ -77,7 +82,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.scrollTarget += event.deltaY * 0.5;
     if (this.scrollTarget < 0) this.scrollTarget = 0;
     if (this.scrollTarget > el.scrollHeight - el.clientHeight) this.scrollTarget = el.scrollHeight - el.clientHeight;
-    this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 80;
 
     this.tweenGroup.removeAll();
     new Tween(el, this.tweenGroup).to({ scrollTop: this.scrollTarget }, 100).start();
@@ -100,12 +104,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (!this.output) return;
     const output = this.output;
     const el = output.elementRef.nativeElement;
-    if (this.scrolledToBottom) {
+    if (this.scrolledToBottom && !this.isScrolling) {
       setTimeout(() => {
         output.scrollTo({ bottom: 0 });
         setTimeout(() => {
           el.scrollTop = el.scrollHeight;
-          this.scrollTarget = el.scrollTop;
         });
       });
     }
