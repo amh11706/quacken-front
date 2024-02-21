@@ -36,6 +36,10 @@ body {
   background-color: black; // added for white bars on mobile
 }
 
+.mat-tooltip-panel {
+  pointer-events: none;
+}
+
 button {
   padding: 3px 8px;
 }
