@@ -146,6 +146,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     }
     this.updateRanks();
     this.teamPlayers$.next([...this.teamPlayers$.getValue()]);
+    this.fs.lobby$.next(fsPlayers);
   }
 
   submitRating(value: number): void {
