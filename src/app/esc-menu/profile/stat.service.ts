@@ -26,7 +26,7 @@ export class StatService {
   profileTabChange$ = new Subject<number>();
   target = this.ws.user?.name || '';
 
-  id = 0;
+  id = 199;
   group = 1;
   leaders$ = new BehaviorSubject<Leader[] | null>(null);
   rankLeaders$ = new BehaviorSubject<{ tier: RankLeader[], xp: RankLeader[] } | null>(null);
@@ -48,7 +48,11 @@ export class StatService {
     private fs: FriendsService,
     private es: EscMenuService,
     private kbs: KeyBindingService,
-  ) { }
+  ) {
+    this.es.open$.subscribe(open => {
+      if (open && es.activeTab === 1) this.profileTabChange$.next(this.profileTab);
+    });
+  }
 
   async updateWinLoss(): Promise<void> {
     const winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group + 1 });
@@ -83,9 +87,9 @@ export class StatService {
     void this.setTab(4);
   }
 
-  openLeaders(id: number): Promise<void> {
+  openLeaders(id: number): void {
     this.id = id;
-    return this.refreshLeaders();
+    void this.setTab(3);
   }
 
   async refresh(): Promise<void> {
@@ -125,6 +129,7 @@ export class StatService {
 
   private async getRankLeaders() {
     const rankLeaders = await this.ws.request(OutCmd.RanksTop, this.group + 1);
+    this.leaders$.next(null);
     if (!rankLeaders) return;
 
     for (const l of rankLeaders.tier) {
@@ -139,14 +144,13 @@ export class StatService {
   }
 
   async refreshLeaders(): Promise<void> {
-    this.leaders$.next(null);
-    this.rankLeaders$.next(null);
     this.columns = StatColumns;
     if (!this.id) return;
     this.group = Math.floor(this.id / 100);
     if (this.id % 100 === 99) return this.getRankLeaders();
 
     const leaders = await this.ws.request(OutCmd.StatsTop, this.id);
+    this.rankLeaders$.next(null);
     if (!leaders || !leaders.length) return;
 
     if (leaders[0]?.matchId) this.columns = StatColumnsWithReplay;

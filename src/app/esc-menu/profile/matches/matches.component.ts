@@ -100,7 +100,9 @@ export class MatchesComponent implements OnInit {
       m.teams = this.parseTeams(m.players);
       this.matches[m.rankArea - 1]?.push(m);
     }
+    const oldGroup = this.stat.group;
     this.stat.group = (newest.rankArea ?? 2) - 1;
+    if (oldGroup !== this.stat.group) void this.stat.changeGroup();
 
     if (!this.matches[this.stat.group]?.length) {
       for (let i = 0; i < this.matches.length; i++) if (this.matches[i]?.length) this.stat.group = i;

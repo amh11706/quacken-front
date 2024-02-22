@@ -23,5 +23,9 @@ export class LeadersComponent {
 
   constructor(
     public stat: StatService,
-  ) { }
+  ) {
+    this.stat.profileTabChange$.subscribe(value => {
+      if (value === 3) void this.stat.refreshLeaders();
+    });
+  }
 }
