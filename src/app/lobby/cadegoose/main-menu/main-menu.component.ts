@@ -54,6 +54,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
       this.lobby = m;
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
+      if (m.players) this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
       const maxTurns = m.maxTurns || 60;
       this.roundGoing = (maxTurns && m.turn && m.turn <= maxTurns) || false;
       if (this.firstJoin) {
