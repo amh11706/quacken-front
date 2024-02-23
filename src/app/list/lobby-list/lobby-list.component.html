@@ -39,7 +39,7 @@
       </button>
 
       <a mat-button
-         *ngFor="let l of lobbies | async"
+         *ngFor="let l of lobbies | async; trackBy: trackByLobbyId"
          (click)="join(l, $event)"
          [href]="'/#/lobby/' + l.id"
          class="card">

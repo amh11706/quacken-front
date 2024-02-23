@@ -74,6 +74,10 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     }
   }
 
+  trackByLobbyId(_: number, l: Lobby): string {
+    return '' + l.id;
+  }
+
   createLobby(): void {
     this.dialog.open(CreateComponent, { maxHeight: '90vh' });
   }
