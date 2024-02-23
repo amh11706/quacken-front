@@ -9,6 +9,7 @@ export type SendCmdInputs = {
   [OutCmd.NextBoat]: number;
   [OutCmd.Ready]: Partial<MoveMessage> & { ready: boolean } | undefined;
   [OutCmd.SetMyJobbers]: number;
+  [OutCmd.Vote]: number;
   [OutCmd.RateMap]: number;
   [OutCmd.WantManeuver]: number;
   [OutCmd.WantMove]: number;

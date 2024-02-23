@@ -11,7 +11,7 @@ import { Sounds, SoundService } from '../../../sound.service';
 import { Boat } from '../../quacken/boats/boat';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 import { BoatSetting, SettingGroup, Settings } from '../../../settings/setting/settings';
-import { Lobby, TeamMessage } from '../types';
+import { Lobby, LobbyStatus, TeamMessage } from '../types';
 import { MoveMessageIncoming } from '../../quacken/boats/types';
 
 @Component({
@@ -24,21 +24,29 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   teamColors = TeamColorsCss;
   teamNames = TeamNames;
   boatTitles = (Settings.nextCadeBoat as BoatSetting).titles;
+  voteOptions = [
+    { icon: '', text: 'No vote' },
+    { icon: 'pause', text: 'Voted pause' },
+    { icon: 'play_arrow', text: 'Voted continue' },
+    { icon: 'handshake', text: 'Voted tie' },
+    { icon: 'close', text: 'Voted forfeit' },
+  ];
 
   links = links;
   teamPlayers$ = new BehaviorSubject<TeamMessage[][]>([]);
+  status = new BehaviorSubject<LobbyStatus>(LobbyStatus.PreMatch);
   teamRanks: number[] = [];
   myBoat = new Boat('');
   myTeam = 99;
   myJobbers = 100;
+  myVote = 0;
   ready = false;
   statsOpen = false;
-  roundGoing = false;
   settings = this.ss.prefetch('l/cade');
   private subs = new Subscription();
   private firstJoin = true;
   protected group = 'l/cade' as SettingGroup;
-  private lobby?: Lobby;
+  public lobby?: Lobby;
 
   constructor(
     public ws: WsService,
@@ -53,10 +61,9 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
     this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
       this.lobby = m;
+      this.status.next(m.inProgress);
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
-      if (m.players) this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
-      const maxTurns = m.maxTurns || 60;
-      this.roundGoing = (maxTurns && m.turn && m.turn <= maxTurns) || false;
+      if (m.players?.length) this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
       if (this.firstJoin) {
         this.firstJoin = false;
         this.es.activeTab = 0;
@@ -73,18 +80,26 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.ws.dispatchMessage({ cmd: InCmd.Moves, data: m.moves as MoveMessageIncoming[] });
       }
     }));
-    this.subs.add(this.ws.subscribe(InCmd.PlayerList, r => {
+    this.subs.add(this.fs.lobby$.subscribe(r => {
       this.teamPlayers$.next(Array(this.teamPlayers$.getValue().length).fill([]));
-      this.updatePlayers(Object.values(r) as TeamMessage[]);
+      this.updatePlayers(r as TeamMessage[]);
     }));
     this.subs.add(this.ws.subscribe(InCmd.Team, m => {
       this.updatePlayers([m]);
+      this.fs.lobby$.next([...this.fs.lobby$.getValue()]);
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, m => {
       if (m.sId) this.removeUser(m.sId);
     }));
+    this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
+      this.status.next(m);
+      if (m === LobbyStatus.MidMatch && this.myBoat.isMe) return this.es.open$.next(false);
+      else if (m === LobbyStatus.PreMatch) return;
+      this.es.open$.next(true);
+      this.es.activeTab = 0;
+    }));
     this.subs.add(this.ws.subscribe(Internal.MyBoat, b => {
-      if (!this.roundGoing && this.ws.connected) {
+      if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {
         this.myBoat.isMe = false;
         this.es.open$.next(true);
         this.es.activeTab = 0;
@@ -94,17 +109,17 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.myBoat = b;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, async t => {
-      const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
-      this.roundGoing = (maxTurns && t.turn && t.turn < maxTurns) || false;
       this.statsOpen = false;
-      if (this.roundGoing) return;
+      const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
+      const roundGoing = (maxTurns && t.turn && t.turn < maxTurns) || false;
+      if (roundGoing) return;
       if (this.lobby) this.lobby.turn = 0;
       this.es.lobbyContext.stats = t.stats;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat = new Boat('');
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
-      if (!this.roundGoing && this.ws.connected) {
+      if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {
         this.es.open$.next(true);
         this.es.activeTab = 0;
         this.es.lobbyTab = 0;
@@ -121,6 +136,12 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       while (teamPlayers.length < v) teamPlayers.push([]);
       this.teamPlayers$.next(teamPlayers);
     }));
+  }
+
+  vote(v: number): void {
+    if (v === this.myVote) v = 0;
+    this.myVote = v;
+    this.ws.send(OutCmd.Vote, v);
   }
 
   private updateRanks() {
@@ -142,12 +163,12 @@ export class MainMenuComponent implements OnInit, OnDestroy {
         this.ready = t.r ?? false;
         this.ss.admin$.next(t.a ?? false);
         this.fs.allowInvite = t.a ?? false;
+        this.myVote = t.v ?? 0;
       }
       this.setTeam(user.sId, t.t ?? 99, false);
     }
     this.updateRanks();
     this.teamPlayers$.next([...this.teamPlayers$.getValue()]);
-    this.fs.lobby$.next(fsPlayers);
   }
 
   submitRating(value: number): void {
@@ -155,6 +176,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   }
 
   private gotBoat() {
+    if (this.status.value >= LobbyStatus.Voting) return;
     this.es.open$.next(false);
     this.ready = false;
     for (const p of Object.values(this.fs.lobby$.getValue())) p.r = false;
@@ -185,6 +207,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   shuffleTeams(): void {
     this.ws.send(OutCmd.ShuffleTeams);
+  }
+
+  pause(): void {
+    this.ws.send(OutCmd.ChatCommand, '/pause');
   }
 
   private removeUser(id: number) {

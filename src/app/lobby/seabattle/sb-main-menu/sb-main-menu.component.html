@@ -23,7 +23,7 @@
         </div>
         <br>
         <button mat-raised-button
-                *ngIf="!roundGoing"
+                *ngIf="(status | async) === 0"
                 [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
       </div>

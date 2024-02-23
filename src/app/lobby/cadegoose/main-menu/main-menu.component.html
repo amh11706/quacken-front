@@ -6,73 +6,105 @@
                 (rateMap)="submitRating($event)"></q-stat-end>
   </div>
   <ng-template #teams>
-    <h2 style="font-size: 20px;">Team Selection</h2>
-    <div id="flexmenu"
-         *ngrxLet="es.open$ as open">
-      <div class="teamwrap"
-           *ngFor="let team of teamPlayers$ | async; let i = index">
-        <button mat-raised-button
-                *ngIf="!roundGoing || (settings.hotEntry.stream | async) === 1"
-                [disabled]="!open || (ws.connected$ | async) === false"
-                (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
-        <br>
-        <p class="teamcount">{{teamNames[i]}}: {{team.length}}, Rank sum: {{teamRanks[i] || 0}}</p>
-        <div class="team"
-             [style.borderColor]="teamColors[i]">
-          <div *ngFor="let m of team"
-               class="lobbyPlayer"
-               [class.ready]="m.r">
-            <q-name [message]="m"></q-name>
-            <img *ngIf="m.sId === ws.sId && ws.connected; else boatImage"
-                 [matMenuTriggerFor]="jobbers"
-                 src="./assets/boats/{{links[m.b]}}.png"
-                 [class.lowjobbers]="m.jq < 100"
-                 [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
-            <mat-menu #jobbers="matMenu">
-              <mat-card class="jobberSelect"
-                        (click)="$event.stopPropagation()">
-                <span>Your Jobber Quality ({{myJobbers}}%)</span><br>
-                <mat-slider [value]="myJobbers"
-                            (valueChange)="updateJobbers($event)"
-                            (input)="myJobbers = $event.value || 0"
-                            max="100"
-                            step="5"></mat-slider>
-              </mat-card>
-            </mat-menu>
-            <ng-template #boatImage>
-              <img src="./assets/boats/{{links[m.b]}}.png"
-                   [class.lowjobbers]="m.jq < 100"
-                   [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
-            </ng-template>
-            <span class="spawn"
-                  [matTooltip]="m.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.s ? 'O' : 'I'}}</span>
+    <ng-container *ngrxLet="(status | async) || 0 as status">
+      <h2 style="font-size: 20px;">{{status > 1 ? 'Pause Voting' : 'Team Selection'}}</h2>
+      <div id="flexmenu"
+           *ngrxLet="es.open$ as open">
+        <div class="teamwrap"
+             *ngFor="let team of teamPlayers$ | async; let i = index">
+          <button mat-raised-button
+                  *ngIf="status === 0 || (settings.hotEntry.stream | async) === 1"
+                  [disabled]="!open || (ws.connected$ | async) === false"
+                  (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
+          <br>
+          <p class="teamcount">{{teamNames[i]}}: {{team.length}}, Rank sum: {{teamRanks[i] || 0}}</p>
+          <div class="team"
+               [style.borderColor]="teamColors[i]">
+            <div *ngFor="let m of team"
+                 class="lobbyPlayer vote{{m.v}}"
+                 [class.ready]="m.r">
+              <q-name [message]="m"></q-name>
+
+              <ng-template #playerVote>
+                <mat-icon [matTooltip]="voteOptions[m.v]?.text || ''">{{voteOptions[m.v]?.icon}}</mat-icon>
+                <span matTooltip="Pause credits">{{m.pc}}</span>
+              </ng-template>
+              <ng-container *ngIf="status < 2; else playerVote">
+                <img *ngIf="m.sId === ws.sId && ws.connected; else boatImage"
+                     [matMenuTriggerFor]="jobbers"
+                     src="./assets/boats/{{links[m.b]}}.png"
+                     [class.lowjobbers]="m.jq < 100"
+                     [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
+                <mat-menu #jobbers="matMenu">
+                  <mat-card class="jobberSelect"
+                            (click)="$event.stopPropagation()">
+                    <span>Your Jobber Quality ({{myJobbers}}%)</span><br>
+                    <mat-slider [value]="myJobbers"
+                                (valueChange)="updateJobbers($event)"
+                                (input)="myJobbers = $event.value || 0"
+                                max="100"
+                                step="5"></mat-slider>
+                  </mat-card>
+                </mat-menu>
+                <ng-template #boatImage>
+                  <img src="./assets/boats/{{links[m.b]}}.png"
+                       [class.lowjobbers]="m.jq < 100"
+                       [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
+                </ng-template>
+                <span class="spawn"
+                      [matTooltip]="m.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.s ? 'O' : 'I'}}</span>
+              </ng-container>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="settings">
-        <ng-container *ngIf="open && (ws.connected$ | async)">
-          <div class="settingRow">
-            <button mat-raised-button
-                    [disabled]="!open || ((teamPlayers$ | async)?.length || 0) < 2"
-                    color="accent"
-                    class="readyButton"
-                    [class.cancel]="ready"
-                    (click)="toggleReady()">{{readyText()}}</button>
-            <button *ngIf="(ss.admin$ | async) && !roundGoing"
-                    mat-raised-button
-                    (click)="shuffleTeams()">Shuffle Teams</button>
-            <q-setting *ngIf="(ss.admin$ | async)"
-                       name="startNew"></q-setting>
-          </div>
-          <div class="settingRow">
-            <q-setting name="cadeRated"
-                       [disabled]="roundGoing"></q-setting>
-            <q-setting name="nextCadeBoat"></q-setting>
-            <q-setting name="spawnSide"></q-setting>
-          </div>
-        </ng-container>
+        <div class="settings">
+          <ng-container *ngIf="open && (ws.connected$ | async)">
+            <div *ngIf="status > 1 && myTeam < 99"
+                 class="settingRow">
+              <button mat-raised-button
+                      [disabled]="!open"
+                      id="voteWait"
+                      (click)="vote(1)">Vote wait <mat-icon>pause</mat-icon></button>
+              <button mat-raised-button
+                      [disabled]="!open"
+                      id="voteContinue"
+                      (click)="vote(2)">Vote continue <mat-icon>play_arrow</mat-icon></button>
+              <button mat-raised-button
+                      [disabled]="!open"
+                      id="voteTie"
+                      (click)="vote(4)">Vote tie <mat-icon>handshake</mat-icon></button>
+              <button mat-raised-button
+                      [disabled]="!open"
+                      color="accent"
+                      id="voteForfeit"
+                      (click)="vote(3)">Vote forfeit <mat-icon>close</mat-icon></button>
+            </div>
+            <div class="settingRow">
+              <button *ngIf="(ss.admin$ | async) && status === 1"
+                      mat-raised-button
+                      (click)="pause()">Pause</button>
+              <button mat-raised-button
+                      [disabled]="!open || ((teamPlayers$ | async)?.length || 0) < 2"
+                      color="accent"
+                      class="readyButton"
+                      [class.cancel]="ready"
+                      (click)="toggleReady()">{{readyText()}}</button>
+              <button *ngIf="(ss.admin$ | async) && status === 0"
+                      mat-raised-button
+                      (click)="shuffleTeams()">Shuffle Teams</button>
+              <q-setting *ngIf="(ss.admin$ | async)"
+                         name="startNew"></q-setting>
+            </div>
+            <div class="settingRow">
+              <q-setting name="cadeRated"
+                         [disabled]="status !== 0"></q-setting>
+              <q-setting name="nextCadeBoat"></q-setting>
+              <q-setting name="spawnSide"></q-setting>
+            </div>
+          </ng-container>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </ng-template>
 </mat-card>

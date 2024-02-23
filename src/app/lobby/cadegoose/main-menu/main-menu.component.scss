@@ -44,6 +44,11 @@
   img {
     height: 30px;
   }
+
+  mat-icon {
+    font-size: 22px;
+    margin-right: 4px;
+  }
 }
 
 .lobbyPlayer.ready {
@@ -52,6 +57,34 @@
 
 .settings {
   width: 100%;
+}
+
+$waitColor: darkslateblue;
+$continueColor: darkgreen;
+$tieColor: darkgoldenrod;
+$forfeitColor: darkred;
+
+.vote1 {
+  border-color: $waitColor;
+}
+
+.vote2 {
+  border-color: $continueColor;
+}
+
+.vote3 {
+  border-color: $forfeitColor;
+}
+
+.vote4 {
+  border-color: $tieColor;
+}
+
+.vote1,
+.vote2,
+.vote3,
+.vote4 {
+  border-width: 2px;
 }
 
 .settingRow {
@@ -63,10 +96,36 @@
   column-gap: 16px;
   min-height: 50px;
 
+  #voteWait {
+    background-color: $waitColor;
+  }
+
+  #voteContinue {
+    background-color: $continueColor;
+  }
+
+  #voteTie {
+    background-color: $tieColor;
+    margin-left: 48px;
+  }
+
+  #voteForfeit {
+    background-color: $forfeitColor;
+  }
+
   button {
     min-width: auto;
     position: relative;
     top: -4px;
+
+    ::ng-deep {
+      .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        column-gap: 4px;
+      }
+    }
   }
 
   q-setting {

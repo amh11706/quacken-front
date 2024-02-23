@@ -2,6 +2,13 @@ import { ChatMessage, Message } from '../../chat/types';
 import { BoatStatus, BoatSync, BoatTick, Clutter, Sync, Turn } from '../quacken/boats/types';
 import { StatRow } from './stats/types';
 
+export const enum LobbyStatus {
+  PreMatch,
+  MidMatch,
+  Voting,
+  Paused,
+}
+
 export interface Lobby {
   id: number;
   owner: boolean;
@@ -16,6 +23,7 @@ export interface Lobby {
   seconds?: number;
   stats?: Record<number, StatRow>;
   type: 'Quacken' | 'Spades' | 'CadeGoose';
+  inProgress: LobbyStatus;
   [key: string]: any;
 }
 
@@ -28,6 +36,8 @@ export interface TeamMessage extends ChatMessage {
   jq: number;
   ti: number;
   sc: number;
+  v: number;
+  pc: number;
 }
 
 export interface ParsedTurn {

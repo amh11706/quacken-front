@@ -23,7 +23,7 @@ const ownerSettings: SettingName[] = [
 })
 export class SpadesComponent implements OnInit, OnDestroy {
   @ViewChild(TimerComponent, { static: false }) timer?: TimerComponent;
-  private _lobby: Lobby = { id: 0, owner: false, type: 'Spades', players: [{}, {}, {}, {}] };
+  private _lobby = { id: 0, owner: false, type: 'Spades', players: [{}, {}, {}, {}] } as Lobby;
   @Input() set lobby(l: Lobby) {
     if (!l) return;
     if (!l.played) l.played = [];

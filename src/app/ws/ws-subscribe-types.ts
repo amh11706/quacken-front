@@ -3,7 +3,7 @@ import { Boat } from '../lobby/quacken/boats/boat';
 import { BoatSync, BoatTick, MoveMessage, MoveMessageIncoming, Sync, Turn } from '../lobby/quacken/boats/types';
 import { InCmd, Internal } from './ws-messages';
 import { DBSetting } from '../settings/types';
-import { Lobby, TeamMessage } from '../lobby/cadegoose/types';
+import { Lobby, LobbyStatus, TeamMessage } from '../lobby/cadegoose/types';
 import { Player } from '../lobby/spades/types';
 import { Command, Invite, Message } from '../chat/types';
 import { InvUpdate, Inventory } from '../esc-menu/profile/types';
@@ -58,6 +58,7 @@ export type SubscribeData = {
   [InCmd.LobbyList]: Lobby[];
   [InCmd.LobbyUpdate]: Lobby;
   [InCmd.LobbyRemove]: number;
+  [InCmd.LobbyStatus]: LobbyStatus;
 
   [InCmd.LobbyJoin]: Lobby;
   [InCmd.Sync]: Sync;

@@ -93,6 +93,7 @@ export const enum OutCmd {
   RateMap,
   SetMapData,
   SetMyJobbers,
+  Vote,
 }
 
 export const enum InCmd {
@@ -126,6 +127,7 @@ export const enum InCmd {
   PlayerAdd,
   PlayerList,
   PlayerRemove,
+  LobbyStatus,
 
   LobbyJoin,
   Sync,

@@ -13,7 +13,7 @@
       <div class="teamwrap"
            *ngFor="let team of teamPlayers$ | async; let i = index">
         <button mat-raised-button
-                *ngIf="!roundGoing || (settings.hotEntry.stream | async) === 1"
+                *ngIf="(status | async) === 0 || (settings.hotEntry.stream | async) === 1"
                 [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>
@@ -57,7 +57,7 @@
                   class="readyButton"
                   [class.cancel]="ready"
                   (click)="toggleReady()">{{readyText()}}</button>
-          <button *ngIf="(ss.admin$ | async) && !roundGoing"
+          <button *ngIf="(ss.admin$ | async) && (status | async) === 0"
                   mat-raised-button
                   (click)="shuffleTeams()">Shuffle Teams</button>
           <q-setting *ngIf="(ss.admin$ | async) && (settings.rated.stream | async) === 0"

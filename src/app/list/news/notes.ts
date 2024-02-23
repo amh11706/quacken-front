@@ -7,8 +7,9 @@ export const Notes: Note[] = [
   {
     title: 'Release TBD',
     points: [
-      // 'Players can now vote to end the match early.',
-      // 'Disconnects now pause the game for up to 2 minutes per game per player.',
+      'Players can now pause the game for up to 2 minutes per game per player.',
+      'You can vote to end the game early from the pause screen.',
+      'Disconnects automatically pause the game.',
       // 'You can now add notes to a replay.',
       'You can no longer have bots in a rated game if any player is above 125 rating.',
       'Op command is now a toggle. You don\'t have to specify true/false.',

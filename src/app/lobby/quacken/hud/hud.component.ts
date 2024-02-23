@@ -185,6 +185,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }
     if (this.myBoat.moveLock === 99) this.myBoat.moveLock = 0;
     this.lastMoveReset = this.turn;
+    this.totalTokens = { ...this.totalTokens };
     for (const i in this.serverBoat.moves) this.serverBoat.moves[i] = 0;
     for (const i in this.serverBoat.shots) this.serverBoat.shots[i] = 0;
     for (const i in this.serverBoatPending.moves) this.serverBoatPending.moves[i] = 0;

@@ -12,7 +12,7 @@ export class QdragDirective implements OnInit, OnDestroy {
   private _offset = { x: 0, y: 0 };
   get offset() { return this._offset; }
   @Input() set offset(value: {x: number, y: number}) {
-    this._offset = typeof value === 'object' ? value : this._offset;
+    this._offset = typeof value === 'object' ? value || this._offset : this._offset;
     this.updateTransform(false);
     setTimeout(() => this.bindToWindow && this.bindWindow(false, false), 0);
   }

@@ -62,7 +62,7 @@ export class FriendsService {
     this.ws.subscribe(InCmd.PlayerAdd, m => {
       const lobby = this.lobby$.getValue();
       lobby.push(m as TeamMessage);
-      this.lobby$.next(lobby);
+      this.lobby$.next([...lobby]);
       if (m.copy === 0) return;
       m.type = 3;
       m.message = 'has joined the lobby.';
