@@ -127,7 +127,6 @@ export const enum InCmd {
   PlayerAdd,
   PlayerList,
   PlayerRemove,
-  LobbyStatus,
 
   LobbyJoin,
   Sync,
@@ -151,4 +150,6 @@ export const enum InCmd {
   Scores,
   Over,
   OfferBlind,
+
+  LobbyStatus,
 }

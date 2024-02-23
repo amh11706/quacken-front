@@ -30,10 +30,10 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
             : moves[m.data.t] = { shots: m.data.s || [], moves: m.data.m };
           break;
         case InCmd.DelBoat:
-          lastSync.sync = lastSync.sync.filter(b => b.id !== m.data);
+          lastSync.sync = lastSync.sync?.filter(b => b.id !== m.data);
           break;
         case InCmd.NewBoat:
-          lastSync.sync.push(...Array.isArray(m.data) ? m.data : [m.data]);
+          lastSync.sync?.push(...Array.isArray(m.data) ? m.data : [m.data]);
           break;
         case InCmd.Sync:
           lastSync = m.data;
@@ -52,7 +52,7 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
             turn: turns.length + 1,
             rawTurn: lastTurnRaw || turn,
             index: i,
-            teams: turn.points.map((score, j) => {
+            teams: turn.points?.map((score, j) => {
               const team = { score, scoreChange: score - (lastTurn.teams[j]?.score || 0), sinks: sinks[j] || [] };
               if (team.scoreChange > maxScore) maxScore = team.scoreChange;
               return team;
