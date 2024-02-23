@@ -5,7 +5,7 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
-    title: 'Release TBD',
+    title: 'Release 23 February 2024',
     points: [
       'Players can now pause the game for up to 2 minutes per game per player.',
       'You can vote to end the game early from the pause screen.',
