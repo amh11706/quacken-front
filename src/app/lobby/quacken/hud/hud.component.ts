@@ -11,6 +11,7 @@ import { WsService } from '../../../ws/ws.service';
 import { Tokens } from '../../../boats/move-input/move-input.component';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { SettingGroup } from '../../../settings/setting/settings';
+import { LobbyStatus } from '../../cadegoose/types';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -131,9 +132,14 @@ export class HudComponent implements OnInit, OnDestroy {
         if (m.seconds > 20) m.seconds = 20;
         m.seconds = Math.round(m.seconds * this.secondsPerTurn / 30);
       }
-      if (!this.timeInterval && this.turn > 0 && this.turn <= this.maxTurn) this.startTimer();
+      if (!this.timeInterval && m.inProgress === LobbyStatus.MidMatch) this.startTimer();
       else this.stopTimer();
       this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);
+    }));
+
+    this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
+      if (m === LobbyStatus.MidMatch) this.startTimer();
+      else this.stopTimer();
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => {
