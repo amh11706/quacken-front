@@ -1,5 +1,5 @@
 <ng-container *ngIf="ws.user?.id">
-  <h2 id="create">Lobby Type: <q-setting name="createType"
+  <h2 id="create"><q-setting name="createType"
                (valueChange)="changeType()"></q-setting>
   </h2>
   <p>{{idDescriptions[settings.createType.value || 0]}}</p>

@@ -275,6 +275,7 @@ export const Settings: SettingList = {
     id: 14,
     group: 'l/create',
     name: 'createType',
+    label: 'Create Type',
     type: 'option',
     options: [
       'Quacken', 'Spades', 'Cadesim', 'Sea Battle', 'Capture the Flag',
