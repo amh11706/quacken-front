@@ -54,7 +54,7 @@ export type SubscribeData = {
 
   [InCmd.PlayerAdd]: Message;
   [InCmd.PlayerRemove]: Message;
-  [InCmd.PlayerList]: Record<number, Message>;
+  [InCmd.PlayerList]: Message[];
   [InCmd.LobbyList]: Lobby[];
   [InCmd.LobbyUpdate]: Lobby;
   [InCmd.LobbyRemove]: number;

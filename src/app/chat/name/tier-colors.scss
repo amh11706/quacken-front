@@ -3,7 +3,7 @@
 }
 
 .Ace {
-  border-color: Purple;
+  border-color: magenta;
 }
 
 .Diamond {
@@ -11,7 +11,7 @@
 }
 
 .Platinum {
-  border-color: white;
+  border-color: paleturquoise;
 }
 
 .Gold {
@@ -24,4 +24,12 @@
 
 .Bronze {
   border-color: brown;
+}
+
+div[class~="2"] {
+  border-width: 3px;
+}
+
+div[class~="1"] {
+  border-width: 2px;
 }

@@ -5,6 +5,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
@@ -23,6 +24,7 @@ import { PlayerListComponent } from './player-list/player-list.component';
     MatButtonModule,
     MatCardModule,
     MatTabsModule,
+    MatTooltipModule,
     QdragModule,
     NameModule,
   ],

@@ -17,7 +17,7 @@
       <mat-select [(ngModel)]="setting.data.padExtra[i]">
         <mat-select-trigger>
           <img [src]="getShipLink(boatType)"
-               [title]="Ships.titles[boatType]">
+               [matTooltip]="Ships.titles[boatType] || ''">
         </mat-select-trigger>
         <mat-option *ngFor="let o of Ships.groups[0]?.options"
                     [value]="o">
@@ -46,7 +46,7 @@
       <mat-select [(ngModel)]="team[i]">
         <mat-select-trigger>
           <img [src]="getShipLink(boatType)"
-               [title]="Ships.titles[boatType]">
+               [matTooltip]="Ships.titles[boatType] || ''">
         </mat-select-trigger>
         <mat-option *ngFor="let o of Ships.groups[0]?.options"
                     [value]="o">

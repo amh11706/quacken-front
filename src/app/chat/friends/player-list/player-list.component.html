@@ -1,22 +1,20 @@
-<mat-card *ngIf="fs.lobby$ | async as lobby">
-  <p *ngIf="lobby.length > 1; else alone"
+<ng-container *ngIf="showCount">
+  <p *ngIf="players.length > 1; else alone"
      class="empty">
-    There are {{lobby.length}} players in this lobby:
+    There are {{players.length}} players in this lobby:
   </p>
   <ng-template #alone>
     <p class="empty">You are alone here.</p>
   </ng-template>
-  <ng-container *ngFor="let m of lobby">
-    <div class="lobbyPlayer">
-      <ng-container *ngIf="m.t !== undefined">
-        <img class="team"
-             [title]="teamImages[m.t].title"
-             [src]="teamImages[m.t].src">
-      </ng-container>
-      <q-name [message]="m"></q-name>
-      <mat-icon *ngIf="m.a"
-                [inline]="true"
-                title="Opped">star</mat-icon>
-    </div>
-  </ng-container>
-</mat-card>
+</ng-container>
+<div *ngFor="let m of players"
+     class="lobbyPlayer">
+  <img *ngIf="m.t !== undefined"
+       class="team"
+       [matTooltip]="teamImages[m.t].title"
+       [src]="teamImages[m.t].src">
+  <q-name [message]="m"></q-name>
+  <mat-icon *ngIf="m.a"
+            [inline]="true"
+            matTooltip="Opped">star</mat-icon>
+</div>

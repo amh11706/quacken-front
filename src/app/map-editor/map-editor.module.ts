@@ -6,6 +6,8 @@ import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
+
 import { MatIconModule } from '@angular/material/icon';
 
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -57,6 +59,7 @@ import { TagsComponent } from './tags/tags.component';
     MatInputModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatTooltipModule,
     MatExpansionModule,
     MatAutocompleteModule,
     MatChipsModule,

@@ -9,7 +9,9 @@
       <ng-container *cdkVirtualFor="let m of chat.messages$">
         <p *ngIf="!m.blocked"
            [style.backgroundColor]="colors[m.type]"
-           [title]="m.receivedTime">
+           [matTooltipShowDelay]="500"
+           [matTooltipPosition]="'right'"
+           [matTooltip]="m.receivedTime">
           <ng-container [ngSwitch]="m.type">
             <span *ngSwitchCase="0">{{m.message}}</span>
             <span *ngSwitchCase="1"

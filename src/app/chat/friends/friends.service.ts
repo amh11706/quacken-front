@@ -56,17 +56,10 @@ export class FriendsService {
   }
 
   private handlePlayers() {
-    this.ws.subscribe(InCmd.PlayerList, (r: Record<number, ChatMessage>) => {
-      const users = Object.values(r);
-      for (const m of users) {
-        m.friend = this.isFriend(m.from);
-        m.blocked = this.isBlocked(m.from);
-      }
-      this.lobby$.next(users as TeamMessage[]);
+    this.ws.subscribe(InCmd.PlayerList, r => {
+      this.lobby$.next(r as TeamMessage[]);
     });
-    this.ws.subscribe(InCmd.PlayerAdd, (m: ChatMessage) => {
-      m.friend = this.isFriend(m.from);
-      m.blocked = this.isBlocked(m.from);
+    this.ws.subscribe(InCmd.PlayerAdd, m => {
       const lobby = this.lobby$.getValue();
       lobby.push(m as TeamMessage);
       this.lobby$.next(lobby);
@@ -88,9 +81,6 @@ export class FriendsService {
   private handleInvites() {
     this.ws.subscribe(InCmd.InviteAdd, u => {
       this.invites.push(u);
-      // let message = u.f;
-      // if (u.ty === 0) message += ' has requested to add you as a friend.';
-      // else message += ' has invited you to join their lobby.';
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 8, message: u, from: u.f } });
     });
     this.ws.subscribe(InCmd.InviteRemove, u => {

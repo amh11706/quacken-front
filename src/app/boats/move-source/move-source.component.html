@@ -1,6 +1,7 @@
 <mat-checkbox class="moveCheck"
               [(ngModel)]="auto"
-              title="Auto"
+              matTooltip="Auto"
+              [matTooltipShowDelay]="750"
               (change)="changeWantMove()">
 </mat-checkbox>
 <div class="cannons">
@@ -19,7 +20,8 @@
     </mat-radio-button>
     <br>
     <div class="move move1"
-         [title]="tokenStrings[0]">
+         [matTooltipShowDelay]="750"
+         [matTooltip]="tokenStrings[0] || ''">
       <img [style.opacity]="unusedTokens.moves[0] ? 1 : 0"
            name="left"
            draggable="true"
@@ -36,7 +38,8 @@
     </mat-radio-button>
     <br>
     <div class="move move2"
-         [title]="tokenStrings[1]">
+         [matTooltipShowDelay]="750"
+         [matTooltip]="tokenStrings[1] || ''">
       <img [style.opacity]="unusedTokens.moves[1] ? 1 : 0"
            name="forward"
            draggable="true"
@@ -53,7 +56,8 @@
     </mat-radio-button>
     <br>
     <div class="move move3"
-         [title]="tokenStrings[2]">
+         [matTooltipShowDelay]="750"
+         [matTooltip]="tokenStrings[2] || ''">
       <img [style.opacity]="unusedTokens.moves[2] ? 1 : 0"
            name="right"
            draggable="true"

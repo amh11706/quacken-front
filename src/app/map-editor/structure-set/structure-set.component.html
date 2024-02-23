@@ -15,7 +15,7 @@
            [class.selected]="structure === map.selectedTile"
            (click)="select(structure)">
         <div (dblclick)="editTile()"
-             [title]="structure.description">
+             [matTooltip]="structure.description || ''">
           {{structure.name}}</div>
         <span *ngIf="structure.weight === 0"
               class="delete"
@@ -24,7 +24,7 @@
         </span>
 
         <div class="weight"
-             title="How common this structure should be relative to the rest in this set.">
+             matTooltip="How common this structure should be relative to the rest in this set.">
           <mat-form-field>
             <input matInput
                    placeholder="Weight"

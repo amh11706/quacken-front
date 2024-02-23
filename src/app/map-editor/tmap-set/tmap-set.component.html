@@ -15,7 +15,7 @@
                  [class.selected]="structure === map.selectedTile"
                  (click)="select(structure)">
                 <div (dblclick)="editTile()"
-                     [title]="structure.description">
+                     [matTooltip]="structure.description || ''">
                     {{structure.name}}</div>
                 <span class="delete"
                       (click)="deleteTile(structure)">

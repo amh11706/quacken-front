@@ -1,11 +1,7 @@
-mat-card {
+:host {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 900px;
-  margin: auto;
-  margin-top: 16px;
-  background-color: rgb(94, 92, 92);
 }
 
 .lobbyPlayer {
@@ -14,7 +10,6 @@ mat-card {
   justify-content: center;
   min-width: 175px;
   text-align: center;
-  font-size: 18px;
   padding: 4px;
   border: 1px solid black;
   color: #eee;

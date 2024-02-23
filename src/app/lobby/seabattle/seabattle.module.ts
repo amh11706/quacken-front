@@ -4,6 +4,7 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
 import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { LetDirective } from '@ngrx/component';
 import { ChatModule } from '../../chat/chat.module';
@@ -31,6 +32,7 @@ import { MapEditorModule } from '../../map-editor/map-editor.module';
     MatRadioModule,
     MatCheckboxModule,
     MatCardModule,
+    MatTooltipModule,
     QdragModule,
     ChatModule,
     SettingsModule,

@@ -16,7 +16,7 @@
                 [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>
-        <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}, Rank sum: {{teamRanks[i] || 0}}</p>
+        <p class="teamcount">{{teamNames[i]}}: {{team.length}}, Rank sum: {{teamRanks[i] || 0}}</p>
         <div class="team"
              [style.borderColor]="teamColors[i]">
           <div *ngFor="let m of team"
@@ -27,7 +27,7 @@
                  [matMenuTriggerFor]="jobbers"
                  src="./assets/boats/{{links[m.b]}}.png"
                  [class.lowjobbers]="m.jq < 100"
-                 [title]="boatTitles[m.b] + ' ' + m.jq + '%'">
+                 [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
             <mat-menu #jobbers="matMenu">
               <mat-card class="jobberSelect"
                         (click)="$event.stopPropagation()">
@@ -42,10 +42,10 @@
             <ng-template #boatImage>
               <img src="./assets/boats/{{links[m.b]}}.png"
                    [class.lowjobbers]="m.jq < 100"
-                   [title]="boatTitles[m.b] + ' ' + m.jq + '%'">
+                   [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
             </ng-template>
             <span class="spawn"
-                  [title]="m.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.s ? 'O' : 'I'}}</span>
+                  [matTooltip]="m.s ? 'Ocean Spawn' : 'Island Spawn'">{{m.s ? 'O' : 'I'}}</span>
           </div>
         </div>
       </div>

@@ -16,14 +16,14 @@
           <div *ngFor="let team of turn.teams; let i = index; let odd = odd"
                [class.right]="odd">
             <mat-icon *ngFor="let sink of team.sinks"
-                      [title]="sink.message">sailing</mat-icon>
+                      [matTooltip]="sink.message">sailing</mat-icon>
           </div>
         </div>
 
         <div class="points">
           <div *ngFor="let team of turn.teams; let i = index"
                [style.backgroundColor]="teamColors[i]"
-               [title]="team.scoreChange"
+               [matTooltip]="'' + team.scoreChange"
                [style.width]="50 * team.scoreChange / maxScore+ 'px'"></div>
         </div>
       </button>
@@ -47,12 +47,12 @@
       <ng-container *ngIf="boatTicks[boat.id]">
         <br>
         <div class="damage"
-             title="{{boat.getDamage()}}%">
+             matTooltip="{{boat.getDamage()}}%">
           <div class="damagebar"
                [style.transform]="'translateX(' + boat.getDamage() / 2 + 'px)'"></div>
         </div>
         <div class="bilge"
-             title="{{boatTicks[boat.id]?.b || 0}}%">
+             matTooltip="{{boatTicks[boat.id]?.b || 0}}%">
           <div class="bilgebar"
                [style.transform]="'translateX(' + (boatTicks[boat.id]?.b || 0) / 2 + 'px)'"></div>
         </div>
@@ -82,7 +82,7 @@
         <button *ngFor="let boat of aiData.boats"
                 mat-icon-button
                 [color]="boat === activeAiBoat ? 'primary' : undefined"
-                [title]="boat.name"
+                [matTooltip]="boat.name || ''"
                 (click)="selectAiBoat(boat)">
           <mat-icon>sailing</mat-icon>
         </button><br>
@@ -187,7 +187,7 @@
                  [style.backgroundColor]="'transparent'">
               <div *ngFor="let penalty of team; let i2 = index"
                    class="penalty"
-                   [title]="Penalties[i2]?.title + ' - ' + penalty"
+                   [matTooltip]="Penalties[i2]?.title + ' - ' + penalty"
                    [style.backgroundColor]="penaltyColors[i2]"
                    [style.width]="50 * penalty*(Penalties[i2]?.value ?? 0) / maxPenalty + 'px'"></div>
             </div>
@@ -221,7 +221,7 @@
       <button *ngFor="let boat of aiData.boats; let i=index"
               mat-icon-button
               [color]="boat === activeAiBoat ? 'primary' : undefined"
-              [title]="selectedShips[i]?.label + ' Claim ' + (i+1)"
+              [matTooltip]="selectedShips[i]?.label + ' Claim ' + (i+1)"
               (click)="selectAiBoat(boat)">
         <mat-icon>sailing</mat-icon>
       </button><br>

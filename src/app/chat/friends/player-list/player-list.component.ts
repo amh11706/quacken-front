@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FriendsService } from '../friends.service';
-import { TeamImages } from '../../../lobby/cadegoose/types';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { TeamImages, TeamMessage } from '../../../lobby/cadegoose/types';
 
 @Component({
   selector: 'q-player-list',
@@ -10,6 +9,6 @@ import { TeamImages } from '../../../lobby/cadegoose/types';
 })
 export class PlayerListComponent {
   teamImages = TeamImages;
-
-  constructor(public fs: FriendsService) { }
+  @Input() players: TeamMessage[] = [];
+  @Input() showCount = true;
 }

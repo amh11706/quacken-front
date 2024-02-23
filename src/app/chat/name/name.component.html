@@ -7,7 +7,7 @@
         [class.blocked]="message.blocked">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
   <div *ngIf="message.ti !== undefined"
-       [title]="tierTitles[message.ti] + ' (' + message.sc + ')'"
+       [matTooltip]="tierTitles[message.ti] + ' (' + message.sc + ')'"
        class="tier {{tierTitles[message.ti]}}"></div>
 </span>
 
@@ -15,11 +15,10 @@
   <span [class.hasTier]="message.ti !== undefined">
     <span class="you"
           [class.admin]="message.admin && message.admin >= 3"
-          title="you"
           [matMenuTriggerFor]="youMenu">{{message.from}}</span>
     <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
     <div *ngIf="message.ti !== undefined"
-         [title]="tierTitles[message.ti] + ' (' + message.sc + ')'"
+         [matTooltip]="tierTitles[message.ti] + ' (' + message.sc + ')'"
          class="tier {{tierTitles[message.ti]}}"></div>
   </span>
 </ng-template>

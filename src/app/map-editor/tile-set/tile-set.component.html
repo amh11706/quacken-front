@@ -25,7 +25,7 @@
            [class.selected]="tile === map.selectedTile"
            (click)="select(tile)">
         <div (dblclick)="editTile()"
-             [title]="tile.description || ''">
+             [matTooltip]="tile.description || ''">
           {{tile.name}}
         </div>
         <span *ngIf="tile.weight === 0"
@@ -35,7 +35,7 @@
         </span>
 
         <div class="weight"
-             title="How common this tile should be relative to the rest of the same type.">
+             matTooltip="How common this tile should be relative to the rest of the same type.">
           <mat-form-field>
             <input matInput
                    placeholder="Weight"

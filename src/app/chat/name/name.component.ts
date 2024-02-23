@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
@@ -17,7 +17,7 @@ import { TeamMessage } from '../../lobby/cadegoose/types';
   styleUrls: ['./name.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NameComponent {
+export class NameComponent implements OnInit {
   @Input() message: Partial<TeamMessage> = {};
   @Input() offline = false;
   tierTitles = TierTitles;
@@ -29,6 +29,13 @@ export class NameComponent {
     public fs: FriendsService,
     private kbs: KeyBindingService,
   ) { }
+
+  ngOnInit(): void {
+    if (this.message.from) {
+      this.message.friend = this.fs.isFriend(this.message.from);
+      this.message.blocked = this.fs.isBlocked(this.message.from);
+    }
+  }
 
   private getName(): string {
     let name = this.message.from;

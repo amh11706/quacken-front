@@ -12,7 +12,7 @@
            src="./assets/images/obstacle{{tile}}.png"
            draggable="false"
            [class]="'img' + tile"
-           [title]="tile < 5 ? titles[tile + 1] : ''">
+           [matTooltip]="tile < 5 ? titles[tile + 1] || '': ''">
     </div>
   </div>
 </div>

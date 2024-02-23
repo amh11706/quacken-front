@@ -28,7 +28,7 @@
                  [matMenuTriggerFor]="jobbers"
                  src="./assets/boats/{{links[m.b]}}.png"
                  [class.lowjobbers]="m.jq < 100"
-                 [title]="boatTitles[m.b] + ' ' + m.jq + '%'">
+                 [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
             <mat-menu #jobbers="matMenu">
               <mat-card class="jobberSelect"
                         (click)="$event.stopPropagation()">
@@ -43,7 +43,7 @@
             <ng-template #boatImage>
               <img src="./assets/boats/{{links[m.b]}}.png"
                    [class.lowjobbers]="m.jq < 100"
-                   [title]="boatTitles[m.b] + ' ' + m.jq + '%'">
+                   [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
             </ng-template>
           </div>
         </div>

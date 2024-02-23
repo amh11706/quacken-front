@@ -18,7 +18,7 @@
                [class.ready]="m.r">
             <q-name [message]="m"></q-name>
             <img src="./assets/boats/{{links[m.b]}}.png"
-                 [title]="boatTitles[m.b]">
+                 [matTooltip]="boatTitles[m.b] || ''">
           </div>
         </div>
         <br>

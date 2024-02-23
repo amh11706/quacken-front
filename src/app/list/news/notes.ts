@@ -5,11 +5,24 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release TBD',
+    points: [
+      // 'Players can now vote to end the match early.',
+      // 'Disconnects now pause the game for up to 2 minutes per game per player.',
+      // 'You can now add notes to a replay.',
+      'You can no longer have bots in a rated game if any player is above 125 rating.',
+      'Op command is now a toggle. You don\'t have to specify true/false.',
+      'You can now click the scores to toggle between normal and extra stats.',
+      'Tooltips no longer block clicks.',
+      'Link buttons are now actual links.',
+    ],
+  },
+  {
     title: 'Release 19 February 2024',
     points: [
       'The great (rank) reset!',
-      'Rank is now based on win/loss rather than score.',
-      'Teams must be within 100 points of each other to be ranked.',
+      'Rating is now based on win/loss rather than score.',
+      'Teams must be within 100 points average of each other to be rated.',
       'New checkbox to make a match rated or unrated.',
       'You can now see replays of any player.',
       'Stat leaderboards now have a link to the replay where the record was achieved.',

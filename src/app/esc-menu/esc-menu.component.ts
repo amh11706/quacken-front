@@ -7,6 +7,7 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { SettingsComponent } from '../settings/settings.component';
 import { LogoutConfirmComponent } from './logout-confirm/logout-confirm.component';
 import { SettingsService } from '../settings/settings.service';
+import { FriendsService } from '../chat/friends/friends.service';
 
 @Component({
   selector: 'q-esc-menu',
@@ -22,6 +23,7 @@ export class EscMenuComponent {
   constructor(
     public es: EscMenuService,
     public ss: SettingsService,
+    public fs: FriendsService,
     public ws: WsService,
     private dialog: MatDialog,
   ) {

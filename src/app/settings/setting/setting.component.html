@@ -6,7 +6,7 @@
     <mat-select-trigger>
       <img *ngIf="settingValue.value !== undefined"
            [src]="getShipLink(settingValue.value)"
-           [title]="setting.titles[settingValue.value]">
+           [matTooltip]="setting.titles[settingValue.value] || ''">
     </mat-select-trigger>
     <mat-optgroup *ngFor="let g of setting.groups"
                   [label]="g.name">
@@ -33,7 +33,7 @@
     </mat-select>
   </mat-form-field>
   <mat-icon *ngIf="setting.advancedComponent"
-            title="Advanced"
+            matTooltip="Advanced"
             class="advanced"
             (click)="openAdvanced()">settings</mat-icon>
 </div>
@@ -59,7 +59,7 @@
               (input)="save($event.value || 0)">
   </mat-slider>
   <mat-icon *ngIf="setting.advancedComponent"
-            title="Advanced"
+            matTooltip="Advanced"
             class="advanced"
             (click)="openAdvanced()">settings</mat-icon>
 </div>

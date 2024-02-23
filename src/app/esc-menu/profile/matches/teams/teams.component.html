@@ -10,7 +10,7 @@
         <ng-container *ngFor="let team of teamImages; let i = index">
           <th *ngIf="teams[i]">
             <img [src]="team.src"
-                 [title]="team.title">
+                 [matTooltip]="team.title">
           </th>
         </ng-container>
       </tr>

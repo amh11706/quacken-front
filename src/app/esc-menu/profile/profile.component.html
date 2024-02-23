@@ -16,10 +16,10 @@
           <div *ngFor="let rank of stat.userRanks"
                (click)="showRankLeaders(rank)">
             <div class="badge {{tierTitles[rank.tier]}}"
-                 title="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
+                 matTooltip="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
               {{rank.level}}
             </div>
-            <div [title]="rank.title || ''">
+            <div [matTooltip]="rank.title || ''">
               <div class="badgetitle">{{titles[rank.name] || rank.name}}</div>
               <mat-progress-bar mode="determinate"
                                 color="accent"
