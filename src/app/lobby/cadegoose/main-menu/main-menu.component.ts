@@ -28,8 +28,8 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     { icon: '', text: 'No vote' },
     { icon: 'pause', text: 'Voted pause' },
     { icon: 'play_arrow', text: 'Voted continue' },
-    { icon: 'handshake', text: 'Voted tie' },
     { icon: 'close', text: 'Voted forfeit' },
+    { icon: 'handshake', text: 'Voted tie' },
   ];
 
   links = links;
