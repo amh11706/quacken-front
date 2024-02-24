@@ -45,7 +45,7 @@ p {
 .tier {
   display: inline-block;
   position: absolute;
-  top: 48%;
+  top: 50%;
   transform: translateY(-50%);
   margin-left: 4px;
   width: 10px;
