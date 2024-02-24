@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
-import { ChatMessage, Invite } from '../types';
+import { Invite } from '../types';
 import { TeamMessage } from '../../lobby/cadegoose/types';
 
 @Injectable({
@@ -20,7 +20,6 @@ export class FriendsService {
   invites: Invite[] = [];
 
   constructor(private ws: WsService) {
-    this.tapMessages();
     this.handleBlocks();
     this.handlePlayers();
     this.handleFriends();
@@ -33,13 +32,6 @@ export class FriendsService {
 
   declineFriend(invite: Invite): void {
     this.ws.send(OutCmd.FriendDecline, invite);
-  }
-
-  private tapMessages() {
-    this.ws.subscribe(InCmd.ChatMessage, (m: ChatMessage) => {
-      m.friend = this.isFriend(m.from);
-      m.blocked = this.isBlocked(m.from);
-    });
   }
 
   private handleBlocks() {
