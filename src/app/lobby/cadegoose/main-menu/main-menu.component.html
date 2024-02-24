@@ -81,7 +81,7 @@
                       (click)="vote(3)">Vote forfeit <mat-icon>close</mat-icon></button>
             </div>
             <div class="settingRow">
-              <button *ngIf="status === 1"
+              <button *ngIf="status === 1 && myTeam < 99"
                       mat-raised-button
                       (click)="pause()">Pause</button>
               <button mat-raised-button
