@@ -89,7 +89,8 @@ export class StatService {
 
   openLeaders(id: number): void {
     this.id = id;
-    void this.setTab(3);
+    if (this.profileTab !== 3) void this.setTab(3);
+    else void this.refreshLeaders();
   }
 
   async refresh(): Promise<void> {
