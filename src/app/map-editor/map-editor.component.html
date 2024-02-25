@@ -52,31 +52,31 @@
       <button mat-icon-button
               [disabled]="editor.settingsOpen || !editor.selectedTile.undos.length"
               (click)="undo(editor.selectedTile.undos, editor.selectedTile.redos)"
-              title="Undo - ctrl + z">
+              matTooltip="Undo - ctrl + z">
         <mat-icon>undo</mat-icon>
       </button>
       <button mat-icon-button
               [disabled]="editor.settingsOpen || !editor.selectedTile.redos.length"
               (click)="undo(editor.selectedTile.redos, editor.selectedTile.undos)"
-              title="Redo - ctrl + y">
+              matTooltip="Redo - ctrl + y">
         <mat-icon>redo</mat-icon>
       </button>
     </ng-container>
     <button mat-icon-button
             [disabled]="editor.settingsOpen"
             (click)="save()"
-            title="Save - ctrl + s">
+            matTooltip="Save - ctrl + s">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-icon-button
             (click)="openGuide()"
-            title="Open Guide">
+            matTooltip="Open Guide">
       <mat-icon>help_outline</mat-icon>
     </button>
     <button mat-raised-button
             [disabled]="editor.settingsOpen"
             id="editorSettings"
             (click)="openSettings()"
-            title="Settings - ctrl + e">Editor Settings</button>
+            matTooltip="Settings - ctrl + e">Editor Settings</button>
   </div>
 </div>
