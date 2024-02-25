@@ -82,20 +82,6 @@ export class ChatService {
     this.ws.connected$.subscribe(value => {
       if (!value) this.messages = [];
     });
-
-    this.ws.subscribe(InCmd.FriendAdd, u => {
-      for (const m of this.messages) if (m.from === u.from) m.friend = true;
-    });
-    this.ws.subscribe(InCmd.FriendRemove, u => {
-      for (const m of this.messages) if (m.from === u.from) m.friend = false;
-    });
-
-    this.ws.subscribe(InCmd.BlockUser, u => {
-      for (const m of this.messages) if (m.from === u) m.blocked = true;
-    });
-    this.ws.subscribe(InCmd.UnblockUser, u => {
-      for (const m of this.messages) if (m.from === u) m.blocked = false;
-    });
   }
 
   sendMessage(text: string): void {

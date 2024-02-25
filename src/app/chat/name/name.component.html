@@ -1,10 +1,10 @@
 <span *ngIf="message.from !== ws.user?.name || (message.from === 'Guest' && message.copy !== ws.copy); else you"
       [matMenuTriggerFor]="nameMenu"
       [class.hasTier]="message.ti !== undefined">
-  <span [class.friend]="message.friend"
-        [class.bot]="message.from?.indexOf('Bot') === 0"
+  <span [class.friend]="fs.isFriend(message.from)"
+        [class.bot]="message.copy === 0"
         [class.admin]="message.admin && message.admin >= 3"
-        [class.blocked]="message.blocked">{{message.from}}</span>
+        [class.blocked]="fs.isBlocked(message.from)">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
   <div *ngIf="message.ti !== undefined"
        [matTooltip]="tierTitles[message.ti] + ' (' + message.sc + ')'"
@@ -55,12 +55,12 @@
           {{cmd.title | titlecase}}
         </button>
         <ng-container *ngIf="ws.user?.name !== 'Guest'">
-          <button *ngIf="!message.friend"
+          <button *ngIf="!fs.isFriend(message.from)"
                   mat-menu-item
                   (click)="add()">
             Add friend
           </button>
-          <button *ngIf="!message.blocked; else unblockButton"
+          <button *ngIf="!fs.isBlocked(message.from); else unblockButton"
                   mat-menu-item
                   (click)="block()">
             Block

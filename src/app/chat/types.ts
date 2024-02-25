@@ -12,8 +12,6 @@ export interface Message {
 }
 
 export interface ChatMessage extends Message {
-  friend?: boolean;
-  blocked?: boolean;
   time?: number | string;
   ago?: string;
   receivedTime?: string;

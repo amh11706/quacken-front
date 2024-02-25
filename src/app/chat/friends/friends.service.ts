@@ -15,8 +15,10 @@ export class FriendsService {
 
   lobby$ = new BehaviorSubject<TeamMessage[]>([]);
   friends: string[] = [];
+  private friendMap = new Set<string>();
   offline: string[] = [];
   blocked: string[] = [];
+  private blockedMap = new Set<string>();
   invites: Invite[] = [];
 
   constructor(private ws: WsService) {
@@ -37,12 +39,12 @@ export class FriendsService {
   private handleBlocks() {
     this.ws.subscribe(InCmd.BlockUser, m => {
       this.blocked.push(m);
-      for (const n of this.lobby$.getValue()) if (n.from === m) n.blocked = true;
+      this.blockedMap.add(m);
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been blocked.' } });
     });
     this.ws.subscribe(InCmd.UnblockUser, m => {
       this.blocked = this.blocked.filter(n => m !== n);
-      for (const n of this.lobby$.getValue()) if (n.from === m) n.blocked = false;
+      this.blockedMap.delete(m);
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been unblocked.' } });
     });
   }
@@ -84,7 +86,9 @@ export class FriendsService {
     this.ws.subscribe(InCmd.FriendList, r => {
       this.friends = r.online || [];
       this.offline = r.offline || [];
+      this.friendMap = new Set([...this.friends, ...this.offline]);
       this.blocked = r.blocked || [];
+      this.blockedMap = new Set(r.blocked);
     });
     this.ws.subscribe(InCmd.FriendOnline, u => {
       this.friends.push(u.from);
@@ -98,8 +102,8 @@ export class FriendsService {
     });
     this.ws.subscribe(InCmd.FriendAdd, u => {
       this.friends.push(u.from);
+      this.friendMap.add(u.from);
       this.invites = this.invites.filter(i => i.ty !== 0 || i.f !== u.from);
-      for (const n of this.lobby$.getValue()) if (n.from === u.from) n.friend = true;
       this.ws.dispatchMessage({
         cmd: InCmd.ChatMessage,
         data: { ...u, copy: 1, type: 3, message: 'has been added to your friend list.' },
@@ -108,7 +112,7 @@ export class FriendsService {
     this.ws.subscribe(InCmd.FriendRemove, u => {
       this.friends = this.friends.filter(f => f !== u.from);
       this.offline = this.offline.filter(f => f !== u.from);
-      for (const n of this.lobby$.getValue()) if (n.from === u.from) n.friend = false;
+      this.friendMap.delete(u.from);
       this.ws.dispatchMessage({
         cmd: InCmd.ChatMessage,
         data: { ...u, copy: 1, type: 3, message: 'has been removed from your friend list.' },
@@ -117,13 +121,10 @@ export class FriendsService {
   }
 
   isFriend(name: string): boolean {
-    for (const n of this.friends) if (n === name) return true;
-    for (const n of this.offline) if (n === name) return true;
-    return false;
+    return this.friendMap.has(name);
   }
 
   isBlocked(name: string): boolean {
-    for (const n of this.blocked) if (n === name) return true;
-    return false;
+    return this.blockedMap.has(name);
   }
 }
