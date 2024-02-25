@@ -135,11 +135,13 @@ export class StatService {
 
     for (const l of rankLeaders.tier) {
       l.from = l.userName;
-      l.friend = this.fs.isFriend(l.userName);
+      l.ti = l.tier;
+      l.sc = l.score;
     }
     for (const l of rankLeaders.xp) {
       l.from = l.userName;
-      l.friend = this.fs.isFriend(l.userName);
+      l.ti = l.tier;
+      l.sc = l.score;
     }
     this.rankLeaders$.next(rankLeaders);
   }
@@ -157,7 +159,6 @@ export class StatService {
     if (leaders[0]?.matchId) this.columns = StatColumnsWithReplay;
     for (const l of leaders) {
       l.from = l.name;
-      l.friend = this.fs.isFriend(l.name);
     }
     this.leaders$.next(leaders);
   }

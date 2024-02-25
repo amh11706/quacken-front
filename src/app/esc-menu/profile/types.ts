@@ -1,7 +1,6 @@
-import { ChatMessage } from '../../chat/types';
-import { TeamImages } from '../../lobby/cadegoose/types';
+import { TeamImages, TeamMessage } from '../../lobby/cadegoose/types';
 
-export interface Leader extends ChatMessage {
+export interface Leader extends TeamMessage {
   name: string;
   value: number;
   details?: string;
@@ -10,10 +9,11 @@ export interface Leader extends ChatMessage {
   matchId?: number;
 }
 
-export interface RankLeader extends ChatMessage {
+export interface RankLeader extends TeamMessage {
   userName: string;
   level: number;
   tier: number;
+  score: number;
 }
 
 export interface WinLoss {

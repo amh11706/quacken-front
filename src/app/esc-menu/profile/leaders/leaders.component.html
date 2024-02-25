@@ -70,9 +70,9 @@
       <table mat-table
              [dataSource]="rankLeaders.tier">
         <tr mat-header-row
-            *matHeaderRowDef="['position', 'name', 'level', 'rank']; sticky: true"></tr>
+            *matHeaderRowDef="['position', 'name', 'level']; sticky: true"></tr>
         <tr mat-row
-            *matRowDef="let row; columns: ['position', 'name', 'level', 'rank'];"></tr>
+            *matRowDef="let row; columns: ['position', 'name', 'level'];"></tr>
 
         <ng-container matColumnDef="position">
           <th mat-header-cell
@@ -95,15 +95,6 @@
               *matHeaderCellDef>Level</th>
           <td mat-cell
               *matCellDef="let element">{{element.level}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="rank">
-          <th mat-header-cell
-              *matHeaderCellDef>Rank</th>
-          <td mat-cell
-              class="tier {{element.score > 0 && tierTitles[element.tier]}}"
-              [matTooltip]="element.score > 0 ? tierTitles[element.tier] || '' : ''"
-              *matCellDef="let element">{{element.score}}</td>
         </ng-container>
       </table>
 
@@ -111,9 +102,9 @@
       <table mat-table
              [dataSource]="rankLeaders.xp">
         <tr mat-header-row
-            *matHeaderRowDef="['position', 'name', 'level', 'rank']; sticky: true"></tr>
+            *matHeaderRowDef="['position', 'name', 'level']; sticky: true"></tr>
         <tr mat-row
-            *matRowDef="let row; columns: ['position', 'name', 'level', 'rank'];"></tr>
+            *matRowDef="let row; columns: ['position', 'name', 'level'];"></tr>
 
         <ng-container matColumnDef="position">
           <th mat-header-cell
@@ -136,15 +127,6 @@
               *matHeaderCellDef>Level</th>
           <td mat-cell
               *matCellDef="let element">{{element.level}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="rank">
-          <th mat-header-cell
-              *matHeaderCellDef>Rank</th>
-          <td mat-cell
-              class="tier {{element.score > 0 && tierTitles[element.tier]}}"
-              [matTooltip]="element.score > 0 ? tierTitles[element.tier] || '' : ''"
-              *matCellDef="let element">{{element.score}}</td>
         </ng-container>
       </table>
     </ng-container>
