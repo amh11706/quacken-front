@@ -144,6 +144,10 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.ws.send(OutCmd.Vote, v);
   }
 
+  trackTeamBy(index: number, _: TeamMessage[]): number {
+    return index;
+  }
+
   private updateRanks() {
     const teamPlayers = this.teamPlayers$.getValue();
     this.teamRanks = Array(teamPlayers.length).fill(0);

@@ -74,8 +74,8 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     }
   }
 
-  trackByLobbyId(_: number, l: Lobby): string {
-    return '' + l.id;
+  trackByLobbyId(_: number, l: Lobby): number {
+    return l.id;
   }
 
   createLobby(): void {
