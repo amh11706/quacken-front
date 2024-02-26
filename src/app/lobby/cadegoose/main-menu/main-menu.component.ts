@@ -93,6 +93,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
       this.status.next(m);
+      if (!this.ws.connected) return;
       if (m === LobbyStatus.MidMatch && this.myBoat.isMe) return this.es.open$.next(false);
       else if (m === LobbyStatus.PreMatch) return;
       this.es.open$.next(true);
