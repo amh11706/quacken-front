@@ -19,10 +19,12 @@
                      [onlineOnly]="true"
                      [matInput]="false"
                      [clearOnFocus]="false"
+                     (keyup)="handleKey($event)"
                      [(value)]="param.value"></q-name-search>
       <q-name-search *ngSwitchCase="'nameany'"
                      [matInput]="false"
                      [clearOnFocus]="false"
+                     (keyup)="handleKey($event)"
                      [(value)]="param.value"></q-name-search>
 
       <span *ngSwitchCase="'new'">new</span>

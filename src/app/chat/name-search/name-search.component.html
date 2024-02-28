@@ -12,7 +12,7 @@
                     [autoSelectActiveOption]="true"
                     (opened)="clearOnFocus && myControl.setValue('')"
                     (optionSelected)="value = $event.option.value"
-                    [autoActiveFirstOption]="true">
+                    [autoActiveFirstOption]="false">
     <mat-option *ngFor="let option of searchedNames | async"
                 [value]="option">
       {{option}}
@@ -30,7 +30,7 @@
                     [autoSelectActiveOption]="true"
                     (opened)="clearOnFocus && myControl.setValue('')"
                     (optionSelected)="valueChange.emit($event.option.value)"
-                    [autoActiveFirstOption]="true">
+                    [autoActiveFirstOption]="false">
     <mat-option *ngFor="let option of searchedNames | async"
                 [value]="option">
       {{option}}
