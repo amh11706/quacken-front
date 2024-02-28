@@ -1,23 +1,23 @@
 <span *ngIf="message.from !== ws.user?.name || (message.from === 'Guest' && message.copy !== ws.copy); else you"
       [matMenuTriggerFor]="nameMenu"
-      [class.hasTier]="message.ti !== undefined">
+      [class.hasTier]="message.ti">
   <span [class.friend]="fs.isFriend(message.from)"
         [class.bot]="message.copy === 0"
         [class.admin]="message.admin && message.admin >= 3"
         [class.blocked]="fs.isBlocked(message.from)">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-  <div *ngIf="message.ti !== undefined"
+  <div *ngIf="message.ti"
        [matTooltip]="tierTitles[message.ti] + ' (' + message.sc + ')'"
        class="tier {{tierTitles[message.ti]}}"></div>
 </span>
 
 <ng-template #you>
-  <span [class.hasTier]="message.ti !== undefined">
+  <span [class.hasTier]="message.ti">
     <span class="you"
           [class.admin]="message.admin && message.admin >= 3"
           [matMenuTriggerFor]="youMenu">{{message.from}}</span>
     <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-    <div *ngIf="message.ti !== undefined"
+    <div *ngIf="message.ti"
          [matTooltip]="tierTitles[message.ti] + ' (' + message.sc + ')'"
          class="tier {{tierTitles[message.ti]}}"></div>
   </span>
