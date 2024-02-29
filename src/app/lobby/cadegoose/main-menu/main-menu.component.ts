@@ -95,7 +95,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       this.status.next(m);
       if (!this.ws.connected) return;
       if (m === LobbyStatus.MidMatch && this.myBoat.isMe) return this.es.open$.next(false);
-      else if (m === LobbyStatus.PreMatch) return;
+      else if (m === LobbyStatus.PreMatch) return this.myBoat.isMe = false;
       this.es.open$.next(true);
       this.es.activeTab$.next(0);
     }));
