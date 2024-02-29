@@ -33,6 +33,7 @@ import { MatchesComponent } from './profile/matches/matches.component';
 import { FriendsModule } from '../chat/friends/friends.module';
 import { MapListModule } from '../settings/map-list/map-list.module';
 import { TeamsComponent } from './profile/matches/teams/teams.component';
+import { RankCircleComponent } from '../chat/rank-circle/rank-circle.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { TeamsComponent } from './profile/matches/teams/teams.component';
     FriendsModule,
     MapListModule,
     LetDirective,
+    RankCircleComponent,
   ],
   exports: [EscMenuComponent],
 })

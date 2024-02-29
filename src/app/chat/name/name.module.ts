@@ -4,6 +4,7 @@ import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-m
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { NameComponent } from './name.component';
+import { RankCircleComponent } from '../rank-circle/rank-circle.component';
 
 @NgModule({
   declarations: [NameComponent],
@@ -11,6 +12,7 @@ import { NameComponent } from './name.component';
     CommonModule,
     MatMenuModule,
     MatTooltipModule,
+    RankCircleComponent,
   ],
   exports: [NameComponent],
 })

@@ -1,3 +1,13 @@
+.tier {
+  display: inline-block;
+  margin-left: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border-width: 5px;
+  border-style: solid;
+}
+
 .Jolly {
   border-color: Orange;
 }
@@ -33,3 +43,4 @@ div[class~="2"] {
 div[class~="1"] {
   border-width: 2px;
 }
+

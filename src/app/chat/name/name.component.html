@@ -1,26 +1,23 @@
 <span *ngIf="message.from !== ws.user?.name || (message.from === 'Guest' && message.copy !== ws.copy); else you"
-      [matMenuTriggerFor]="nameMenu"
-      [class.hasTier]="message.ti">
+      [matMenuTriggerFor]="nameMenu">
   <span [class.friend]="fs.isFriend(message.from)"
         [class.bot]="message.copy === 0"
         [class.admin]="message.admin && message.admin >= 3"
         [class.blocked]="fs.isBlocked(message.from)">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-  <div *ngIf="message.ti"
-       [matTooltip]="tierTitles[message.ti] + ' (' + message.sc + ')'"
-       class="tier {{tierTitles[message.ti]}}"></div>
+  <q-rank-circle *ngIf="message.ti"
+                 [tier]="message.ti"
+                 [score]="message.sc || 0"></q-rank-circle>
 </span>
 
 <ng-template #you>
-  <span [class.hasTier]="message.ti">
-    <span class="you"
-          [class.admin]="message.admin && message.admin >= 3"
-          [matMenuTriggerFor]="youMenu">{{message.from}}</span>
-    <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-    <div *ngIf="message.ti"
-         [matTooltip]="tierTitles[message.ti] + ' (' + message.sc + ')'"
-         class="tier {{tierTitles[message.ti]}}"></div>
-  </span>
+  <span class="you"
+        [class.admin]="message.admin && message.admin >= 3"
+        [matMenuTriggerFor]="youMenu">{{message.from}}</span>
+  <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
+  <q-rank-circle *ngIf="message.ti"
+                 [tier]="message.ti"
+                 [score]="message.sc || 0"></q-rank-circle>
 </ng-template>
 
 <ng-template #guest>

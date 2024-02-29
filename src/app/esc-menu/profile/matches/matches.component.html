@@ -64,14 +64,14 @@
             *matCellDef="let element">{{element.createdAtString}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="rank">
+      <ng-container matColumnDef="score">
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef>Rank</th>
         <td mat-cell
-            class="tier {{element.rank > 0 && tierTitles[element.tier]}}"
-            [matTooltip]="element.rank > 0 ? tierTitles[element.tier] || '' : 'Unranked'"
-            *matCellDef="let element">{{element.rank}}</td>
+            *matCellDef="let element">{{element.score || '-'}}<q-rank-circle *ngIf="element.score"
+                         [tier]="element.tier"
+                         [score]="element.score"></q-rank-circle></td>
       </ng-container>
 
       <ng-container matColumnDef="result">

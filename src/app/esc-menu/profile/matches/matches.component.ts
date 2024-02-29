@@ -43,7 +43,7 @@ export class MatchesComponent implements OnInit {
   results = Results;
 
   dataSource = new TableVirtualScrollDataSource<Match>();
-  displayedColumns = ['lobby', 'createdAtString', 'rank', 'result', 'team', 'players', 'view'];
+  displayedColumns = ['lobby', 'createdAtString', 'score', 'result', 'team', 'players', 'view'];
   @ViewChild(MatSort) sort?: MatSort;
   searchTerms: string[] = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];

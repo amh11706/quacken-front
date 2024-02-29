@@ -1,5 +1,3 @@
-@import './tier-colors.scss';
-
 :host {
   position: relative;
 }
@@ -36,21 +34,4 @@ p {
   color: #ddd;
   padding: 0 8px;
   margin: 0;
-}
-
-.hasTier {
-  padding-right: 14px;
-}
-
-.tier {
-  display: inline-block;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-left: 4px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border-width: 5px;
-  border-style: solid;
 }
