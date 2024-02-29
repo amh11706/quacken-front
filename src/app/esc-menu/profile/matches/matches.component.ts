@@ -43,7 +43,7 @@ export class MatchesComponent implements OnInit {
   results = Results;
 
   dataSource = new TableVirtualScrollDataSource<Match>();
-  displayedColumns = ['lobby', 'createdAtString', 'score', 'result', 'team', 'players', 'view'];
+  displayedColumns = ['lobby', 'createdAt', 'score', 'result', 'team', 'players', 'view'];
   @ViewChild(MatSort) sort?: MatSort;
   searchTerms: string[] = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -96,7 +96,7 @@ export class MatchesComponent implements OnInit {
     let newest = { createdAt: 0 } as Match;
     for (const m of matches) {
       if (m.createdAt > newest.createdAt) newest = m;
-      m.createdAtString = dayjs.unix(m.createdAt).format('YYYY-MM-DD HH:mm');
+      m.createdAtString = dayjs.unix(m.createdAt).format('D MMM YYYY HH:mm');
       m.teams = this.parseTeams(m.players);
       this.matches[m.rankArea - 1]?.push(m);
     }
@@ -118,7 +118,7 @@ export class MatchesComponent implements OnInit {
     this.dataSource.data = this.matches[this.stat.group] || [];
     setTimeout(() => {
       if (!this.dataSource.sort) {
-        this.sort?.sort({ id: 'createdAtString', start: 'desc', disableClear: false });
+        this.sort?.sort({ id: 'createdAt', start: 'desc', disableClear: false });
       }
       this.dataSource.sort = this.sort || null;
     });
