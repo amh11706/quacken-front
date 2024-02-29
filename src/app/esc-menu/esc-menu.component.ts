@@ -26,9 +26,7 @@ export class EscMenuComponent {
     public fs: FriendsService,
     public ws: WsService,
     private dialog: MatDialog,
-  ) {
-    this.es.activeTab = 0;
-  }
+  ) { }
 
   logout(): void {
     this.dialog.open(LogoutConfirmComponent, { width: '90%', maxWidth: '300px' });

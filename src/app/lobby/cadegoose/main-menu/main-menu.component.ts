@@ -66,7 +66,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (m.players?.length) this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
       if (this.firstJoin) {
         this.firstJoin = false;
-        this.es.activeTab = 0;
+        this.es.activeTab$.next(0);
       }
       const teamPlayers = this.teamPlayers$.getValue();
       while (teamPlayers.length < m.points.length) teamPlayers.push([]);
@@ -97,13 +97,13 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       if (m === LobbyStatus.MidMatch && this.myBoat.isMe) return this.es.open$.next(false);
       else if (m === LobbyStatus.PreMatch) return;
       this.es.open$.next(true);
-      this.es.activeTab = 0;
+      this.es.activeTab$.next(0);
     }));
     this.subs.add(this.ws.subscribe(Internal.MyBoat, b => {
       if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {
         this.myBoat.isMe = false;
         this.es.open$.next(true);
-        this.es.activeTab = 0;
+        this.es.activeTab$.next(0);
         return;
       }
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
@@ -122,7 +122,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {
         this.es.open$.next(true);
-        this.es.activeTab = 0;
+        this.es.activeTab$.next(0);
         this.es.lobbyTab = 0;
         this.teamPlayers$.next(this.teamPlayers$.getValue());
       }

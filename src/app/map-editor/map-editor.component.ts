@@ -105,7 +105,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
 
   openGuide(): void {
     this.es.open$.next(true);
-    this.es.activeTab = 0;
+    this.es.activeTab$.next(0);
   }
 
   resetUndos = (): void => {

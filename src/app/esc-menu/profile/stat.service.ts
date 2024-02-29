@@ -52,7 +52,7 @@ export class StatService {
     private kbs: KeyBindingService,
   ) {
     this.es.open$.subscribe(open => {
-      if (open && es.activeTab === 1) this.profileTabChange$.next(this.profileTab);
+      if (open && es.activeTab$.getValue() === 1) this.profileTabChange$.next(this.profileTab);
     });
   }
 

@@ -11,7 +11,7 @@ import { WsService } from '../ws/ws.service';
 export class EscMenuService {
   open$ = new BehaviorSubject(false);
   lobbyComponent: any;
-  activeTab = 1;
+  activeTab$ = new BehaviorSubject(0);
   lobbyTab = 0;
   lobbyContext: any;
 
@@ -52,16 +52,16 @@ export class EscMenuService {
   }
 
   private openTab(tab: number) {
-    if (this.open$.getValue() && this.activeTab === tab) {
+    if (this.open$.getValue() && this.activeTab$.getValue() === tab) {
       this.open$.next(false);
       return;
     }
     this.open$.next(true);
-    this.activeTab = tab;
+    this.activeTab$.next(tab);
   }
 
   setLobby(component?: unknown, context?: unknown): void {
-    this.activeTab = -1;
+    this.activeTab$.next(-1);
     this.lobbyComponent = component;
     this.lobbyContext = context;
     if (!this.lobbyComponent) this.open$.next(false);

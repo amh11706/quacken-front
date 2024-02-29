@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { StatService } from '../stat.service';
+import { EscMenuService } from '../../esc-menu.service';
 
 export const TierTitles = [
   'Bronze 1', 'Bronze 2', 'Bronze 3',
@@ -23,9 +24,13 @@ export class LeadersComponent {
 
   constructor(
     public stat: StatService,
+    private esc: EscMenuService,
   ) {
     this.stat.profileTabChange$.subscribe(value => {
       if (value === 3) void this.stat.refreshLeaders();
+    });
+    this.esc.activeTab$.subscribe(value => {
+      if (value === 1 && this.stat.profileTab === 3) void this.stat.refreshLeaders();
     });
   }
 }

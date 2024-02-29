@@ -41,7 +41,8 @@
     </div>
 
     <mat-tab-group id="main-tab"
-                   [(selectedIndex)]="es.activeTab">
+                   (selectedIndexChange)="es.activeTab$.next($event)"
+                   [selectedIndex]="es.activeTab$ | async">
       <mat-tab label="LOBBY"
                [disabled]="!open">
         <mat-tab-group id="sub-tab"
