@@ -1,28 +1,16 @@
-<div class="flex">
-  <span id="searchLabel">Search Map: </span>
-  <input type="text"
-         placeholder="1v1"
-         (keyup.enter)="filter()"
-         (blur)="filter()"
-         [(ngModel)]="search">
-  <button mat-raised-button
-          color="accent"
-          (click)="filter()">Search</button>
-  <button mat-raised-button
-          color="accent"
-          (click)="openFilterWindow()">Filter</button>
-  <mat-form-field>
-    <mat-label>Sort by:</mat-label>
-    <mat-select [(value)]="selectedSortOption"
-                (selectionChange)="sort($event.value)">
-      <mat-option *ngFor="let option of sortList"
-                  [value]="option">{{option}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
-
-<div class="item">
-  <mat-chip-listbox>
+<mat-form-field id="mapSearch"
+                [floatLabel]="'always'">
+  <mat-label>Search ({{(maplist | async)?.length}})</mat-label>
+  <mat-autocomplete #auto="matAutocomplete"
+                    [autoSelectActiveOption]="true"
+                    (optionSelected)="toggleTag($event.option.value)"
+                    [autoActiveFirstOption]="false">
+    <mat-option *ngFor="let option of searchResults | async"
+                [value]="option">
+      {{option}}
+    </mat-option>
+  </mat-autocomplete>
+  <mat-chip-grid #chipList>
     <mat-chip *ngFor="let tag of selectedFilters"
               [removable]="true"
               (removed)="toggleTag(tag)">
@@ -33,15 +21,34 @@
       <ng-template #string>{{tag}}</ng-template>
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
-  </mat-chip-listbox>
-</div>
+    <input #search
+           matInput
+           [matChipInputFor]="chipList"
+           [matAutocomplete]="auto"
+           (blur)="search.value = ''; searchCtrl.setValue('');"
+           placeholder="1v1, practice, etc."
+           [formControl]="searchCtrl">
+  </mat-chip-grid>
+  <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
 
-<div class="item">
+<div class="flex">
   <button mat-raised-button
           color="accent"
           [disabled]="(ss.admin$ | async) === false"
           (click)="selectMap(-1)"
           matTooltip="Random User Map">Random</button>
+  <button mat-raised-button
+          color="accent"
+          (click)="openFilterWindow()">Filter</button>
+  <mat-form-field>
+    <mat-label>Sort by</mat-label>
+    <mat-select [(value)]="selectedSortOption"
+                (selectionChange)="sort($event.value)">
+      <mat-option *ngFor="let option of sortList"
+                  [value]="option">{{option}}</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
 <cdk-virtual-scroll-viewport id="maps"

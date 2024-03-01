@@ -1,14 +1,23 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
+import { debounceTime, map, startWith } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 import { Internal, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../settings.service';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { ServerSettingGroup, Settings } from '../setting/settings';
 import { MapOption } from './map-card/types';
+
+const starRatings = [
+  '4+ Stars',
+  '3+ Stars',
+  '2+ Stars',
+  '1+ Star',
+];
 
 const enum SortOptions {
   AscendingAvgRating = 'Ascending Avg. Rating',
@@ -81,7 +90,7 @@ const MapSizes = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapListComponent implements OnInit, OnDestroy {
-  @ViewChild(CdkVirtualScrollViewport, { static: true }) mapViewport?: CdkVirtualScrollViewport;
+  @ViewChild(CdkVirtualScrollViewport, { static: false }) mapViewport?: CdkVirtualScrollViewport;
   @Input() set visible(v: boolean) {
     if (!v) return;
     const i = this.filteredMapList.findIndex(m => m.id === this.selectedMap?.value);
@@ -93,8 +102,6 @@ export class MapListComponent implements OnInit, OnDestroy {
   }
 
   @Input() rankArea = 2;
-
-  search = '';
   private servermapList: MapOption[] = [];
   private filteredMapList: MapOption[] = [];
   mapHeight = 36;
@@ -116,6 +123,8 @@ export class MapListComponent implements OnInit, OnDestroy {
   private setting: typeof Settings['cadeMap'] | typeof Settings['flagMap'] = Settings.cadeMap;
   private subs = new Subscription();
   selectedMap = this.ss.prefetch(this.setting.group).map;
+  searchCtrl = new FormControl();
+  searchResults?: Observable<string[]>;
 
   constructor(
     private bottomSheet: MatBottomSheet,
@@ -145,11 +154,37 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.initFilters();
     this.maplist.next(this.filteredMapList);
     this.selectedMap = await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']);
+
+    this.searchResults = this.searchCtrl.valueChanges
+      .pipe(
+        startWith(''),
+        debounceTime(300),
+        map(value => this.searchMaps(value)),
+      );
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
+
+  private searchMaps = (search: string): string[] => {
+    const matches: string[] = [];
+    for (const tag of this.tagList) {
+      if (tag.toLowerCase().includes(search.toLowerCase())) matches.push(tag);
+    }
+    for (const star of starRatings) {
+      if (star.toLowerCase().includes(search.toLowerCase())) matches.push(star);
+    }
+    for (const user of this.userList) {
+      if (user.toLowerCase().includes(search.toLowerCase())) matches.push(user);
+    }
+    if (!search) return matches;
+
+    matches.push(...this.filteredMapList.filter(map => {
+      return map.name.toLowerCase().includes(search.toLowerCase());
+    }).map(map => map.name));
+    return matches;
+  };
 
   initGenerated(): void {
     this.servermapList.push({
@@ -227,18 +262,16 @@ export class MapListComponent implements OnInit, OnDestroy {
       group: this.setting.group,
       data: map.username ? `${map.name} (${map.username})` : 'Generated',
     });
+    this.selectedMap.setServerValue(map.id);
     if (id < 0) this.visible = true;
   }
 
-  filter(): void {
-    if (!this.search) this.maplist.next(this.servermapList);
-    const search = new RegExp(this.search, 'i');
+  private filter(): void {
+    if (!this.selectedFilters) this.maplist.next(this.servermapList);
     this.filteredMapList = this.servermapList.filter(map => {
-      const textMatched = search.test(map.name) || search.test(map.username) || map.tags?.some(tag => search.test(tag));
-      if (!textMatched || this.selectedFilters.length === 0) return textMatched;
-
-      const tagMatched = this.selectedFilters.some(filter => {
-        return filter === map.username || +filter <= map.ratingAverage || map.tags?.includes(filter);
+      const tagMatched = this.selectedFilters.every(filter => {
+        return filter === map.name || filter === map.username ||
+         +filter <= map.ratingAverage || map.tags?.includes(filter);
       });
       return tagMatched;
     });
@@ -246,6 +279,9 @@ export class MapListComponent implements OnInit, OnDestroy {
   }
 
   toggleTag(tag: string): void {
+    if (/\d\+/.test(tag)) {
+      tag = tag[0] as string;
+    }
     if (this.selectedFilters.indexOf(tag) !== -1) {
       this.selectedFilters = this.selectedFilters.filter(el => el !== tag);
     } else {
