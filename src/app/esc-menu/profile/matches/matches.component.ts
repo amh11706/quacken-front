@@ -15,10 +15,12 @@ import { Match, TeamPlayer } from '../types';
 import { TierTitles } from '../leaders/leaders.component';
 
 const Results = ['N/A', 'Loss', 'Draw', 'Win'];
+const PlayerCountRegex = /^\d{1,2}$/;
 
 function searchMatch(match: Match, term: string): boolean {
   if (term === 'rated') return match.rank > 0;
   if (term === 'unrated') return match.rank === 0;
+  if (PlayerCountRegex.test(term)) return match.players.length === +term;
 
   if (match.lobby.toLowerCase().indexOf(term) !== -1) return true;
   if (match.createdAtString.toLowerCase().indexOf(term) !== -1) return true;

@@ -14,7 +14,7 @@
     </mat-form-field>
 
     <mat-form-field class="tag-list">
-      <mat-label>Filter</mat-label>
+      <mat-label>Filter ({{dataSource.filteredData.length}})</mat-label>
       <mat-chip-list #chipList>
         <mat-chip *ngFor="let term of searchTerms; let i = index"
                   (removed)="removeSearchTerm(i)"
