@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatInputModule } from '@angular/material/input';
 import { RatingModule } from '../rating/rating.module';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { MapCardComponent } from './map-card/map-card.component';
@@ -41,6 +42,7 @@ import { CanvasModule } from '../../lobby/cadegoose/canvas/canvas.module';
     MatDialogModule,
     MatBottomSheetModule,
     MatListModule,
+    MatInputModule,
     SettingsModule,
     CanvasModule,
     ScrollingModule,

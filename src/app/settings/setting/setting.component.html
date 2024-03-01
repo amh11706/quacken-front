@@ -81,12 +81,3 @@
               [color]="icon.color">{{icon.name}}</mat-icon>
   </mat-checkbox>
 </div>
-
-<div *ngIf="setting.type === 'customMap'"
-     class="setting select">
-  <q-custom-map [settingValue]="settingValue"
-                (save)="save($event)"
-                [setting]="setting"
-                [disabled]="disabled || (setting.admin === true) && (ss.admin$ | async) === false">
-  </q-custom-map>
-</div>

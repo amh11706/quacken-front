@@ -13,12 +13,13 @@ interface BaseSetting {
   readonly name: ServerSettingGroup[SettingGroup];
   readonly advancedComponent?: any;
   readonly trigger?: OutCmd.NextBoat | OutCmd.SpawnSide | OutCmd.ChatCommand;
+  readonly cmd?: OutCmd;
 }
 
 interface ButtonSetting extends BaseSetting {
   readonly type: 'button',
   readonly trigger?: OutCmd.NextBoat | OutCmd.SpawnSide | OutCmd.ChatCommand;
-  readonly data: string;
+  readonly data: string | number;
 }
 
 export interface BoatSetting extends BaseSetting {
@@ -45,14 +46,7 @@ interface CheckboxSetting extends BaseSetting {
   readonly type: 'checkbox',
 }
 
-export interface CustomMapSetting extends BaseSetting {
-  readonly type: 'customMap' | 'tileSet' | 'structureSet',
-  readonly cmd: OutCmd.MapList | OutCmd.CgMapList | OutCmd.TileSetList | OutCmd.StructureSetList,
-  readonly data?: any,
-}
-
-export type SettingInput = ButtonSetting | BoatSetting | SliderSetting | OptionSetting | CheckboxSetting |
-  CustomMapSetting;
+export type SettingInput = ButtonSetting | BoatSetting | SliderSetting | OptionSetting | CheckboxSetting;
 
 export type SettingGroup = keyof ServerSettingGroup;
 
@@ -62,7 +56,7 @@ type ClientSettingGroup = {
   graphics: 'mapScale' | 'speed' | 'water' | 'showFps' | 'maxFps' | 'renderMode',
   controls: 'lockAngle' | 'kbControls' | 'alwaysChat' | 'shiftSpecials' | 'updateLinked',
   sounds: 'soundMaster' | 'soundNotify' | 'soundShip' | 'soundAlert',
-  'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' | 'customMap' | 'hideMoves',
+  'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
   'l/cade': 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'cadePublicMode' | 'cadeMaxPlayers' |
     'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' | 'cadeMap' | 'cadeTeams' | 'cadeShowMoves' | 'cadeRated' | 'fishBoats' | 'allowGuests',
   'l/create': 'createType',
@@ -77,7 +71,7 @@ export type ServerSettingGroup = {
   graphics: 'mapScale' | 'speed' | 'water' | 'showFps' | 'maxFps' | 'renderMode',
   controls: 'lockAngle' | 'kbControls' | 'alwaysChat' | 'shiftSpecials' | 'updateLinked' | 'bindings',
   sounds: 'master' | 'notification' | 'ship' | 'alert',
-  'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'tileSet' | 'structureSet' | 'hotEntry' | 'autoGen' | 'customMap' | 'hideMoves',
+  'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
   'l/cade': 'jobberQuality' | 'turnTime' | 'turns' | 'bots' | 'botDifficulty' | 'publicMode' | 'maxPlayers' | 'spawnDelay' |
     'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'rated' | 'fishBoats' | 'allowGuests',
   'l/create': 'createType',
@@ -219,7 +213,7 @@ export const Settings: SettingList = {
     admin: true, id: 45, group: 'l/cade', name: 'fishBoats', type: 'checkbox', label: 'Fish boat names',
   },
   cadeMap: {
-    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'customMap', label: 'Map', cmd: OutCmd.CgMapList, data: 2,
+    admin: true, id: 18, group: 'l/cade', name: 'map', type: 'button', label: 'Map', cmd: OutCmd.CgMapList, data: 2,
   },
   cadeTeams: {
     admin: true, id: 43, group: 'l/cade', name: 'teams', type: 'slider', label: 'Teams', min: 2, max: 4, step: 1,
@@ -244,12 +238,6 @@ export const Settings: SettingList = {
       'Public', 'Public Application', 'Invite Only',
     ],
   },
-  tileSet: {
-    admin: true, id: 7, group: 'l/quacken', type: 'tileSet', label: 'Tile Set', cmd: OutCmd.TileSetList, name: 'tileSet',
-  },
-  structureSet: {
-    admin: true, id: 8, group: 'l/quacken', type: 'structureSet', label: 'Structure Set', cmd: OutCmd.StructureSetList, name: 'structureSet',
-  },
   hotEntry: {
     admin: true, id: 9, group: 'l/quacken', type: 'checkbox', label: 'Allow join while an entry is in progress', name: 'hotEntry',
   },
@@ -264,9 +252,6 @@ export const Settings: SettingList = {
   },
   alwaysChat: {
     id: 41, group: 'controls', type: 'checkbox', label: 'Always focus chat', name: 'alwaysChat',
-  },
-  customMap: {
-    admin: true, id: 12, group: 'l/quacken', type: 'customMap', label: 'Map', cmd: OutCmd.MapList, name: 'customMap',
   },
   hideMoves: {
     admin: true, id: 13, group: 'l/quacken', type: 'checkbox', label: 'Hide Moves', name: 'hideMoves',
@@ -296,7 +281,7 @@ export const Settings: SettingList = {
   },
 
   flagMap: {
-    admin: true, id: 47, group: 'l/flaggames', name: 'map', type: 'customMap', label: 'Map', cmd: OutCmd.CgMapList, data: 4,
+    admin: true, id: 47, group: 'l/flaggames', name: 'map', type: 'button', label: 'Map', cmd: OutCmd.CgMapList, data: 4,
   },
   flagMaxPlayers: {
     admin: true, id: 48, group: 'l/flaggames', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40, step: 1,

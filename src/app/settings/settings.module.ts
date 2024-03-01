@@ -23,7 +23,6 @@ import { MessageComponent } from './account/message/message.component';
 import { KeyBindingComponent } from './key-binding/key-binding.component';
 import { BinderComponent } from './key-binding/binder/binder.component';
 import { ExitPromptComponent } from './key-binding/exit-prompt/exit-prompt.component';
-import { CustomMapComponent } from './custom-map/custom-map.component';
 import { BotSettingComponent } from './bot-setting/bot-setting.component';
 import { AdvancedComponent } from './advanced/advanced.component';
 import { JobberQualityComponent } from './jobber-quality/jobber-quality.component';
@@ -37,7 +36,6 @@ import { JobberQualityComponent } from './jobber-quality/jobber-quality.componen
     KeyBindingComponent,
     BinderComponent,
     ExitPromptComponent,
-    CustomMapComponent,
     BotSettingComponent,
     AdvancedComponent,
     JobberQualityComponent,

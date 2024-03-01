@@ -12,7 +12,7 @@ import { Lobby } from '../cadegoose/types';
 
 const ownerSettings: SettingName[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
-  'maxPlayers', 'customMap', 'tileSet', 'structureSet', 'autoGen',
+  'maxPlayers', 'autoGen',
 ];
 
 export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy ducks to steal their food and bring it home.';

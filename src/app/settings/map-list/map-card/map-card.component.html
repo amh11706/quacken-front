@@ -45,12 +45,15 @@
        *ngIf="map">
     <mat-card-title class="title">{{generated}}</mat-card-title>
     <mat-card-content>
-      <mat-label class="subtitle">Seed:</mat-label>
-      <input class="seed"
-             (change)="updateSeed($any($event.target).value)"
-             [value]="map.description">
-      <mat-label>Previous seeds:</mat-label>
       <mat-form-field>
+        <mat-label class="subtitle">Seed:</mat-label>
+        <input matInput
+               class="seed"
+               (change)="updateSeed($any($event.target).value)"
+               [value]="map.description">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Previous seeds:</mat-label>
         <mat-select (selectionChange)="updateSeed($event.value)"
                     [disabled]="(ss.admin$ | async) === false">
           <mat-option *ngFor="let seed of seeds"
