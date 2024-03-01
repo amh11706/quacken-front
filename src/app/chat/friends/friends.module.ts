@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -18,7 +17,6 @@ import { PlayerListComponent } from './player-list/player-list.component';
     CommonModule,
     MatIconModule,
     MatExpansionModule,
-    MatMenuModule,
     MatTabsModule,
     MatTooltipModule,
     QdragModule,

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
 import { NameComponent } from './name.component';
 import { RankCircleComponent } from '../rank-circle/rank-circle.component';
 

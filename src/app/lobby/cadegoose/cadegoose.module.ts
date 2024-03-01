@@ -5,7 +5,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LetDirective } from '@ngrx/component';
@@ -13,6 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatMenuModule } from '@angular/material/menu';
 import { MoveInputModule } from '../../boats/move-input/move-input.module';
 import { NameModule } from '../../chat/name/name.module';
 import { SettingsModule } from '../../settings/settings.module';

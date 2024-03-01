@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -42,7 +41,6 @@ import { CompetitionComponent } from './competition/competition.component';
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
-    MatMenuModule,
     MatCardModule,
     MatTooltipModule,
     NgSelectModule,
