@@ -5,7 +5,6 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { MatIconModule } from '@angular/material/icon';
 
@@ -13,6 +12,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
 import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { ChatModule } from '../chat/chat.module';
 import { TwodRenderModule } from '../lobby/cadegoose/twod-render/twod-render.module';

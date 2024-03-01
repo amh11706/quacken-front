@@ -14,8 +14,8 @@ import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-c
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
-import { MatLegacyTooltipModule } from '@angular/material/legacy-tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SettingComponent } from './setting/setting.component';
 import { SettingsComponent } from './settings.component';
 import { AccountComponent } from './account/account.component';
@@ -53,7 +53,7 @@ import { JobberQualityComponent } from './jobber-quality/jobber-quality.componen
     MatCheckboxModule,
     MatButtonModule,
     NgSelectModule,
-    MatLegacyTooltipModule,
+    MatTooltipModule,
     MatTabsModule,
     MatCardModule,
     MatExpansionModule,

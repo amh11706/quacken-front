@@ -34,3 +34,5 @@ $theme: mat.define-dark-theme(
 @include mat.table-theme($theme);
 @include mat.progress-spinner-theme($theme);
 @include mat.checkbox-theme($theme);
+@include mat.radio-theme($theme);
+@include mat.tooltip-theme($theme);

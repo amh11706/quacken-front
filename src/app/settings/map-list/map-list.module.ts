@@ -5,7 +5,6 @@ import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-c
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
@@ -15,6 +14,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
 
 import { LetDirective } from '@ngrx/component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RatingModule } from '../rating/rating.module';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { MapCardComponent } from './map-card/map-card.component';

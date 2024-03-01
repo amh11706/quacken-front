@@ -7,10 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChatModule } from '../chat/chat.module';
 import { ListComponent } from './list.component';
 import { SettingsModule } from '../settings/settings.module';

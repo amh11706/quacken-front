@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TrainingComponent } from './training.component';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { TrainingRoutingModule } from './training-routing.module';

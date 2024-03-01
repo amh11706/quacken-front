@@ -5,8 +5,8 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { LetDirective } from '@ngrx/component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { FlaggamesComponent } from './flaggames.component';
 import { FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';

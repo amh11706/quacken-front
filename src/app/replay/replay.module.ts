@@ -11,8 +11,8 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
 import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SettingsModule } from '../settings/settings.module';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { CadegooseComponent } from './cadegoose/cadegoose.component';

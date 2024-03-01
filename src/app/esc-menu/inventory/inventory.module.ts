@@ -9,8 +9,8 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
-import { MatLegacyTooltipModule } from '@angular/material/legacy-tooltip';
 
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { InventoryComponent } from './inventory.component';
 import { SplitComponent } from './split/split.component';
 
@@ -26,7 +26,7 @@ import { SplitComponent } from './split/split.component';
     MatDialogModule,
     MatButtonModule,
     MatSliderModule,
-    MatLegacyTooltipModule,
+    MatTooltipModule,
   ],
   exports: [InventoryComponent],
 })

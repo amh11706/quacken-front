@@ -9,9 +9,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
 import { MatLegacyInputModule } from '@angular/material/legacy-input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NameSearchComponent } from './name-search/name-search.component';
 import { InputComponent } from './input/input.component';
 import { QdragModule } from '../qdrag/qdrag.module';
