@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 
+import { MatButtonModule } from '@angular/material/button';
 import { QdragModule } from '../../qdrag/qdrag.module';
 import { ChatModule } from '../../chat/chat.module';
 import { SettingsModule } from '../../settings/settings.module';

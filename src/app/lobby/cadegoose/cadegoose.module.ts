@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
@@ -13,6 +11,8 @@ import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-m
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LetDirective } from '@ngrx/component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { MoveInputModule } from '../../boats/move-input/move-input.module';
 import { NameModule } from '../../chat/name/name.module';
 import { SettingsModule } from '../../settings/settings.module';

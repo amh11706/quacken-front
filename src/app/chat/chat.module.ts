@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -12,6 +11,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 import { MatLegacyInputModule } from '@angular/material/legacy-input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 import { NameSearchComponent } from './name-search/name-search.component';
 import { InputComponent } from './input/input.component';
 import { QdragModule } from '../qdrag/qdrag.module';

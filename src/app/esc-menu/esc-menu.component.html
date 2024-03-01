@@ -50,7 +50,9 @@
                        mat-align-tabs="center">
           <mat-tab label="Lobby">
             <mat-card>
-              <q-player-list [players]="(fs.lobby$ | async) || []"></q-player-list>
+              <mat-card-content>
+                <q-player-list [players]="(fs.lobby$ | async) || []"></q-player-list>
+              </mat-card-content>
             </mat-card>
             <ng-container *ngComponentOutlet="es.lobbyComponent"></ng-container>
           </mat-tab>

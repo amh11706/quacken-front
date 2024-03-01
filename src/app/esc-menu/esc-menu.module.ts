@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,8 +10,8 @@ import { MatLegacySelectModule as MatSelectModule } from '@angular/material/lega
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/material/legacy-progress-bar';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
@@ -21,6 +20,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { LetDirective } from '@ngrx/component';
 import { MatLegacyChipsModule } from '@angular/material/legacy-chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 import { ProfileComponent } from './profile/profile.component';
 import { EscMenuComponent } from './esc-menu.component';
 import { InventoryModule } from './inventory/inventory.module';

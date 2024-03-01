@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 
 import { LetDirective } from '@ngrx/component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { ChatModule } from '../../chat/chat.module';
 import { NameModule } from '../../chat/name/name.module';
 import { QdragModule } from '../../qdrag/qdrag.module';

@@ -7,15 +7,15 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
 import { SettingComponent } from './setting/setting.component';
 import { SettingsComponent } from './settings.component';
 import { AccountComponent } from './account/account.component';

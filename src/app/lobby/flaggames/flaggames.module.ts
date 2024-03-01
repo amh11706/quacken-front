@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
 import { MatIconModule } from '@angular/material/icon';
 import { LetDirective } from '@ngrx/component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { FlaggamesComponent } from './flaggames.component';
 import { FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';

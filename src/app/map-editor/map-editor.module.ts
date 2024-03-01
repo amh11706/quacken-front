@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
@@ -13,6 +12,7 @@ import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/m
 import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { ChatModule } from '../chat/chat.module';
 import { TwodRenderModule } from '../lobby/cadegoose/twod-render/twod-render.module';

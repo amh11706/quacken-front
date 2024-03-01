@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips';
@@ -15,6 +13,8 @@ import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-l
 
 import { LetDirective } from '@ngrx/component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { RatingModule } from '../rating/rating.module';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { MapCardComponent } from './map-card/map-card.component';
