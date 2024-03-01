@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { MatIconModule } from '@angular/material/icon';
 
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -50,7 +49,6 @@ import { JobberQualityComponent } from './jobber-quality/jobber-quality.componen
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
-    NgSelectModule,
     MatTooltipModule,
     MatTabsModule,
     MatCardModule,

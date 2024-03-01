@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { MatIconModule } from '@angular/material/icon';
-
-import { NgSelectModule } from '@ng-select/ng-select';
-
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -43,7 +39,6 @@ import { CompetitionComponent } from './competition/competition.component';
     MatCardModule,
     MatDialogModule,
     MatTooltipModule,
-    NgSelectModule,
     ChatModule,
     SettingsModule,
     FriendsModule,

@@ -3,12 +3,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { NgSelectModule } from '@ng-select/ng-select';
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
 import { NameSearchComponent } from './name-search/name-search.component';
 import { InputComponent } from './input/input.component';
 import { QdragModule } from '../qdrag/qdrag.module';
@@ -26,7 +26,7 @@ import { NameModule } from './name/name.module';
     MatAutocompleteModule,
     MatTooltipModule,
     MatInputModule,
-    NgSelectModule,
+    MatSelectModule,
     NameModule,
     QdragModule,
     ScrollingModule,

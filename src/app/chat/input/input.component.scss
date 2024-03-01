@@ -23,42 +23,6 @@ div.col4 {
   transition: 0.3s;
 }
 
-::ng-deep .ng-dropdown-panel {
-  width: auto !important;
-}
-
-::ng-deep input {
-  background-color: #eee;
-}
-
-::ng-deep q-input {
-  .ng-select {
-    padding-bottom: 0;
-  }
-
-  .ng-select .ng-select-container {
-    min-height: 0;
-  }
-
-  .ng-select .ng-select-container .ng-value-container {
-    border-top: none;
-    padding: 0;
-  }
-
-  .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
-    bottom: 7px;
-  }
-
-  .ng-select-container {
-    height: 23px;
-  }
-}
-
-::ng-deep .ng-select .ng-value-container {
-  margin: auto;
-  text-transform: capitalize !important;
-}
-
 q-name-search {
   width: 100px;
 }
@@ -77,20 +41,5 @@ button#send {
 
 .textinput:focus {
   background-color: #eee;
-}
-
-#help {
-  min-width: 25px !important;
-  .mat-icon {
-    font-size: 21px;
-    color: yellow;
-  }
-}
-
-#options {
-  line-height: 15px;
-}
-
-::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
-  text-transform: capitalize !important;
+  border: 1px solid #aaa;
 }
