@@ -32,12 +32,16 @@
             <mat-menu #jobbers="matMenu">
               <mat-card class="jobberSelect"
                         (click)="$event.stopPropagation()">
-                <span>Your Jobber Quality ({{myJobbers}}%)</span><br>
-                <mat-slider [value]="myJobbers"
-                            (valueChange)="updateJobbers($event)"
-                            (input)="myJobbers = $event.value || 0"
-                            max="100"
-                            step="5"></mat-slider>
+                <mat-card-content>
+                  <span>Your Jobber Quality ({{slider.value}}%)</span><br>
+                  <mat-slider max="100"
+                              step="5">
+                    <input matSliderThumb
+                           [(value)]="myJobbers"
+                           (valueChange)="updateJobbers($event)"
+                           #slider>
+                  </mat-slider>
+                </mat-card-content>
               </mat-card>
             </mat-menu>
             <ng-template #boatImage>

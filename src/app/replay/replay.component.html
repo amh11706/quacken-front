@@ -30,7 +30,10 @@
   </button>
 
   <mat-slider [min]="0"
-              [max]="messages.length-1"
-              [value]="tick"
-              (input)="playTo($event.value || 0)"></mat-slider>
+              [max]="messages.length-1">
+    <input matSliderThumb
+           [value]="tick"
+           (input)="playTo(slider.valueAsNumber)"
+           #slider>
+  </mat-slider>
 </div>

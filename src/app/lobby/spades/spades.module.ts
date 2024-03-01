@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatLegacySliderModule as MatSliderModule } from '@angular/material/legacy-slider';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatSliderModule } from '@angular/material/slider';
 import { ChatModule } from '../../chat/chat.module';
 
 import { SpadesComponent } from './spades.component';

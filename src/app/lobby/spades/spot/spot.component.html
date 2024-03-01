@@ -28,7 +28,7 @@
 
     <span *ngIf="lobby.playing && spot.tricks !== -1"
           [class.busted]="spot.bid <= 0 && spot.tricks">
-      {{spot.tricks}} / {{spot.bid === -2 ? 'nil (blind)' : spot.bid  || 'nil'}}
+      {{spot.tricks}} / {{spot.bid === -2 ? 'nil (blind)' : spot.bid || 'nil'}}
     </span>
 
     <ng-container *ngIf="spot.sId === ws.sId && lobby.bidding === ws.sId">
@@ -43,9 +43,11 @@
         <button mat-raised-button
                 (click)="bid(spot.bid)">Bid
           {{spot.bid || 'nil'}}</button><br>
-        <mat-slider max="13"
-                    [value]="spot.bid"
-                    (input)="spot.bid = $event.value || 0; spot.tricks = -1">
+        <mat-slider max="13">
+          <input matSliderThumb
+                 [(ngModel)]="spot.bid"
+                 (input)="spot.tricks = -1"
+                 #slider>
         </mat-slider>
       </ng-template>
     </ng-container>

@@ -6,26 +6,30 @@
 
 <div *ngIf="!advanced; else advancedSliders"
      class="setting">
-  <span class="label">{{JobberSetting.label}} ({{setting.value}})</span>
+  <span class="label">{{JobberSetting.label}} ({{slider.value}})</span>
   <mat-slider [min]="JobberSetting.min"
               [max]="100"
+              [color]="'accent'"
               [step]="JobberSetting.step"
-              [value]="setting.value"
-              [disabled]="JobberSetting.admin && (ss.admin$ | async) === false"
-              (input)="setting.value=$event.value || 0">
+              [disabled]="JobberSetting.admin && (ss.admin$ | async) === false">
+    <input matSliderThumb
+           [(ngModel)]="setting.value"
+           #slider>
   </mat-slider>
 </div>
 
 <ng-template #advancedSliders>
   <div *ngFor="let slider of sliders"
        class="setting">
-    <span class="label">{{slider}} ({{setting.data[slider] > 100 ? 'Unlimited' : setting.data[slider]}})</span>
+    <span class="label">{{slider}} ({{sliderInput.valueAsNumber > 100 ? 'Unlimited' : sliderInput.value}})</span>
     <mat-slider [min]="0"
                 [max]="105"
+                [color]="'accent'"
                 [step]="5"
-                [value]="setting.data[slider]"
-                [disabled]="JobberSetting.admin && (ss.admin$ | async) === false"
-                (input)="setting.data[slider]=$event.value || 0">
+                [disabled]="JobberSetting.admin && (ss.admin$ | async) === false">
+      <input matSliderThumb
+             [(ngModel)]="setting.data[slider]"
+             #sliderInput>
     </mat-slider>
   </div>
 </ng-template>

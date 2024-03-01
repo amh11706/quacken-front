@@ -49,14 +49,17 @@
 
 <div *ngIf="setting.type === 'slider'"
      class="setting slider">
-  <span class="label">{{setting.label}} ({{setting.stepLabels?.[settingValue.value] ||
-    settingValue.value}})</span>
+  <span class="label">{{setting.label}} ({{setting.stepLabels?.[slider.valueAsNumber] ||
+    slider.value}})</span>
   <mat-slider [min]="setting.min"
               [max]="setting.max"
               [step]="setting.step"
-              [value]="settingValue.stream | async"
-              [disabled]="disabled || setting.admin && (ss.admin$ | async) === false"
-              (input)="save($event.value || 0)">
+              [color]="'accent'"
+              [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
+    <input matSliderThumb
+           [value]="settingValue.stream | async"
+           (valueChange)="save($event)"
+           #slider>
   </mat-slider>
   <mat-icon *ngIf="setting.advancedComponent"
             matTooltip="Advanced"
@@ -70,11 +73,11 @@
                 (change)="save(+$event.checked)"
                 [class.nowrap]="settingValue.data?.icon"
                 [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
-      <span class="checkbox-text">{{setting.label}}</span>&nbsp;
-      <mat-icon *ngIf="settingValue.data?.icon as icon"
-                [matTooltip]="icon.text"
-                [matTooltipPosition]="'above'"
-                [color]="icon.color">{{icon.name}}</mat-icon>
+    <span class="checkbox-text">{{setting.label}}</span>&nbsp;
+    <mat-icon *ngIf="settingValue.data?.icon as icon"
+              [matTooltip]="icon.text"
+              [matTooltipPosition]="'above'"
+              [color]="icon.color">{{icon.name}}</mat-icon>
   </mat-checkbox>
 </div>
 

@@ -1,10 +1,11 @@
 <h1 mat-dialog-title>{{data.n}}</h1>
 <div mat-dialog-content>
-  <p>New stack size: {{quantity}}</p>
+  <p>New stack size: {{slider.value}}</p>
   <mat-slider cdkFocusInitial
-              [value]="quantity"
-              (input)="quantity=$event.value || quantity"
               [max]="data.q-1">
+    <input matSliderThumb
+           [(ngModel)]="quantity"
+           #slider>
   </mat-slider>
 </div>
 <div mat-dialog-actions>
