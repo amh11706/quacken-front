@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -40,7 +39,6 @@ import { CompetitionComponent } from './competition/competition.component';
     FormsModule,
     MatButtonModule,
     MatIconModule,
-    MatSelectModule,
     MatCardModule,
     MatTooltipModule,
     NgSelectModule,

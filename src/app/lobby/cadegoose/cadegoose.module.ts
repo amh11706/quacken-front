@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { LetDirective } from '@ngrx/component';
@@ -13,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatInputModule } from '@angular/material/input';
 import { MoveInputModule } from '../../boats/move-input/move-input.module';
 import { NameModule } from '../../chat/name/name.module';
 import { SettingsModule } from '../../settings/settings.module';
@@ -49,7 +48,6 @@ import { ManeuverSourceModule } from '../../boats/maneuver-source/maneuver-sourc
     MatExpansionModule,
     MatSliderModule,
     MatButtonToggleModule,
-    MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
     QdragModule,

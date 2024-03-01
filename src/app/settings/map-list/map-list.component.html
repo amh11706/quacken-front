@@ -22,9 +22,8 @@
 </div>
 
 <div class="item">
-  <mat-chip-list>
+  <mat-chip-listbox>
     <mat-chip *ngFor="let tag of selectedFilters"
-              [selectable]="false"
               [removable]="true"
               (removed)="toggleTag(tag)">
       <ng-container *ngIf="+tag else string">
@@ -34,7 +33,7 @@
       <ng-template #string>{{tag}}</ng-template>
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
-  </mat-chip-list>
+  </mat-chip-listbox>
 </div>
 
 <div class="item">

@@ -2,12 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
-import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/material/legacy-progress-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -16,11 +12,15 @@ import { TableVirtualScrollModule } from 'ng-table-virtual-scroll';
 import { MatSortModule } from '@angular/material/sort';
 
 import { LetDirective } from '@ngrx/component';
-import { MatLegacyChipsModule } from '@angular/material/legacy-chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ProfileComponent } from './profile/profile.component';
 import { EscMenuComponent } from './esc-menu.component';
 import { InventoryModule } from './inventory/inventory.module';
@@ -60,7 +60,7 @@ import { RankCircleComponent } from '../chat/rank-circle/rank-circle.component';
     MatTooltipModule,
     MatExpansionModule,
     MatCardModule,
-    MatLegacyChipsModule,
+    MatChipsModule,
     MatTableModule,
     ScrollingModule,
     TableVirtualScrollModule,

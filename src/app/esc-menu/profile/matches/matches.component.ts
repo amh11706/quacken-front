@@ -4,9 +4,9 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { MatSort } from '@angular/material/sort';
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatLegacyChipInputEvent } from '@angular/material/legacy-chips';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { OutCmd } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
 import { StatService } from '../stat.service';
@@ -146,7 +146,7 @@ export class MatchesComponent implements OnInit {
     return this.teamImages[team].title;
   }
 
-  addSearchTerm(event: MatLegacyChipInputEvent): void {
+  addSearchTerm(event: MatChipInputEvent): void {
     const value = (event.value || '').trim().toLowerCase();
     if (value) {
       this.searchTerms.push(value);

@@ -1,33 +1,38 @@
 <div class="flex">
-    <div class="dismiss">
-        <button mat-icon-button color="accent" (click)="filterRef.dismiss()">
-            <mat-icon>close</mat-icon>
-          </button>
-    </div>
-    <div>
-        Ratings:
-        <mat-chip-list class="star">
-            <mat-chip #chipList *ngFor="let rating of [4,3,2,1]" 
+  <div class="dismiss">
+    <button mat-icon-button
+            color="accent"
+            (click)="filterRef.dismiss()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div>
+    Ratings:
+    <mat-chip-listbox class="star">
+      <mat-chip #chipList
+                *ngFor="let rating of [4,3,2,1]"
                 [removable]="false"
                 (click)="onClick(rating.toString())">
-                <q-rating [rating]="rating"
-                          [forTags]="true"></q-rating>
-            </mat-chip>
-        </mat-chip-list>
-        <mat-divider class="divider"></mat-divider>
-            Tags:
-            <mat-chip-list>
-                <mat-chip #chipList *ngFor="let tag of data.tagList" 
-                    [removable]="false"
-                    (click)="onClick(tag)">{{tag}}</mat-chip>
-            </mat-chip-list>
-        <mat-divider class="divider"></mat-divider>
-    
-        Creators:
-        <mat-chip-list>
-            <mat-chip #chipList *ngFor="let name of data.userList"
+        <q-rating [rating]="rating"
+                  [forTags]="true"></q-rating>
+      </mat-chip>
+    </mat-chip-listbox>
+    <mat-divider class="divider"></mat-divider>
+    Tags:
+    <mat-chip-listbox>
+      <mat-chip #chipList
+                *ngFor="let tag of data.tagList"
+                [removable]="false"
+                (click)="onClick(tag)">{{tag}}</mat-chip>
+    </mat-chip-listbox>
+    <mat-divider class="divider"></mat-divider>
+
+    Creators:
+    <mat-chip-listbox>
+      <mat-chip #chipList
+                *ngFor="let name of data.userList"
                 [removable]="false"
                 (click)="onClick(name)">{{name}}</mat-chip>
-        </mat-chip-list>
-    </div>
+    </mat-chip-listbox>
+  </div>
 </div>

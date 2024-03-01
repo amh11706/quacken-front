@@ -1,9 +1,9 @@
 <mat-form-field class="tag-list">
   <mat-label>Tags:</mat-label>
-  <mat-chip-list #chipList aria-label="Tag selection">
+  <mat-chip-grid #chipList aria-label="Tag selection">
     <mat-chip
       *ngFor="let tag of tags"
-      [selectable]="selectable"
+      [disabled]="!selectable"
       [removable]="removable"
       (removed)="remove(tag)">
       {{tag}}
@@ -16,7 +16,7 @@
       [matChipInputFor]="chipList"
       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
       (matChipInputTokenEnd)="add($event)">
-  </mat-chip-list>
+  </mat-chip-grid>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
     <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
       {{tag}}

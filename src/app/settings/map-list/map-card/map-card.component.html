@@ -22,11 +22,11 @@
                     [count]="map.ratingCount"></q-rating>
         </div>
         <div class="subitem">
-          <mat-chip-list>
+          <mat-chip-listbox>
             <mat-chip #chipList
                       *ngFor="let option of map.tags"
                       [removable]="false">{{option}}</mat-chip>
-          </mat-chip-list>
+          </mat-chip-listbox>
         </div>
       </mat-card-content>
       <mat-card-actions class="flex-subitem2">
@@ -44,11 +44,11 @@
   <div class="flex-item2"
        *ngIf="map">
     <mat-card-title class="title">{{generated}}</mat-card-title>
-    <mat-label class="subtitle">Seed:</mat-label>
-    <input class="seed"
-           (change)="updateSeed($any($event.target).value)"
-           [value]="map.description">
-    <div class="flex-generated">
+    <mat-card-content>
+      <mat-label class="subtitle">Seed:</mat-label>
+      <input class="seed"
+             (change)="updateSeed($any($event.target).value)"
+             [value]="map.description">
       <mat-label>Previous seeds:</mat-label>
       <mat-form-field>
         <mat-select (selectionChange)="updateSeed($event.value)"
@@ -57,7 +57,7 @@
                       [value]="seed">{{seed}}</mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
+    </mat-card-content>
     <mat-card-actions class="flex-subitem2">
       <button mat-raised-button
               color="accent"

@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { toBlob } from 'html-to-image';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PenaltySummary } from '../types';
 
 export const Penalties = [

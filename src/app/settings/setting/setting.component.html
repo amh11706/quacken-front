@@ -23,7 +23,7 @@
 
 <div *ngIf="setting.type === 'option'"
      class="setting select">
-  <mat-form-field>
+  <mat-form-field [appearance]="'outline'">
     <mat-label>{{setting.label}}</mat-label>
     <mat-select [value]="settingValue.stream | async"
                 (selectionChange)="save($event.value)"

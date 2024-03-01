@@ -2,7 +2,8 @@
   <q-name-search [value]="stat.target"
                  (valueChange)="fetchMatches($event)"></q-name-search>
   <div>
-    <mat-form-field>
+    <mat-form-field class="gamemode">
+      <mat-label>Mode</mat-label>
       <mat-select [(value)]="stat.group"
                   (valueChange)="stat.changeGroup(); updateDataSource()"
                   placeholder="Category">
@@ -15,7 +16,7 @@
 
     <mat-form-field class="tag-list">
       <mat-label>Filter ({{dataSource.filteredData.length}})</mat-label>
-      <mat-chip-list #chipList>
+      <mat-chip-grid #chipList>
         <mat-chip *ngFor="let term of searchTerms; let i = index"
                   (removed)="removeSearchTerm(i)"
                   [removable]="true">
@@ -28,7 +29,7 @@
                [matChipInputAddOnBlur]="true"
                (matChipInputTokenEnd)="addSearchTerm($event)"
                (keyup)="applyFilter($any($event.target).value)">
-      </mat-chip-list>
+      </mat-chip-grid>
     </mat-form-field>
   </div>
 
