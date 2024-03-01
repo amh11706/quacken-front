@@ -1,45 +1,42 @@
 :host {
-    text-align: center;
-    position: relative;
+  text-align: center;
+  position: relative;
 }
 
 mat-card-actions {
-    text-align: left;
+  text-align: left;
 }
 
 q-setting {
-    display: inline-block;
-    margin-right: 16px;
+  display: inline-block;
+  margin-right: 16px;
 }
 
 #defaults {
-    float: right;
+  float: right;
 }
 
 table {
-    width: 100%;
+  width: 100%;
 }
 
 th,
 td {
-    padding: 8px 16px;
-    border: 1px solid grey;
+  padding: 8px 16px;
+  border: 1px solid grey;
 }
 
-.mat-icon-button {
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
-
-    mat-icon {
-        font-size: 18px;
-    }
+.key-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
 }
 
 ::ng-deep .mat-menu-panel {
-    max-width: none;
+  max-width: none;
 }
 
 .popup {
-    color: #eee;
+  color: #eee;
 }

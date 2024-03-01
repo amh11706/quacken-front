@@ -63,12 +63,16 @@
     <th>Secondary</th>
   </tr>
   <tr *ngFor="let action of actions[group]">
-    <td>{{action.title}} <button *ngIf="action.links"
-              mat-icon-button
-              [matMenuTriggerFor]="appMenu"
-              [matMenuTriggerData]="{ links: action.links }">
-        <mat-icon>link</mat-icon>
-      </button></td>
+    <td>
+      <div class="key-action">
+        {{action.title}}<button *ngIf="action.links"
+                mat-icon-button
+                [matMenuTriggerFor]="appMenu"
+                [matMenuTriggerData]="{ links: action.links }">
+          <mat-icon>link</mat-icon>
+        </button>
+      </div>
+    </td>
     <td>
       <q-binder [binding]="action"
                 [takenKeys]="takenKeys"
