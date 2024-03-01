@@ -1,4 +1,6 @@
 <mat-tab-group [(selectedIndex)]="stat.profileTab"
+               [mat-stretch-tabs]="false"
+               mat-align-tabs="center"
                (animationDone)="stat.emitTab()">
   <mat-tab label="Profile">
     <div id="stats">

@@ -41,11 +41,13 @@
     </div>
 
     <mat-tab-group id="main-tab"
+                   [mat-stretch-tabs]="false"
                    (selectedIndexChange)="es.activeTab$.next($event)"
                    [selectedIndex]="es.activeTab$ | async">
       <mat-tab label="LOBBY"
                [disabled]="!open">
         <mat-tab-group id="sub-tab"
+                       [mat-stretch-tabs]="false"
                        [(selectedIndex)]="es.lobbyTab"
                        mat-align-tabs="center">
           <mat-tab label="Lobby">
