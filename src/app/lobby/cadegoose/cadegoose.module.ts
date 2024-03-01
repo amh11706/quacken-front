@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
@@ -45,8 +43,6 @@ import { ManeuverSourceModule } from '../../boats/maneuver-source/maneuver-sourc
     CommonModule,
     FormsModule,
     MatButtonModule,
-    MatRadioModule,
-    MatCheckboxModule,
     MatCardModule,
     MatIconModule,
     MatTooltipModule,

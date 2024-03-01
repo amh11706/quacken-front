@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Renderer2, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -27,7 +27,10 @@ const joinMessage = 'Match replay: Use the replay controls to see a previous mat
 })
 export class ReplayComponent implements OnInit, OnDestroy {
   @ViewChild(LobbyWrapperComponent, { static: true }) private lobbyWrapper?: LobbyWrapperComponent;
-  animationPlayState = 'paused';
+  set animationPlayState(v: string) {
+    this.renderer.setStyle(this.el.nativeElement, '--playstate', v);
+  }
+
   tickInterval = 0;
   messages: InMessage[][] = [];
   private sub = new Subscription();
@@ -48,6 +51,8 @@ export class ReplayComponent implements OnInit, OnDestroy {
     private fs: FriendsService,
     private route: ActivatedRoute,
     private kbs: KeyBindingService,
+    private renderer: Renderer2,
+    private el: ElementRef,
   ) { }
 
   ngOnInit(): void {

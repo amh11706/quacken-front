@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Tween } from '@tweenjs/tween.js';
 import { WsService } from '../../../../ws/ws.service';
 import { Boat } from '../../../../lobby/quacken/boats/boat';
@@ -35,7 +35,20 @@ const CannonSounds: Record<number, Sounds> = {
 })
 export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   @Input() showIsland = false;
-  @Input() speed = 15;
+  protected _speed = 15;
+  @Input() set speed(v: number) {
+    this._speed = v;
+    this.renderer.setStyle(
+      this.el.nativeElement,
+      '--speed',
+      10 / v,
+    );
+  }
+
+  get speed(): number {
+    return this._speed;
+  }
+
   @Input() fishBoats = 0;
   @Input() set hoveredTeam(v: number) {
     this._hoveredTeam = v;
@@ -71,7 +84,12 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     }
   };
 
-  constructor(ws: WsService, sound: SoundService, private image: ImageService) {
+  constructor(
+    ws: WsService, sound: SoundService,
+     private image: ImageService,
+     private renderer: Renderer2,
+      private el: ElementRef,
+  ) {
     super(ws, sound);
     this.blockRender = false;
   }

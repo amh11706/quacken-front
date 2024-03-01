@@ -1,7 +1,7 @@
 <div #frame
      class="noselect"
      id="background"
-     oncontextmenu="event.preventDefault();">
+     (contextmenu)="$event.preventDefault()">
      <!-- three.js canvas goes here -->
 </div>
 <div #fps

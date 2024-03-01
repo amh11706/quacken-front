@@ -44,9 +44,9 @@ export class MoveSourceComponent implements OnDestroy {
   }
 
   drag(move: number): void {
-    this.dragContext.move = move;
-    this.dragContext.source = 8;
     this.dragContext.type = move === 6 ? 'shot' : 'move';
+    this.dragContext.move = move === 6 ? 1 : move;
+    this.dragContext.source = -1;
   }
 
   changeWantMove(): void {

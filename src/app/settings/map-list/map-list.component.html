@@ -11,7 +11,7 @@
   <button mat-raised-button
           color="accent"
           (click)="openFilterWindow()">Filter</button>
-  <mat-form-field style="margin-top: 15px;">
+  <mat-form-field>
     <mat-label>Sort by:</mat-label>
     <mat-select [(value)]="selectedSortOption"
                 (selectionChange)="sort($event.value)">

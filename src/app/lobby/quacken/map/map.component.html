@@ -2,7 +2,7 @@
      class="noselect"
      id="background"
      (wheel)="scroll($event)"
-     oncontextmenu="event.preventDefault();">
+     (contextmenu)="$event.preventDefault()">
     <!-- mapframe receives the offset transform, map receives the rotate transform.
  	This allows them to be altered independent of each other -->
     <div id="mapcenter">

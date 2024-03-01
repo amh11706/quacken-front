@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { MatLegacyCheckboxModule as MatCheckboxModule } from '@angular/material/legacy-checkbox';
-import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { MatLegacyTooltipModule as MatTooltipModule } from '@angular/material/legacy-tooltip';
 
@@ -29,8 +27,6 @@ import { MapEditorModule } from '../../map-editor/map-editor.module';
     TwodRenderModule,
     ThreedRenderModule,
     MatButtonModule,
-    MatRadioModule,
-    MatCheckboxModule,
     MatCardModule,
     MatTooltipModule,
     QdragModule,

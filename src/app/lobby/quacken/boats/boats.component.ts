@@ -41,7 +41,15 @@ export class BoatsComponent implements OnInit, OnDestroy {
   protected step = -1;
   protected turn?: Turn;
 
-  @Input() speed = 10;
+  protected _speed = 15;
+  @Input() set speed(v: number) {
+    this._speed = v;
+  }
+
+  get speed(): number {
+    return this._speed;
+  }
+
   @Input() map?: HTMLElement;
   @Input() getX = (p: { x: number, y: number }): number => (p.x) * 50;
   @Input() getY = (p: { x: number, y: number }): number => (p.y) * 50;

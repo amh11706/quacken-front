@@ -3,6 +3,28 @@ export interface Note {
   points: string[];
 }
 
+/* Done but not released:
+'Users can only play in one rated match at a time.',
+'Playing in the same rated match twice is no longer allowed.',
+'Send rank update to client on match end.',
+'Filter matches by player count by entering a number.',
+*/
+
+/* In progress:
+'show team damage setting.',
+*/
+
+/* Planned:
+'1v1 queue.',
+'1v1 map generation.',
+'You can now add notes to a replay.',
+'emoji picker for name in user settings.',
+'Map creators can now see a list of matches using their map. Viewable from the map editor.',
+'New "Map Browser" page to view highlighted maps and creators.',
+'Added a way to delete maps.',
+'Added sort by popularity to the map browser.',
+*/
+
 export const Notes: Note[] = [
   {
     title: 'Release 23 February 2024',
@@ -10,7 +32,6 @@ export const Notes: Note[] = [
       'Players can now pause the game for up to 2 minutes per game per player.',
       'You can vote to end the game early from the pause screen.',
       'Disconnects automatically pause the game.',
-      // 'You can now add notes to a replay.',
       'You can no longer have bots in a rated game if any player is above 125 rating.',
       'Op command is now a toggle. You don\'t have to specify true/false.',
       'You can now click the scores to toggle between normal and extra stats.',
@@ -44,10 +65,6 @@ export const Notes: Note[] = [
     points: [
       'Match history reworked; It now shows results and team info.',
       'Profile page now includes w/l last 30 days and vs you (if it\'s not your profile).',
-      // 'Map creators can now see a list of matches using their map. Viewable from the map editor.',
-      // 'New "Map Browser" page to view highlighted maps and creators.',
-      // 'Added a way to delete maps.',
-      // 'Added sort by popularity to the map browser.',
       'Leaderboards now only show players who have played in the last 30 days.',
       'New setting to show the moves of boats on your team.',
       'Added a bunch of new statistics visible during a match. Shift + Tab to show (if enabled).',

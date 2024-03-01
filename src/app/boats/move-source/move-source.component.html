@@ -1,24 +1,22 @@
-<mat-checkbox class="moveCheck"
-              [(ngModel)]="auto"
-              matTooltip="Auto"
-              [matTooltipShowDelay]="750"
-              (change)="changeWantMove()">
-</mat-checkbox>
 <div class="cannons">
+  <mat-checkbox class="moveCheck"
+                [(ngModel)]="auto"
+                matTooltip="Auto"
+                [matTooltipShowDelay]="750"
+                (change)="changeWantMove()">
+  </mat-checkbox>
   <div class="bombempty"
        [draggable]="unusedTokens.shots > 0"
        (dragstart)="drag(6)"
-       [class.bombmove]="unusedTokens.shots > 0"></div><br>
+       [class.bombmove]="unusedTokens.shots > 0"></div>
   <span class="cannontext">{{unusedTokens.shots}}X</span>
 </div>
 <mat-radio-group [(ngModel)]="wantMove"
                  (change)="changeWantMove()">
-  <div>
-    <mat-radio-button [style.paddingLeft]="'10px'"
-                      [value]="1"
+  <div class="moveRadio">
+    <mat-radio-button [value]="1"
                       [disabled]="auto">
     </mat-radio-button>
-    <br>
     <div class="move move1"
          [matTooltipShowDelay]="750"
          [matTooltip]="tokenStrings[0] || ''">
@@ -28,15 +26,12 @@
            src="./assets/images/arrow1.png"
            (dragstart)="drag(1)">
     </div>
-    <br>
     {{unusedTokens.moves[0]}}X
   </div>
-  <div>
-    <mat-radio-button [style.paddingLeft]="'10px'"
-                      [value]="2"
+  <div class="moveRadio">
+    <mat-radio-button [value]="2"
                       [disabled]="auto">
     </mat-radio-button>
-    <br>
     <div class="move move2"
          [matTooltipShowDelay]="750"
          [matTooltip]="tokenStrings[1] || ''">
@@ -46,15 +41,12 @@
            src="./assets/images/arrow2.png"
            (dragstart)="drag(2)">
     </div>
-    <br>
     {{unusedTokens.moves[1]}}X
   </div>
-  <div>
-    <mat-radio-button [style.paddingLeft]="'10px'"
-                      [value]="3"
+  <div class="moveRadio">
+    <mat-radio-button [value]="3"
                       [disabled]="auto">
     </mat-radio-button>
-    <br>
     <div class="move move3"
          [matTooltipShowDelay]="750"
          [matTooltip]="tokenStrings[2] || ''">
@@ -64,7 +56,6 @@
            src="./assets/images/arrow3.png"
            (dragstart)="drag(3)">
     </div>
-    <br>
     {{unusedTokens.moves[2]}}X
   </div>
 </mat-radio-group>

@@ -2,7 +2,7 @@
      class="noselect"
      id="background"
      (wheel)="scroll($event)"
-     oncontextmenu="event.preventDefault();"
+     (contextmenu)="$event.preventDefault()"
      [style.backgroundSize]="mapScale*64 + 'px'"
      [style.backgroundPosition]="'calc(50vw + ' + (drag.offset.x - getXOff(myBoat))*mapScale + 'px) calc(50vh + ' + (drag.offset.y - getYOff(myBoat))*mapScale + 'px)'">
   <!-- mapframe receives the offset transform, map receives the rotate transform.

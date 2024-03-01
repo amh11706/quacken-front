@@ -16,8 +16,8 @@ mat-checkbox {
   text-align: left;
 }
 
-mat-checkbox span {
-  white-space: break-spaces;
+mat-checkbox.nowrap {
+  white-space: nowrap;
 }
 
 mat-icon {
