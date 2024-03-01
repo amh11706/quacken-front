@@ -9,6 +9,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ChatModule } from '../chat/chat.module';
 import { ListComponent } from './list.component';
 import { SettingsModule } from '../settings/settings.module';
@@ -40,6 +41,7 @@ import { CompetitionComponent } from './competition/competition.component';
     MatButtonModule,
     MatIconModule,
     MatCardModule,
+    MatDialogModule,
     MatTooltipModule,
     NgSelectModule,
     ChatModule,

@@ -1,6 +1,7 @@
 <div *ngIf="setting.type === 'boat'"
      class="setting boat">
   <mat-select *ngIf="settingValue"
+              [panelWidth]="240"
               [value]="settingValue.stream | async"
               (selectionChange)="save($event.value)">
     <mat-select-trigger>

@@ -28,6 +28,7 @@
          [matAutocomplete]="auto">
   <mat-autocomplete #auto="matAutocomplete"
                     [autoSelectActiveOption]="true"
+                    [panelWidth]="200"
                     (opened)="clearOnFocus && myControl.setValue('')"
                     (optionSelected)="valueChange.emit($event.option.value)"
                     [autoActiveFirstOption]="false">

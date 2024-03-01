@@ -1,23 +1,25 @@
-<ng-container *ngIf="ws.user?.id">
-  <h2 id="create"><q-setting name="createType"
-               (valueChange)="changeType()"></q-setting>
-  </h2>
-  <p>{{idDescriptions[settings.createType.value || 0]}}</p>
-  <div id="lsettings">
-    <q-setting *ngFor="let setting of typeSettings[settings.createType?.value || 0]"
-               [name]="setting"></q-setting>
-  </div>
+<mat-dialog-content>
+  <ng-container *ngIf="ws.user?.id">
+    <h2 id="create"><q-setting name="createType"
+                 (valueChange)="changeType()"></q-setting>
+    </h2>
+    <p>{{idDescriptions[settings.createType.value || 0]}}</p>
+    <div id="lsettings">
+      <q-setting *ngFor="let setting of typeSettings[settings.createType?.value || 0]"
+                 [name]="setting"></q-setting>
+    </div>
 
-  <p>
-    <button mat-raised-button
-            color="accent"
-            (click)="createLobby()"
-            [disabled]="created">Create</button>
+    <p>
+      <button mat-raised-button
+              color="accent"
+              (click)="createLobby()"
+              [disabled]="created">Create</button>
+    </p>
+  </ng-container>
+
+  <p *ngIf="!ws.user?.id"
+     class="error">
+    Guests cannot make lobbies. Join an existing lobby or create an account
+    to make your own.
   </p>
-</ng-container>
-
-<p *ngIf="!ws.user?.id"
-   class="error">
-  Guests cannot make lobbies. Join an existing lobby or create an account
-  to make your own.
-</p>
+</mat-dialog-content>

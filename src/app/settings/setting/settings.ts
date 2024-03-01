@@ -166,7 +166,7 @@ export const Settings: SettingList = {
     group: 'l/cade',
     name: 'showStats',
     type: 'option',
-    label: 'Show stats during a match',
+    label: 'Show stats',
     options: ['Disabled', 'Players only', 'Watchers only', 'Everyone'],
   },
   cadeShowMoves: { admin: true, id: 67, group: 'l/cade', name: 'showMoves', type: 'checkbox', label: 'Show team moves' },
