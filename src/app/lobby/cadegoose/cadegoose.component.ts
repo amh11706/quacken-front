@@ -22,12 +22,11 @@ import { SettingGroup } from '../../settings/setting/settings';
 const ownerSettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',
   'cadeTurnTime', 'cadeTurns',
+  'cadeSpawnDelay', 'cadeTeams',
   'enableBots', 'botDifficulty',
-  'cadeHotEntry', 'cadePublicMode',
-  'cadeSpawnDelay', 'cadeMap',
-  'cadeTeams', 'cadeShowStats',
-  'allowGuests', 'cadeShowMoves',
-  'fishBoats',
+  'cadePublicMode', 'cadeHotEntry',
+  'cadeShowStats', 'allowGuests',
+  'cadeShowMoves', 'fishBoats',
 ];
 
 export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy ships in a battle for points.';

@@ -13,10 +13,10 @@ export const FgDesc = 'Flag games: Plant flags in the enemy base to score points
 const ownerSettings: SettingList = [
   'flagMaxPlayers', 'flagJobberQuality',
   'flagTurnTime', 'flagTurns',
-  'flagHotEntry', 'flagPublicMode',
-  'flagSpawnDelay', 'flagMap',
-  'flagFishBoats', 'flagAllowGuests',
-  'flagRespawn', 'flagSteal',
+  'flagPublicMode', 'flagHotEntry',
+  'flagSpawnDelay', 'flagFishBoats',
+  'flagAllowGuests', 'flagRespawn',
+  'flagSteal',
 ];
 
 @Component({
