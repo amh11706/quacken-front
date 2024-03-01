@@ -48,7 +48,7 @@
 </div>
 
 <div *ngIf="setting.type === 'slider'"
-     class="setting slider">
+     class="setting slider mat-mdc-form-field">
   <span class="label">{{setting.label}} ({{setting.stepLabels?.[slider.valueAsNumber] ||
     slider.value}})</span>
   <mat-slider [min]="setting.min"

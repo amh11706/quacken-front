@@ -21,7 +21,7 @@ mat-checkbox.nowrap {
 }
 
 mat-icon {
-  position: relative; 
+  position: relative;
   top: 3px;
   width: 17px;
   height: 17px;
@@ -29,8 +29,8 @@ mat-icon {
 
   &.advanced {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: -6px;
+    top: -6px;
     cursor: pointer;
   }
 }
@@ -58,7 +58,8 @@ mat-form-field.setting {
   margin: 0;
 }
 
-.setting.select, .setting.slider {
+.setting.select,
+.setting.slider {
   top: 8px;
 }
 
