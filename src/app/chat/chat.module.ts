@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatLegacySelectModule as MatSelectModule } from '@angular/material/legacy-select';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -28,7 +27,6 @@ import { NameModule } from './name/name.module';
     MatIconModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatDialogModule,
     MatAutocompleteModule,
     MatTooltipModule,
     MatLegacyInputModule,

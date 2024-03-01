@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { FriendsService } from '../../../chat/friends/friends.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Settings, BoatSetting } from '../../../settings/setting/settings';

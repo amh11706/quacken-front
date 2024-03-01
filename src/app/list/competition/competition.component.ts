@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
+import { MatDialogRef } from '@angular/material/dialog';
 import { WsService } from '../../ws/ws.service';
 import { Competitions } from './competition';
 import { InCmd, OutCmd } from '../../ws/ws-messages';

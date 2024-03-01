@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { StatService } from '../../esc-menu/profile/stat.service';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';

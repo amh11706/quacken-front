@@ -4,7 +4,6 @@ import { MatLegacySliderModule as MatSliderModule } from '@angular/material/lega
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
@@ -13,6 +12,7 @@ import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/m
 
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { SettingsModule } from '../settings/settings.module';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { CadegooseComponent } from './cadegoose/cadegoose.component';

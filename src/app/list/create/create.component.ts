@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { Subscription } from 'rxjs';
+import { MatDialogRef } from '@angular/material/dialog';
 import { CadeDesc } from '../../lobby/cadegoose/cadegoose.component';
 import { QuackenDesc } from '../../lobby/quacken/quacken.component';
 import { SbDesc } from '../../lobby/seabattle/seabattle.component';

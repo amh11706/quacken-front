@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 
 import { BehaviorSubject } from 'rxjs';
+import { MatDialogRef } from '@angular/material/dialog';
 import { WsService } from '../../ws/ws.service';
 
 @Component({

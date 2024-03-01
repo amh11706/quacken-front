@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { WsService } from '../../ws/ws.service';
 import { AdvancedComponent } from '../advanced/advanced.component';
 import { SettingsService } from '../settings.service';

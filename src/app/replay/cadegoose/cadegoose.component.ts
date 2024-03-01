@@ -6,8 +6,8 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { startWith, map } from 'rxjs/operators';
 import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
 import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent } from '@angular/material/legacy-autocomplete';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
+import { MatDialog } from '@angular/material/dialog';
 import { WsService } from '../../ws/ws.service';
 import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
 import { Boat } from '../../lobby/quacken/boats/boat';

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
+import { MatDialog } from '@angular/material/dialog';
 import { WsService } from '../../ws/ws.service';
 import { SplitComponent } from './split/split.component';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
