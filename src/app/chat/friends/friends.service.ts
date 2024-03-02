@@ -50,6 +50,13 @@ export class FriendsService {
   }
 
   private handlePlayers() {
+    this.ws.subscribe(InCmd.UpdateUser, r => {
+      const users = this.lobby$.getValue().map(u => {
+        if (u.from === r.from) return { ...u, ...r };
+        return u;
+      });
+      this.lobby$.next(users);
+    });
     this.ws.subscribe(InCmd.PlayerList, r => {
       this.lobby$.next(r as TeamMessage[]);
     });

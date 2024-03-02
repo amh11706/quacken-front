@@ -47,6 +47,7 @@ export type SubscribeData = {
   [InCmd.InviteRemove]: Invite;
   [InCmd.BlockUser]: string;
   [InCmd.UnblockUser]: string;
+  [InCmd.UpdateUser]: { from: string, d: string };
 
   [InCmd.SettingSet]: DBSetting;
   [InCmd.IntentoryOpen]: Inventory;

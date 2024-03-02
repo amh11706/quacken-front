@@ -122,6 +122,7 @@ export const enum InCmd {
   ChatCommands,
   Reload,
   SetUser,
+  UpdateUser,
 
   LobbyUpdate = 101,
   LobbyList,
