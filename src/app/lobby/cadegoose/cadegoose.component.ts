@@ -64,7 +64,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   advancedMapOpen = false;
   mapSeed = '';
   private mapDebounce = new Subject<string>();
-  private mapDataDebounce = new Subject();
+  private mapDataDebounce = new Subject<void>();
   protected joinMessage = CadeDesc;
   protected statAction = KeyActions.CShowStats;
   protected statExtraAction = KeyActions.CShowExtraStats;

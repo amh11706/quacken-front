@@ -35,3 +35,10 @@ p {
   padding: 0 8px;
   margin: 0;
 }
+
+ngx-emoji {
+  position: relative;
+  top: 3px;
+  display: inline-block;
+  margin-left: 4px;
+}

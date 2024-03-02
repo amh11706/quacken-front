@@ -1,24 +1,26 @@
 :host {
-    text-align: center;
+  text-align: center;
+
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  max-width: fit-content;
 }
 
 #accountWrapper {
-    padding-top: 32px;
+  padding-top: 32px;
 }
 
 #account {
-    display: inline-block;
-    max-width: 400px;
-    margin: auto;
+  display: inline-block;
+  max-width: 400px;
+  margin: auto;
 
-    form {
-        padding: 0 32px;
-    }
-}
-.mat-expansion-panel{
-    background-color: rgb(94, 92, 92);
-}
-mat-expansion-panel-header:hover {
-    background-color:rgb(236, 57, 57) !important;
+  form {
+    padding: 0 32px;
+  }
 }
 
+ngx-emoji {
+  cursor: pointer;
+}

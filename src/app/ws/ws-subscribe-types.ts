@@ -7,6 +7,7 @@ import { Lobby, LobbyStatus, TeamMessage } from '../lobby/cadegoose/types';
 import { Player } from '../lobby/spades/types';
 import { Command, Invite, Message } from '../chat/types';
 import { InvUpdate, Inventory } from '../esc-menu/profile/types';
+import { TokenUser } from './ws.service';
 
 export type InMessage = {
   [K in keyof SubscribeData]: { cmd: K, id?: number, data: SubscribeData[K] };
@@ -51,6 +52,7 @@ export type SubscribeData = {
   [InCmd.IntentoryOpen]: Inventory;
   [InCmd.InventoryUpdate]: InvUpdate;
   [InCmd.InventoryCoin]: number;
+  [InCmd.SetUser]: Partial<TokenUser>;
 
   [InCmd.PlayerAdd]: Message;
   [InCmd.PlayerRemove]: Message;

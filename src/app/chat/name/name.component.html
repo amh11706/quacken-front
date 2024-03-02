@@ -5,7 +5,10 @@
         [class.admin]="message.admin && message.admin >= 3"
         [class.blocked]="fs.isBlocked(message.from)">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-  <span *ngIf="message.d">{{message.d}}</span>
+  <ngx-emoji *ngIf="message.d"
+             [size]="16"
+             [tooltip]="true"
+             [emoji]="message.d"></ngx-emoji>
   <q-rank-circle *ngIf="message.ti"
                  [tier]="message.ti"
                  [score]="message.sc || 0"></q-rank-circle>
@@ -16,7 +19,10 @@
     <span class="you"
           [class.admin]="message.admin && message.admin >= 3">{{message.from}}</span>
     <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-    <span *ngIf="message.d">{{message.d}}</span>
+    <ngx-emoji *ngIf="message.d"
+               [size]="16"
+               [tooltip]="true"
+               [emoji]="message.d"></ngx-emoji>
     <q-rank-circle *ngIf="message.ti"
                    [tier]="message.ti"
                    [score]="message.sc || 0"></q-rank-circle>
@@ -33,6 +39,10 @@
             mat-menu-item
             (click)="openProfile()">
       Profile
+    </button>
+    <button mat-menu-item
+            (click)="openEmoji()">
+      Set emoji
     </button>
   </ng-template>
 </mat-menu>

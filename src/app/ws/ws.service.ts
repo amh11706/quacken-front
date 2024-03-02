@@ -16,6 +16,7 @@ export interface TokenUser {
   id: number;
   name: string;
   admin: number;
+  d?: string;
   inventory?: number;
 }
 
@@ -31,7 +32,7 @@ export class WsService {
   private requests = new Map<number, (value: any) => void>();
   private nextId = 1;
   private tokenParser = new JwtHelperService();
-  user?: TokenUser;
+  user: TokenUser = { id: 0, name: 'Guest', admin: 0 };
   connected = false;
   connected$ = new ReplaySubject<boolean>(1);
   outMessages$ = new Subject<{ cmd: OutCmd, data: any, id?: number }>();
@@ -59,6 +60,9 @@ export class WsService {
     this.subscribe(InCmd.Copy, copy => {
       this.copy = copy;
     });
+    this.subscribe(InCmd.SetUser, user => {
+      this.user = Object.assign({}, this.user, user);
+    });
     this.subscribe(InCmd.Reload, () => {
       const lastReload = sessionStorage.getItem('reloadTime');
       if (lastReload && +lastReload > new Date().valueOf() - 30000) {
@@ -81,7 +85,7 @@ export class WsService {
     }
     this.token = token;
     if (token === 'guest') this.user = { id: 0, name: 'Guest', admin: 0 };
-    else this.user = this.tokenParser.decodeToken(token) || undefined;
+    else this.user = this.tokenParser.decodeToken(token) || { id: 0, name: 'Guest', admin: 0 };
 
     this.socket = new WebSocket(environment.ws);
 

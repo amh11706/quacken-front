@@ -28,6 +28,7 @@ export type SendCmdInputs = {
   [OutCmd.FriendAdd]: string;
   [OutCmd.FriendRemove]: string;
   [OutCmd.FriendDecline]: Invite;
+  [OutCmd.SetUserEmoji]: string;
 
   // TODO: use more complete types
   [OutCmd.InventoryCmd]: { cmd: 'c' | 'o' | 'cb' | 'sort' | 's', id: number, data?: any };

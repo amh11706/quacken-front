@@ -10,6 +10,8 @@ import { KeyActions } from '../../settings/key-binding/key-actions';
 import { Command } from '../types';
 import { TierTitles } from '../../esc-menu/profile/leaders/leaders.component';
 import { TeamMessage } from '../../lobby/cadegoose/types';
+import { EscMenuService } from '../../esc-menu/esc-menu.service';
+import { SettingsService } from '../../settings/settings.service';
 
 @Component({
   selector: 'q-name',
@@ -28,6 +30,8 @@ export class NameComponent {
     public ws: WsService,
     public fs: FriendsService,
     private kbs: KeyBindingService,
+    private esc: EscMenuService,
+    private ss: SettingsService,
   ) { }
 
   private getName(): string {
@@ -38,6 +42,11 @@ export class NameComponent {
 
   openProfile(): void {
     if (this.message.from) this.stat.openUser(this.message.from);
+  }
+
+  openEmoji(): void {
+    this.esc.activeTab$.next(4);
+    this.ss.tabIndex = 4;
   }
 
   sendCmd(cmd: Command): void {

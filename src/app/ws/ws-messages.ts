@@ -53,6 +53,7 @@ export const enum OutCmd {
   ChangeName,
   SearchNames,
   SearchNamesOnline,
+  SetUserEmoji,
 
   LobbyCreate = 101,
   LobbyApply,
@@ -120,6 +121,7 @@ export const enum InCmd {
 
   ChatCommands,
   Reload,
+  SetUser,
 
   LobbyUpdate = 101,
   LobbyList,

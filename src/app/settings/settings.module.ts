@@ -15,6 +15,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { SettingComponent } from './setting/setting.component';
 import { SettingsComponent } from './settings.component';
 import { AccountComponent } from './account/account.component';
@@ -55,6 +57,8 @@ import { JobberQualityComponent } from './jobber-quality/jobber-quality.componen
     MatExpansionModule,
     MatDialogModule,
     MatMenuModule,
+    PickerComponent,
+    EmojiComponent,
   ],
   exports: [SettingComponent, SettingsComponent],
 })

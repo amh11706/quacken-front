@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
 import { MessageComponent } from './message/message.component';
@@ -13,12 +14,20 @@ import { MessageComponent } from './message/message.component';
 })
 export class AccountComponent {
   pending = false;
+  logged = 0;
 
   constructor(
-    private ws: WsService,
+    public ws: WsService,
     private dialog: MatDialog,
     private router: Router,
   ) { }
+
+  emojiPicked(e: EmojiEvent): void {
+    // crown is reserved for competition winners
+    if (e.emoji.shortName === 'crown') e.emoji.shortName = 'poop';
+    this.ws.user.d = e.emoji.shortName;
+    this.ws.send(OutCmd.SetUserEmoji, e.emoji.shortName);
+  }
 
   async changePass(newPass: string, password: string): Promise<void> {
     this.pending = true;
