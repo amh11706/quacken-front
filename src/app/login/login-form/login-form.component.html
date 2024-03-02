@@ -7,22 +7,22 @@
           (ngSubmit)="login()"
           #loginForm="ngForm">
       <mat-form-field>
+        <mat-label>Email</mat-label>
         <input [(ngModel)]="user.email"
                name="email"
                matInput
                qAutoSelect
-               placeholder="Email"
                autocomplete="username"
                required>
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Password</mat-label>
         <input [(ngModel)]="user.password"
                name="password"
                matInput
                qAutoSelect
                type="password"
                minlength="6"
-               placeholder="Password"
                autocomplete="current-password"
                required>
       </mat-form-field>
@@ -61,11 +61,13 @@
   <mat-dialog-actions align="end">
     <button *ngIf="errMessage !== defaultServerError"
             mat-raised-button
+            color="accent"
             [disabled]="pending"
             (click)="sendReset()">
       Forgot Password
     </button>
     <button mat-raised-button
+            color="accent"
             mat-dialog-close
             [disabled]="pending"
             cdkFocusInitial>Close</button>

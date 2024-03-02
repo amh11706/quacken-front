@@ -8,10 +8,12 @@ export interface Note {
 'Playing in the same rated match twice is no longer allowed.',
 'Send rank update to client on match end.',
 'Filter matches by player count by entering a number.',
+'Map search reworked.',
 */
 
 /* In progress:
 'show team damage setting.',
+'Emoji picker for profile name.',
 */
 
 /* Planned:

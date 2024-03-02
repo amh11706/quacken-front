@@ -1,13 +1,1 @@
 @import "../login-form/login-form.component.scss";
-
-@-webkit-keyframes autofill {
-  to {
-    color: silver;
-    background: transparent;
-  }
-}
-
-input:-webkit-autofill {
-  -webkit-animation-name: autofill;
-  -webkit-animation-fill-mode: both;
-}

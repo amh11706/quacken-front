@@ -7,34 +7,34 @@
           (ngSubmit)="create()"
           #loginForm="ngForm">
       <mat-form-field>
+        <mat-label>Email</mat-label>
         <input [(ngModel)]="user.email"
                name="email"
                type="email"
                matInput
                qAutoSelect
-               placeholder="Email"
                autocomplete="username"
                required>
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Password</mat-label>
         <input [(ngModel)]="user.password"
                name="password"
                matInput
                qAutoSelect
                type="password"
                minlength="6"
-               placeholder="Password"
                autocomplete="new-password"
                required>
       </mat-form-field>
       <mat-form-field>
+        <mat-label>Username</mat-label>
         <input [(ngModel)]="user.name"
                name="name"
                matInput
                qAutoSelect
                minlength="2"
                maxlength="16"
-               placeholder="Display Name"
                autocomplete="nickname"
                required>
       </mat-form-field>

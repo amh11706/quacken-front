@@ -7,13 +7,13 @@
           (ngSubmit)="reset()"
           #loginForm="ngForm">
       <mat-form-field>
+        <mat-label>New Password</mat-label>
         <input [(ngModel)]="password"
                name="password"
                matInput
                qAutoSelect
                type="password"
                minlength="6"
-               placeholder="New Password"
                autocomplete="new-password"
                required>
       </mat-form-field>

@@ -8,22 +8,22 @@
           #loginForm="ngForm">
       <h3>Enter your email address and a new password to continue.</h3>
       <mat-form-field>
+        <mat-label>Email</mat-label>
         <input [(ngModel)]="user.email"
                name="email"
                matInput
                qAutoSelect
-               placeholder="Email"
                autocomplete="username"
                required>
       </mat-form-field>
       <mat-form-field>
+        <mat-label>New Password</mat-label>
         <input [(ngModel)]="user.password"
                name="password"
                matInput
                qAutoSelect
                type="password"
                minlength="6"
-               placeholder="Password"
                autocomplete="new-password"
                required>
       </mat-form-field>
