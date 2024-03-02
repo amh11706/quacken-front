@@ -5,19 +5,22 @@
         [class.admin]="message.admin && message.admin >= 3"
         [class.blocked]="fs.isBlocked(message.from)">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
+  <span *ngIf="message.d">{{message.d}}</span>
   <q-rank-circle *ngIf="message.ti"
                  [tier]="message.ti"
                  [score]="message.sc || 0"></q-rank-circle>
 </span>
 
 <ng-template #you>
-  <span class="you"
-        [class.admin]="message.admin && message.admin >= 3"
-        [matMenuTriggerFor]="youMenu">{{message.from}}</span>
-  <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-  <q-rank-circle *ngIf="message.ti"
-                 [tier]="message.ti"
-                 [score]="message.sc || 0"></q-rank-circle>
+  <span [matMenuTriggerFor]="youMenu">
+    <span class="you"
+          [class.admin]="message.admin && message.admin >= 3">{{message.from}}</span>
+    <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
+    <span *ngIf="message.d">{{message.d}}</span>
+    <q-rank-circle *ngIf="message.ti"
+                   [tier]="message.ti"
+                   [score]="message.sc || 0"></q-rank-circle>
+  </span>
 </ng-template>
 
 <ng-template #guest>

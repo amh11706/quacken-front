@@ -9,6 +9,7 @@ export interface Message {
   copy?: number;
   sId?: number;
   admin?: number;
+  d?: string; // decoration
 }
 
 export interface ChatMessage extends Message {

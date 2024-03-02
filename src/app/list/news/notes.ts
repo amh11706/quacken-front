@@ -17,6 +17,7 @@ export interface Note {
 */
 
 /* Planned:
+'smoother boat turning.',
 '1v1 queue.',
 '1v1 map generation.',
 'You can now add notes to a replay.',
