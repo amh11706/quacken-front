@@ -54,7 +54,7 @@ export class ChatService {
         });
       }
       if (!cmdFound) this.selectedCommand$.next(lobbyCommands[0] ?? selectedCommand);
-      this.nameCommands = lobbyCommands.filter(cmd => cmd.params[0]?.name === 'name');
+      this.nameCommands = lobbyCommands.filter(cmd => cmd.params[0]?.name === 'name' || cmd.params[0]?.name === 'nameany');
       this.commands$.next(lobbyCommands);
     });
 
