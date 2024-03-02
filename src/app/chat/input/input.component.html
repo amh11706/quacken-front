@@ -4,6 +4,8 @@
               [value]="command"
               (selectionChange)="focusChat(); chat.selectedCommand$.next($event.value)">
     <mat-option *ngFor="let item of chat.commands$ | async"
+                [matTooltip]="item.help"
+                [matTooltipShowDelay]="500"
                 [value]="item">
       {{ item.title }}
     </mat-option>
