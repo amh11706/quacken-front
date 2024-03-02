@@ -1,10 +1,26 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { EmojiData, EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
 import { MessageComponent } from './message/message.component';
+
+export const CustomEmojis: Partial<EmojiData>[] = [
+  {
+    name: 'FrogSuss',
+    shortName: 'frogsuss',
+    shortNames: ['frogsuss'],
+    text: '',
+    emoticons: [],
+    keywords: ['frog', 'frogsuss'],
+    imageUrl: '/assets/icons/frog.png',
+  },
+];
+
+export function FindCustomEmoji(name: string): EmojiData | string {
+  return CustomEmojis.find(e => e.shortName === name) as EmojiData || name;
+}
 
 @Component({
   selector: 'q-account',
@@ -15,6 +31,8 @@ import { MessageComponent } from './message/message.component';
 export class AccountComponent {
   pending = false;
   logged = 0;
+  customEmojis = CustomEmojis;
+  findCustomEmoji = FindCustomEmoji;
 
   constructor(
     public ws: WsService,

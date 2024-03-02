@@ -22,7 +22,7 @@
     <ngx-emoji *ngIf="message.d"
                [size]="16"
                [tooltip]="true"
-               [emoji]="message.d"></ngx-emoji>
+               [emoji]="findCustomEmoji(message.d)"></ngx-emoji>
     <q-rank-circle *ngIf="message.ti"
                    [tier]="message.ti"
                    [score]="message.sc || 0"></q-rank-circle>

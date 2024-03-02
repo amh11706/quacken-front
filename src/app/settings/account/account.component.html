@@ -7,18 +7,18 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-container *ngIf="ws.user.d; else noEmoji">
-      <ngx-emoji [matMenuTriggerFor]="emojimenu"
-                 [tooltip]="true"
-                 [emoji]="ws.user.d || 'smile'"></ngx-emoji>
-      <mat-menu #emojimenu>
-        <ng-template matMenuContent>
-          <emoji-mart (click)="$event.preventDefault(); $event.stopPropagation();"
-                      [virtualize]="true"
-                      [darkMode]="true"
-                      [autoFocus]="true"
-                      (emojiSelect)="emojiPicked($event); emojimenu.close.emit()"></emoji-mart>
-        </ng-template>
-      </mat-menu>
+        <ngx-emoji [matMenuTriggerFor]="emojimenu"
+                   [tooltip]="true"
+                   [emoji]="findCustomEmoji(ws.user.d)"></ngx-emoji>
+        <mat-menu #emojimenu>
+          <ng-template matMenuContent>
+            <emoji-mart (click)="$event.preventDefault(); $event.stopPropagation();"
+                        [darkMode]="true"
+                        [autoFocus]="true"
+                        [custom]="customEmojis"
+                        (emojiSelect)="emojiPicked($event); emojimenu.close.emit()"></emoji-mart>
+          </ng-template>
+        </mat-menu>
       </ng-container>
       <ng-template #noEmoji>
         You do not have a name emoji. Win a competition or donate to get one.

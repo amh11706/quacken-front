@@ -12,6 +12,7 @@ import { TierTitles } from '../../esc-menu/profile/leaders/leaders.component';
 import { TeamMessage } from '../../lobby/cadegoose/types';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { SettingsService } from '../../settings/settings.service';
+import { FindCustomEmoji } from '../../settings/account/account.component';
 
 @Component({
   selector: 'q-name',
@@ -23,6 +24,7 @@ export class NameComponent {
   @Input() message = {} as Partial<TeamMessage> & { from: string };
   @Input() offline = false;
   tierTitles = TierTitles;
+  findCustomEmoji = FindCustomEmoji;
 
   constructor(
     public chat: ChatService,
