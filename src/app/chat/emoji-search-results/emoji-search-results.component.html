@@ -1,0 +1,27 @@
+<mat-card>
+  <mat-card-title>
+    <emoji-preview class="emoji-mart-dark"
+                   [emoji]="hoveredEmoji"
+                   [idleEmoji]="'duck'"
+                   [emojiSkin]="skin"
+                   (skinChange)="handleSkinChange($event)"
+                   [emojiIsNative]="true"
+                   [emojiSet]="'apple'"
+                   [emojiSize]="32"
+                   [i18n]="i18n">
+    </emoji-preview>
+  </mat-card-title>
+  <mat-card-content (mouseleave)="hoveredEmoji = null">
+    <div *ngFor="let emoji of data.searchResults"
+         class="emoji"
+         (mouseover)="hoverEmoji(emoji)"
+         (click)="onSelect(emoji)">
+      <ngx-emoji [emoji]="emoji"
+                 [isNative]="true"
+                 [size]="16"
+                 [skin]="skin"
+                 [tooltip]="true"></ngx-emoji>
+    </div>
+    <p *ngIf="data.searchResults.length === 0">No results</p>
+  </mat-card-content>
+</mat-card>

@@ -49,6 +49,7 @@ export class NameComponent {
   openEmoji(): void {
     this.esc.activeTab$.next(4);
     this.ss.tabIndex = 4;
+    this.esc.open$.next(true);
   }
 
   sendCmd(cmd: Command): void {

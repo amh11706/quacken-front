@@ -84,11 +84,9 @@ export class ChatService {
     });
   }
 
-  sendMessage(text: string): void {
-    this.ws.send(OutCmd.ChatMessage, text);
-  }
-
   sendCommand(text: string): void {
+    text = text.trim();
+    if (!text) return;
     this.ws.send(OutCmd.ChatCommand, text);
   }
 

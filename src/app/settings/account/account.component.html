@@ -15,6 +15,7 @@
             <emoji-mart (click)="$event.preventDefault(); $event.stopPropagation();"
                         [darkMode]="true"
                         [autoFocus]="true"
+                        [showSingleCategory]="true"
                         [custom]="customEmojis"
                         (emojiSelect)="emojiPicked($event); emojimenu.close.emit()"></emoji-mart>
           </ng-template>

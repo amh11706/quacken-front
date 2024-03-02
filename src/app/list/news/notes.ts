@@ -9,11 +9,11 @@ export interface Note {
 'Send rank update to client on match end.',
 'Filter matches by player count by entering a number.',
 'Map search reworked.',
+'Emoji picker in account settings.',
 */
 
 /* In progress:
 'show team damage setting.',
-'Emoji picker for profile name.',
 */
 
 /* Planned:

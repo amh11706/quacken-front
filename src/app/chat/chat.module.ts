@@ -14,6 +14,7 @@ import { InputComponent } from './input/input.component';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { ChatComponent } from './chat.component';
 import { NameModule } from './name/name.module';
+import { EmojiInputDirective } from './input/emoji-input.directive';
 
 @NgModule({
   declarations: [ChatComponent, InputComponent, NameSearchComponent],
@@ -30,6 +31,7 @@ import { NameModule } from './name/name.module';
     NameModule,
     QdragModule,
     ScrollingModule,
+    EmojiInputDirective,
   ],
   exports: [ChatComponent, NameSearchComponent],
 })

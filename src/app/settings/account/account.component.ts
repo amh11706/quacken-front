@@ -41,10 +41,11 @@ export class AccountComponent {
   ) { }
 
   emojiPicked(e: EmojiEvent): void {
+    let name = e.emoji.colons || e.emoji.shortName;
     // crown is reserved for competition winners
-    if (e.emoji.shortName === 'crown') e.emoji.shortName = 'poop';
-    this.ws.user.d = e.emoji.shortName;
-    this.ws.send(OutCmd.SetUserEmoji, e.emoji.shortName);
+    if (name === ':crown:') name = ':hankey:';
+    this.ws.user.d = name;
+    this.ws.send(OutCmd.SetUserEmoji, name);
   }
 
   async changePass(newPass: string, password: string): Promise<void> {

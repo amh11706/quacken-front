@@ -1,0 +1,21 @@
+mat-card {
+  width: 302px;
+  height: min-content;
+  padding: 8px 0;
+  color: #fff;
+}
+
+emoji-preview {
+  display: block;
+  padding: 8px 16px;
+  line-height: 1.5;
+  border-bottom: 1px solid #777;
+  overflow: hidden;
+}
+
+.emoji {
+  float: left;
+  width: 30px;
+  cursor: pointer;
+  padding: 6px;
+}

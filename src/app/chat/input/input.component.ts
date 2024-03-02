@@ -89,8 +89,6 @@ export class InputComponent implements OnInit, OnDestroy {
       text += ' ' + value;
     }
     this.chat.historyIndex = -1;
-
-    if (text[0] !== '/') return this.chat.sendMessage(text);
     this.chat.sendCommand(text);
 
     const firstSpace = text.indexOf(' ');
