@@ -58,6 +58,7 @@
               [color]="'accent'"
               [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
     <input matSliderThumb
+           [disabled]="disabled || setting.admin && (ss.admin$ | async) === false"
            [value]="settingValue.stream | async"
            (valueChange)="save($event)"
            #slider>
