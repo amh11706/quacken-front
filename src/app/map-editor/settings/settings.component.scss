@@ -66,10 +66,3 @@
 .setting p {
   margin: 4px 0;
 }
-
-::ng-deep{
-  .mat-select-panel mat-option.mat-option {
-    white-space: normal;
-    line-height: auto;
-  }
-}

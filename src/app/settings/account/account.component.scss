@@ -1,8 +1,8 @@
 :host {
   text-align: center;
-
 }
 
+// needed for the emoji picker to not scroll
 ::ng-deep .mat-mdc-menu-panel {
   max-width: fit-content;
 }

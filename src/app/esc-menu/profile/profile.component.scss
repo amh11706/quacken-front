@@ -28,15 +28,6 @@ mat-tab-group {
   height: 100%;
 }
 
-::ng-deep .mat-tab-label .mat-tab-label-content {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-::ng-deep .mat-select.mat-hover {
-  background: red !important;
-}
-
 #selection {
   padding-bottom: 24px;
 }
@@ -91,11 +82,6 @@ th {
 
 td {
   cursor: pointer;
-}
-
-.mat-tab-label {
-  font-size: 10px !important;
-  color: #ff0000;
 }
 
 mat-expansion-panel {

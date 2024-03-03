@@ -40,6 +40,7 @@ mat-radio-group {
   width: 37px;
 }
 
+// needed to squeeze the radio buttons in the small space
 :host ::ng-deep {
   mat-radio-button div.mdc-form-field {
     transform: scale(0.6);

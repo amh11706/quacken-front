@@ -117,15 +117,6 @@ $forfeitColor: darkred;
     min-width: auto;
     position: relative;
     top: -4px;
-
-    ::ng-deep {
-      .mat-button-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        column-gap: 4px;
-      }
-    }
   }
 
   q-setting {
