@@ -7,7 +7,6 @@ export interface Note {
 */
 
 /* In progress:
-'show team damage setting.',
 */
 
 /* Planned:
@@ -29,6 +28,7 @@ export const Notes: Note[] = [
       'Type a colon : in chat to open the emoji picker.',
       'Donators can now set their own emoji in their account settings.',
       'Click your name for a quick link to the emoji picker.',
+      'Added show team damage setting.',
       'Updated ui library to improve security.',
       'Users can only have one client in a rated match at a time.',
       'Rank circles are now updated more reliably.',
