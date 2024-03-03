@@ -1,4 +1,5 @@
 <mat-tab-group [(selectedIndex)]="tabIndex"
+               [mat-stretch-tabs]="false"
                (selectedIndexChange)="centerButtons()">
   <mat-tab>
     <ng-template mat-tab-label>
@@ -12,19 +13,19 @@
               class="turn"
               (click)="clickTurn(turn)">
         Turn {{turn.turn}}<br>
-        <div class="sinks">
-          <div *ngFor="let team of turn.teams; let i = index; let odd = odd"
-               [class.right]="odd">
-            <mat-icon *ngFor="let sink of team.sinks"
-                      [matTooltip]="sink.message">sailing</mat-icon>
-          </div>
-        </div>
 
         <div class="points">
           <div *ngFor="let team of turn.teams; let i = index"
                [style.backgroundColor]="teamColors[i]"
                [matTooltip]="'' + team.scoreChange"
                [style.width]="50 * team.scoreChange / maxScore+ 'px'"></div>
+        </div>
+        <div class="sinks">
+          <div *ngFor="let team of turn.teams; let i = index; let odd = odd"
+               [class.right]="odd">
+            <mat-icon *ngFor="let sink of team.sinks"
+                      [matTooltip]="sink.message">sailing</mat-icon>
+          </div>
         </div>
       </button>
     </div>
