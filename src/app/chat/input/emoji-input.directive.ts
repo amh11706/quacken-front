@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, Injector, OnInit, Optional } from '@angular/core';
 import { EmojiFrequentlyService, EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { NgModel } from '@angular/forms';
-import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { Emoji, EmojiData, EmojiService } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { FlexibleConnectedPositionStrategy, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { CustomEmojis } from '../../settings/account/account.component';
@@ -14,7 +14,12 @@ import { EmojiSearchResultsComponent } from '../emoji-search-results/emoji-searc
 export class EmojiInputDirective implements OnInit {
   private overlayRef?: OverlayRef;
   private componentPortal?: ComponentPortal<EmojiSearchResultsComponent>;
-  private overlayContext = { searchResults: [] as EmojiData[], onSelect: (emoji: EmojiData) => this.onSelect(emoji) };
+  private overlayContext = {
+    skin: 1 as Emoji['skin'],
+    searchResults: [] as EmojiData[],
+    onSelect: (emoji: EmojiData) => this.onSelect(emoji),
+  };
+
   private cursorWordStart = 0;
   private cursorWordEnd = 0;
 
@@ -25,6 +30,7 @@ export class EmojiInputDirective implements OnInit {
     private overlay: Overlay,
     private injector: Injector,
     private frequent: EmojiFrequentlyService,
+    private emojiService: EmojiService,
   ) {
     emojiSearch.addCustomToPool(CustomEmojis, emojiSearch.originalPool);
 
@@ -79,7 +85,7 @@ export class EmojiInputDirective implements OnInit {
     const first = this.overlayContext.searchResults[0];
     if (!first) return;
     event.preventDefault();
-    this.onSelect(first);
+    this.onSelect(this.emojiService.getSanitizedData(first, this.overlayContext.skin, 'apple'));
   }
 
   private createInjector(data: any): Injector {

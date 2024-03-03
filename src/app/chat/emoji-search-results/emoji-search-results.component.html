@@ -3,7 +3,7 @@
     <emoji-preview class="emoji-mart-dark"
                    [emoji]="hoveredEmoji"
                    [idleEmoji]="'duck'"
-                   [emojiSkin]="skin"
+                   [emojiSkin]="data.skin"
                    (skinChange)="handleSkinChange($event)"
                    [emojiIsNative]="true"
                    [emojiSet]="'apple'"
@@ -19,7 +19,7 @@
       <ngx-emoji [emoji]="emoji"
                  [isNative]="true"
                  [size]="16"
-                 [skin]="skin"
+                 [skin]="data.skin"
                  [tooltip]="true"></ngx-emoji>
     </div>
     <p *ngIf="data.searchResults.length === 0">No results</p>

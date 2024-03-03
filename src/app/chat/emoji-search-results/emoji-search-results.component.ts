@@ -48,11 +48,10 @@ export class EmojiSearchResultsComponent implements OnInit {
   hoveredEmoji: EmojiData | null = null;
   defaultEmoji: EmojiData;
   i18n = I18N;
-  skin: Emoji['skin'] = 1;
   NAMESPACE = 'emoji-mart';
 
   constructor(
-    @Inject('overlayData') public data: {searchResults: EmojiData[], onSelect: (d: EmojiData) => void},
+    @Inject('overlayData') public data: { skin: Emoji['skin'], searchResults: EmojiData[], onSelect: (d: EmojiData) => void },
     emojiSearch: EmojiSearch,
     private emojiService: EmojiService,
   ) {
@@ -60,29 +59,29 @@ export class EmojiSearchResultsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.skin =
+    this.data.skin =
       JSON.parse(
         (localStorage.getItem(`${this.NAMESPACE}.skin`)) ||
-          'null',
-      ) || this.skin;
+        'null',
+      ) || this.data.skin;
   }
 
   handleSkinChange(skin: Emoji['skin']) {
-    this.skin = skin;
+    this.data.skin = skin;
     localStorage.setItem(`${this.NAMESPACE}.skin`, String(skin));
   }
 
   hoverEmoji(emoji: EmojiData): void {
-    emoji = this.emojiService.getSanitizedData(emoji, this.skin, 'apple') as EmojiData;
+    emoji = this.emojiService.getSanitizedData(emoji, this.data.skin, 'apple') as EmojiData;
     this.hoveredEmoji = emoji;
   }
 
   onSelect(emoji: EmojiData): void {
-    emoji = this.emojiService.getSanitizedData(emoji, this.skin, 'apple') as EmojiData;
+    emoji = this.emojiService.getSanitizedData(emoji, this.data.skin, 'apple') as EmojiData;
     this.data.onSelect(emoji);
   }
 
   onSkinChange(skin: Emoji['skin']): void {
-    this.skin = skin;
+    this.data.skin = skin;
   }
 }

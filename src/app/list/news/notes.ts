@@ -4,12 +4,6 @@ export interface Note {
 }
 
 /* Done but not released:
-'Users can only play in one rated match at a time.',
-'Playing in the same rated match twice is no longer allowed.',
-'Send rank update to client on match end.',
-'Filter matches by player count by entering a number.',
-'Map search reworked.',
-'Emoji picker in account settings.',
 */
 
 /* In progress:
@@ -21,7 +15,6 @@ export interface Note {
 '1v1 queue.',
 '1v1 map generation.',
 'You can now add notes to a replay.',
-'emoji picker for name in user settings.',
 'Map creators can now see a list of matches using their map. Viewable from the map editor.',
 'New "Map Browser" page to view highlighted maps and creators.',
 'Added a way to delete maps.',
@@ -29,6 +22,18 @@ export interface Note {
 */
 
 export const Notes: Note[] = [
+  {
+    title: 'Release 03 March 2024',
+    points: [
+      'Emoji picker!',
+      'Type a colon : in chat to open the emoji picker.',
+      'Donators can now set their own emoji in their account settings.',
+      'Click your name for a quick link to the emoji picker.',
+      'Users can only have one client in a rated match at a time.',
+      'Rank circles are now updated more reliably.',
+      'Map search now has autocomplete.',
+    ],
+  },
   {
     title: 'Release 23 February 2024',
     points: [
