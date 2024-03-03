@@ -49,6 +49,10 @@
   background-color: rgba(198, 198, 204, 0.5);
   border: 1px solid black;
   border-radius: 16px;
+
+  &:hover {
+    overflow: visible;
+  }
 }
 
 #frame {
