@@ -1,7 +1,9 @@
-<div *ngFor="let note of notes"
-     class="note">
-    <h2>{{note.title}}</h2>
-    <ul>
-        <li *ngFor="let p of note.points">{{p}}</li>
-    </ul>
-</div>
+<mat-dialog-content>
+  <div *ngFor="let note of notes"
+       class="note">
+      <h2>{{note.title}}</h2>
+      <ul>
+          <li *ngFor="let p of note.points">{{p}}</li>
+      </ul>
+  </div>
+</mat-dialog-content>
