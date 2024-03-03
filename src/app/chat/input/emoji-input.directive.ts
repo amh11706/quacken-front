@@ -54,12 +54,12 @@ export class EmojiInputDirective implements OnInit {
     this.overlayRef.backdropClick().subscribe(() => this.overlayRef?.detach());
   }
 
-  private lastValue = '';
+  private static lastValue = '';
   @HostListener('input', ['$event'])
   private onInput(_event: InputEvent) {
     const input = this.ref.nativeElement;
-    if (input.value === this.lastValue) return;
-    this.lastValue = input.value;
+    if (input.value === EmojiInputDirective.lastValue) return;
+    EmojiInputDirective.lastValue = input.value;
 
     const { start, end, word } = this.getCursorWord();
     this.cursorWordStart = start;
@@ -78,6 +78,12 @@ export class EmojiInputDirective implements OnInit {
       this.overlayRef?.updatePositionStrategy(this.getPositionStrategy(this.cursorWordStart));
       this.overlayRef?.attach(this.componentPortal);
     }
+  }
+
+  @HostListener('keydown.escape', ['$event'])
+  onEscape(event: KeyboardEvent) {
+    event.preventDefault();
+    this.overlayRef?.detach();
   }
 
   @HostListener('keydown.tab', ['$event'])
