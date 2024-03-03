@@ -13,8 +13,12 @@ emoji-preview {
   overflow: hidden;
 }
 
+mat-card-content{
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .emoji {
-  float: left;
   width: 30px;
   cursor: pointer;
   padding: 6px;
