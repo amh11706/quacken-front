@@ -60,7 +60,8 @@
           </mat-tab>
           <mat-tab label="Settings"
                    *ngIf="ss.lAdminSettings.length">
-            <mat-card id="lobbySettings">
+            <mat-card id="lobbySettings"
+                      *ngIf="es.open$ | async">
               <h4>Lobby Owner Settings</h4>
               <div class="settings">
                 <q-setting *ngFor="let s of ss.lAdminSettings"
@@ -70,7 +71,7 @@
           </mat-tab>
           <mat-tab label="Map Selection"
                    *ngIf="ss.showMapChoice">
-            <q-map-list [visible]="es.lobbyTab === 2"
+            <q-map-list [visible]="es.lobbyTab === 2 && (es.open$ | async) === true"
                         [rankArea]="ss.rankArea"></q-map-list>
           </mat-tab>
         </mat-tab-group>
