@@ -19,7 +19,7 @@ export const CustomEmojis: Partial<EmojiData>[] = [
 ];
 
 export function FindCustomEmoji(name: string): EmojiData | string {
-  return CustomEmojis.find(e => e.shortName === name) as EmojiData || name;
+  return CustomEmojis.find(e => e.colons === name) as EmojiData || name;
 }
 
 @Component({
