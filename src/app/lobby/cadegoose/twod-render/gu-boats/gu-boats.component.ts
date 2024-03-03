@@ -1,8 +1,8 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Tween } from '@tweenjs/tween.js';
 import { WsService } from '../../../../ws/ws.service';
 import { Boat } from '../../../../lobby/quacken/boats/boat';
-import { Internal } from '../../../../ws/ws-messages';
+import { InCmd, Internal } from '../../../../ws/ws-messages';
 import { Sounds, SoundService } from '../../../../sound.service';
 import { ImageService } from '../../../../image.service';
 import { GuBoat } from './gu-boat';
@@ -38,11 +38,7 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   protected _speed = 15;
   @Input() set speed(v: number) {
     this._speed = v;
-    this.renderer.setStyle(
-      this.el.nativeElement,
-      '--speed',
-      10 / v,
-    );
+    this.el.nativeElement.style.setProperty('--speed', (10 / v));
   }
 
   get speed(): number {
@@ -86,9 +82,8 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   constructor(
     ws: WsService, sound: SoundService,
-     private image: ImageService,
-     private renderer: Renderer2,
-      private el: ElementRef,
+    private image: ImageService,
+    private el: ElementRef,
   ) {
     super(ws, sound);
     this.blockRender = false;
@@ -96,6 +91,15 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // no super to prevent double init thanks to extended class not being a component
+    this.subs.add(this.ws.subscribe(InCmd.BoatTicks, ticks => {
+      for (const boat of this.boats) {
+        const tick = ticks[boat.id];
+        if (!tick) continue;
+        boat.damage = tick.d;
+        boat.bilge = tick.b;
+      }
+    }));
+
     this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
       if (!b.render) b.render = new GuBoat(b, undefined as any);
       GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;

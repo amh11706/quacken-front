@@ -35,6 +35,15 @@
       {{!fishBoats || hoveredTeam === boat.team ? boat.title : boat.name}}
     </span>
 
+    <div *ngIf="boat.damage">
+      <div class="damage">
+        <div [style.transform]="'translateX(' + boat.getDamage()/2 + 'px)'"></div>
+      </div>
+      <div class="bilge">
+        <div [style.transform]="'translateX(' + boat.bilge/2 + 'px)'"></div>
+      </div>
+    </div>
+
     <div class="movebar"
          [class.ready]="boat.ready">
       <div *ngFor="let move of boat.moves; let i = index"

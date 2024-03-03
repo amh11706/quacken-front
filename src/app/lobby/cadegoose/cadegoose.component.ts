@@ -26,7 +26,8 @@ const ownerSettings: SettingList = [
   'enableBots', 'botDifficulty',
   'cadePublicMode', 'cadeHotEntry',
   'cadeShowStats', 'allowGuests',
-  'cadeShowMoves', 'fishBoats',
+  'cadeShowMoves', 'cadeShowDamage',
+  'fishBoats',
 ];
 
 export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy ships in a battle for points.';

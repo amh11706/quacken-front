@@ -82,11 +82,13 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.fs.lobby$.subscribe(r => {
       this.teamPlayers$.next(Array(this.teamPlayers$.getValue().length).fill([]));
-      this.updatePlayers(r as TeamMessage[]);
+      this.updatePlayers(Object.values(r));
     }));
     this.subs.add(this.ws.subscribe(InCmd.Team, m => {
+      const players = this.fs.lobby$.getValue();
+      if (!players.length) return;
       this.updatePlayers([m]);
-      this.fs.lobby$.next([...this.fs.lobby$.getValue()]);
+      this.fs.lobby$.next([...players]);
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, m => {
       if (m.sId) this.removeUser(m.sId);
@@ -159,6 +161,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   private updatePlayers(players: TeamMessage[]) {
     const fsPlayers = this.fs.lobby$.getValue();
+    if (!fsPlayers.length) return;
     for (const t of players) {
       const user = fsPlayers.find((mes) => mes.sId === t.sId);
       if (!user?.sId) continue;

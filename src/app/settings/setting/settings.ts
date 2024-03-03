@@ -58,7 +58,8 @@ type ClientSettingGroup = {
   sounds: 'soundMaster' | 'soundNotify' | 'soundShip' | 'soundAlert',
   'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
   'l/cade': 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'cadePublicMode' | 'cadeMaxPlayers' |
-    'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' | 'cadeMap' | 'cadeTeams' | 'cadeShowMoves' | 'cadeRated' | 'fishBoats' | 'allowGuests',
+    'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' | 'cadeMap' | 'cadeTeams' | 'cadeShowMoves' | 'cadeShowDamage' |
+    'cadeRated' | 'fishBoats' | 'allowGuests',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
   'l/flaggames': 'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' |
@@ -73,7 +74,7 @@ export type ServerSettingGroup = {
   sounds: 'master' | 'notification' | 'ship' | 'alert',
   'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
   'l/cade': 'jobberQuality' | 'turnTime' | 'turns' | 'bots' | 'botDifficulty' | 'publicMode' | 'maxPlayers' | 'spawnDelay' |
-    'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'rated' | 'fishBoats' | 'allowGuests',
+    'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
   'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
@@ -164,6 +165,7 @@ export const Settings: SettingList = {
     options: ['Disabled', 'Players only', 'Watchers only', 'Everyone'],
   },
   cadeShowMoves: { admin: true, id: 67, group: 'l/cade', name: 'showMoves', type: 'checkbox', label: 'Show team moves' },
+  cadeShowDamage: { admin: true, id: 69, group: 'l/cade', name: 'showDamage', type: 'checkbox', label: 'Show team damage' },
   cadeRated: { admin: true, id: 68, group: 'l/cade', name: 'rated', type: 'checkbox', label: 'Rated' },
   cadeTurns: { admin: true, id: 34, group: 'l/cade', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5, default: 60 },
   enableBots: {

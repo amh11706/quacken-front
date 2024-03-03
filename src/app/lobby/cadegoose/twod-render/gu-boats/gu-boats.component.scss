@@ -5,6 +5,28 @@
   height: 0;
 }
 
+.damage,
+.bilge {
+  width: 50px;
+  height: 2px;
+  background-color: #aaaaaa;
+  overflow: hidden;
+  margin: auto;
+
+  div {
+    position: relative;
+    background: rgb(136, 4, 4);
+    height: 2px;
+    left: -100%;
+    transition: 0.3s linear;
+    pointer-events: none;
+  }
+}
+
+.bilge div {
+  background: rgb(37, 150, 255);
+}
+
 #island {
   transform: translate(-40%, -50%);
 }
@@ -20,30 +42,41 @@ q-sprite-img {
   transform: translateX(-50%);
 }
 
-.move8, .move9, .move10, .move11, .move12, .move13, .move16, .move17 {
+.move8,
+.move9,
+.move10,
+.move11,
+.move12,
+.move13,
+.move16,
+.move17 {
   background-color: goldenrod;
   color: white;
 }
 
-.move8, .move9 {
+.move8,
+.move9 {
   &::after {
     content: "L";
   }
 }
 
-.move10, .move11 {
+.move10,
+.move11 {
   &::after {
     content: "R";
   }
 }
 
-.move12, .move13 {
+.move12,
+.move13 {
   &::after {
     content: "F";
   }
 }
 
-.move16, .move17 {
+.move16,
+.move17 {
   &::after {
     content: "X";
   }
@@ -81,7 +114,11 @@ q-sprite-img {
 }
 
 .boattitle {
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
   white-space: nowrap;
   font-size: 13px;
 }
@@ -93,44 +130,98 @@ q-sprite-img {
   color: rgb(214, 247, 255) !important;
 }
 
-
 @keyframes explode {
-  from { background: url("/assets/clutter/hit.png") 0 no-repeat; }
-  to { background: url("/assets/clutter/hit.png") -640px no-repeat; }
+  from {
+    background: url("/assets/clutter/hit.png") 0 no-repeat;
+  }
+  to {
+    background: url("/assets/clutter/hit.png") -640px no-repeat;
+  }
 }
 @keyframes splash {
-  from { background: url("/assets/clutter/splash_large.png") 0 no-repeat; }
-  to { background: url("/assets/clutter/splash_large.png") -520px no-repeat; }
+  from {
+    background: url("/assets/clutter/splash_large.png") 0 no-repeat;
+  }
+  to {
+    background: url("/assets/clutter/splash_large.png") -520px no-repeat;
+  }
 }
 @keyframes rotate {
-  to { transform: translate(var(--tranX,0), var(--tranY,0)) rotate(360deg);}
+  to {
+    transform: translate(var(--tranX, 0), var(--tranY, 0)) rotate(360deg);
+  }
 }
-@keyframes move { 
-  to { transform: translate(var(--tranX,0), var(--tranY,0)) rotate(360deg) scale(var(--scale, 1)); }
+@keyframes move {
+  to {
+    transform: translate(var(--tranX, 0), var(--tranY, 0)) rotate(360deg) scale(var(--scale, 1));
+  }
 }
 @keyframes smoke {
-  from { background-position-x: 0; }
-  to { background-position-x: var(--endX); }
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: var(--endX);
+  }
 }
 
 @keyframes floatsam {
-  0%   { opacity: 0.7; transform: scale(1) }
-  25%   { opacity: 0.95; }
-  50%   { opacity: 1; transform: scale(1.01) }
-  75%   { opacity: 0.95; }
-  100% { opacity: 0.7; transform: scale(1) }
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  25% {
+    opacity: 0.95;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+  75% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
 }
 
-.shot.dis1 { --movetime: .3s; --distance: 1; }
-.shot.dis2 { --movetime: .5s; --distance: 2; }
-.shot.dis3, .shot.dis4 { --movetime: 0.7s; --distance: 3; }
-.size28 .shot.dis4, .size29 .shot.dis4, .size28 .shot.dis5, .size29 .shot.dis5 { --movetime: 0.7s; --distance: 4; }
+.shot.dis1 {
+  --movetime: 0.3s;
+  --distance: 1;
+}
+.shot.dis2 {
+  --movetime: 0.5s;
+  --distance: 2;
+}
+.shot.dis3,
+.shot.dis4 {
+  --movetime: 0.7s;
+  --distance: 3;
+}
+.size28 .shot.dis4,
+.size29 .shot.dis4,
+.size28 .shot.dis5,
+.size29 .shot.dis5 {
+  --movetime: 0.7s;
+  --distance: 4;
+}
 
 // speed set from html
-.shot.double { top: 10px; --delay: calc(var(--speed) * .2s) }
-.clutter { z-index: 2000; pointer-events: none; }
-.clutter16, .clutter17 { z-index: 5; }
-.shot, .smoke {
+.shot.double {
+  top: 10px;
+  --delay: calc(var(--speed) * 0.2s);
+}
+.clutter {
+  z-index: 2000;
+  pointer-events: none;
+}
+.clutter16,
+.clutter17 {
+  z-index: 5;
+}
+.shot,
+.smoke {
   position: absolute;
   top: 9px;
   left: 12px;
@@ -142,33 +233,93 @@ q-sprite-img {
 .shot {
   background-position: center;
   animation-play-state: var(--playState, running);
-  animation-duration: calc(var(--speed) * var(--movetime)), calc(var(--speed) * .5s);
+  animation-duration: calc(var(--speed) * var(--movetime)), calc(var(--speed) * 0.5s);
   animation-delay: var(--delay, 0s), calc(var(--movetime) * var(--speed) + var(--delay, 0s));
   animation-fill-mode: forwards;
   animation-name: move, explode;
   animation-timing-function: linear, steps(16);
 }
 
-.size1 .shot { background-image: url("/assets/clutter/cannonball_small.png"); }
-.size2 .shot { background-image: url("/assets/clutter/cannonball_medium.png"); }
-.size3 .shot { background-image: url("/assets/clutter/cannonball_large.png"); }
-.size28 .shot { background-image: url("/assets/clutter/cannonball_long.png"); --scale: 1.5; }
-.size29 .shot { background-image: url("/assets/clutter/cannonball_long_gold.png"); --scale: 2; }
-.size36 .shot { background-image: url("/assets/clutter/cannonball_healing.png"); }
-.size37 .shot { background-image: url("/assets/clutter/cannonball_healing_gold.png"); }
-.size4 .shot, .size6 .shot { background-image: url("/assets/clutter/chain_cannonball.png"); }
-.size5 .shot, .size7 .shot { background-image: url("/assets/clutter/flaming_cannonball.png"); }
-.shot.dis4, .shot.dis5 { animation-name: move, splash; animation-timing-function: linear, steps(13); }
-.smoke { animation: smoke calc(var(--speed) * 1s) steps(18) both; }
-.smoke { --endX: -720px; background-image: url("/assets/clutter/explode_small.png"); }
-.size2 .smoke, .size4 .smoke, .size5 .smoke, .size6 .smoke, .size7 .smoke { --endX: -720px; background-image: url("/assets/clutter/explode_medium.png"); }
-.size3 .smoke { --endX: -960px; animation-timing-function: steps(24); background-image: url("/assets/clutter/explode_large.png"); }
-.size20 .shot, .size21 .shot, .size22 .shot, .size23 .shot { --scale: 4; --delay: calc(var(--distance) * 0.15s * var(--speed)) }
+.size1 .shot {
+  background-image: url("/assets/clutter/cannonball_small.png");
+}
+.size2 .shot {
+  background-image: url("/assets/clutter/cannonball_medium.png");
+}
+.size3 .shot {
+  background-image: url("/assets/clutter/cannonball_large.png");
+}
+.size28 .shot {
+  background-image: url("/assets/clutter/cannonball_long.png");
+  --scale: 1.5;
+}
+.size29 .shot {
+  background-image: url("/assets/clutter/cannonball_long_gold.png");
+  --scale: 2;
+}
+.size36 .shot {
+  background-image: url("/assets/clutter/cannonball_healing.png");
+}
+.size37 .shot {
+  background-image: url("/assets/clutter/cannonball_healing_gold.png");
+}
+.size4 .shot,
+.size6 .shot {
+  background-image: url("/assets/clutter/chain_cannonball.png");
+}
+.size5 .shot,
+.size7 .shot {
+  background-image: url("/assets/clutter/flaming_cannonball.png");
+}
+.shot.dis4,
+.shot.dis5 {
+  animation-name: move, splash;
+  animation-timing-function: linear, steps(13);
+}
+.smoke {
+  animation: smoke calc(var(--speed) * 1s) steps(18) both;
+}
+.smoke {
+  --endX: -720px;
+  background-image: url("/assets/clutter/explode_small.png");
+}
+.size2 .smoke,
+.size4 .smoke,
+.size5 .smoke,
+.size6 .smoke,
+.size7 .smoke {
+  --endX: -720px;
+  background-image: url("/assets/clutter/explode_medium.png");
+}
+.size3 .smoke {
+  --endX: -960px;
+  animation-timing-function: steps(24);
+  background-image: url("/assets/clutter/explode_large.png");
+}
+.size20 .shot,
+.size21 .shot,
+.size22 .shot,
+.size23 .shot {
+  --scale: 4;
+  --delay: calc(var(--distance) * 0.15s * var(--speed));
+}
 
-.shot.dir0, .shot.dir1 { --tranY: calc(0px - var(--distance) * 24px) }
-.shot.dir2, .shot.dir3 { --tranY: calc(var(--distance) * 24px) }
-.shot.dir1, .shot.dir2 { --tranX: calc(var(--distance) * 32px) }
-.shot.dir0, .shot.dir3 { --tranX: calc(0px - var(--distance) * 32px) }
+.shot.dir0,
+.shot.dir1 {
+  --tranY: calc(0px - var(--distance) * 24px);
+}
+.shot.dir2,
+.shot.dir3 {
+  --tranY: calc(var(--distance) * 24px);
+}
+.shot.dir1,
+.shot.dir2 {
+  --tranX: calc(var(--distance) * 32px);
+}
+.shot.dir0,
+.shot.dir3 {
+  --tranX: calc(0px - var(--distance) * 32px);
+}
 
 .clutterimg {
   height: 48px;
@@ -177,12 +328,24 @@ q-sprite-img {
 }
 
 @keyframes wave {
-  from { transform: rotate(var(--rotate, 0)) scale(calc(var(--scaleX) / 4), calc(var(--scaleY) / 4)); }
-  60% { opacity: 1 }
-  to { transform: rotate(var(--rotate, 0)) scale(var(--scaleX), var(--scaleY)); opacity: 0 }
+  from {
+    transform: rotate(var(--rotate, 0)) scale(calc(var(--scaleX) / 4), calc(var(--scaleY) / 4));
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    transform: rotate(var(--rotate, 0)) scale(var(--scaleX), var(--scaleY));
+    opacity: 0;
+  }
 }
 
-.clutter12 .clutterimg, .clutter8 .clutterimg, .clutter20 .clutterimg, .clutter21 .clutterimg, .clutter22 .clutterimg, .clutter23 .clutterimg { 
+.clutter12 .clutterimg,
+.clutter8 .clutterimg,
+.clutter20 .clutterimg,
+.clutter21 .clutterimg,
+.clutter22 .clutterimg,
+.clutter23 .clutterimg {
   background-image: url("/assets/clutter/wave.png");
   position: absolute;
   opacity: 0;
@@ -195,28 +358,89 @@ q-sprite-img {
   animation-fill-mode: forwards;
 }
 
-.clutter20 .clutterimg, .clutter21 .clutterimg { animation-delay: 0; animation-duration: calc(var(--speed, 1) * 0.4s); }
-.clutter12 .clutterimg.dir0, .clutter20 .clutterimg.dir0, .clutter21 .clutterimg.dir0, .clutter22 .clutterimg.dir0, .clutter23 .clutterimg.dir0 { 
-  bottom: -48px; right: -64px; --scaleX: 1; --scaleY: -1; }
-.clutter12 .clutterimg.dir1, .clutter20 .clutterimg.dir1, .clutter21 .clutterimg.dir1, .clutter22 .clutterimg.dir1, .clutter23 .clutterimg.dir1 { 
-  bottom: -48px; left: 0; --scaleX: -1; --scaleY: -1; }
-.clutter12 .clutterimg.dir2, .clutter20 .clutterimg.dir2, .clutter21 .clutterimg.dir2, .clutter22 .clutterimg.dir2, .clutter23 .clutterimg.dir2 { 
-  top: 0; left: 0; --scaleX: -1; --scaleY: 1 }
-.clutter12 .clutterimg.dir3, .clutter20 .clutterimg.dir3, .clutter21 .clutterimg.dir3, .clutter22 .clutterimg.dir3, .clutter23 .clutterimg.dir3 { 
-  top: 0; right: -64px; --scaleX: 1; --scaleY: 1; }
+.clutter20 .clutterimg,
+.clutter21 .clutterimg {
+  animation-delay: 0;
+  animation-duration: calc(var(--speed, 1) * 0.4s);
+}
+.clutter12 .clutterimg.dir0,
+.clutter20 .clutterimg.dir0,
+.clutter21 .clutterimg.dir0,
+.clutter22 .clutterimg.dir0,
+.clutter23 .clutterimg.dir0 {
+  bottom: -48px;
+  right: -64px;
+  --scaleX: 1;
+  --scaleY: -1;
+}
+.clutter12 .clutterimg.dir1,
+.clutter20 .clutterimg.dir1,
+.clutter21 .clutterimg.dir1,
+.clutter22 .clutterimg.dir1,
+.clutter23 .clutterimg.dir1 {
+  bottom: -48px;
+  left: 0;
+  --scaleX: -1;
+  --scaleY: -1;
+}
+.clutter12 .clutterimg.dir2,
+.clutter20 .clutterimg.dir2,
+.clutter21 .clutterimg.dir2,
+.clutter22 .clutterimg.dir2,
+.clutter23 .clutterimg.dir2 {
+  top: 0;
+  left: 0;
+  --scaleX: -1;
+  --scaleY: 1;
+}
+.clutter12 .clutterimg.dir3,
+.clutter20 .clutterimg.dir3,
+.clutter21 .clutterimg.dir3,
+.clutter22 .clutterimg.dir3,
+.clutter23 .clutterimg.dir3 {
+  top: 0;
+  right: -64px;
+  --scaleX: 1;
+  --scaleY: 1;
+}
 
-.clutter8 .clutterimg { background-image: url("/assets/clutter/wave2.png"); top: -24px; left: -32px; }
-.clutter8 .clutterimg.dir0 { --scaleX: 1; --scaleY: 1; }
-.clutter8 .clutterimg.dir1 { --scaleX: -1; --scaleY: 1; }
-.clutter8 .clutterimg.dir2 { --scaleX: -1; --scaleY: 1.25; --rotate: 90deg; }
-.clutter8 .clutterimg.dir3 { --scaleX: 1; --scaleY: 1.25; --rotate: -90deg; }
+.clutter8 .clutterimg {
+  background-image: url("/assets/clutter/wave2.png");
+  top: -24px;
+  left: -32px;
+}
+.clutter8 .clutterimg.dir0 {
+  --scaleX: 1;
+  --scaleY: 1;
+}
+.clutter8 .clutterimg.dir1 {
+  --scaleX: -1;
+  --scaleY: 1;
+}
+.clutter8 .clutterimg.dir2 {
+  --scaleX: -1;
+  --scaleY: 1.25;
+  --rotate: 90deg;
+}
+.clutter8 .clutterimg.dir3 {
+  --scaleX: 1;
+  --scaleY: 1.25;
+  --rotate: -90deg;
+}
 
-.clutter16 .clutterimg { background-image: url("/assets/clutter/flotsam.png"); }
-.clutter17 .clutterimg { background-image: url("/assets/clutter/flaming_flotsam.png"); }
+.clutter16 .clutterimg {
+  background-image: url("/assets/clutter/flotsam.png");
+}
+.clutter17 .clutterimg {
+  background-image: url("/assets/clutter/flaming_flotsam.png");
+}
 
-.clutter17 .clutterimg { animation: floatsam 1.5s ease-in-out infinite; }
+.clutter17 .clutterimg {
+  animation: floatsam 1.5s ease-in-out infinite;
+}
 
-.clutter24 .clutterimg, .clutter25 .clutterimg { 
+.clutter24 .clutterimg,
+.clutter25 .clutterimg {
   background: url("/assets/images/powderkeg.png") center/cover no-repeat;
   scale: 0.2;
 
@@ -231,7 +455,9 @@ q-sprite-img {
     animation: explode calc(var(--speed) * 1s) steps(16) forwards;
   }
 }
-.clutter25 .clutterimg { 
+.clutter25 .clutterimg {
   background-image: url("/assets/images/powderkeg_gold.png");
-  &.popped { scale: 1.5; }
+  &.popped {
+    scale: 1.5;
+  }
 }
