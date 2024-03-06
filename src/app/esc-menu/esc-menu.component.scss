@@ -36,6 +36,12 @@
   color: #eee;
   z-index: 49;
 }
+
+// needed for the tabs to fill the whole height
+::ng-deep .mat-mdc-tab-body-wrapper {
+  height: 100%;
+}
+
 @media screen and (max-height: 350px) {
   //temporary fix for mobile screens
   #side-menu {

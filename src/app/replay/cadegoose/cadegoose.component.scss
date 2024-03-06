@@ -1,5 +1,5 @@
 // needed to make the tabs fit without scroll
-::ng-deep div.mdc-tab {
+:host ::ng-deep div.mdc-tab {
   min-width: 20px;
   max-width: 40px;
   padding: 0 12px;
