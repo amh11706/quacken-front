@@ -70,9 +70,9 @@
             mat-sort-header
             *matHeaderCellDef>Rank</th>
         <td mat-cell
-            *matCellDef="let element">{{element.score || '-'}}<q-rank-circle *ngIf="element.score"
+            *matCellDef="let element">{{element.rank || '-'}}<q-rank-circle *ngIf="element.rank"
                          [tier]="element.tier"
-                         [score]="element.score"></q-rank-circle></td>
+                         [score]="element.rank"></q-rank-circle></td>
       </ng-container>
 
       <ng-container matColumnDef="result">
