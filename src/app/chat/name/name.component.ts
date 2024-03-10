@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
@@ -14,17 +14,26 @@ import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { SettingsService } from '../../settings/settings.service';
 import { FindCustomEmoji } from '../../settings/account/account.component';
 
+interface MenuOption {
+  label: string;
+  action: () => void;
+}
+
+const BotRegex = /Bot\d{1,4}/;
+
 @Component({
   selector: 'q-name',
   templateUrl: './name.component.html',
   styleUrls: ['./name.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NameComponent {
-  @Input() message = {} as Partial<TeamMessage> & { from: string };
+export class NameComponent implements OnChanges {
+  @Input() message = { from: '' } as Partial<TeamMessage> & { from: string };
   @Input() offline = false;
   tierTitles = TierTitles;
   findCustomEmoji = FindCustomEmoji;
+  menuItems: MenuOption[] = [];
+  private lastFrom = '';
 
   constructor(
     public chat: ChatService,
@@ -35,6 +44,42 @@ export class NameComponent {
     private esc: EscMenuService,
     private ss: SettingsService,
   ) { }
+
+  ngOnChanges(): void {
+    if (this.message.from === this.lastFrom) return;
+    this.lastFrom = this.message.from || '';
+    this.menuItems = this.getMenuItems(this.lastFrom);
+  }
+
+  private getMenuItems(from: string): MenuOption[] {
+    if (BotRegex.test(from)) {
+      return [{
+        label: 'It\'s a bot',
+        action: () => this.openProfile(),
+      }];
+    }
+    if (from === 'Guest' && from === this.ws.user.name) {
+      return [{
+        label: 'It\'s you. Create an account for more options.',
+        action: () => null,
+      }];
+    }
+    if (from === this.ws.user.name) {
+      return [
+        { label: 'Your Profile', action: () => this.openProfile() },
+        { label: 'Set Emoji', action: () => this.openEmoji() },
+      ];
+    }
+
+    return [
+      { label: 'Open Profile', action: () => this.openProfile() },
+      ...this.chat.nameCommands.map(cmd => ({ label: cmd.title, action: () => this.sendCmd(cmd) })),
+      { label: 'Add Friend', action: () => this.add() },
+      this.fs.isBlocked(from)
+        ? { label: 'Unblock', action: () => this.unblock() }
+        : { label: 'Block', action: () => this.block() },
+    ];
+  }
 
   private getName(): string {
     let name = this.message.from;

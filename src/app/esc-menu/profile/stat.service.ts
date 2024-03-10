@@ -18,8 +18,6 @@ const placeholderRank = {
   level: 0,
 } as UserRank;
 
-const BotRegex = /Bot\d{1,4}/;
-
 @Injectable({
   providedIn: 'root',
 })
@@ -139,13 +137,11 @@ export class StatService {
       l.from = l.userName;
       l.ti = l.tier;
       l.sc = l.score;
-      l.copy = BotRegex.test(l.userName) ? 0 : 1;
     }
     for (const l of rankLeaders.xp) {
       l.from = l.userName;
       l.ti = l.tier;
       l.sc = l.score;
-      l.copy = BotRegex.test(l.userName) ? 0 : 1;
     }
     this.rankLeaders$.next(rankLeaders);
   }
@@ -163,7 +159,6 @@ export class StatService {
     if (leaders[0]?.matchId) this.columns = StatColumnsWithReplay;
     for (const l of leaders) {
       l.from = l.name;
-      l.copy = BotRegex.test(l.name) ? 0 : 1;
     }
     this.leaders$.next(leaders);
   }

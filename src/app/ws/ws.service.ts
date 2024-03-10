@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, Subscription, ReplaySubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -23,7 +23,7 @@ export interface TokenUser {
 @Injectable({
   providedIn: 'root',
 })
-export class WsService {
+export class WsService implements OnDestroy {
   static reason?: string;
   private socket?: WebSocket;
   private token = '';
@@ -76,6 +76,10 @@ export class WsService {
       sessionStorage.setItem('reloadTime', String(new Date().valueOf()));
       location.reload();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.close();
   }
 
   connect(token = this.token): void {

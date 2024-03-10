@@ -1,7 +1,7 @@
-<span *ngIf="message.from !== ws.user?.name || (message.from === 'Guest' && message.copy !== ws.copy); else you"
-      [matMenuTriggerFor]="nameMenu">
+<span [matMenuTriggerFor]="nameMenu">
   <span [class.friend]="fs.isFriend(message.from)"
         [class.bot]="message.copy === 0"
+        [class.you]="message.from === ws.user.name"
         [class.admin]="message.admin && message.admin >= 3"
         [class.blocked]="fs.isBlocked(message.from)">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
@@ -14,75 +14,10 @@
                  [score]="message.sc || 0"></q-rank-circle>
 </span>
 
-<ng-template #you>
-  <span [matMenuTriggerFor]="youMenu">
-    <span class="you"
-          [class.admin]="message.admin && message.admin >= 3">{{message.from}}</span>
-    <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-    <ngx-emoji *ngIf="message.d"
-               [size]="16"
-               [tooltip]="true"
-               [emoji]="findCustomEmoji(message.d)"></ngx-emoji>
-    <q-rank-circle *ngIf="message.ti"
-                   [tier]="message.ti"
-                   [score]="message.sc || 0"></q-rank-circle>
-  </span>
-</ng-template>
-
-<ng-template #guest>
-  <p>Create an account to get a profile page.</p>
-</ng-template>
-
-<mat-menu #youMenu="matMenu">
-  <ng-template matMenuContent>
-    <button *ngIf="message.from !== 'Guest'; else guest"
-            mat-menu-item
-            (click)="openProfile()">
-      Profile
-    </button>
-    <button mat-menu-item
-            (click)="openEmoji()">
-      Set emoji
-    </button>
-  </ng-template>
-</mat-menu>
-
 <mat-menu #nameMenu="matMenu">
   <ng-template matMenuContent>
-    <button *ngIf="message.copy === 0; else notabot"
+    <button *ngFor="let option of menuItems"
             mat-menu-item
-            (click)="openProfile()">It's a bot</button>
-    <ng-template #notabot>
-      <button *ngIf="message.from !== 'Guest'"
-              mat-menu-item
-              (click)="openProfile()">
-        Profile
-      </button>
-      <ng-container *ngIf="!offline">
-        <button *ngFor="let cmd of chat.nameCommands"
-                mat-menu-item
-                (click)="sendCmd(cmd)">
-          {{cmd.title | titlecase}}
-        </button>
-        <ng-container *ngIf="ws.user?.name !== 'Guest'">
-          <button *ngIf="!fs.isFriend(message.from)"
-                  mat-menu-item
-                  (click)="add()">
-            Add friend
-          </button>
-          <button *ngIf="!fs.isBlocked(message.from); else unblockButton"
-                  mat-menu-item
-                  (click)="block()">
-            Block
-          </button>
-        </ng-container>
-        <ng-template #unblockButton>
-          <button mat-menu-item
-                  (click)="unblock()">
-            Unblock
-          </button>
-        </ng-template>
-      </ng-container>
-    </ng-template>
+            (click)="option.action()">{{ option.label | titlecase }}</button>
   </ng-template>
 </mat-menu>
