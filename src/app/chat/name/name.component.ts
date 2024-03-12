@@ -32,6 +32,9 @@ export class NameComponent implements OnChanges {
   @Input() offline = false;
   tierTitles = TierTitles;
   findCustomEmoji = FindCustomEmoji;
+  emoji = '';
+  friend = false;
+  blocked = false;
   menuItems: MenuOption[] = [];
   private lastFrom = '';
 
@@ -49,6 +52,10 @@ export class NameComponent implements OnChanges {
     if (this.message.from === this.lastFrom) return;
     this.lastFrom = this.message.from || '';
     this.menuItems = this.getMenuItems(this.lastFrom);
+    this.friend = this.fs.isFriend(this.lastFrom);
+    this.blocked = this.fs.isBlocked(this.lastFrom);
+    this.emoji = '';
+    if (this.message.d) this.emoji = this.findCustomEmoji(this.message.d) as string;
   }
 
   private getMenuItems(from: string): MenuOption[] {
@@ -88,13 +95,12 @@ export class NameComponent implements OnChanges {
   }
 
   openProfile(): void {
-    if (this.message.from) this.stat.openUser(this.message.from);
+    if (this.message.from) void this.stat.openUser(this.message.from);
   }
 
   openEmoji(): void {
-    this.esc.activeTab$.next(4);
+    void this.esc.openTab(4);
     this.ss.tabIndex = 4;
-    this.esc.open$.next(true);
   }
 
   sendCmd(cmd: Command): void {

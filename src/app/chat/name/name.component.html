@@ -1,14 +1,14 @@
 <span [matMenuTriggerFor]="nameMenu">
-  <span [class.friend]="fs.isFriend(message.from)"
+  <span [class.friend]="friend"
         [class.bot]="message.copy === 0"
         [class.you]="message.from === ws.user.name"
         [class.admin]="message.admin && message.admin >= 3"
-        [class.blocked]="fs.isBlocked(message.from)">{{message.from}}</span>
+        [class.blocked]="blocked">{{message.from}}</span>
   <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-  <ngx-emoji *ngIf="message.d"
+  <ngx-emoji *ngIf="emoji"
              [size]="16"
              [tooltip]="true"
-             [emoji]="message.d"></ngx-emoji>
+             [emoji]="emoji"></ngx-emoji>
   <q-rank-circle *ngIf="message.ti"
                  [tier]="message.ti"
                  [score]="message.sc || 0"></q-rank-circle>

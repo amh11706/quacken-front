@@ -13,8 +13,17 @@ export const CustomEmojis: Partial<EmojiData>[] = [
     shortNames: ['frogsuss'],
     text: '',
     emoticons: [],
-    keywords: ['frog', 'frogsuss'],
+    keywords: ['frog', 'suss', 'frogsuss'],
     imageUrl: '/assets/icons/frog.png',
+  },
+  {
+    name: 'This is fine',
+    shortName: 'thisisfine',
+    shortNames: ['thisisfine'],
+    text: '',
+    emoticons: [],
+    keywords: ['this', 'fine', 'fire'],
+    imageUrl: '/assets/icons/thisisfine.gif',
   },
 ];
 
