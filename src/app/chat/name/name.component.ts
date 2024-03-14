@@ -35,6 +35,7 @@ export class NameComponent implements OnChanges {
   emoji = '';
   friend = false;
   blocked = false;
+  bot = false;
   menuItems: MenuOption[] = [];
   private lastFrom = '';
 
@@ -51,15 +52,16 @@ export class NameComponent implements OnChanges {
   ngOnChanges(): void {
     if (this.message.from === this.lastFrom) return;
     this.lastFrom = this.message.from || '';
-    this.menuItems = this.getMenuItems(this.lastFrom);
     this.friend = this.fs.isFriend(this.lastFrom);
     this.blocked = this.fs.isBlocked(this.lastFrom);
+    this.bot = this.message.copy === 0 || BotRegex.test(this.lastFrom);
     this.emoji = '';
     if (this.message.d) this.emoji = this.findCustomEmoji(this.message.d) as string;
+    this.menuItems = this.getMenuItems(this.lastFrom);
   }
 
   private getMenuItems(from: string): MenuOption[] {
-    if (BotRegex.test(from)) {
+    if (this.bot) {
       return [{
         label: 'It\'s a bot',
         action: () => this.openProfile(),

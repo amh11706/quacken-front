@@ -1,6 +1,6 @@
 <span [matMenuTriggerFor]="nameMenu">
   <span [class.friend]="friend"
-        [class.bot]="message.copy === 0"
+        [class.bot]="bot"
         [class.you]="message.from === ws.user.name"
         [class.admin]="message.admin && message.admin >= 3"
         [class.blocked]="blocked">{{message.from}}</span>
