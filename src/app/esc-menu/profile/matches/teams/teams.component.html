@@ -8,16 +8,19 @@
     <table>
       <tr>
         <ng-container *ngFor="let team of teamImages; let i = index">
-          <th *ngIf="teams[i]">
+          <th *ngIf="teams[i]?.length">
             <img [src]="team.src"
                  [matTooltip]="team.title">
           </th>
         </ng-container>
       </tr>
       <tr>
-        <td *ngFor="let team of teams">
-          <q-name *ngFor="let p of team" [message]="p"></q-name>
-        </td>
+        <ng-container *ngFor="let team of teams">
+          <td *ngIf="team?.length">
+            <q-name *ngFor="let p of team"
+                    [message]="p"></q-name>
+          </td>
+        </ng-container>
       </tr>
     </table>
   </div>
