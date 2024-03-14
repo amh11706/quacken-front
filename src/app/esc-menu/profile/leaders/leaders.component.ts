@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { StatService } from '../stat.service';
-import { EscMenuService } from '../../esc-menu.service';
 
 export const TierTitles = [
   'Bronze 1', 'Bronze 2', 'Bronze 3',
@@ -18,19 +17,22 @@ export const TierTitles = [
   styleUrls: ['./leaders.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LeadersComponent {
+export class LeadersComponent implements OnInit, OnDestroy {
   @Input() name?: string;
   tierTitles = TierTitles;
+  private initTimer = 0;
 
   constructor(
     public stat: StatService,
-    private esc: EscMenuService,
-  ) {
-    this.stat.profileTabChange$.subscribe(value => {
-      if (value === 3) void this.stat.refreshLeaders();
-    });
-    this.esc.activeTab$.subscribe(value => {
-      if (value === 1 && this.stat.profileTab === 3) void this.stat.refreshLeaders();
-    });
+  ) { }
+
+  ngOnInit(): void {
+    this.initTimer = window.setTimeout(() => {
+      void this.stat.refreshLeaders();
+    }, 750);
+  }
+
+  ngOnDestroy(): void {
+    window.clearTimeout(this.initTimer);
   }
 }

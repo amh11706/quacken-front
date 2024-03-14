@@ -1,7 +1,7 @@
-<mat-tab-group [(selectedIndex)]="stat.profileTab"
+<mat-tab-group [selectedIndex]="stat.profileTab$ | async"
+               (selectedIndexChange)="stat.setTab($event)"
                [mat-stretch-tabs]="false"
-               mat-align-tabs="center"
-               (animationDone)="stat.emitTab()">
+               mat-align-tabs="center">
   <mat-tab label="Profile">
     <div id="stats">
       <button mat-icon-button
@@ -156,11 +156,15 @@
   </mat-tab>
 
   <mat-tab label="Leaderboards">
-    <q-leaders [name]='ws.user.name'></q-leaders>
+    <ng-template matTabContent>
+      <q-leaders [name]='ws.user.name'></q-leaders>
+    </ng-template>
   </mat-tab>
 
   <mat-tab label="Matches">
-    <q-matches></q-matches>
+    <ng-template matTabContent>
+      <q-matches></q-matches>
+    </ng-template>
   </mat-tab>
 </mat-tab-group>
 

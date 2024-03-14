@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { MatSort } from '@angular/material/sort';
@@ -38,7 +38,7 @@ function searchMatch(match: Match, term: string): boolean {
   styleUrls: ['./matches.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MatchesComponent implements OnInit {
+export class MatchesComponent implements OnInit, OnDestroy {
   tierTitles = TierTitles;
   matches: Match[][] = [[], [], [], []];
   teamImages = TeamImages;
@@ -49,8 +49,8 @@ export class MatchesComponent implements OnInit {
   @ViewChild(MatSort) sort?: MatSort;
   searchTerms: string[] = [];
   separatorKeysCodes: number[] = [ENTER, COMMA];
-  private viewLoaded = false;
   private filterChanges = new Subject<string>();
+  private initTimer = 0;
 
   constructor(
     public ws: WsService,
@@ -73,14 +73,14 @@ export class MatchesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.stat.profileTabChange$.subscribe(value => {
-      this.viewLoaded = value === 4;
-      if (this.viewLoaded) void this.fetchMatches();
-    });
+    this.initTimer = window.setTimeout(() => this.fetchMatches(), 500);
+  }
+
+  ngOnDestroy(): void {
+    clearTimeout(this.initTimer);
   }
 
   async fetchMatches(name = this.stat.target): Promise<void> {
-    if (!this.viewLoaded) return;
     if (name !== this.stat.target) {
       this.stat.target = name;
     }

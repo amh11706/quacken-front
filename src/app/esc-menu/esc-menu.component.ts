@@ -28,6 +28,14 @@ export class EscMenuComponent {
     private dialog: MatDialog,
   ) { }
 
+  onTabChange(index: number) {
+    void this.es.tabChange(index);
+  }
+
+  onLobbyTabChange(index: number) {
+    void this.es.tabChange(this.es.activeTab$.value, false, { lobbyTab: index });
+  }
+
   logout(): void {
     this.dialog.open(LogoutConfirmComponent, { width: '90%', maxWidth: '300px' });
   }

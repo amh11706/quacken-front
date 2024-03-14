@@ -12,7 +12,7 @@
 </button>
 <div id="backgroundframe"
      *ngrxLet="es.open$ as open"
-     [class.open]="es.open$ | async">
+     [class.open]="open">
   <div id="side-menu">
     <div id="menuButtons">
       <a mat-button
@@ -42,13 +42,14 @@
 
     <mat-tab-group id="main-tab"
                    [mat-stretch-tabs]="false"
-                   (selectedIndexChange)="es.activeTab$.next($event)"
+                   (selectedIndexChange)="onTabChange($event)"
                    [selectedIndex]="es.activeTab$ | async">
       <mat-tab label="LOBBY"
                [disabled]="!open">
         <mat-tab-group id="sub-tab"
                        [mat-stretch-tabs]="false"
-                       [(selectedIndex)]="es.lobbyTab"
+                       [selectedIndex]="es.lobbyTab$ | async"
+                       (selectedIndexChange)="onLobbyTabChange($event)"
                        mat-align-tabs="center">
           <mat-tab label="Lobby">
             <mat-card>
@@ -60,18 +61,20 @@
           </mat-tab>
           <mat-tab label="Settings"
                    *ngIf="ss.lAdminSettings.length">
-            <mat-card id="lobbySettings"
-                      *ngIf="es.open$ | async">
-              <h4>Lobby Owner Settings</h4>
-              <div class="settings">
-                <q-setting *ngFor="let s of ss.lAdminSettings"
-                           [name]="s"></q-setting>
-              </div>
-            </mat-card>
+            <ng-template matTabContent>
+              <mat-card id="lobbySettings"
+                        *ngIf="es.open$ | async">
+                <h4>Lobby Owner Settings</h4>
+                <div class="settings">
+                  <q-setting *ngFor="let s of ss.lAdminSettings"
+                             [name]="s"></q-setting>
+                </div>
+              </mat-card>
+            </ng-template>
           </mat-tab>
           <mat-tab label="Map Selection"
                    *ngIf="ss.showMapChoice">
-            <q-map-list [visible]="es.lobbyTab === 2 && (es.open$ | async) === true"
+            <q-map-list [visible]="es.lobbyTab$.value === 2 && open"
                         [rankArea]="ss.rankArea"></q-map-list>
           </mat-tab>
         </mat-tab-group>
@@ -79,18 +82,24 @@
 
       <mat-tab label="PROFILE"
                [disabled]="!open">
-        <ng-container *ngComponentOutlet="ProfileComponent"></ng-container>
+        <ng-template matTabContent>
+          <ng-container *ngComponentOutlet="ProfileComponent"></ng-container>
+        </ng-template>
       </mat-tab>
 
       <mat-tab label="INVENTORY"
                *ngIf="ws.user?.id"
                [disabled]="!open">
-        <ng-container *ngComponentOutlet="InventoryComponent"></ng-container>
+        <ng-template matTabContent>
+          <ng-container *ngComponentOutlet="InventoryComponent"></ng-container>
+        </ng-template>
       </mat-tab>
 
       <mat-tab label="SETTINGS"
                [disabled]="!open">
-        <ng-container *ngComponentOutlet="SettingsComponent"></ng-container>
+        <ng-template matTabContent>
+          <ng-container *ngComponentOutlet="SettingsComponent"></ng-container>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
 

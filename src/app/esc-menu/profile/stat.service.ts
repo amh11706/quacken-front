@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
-import { FriendsService } from '../../chat/friends/friends.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { EscMenuService } from '../esc-menu.service';
@@ -22,8 +21,7 @@ const placeholderRank = {
   providedIn: 'root',
 })
 export class StatService {
-  profileTab = 0;
-  profileTabChange$ = new Subject<number>();
+  profileTab$ = new BehaviorSubject<number>(0);
   target = this.ws.user?.name || '';
 
   id = 199;
@@ -45,12 +43,15 @@ export class StatService {
 
   constructor(
     private ws: WsService,
-    private fs: FriendsService,
     private es: EscMenuService,
     private kbs: KeyBindingService,
   ) {
-    this.es.open$.subscribe(open => {
-      if (open && es.activeTab$.getValue() === 1) this.profileTabChange$.next(this.profileTab);
+    this.es.queryParams$.pipe(
+      filter(p => p.profileTab !== undefined),
+      map(p => +p.profileTab),
+      distinctUntilChanged(),
+    ).subscribe(v => {
+      this.profileTab$.next(v);
     });
   }
 
@@ -59,22 +60,16 @@ export class StatService {
     this.winLoss = winLoss || { wins: 0, losses: 0 };
   }
 
-  emitTab(): void {
-    this.profileTabChange$.next(this.profileTab);
+  setTab(tab: number) {
+    return this.es.tabChange(1, false, { profileTab: tab });
   }
 
-  async setTab(tab: number): Promise<void> {
-    if (this.profileTab === tab) return;
-    this.profileTab = tab;
-    await this.profileTabChange$.toPromise();
-  }
-
-  openUser(name: string, open = true): void {
+  async openUser(name: string, open = true) {
     this.target = name;
     void this.refresh();
     if (open) {
       this.kbs.emitAction(KeyActions.OpenProfile);
-      this.es.open$.next(true);
+      await this.es.openMenu();
       void this.setTab(0);
     }
   }
@@ -87,10 +82,10 @@ export class StatService {
     void this.setTab(4);
   }
 
-  openLeaders(id: number): void {
+  openLeaders(id: number) {
     this.id = id;
-    if (this.profileTab !== 3) void this.setTab(3);
-    else void this.refreshLeaders();
+    void this.refreshLeaders();
+    return this.setTab(3);
   }
 
   async refresh(): Promise<void> {

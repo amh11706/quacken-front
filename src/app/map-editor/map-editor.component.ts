@@ -83,14 +83,14 @@ export class MapEditorComponent implements OnInit, OnDestroy {
       if (v) this.ws.send(OutCmd.EditorJoin);
     }));
 
-    this.es.setLobby(GuideComponent);
+    void this.es.setLobby(GuideComponent);
   }
 
   ngOnDestroy(): void {
     this.saveSession();
     window.removeEventListener('beforeunload', this.saveSession);
     this.sub.unsubscribe();
-    this.es.setLobby();
+    void this.es.setLobby();
   }
 
   settings(): RenderSetting | undefined {
@@ -104,8 +104,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
   };
 
   openGuide(): void {
-    this.es.open$.next(true);
-    this.es.activeTab$.next(0);
+    void this.es.openTab(0);
   }
 
   resetUndos = (): void => {

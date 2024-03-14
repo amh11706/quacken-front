@@ -31,8 +31,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v || !this.ws.user || this.stat.target) return;
-      this.stat.openUser(this.ws.user?.name, false);
+      void this.stat.openUser(this.ws.user?.name, false);
     }));
+    this.showUser(this.stat.target);
   }
 
   ngOnDestroy(): void {
@@ -48,11 +49,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   reset(): void {
-    this.stat.openUser(this.ws.user?.name || '');
+    void this.stat.openUser(this.ws.user?.name || '');
   }
 
   showUser(name: string): void {
-    this.stat.openUser(name || this.ws.user?.name || '', false);
+    void this.stat.openUser(name || this.ws.user?.name || '', false);
   }
 
   sendTell(friend: string): void {

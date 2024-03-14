@@ -16,7 +16,7 @@ export class NameSearchComponent implements OnInit {
   private _value = '';
   @Input() set value(v: string) {
     this.myControl.setValue(v);
-    if (v !== this._value) this.valueChange.emit(v);
+    if (this.value && v !== this._value) this.valueChange.emit(v);
     this._value = v;
   }
 

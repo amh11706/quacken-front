@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { BehaviorSubject, Observable, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { WsService } from '../ws/ws.service';
@@ -9,72 +9,111 @@ import { WsService } from '../ws/ws.service';
   providedIn: 'root',
 })
 export class EscMenuService {
+  queryParams$: Observable<any>;
   open$ = new BehaviorSubject(false);
   lobbyComponent: any;
   activeTab$ = new BehaviorSubject(0);
-  lobbyTab = 0;
+  lobbyTab$ = new BehaviorSubject(0);
   lobbyContext: any;
 
   constructor(
     private ws: WsService,
     private router: Router,
+    private route: ActivatedRoute,
     kbs: KeyBindingService,
   ) {
-    this.ws.connected$.subscribe(v => {
-      if (!v) this.open$.next(false);
+    this.queryParams$ = this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      tap(() => {
+        this.route = this.router.routerState.root.firstChild || this.route;
+      }),
+      switchMap(() => this.route.queryParams),
+    );
+
+    this.queryParams$.pipe(
+      filter(p => p.tab !== undefined),
+      map(p => +p.tab),
+      distinctUntilChanged(),
+    ).subscribe(v => {
+      this.activeTab$.next(v);
+    });
+
+    this.queryParams$.pipe(
+      map(p => p.esc === 'true'),
+      distinctUntilChanged(),
+    ).subscribe(v => {
+      this.open$.next(v);
+    });
+
+    this.queryParams$.pipe(
+      filter(p => p.lobbyTab !== undefined),
+      map(p => +p.lobbyTab),
+      distinctUntilChanged(),
+    ).subscribe(v => {
+      this.lobbyTab$.next(v);
     });
 
     kbs.subscribe(KeyActions.ToggleEscMenu, v => {
-      if (v) this.toggle();
+      if (v) void this.toggle();
     });
     kbs.subscribe(KeyActions.OpenLobby, v => {
-      if (v) this.openTab(this.lobbyComponent);
+      if (v) void this.openTab(0, true);
     });
     kbs.subscribe(KeyActions.OpenSettings, v => {
-      if (v) this.openTab(3);
+      if (v) void this.openTab(3, true);
     });
     kbs.subscribe(KeyActions.OpenInventory, v => {
-      if (v) this.openTab(2);
+      if (v) void this.openTab(2, true);
     });
     kbs.subscribe(KeyActions.OpenProfile, v => {
-      if (v) this.openTab(1);
+      if (v) void this.openTab(1, true);
     });
     kbs.subscribe(KeyActions.LeaveLobby, v => {
-      if (v && (this.lobbyComponent || this.lobbyContext)) this.leave();
+      if (v && (this.lobbyComponent || this.lobbyContext)) void this.leave();
     });
     kbs.subscribe(KeyActions.Logout, v => {
-      if (v) this.logout();
+      if (v) void this.logout();
+    });
+  }
+
+  tabChange(index: number, toggle = false, queryExtra: Record<string, number> = {}) {
+    if (!this.open$.value) return;
+    return this.openTab(index, toggle, queryExtra);
+  }
+
+  openTab(tab: number, toggle = false, queryExtra: Record<string, number> = {}): Promise<any> {
+    if (toggle && tab === this.activeTab$.value) return this.openMenu(false);
+    return this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { esc: 'true', tab, lobbyTab: null, ...queryExtra },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  openMenu(value = true) {
+    return this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: value ? { esc: 'true', tab: 0, lobbyTab: 0 } : { esc: null, tab: null, lobbyTab: null, profileTab: null },
+      queryParamsHandling: 'merge',
     });
   }
 
   toggle() {
-    this.open$.next(!this.open$.value);
-  }
-
-  private openTab(tab: number) {
-    if (this.open$.getValue() && this.activeTab$.getValue() === tab) {
-      this.open$.next(false);
-      return;
-    }
-    this.open$.next(true);
-    this.activeTab$.next(tab);
+    return this.openMenu(!this.open$.value);
   }
 
   setLobby(component?: unknown, context?: unknown): void {
-    this.activeTab$.next(-1);
     this.lobbyComponent = component;
     this.lobbyContext = context;
-    if (!this.lobbyComponent) this.open$.next(false);
   }
 
   private logout() {
     this.ws.close();
     window.localStorage.removeItem('token');
-    void this.router.navigate(['auth/login']);
+    return this.router.navigate(['auth/login']);
   }
 
-  private leave(): void {
-    void this.router.navigateByUrl('/list');
-    this.open$.next(false);
+  private leave() {
+    return this.router.navigate(['list']);
   }
 }

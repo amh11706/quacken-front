@@ -56,15 +56,6 @@
   flex-direction: column;
   row-gap: min(1vh, 32px);
   justify-content: center;
-
-  .mat-button {
-    width: 75px;
-    height: 50px;
-  }
-
-  .mat-button:hover {
-    background-color: none;
-  }
 }
 
 .discord {
