@@ -53,7 +53,6 @@ export class StatService {
       distinctUntilChanged(),
     ).subscribe(v => {
       this._profileTab$.next(v);
-      console.log('profileTab', v);
     });
   }
 
