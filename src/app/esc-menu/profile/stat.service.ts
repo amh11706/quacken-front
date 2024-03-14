@@ -21,7 +21,8 @@ const placeholderRank = {
   providedIn: 'root',
 })
 export class StatService {
-  profileTab$ = new BehaviorSubject<number>(0);
+  private _profileTab$ = new BehaviorSubject(0);
+  profileTab$ = this._profileTab$.asObservable();
   target = this.ws.user?.name || '';
 
   id = 199;
@@ -51,7 +52,8 @@ export class StatService {
       map(p => +p.profileTab),
       distinctUntilChanged(),
     ).subscribe(v => {
-      this.profileTab$.next(v);
+      this._profileTab$.next(v);
+      console.log('profileTab', v);
     });
   }
 

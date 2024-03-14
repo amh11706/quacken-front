@@ -9,10 +9,11 @@ import { WsService } from '../ws/ws.service';
   providedIn: 'root',
 })
 export class EscMenuService {
-  queryParams$: Observable<Params>;
+  private _queryParams$: BehaviorSubject<Params>;
   private _open$ = new BehaviorSubject(false);
   private _activeTab$ = new BehaviorSubject(0);
   private _lobbyTab$ = new BehaviorSubject(0);
+  queryParams$: Observable<Params>;
   open$ = this._open$.asObservable();
   activeTab$ = this._activeTab$.asObservable();
   lobbyTab$ = this._lobbyTab$.asObservable();
@@ -26,13 +27,18 @@ export class EscMenuService {
     private route: ActivatedRoute,
     kbs: KeyBindingService,
   ) {
-    this.queryParams$ = this.router.events.pipe(
+    this._queryParams$ = new BehaviorSubject(this.route.snapshot.queryParams);
+    this.queryParams$ = this._queryParams$.asObservable();
+
+    this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
       tap(() => {
         this.route = this.router.routerState.root.firstChild || this.route;
       }),
       switchMap(() => this.route.queryParams),
-    );
+    ).subscribe(p => {
+      this._queryParams$.next(p);
+    });
 
     this.queryParams$.pipe(
       filter(p => p.tab !== undefined),
