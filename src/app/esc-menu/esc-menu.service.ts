@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { BehaviorSubject, Observable, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
 import { KeyActions } from '../settings/key-binding/key-actions';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
@@ -9,11 +9,15 @@ import { WsService } from '../ws/ws.service';
   providedIn: 'root',
 })
 export class EscMenuService {
-  queryParams$: Observable<any>;
-  open$ = new BehaviorSubject(false);
+  queryParams$: Observable<Params>;
+  private _open$ = new BehaviorSubject(false);
+  private _activeTab$ = new BehaviorSubject(0);
+  private _lobbyTab$ = new BehaviorSubject(0);
+  open$ = this._open$.asObservable();
+  activeTab$ = this._activeTab$.asObservable();
+  lobbyTab$ = this._lobbyTab$.asObservable();
+
   lobbyComponent: any;
-  activeTab$ = new BehaviorSubject(0);
-  lobbyTab$ = new BehaviorSubject(0);
   lobbyContext: any;
 
   constructor(
@@ -35,14 +39,14 @@ export class EscMenuService {
       map(p => +p.tab),
       distinctUntilChanged(),
     ).subscribe(v => {
-      this.activeTab$.next(v);
+      this._activeTab$.next(v);
     });
 
     this.queryParams$.pipe(
       map(p => p.esc === 'true'),
       distinctUntilChanged(),
     ).subscribe(v => {
-      this.open$.next(v);
+      this._open$.next(v);
     });
 
     this.queryParams$.pipe(
@@ -50,7 +54,7 @@ export class EscMenuService {
       map(p => +p.lobbyTab),
       distinctUntilChanged(),
     ).subscribe(v => {
-      this.lobbyTab$.next(v);
+      this._lobbyTab$.next(v);
     });
 
     kbs.subscribe(KeyActions.ToggleEscMenu, v => {
@@ -77,12 +81,12 @@ export class EscMenuService {
   }
 
   tabChange(index: number, toggle = false, queryExtra: Record<string, number> = {}) {
-    if (!this.open$.value) return;
+    if (!this._open$.value) return;
     return this.openTab(index, toggle, queryExtra);
   }
 
   openTab(tab: number, toggle = false, queryExtra: Record<string, number> = {}): Promise<any> {
-    if (toggle && tab === this.activeTab$.value) return this.openMenu(false);
+    if (toggle && tab === this._activeTab$.value) return this.openMenu(false);
     return this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { esc: 'true', tab, lobbyTab: null, ...queryExtra },
@@ -99,7 +103,7 @@ export class EscMenuService {
   }
 
   toggle() {
-    return this.openMenu(!this.open$.value);
+    return this.openMenu(!this._open$.value);
   }
 
   setLobby(component?: unknown, context?: unknown): void {

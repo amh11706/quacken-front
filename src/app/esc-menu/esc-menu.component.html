@@ -74,7 +74,7 @@
           </mat-tab>
           <mat-tab label="Map Selection"
                    *ngIf="ss.showMapChoice">
-            <q-map-list [visible]="es.lobbyTab$.value === 2 && open"
+            <q-map-list [visible]="(es.lobbyTab$ | async) === 2 && open"
                         [rankArea]="ss.rankArea"></q-map-list>
           </mat-tab>
         </mat-tab-group>

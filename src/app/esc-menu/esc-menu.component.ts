@@ -33,7 +33,7 @@ export class EscMenuComponent {
   }
 
   onLobbyTabChange(index: number) {
-    void this.es.tabChange(this.es.activeTab$.value, false, { lobbyTab: index });
+    void this.es.tabChange(0, false, { lobbyTab: index });
   }
 
   logout(): void {
