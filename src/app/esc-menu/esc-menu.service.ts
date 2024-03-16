@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { BehaviorSubject, Observable, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
 import { KeyActions } from '../settings/key-binding/key-actions';
@@ -19,7 +19,7 @@ export class EscMenuService {
   lobbyTab$ = this._lobbyTab$.asObservable();
 
   lobbyComponent: any;
-  lobbyContext: any;
+  lobbyInjector?: Injector;
 
   constructor(
     private ws: WsService,
@@ -79,7 +79,7 @@ export class EscMenuService {
       if (v) void this.openTab(1, true);
     });
     kbs.subscribe(KeyActions.LeaveLobby, v => {
-      if (v && (this.lobbyComponent || this.lobbyContext)) void this.leave();
+      if (v && (this.lobbyComponent || this.lobbyInjector)) void this.leave();
     });
     kbs.subscribe(KeyActions.Logout, v => {
       if (v) void this.logout();
@@ -112,9 +112,9 @@ export class EscMenuService {
     return this.openMenu(!this._open$.value);
   }
 
-  setLobby(component?: unknown, context?: unknown): void {
+  setLobby(component?: unknown, injector?: Injector): void {
     this.lobbyComponent = component;
-    this.lobbyContext = context;
+    this.lobbyInjector = injector;
   }
 
   private logout() {

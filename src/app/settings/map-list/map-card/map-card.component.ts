@@ -17,26 +17,15 @@ export class MapCardComponent {
   @Input() height = 36;
   @Input() safeZone = true;
   @Input() disabled = false;
-  @Input() set description(d: string) {
-    if (this.map && this.map?.id > 0) return;
-    this.pushSeed(d);
-  }
+  @Input() seeds = [] as string[];
 
   @Output() selectedMap = new EventEmitter<number>();
   generated = 'Generated';
-  seeds: string[] = [];
 
   constructor(public ss: SettingsService, public ws: WsService, private es: EscMenuService) { }
 
   selectMap(id: number): void {
     this.selectedMap.emit(id);
-  }
-
-  pushSeed(seed: string): void {
-    if (seed !== '' && !(this.seeds.find(item => item === seed))) {
-      this.seeds.push(seed);
-      if (this.seeds.length > 8) this.seeds.shift();
-    }
   }
 
   updateSeed(seed: string): void {

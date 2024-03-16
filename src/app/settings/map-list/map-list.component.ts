@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -11,6 +11,7 @@ import { SettingsService } from '../settings.service';
 import { MapFilterComponent } from './map-filter/map-filter.component';
 import { ServerSettingGroup, Settings } from '../setting/settings';
 import { MapOption } from './map-card/types';
+import { MainMenuService } from '../../lobby/cadegoose/main-menu/main-menu.service';
 
 const starRatings = [
   '4+ Stars',
@@ -91,17 +92,10 @@ const MapSizes = {
 })
 export class MapListComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport, { static: false }) mapViewport?: CdkVirtualScrollViewport;
-  @Input() set visible(v: boolean) {
-    if (!v) return;
-    const i = this.filteredMapList.findIndex(m => m.id === this.selectedMap?.value);
-    if (i !== -1) {
-      setTimeout(() => {
-        this.mapViewport?.scrollToIndex(i);
-      });
-    }
-  }
-
   @Input() rankArea = 2;
+  @Input() injector?: Injector;
+  ms?: MainMenuService;
+
   private servermapList: MapOption[] = [];
   private filteredMapList: MapOption[] = [];
   mapHeight = 36;
@@ -130,30 +124,30 @@ export class MapListComponent implements OnInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
      public ws: WsService,
      public ss: SettingsService,
-     private cd: ChangeDetectorRef,
   ) { }
 
   async ngOnInit(): Promise<void> {
+    if (this.injector) {
+      this.ms = this.injector.get(MainMenuService);
+    }
+
     if (this.rankArea === 4) this.setting = Settings.flagMap;
     const mapSize = MapSizes[this.rankArea as keyof typeof MapSizes] || MapSizes[2];
     this.mapHeight = mapSize.height;
     this.mapWidth = mapSize.width;
     this.safeZone = mapSize.safeZone;
-    this.subs.add(this.ws.subscribe(Internal.Lobby, async l => {
-      const settingValue = (await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']))?.value || 0;
-      if (settingValue > 1 || !l.map || !this.servermapList[0]) return;
-      const generatedMap = this.servermapList[0];
-      generatedMap.data = this.b64ToArray(l.map);
-      generatedMap.description = l.seed;
-      this.cd.detectChanges();
-    }));
+    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']);
+
+    this.scrollToSelected();
     this.initGenerated();
-    this.servermapList.push(...(await this.ws.request(OutCmd.CgMapList, this.rankArea) || []));
+    this.subs.add(this.ws.subscribe(Internal.Lobby, () => {
+      if (this.selectedMap.value === 0) this.updateGenerated();
+    }));
     this.filteredMapList = this.servermapList;
+    this.servermapList.push(...(await this.ws.request(OutCmd.CgMapList, this.rankArea) || []));
     this.sort(this.selectedSortOption);
     this.initFilters();
     this.maplist.next(this.filteredMapList);
-    this.selectedMap = await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']);
 
     this.searchResults = this.searchCtrl.valueChanges
       .pipe(
@@ -165,6 +159,24 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+  }
+
+  private scrollToSelected(): void {
+    const i = this.filteredMapList.findIndex(m => m.id === this.selectedMap.value);
+    if (i !== -1) {
+      setTimeout(() => {
+        this.mapViewport?.scrollToIndex(i);
+      });
+    }
+  }
+
+  private updateGenerated(): void {
+    const generatedMap = this.servermapList[0];
+    if (!generatedMap) return;
+    generatedMap.data = this.b64ToArray(this.ms?.lobby?.map || '');
+    generatedMap.description = this.ms?.lobby?.seed || '';
+    this.servermapList[0] = { ...generatedMap };
+    this.maplist.next(this.filteredMapList);
   }
 
   private searchMaps = (search: string): string[] => {
@@ -200,6 +212,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       data: this.initMap(),
       createdAt: new Date().toISOString(),
     });
+    this.updateGenerated();
   }
 
   initFilters(): void {
@@ -234,7 +247,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     return map;
   }
 
-  b64ToArray(map: string): number[][] {
+  private b64ToArray(map: string): number[][] {
     const data = this.initMap();
     const bString = window.atob(map);
     let i = 0;
@@ -263,7 +276,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       data: map.username ? `${map.name} (${map.username})` : 'Generated',
     });
     this.selectedMap.setServerValue(map.id);
-    if (id < 0) this.visible = true;
+    if (id < 0) this.scrollToSelected();
   }
 
   private filter(): void {

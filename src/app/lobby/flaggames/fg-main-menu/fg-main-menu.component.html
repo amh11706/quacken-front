@@ -1,9 +1,9 @@
 <mat-card id="menu">
-  <div *ngIf="statsOpen; else teams">
-    <q-stat-end [stats]="es.lobbyContext?.stats"
-                (closeStats)="statsOpen = false"
+  <div *ngIf="ms.statsOpen; else teams">
+    <q-stat-end [stats]="ms.lobby?.stats"
+                (closeStats)="ms.statsOpen = false"
                 [columns]="columns"
-                (rateMap)="submitRating($event)"
+                (rateMap)="ms.submitRating($event)"
                 [rating]=true></q-stat-end>
   </div>
   <ng-template #teams>
@@ -11,11 +11,11 @@
     <div id="flexmenu"
          *ngrxLet="es.open$ as open">
       <div class="teamwrap"
-           *ngFor="let team of teamPlayers$ | async; let i = index">
+           *ngFor="let team of ms.teamPlayers$ | async; let i = index">
         <button mat-raised-button
-                *ngIf="(status | async) === 0 || (settings.hotEntry.stream | async) === 1"
+                *ngIf="(ms.status | async) === 0 || (ms.settings.hotEntry.stream | async) === 1"
                 [disabled]="!open || (ws.connected$ | async) === false"
-                (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
+                (click)="ms.joinTeam(i)">{{ms.myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>
         <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
         <div class="team"
@@ -37,8 +37,8 @@
                   <mat-slider max="100"
                               step="5">
                     <input matSliderThumb
-                           [(value)]="myJobbers"
-                           (valueChange)="updateJobbers($event)"
+                           [(value)]="ms.myJobbers"
+                           (valueChange)="ms.updateJobbers($event)"
                            #slider>
                   </mat-slider>
                 </mat-card-content>
@@ -56,15 +56,15 @@
       <div class="settings">
         <div class="settingRow">
           <button mat-raised-button
-                  [disabled]="!open || ((teamPlayers$ | async)?.length || 0) < 2"
+                  [disabled]="!open || ((ms.teamPlayers$ | async)?.length || 0) < 2"
                   color="accent"
                   class="readyButton"
-                  [class.cancel]="ready"
-                  (click)="toggleReady()">{{readyText()}}</button>
-          <button *ngIf="(ss.admin$ | async) && (status | async) === 0"
+                  [class.cancel]="ms.ready"
+                  (click)="ms.toggleReady()">{{readyText()}}</button>
+          <button *ngIf="(ss.admin$ | async) && (ms.status | async) === 0"
                   mat-raised-button
-                  (click)="shuffleTeams()">Shuffle Teams</button>
-          <q-setting *ngIf="(ss.admin$ | async) && (settings.rated.stream | async) === 0"
+                  (click)="ms.shuffleTeams()">Shuffle Teams</button>
+          <q-setting *ngIf="(ss.admin$ | async) && (ms.settings.rated.stream | async) === 0"
                      name="startNew"></q-setting>
         </div>
         <div class="settingRow">

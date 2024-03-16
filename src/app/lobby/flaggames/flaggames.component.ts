@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
@@ -8,6 +8,7 @@ import { WsService } from '../../ws/ws.service';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
 import { FgColumns, FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { MapTile } from '../../map-editor/types';
+import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
 
 export const FgDesc = 'Flag games: Plant flags in the enemy base to score points!';
 const ownerSettings: SettingList = [
@@ -23,6 +24,7 @@ const ownerSettings: SettingList = [
   selector: 'q-flaggames',
   templateUrl: './flaggames.component.html',
   styleUrls: ['./flaggames.component.scss'],
+  providers: [MainMenuService],
 })
 export class FlaggamesComponent extends CadegooseComponent {
   columns = FgColumns;
@@ -62,8 +64,9 @@ export class FlaggamesComponent extends CadegooseComponent {
     fs: FriendsService,
     kbs: KeyBindingService,
     es: EscMenuService,
+    injector: Injector,
   ) {
-    super(ws, ss, fs, kbs, es);
+    super(ws, ss, fs, kbs, es, injector);
 
     this.group = 'l/flaggames';
     this.ss.setLobbySettings(ownerSettings, true, 4);

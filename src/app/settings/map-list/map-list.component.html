@@ -62,7 +62,7 @@
               [height]="mapHeight"
               [safeZone]="safeZone"
               [disabled]="(ss.admin$ | async) === false"
-              [description]="m.description"
+              [seeds]="ms?.seeds || []"
               [class.selected]="m.id === selectedMap"
               (selectedMap)="selectMap($event)"></q-map-card>
 </cdk-virtual-scroll-viewport>

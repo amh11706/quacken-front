@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -18,6 +18,7 @@ import { MapTile, MapEditor } from '../../map-editor/types';
 import { Turn } from '../quacken/boats/types';
 import { SettingMap } from '../../settings/types';
 import { SettingGroup } from '../../settings/setting/settings';
+import { MainMenuService } from './main-menu/main-menu.service';
 
 const ownerSettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',
@@ -36,6 +37,7 @@ export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy 
   selector: 'q-cadegoose',
   templateUrl: './cadegoose.component.html',
   styleUrls: ['./cadegoose.component.scss'],
+  providers: [MainMenuService],
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('renderer', { static: false }) renderer?: TwodRenderComponent;
@@ -78,6 +80,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     fs: FriendsService,
     private kbs: KeyBindingService,
     es: EscMenuService,
+    private injector: Injector,
   ) {
     super(ws, ss, fs, es);
 
@@ -88,7 +91,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage, from: '' } });
-    void this.es.setLobby(this.menuComponent, this.lobby);
+    void this.es.setLobby(this.menuComponent, this.injector);
     void this.es.openMenu();
 
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {

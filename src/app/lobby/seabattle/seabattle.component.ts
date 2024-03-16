@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { BoatService } from '../cadegoose/boat.service';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
@@ -8,6 +8,7 @@ import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { SettingsService } from '../../settings/settings.service';
 import { WsService } from '../../ws/ws.service';
+import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
 
 export const SbDesc = 'Sea Battle: Sink the enemy ship to win!';
 
@@ -15,7 +16,7 @@ export const SbDesc = 'Sea Battle: Sink the enemy ship to win!';
   selector: 'q-seabattle',
   templateUrl: './seabattle.component.html',
   styleUrls: ['./seabattle.component.scss'],
-  providers: [BoatService],
+  providers: [BoatService, MainMenuService],
 })
 export class SeabattleComponent extends CadegooseComponent {
   protected menuComponent = SbMainMenuComponent;
@@ -50,8 +51,9 @@ export class SeabattleComponent extends CadegooseComponent {
     fs: FriendsService,
     kbs: KeyBindingService,
     es: EscMenuService,
+    injector: Injector,
   ) {
-    super(ws, ss, fs, kbs, es);
+    super(ws, ss, fs, kbs, es, injector);
 
     this.ss.setLobbySettings(ss.lAdminSettings, true, 3);
   }

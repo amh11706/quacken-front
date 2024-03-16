@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FriendsService } from '../../../chat/friends/friends.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Settings, BoatSetting } from '../../../settings/setting/settings';
 import { SettingsService } from '../../../settings/settings.service';
-import { SoundService } from '../../../sound.service';
 import { WsService } from '../../../ws/ws.service';
 import { MainMenuComponent } from '../../cadegoose/main-menu/main-menu.component';
 import { FgHelpComponent } from '../fg-help/fg-help.component';
 import { Stat } from '../../cadegoose/stats/types';
+import { MainMenuService } from '../../cadegoose/main-menu/main-menu.service';
 
 export const FgColumns = [
   { stat: Stat.PointsScored, title: 'Flags Returned' },
@@ -32,14 +31,13 @@ export class FgMainMenuComponent extends MainMenuComponent {
 
   constructor(
     ws: WsService,
-    fs: FriendsService,
     es: EscMenuService,
     ss: SettingsService,
-    sound: SoundService,
     private dialog: MatDialog,
+    ms: MainMenuService,
   ) {
-    super(ws, fs, es, ss, sound);
-    this.group = 'l/flaggames';
+    super(ws, es, ss, ms);
+    this.ms.group = 'l/flaggames';
   }
 
   boatTitles = (Settings.flagNextBoat as BoatSetting).titles;

@@ -1,23 +1,23 @@
 <mat-card id="menu">
-  <div *ngIf="statsOpen; else teams">
-    <q-stat-end [stats]="es.lobbyContext?.stats"
-                (closeStats)="statsOpen = false"
-                [rating]="settings.map.value > 2"
-                (rateMap)="submitRating($event)"></q-stat-end>
+  <div *ngIf="ms.statsOpen; else teams">
+    <q-stat-end [stats]="ms.lobby?.stats"
+                (closeStats)="ms.statsOpen = false"
+                [rating]="ms.settings.map.value > 2"
+                (rateMap)="ms.submitRating($event)"></q-stat-end>
   </div>
   <ng-template #teams>
-    <ng-container *ngrxLet="(status | async) || 0 as status">
+    <ng-container *ngrxLet="(ms.status | async) || 0 as status">
       <h3>{{status > 1 ? 'Pause Voting' : 'Team Selection'}}</h3>
       <div id="flexmenu"
            *ngrxLet="es.open$ as open">
         <div class="teamwrap"
-             *ngFor="let team of teamPlayers$ | async; let i = index; trackBy: trackTeamBy">
+             *ngFor="let team of ms.teamPlayers$ | async; let i = index; trackBy: trackTeamBy">
           <button mat-raised-button
-                  *ngIf="status === 0 || (settings.hotEntry.stream | async) === 1"
+                  *ngIf="status === 0 || (ms.settings.hotEntry.stream | async) === 1"
                   [disabled]="!open || (ws.connected$ | async) === false"
-                  (click)="joinTeam(i)">{{myTeam === i ? 'Leave' : 'Join'}}</button>
+                  (click)="ms.joinTeam(i)">{{ms.myTeam === i ? 'Leave' : 'Join'}}</button>
           <br>
-          <p class="teamcount">{{teamNames[i]}}: {{team.length}}, Rank sum: {{teamRanks[i] || 0}}</p>
+          <p class="teamcount">{{teamNames[i]}}: {{team.length}}, Rank sum: {{ms.teamRanks[i] || 0}}</p>
           <div class="team"
                [style.borderColor]="teamColors[i]">
             <div *ngFor="let m of team"
@@ -39,12 +39,12 @@
                   <mat-card class="jobberSelect"
                             (click)="$event.stopPropagation()">
                     <mat-card-content>
-                      <span>Your Jobber Quality ({{myJobbers}}%)</span><br>
+                      <span>Your Jobber Quality ({{ms.myJobbers}}%)</span><br>
                       <mat-slider max="100"
                                   step="5">
                         <input matSliderThumb
-                               [(ngModel)]="myJobbers"
-                               (valueChange)="updateJobbers($event)"
+                               [(ngModel)]="ms.myJobbers"
+                               (valueChange)="ms.updateJobbers($event)"
                                #slider>
                       </mat-slider>
                     </mat-card-content>
@@ -64,39 +64,39 @@
 
         <div class="settings">
           <ng-container *ngIf="open && (ws.connected$ | async)">
-            <div *ngIf="status > 1 && myTeam < 99"
+            <div *ngIf="status > 1 && ms.myTeam < 99"
                  class="settingRow">
               <button mat-raised-button
                       [disabled]="!open"
                       id="voteWait"
-                      (click)="vote(1)">Vote wait <mat-icon>pause</mat-icon></button>
+                      (click)="ms.vote(1)">Vote wait <mat-icon>pause</mat-icon></button>
               <button mat-raised-button
                       [disabled]="!open"
                       id="voteContinue"
-                      (click)="vote(2)">Vote continue <mat-icon>play_arrow</mat-icon></button>
+                      (click)="ms.vote(2)">Vote continue <mat-icon>play_arrow</mat-icon></button>
               <button mat-raised-button
                       [disabled]="!open"
                       id="voteTie"
-                      (click)="vote(4)">Vote tie <mat-icon>handshake</mat-icon></button>
+                      (click)="ms.vote(4)">Vote tie <mat-icon>handshake</mat-icon></button>
               <button mat-raised-button
                       [disabled]="!open"
                       color="accent"
                       id="voteForfeit"
-                      (click)="vote(3)">Vote forfeit <mat-icon>close</mat-icon></button>
+                      (click)="ms.vote(3)">Vote forfeit <mat-icon>close</mat-icon></button>
             </div>
             <div class="settingRow">
-              <button *ngIf="status === 1 && myTeam < 99"
+              <button *ngIf="status === 1 && ms.myTeam < 99"
                       mat-raised-button
-                      (click)="pause()">Pause</button>
+                      (click)="ms.pause()">Pause</button>
               <button mat-raised-button
-                      [disabled]="!open || ((teamPlayers$ | async)?.length || 0) < 2"
+                      [disabled]="!open || ((ms.teamPlayers$ | async)?.length || 0) < 2"
                       color="accent"
                       class="readyButton"
-                      [class.cancel]="ready"
-                      (click)="toggleReady()">{{readyText()}}</button>
+                      [class.cancel]="ms.ready"
+                      (click)="ms.toggleReady()">{{readyText()}}</button>
               <button *ngIf="(ss.admin$ | async) && status === 0"
                       mat-raised-button
-                      (click)="shuffleTeams()">Shuffle Teams</button>
+                      (click)="ms.shuffleTeams()">Shuffle Teams</button>
               <q-setting *ngIf="(ss.admin$ | async)"
                          name="startNew"></q-setting>
             </div>
