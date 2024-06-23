@@ -13,7 +13,6 @@ export class AuthGuard {
     const token = window.localStorage.getItem('token');
     if (!token) {
       AuthGuard.triedPath = state.url.split('?')[0] || '';
-      console.log('AuthGuard: redirecting to login from ' + AuthGuard.triedPath);
       void this.router.navigateByUrl('/auth/login');
       return false;
     }
