@@ -31,7 +31,6 @@ export class LoginFormComponent implements AfterViewInit {
     private dialog: MatDialog,
     private http: HttpClient,
     private router: Router,
-    private guard: AuthGuard,
   ) {
     const token = window.localStorage.getItem('token');
     if (token) {
@@ -53,8 +52,8 @@ export class LoginFormComponent implements AfterViewInit {
       .subscribe(
         resp => {
           window.localStorage.setItem('token', resp);
-          this.guard.triedPath = '';
-          void this.router.navigate([this.guard.triedPath || 'list']);
+          void this.router.navigate([AuthGuard.triedPath || 'list']);
+          AuthGuard.triedPath = '';
         },
         (err: unknown) => {
           this.pending = false;
@@ -77,8 +76,8 @@ export class LoginFormComponent implements AfterViewInit {
 
   guestLogin(): void {
     window.localStorage.setItem('token', 'guest');
-    void this.router.navigate([this.guard.triedPath || 'list']);
-    this.guard.triedPath = '';
+    void this.router.navigate([AuthGuard.triedPath || 'list']);
+    AuthGuard.triedPath = '';
   }
 
   showTerms(): void {

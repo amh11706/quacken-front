@@ -5,14 +5,15 @@ import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/ro
   providedIn: 'root',
 })
 export class AuthGuard {
-  triedPath = '';
+  static triedPath = '';
 
   constructor(private router: Router) { }
 
   canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const token = window.localStorage.getItem('token');
     if (!token) {
-      this.triedPath = state.url;
+      AuthGuard.triedPath = state.url.split('?')[0] || '';
+      console.log('AuthGuard: redirecting to login from ' + AuthGuard.triedPath);
       void this.router.navigateByUrl('/auth/login');
       return false;
     }

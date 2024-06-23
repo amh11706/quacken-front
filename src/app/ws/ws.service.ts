@@ -41,12 +41,12 @@ export class WsService implements OnDestroy {
   sId?: number;
   copy?: number;
 
-  constructor(private router: Router, private guard: AuthGuard) {
+  constructor(private router: Router) {
     this.subscribe(InCmd.Kick, (reason: string) => {
       this.close();
       WsService.reason = reason;
       window.localStorage.removeItem('token');
-      this.guard.triedPath = location.hash.substr(2);
+      AuthGuard.triedPath = location.hash.substr(2);
       void this.router.navigate(['auth/login']);
     });
     this.subscribe(InCmd.NavigateTo, path => {
