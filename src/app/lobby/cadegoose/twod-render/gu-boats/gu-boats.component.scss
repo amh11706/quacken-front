@@ -33,6 +33,8 @@
 
 q-sprite-img {
   display: inline-block;
+  position: relative;
+  z-index: -5;
   transform: translate(-50%, -50%) translate(32px, 24px);
 }
 
