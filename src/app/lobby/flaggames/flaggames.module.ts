@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FlaggamesComponent } from './flaggames.component';
 import { FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
@@ -36,6 +37,7 @@ import { FgHelpComponent } from './fg-help/fg-help.component';
     MatSliderModule,
     MatIconModule,
     MatTooltipModule,
+    MatDialogModule,
     MapEditorModule,
     LetDirective,
   ],

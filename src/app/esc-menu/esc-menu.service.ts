@@ -108,7 +108,7 @@ export class EscMenuService {
     });
   }
 
-  toggle() {
+  toggle(): Promise<boolean> {
     return this.openMenu(!this._open$.value);
   }
 
