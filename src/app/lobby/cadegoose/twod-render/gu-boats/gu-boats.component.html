@@ -65,7 +65,8 @@
        [style.height]="boat.influence*92 + 'px'"
        class="influence"></div>
 
-  <q-sprite-img [render]="render(boat)"
+  <q-sprite-img [class.ghostly]="boat.type === 28"
+                [render]="render(boat)"
                 (click)="clickBoat(boat)"
                 (mouseenter)="hoveredTeam = boat.team || 0;"
                 (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
