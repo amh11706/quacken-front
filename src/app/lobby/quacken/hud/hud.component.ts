@@ -96,6 +96,9 @@ export class HudComponent implements OnInit, OnDestroy {
   private minutes = 0;
   private seconds = 0;
   readonly maxSeconds = 65;
+
+  private turnStartTime = 0;
+  private pauseRemainingSeconds = 0;
   protected turnSeconds = 0;
   public blockedPosition = 3;
   seconds$ = new BehaviorSubject<number>(76);
@@ -132,14 +135,23 @@ export class HudComponent implements OnInit, OnDestroy {
         if (m.seconds > 20) m.seconds = 20;
         m.seconds = Math.round(m.seconds * this.secondsPerTurn / 30);
       }
+      if (m.inProgress !== LobbyStatus.MidMatch) this.pauseRemainingSeconds = this.secondsPerTurn - (m.seconds || 0);
       if (!this.timeInterval && m.inProgress === LobbyStatus.MidMatch) this.startTimer();
       else this.stopTimer();
       this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
-      if (m === LobbyStatus.MidMatch) this.startTimer();
-      else this.stopTimer();
+      if (m === LobbyStatus.MidMatch) {
+        if (this.pauseRemainingSeconds) {
+          this.turnStartTime = new Date().valueOf() - (this.secondsPerTurn - this.pauseRemainingSeconds) * 1000;
+          this.pauseRemainingSeconds = 0;
+        }
+        this.startTimer();
+      } else {
+        this.stopTimer();
+        this.pauseRemainingSeconds = this.turnSeconds;
+      }
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => {
@@ -266,6 +278,7 @@ export class HudComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.turnStartTime = new Date().valueOf() - (this.secondsPerTurn - sec) * 1000;
     if (this.secondsPerTurn === this.maxSeconds) {
       this.seconds = turn === this.maxTurn ? turn : turn + 1;
       this.minutes = 0;
@@ -311,7 +324,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.minutes--;
     }
     if (this.turnSeconds > this.secondsPerTurn) this.setTurn(this.maxTurn - this.turn);
-    this.turnSeconds--;
+    this.turnSeconds = this.secondsPerTurn - Math.floor((new Date().valueOf() - this.turnStartTime) / 1000);
     this.updatetime();
   }
 
