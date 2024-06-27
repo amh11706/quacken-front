@@ -93,13 +93,11 @@ export class HudComponent implements OnInit, OnDestroy {
   get secondsPerTurn(): number { return this.lobbySettings.turnTime?.value || 30; }
 
   private timeInterval?: number;
-  private minutes = 0;
-  private seconds = 0;
-  readonly maxSeconds = 65;
+  static readonly maxSeconds = 65;
+  get isUnlimitedTime(): boolean { return this.secondsPerTurn === HudComponent.maxSeconds; }
 
   private turnStartTime = 0;
-  private pauseRemainingSeconds = 0;
-  protected turnSeconds = 0;
+  protected turnSecondsRemaining = 0;
   public blockedPosition = 3;
   seconds$ = new BehaviorSubject<number>(76);
 
@@ -135,7 +133,6 @@ export class HudComponent implements OnInit, OnDestroy {
         if (m.seconds > 20) m.seconds = 20;
         m.seconds = Math.round(m.seconds * this.secondsPerTurn / 30);
       }
-      if (m.inProgress !== LobbyStatus.MidMatch) this.pauseRemainingSeconds = this.secondsPerTurn - (m.seconds || 0);
       if (!this.timeInterval && m.inProgress === LobbyStatus.MidMatch) this.startTimer();
       else this.stopTimer();
       this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);
@@ -143,14 +140,10 @@ export class HudComponent implements OnInit, OnDestroy {
 
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
       if (m === LobbyStatus.MidMatch) {
-        if (this.pauseRemainingSeconds) {
-          this.turnStartTime = new Date().valueOf() - (this.secondsPerTurn - this.pauseRemainingSeconds) * 1000;
-          this.pauseRemainingSeconds = 0;
-        }
+        this.updateTurnStart(this.turnSecondsRemaining);
         this.startTimer();
       } else {
         this.stopTimer();
-        this.pauseRemainingSeconds = this.turnSeconds;
       }
     }));
 
@@ -278,18 +271,14 @@ export class HudComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.turnStartTime = new Date().valueOf() - (this.secondsPerTurn - sec) * 1000;
-    if (this.secondsPerTurn === this.maxSeconds) {
-      this.seconds = turn === this.maxTurn ? turn : turn + 1;
-      this.minutes = 0;
-      this.turnSeconds = this.secondsPerTurn;
-    } else {
-      const remaining = this.secondsPerTurn * turn + sec;
-      this.minutes = Math.floor(remaining / 60);
-      this.seconds = remaining % 60;
-      this.turnSeconds = sec;
-    }
+    this.updateTurnStart(sec);
+    this.turnSecondsRemaining = sec;
     this.updatetime();
+  }
+
+  private updateTurnStart(offset: number): void {
+    // Offset the start time by 100ms to avoid edge jittering
+    this.turnStartTime = new Date().valueOf() - (this.secondsPerTurn - offset) * 1000 + 100;
   }
 
   private endRound(): void {
@@ -298,7 +287,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
-  startTimer(ms = 1000): void {
+  startTimer(ms = 500): void {
     clearInterval(this.timeInterval);
     this.timeInterval = window.setInterval(() => this.tickTimer(), ms);
   }
@@ -311,27 +300,23 @@ export class HudComponent implements OnInit, OnDestroy {
   private tickTimer() {
     if (this.turn === 0) return this.stopTimer();
     // unlimited time
-    if (this.secondsPerTurn === this.maxSeconds) return;
-    if (this.turnSeconds < 0.5 || this.minutes + this.seconds === 0) {
+    if (this.secondsPerTurn === HudComponent.maxSeconds) return;
+    if (this.turnSecondsRemaining < 0.5) {
       this.myBoat.ready = false;
       this.imReady();
       return;
     }
 
-    this.seconds--;
-    if (this.seconds < 0) {
-      this.seconds += 60;
-      this.minutes--;
-    }
-    if (this.turnSeconds > this.secondsPerTurn) this.setTurn(this.maxTurn - this.turn);
-    this.turnSeconds = this.secondsPerTurn - (new Date().valueOf() - this.turnStartTime) / 1000;
-    if (this.turnSeconds < 0) this.turnSeconds = 0;
+    this.turnSecondsRemaining = this.secondsPerTurn - (new Date().valueOf() - this.turnStartTime) / 1000;
+    if (this.turnSecondsRemaining < 0) this.turnSecondsRemaining = 0;
     this.updatetime();
   }
 
   protected updatetime(): void {
-    this.seconds$.next(Math.round(this.turnSeconds * 76 / this.secondsPerTurn) - 4);
-    const seconds = this.seconds < 10 ? '0' + this.seconds : this.seconds;
-    this.ws.dispatchMessage({ cmd: Internal.Time, data: this.minutes + ':' + seconds });
+    this.seconds$.next(Math.floor(this.turnSecondsRemaining * 76 / this.secondsPerTurn) - 4);
+    const totalSeconds = Math.floor((this.maxTurn - this.turn) * this.secondsPerTurn + this.turnSecondsRemaining);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    this.ws.dispatchMessage({ cmd: Internal.Time, data: minutes + ':' + seconds });
   }
 }
