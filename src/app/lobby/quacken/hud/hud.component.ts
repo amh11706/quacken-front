@@ -312,7 +312,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.turn === 0) return this.stopTimer();
     // unlimited time
     if (this.secondsPerTurn === this.maxSeconds) return;
-    if (this.turnSeconds < 1 || this.minutes + this.seconds === 0) {
+    if (this.turnSeconds < 0.5 || this.minutes + this.seconds === 0) {
       this.myBoat.ready = false;
       this.imReady();
       return;
@@ -324,7 +324,8 @@ export class HudComponent implements OnInit, OnDestroy {
       this.minutes--;
     }
     if (this.turnSeconds > this.secondsPerTurn) this.setTurn(this.maxTurn - this.turn);
-    this.turnSeconds = this.secondsPerTurn - Math.floor((new Date().valueOf() - this.turnStartTime) / 1000);
+    this.turnSeconds = this.secondsPerTurn - (new Date().valueOf() - this.turnStartTime) / 1000;
+    if (this.turnSeconds < 0) this.turnSeconds = 0;
     this.updatetime();
   }
 
