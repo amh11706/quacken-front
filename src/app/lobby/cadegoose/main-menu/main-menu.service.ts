@@ -34,6 +34,7 @@ export class MainMenuService implements OnDestroy {
   myTeam = 99;
   myJobbers = 100;
   myVote = 0;
+  lastMapId = 0;
   ready = false;
   statsOpen = false;
   settings = this.ss.prefetch('l/cade');
@@ -111,6 +112,7 @@ export class MainMenuService implements OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, async t => {
       this.statsOpen = false;
+      this.lastMapId = this.settings.map.value;
       const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
       const roundGoing = (maxTurns && t.turn && t.turn < maxTurns) || false;
       if (roundGoing) return;

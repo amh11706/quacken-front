@@ -2,7 +2,7 @@
   <div *ngIf="ms.statsOpen; else teams">
     <q-stat-end [stats]="ms.lobby?.stats"
                 (closeStats)="ms.statsOpen = false"
-                [rating]="ms.settings.map.value > 2"
+                [rating]="ms.lastMapId > 2"
                 (rateMap)="ms.submitRating($event)"></q-stat-end>
   </div>
   <ng-template #teams>
