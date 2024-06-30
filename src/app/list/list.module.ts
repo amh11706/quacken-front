@@ -6,6 +6,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 import { ChatModule } from '../chat/chat.module';
 import { ListComponent } from './list.component';
 import { SettingsModule } from '../settings/settings.module';
@@ -39,6 +40,7 @@ import { CompetitionComponent } from './competition/competition.component';
     MatCardModule,
     MatDialogModule,
     MatTooltipModule,
+    MatSelectModule,
     ChatModule,
     SettingsModule,
     FriendsModule,

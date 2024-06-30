@@ -1,12 +1,18 @@
 <ng-container *ngIf="ws.user?.id"
               class="buttons">
-  <mat-card *ngFor="let c of competitions">
+  <mat-card mat-dialog-content
+            *ngFor="let c of competitions">
     <h3>{{c.description}}</h3>
-    <!-- <ng-select [items]="c.rounds"
-               [clearable]="false"
-               bindLabel="description"
-               [appendTo]="'body'"
-               [(ngModel)]="selectedRound"></ng-select> -->
+    <mat-form-field [appearance]="'outline'">
+      <mat-select [(ngModel)]="selectedRound"
+                  (selectionChange)="selectedRound = $any($event).value">
+        <mat-option *ngFor="let r of c.rounds"
+                    [value]="r">
+          {{r.description}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <div class="buttons">
       <button *ngFor="let game of selectedRound?.games; let i = index"
               mat-raised-button

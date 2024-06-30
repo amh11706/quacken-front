@@ -150,6 +150,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => {
       const turnNumber = turn.turn + 1;
       this.turn = turnNumber;
+      this.startTimer();
       this.setTurn(this.maxTurn - turnNumber);
 
       if (!this.myBoat.moveLock) this.myBoat.moveLock = 99;
@@ -265,8 +266,6 @@ export class HudComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // reset the interval to make sure it's still synced
-    if (this.timeInterval) this.startTimer();
     this.updateTurnStart(sec);
     this.turnSecondsRemaining = sec;
     this.updatetime();

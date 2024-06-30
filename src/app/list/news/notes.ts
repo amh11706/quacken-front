@@ -22,6 +22,14 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 29 June 2024',
+    points: [
+      'Escape menu now always opens to the lobby tab.',
+      'Black ship can now be used.',
+      'Turn timer is now more accurate even when the tab is not focused.',
+    ],
+  },
+  {
     title: 'Release 03 March 2024',
     points: [
       'Emoji picker!',

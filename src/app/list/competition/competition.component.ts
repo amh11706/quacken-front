@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { WsService } from '../../ws/ws.service';
 import { Competitions } from './competition';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
-import { ServerSettingMap } from '../../settings/types';
+import { DBSetting, ServerSettingMap } from '../../settings/types';
 
 @Component({
   selector: 'q-competition',
@@ -32,7 +32,7 @@ export class CompetitionComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  createLobby(c: ServerSettingMap<'l/cade'>): void {
+  createLobby(c: Record<string, Partial<DBSetting>>): void {
     this.created = true;
     this.ws.send(OutCmd.LobbyCreate, c as ServerSettingMap);
   }
