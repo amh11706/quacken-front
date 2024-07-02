@@ -20,7 +20,8 @@
     <mat-icon>skip_previous</mat-icon>
   </button>
   <button mat-icon-button
-          (click)="togglePlay()">
+          (click)="togglePlay()"
+          [matTooltip]="tickInterval ? 'Pause' : 'Play'">
     <mat-icon>{{ tickInterval ? 'pause' : 'play_arrow'}}</mat-icon>
   </button>
   <button mat-icon-button
