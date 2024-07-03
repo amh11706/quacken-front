@@ -19,7 +19,8 @@
   align-items: center;
 
   mat-slider {
-    width: calc(100% - 170px);
+    width: calc(100% - 200px);
+    margin-left: 32px;
   }
 
   &:hover {
