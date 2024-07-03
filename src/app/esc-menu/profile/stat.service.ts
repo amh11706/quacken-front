@@ -4,7 +4,6 @@ import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
-import { KeyActions } from '../../settings/key-binding/key-actions';
 import { EscMenuService } from '../esc-menu.service';
 import { UserRank, Leader, RankLeader, Stat, WinLoss } from './types';
 
@@ -62,24 +61,19 @@ export class StatService {
   }
 
   setTab(tab: number) {
-    return this.es.tabChange(1, false, { profileTab: tab });
+    return this.es.openTab(1, false, { profileTab: tab });
   }
 
-  async openUser(name: string, open = true) {
+  openUser(name: string, open = true) {
     this.target = name;
     void this.refresh();
     if (open) {
-      this.kbs.emitAction(KeyActions.OpenProfile);
-      await this.es.openMenu();
       void this.setTab(0);
     }
   }
 
-  openUserMatches(open = true): void {
+  openUserMatches(): void {
     void this.refresh();
-    if (open) {
-      this.kbs.emitAction(KeyActions.OpenProfile);
-    }
     void this.setTab(4);
   }
 

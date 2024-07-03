@@ -92,7 +92,7 @@ export class EscMenuService {
   }
 
   openTab(tab: number, toggle = false, queryExtra: Record<string, number> = {}): Promise<any> {
-    if (toggle && tab === this._activeTab$.value) return this.openMenu(false);
+    if (toggle && tab === this._activeTab$.value && this._open$.value) return this.openMenu(false);
     return this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { esc: 'true', tab, lobbyTab: null, ...queryExtra },
