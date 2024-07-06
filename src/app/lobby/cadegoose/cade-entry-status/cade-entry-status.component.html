@@ -9,7 +9,7 @@
     <span *ngIf="myTeam !== 0; else defend0">
       <img src="assets/images/icon_defend1.png">
     </span>
-    {{points[0]}}
+    {{getScore(0)}}
   </p>
   -
   <ng-container *ngFor="let team of points; let i = index">
@@ -19,7 +19,7 @@
        [class.sameteam]="myTeam === i"
        (mouseover)="hoveredTeam.emit(i)"
        (mouseleave)="hoveredTeam.emit(-1)">
-      {{points[i]}}
+      {{getScore(i)}}
       <span *ngIf="myTeam !== i; else attack0">
         <img src="assets/images/icon_attack{{i}}.png">
       </span>

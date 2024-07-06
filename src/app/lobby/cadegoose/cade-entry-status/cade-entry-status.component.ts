@@ -23,4 +23,9 @@ export class CadeEntryStatusComponent extends EntryStatusComponent implements On
     this.subs.add(this.ws.subscribe(InCmd.Turn, t => this.points = t.points));
     this.subs.add(this.ws.subscribe(Internal.Lobby, l => l.points && (this.points = l.points)));
   }
+
+  getScore(team: number): string {
+    const points = this.points[team] || 0;
+    return points < 0 ? `${-points - 1} F` : points.toString();
+  }
 }
