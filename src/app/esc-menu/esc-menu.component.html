@@ -64,7 +64,6 @@
               <ng-template matTabContent>
                 <mat-card id="lobbySettings"
                           *ngIf="es.open$ | async">
-                  <h4>Lobby Owner Settings</h4>
                   <div class="settings">
                     <q-setting *ngFor="let s of ss.lAdminSettings"
                                [name]="s"></q-setting>

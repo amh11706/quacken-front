@@ -135,6 +135,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
+      if (!t.flags) return;
       if (this.lobby) this.lobby.flags = t.flags;
       const flagMap: FlagMap = new Map();
       for (const f of t.flags) flagMap.set(`${f.x},${f.y}`, f);
