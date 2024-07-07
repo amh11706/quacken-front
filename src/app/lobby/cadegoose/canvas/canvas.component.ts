@@ -13,15 +13,4 @@ export class CanvasComponent extends TwodRenderComponent {
   ngOnInit(): void {
     // override super onInit because this is just a preview
   }
-
-  protected getScale(): number {
-    return 300 / this.getWidth();
-  }
-
-  protected resize(): void {
-    if (this.canvasElement) {
-      this.canvasElement.nativeElement.width = 300;
-      this.canvasElement.nativeElement.height = this.getHeight() * this.getScale();
-    }
-  }
 }

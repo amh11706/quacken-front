@@ -3,4 +3,17 @@
   background: url("/assets/images/sea1.png");
   margin: 5px;
   border: solid 1px;
+  overflow: hidden;
+  transform-origin: left;
+  transition: 0.2s;
+
+  &:hover {
+    scale: 2;
+    z-index: 1000;
+  }
 }
+
+canvas {
+  transform-origin: top left;
+}
+

@@ -1,6 +1,8 @@
 <div class="noselect"
+     [style.height]="getHeight() * 300 / getWidth() + 'px'"
      id="background">
   <div id="mapcenter">
-    <canvas #canvas></canvas>
+    <canvas #canvas
+            [style.scale]="300 / getWidth()"></canvas>
   </div>
 </div>
