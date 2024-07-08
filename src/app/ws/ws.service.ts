@@ -46,7 +46,7 @@ export class WsService implements OnDestroy {
       this.close();
       WsService.reason = reason;
       window.localStorage.removeItem('token');
-      AuthGuard.triedPath = location.hash.substr(2);
+      AuthGuard.triedPath = location.hash.substr(2).split('?')[0] || '';
       void this.router.navigate(['auth/login']);
     });
     this.subscribe(InCmd.NavigateTo, path => {
