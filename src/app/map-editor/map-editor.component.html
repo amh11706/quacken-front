@@ -2,7 +2,7 @@
      class="noselect"
      id="background"
      (contextmenu)="$event.preventDefault()">
-  <q-twod-render *ngIf="settings() && editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length; else oldRender"
+  <q-twod-render *ngIf="settings() && editor.selectedTile.data; else oldRender"
                  [map]="editor.selectedTile.data"
                  [editor]="editor"
                  [undo]="undo"

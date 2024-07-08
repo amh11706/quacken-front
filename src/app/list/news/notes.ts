@@ -22,6 +22,14 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 08 July 2024',
+    points: [
+      'Map preview now zooms on hover.',
+      'Map editor bug fixes. Now somewhat less likely to erase your maps.',
+      'Forfeit team score now shows F instead of 0.',
+    ],
+  },
+  {
     title: 'Release 29 June 2024',
     points: [
       'Escape menu now always opens to the lobby tab.',

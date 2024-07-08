@@ -54,7 +54,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   error = '';
   success = '';
-  pending = false;
+  pending = true;
   shown?: DBTile;
 
   constructor(protected socket: WsService) { }
@@ -62,7 +62,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub.add(this.socket.connected$.subscribe(v => {
       if (!v) return;
-      setTimeout(async () => this.gotList(await this.socket.request(OutCmd.MapListAll)));
+      setTimeout(async () => this.gotList(await this.socket.request(OutCmd.MapListAll)), 100);
     }));
     this.shown = this.map.selectedTile;
     if (!this.map.tileSettings) {
@@ -117,6 +117,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         default:
       }
     }
+    this.shown.unsaved = unsaved;
     if (unsaved) this.error = 'Unsaved changes! They will be discarded if you select a different map without saving.';
   }
 
@@ -131,12 +132,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.options = list[tile?.group ?? 'maps'] ?? this.options;
     if (tile && this.options) {
       for (const o of this.options) {
+        o.group = tile.group;
         if (o.id === tile.id) {
           this.shown = { ...tile, ...o };
-          break;
         }
       }
     }
+    this.select();
   }
 
   private handleTileSet(tileSet?: DBTile[]) {
@@ -162,7 +164,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
-    this.map.settingsOpen = false;
   }
 
   private handleStructureSet(structureSet?: DBTile[]) {
@@ -179,7 +180,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
-    this.map.settingsOpen = false;
   }
 
   private handleTMapSet(tmaps?: DBTile[]) {
@@ -196,7 +196,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const tile = this.map.selectedTile;
     tile.undos = tile.undos || [];
     tile.redos = tile.redos || [];
-    this.map.settingsOpen = false;
   }
 
   // Fetched data
@@ -212,7 +211,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     tile.undos = map?.undos || [];
     tile.redos = map?.redos || [];
     this.map.selectedTile = tile;
-    this.map.settingsOpen = false;
   }
 
   // Create or save
@@ -285,19 +283,24 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   select(): void {
-    this.error = '';
-    this.success = '';
-    delete this.map.tiles;
-    delete this.map.structures;
-    delete this.map.tmaps;
     const tile = this.shown || this.map.selectedTile;
-    tile.unsaved = false;
-
     const selected = this.options.find(option => option.id === +this.selected) || {
-      id: null, name: '', undos: [], redos: [], tags: [],
+      id: null, name: '', undos: [], redos: [], tags: [], group: tile.group, data: [],
     };
+    tile.unsaved = tile.id === selected.id && tile.group === selected.group && tile.unsaved;
     Object.assign(tile, selected);
-    this.tags.addAll(tile.tags);
+    this.tags?.addAll(tile.tags);
+
+    if (!tile.unsaved) {
+      void this.fetchMap();
+      this.error = '';
+      this.success = '';
+      delete this.map.tiles;
+      delete this.map.structures;
+      delete this.map.tmaps;
+    } else {
+      this.pending = false;
+    }
   }
 
   updateOptions(): void {
@@ -388,10 +391,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async edit(): Promise<void> {
+  close(): void {
+    this.map.settingsOpen = false;
+  }
+
+  async fetchMap(): Promise<void> {
     if (this.map.tileSettings) {
       this.map.tileSettings = false;
       this.map.settingsOpen = false;
+      this.pending = false;
       return;
     }
 
@@ -399,22 +407,17 @@ export class SettingsComponent implements OnInit, OnDestroy {
     const tile = this.shown || this.map.selectedTile;
     switch (tile.group) {
       case 'tile_sets':
-        if (!this.map.tiles || this.map.tileSet?.id !== tile.id) {
-          this.handleTileSet(await this.socket.request(OutCmd.TileSetGet, tile.id));
-        } else this.map.settingsOpen = false;
-        return;
+        this.handleTileSet(await this.socket.request(OutCmd.TileSetGet, tile.id));
+        break;
       case 'structure_sets':
-        if (!this.map.structures || this.map.structureSet?.id !== tile.id) {
-          this.handleStructureSet(await this.socket.request(OutCmd.StructureSetGet, tile.id));
-        } else this.map.settingsOpen = false;
-        return;
+        this.handleStructureSet(await this.socket.request(OutCmd.StructureSetGet, tile.id));
+        break;
       case 'tmap_sets':
-        if (!this.map.tmaps || this.map.tmapSet?.id !== tile.id) {
-          this.handleTMapSet(await this.socket.request(OutCmd.TMapSetGet, tile.id));
-        } else this.map.settingsOpen = false;
-        return;
+        this.handleTMapSet(await this.socket.request(OutCmd.TMapSetGet, tile.id));
+        break;
       default:
         this.gotMap(await this.socket.request(OutCmd.MapGet, { group: tile.group, tile: tile.id }));
     }
+    this.pending = false;
   }
 }
