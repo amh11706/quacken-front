@@ -70,6 +70,8 @@
 </div>
 
 <div *ngIf="setting.type === 'checkbox'"
+     [matTooltip]="settingValue.data?.icon?.text"
+     [matTooltipPosition]="'above'"
      class="setting">
   <mat-checkbox [checked]="!!(settingValue.stream | async)"
                 (change)="save(+$event.checked)"
@@ -77,8 +79,6 @@
                 [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
     <span class="checkbox-text">{{setting.label}}</span>&nbsp;
     <mat-icon *ngIf="settingValue.data?.icon as icon"
-              [matTooltip]="icon.text"
-              [matTooltipPosition]="'above'"
               [color]="icon.color">{{icon.name}}</mat-icon>
   </mat-checkbox>
 </div>
