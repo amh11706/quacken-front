@@ -87,7 +87,7 @@ export class MainMenuService implements OnDestroy {
       this.fs.lobby$.next([...players]);
     }));
     this.subs.add(this.ws.subscribe(InCmd.PlayerRemove, m => {
-      if (m.sId) this.removeUser(m.sId);
+      this.removeUser(m);
     }));
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
       this.status.next(m);

@@ -7,14 +7,16 @@
     <p class="empty">You are alone here.</p>
   </ng-template>
 </ng-container>
-<div *ngFor="let m of players"
-     class="lobbyPlayer">
-  <img *ngIf="m.t !== undefined"
-       class="team"
-       [matTooltip]="teamImages[m.t].title"
-       [src]="teamImages[m.t].src">
-  <q-name [message]="m"></q-name>
-  <mat-icon *ngIf="m.a"
-            [inline]="true"
-            matTooltip="Opped">star</mat-icon>
-</div>
+<ng-container *ngFor="let m of players">
+  <div *ngIf="!m.h"
+       class="lobbyPlayer">
+    <img *ngIf="m.t !== undefined"
+         class="team"
+         [matTooltip]="teamImages[m.t].title"
+         [src]="teamImages[m.t].src">
+    <q-name [message]="m"></q-name>
+    <mat-icon *ngIf="m.a"
+              [inline]="true"
+              matTooltip="Opped">star</mat-icon>
+  </div>
+</ng-container>

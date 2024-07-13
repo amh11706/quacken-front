@@ -70,12 +70,8 @@ export class FriendsService {
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: m });
     });
     this.ws.subscribe(InCmd.PlayerRemove, m => {
-      const lobby = this.lobby$.getValue().filter(n => m.from !== n.from || m.copy !== n.copy);
+      const lobby = this.lobby$.getValue().filter(n => m !== n.sId);
       this.lobby$.next(lobby);
-      if (m.copy === 0) return;
-      m.type = 3;
-      m.message = 'has left the lobby.';
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: m });
     });
   }
 

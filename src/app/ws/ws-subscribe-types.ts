@@ -56,7 +56,7 @@ export type SubscribeData = {
   [InCmd.SetUser]: Partial<TokenUser>;
 
   [InCmd.PlayerAdd]: Message;
-  [InCmd.PlayerRemove]: Message;
+  [InCmd.PlayerRemove]: number;
   [InCmd.PlayerList]: Message[];
   [InCmd.LobbyList]: Lobby[];
   [InCmd.LobbyUpdate]: Lobby;

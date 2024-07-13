@@ -38,6 +38,7 @@ export interface TeamMessage extends ChatMessage {
   sc: number;
   v: number;
   pc: number;
+  h?: boolean;
 }
 
 export interface ParsedTurn {
