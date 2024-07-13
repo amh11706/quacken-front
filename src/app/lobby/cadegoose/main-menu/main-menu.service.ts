@@ -154,6 +154,9 @@ export class MainMenuService implements OnDestroy {
     teamPlayers.forEach((team, i) => {
       team.forEach((p) => this.teamRanks[i] += p.sc ?? 0);
     });
+    for (let i = 0; i < this.teamRanks.length; i++) {
+      if (this.teamRanks[i] !== 0) this.teamRanks[i] /= teamPlayers[i]?.length || 1;
+    }
   }
 
   private updatePlayers(players: TeamMessage[]) {
