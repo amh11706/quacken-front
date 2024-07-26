@@ -12,12 +12,12 @@ const BaseSettings = {
       Sail: 80,
       Carp: 80,
       Bilge: 80,
-      Cannon: 80,
+      Cannon: 100,
       Maneuver: 20,
-      label: 'Sail: 80, Carp: 80, Bilge: 80, Cannon: 80, Maneuver: 20',
+      label: 'Sail: 80, Carp: 80, Bilge: 80, Cannon: 100, Maneuver: 20',
     },
   },
-  turnTime: { id: 30, value: 35 },
+  turnTime: { id: 30, value: 20 },
   turns: { id: 34, value: 60 },
   bots: { id: 35, value: 0 },
   botDifficulty: { id: 36, value: 100 },
@@ -30,6 +30,21 @@ const BaseSettings = {
   showDamage: { id: 69, value: 1 },
 };
 
+// id,name
+// 801,Tie Breaker 2
+// 800,Tie Breaker 1
+// 799,Round 5
+// 798,Grand Finals 1
+// 797,Round 3
+// 796,Round 1
+// 793,Semi Finals
+// 791,Round 2
+// 789,Grand finals 3
+// 788,Quarter Finals
+// 786,Grand Finals 2
+// 785,Round 4
+// 784,Round of 16
+
 interface Competition {
   description: string,
   rounds: {
@@ -40,85 +55,90 @@ interface Competition {
 
 export const Competitions: Competition[] = [
   {
-    description: 'DOTD 2v2 Tournament June 2024',
+    description: '1v1 Blitz Tournament July 2024',
     rounds: [
       {
-        description: 'Winner Bracket',
+        description: 'Group Stage',
         games: [
           {
             ...BaseSettings,
-            name: { data: 'Winners R1', value: 0 },
-            map: { id: 18, value: 745, data: 'R1:W' },
+            name: { data: 'Round 1', value: 0 },
+            map: { id: 18, value: 796, data: 'Round 1' },
           },
           {
             ...BaseSettings,
-            name: { data: 'Winners R2', value: 0 },
-            map: { id: 18, value: 746, data: 'R2:W+L' },
+            name: { data: 'Round 2', value: 0 },
+            map: { id: 18, value: 791, data: 'Round 2' },
           },
           {
             ...BaseSettings,
-            name: { data: 'Winners R3', value: 0 },
-            map: { id: 18, value: 747, data: 'R3:W+L' },
+            name: { data: 'Round 3', value: 0 },
+            map: { id: 18, value: 797, data: 'Round 3' },
           },
           {
             ...BaseSettings,
-            name: { data: 'Winners Final', value: 0 },
-            map: { id: 18, value: 748, data: 'FIN:W+L R4' },
+            name: { data: 'Round 4', value: 0 },
+            map: { id: 18, value: 785, data: 'Round 4' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'Round 5', value: 0 },
+            map: { id: 18, value: 799, data: 'Round 5' },
           },
         ],
       },
       {
-        description: 'Losers Bracket',
+        description: 'Knockout Stage',
         games: [
           {
             ...BaseSettings,
-            name: { data: 'Losers R1', value: 0 },
-            map: { id: 18, value: 757, data: 'R1:L' },
+            name: { data: 'Round of 16', value: 0 },
+            map: { id: 18, value: 784, data: 'Round of 16' },
           },
           {
             ...BaseSettings,
-            name: { data: 'Losers R2', value: 0 },
-            map: { id: 18, value: 751, data: 'GFIN3:W' },
+            name: { data: 'Quarter Finals', value: 0 },
+            map: { id: 18, value: 788, data: 'Quarter Finals' },
           },
           {
             ...BaseSettings,
-            name: { data: 'Losers R3', value: 0 },
-            map: { id: 18, value: 747, data: 'R3:W+L' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Losers R4', value: 0 },
-            map: { id: 18, value: 748, data: 'FIN:W+L R4' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Losers R5', value: 0 },
-            map: { id: 18, value: 749, data: 'GFIN1:W+L R5' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Losers Final', value: 0 },
-            map: { id: 18, value: 758, data: 'LFIN' },
+            name: { data: 'Semi Finals', value: 0 },
+            map: { id: 18, value: 793, data: 'Semi Finals' },
           },
         ],
       },
       {
-        description: 'Grand Final',
+        description: 'Finals',
         games: [
           {
             ...BaseSettings,
-            name: { data: 'Grand Final G1', value: 0 },
-            map: { id: 18, value: 749, data: 'GFIN1:W+L R5' },
+            name: { data: 'Grand Finals 1', value: 0 },
+            map: { id: 18, value: 798, data: 'Grand Finals 1' },
           },
           {
             ...BaseSettings,
-            name: { data: 'Grand Final G2', value: 0 },
-            map: { id: 18, value: 750, data: 'GFIN2:W' },
+            name: { data: 'Grand Finals 2', value: 0 },
+            map: { id: 18, value: 786, data: 'Grand Finals 2' },
           },
           {
             ...BaseSettings,
-            name: { data: 'Grand Final G3', value: 0 },
-            map: { id: 18, value: 751, data: 'GFIN3:W' },
+            name: { data: 'Grand finals 3', value: 0 },
+            map: { id: 18, value: 789, data: 'Grand finals 3' },
+          },
+        ],
+      },
+      {
+        description: 'Tie Breaker',
+        games: [
+          {
+            ...BaseSettings,
+            name: { data: 'Tie Breaker 1', value: 0 },
+            map: { id: 18, value: 800, data: 'Tie Breaker 1' },
+          },
+          {
+            ...BaseSettings,
+            name: { data: 'Tie Breaker 2', value: 0 },
+            map: { id: 18, value: 801, data: 'Tie Breaker 2' },
           },
         ],
       },
