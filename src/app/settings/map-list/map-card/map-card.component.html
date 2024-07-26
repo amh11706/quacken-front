@@ -12,10 +12,10 @@
     <div class="flex-item2">
       <mat-card-title class="title">{{map.name}}</mat-card-title>
       <mat-card-subtitle class="subtitle">
-        Designed by: {{map.username}}
+        By: {{map.username}}
       </mat-card-subtitle>
       <mat-card-content class="description">
-        Description:<p>{{map.description || "N/A"}}</p>
+        <p>{{map.description || "N/A"}}</p>
         <div class="flex-subitem1">
           <q-rating [isPecentage]="true"
                     [rating]="map.ratingAverage"

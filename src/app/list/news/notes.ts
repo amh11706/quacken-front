@@ -22,6 +22,14 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 14 July 2024',
+    points: [
+      'Chain shot now only removes stored tokens. It will remove a lot more tokens than before though.',
+      'First win now always gives at least 25 rank points.',
+      'Disconnected players now still show on the team they were on.',
+    ],
+  },
+  {
     title: 'Release 08 July 2024',
     points: [
       'Map preview now zooms on hover.',

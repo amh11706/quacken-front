@@ -5,6 +5,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import { COMMA, SPACE } from '@angular/cdk/keycodes';
 import { Internal, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../settings.service';
@@ -96,13 +97,17 @@ export class MapListComponent implements OnInit, OnDestroy {
   @Input() injector?: Injector;
   ms?: MainMenuService;
 
+  separatorKeysCodes: number[] = [COMMA, SPACE];
+
   private servermapList: MapOption[] = [];
   private filteredMapList: MapOption[] = [];
   mapHeight = 36;
   mapWidth = 20;
   safeZone = true;
   maplist = new ReplaySubject<MapOption[]>(1);
-  selectedFilters: string[] = [];
+  static selectedFilters: string[] = [];
+  get selectedFilters(): string[] { return MapListComponent.selectedFilters; }
+
   sortList = [
     SortOptions.AscendingAvgRating, SortOptions.DescendingAvgRating,
     SortOptions.Newest, SortOptions.Oldest,
@@ -111,7 +116,10 @@ export class MapListComponent implements OnInit, OnDestroy {
     SortOptions.MapsYouRated,
   ];
 
-  selectedSortOption = this.sortList[1] || SortOptions.DescendingAvgRating;
+  static selectedSortOption = SortOptions.Newest;
+  get selectedSortOption(): SortOptions { return MapListComponent.selectedSortOption; }
+  set selectedSortOption(value: SortOptions) { MapListComponent.selectedSortOption = value; }
+
   private tagList: string[] = [];
   private userList: string[] = [];
   private setting: typeof Settings['cadeMap'] | typeof Settings['flagMap'] = Settings.cadeMap;
@@ -138,7 +146,6 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.safeZone = mapSize.safeZone;
     this.selectedMap = await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']);
 
-    this.scrollToSelected();
     this.initGenerated();
     this.subs.add(this.ws.subscribe(Internal.Lobby, () => {
       if (this.selectedMap.value === 0) this.updateGenerated();
@@ -147,7 +154,8 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.servermapList.push(...(await this.ws.request(OutCmd.CgMapList, this.rankArea) || []));
     this.sort(this.selectedSortOption);
     this.initFilters();
-    this.maplist.next(this.filteredMapList);
+    this.filter();
+    this.scrollToSelected();
 
     this.searchResults = this.searchCtrl.valueChanges
       .pipe(
@@ -291,17 +299,24 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.maplist.next(this.filteredMapList);
   }
 
+  removeLastTag(): void {
+    this.selectedFilters.pop();
+    this.filter();
+  }
+
   toggleTag(tag: string): void {
+    if (!tag) return;
     if (/\d\+/.test(tag)) {
       tag = tag[0] as string;
     }
     if (this.selectedFilters.indexOf(tag) !== -1) {
-      this.selectedFilters = this.selectedFilters.filter(el => el !== tag);
+      MapListComponent.selectedFilters = this.selectedFilters.filter(el => el !== tag);
     } else {
       if (this.selectedFilters.some(r => [1, 2, 3, 4].includes(+r))) return;
       this.selectedFilters.push(tag);
     }
 
+    this.searchCtrl.setValue('');
     this.filter();
   }
 

@@ -2,7 +2,7 @@
                 [floatLabel]="'always'">
   <mat-label>Search ({{(maplist | async)?.length}})</mat-label>
   <mat-autocomplete #auto="matAutocomplete"
-                    [autoSelectActiveOption]="true"
+                    [autoSelectActiveOption]="false"
                     (optionSelected)="toggleTag($event.option.value)"
                     [autoActiveFirstOption]="false">
     <mat-option *ngFor="let option of searchResults | async"
@@ -24,7 +24,10 @@
     <input #search
            matInput
            [matChipInputFor]="chipList"
+           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+           (matChipInputTokenEnd)="toggleTag($event.value); search.value = ''"
            [matAutocomplete]="auto"
+           (keydown.backspace)="!search.value && removeLastTag()"
            (blur)="search.value = ''; searchCtrl.setValue('');"
            placeholder="1v1, practice, etc."
            [formControl]="searchCtrl">
@@ -53,7 +56,7 @@
 
 <cdk-virtual-scroll-viewport id="maps"
                              *ngrxLet="selectedMap.stream as selectedMap"
-                             [itemSize]="273"
+                             [itemSize]="250"
                              [minBufferPx]="600"
                              [maxBufferPx]="900">
   <q-map-card *cdkVirtualFor="let m of maplist"
