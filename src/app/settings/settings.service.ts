@@ -60,15 +60,23 @@ export class SettingsService {
     this.rankArea = rankArea;
   }
 
-  prefetch<T extends SettingGroup>(group: T): SettingMap<T> {
+  prefetch<T extends SettingGroup>(group: T, clean = false): SettingMap<T> {
     const settings = this.settings.get(group);
-    if (settings) return settings;
+    if (settings && !clean) return settings;
 
-    const newSettings = {} as SettingMap<T>;
+    const newSettings = settings || {} as SettingMap<T>;
     for (const s of SettingValues) {
       if (s.group !== group) continue;
+      const key = s.name as ServerSettingGroup[T];
+      const oldSetting = newSettings[key];
+      if (oldSetting) {
+        oldSetting.data = null;
+        oldSetting.setServerValue(0);
+        continue;
+      }
+
       const setting = new Setting(this, s);
-      newSettings[s.name as ServerSettingGroup[T]] = setting;
+      newSettings[key] = setting;
       setting.userStream.pipe(debounceTime(500)).subscribe(() => {
         this.save(setting.toDBSetting());
       });
@@ -84,7 +92,7 @@ export class SettingsService {
         void this.ws.request(OutCmd.SettingGetGroup, group).then(mu => {
           if (!mu) return;
           const m = mu as DBSetting<T>[];
-          const localSettings = this.prefetch(group);
+          const localSettings = this.prefetch(group, update);
 
           for (const setting of m) {
             const oldSetting = localSettings[setting.name];
