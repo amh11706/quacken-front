@@ -64,7 +64,7 @@
         </div>
 
         <div class="settings">
-          <ng-container *ngIf="open && (ws.connected$ | async)">
+          <ng-container *ngIf="open">
             <div *ngIf="status > 1 && ms.myTeam < 99"
                  class="settingRow">
               <button mat-raised-button

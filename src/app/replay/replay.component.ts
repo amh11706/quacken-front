@@ -107,7 +107,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
         this.graphicSettings = setting as ServerSettingMap<'l/cade'>;
       }
       // setting.turnTime = { id: 0, name: 'turnTime', group: group as SettingGroup, value: 10 };
-      this.ss.setFakeSettings(group as SettingGroup, setting);
+      this.ss.setSettings(group as SettingGroup, setting);
     }
 
     setTimeout(() => {

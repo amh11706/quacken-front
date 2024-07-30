@@ -130,9 +130,6 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       }
       this.ws.send(OutCmd.SetMapData, btoa(bString));
     }));
-    this.sub.add(this.ws.connected$.subscribe(v => {
-      if (v) setTimeout(async () => this.lobbySettings = await this.ss.getGroup(this.group, true), 1000);
-    }));
     this.sub.add(this.kbs.subscribe(KeyActions.Redo, v => {
       if (!this.advancedMapOpen) return;
       const tile = this.editor.selectedTile;

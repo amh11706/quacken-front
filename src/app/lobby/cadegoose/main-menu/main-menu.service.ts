@@ -57,6 +57,7 @@ export class MainMenuService implements OnDestroy {
     this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
       if (this.lobby?.seed && !this.seeds.includes(this.lobby.seed)) this.seeds.push(this.lobby.seed);
       this.lobby = m;
+      if (m.settings) this.ss.setSettings(this.group, m.settings);
       this.status.next(m.inProgress);
       if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       if (m.players?.length) this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
@@ -127,6 +128,7 @@ export class MainMenuService implements OnDestroy {
       }
     }));
     this.subs.add(this.settings.teams.stream.subscribe((v) => {
+      if (v < 2) return;
       const teamPlayers = this.teamPlayers$.getValue();
       if (v < teamPlayers.length) {
         teamPlayers.length = v;
@@ -134,7 +136,7 @@ export class MainMenuService implements OnDestroy {
         return;
       }
       while (teamPlayers.length < v) teamPlayers.push([]);
-      this.teamPlayers$.next(teamPlayers);
+      this.updatePlayers(Object.values(this.fs.lobby$.getValue()));
     }));
   }
 

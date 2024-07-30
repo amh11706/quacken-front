@@ -43,7 +43,7 @@ export class SettingsService {
     });
   }
 
-  setFakeSettings<T extends SettingGroup>(group: T, settings: ServerSettingMap<T>): void {
+  setSettings<T extends SettingGroup>(group: T, settings: ServerSettingMap<T>): void {
     const settingGroup = this.prefetch(group, true);
     for (const [name, value] of Object.entries<DBSetting>(settings)) {
       const s = settingGroup[name as ServerSettingGroup[T]];

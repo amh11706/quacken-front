@@ -152,7 +152,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     const settings = match.data.settings;
     for (const [group, setting] of Object.entries(settings)) {
       if (setting.turnTime) setting.turnTime.value = 65;
-      this.ss.setFakeSettings(group as SettingGroup, setting);
+      this.ss.setSettings(group as SettingGroup, setting);
     }
   }
 
