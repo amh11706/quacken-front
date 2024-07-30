@@ -44,7 +44,7 @@ export class SettingsService {
   }
 
   setFakeSettings<T extends SettingGroup>(group: T, settings: ServerSettingMap<T>): void {
-    const settingGroup = this.prefetch(group);
+    const settingGroup = this.prefetch(group, true);
     for (const [name, value] of Object.entries<DBSetting>(settings)) {
       const s = settingGroup[name as ServerSettingGroup[T]];
       if (!s) continue;
@@ -52,6 +52,7 @@ export class SettingsService {
       s.setServerValue(value.value);
     }
     this.settings.set(group, settingGroup);
+    this.ready.set(group, Promise.resolve(settingGroup));
   }
 
   setLobbySettings(adminNames: SettingList, showMapChoice = false, rankArea = 2): void {
