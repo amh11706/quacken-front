@@ -291,7 +291,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (!this.selectedFilters) this.maplist.next(this.servermapList);
     this.filteredMapList = this.servermapList.filter(map => {
       const tagMatched = this.selectedFilters.every(filter => {
-        return filter === map.name || filter === map.username ||
+        return map.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || filter === map.username ||
          +filter <= map.ratingAverage || map.tags?.includes(filter);
       });
       return tagMatched;
