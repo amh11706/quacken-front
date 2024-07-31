@@ -130,8 +130,8 @@ export class MapListComponent implements OnInit, OnDestroy {
 
   constructor(
     private bottomSheet: MatBottomSheet,
-     public ws: WsService,
-     public ss: SettingsService,
+    public ws: WsService,
+    public ss: SettingsService,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -291,8 +291,10 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (!this.selectedFilters) this.maplist.next(this.servermapList);
     this.filteredMapList = this.servermapList.filter(map => {
       const tagMatched = this.selectedFilters.every(filter => {
-        return map.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1 || filter === map.username ||
-         +filter <= map.ratingAverage || map.tags?.includes(filter);
+        return map.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
+          map.description.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
+          filter === map.username ||
+          +filter <= map.ratingAverage || map.tags?.includes(filter);
       });
       return tagMatched;
     });
