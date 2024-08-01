@@ -84,8 +84,8 @@ export class QdragDirective implements OnInit, OnDestroy {
   private onDown = (event: MouseEvent) => {
     if (event.ctrlKey) return;
 
-    this.startX = event.clientX;
-    this.startY = event.clientY;
+    this.startX = event.screenX;
+    this.startY = event.screenY;
     document.addEventListener('mousemove', this.onMove);
     document.addEventListener('mouseup', this.onUp);
     event.preventDefault();
@@ -96,28 +96,30 @@ export class QdragDirective implements OnInit, OnDestroy {
   private touchStart = (event: TouchEvent) => {
     const touch = event.touches[0];
     if (!touch) return;
-    this.startX = touch.clientX;
-    this.startY = touch.clientY;
+    // prevent double tap resetting the offset
+    event.preventDefault();
+    this.startX = touch.screenX;
+    this.startY = touch.screenY;
     document.addEventListener('touchmove', this.touchMove);
     document.addEventListener('touchcancel', this.touchEnd);
     document.addEventListener('touchend', this.touchEnd);
   };
 
   private onMove = (event: MouseEvent) => {
-    this._offset.x += (event.clientX - this.startX) / this.scale;
-    this._offset.y += (event.clientY - this.startY) / this.scale;
-    this.startX = event.clientX;
-    this.startY = event.clientY;
+    this._offset.x += (event.screenX - this.startX) / this.scale;
+    this._offset.y += (event.screenY - this.startY) / this.scale;
+    this.startX = event.screenX;
+    this.startY = event.screenY;
     this.updateTransform();
   };
 
   private touchMove = (event: TouchEvent) => {
     const touch = event.touches[0];
     if (!touch) return;
-    this._offset.x += (touch.clientX - this.startX) / this.scale;
-    this._offset.y += (touch.clientY - this.startY) / this.scale;
-    this.startX = touch.clientX;
-    this.startY = touch.clientY;
+    this._offset.x += (touch.screenX - this.startX) / this.scale;
+    this._offset.y += (touch.screenY - this.startY) / this.scale;
+    this.startX = touch.screenX;
+    this.startY = touch.screenY;
     this.updateTransform();
   };
 

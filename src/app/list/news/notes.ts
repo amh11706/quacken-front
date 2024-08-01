@@ -7,6 +7,8 @@ export interface Note {
 */
 
 /* In progress:
+'Make your boat stand out more from your team.',
+'Improve mobile scaling and zooming.',
 */
 
 /* Planned:
@@ -18,9 +20,22 @@ export interface Note {
 'New "Map Browser" page to view highlighted maps and creators.',
 'Added a way to delete maps.',
 'Added sort by popularity to the map browser.',
+'refactor mat-chip autocomplete usage.',
 */
 
 export const Notes: Note[] = [
+  {
+    title: 'Release 01 August 2024',
+    points: [
+      'Mobile improvements with help from Straft.',
+      'Zoom and pan work more consistently on mobile.',
+      'HUD is now smaller on small screens.',
+      'Discord users and roles can now be mentioned from in game.',
+      'Paused matches now only remain paused while pause has a majority vote.',
+      'A player leaving with no pause credits now forfeits the match.',
+      'Map search now includes partial name and description matches.',
+    ],
+  },
   {
     title: 'Release 14 July 2024',
     points: [

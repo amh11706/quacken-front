@@ -65,14 +65,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   }
 
   @Input() ctrlZoom = false;
-  private _mapScale = 1;
-  private _mapScaleRaw = 50;
-  @Input() set mapScale(v: number) {
-    this._mapScale = +v / 50;
-    this._mapScaleRaw = +v;
-  }
 
-  get mapScale(): number { return this._mapScale; }
+  get mapScale(): number { return (this.graphicSettings.mapScale.value / 50) || 1; }
   @Input() graphicSettings = this.ss.prefetch('graphics');
 
   protected drawRocks = false;
@@ -101,7 +95,6 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     [200, 0], [200, 69], [200, 138],
   ]);
 
-  private wheelDebounce?: number;
   private sub = new Subscription();
   protected canvas?: CanvasRenderingContext2D | null;
 
@@ -326,19 +319,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     this.colorFlags();
   }
 
-  scroll(e: WheelEvent): void {
-    if (this.ctrlZoom && !e.ctrlKey) return;
-    if (e.deltaY < 0) {
-      this._mapScaleRaw *= 21 / 20;
-      if (this._mapScaleRaw > 100) this._mapScaleRaw = 100;
-    } else {
-      this._mapScaleRaw *= 20 / 21;
-      if (this._mapScaleRaw < 15) this._mapScaleRaw = 15;
-    }
-    this._mapScaleRaw = Math.round(this._mapScaleRaw);
-    this.mapScale = this._mapScaleRaw;
-    e.preventDefault();
-    this.saveScale();
+  zoomChange(e: number): void {
+    this.graphicSettings.mapScale.value = Math.round(e * 50);
   }
 
   extractCoord(event: MouseEvent): Position {
@@ -368,13 +350,6 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     if (!this.mapUtil.painting) return;
     const p = this.extractCoord(event);
     this.mapUtil.clickTile(event, p.x, p.y);
-  }
-
-  private saveScale() {
-    clearTimeout(this.wheelDebounce);
-    this.wheelDebounce = window.setTimeout(() => {
-      void this.ss.save({ id: 2, value: this._mapScaleRaw, name: 'mapScale', title: '', group: 'graphics' });
-    }, 1000);
   }
 
   fpsOffsetChange(event: { x: number, y: number }): void {

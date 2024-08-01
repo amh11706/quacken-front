@@ -73,6 +73,12 @@ q-chat {
   * {
     white-space: normal;
   }
+
+  @media screen and (max-width: 600px), screen and (max-height: 600px) {
+    transform-origin: center center;
+    transform: translate(-50%, 15%) scale(0.75);
+    width: 130%;
+  }
 }
 
 #movesource {
