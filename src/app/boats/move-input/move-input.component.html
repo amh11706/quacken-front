@@ -9,7 +9,8 @@
        (dragend)="dragendCannon()"
        [draggable]="input.shots[i*2]"
        (dragover)="this.dragContext.type !== 'shot'"
-       (mouseup)="addShot($event, i*2)">
+       (mousedown)="touchStartCannon($event, i*2)"
+       (mouseup)="touchEndCannon($event)">
     <div class="bombslot token{{input.shots[i*2]}}"
          [class.unconfirmedShots]="!serverInput.shots[i*2] !== !input.shots[i*2]"
          [class.blocked]="locked"></div>
@@ -28,7 +29,8 @@
        (dragend)="dragendCannon()"
        [draggable]="input.shots[i*2+1]"
        (dragover)="this.dragContext.type !== 'shot'"
-       (mouseup)="addShot($event, i*2+1)">
+       (mousedown)="touchStartCannon($event, i*2+1)"
+       (mouseup)="touchEndCannon($event)">
     <div class="bombslot token{{input.shots[i*2+1]}}"
          [class.blocked]="locked"
          [class.unconfirmedShots]="!serverInput.shots[i*2+1] !== !input.shots[i*2+1]"></div>
