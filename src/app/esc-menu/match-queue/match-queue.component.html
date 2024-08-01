@@ -1,15 +1,16 @@
 <p>match-queue works!</p>
-<!-- matchmaking-queue.component.html -->
 <div class="queue-container">
-    <div class="queue-header">
-      <h2>Matchmaking Queue</h2>
-    </div>
-    <div class="queue-list">
-      <div class="queue-item" *ngFor="let player of players">
-        {{ player.name }}
-      </div>
-    </div>
-    <div class="queue-footer">
-      <button class="join-btn" (click)="joinQueue()">Join Queue</button>
+  <div class="queue-header">
+    <h2>Matchmaking Queue</h2>
+  </div>
+  <div class="queue-list">
+    <div class="queue-item" *ngFor="let player of players">
+      {{ player.name }} ({{ player.username }})
+      <button class="leave-btn" (click)="leaveQueue(player.username)">Leave Queue</button>
     </div>
   </div>
+  <div class="queue-footer">
+    <input #usernameInput type="text" placeholder="Enter username">
+    <button class="join-btn" (click)="joinQueue(usernameInput.value); usernameInput.value=''">Join Queue</button>
+  </div>
+</div>
