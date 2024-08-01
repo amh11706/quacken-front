@@ -85,7 +85,7 @@
       <mat-tab label="PROFILE"
                [disabled]="!open">
         <ng-template matTabContent>
-          <ng-container *ngComponentOutlet="ProfileComponent"></ng-container>
+          <q-profile></q-profile>
         </ng-template>
       </mat-tab>
 
@@ -93,14 +93,14 @@
                *ngIf="ws.user?.id"
                [disabled]="!open">
         <ng-template matTabContent>
-          <ng-container *ngComponentOutlet="InventoryComponent"></ng-container>
+          <q-inventory></q-inventory>
         </ng-template>
       </mat-tab>
 
       <mat-tab label="SETTINGS"
                [disabled]="!open">
         <ng-template matTabContent>
-          <ng-container *ngComponentOutlet="SettingsComponent"></ng-container>
+          <q-settings></q-settings>
         </ng-template>
       </mat-tab>
     </mat-tab-group>
