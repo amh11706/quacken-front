@@ -9,6 +9,14 @@ import { TeamImages, TeamMessage } from '../../../lobby/cadegoose/types';
 })
 export class PlayerListComponent {
   teamImages = TeamImages;
-  @Input() players: TeamMessage[] = [];
   @Input() showCount = true;
+
+  private _players: TeamMessage[] = [];
+  @Input() set players(v: TeamMessage[]) {
+    this._players = v.filter(user => !user.h);
+  }
+
+  get players() {
+    return this._players;
+  }
 }
