@@ -19,5 +19,7 @@ export class MatchQueueComponent {
     const newPlayer = { name: `Player ${this.players.length + 1}` };
     this.players.push(newPlayer);
   }
+ 
+
 
 }
