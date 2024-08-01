@@ -1,0 +1,110 @@
+@import '../../chat/rank-circle/rank-circle.component.scss';
+
+#stats {
+  color: #eee;
+  text-align: center;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+#friends, #blocked {
+  padding-top: 18px;
+}
+
+.refresh {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  cursor: pointer;
+  color: #fff;
+}
+
+q-name-search {
+  display: block;
+  margin-top: 18px;
+}
+
+mat-tab-group {
+  height: 100%;
+}
+
+#selection {
+  padding-bottom: 24px;
+}
+
+h2 {
+  font-size: 24px;
+  margin: 0;
+  padding: 8px 24px;
+  border-bottom: 2px solid grey;
+}
+
+.badges {
+  display: flex;
+  justify-content: center;
+  column-gap: 32px;
+  padding: 24px 32px;
+  border-bottom: 1px solid grey;
+  margin-bottom: 8px;
+
+  div {
+    cursor: pointer;
+  }
+}
+
+.badge {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 8px;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 50%;
+  line-height: 64px;
+}
+
+table {
+  margin: auto;
+  width: 400px;
+  min-width: 0;
+  max-width: 95%;
+}
+
+td, th {
+  word-wrap: break-word;
+  max-width: 200px;
+  text-align: center;
+}
+
+th {
+  top: -18px;
+}
+
+td {
+  cursor: pointer;
+}
+
+mat-expansion-panel {
+  max-width: 400px;
+  margin: auto;
+}
+
+.empty {
+  text-align: center;
+  color: #bbb;
+  margin-bottom: 16px;
+}
+
+.online,
+.offline {
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.offline {
+  color: #aaa;
+}
