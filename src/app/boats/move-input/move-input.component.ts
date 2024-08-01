@@ -185,6 +185,20 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     this.addShot({ ctrlKey: strict } as MouseEvent, i);
   }
 
+  private touchStartTime = 0;
+  private touchStartSlot = 0;
+
+  touchStartCannon(e: TouchEvent, i: number): void {
+    this.touchStartSlot = i;
+    this.touchStartTime = Date.now();
+  }
+
+  touchEndCannon(e: TouchEvent): void {
+    const longTap = Date.now() - this.touchStartTime > 300;
+    this.addShot({ ctrlKey: longTap } as MouseEvent, this.touchStartSlot);
+    e.preventDefault();
+  }
+
   addShot(e: MouseEvent, i: number): void {
     if (this.locked) return;
     const oldShots = this.input.shots[i] || 0;

@@ -2,6 +2,9 @@
      class="moverow">
   <div class="leftbombs"
        (drop)="$event.preventDefault(); dropCannon(i*2)"
+       (touchstart)="touchStartCannon($event, i*2)"
+       (touchend)="touchEndCannon($event)"
+       (touchcancel)="touchEndCannon($event)"
        (dragstart)="dragCannon(i*2)"
        (dragend)="dragendCannon()"
        [draggable]="input.shots[i*2]"
@@ -18,6 +21,9 @@
   </div>
   <div class="rightbombs"
        (drop)="$event.preventDefault(); dropCannon(i*2+1)"
+       (touchstart)="touchStartCannon($event, i*2+1)"
+       (touchend)="touchEndCannon($event)"
+       (touchcancel)="touchEndCannon($event)"
        (dragstart)="dragCannon(i*2+1)"
        (dragend)="dragendCannon()"
        [draggable]="input.shots[i*2+1]"
