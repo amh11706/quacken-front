@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'q-match-queue',
   standalone: true,
@@ -21,9 +22,9 @@ export class MatchQueueComponent implements OnInit {
     // Add more players as needed
   ];
   // Slider values
-  slider1 = 0;
-  slider2 = 0;
-  slider3 = 0;
+  slider1 = 35;
+  slider2 = 60;
+  slider3 = 200;
 
   constructor() {}
 

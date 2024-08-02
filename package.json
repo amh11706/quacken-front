@@ -29,6 +29,7 @@
     "@ngrx/component": "^17.1.0",
     "@tweenjs/tween.js": "18.6.4",
     "dayjs": "^1.11.10",
+    "hammerjs": "^2.0.8",
     "html-to-image": "^1.9.0",
     "ng-table-virtual-scroll": "^1.6.0",
     "rxjs": "7.8.1",
