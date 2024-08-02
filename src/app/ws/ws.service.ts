@@ -24,6 +24,9 @@ export interface TokenUser {
   providedIn: 'root',
 })
 export class WsService implements OnDestroy {
+  getUsername(): string {
+    // Simulate a server call
+    return 'player4';} // This would be dynamically fetched in a real scenario
   static reason?: string;
   private socket?: WebSocket;
   private token = '';

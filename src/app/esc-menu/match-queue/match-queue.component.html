@@ -1,4 +1,3 @@
-<!-- match-queue.component.html -->
 <div class="queue-container">
   <div class="queue-header">
     <h2>Matchmaking Queue</h2>
@@ -15,5 +14,11 @@
     <input #usernameInput type="text" placeholder="Enter username">
     <button class="join-btn" (click)="joinQueue(usernameInput.value); usernameInput.value=''">Join Queue</button>
     <button class="leave-btn" (click)="leaveQueue(usernameInput.value); usernameInput.value=''">Leave Queue</button>
+  </div>
+  <div class="sliders-container">
+    <h3>Adjust Settings</h3>
+    <mat-slider [(ngModel)]="slider1" min="20" max="65" step="5" thumbLabel tickInterval="5"></mat-slider>
+    <mat-slider [(ngModel)]="slider2" min="60" max="75" step="5" thumbLabel tickInterval="5"></mat-slider>
+    <mat-slider [(ngModel)]="slider3" min="25" max="750" step="25" thumbLabel tickInterval="25"></mat-slider>
   </div>
 </div>

@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'q-match-queue',
   standalone: true,
   imports: [MatButtonModule ,
-    CommonModule,
+    CommonModule, MatSliderModule, FormsModule
   ],
   templateUrl: './match-queue.component.html',
   styleUrl: './match-queue.component.scss'
@@ -19,6 +20,10 @@ export class MatchQueueComponent implements OnInit {
     { name: 'Player 3', username: 'player3' },
     // Add more players as needed
   ];
+  // Slider values
+  slider1 = 0;
+  slider2 = 0;
+  slider3 = 0;
 
   constructor() {}
 
