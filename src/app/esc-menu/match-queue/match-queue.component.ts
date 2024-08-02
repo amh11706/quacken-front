@@ -1,8 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
+import { MainMenuService } from '../../lobby/cadegoose/main-menu/main-menu.service';
+import { FriendsService } from '../../chat/friends/friends.service';
+import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
+import { SettingsService } from '../../settings/settings.service';
+import { WsService } from '../../ws/ws.service';
+import { EscMenuService } from '../esc-menu.service';
 
 @Component({
   selector: 'q-match-queue',
@@ -11,8 +17,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule, MatSliderModule, FormsModule
   ],
   templateUrl: './match-queue.component.html',
-  styleUrl: './match-queue.component.scss'
-})
+  styleUrl: './match-queue.component.scss',
+  providers: [MainMenuService]})
 export class MatchQueueComponent implements OnInit {
   players = [
     // Initially empty
@@ -26,7 +32,15 @@ export class MatchQueueComponent implements OnInit {
   slider2 = 60;
   slider3 = 200;
 
-  constructor() {}
+  constructor(
+   public ws: WsService,
+   public ss: SettingsService,
+   public fs: FriendsService,
+   public kbs: KeyBindingService,
+   public es: EscMenuService,
+   public injector: Injector,
+
+  ) {}
 
   ngOnInit(): void {
     // Initialization logic
