@@ -97,7 +97,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       if (this.locked || !v || !this.kbControls) return;
 
       if (this.selected && !this.input.moves[this.selected] &&
-         !this.input.shots[this.selected * 2] && !this.input.shots[this.selected * 2 + 1]
+        !this.input.shots[this.selected * 2] && !this.input.shots[this.selected * 2 + 1]
       ) {
         this.selected -= 1;
       } else if (this.selected === 0 && !this.input.moves[this.selected]) {
@@ -183,6 +183,28 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   setBomb(i: number, strict = false): void {
     if (!strict) if (this.input.shots[i] === this.maxShots && i < 6) i += 2;
     this.addShot({ ctrlKey: strict } as MouseEvent, i);
+  }
+
+  private touchStartTime = 0;
+  private touchStartSlot = 0;
+
+  touchStartCannon(e: TouchEvent | MouseEvent, i: number): void {
+    e.preventDefault();
+    this.touchStartSlot = i;
+    this.touchStartTime = Date.now();
+  }
+
+  touchEndCannon(e: TouchEvent | MouseEvent): void {
+    const touchTime = Date.now() - this.touchStartTime;
+    if (touchTime > 2000) return;
+    e.preventDefault();
+
+    const longTap = touchTime > 300;
+    this.addShot({
+      ctrlKey: longTap || e.ctrlKey,
+      metaKey: e.metaKey,
+      shiftKey: e.shiftKey,
+    } as MouseEvent, this.touchStartSlot);
   }
 
   addShot(e: MouseEvent, i: number): void {

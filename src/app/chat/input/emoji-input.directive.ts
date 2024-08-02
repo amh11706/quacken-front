@@ -80,17 +80,21 @@ export class EmojiInputDirective implements OnInit {
     }
   }
 
-  @HostListener('keydown.escape', ['$event'])
+  @HostListener('keyup.escape', ['$event'])
   onEscape(event: KeyboardEvent) {
+    if (!this.overlayRef?.hasAttached()) return;
     event.preventDefault();
+    event.stopImmediatePropagation();
     this.overlayRef?.detach();
   }
 
-  @HostListener('keydown.tab', ['$event'])
+  @HostListener('keyup.tab', ['$event'])
+  @HostListener('keyup.enter', ['$event'])
   onTab(event: KeyboardEvent) {
     const first = this.overlayContext.searchResults[0];
-    if (!first) return;
+    if (!first || !this.overlayRef?.hasAttached()) return;
     event.preventDefault();
+    event.stopImmediatePropagation();
     this.onSelect(this.emojiService.getSanitizedData(first, this.overlayContext.skin, 'apple'));
   }
 
