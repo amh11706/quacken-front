@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
@@ -9,25 +9,24 @@ import { KeyBindingService } from '../../settings/key-binding/key-binding.servic
 import { SettingsService } from '../../settings/settings.service';
 import { WsService } from '../../ws/ws.service';
 import { EscMenuService } from '../esc-menu.service';
+import { SettingsModule } from '../../settings/settings.module';
 
 @Component({
   selector: 'q-match-queue',
   standalone: true,
-  imports: [MatButtonModule, CommonModule, MatSliderModule, FormsModule],
+  imports: [MatButtonModule, CommonModule, MatSliderModule, FormsModule, SettingsModule],
   templateUrl: './match-queue.component.html',
   styleUrls: ['./match-queue.component.scss'],
-  providers: [MainMenuService]
+  providers: [MainMenuService],
 })
-export class MatchQueueComponent implements OnInit {
+export class MatchQueueComponent {
   players: { name: string, username: string }[] = []; // Initially empty
 
   // Slider values
-  slider1 = 35;
+  slider1 = 20;
   slider2 = 35;
-  slider3 = 60;
-  slider4 = 75;
   slider5 = 25;
-  slider6 = 750;
+  slider6 = 275;
 
   constructor(
     public ws: WsService,
@@ -35,17 +34,13 @@ export class MatchQueueComponent implements OnInit {
     public fs: FriendsService,
     public kbs: KeyBindingService,
     public es: EscMenuService,
-    public injector: Injector
+    public injector: Injector,
   ) {}
-
-  ngOnInit(): void {
-    // Initialization logic
-  }
 
   joinQueue(): void {
     const username = this.ws.getUsername(); // Get the username from WsService
     if (!this.players.find(player => player.username === username)) {
-      const newPlayer = { name: `Player ${this.players.length + 1}`, username: username };
+      const newPlayer = { name: `Player ${this.players.length + 1}`, username };
       this.players.push(newPlayer);
     } else {
       console.warn(`User ${username} is already in the queue.`);

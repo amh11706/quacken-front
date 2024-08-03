@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatchQueueComponent } from './match-queue.component';
+import { SettingsModule } from '../../settings/settings.module';
 
 @NgModule({
   declarations: [],
@@ -12,8 +13,9 @@ import { MatchQueueComponent } from './match-queue.component';
     FormsModule,
     MatButtonModule,
     MatSliderModule,
-    MatchQueueComponent
+    MatchQueueComponent,
+    SettingsModule,
   ],
-  exports: [MatchQueueComponent]
+  exports: [MatchQueueComponent],
 })
 export class MatchQueueModule { }

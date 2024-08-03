@@ -8,16 +8,16 @@ describe('MatchQueueComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MatchQueueComponent]
+      imports: [MatchQueueComponent],
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(MatchQueueComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    void expect(component).toBeTruthy();
   });
 });

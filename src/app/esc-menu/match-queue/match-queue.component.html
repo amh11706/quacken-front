@@ -6,45 +6,9 @@
   <div class="content">
     <h3 class="centered-header">Matchmaking Settings</h3>
     <div class="sliders-container">
-      <div class="slider-row">
-        <div class="slider-label turn-time-label">Turn Time</div>
-        <div class="slider-label">Min</div>
-        <div class="slider-wrapper">
-          <mat-slider class="short-slider" [(ngModel)]="slider1" min="20" max="65" step="5" thumbLabel tickInterval="5"></mat-slider>
-          <span class="slider-value">{{slider1}}</span>
-        </div>
-        <div class="slider-label">Max</div>
-        <div class="slider-wrapper">
-          <mat-slider class="short-slider" [(ngModel)]="slider2" min="20" max="65" step="5" thumbLabel tickInterval="5"></mat-slider>
-          <span class="slider-value">{{slider2}}</span>
-        </div>
-      </div>
-      <div class="slider-row">
-        <div class="slider-label turn-time-label">Turns</div>
-        <div class="slider-label">Min</div>
-        <div class="slider-wrapper">
-          <mat-slider class="short-slider" [(ngModel)]="slider3" min="60" max="75" step="5" thumbLabel tickInterval="5"></mat-slider>
-          <span class="slider-value">{{slider3}}</span>
-        </div>
-        <div class="slider-label">Max</div>
-        <div class="slider-wrapper">
-          <mat-slider class="short-slider" [(ngModel)]="slider4" min="60" max="75" step="5" thumbLabel tickInterval="5"></mat-slider>
-          <span class="slider-value">{{slider4}}</span>
-        </div>
-      </div>
-      <div class="slider-row">
-        <div class="slider-label turn-time-label">Rating</div>
-        <div class="slider-label">Min</div>
-        <div class="slider-wrapper">
-          <mat-slider class="short-slider" [(ngModel)]="slider5" min="25" max="750" step="25" thumbLabel tickInterval="25"></mat-slider>
-          <span class="slider-value">{{slider5}}</span>
-        </div>
-        <div class="slider-label">Max</div>
-        <div class="slider-wrapper">
-          <mat-slider class="short-slider" [(ngModel)]="slider6" min="25" max="750" step="25" thumbLabel tickInterval="25"></mat-slider>
-          <span class="slider-value">{{slider6}}</span>
-        </div>
-      </div>
+      <q-setting [name]="'minTurnTime'"></q-setting>
+      <q-setting [name]="'maxTurnTime'"></q-setting>
+      <q-setting [name]="'deltaRank'"></q-setting>
     </div>
   </div>
   <div class="queue-footer">

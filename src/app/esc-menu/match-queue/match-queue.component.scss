@@ -1,171 +1,62 @@
-:host {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* Align items to the start to allow for the margin-top */
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
-  padding-top: 30px; /* Reduce padding to move the container down */
-  padding-left: 24px; /* Reduce left padding by 70% */
-}
-
 .queue-container {
-  width: 100%;
-  max-width: 600px;
-  margin: 50px 0 0 -400px; /* Offset 50 pixels from the left edge */
-  padding: 20px;
-  background-color: rgba(66, 66, 66, 0.85);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px #4442421a;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Align items to the start */
-  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center items vertically */
+  align-items: center; /* Center items horizontally */
+  height: 100%; /* Ensure the container takes up full height */
+  padding: 20px; /* Optional: Add some padding around the container */
 }
 
 .queue-header {
   text-align: center;
   margin-bottom: 20px;
-
-  h2 {
-    margin: 0;
-    font-size: 21.6px; /* Reduced by 10% from 24px */
-    color: #ffffff;
-  }
-
-  p {
-    font-size: 15.84px; /* Increased by 20% */
-  }
-}
-
-.queue-list {
-  margin-bottom: 20px;
-
-  .queue-item {
-    padding: 10px;
-    margin-bottom: 8px;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.2s;
-    background-color: rgba(66, 66, 66, 0.85); /* Remove white background */
-    font-size: 13.2px; /* Increased by 10% from 12px */
-  }
-}
-
-.no-players {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 13.2px; /* Increased by 10% from 12px */
-  color: #ffffff;
-}
-
-.queue-footer {
-  text-align: center;
-  margin-top: auto; /* Push to the bottom */
-
-  .join-btn,
-  .leave-btn {
-    padding: 10px 20px;
-    font-size: 13.2px; /* Increased by 10% from 12px */
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin: 5px; /* Add margin to separate the buttons */
-  }
-
-  .join-btn {
-    background-color: #b22222; /* Dark color for the button */
-
-    &:hover {
-      background-color: #23272b;
-    }
-  }
-
-  .leave-btn {
-    background-color: #b22222; /* Dark color for the button */
-
-    &:hover {
-      background-color: #23272b;
-    }
-  }
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
+  align-items: center; /* Center content horizontally */
+  width: 100%; /* Ensure content takes full width */
 }
 
 .sliders-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Center sliders horizontally */
+  width: 100%;
   gap: 20px; /* Space between slider rows */
   margin-top: 10px; /* Adjust margin as needed */
+}
+
+.queue-footer {
+  text-align: center;
+  padding: 10px;
+  margin-top: 20px; /* Optional: Add some space between content and footer */
+}
+
+.join-btn, .leave-btn {
+  padding: 10px 20px;
+  font-size: 13.2px;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
   transition: background-color 0.2s;
-  background-color: rgba(66, 66, 66, 0.85); /* Remove white background */
+  margin: 5px;
 }
 
-.centered-header {
-  text-align: center;
-  margin-bottom: 10px;
-  color: #ffffff;
-  width: 100%;
-  font-size: 19.8px; /* Increased by 10% from 18px */
+.join-btn {
+  background-color: #b22222;
 }
 
-.slider-row {
-  display: grid;
-  grid-template-columns: 150px 50px 100px 50px 100px; /* Adjust column widths as needed */
-  align-items: center;
-  gap: 10px; /* Add some space between elements */
-  white-space: nowrap; /* Prevent line breaks */
+.join-btn:hover {
+  background-color: #23272b;
 }
 
-.slider-label {
-  text-align: center;
-  color: #ffffff;
-  font-size: 13.2px; /* Increased by 10% from 12px */
+.leave-btn {
+  background-color: #b22222;
 }
 
-.turn-time-label {
-  font-size: 16.5px; /* Increased by 10% from 15px */
-}
-
-.slider-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center the slider values */
-  text-align: center;
-}
-
-.short-slider {
-  width: 70px; /* Reduce the width by 30% from 100px */
-  margin-bottom: 5px; /* Add space between the slider and the value */
-}
-
-.slider-value {
-  color: #ffffff;
-  font-size: 13.2px; /* Increased by 10% from 12px */
-}
-
-::ng-deep .mat-slider-track-fill {
-  background-color: #8B0000 !important; /* Match the color in the image */
-}
-
-::ng-deep .mat-slider-thumb {
-  background-color: #8B0000 !important; /* Match the color in the image */
-}
-
-::ng-deep .mat-slider-thumb-label {
-  color: #8B0000 !important; /* Match the color in the image */
-}
-
-::ng-deep .mat-slider-track-background {
-  background-color: #3e3e3e !important; /* Darken the track background to match the image */
+.leave-btn:hover {
+  background-color: #23272b;
 }
