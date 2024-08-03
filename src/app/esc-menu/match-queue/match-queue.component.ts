@@ -10,11 +10,10 @@ import { SettingsService } from '../../settings/settings.service';
 import { WsService } from '../../ws/ws.service';
 import { EscMenuService } from '../esc-menu.service';
 
-
 @Component({
   selector: 'q-match-queue',
   standalone: true,
-  imports: [MatButtonModule, CommonModule, MatSliderModule, FormsModule,],
+  imports: [MatButtonModule, CommonModule, MatSliderModule, FormsModule],
   templateUrl: './match-queue.component.html',
   styleUrls: ['./match-queue.component.scss'],
   providers: [MainMenuService]
@@ -45,8 +44,12 @@ export class MatchQueueComponent implements OnInit {
 
   joinQueue(): void {
     const username = this.ws.getUsername(); // Get the username from WsService
-    const newPlayer = { name: `Player ${this.players.length + 1}`, username: username };
-    this.players.push(newPlayer);
+    if (!this.players.find(player => player.username === username)) {
+      const newPlayer = { name: `Player ${this.players.length + 1}`, username: username };
+      this.players.push(newPlayer);
+    } else {
+      console.warn(`User ${username} is already in the queue.`);
+    }
   }
 
   leaveQueue(username: string): void {
