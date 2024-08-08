@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatchFoundDialogComponent } from './match-found.component'; // Update the path as necessary
+import { Injectable, Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +44,31 @@ export class MatchmakingService {
         // Add logic for when the match is declined or auto-closed
       }
     });
+  }
+}
+
+@Component({
+  selector: 'q-match-found-dialog',
+  template: `
+    <h1 mat-dialog-title>Match Found</h1>
+    <div mat-dialog-content>
+      <p>A match has been found. You have 10 seconds to accept or decline.</p>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="decline()">Decline</button>
+      <a [href]="'/lobby/' + lobbyId" (click)="accept()">Accept</a>
+  `,
+})
+export class MatchFoundDialogComponent {
+  constructor(private dialogRef: MatDialogRef<MatchFoundDialogComponent>
+    , @Inject(MAT_DIALOG_DATA) public lobbyId: number,
+  ) {}
+
+  accept(): void {
+    this.dialogRef.close(true);
+  }
+
+  decline(): void {
+    this.dialogRef.close(false);
   }
 }

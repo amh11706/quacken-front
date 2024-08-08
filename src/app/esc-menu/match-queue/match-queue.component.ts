@@ -30,6 +30,7 @@ export class MatchQueueComponent implements OnInit {
 
   subscriptions: Subscription[] = [];
   private matchSettings = this.ss.prefetch('matchmaking');
+  matchmakingService: any;
 
   constructor(
     public ws: WsService,
@@ -73,5 +74,9 @@ export class MatchQueueComponent implements OnInit {
 
   leaveQueue(username: string): void {
     this.players = this.players.filter(player => player.username !== username);
+  }
+
+  simulateMatchFound(): void {
+    this.matchmakingService.triggerMatchFound(); // Call a method to simulate match found
   }
 }

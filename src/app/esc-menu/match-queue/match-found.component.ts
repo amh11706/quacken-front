@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatchmakingService } from './matchmaking.service';
 
 @Component({
   selector: 'q-match-found-dialog',
@@ -18,6 +19,7 @@ export class MatchFoundDialogComponent {
   constructor(
     private dialogRef: MatDialogRef<MatchFoundDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public lobbyId: number,
+    private matchmakingService: MatchmakingService,
   ) {}
 
   accept(): void {
