@@ -1,8 +1,10 @@
-import { Component, Injector } from '@angular/core';
+/* eslint-disable @angular-eslint/use-lifecycle-interface */
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { MainMenuService } from '../../lobby/cadegoose/main-menu/main-menu.service';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
@@ -19,23 +21,45 @@ import { SettingsModule } from '../../settings/settings.module';
   styleUrls: ['./match-queue.component.scss'],
   providers: [MainMenuService],
 })
-export class MatchQueueComponent {
+export class MatchQueueComponent implements OnInit {
   players: { name: string, username: string }[] = []; // Initially empty
 
-  // Slider values
-  slider1 = 20;
-  slider2 = 35;
-  slider5 = 25;
-  slider6 = 275;
+  // Form controls for sliders
+  minTurnTime = new FormControl(20); // Default value for minTurnTime
+  maxTurnTime = new FormControl(35); // Default value for maxTurnTime
+
+  subscriptions: Subscription[] = [];
+  private matchSettings = this.ss.prefetch('matchmaking');
 
   constructor(
     public ws: WsService,
-    public ss: SettingsService,
-    public fs: FriendsService,
-    public kbs: KeyBindingService,
-    public es: EscMenuService,
-    public injector: Injector,
-  ) {}
+    private ss: SettingsService,
+    private fs: FriendsService,
+    private kbs: KeyBindingService,
+    private es: EscMenuService,
+  ) { void ss.getGroup('matchmaking'); }
+
+  ngOnInit() {
+    // Subscribe to settings value changes using SettingsService
+    this.subscriptions.push(
+      this.matchSettings.minTurnTime.userStream.subscribe((value) => {
+        if (value > this.matchSettings.maxTurnTime.value) {
+          this.matchSettings.maxTurnTime.value = (value);
+        }
+      }));
+
+    this.subscriptions.push(
+      this.matchSettings.maxTurnTime.userStream.subscribe((value) => {
+        if (value < this.matchSettings.minTurnTime.value) {
+          this.matchSettings.minTurnTime.value = (value);
+        }
+      }));
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe to prevent memory leaks
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
 
   joinQueue(): void {
     const username = this.ws.getUsername(); // Get the username from WsService

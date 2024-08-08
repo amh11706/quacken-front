@@ -74,7 +74,7 @@ import { MatchQueueComponent } from './match-queue/match-queue.component';
     MapListModule,
     LetDirective,
     RankCircleComponent,
-    MatchQueueComponent
+    MatchQueueComponent,
   ],
   exports: [EscMenuComponent],
 })
