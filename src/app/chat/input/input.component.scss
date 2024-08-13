@@ -43,3 +43,12 @@ button#send {
   background-color: #eee;
   border: 1px solid #aaa;
 }
+
+ngx-emoji {
+  cursor: pointer;
+  width: min-content;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  max-width: fit-content !important;
+}

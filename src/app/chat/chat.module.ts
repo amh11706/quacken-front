@@ -15,6 +15,9 @@ import { QdragModule } from '../qdrag/qdrag.module';
 import { ChatComponent } from './chat.component';
 import { NameModule } from './name/name.module';
 import { EmojiInputDirective } from './input/emoji-input.directive';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { MatMenuModule } from '@angular/material/menu';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   declarations: [ChatComponent, InputComponent, NameSearchComponent],
@@ -32,6 +35,9 @@ import { EmojiInputDirective } from './input/emoji-input.directive';
     QdragModule,
     ScrollingModule,
     EmojiInputDirective,
+    EmojiComponent,
+    PickerComponent,
+    MatMenuModule,
   ],
   exports: [ChatComponent, NameSearchComponent],
 })

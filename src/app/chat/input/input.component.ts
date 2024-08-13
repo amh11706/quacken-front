@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { ChatService } from '../chat.service';
+import { CustomEmojis, FindCustomEmoji } from '../../settings/account/account.component';
 
 @Component({
   selector: 'q-input',
@@ -11,6 +12,9 @@ import { ChatService } from '../chat.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent implements OnInit, OnDestroy {
+  customEmojis = CustomEmojis;
+  findCustomEmoji = FindCustomEmoji;
+
   @Input() disabled = false;
   private subs = new Subscription();
 

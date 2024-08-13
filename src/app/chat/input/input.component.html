@@ -29,6 +29,21 @@
 
       <span *ngSwitchCase="'new'">new</span>
 
+      <ngx-emoji *ngSwitchCase="'emoji'"
+                 [matMenuTriggerFor]="emojimenu"
+                 [tooltip]="true"
+                 [emoji]="findCustomEmoji(param.value || ':+1:')"></ngx-emoji>
+      <mat-menu #emojimenu>
+        <ng-template matMenuContent>
+          <emoji-mart (click)="$event.preventDefault(); $event.stopPropagation();"
+                      [darkMode]="true"
+                      [autoFocus]="true"
+                      [showSingleCategory]="true"
+                      [custom]="customEmojis"
+                      (emojiSelect)="param.value = $event.emoji.colons; emojimenu.close.emit()"></emoji-mart>
+        </ng-template>
+      </mat-menu>
+
       <input *ngSwitchDefault
              qEmojiInput
              [id]="param.name || 'message'"
