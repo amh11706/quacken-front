@@ -11,7 +11,7 @@ export const TeamColors: Readonly<[number, number, number][]> = [
   [236, 30, 30], // red
   [255, 165, 0], // orange
   [255, 0, 255], // magenta
-  [194, 227, 235], // light blue
+  [184, 207, 225], // light blue
 ];
 
 function headerColor(boat: Boat): string {
