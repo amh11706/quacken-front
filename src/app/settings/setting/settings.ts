@@ -62,6 +62,7 @@ type ClientSettingGroup = {
     'cadeRated' | 'fishBoats' | 'allowGuests',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode',
   'l/flaggames': 'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' |
     'flagTurns' | 'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagRespawn' | 'flagSteal',
 };
@@ -77,6 +78,7 @@ export type ServerSettingGroup = {
     'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode'
   'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
     'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
 }
@@ -138,8 +140,15 @@ export const Settings: SettingList = {
     ],
   },
   jobberQuality: {
-    // eslint-disable-next-line object-property-newline
-    admin: true, id: 27, group: 'l/cade', type: 'slider', label: 'Jobber Quality', min: 5, max: 105, step: 5, name: 'jobberQuality',
+    admin: true,
+    id: 27,
+    group: 'l/cade',
+    type: 'slider',
+    label: 'Jobber Quality',
+    min: 5,
+    max: 105,
+    step: 5,
+    name: 'jobberQuality',
     stepLabels: { 105: 'Advanced' },
     advancedComponent: JobberQualityComponent,
     setLabel: (s) => {
@@ -150,8 +159,15 @@ export const Settings: SettingList = {
     },
   },
   cadeTurnTime: {
-    // eslint-disable-next-line object-property-newline
-    admin: true, id: 30, group: 'l/cade', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 65, step: 5,
+    admin: true,
+    id: 30,
+    group: 'l/cade',
+    name: 'turnTime',
+    type: 'slider',
+    label: 'Turn Time',
+    min: 10,
+    max: 65,
+    step: 5,
     stepLabels: { 65: 'Unlimited' },
     default: 30,
   },
@@ -204,8 +220,15 @@ export const Settings: SettingList = {
     admin: true, id: 24, group: 'l/cade', name: 'maxPlayers', type: 'slider', label: 'Max Players', min: 0, max: 40, step: 1,
   },
   cadeSpawnDelay: {
-    // eslint-disable-next-line object-property-newline
-    admin: true, id: 42, group: 'l/cade', name: 'spawnDelay', type: 'slider', label: 'Respawn Delay', min: 0, max: 5, step: 1,
+    admin: true,
+    id: 42,
+    group: 'l/cade',
+    name: 'spawnDelay',
+    type: 'slider',
+    label: 'Respawn Delay',
+    min: 0,
+    max: 5,
+    step: 1,
     stepLabels: { 5: 'No Respawn' },
   },
   cadeHotEntry: {
@@ -278,6 +301,18 @@ export const Settings: SettingList = {
   watchers: {
     admin: true, id: 17, group: 'l/spades', type: 'checkbox', label: 'Allow Watchers', name: 'watchers',
   },
+  minTurnTime: {
+    id: 70, group: 'matchmaking', type: 'slider', label: 'Min Turn Time', min: 20, max: 35, step: 5, name: 'minTurnTime', default: 20,
+  },
+  maxTurnTime: {
+    id: 71, group: 'matchmaking', type: 'slider', label: 'Max Turn Time', min: 20, max: 35, step: 5, name: 'maxTurnTime', default: 20,
+  },
+  deltaRank: {
+    id: 72, group: 'matchmaking', type: 'slider', label: 'Rating +/- ', min: 25, max: 275, step: 25, stepLabels: { 275: 'Unlimited' }, name: 'deltaRank', default: 50,
+  },
+  gameMode: {
+    id: 73, group: 'matchmaking', type: 'option', label: 'Game Mode', options: ['1v1', '2v2'], name: 'gameMode', default: 0,
+  },
   updateLinked: {
     id: 33, group: 'controls', type: 'checkbox', label: 'Update linked settings', name: 'updateLinked',
   },
@@ -303,8 +338,15 @@ export const Settings: SettingList = {
     admin: true, id: 50, group: 'l/flaggames', name: 'hotEntry', type: 'checkbox', label: 'Allow join while an entry is in progress',
   },
   flagJobberQuality: {
-    // eslint-disable-next-line object-property-newline
-    admin: true, id: 51, group: 'l/flaggames', type: 'slider', label: 'Jobber Quality', min: 5, max: 105, step: 5, name: 'jobberQuality',
+    admin: true,
+    id: 51,
+    group: 'l/flaggames',
+    type: 'slider',
+    label: 'Jobber Quality',
+    min: 5,
+    max: 105,
+    step: 5,
+    name: 'jobberQuality',
     stepLabels: { 105: 'Advanced' },
     advancedComponent: JobberQualityComponent,
     setLabel: (s) => {
@@ -315,8 +357,15 @@ export const Settings: SettingList = {
     },
   },
   flagTurnTime: {
-    // eslint-disable-next-line object-property-newline
-    admin: true, id: 52, group: 'l/flaggames', name: 'turnTime', type: 'slider', label: 'Turn Time', min: 10, max: 65, step: 5,
+    admin: true,
+    id: 52,
+    group: 'l/flaggames',
+    name: 'turnTime',
+    type: 'slider',
+    label: 'Turn Time',
+    min: 10,
+    max: 65,
+    step: 5,
     stepLabels: { 65: 'Unlimited' },
     default: 30,
   },
@@ -324,8 +373,15 @@ export const Settings: SettingList = {
     admin: true, id: 53, group: 'l/flaggames', name: 'turns', type: 'slider', label: 'Turns', min: 15, max: 75, step: 5, default: 60,
   },
   flagSpawnDelay: {
-    // eslint-disable-next-line object-property-newline
-    admin: true, id: 54, group: 'l/flaggames', name: 'spawnDelay', type: 'slider', label: 'Spawn Delay', min: 0, max: 5, step: 1,
+    admin: true,
+    id: 54,
+    group: 'l/flaggames',
+    name: 'spawnDelay',
+    type: 'slider',
+    label: 'Spawn Delay',
+    min: 0,
+    max: 5,
+    step: 1,
     stepLabels: { 5: 'No Respawn' },
   },
   flagFishBoats: {

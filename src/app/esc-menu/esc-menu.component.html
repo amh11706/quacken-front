@@ -82,6 +82,11 @@
         </ng-template>
       </mat-tab>
 
+      <mat-tab label="MATCHMAKING"
+      [disabled]="!open">
+<q-match-queue></q-match-queue>
+</mat-tab>
+
       <mat-tab label="PROFILE"
                [disabled]="!open">
         <ng-template matTabContent>

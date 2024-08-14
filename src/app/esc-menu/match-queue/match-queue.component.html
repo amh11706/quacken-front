@@ -1,0 +1,18 @@
+<div class="queue-container">
+  <div class="queue-header">
+    <h2>Matchmaking Queue</h2>
+    <p>Number of players in queue: {{ players.length }}</p>
+  </div>
+  <div class="content">
+    <h3 class="centered-header">Matchmaking Settings</h3>
+    <div class="sliders-container">
+      <q-setting [name]="'minTurnTime'"></q-setting>
+      <q-setting [name]="'maxTurnTime'"></q-setting>
+      <q-setting [name]="'deltaRank'"></q-setting>
+    </div>
+  </div>
+  <div class="queue-footer">
+    <button class="join-btn" (click)="joinQueue()">Join Queue</button>
+    <button class="leave-btn" (click)="leaveQueue(ws.getUsername())">Leave Queue</button>
+  </div>
+</div>
