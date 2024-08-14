@@ -1,9 +1,9 @@
-<div *ngIf="render.orientation"
+<div *ngIf="render.orientation as o"
      class="img"
      [style.backgroundImage]="render.img"
      [style.backgroundPosition]="render.imgPosition"
-     [style.top]="24 - render.orientation.offsety + 'px'"
-     [style.left]="32 + render.orientation.offsetx + 'px'"
-     [style.width]="render.orientation.width + 'px'"
-     [style.height]="render.orientation.height + 'px'">
+     [style.top]="24 - o.offsety + 'px'"
+     [style.left]="32 + o.offsetx + 'px'"
+     [style.width]="o.width + 'px'"
+     [style.height]="o.height + 'px'">
 </div>

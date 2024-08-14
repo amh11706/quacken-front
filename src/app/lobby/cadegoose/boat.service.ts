@@ -23,6 +23,7 @@ export const flagMats: Record<Team, Material> = {
   1: new MeshStandardMaterial({ color: 'darkred', side: DoubleSide }),
   2: new MeshStandardMaterial({ color: 'gold', side: DoubleSide }),
   3: new MeshStandardMaterial({ color: 'magenta', side: DoubleSide }),
+  4: new MeshStandardMaterial({ color: 'white', side: DoubleSide }),
   99: new MeshStandardMaterial({ color: '#CDCA97', side: DoubleSide }),
   100: new MeshStandardMaterial({ color: '#333', side: DoubleSide }),
 };

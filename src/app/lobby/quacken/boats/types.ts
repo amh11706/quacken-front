@@ -1,6 +1,6 @@
 import { StatRow } from '../../cadegoose/stats/types';
 
-export type Team = 0 | 1 | 2 | 3 | 99 | 100;
+export type Team = 0 | 1 | 2 | 3 | 4 | 99 | 100;
 
 export interface BoatTick {
   t: [number[], number[], number[]];

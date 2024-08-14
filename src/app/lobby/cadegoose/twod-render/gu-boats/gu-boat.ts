@@ -109,7 +109,7 @@ export class GuBoat extends BoatRender {
     return Promise.all(promises);
   }
 
-  private getTeamImage(team: number, which: string): Promise<string> {
+  private getTeamImage(team: Team, which: string): Promise<string> {
     let prom = GuBoat.teamImages.get(which + team);
     if (prom) return prom;
     const sail = new window.Image();
@@ -147,7 +147,8 @@ export class GuBoat extends BoatRender {
   public async updateTeam(boat: Boat): Promise<void> {
     if (!this.spriteData) return;
     await new Promise(resolve => setTimeout(resolve));
-    const team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;
+    let team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;
+    if (boat.isMe) team = 4;
     this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sail') + ')';
     if (Boats[boat.type as BoatTypes]?.sink) void this.getTeamImage(team, this.spriteData.name + '/sink');
   }

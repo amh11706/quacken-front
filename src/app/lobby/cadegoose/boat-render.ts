@@ -11,6 +11,7 @@ export const TeamColors: Readonly<[number, number, number][]> = [
   [236, 30, 30], // red
   [255, 165, 0], // orange
   [255, 0, 255], // magenta
+  [194, 227, 235], // light blue
 ];
 
 function headerColor(boat: Boat): string {
@@ -31,7 +32,7 @@ const moveColor = [
   'red',
 ];
 
-const flagColor: Record<Team, string> = { 0: 'lime', 1: 'red', 2: 'gold', 3: 'magenta', 99: '', 100: '#666' };
+const flagColor: Record<Team, string> = { 0: 'lime', 1: 'red', 2: 'gold', 3: 'magenta', 4: 'white', 99: '', 100: '#666' };
 
 const teamMaterials = [
   new THREE.LineBasicMaterial({ color: 'lime', transparent: true, opacity: 0 }),
