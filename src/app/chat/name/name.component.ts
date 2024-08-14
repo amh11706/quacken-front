@@ -81,7 +81,7 @@ export class NameComponent implements OnChanges {
     }
 
     return [
-      { label: 'Open Profile', action: () => this.openProfile() },
+      { label: 'Profile', action: () => this.openProfile() },
       ...this.chat.nameCommands.map(cmd => ({ label: cmd.title, action: () => this.sendCmd(cmd) })),
       { label: 'Add Friend', action: () => this.add() },
       this.fs.isBlocked(from)
