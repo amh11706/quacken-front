@@ -27,7 +27,7 @@ export class StatService {
   id = 199;
   group = 1;
   leaders$ = new BehaviorSubject<Leader[] | null>(null);
-  rankLeaders$ = new BehaviorSubject<{ tier: RankLeader[], xp: RankLeader[] } | null>(null);
+  rankLeaders$ = new BehaviorSubject<{ tier: RankLeader[][], xp: RankLeader[][] } | null>(null);
 
   groups = {
     0: 'Quacken',
@@ -123,15 +123,19 @@ export class StatService {
     this.leaders$.next(null);
     if (!rankLeaders) return;
 
-    for (const l of rankLeaders.tier) {
-      l.from = l.userName;
-      l.ti = l.tier;
-      l.sc = l.score;
+    for (const variation of rankLeaders.tier) {
+      for (const l of variation) {
+        l.from = l.userName;
+        l.ti = l.tier;
+        l.sc = l.score;
+      }
     }
-    for (const l of rankLeaders.xp) {
-      l.from = l.userName;
-      l.ti = l.tier;
-      l.sc = l.score;
+    for (const variation of rankLeaders.xp) {
+      for (const l of variation) {
+        l.from = l.userName;
+        l.ti = l.tier;
+        l.sc = l.score;
+      }
     }
     this.rankLeaders$.next(rankLeaders);
   }

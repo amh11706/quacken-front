@@ -58,7 +58,7 @@ export type InputlessCmds = Exclude<OutCmd, keyof OutCmdInputs>;
 
 type OutCmdReturns = {
   [OutCmd.StatsTop]: Leader[];
-  [OutCmd.RanksTop]: { xp: RankLeader[], tier: RankLeader[] };
+  [OutCmd.RanksTop]: { xp: RankLeader[][], tier: RankLeader[][] };
   [OutCmd.GetWinLoss]: WinLoss;
   [OutCmd.RanksUser]: UserRank[];
   [OutCmd.StatsUser]: Stat[];

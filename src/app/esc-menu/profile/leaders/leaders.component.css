@@ -11,8 +11,18 @@
   padding-top: 8px;
 }
 
+.variations {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.variations div {
+  width: fit-content;
+}
+
 table {
-  margin: auto;
   width: 400px;
   max-width: 95%;
   min-width: 0;

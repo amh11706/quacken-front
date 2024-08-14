@@ -69,7 +69,7 @@
               ]
             },
             "dev": {
-              "outputPath": "/home/andrew/go/src/github.com/amh11706/quackgo/dist/",
+              "outputPath": "C:/Users/Me/code/go/quackgo/dist/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",

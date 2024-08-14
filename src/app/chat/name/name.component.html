@@ -11,7 +11,7 @@
              [emoji]="emoji"></ngx-emoji>
   <q-rank-circle *ngIf="message.ti"
                  [tier]="message.ti"
-                 [score]="message.sc || 0"></q-rank-circle>
+                 [score]="message.sc || [0]"></q-rank-circle>
 </span>
 
 <mat-menu #nameMenu="matMenu">

@@ -67,68 +67,78 @@
 
     <ng-container *ngIf="stat.rankLeaders$ | async as rankLeaders">
       <h4>Top Tier</h4>
-      <table mat-table
-             [dataSource]="rankLeaders.tier">
-        <tr mat-header-row
-            *matHeaderRowDef="['position', 'name', 'level']; sticky: true"></tr>
-        <tr mat-row
-            *matRowDef="let row; columns: ['position', 'name', 'level'];"></tr>
+      <div class="variations">
+        <div *ngFor="let l of rankLeaders.tier; let i = index">
+          <p>{{variations[stat.group]?.[i]}}</p>
+          <table mat-table
+                 [dataSource]="l">
+            <tr mat-header-row
+                *matHeaderRowDef="['position', 'name', 'level']; sticky: true"></tr>
+            <tr mat-row
+                *matRowDef="let row; columns: ['position', 'name', 'level'];"></tr>
 
-        <ng-container matColumnDef="position">
-          <th mat-header-cell
-              *matHeaderCellDef>Position</th>
-          <td mat-cell
-              *matCellDef="let i = index">{{i+1}}</td>
-        </ng-container>
+            <ng-container matColumnDef="position">
+              <th mat-header-cell
+                  *matHeaderCellDef>Position</th>
+              <td mat-cell
+                  *matCellDef="let i = index">{{i+1}}</td>
+            </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell
-              *matHeaderCellDef>Name</th>
-          <td mat-cell
-              *matCellDef="let element">
-            <q-name [message]="element"></q-name>
-          </td>
-        </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell
+                  *matHeaderCellDef>Name</th>
+              <td mat-cell
+                  *matCellDef="let element">
+                <q-name [message]="element"></q-name>
+              </td>
+            </ng-container>
 
-        <ng-container matColumnDef="level">
-          <th mat-header-cell
-              *matHeaderCellDef>Score</th>
-          <td mat-cell
-              *matCellDef="let element">{{element.score}}</td>
-        </ng-container>
-      </table>
+            <ng-container matColumnDef="level">
+              <th mat-header-cell
+                  *matHeaderCellDef>Score</th>
+              <td mat-cell
+                  *matCellDef="let element">{{element.score}}</td>
+            </ng-container>
+          </table>
+        </div>
+      </div>
 
       <h4>Top Experience</h4>
-      <table mat-table
-             [dataSource]="rankLeaders.xp">
-        <tr mat-header-row
-            *matHeaderRowDef="['position', 'name', 'level']; sticky: true"></tr>
-        <tr mat-row
-            *matRowDef="let row; columns: ['position', 'name', 'level'];"></tr>
+      <div class="variations">
+        <div *ngFor="let l of rankLeaders.xp; let i = index">
+          <p>{{variations[stat.group]?.[i]}}</p>
+          <table mat-table
+                 [dataSource]="l">
+            <tr mat-header-row
+                *matHeaderRowDef="['position', 'name', 'level']; sticky: true"></tr>
+            <tr mat-row
+                *matRowDef="let row; columns: ['position', 'name', 'level'];"></tr>
 
-        <ng-container matColumnDef="position">
-          <th mat-header-cell
-              *matHeaderCellDef>Position</th>
-          <td mat-cell
-              *matCellDef="let i = index">{{i+1}}</td>
-        </ng-container>
+            <ng-container matColumnDef="position">
+              <th mat-header-cell
+                  *matHeaderCellDef>Position</th>
+              <td mat-cell
+                  *matCellDef="let i = index">{{i+1}}</td>
+            </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell
-              *matHeaderCellDef>Name</th>
-          <td mat-cell
-              *matCellDef="let element">
-            <q-name [message]="element"></q-name>
-          </td>
-        </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell
+                  *matHeaderCellDef>Name</th>
+              <td mat-cell
+                  *matCellDef="let element">
+                <q-name [message]="element"></q-name>
+              </td>
+            </ng-container>
 
-        <ng-container matColumnDef="level">
-          <th mat-header-cell
-              *matHeaderCellDef>Level</th>
-          <td mat-cell
-              *matCellDef="let element">{{element.level}}</td>
-        </ng-container>
-      </table>
+            <ng-container matColumnDef="level">
+              <th mat-header-cell
+                  *matHeaderCellDef>Level</th>
+              <td mat-cell
+                  *matCellDef="let element">{{element.level}}</td>
+            </ng-container>
+          </table>
+        </div>
+      </div>
     </ng-container>
   </div>
 </div>

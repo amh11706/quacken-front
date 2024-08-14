@@ -12,8 +12,8 @@ export interface Leader extends TeamMessage {
 export interface RankLeader extends TeamMessage {
   userName: string;
   level: number;
-  tier: number;
-  score: number;
+  tier: number[];
+  score: number[];
 }
 
 export interface WinLoss {

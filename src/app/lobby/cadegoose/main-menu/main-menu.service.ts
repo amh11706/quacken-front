@@ -154,12 +154,10 @@ export class MainMenuService implements OnDestroy {
     const teamPlayers = this.teamPlayers$.getValue();
     this.teamRanks = Array(teamPlayers.length).fill(0);
     teamPlayers.forEach((team, i) => {
-      team.forEach((p) => this.teamRanks[i] += p.sc ?? 0);
+      let sum = 0;
+      team.forEach((p) => sum += Math.max(...p.sc));
+      this.teamRanks[i] = Math.round(sum / (team.length || 1));
     });
-    for (let i = 0; i < this.teamRanks.length; i++) {
-      const rank = this.teamRanks[i];
-      if (rank) this.teamRanks[i] = Math.round(rank / (teamPlayers[i]?.length || 1));
-    }
   }
 
   private updatePlayers(players: TeamMessage[]) {

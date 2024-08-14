@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { StatService } from '../stat.service';
+import { Variations } from '../../../chat/rank-circle/rank-circle.component';
 
 export const TierTitles = [
   'Bronze 1', 'Bronze 2', 'Bronze 3',
@@ -20,6 +21,7 @@ export const TierTitles = [
 export class LeadersComponent implements OnInit, OnDestroy {
   @Input() name?: string;
   tierTitles = TierTitles;
+  variations = Variations;
   private initTimer = 0;
 
   constructor(

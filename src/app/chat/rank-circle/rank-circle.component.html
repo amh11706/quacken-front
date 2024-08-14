@@ -1,2 +1,3 @@
-<div [matTooltip]="tierTitles[tier] + ' (' + score + ')'"
-     class="tier {{tierTitles[tier]}}"></div>
+<div *ngIf="bestTier"
+     [matTooltip]="title"
+     class="tier {{tierTitles[bestTier]}}"></div>
