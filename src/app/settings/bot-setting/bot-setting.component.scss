@@ -32,6 +32,10 @@
   }
 }
 
+::ng-deep .cdk-overlay-pane {
+  width: fit-content !important;
+}
+
 .boatoption {
   position: relative;
   top: 6px;
