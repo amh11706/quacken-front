@@ -25,6 +25,14 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 17 August 2024',
+    points: [
+      'Blockade rank is now split between 1v1 and team games.',
+      'Your boat outline is now lighter than your team color.',
+      'Respawns are now limited to once every 5 seconds.',
+    ],
+  },
+  {
     title: 'Release 01 August 2024',
     points: [
       'Mobile improvements with help from Straft.',
