@@ -67,6 +67,10 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     this.stat.openUserMatches();
   }
 
+  openQueue(): void {
+    void this.es.openTab(4);
+  }
+
   join(l: Lobby, e: MouseEvent): void {
     if (l.group.publicMode?.value && !e.ctrlKey) {
       e.preventDefault();

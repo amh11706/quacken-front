@@ -30,21 +30,6 @@ const BaseSettings = {
   showDamage: { id: 69, value: 1 },
 };
 
-// id,name
-// 801,Tie Breaker 2
-// 800,Tie Breaker 1
-// 799,Round 5
-// 798,Grand Finals 1
-// 797,Round 3
-// 796,Round 1
-// 793,Semi Finals
-// 791,Round 2
-// 789,Grand finals 3
-// 788,Quarter Finals
-// 786,Grand Finals 2
-// 785,Round 4
-// 784,Round of 16
-
 interface Competition {
   description: string,
   rounds: {
@@ -54,94 +39,94 @@ interface Competition {
 }
 
 export const Competitions: Competition[] = [
-  {
-    description: '1v1 Blitz Tournament July 2024',
-    rounds: [
-      {
-        description: 'Group Stage',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'Round 1', value: 0 },
-            map: { id: 18, value: 796, data: 'Round 1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Round 2', value: 0 },
-            map: { id: 18, value: 791, data: 'Round 2' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Round 3', value: 0 },
-            map: { id: 18, value: 797, data: 'Round 3' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Round 4', value: 0 },
-            map: { id: 18, value: 785, data: 'Round 4' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Round 5', value: 0 },
-            map: { id: 18, value: 799, data: 'Round 5' },
-          },
-        ],
-      },
-      {
-        description: 'Knockout Stage',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'Round of 16', value: 0 },
-            map: { id: 18, value: 784, data: 'Round of 16' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Quarter Finals', value: 0 },
-            map: { id: 18, value: 788, data: 'Quarter Finals' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Semi Finals', value: 0 },
-            map: { id: 18, value: 793, data: 'Semi Finals' },
-          },
-        ],
-      },
-      {
-        description: 'Finals',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'Grand Finals 1', value: 0 },
-            map: { id: 18, value: 798, data: 'Grand Finals 1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Grand Finals 2', value: 0 },
-            map: { id: 18, value: 786, data: 'Grand Finals 2' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Grand finals 3', value: 0 },
-            map: { id: 18, value: 789, data: 'Grand finals 3' },
-          },
-        ],
-      },
-      {
-        description: 'Tie Breaker',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'Tie Breaker 1', value: 0 },
-            map: { id: 18, value: 800, data: 'Tie Breaker 1' },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Tie Breaker 2', value: 0 },
-            map: { id: 18, value: 801, data: 'Tie Breaker 2' },
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   description: '1v1 Blitz Tournament July 2024',
+  //   rounds: [
+  //     {
+  //       description: 'Group Stage',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round 1', value: 0 },
+  //           map: { id: 18, value: 796, data: 'Round 1' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round 2', value: 0 },
+  //           map: { id: 18, value: 791, data: 'Round 2' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round 3', value: 0 },
+  //           map: { id: 18, value: 797, data: 'Round 3' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round 4', value: 0 },
+  //           map: { id: 18, value: 785, data: 'Round 4' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round 5', value: 0 },
+  //           map: { id: 18, value: 799, data: 'Round 5' },
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       description: 'Knockout Stage',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round of 16', value: 0 },
+  //           map: { id: 18, value: 784, data: 'Round of 16' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Quarter Finals', value: 0 },
+  //           map: { id: 18, value: 788, data: 'Quarter Finals' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Semi Finals', value: 0 },
+  //           map: { id: 18, value: 793, data: 'Semi Finals' },
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       description: 'Finals',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Grand Finals 1', value: 0 },
+  //           map: { id: 18, value: 798, data: 'Grand Finals 1' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Grand Finals 2', value: 0 },
+  //           map: { id: 18, value: 786, data: 'Grand Finals 2' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Grand finals 3', value: 0 },
+  //           map: { id: 18, value: 789, data: 'Grand finals 3' },
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       description: 'Tie Breaker',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Tie Breaker 1', value: 0 },
+  //           map: { id: 18, value: 800, data: 'Tie Breaker 1' },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Tie Breaker 2', value: 0 },
+  //           map: { id: 18, value: 801, data: 'Tie Breaker 2' },
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 ];

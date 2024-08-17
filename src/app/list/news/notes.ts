@@ -27,7 +27,9 @@ export const Notes: Note[] = [
   {
     title: 'Release 17 August 2024',
     points: [
-      'Blockade rank is now split between 1v1 and team games.',
+      '1v1 queue is now available! You can now queue for 1v1 games from the new tab in the escape menu.',
+      '1v1 games are rated separately from team games. 1v1 games can only be rated thru the 1v1 queue.',
+      'The queue chooses a random top rated map. Make sure to rate your favorite maps to see them in the queue later!',
       'Your boat outline is now lighter than your team color.',
       'Respawns are now limited to once every 5 seconds.',
     ],

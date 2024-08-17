@@ -32,6 +32,13 @@
         </div>
       </button>
 
+      <button mat-button
+              class="card"
+              (click)="openQueue()">
+        <h3 class="cardTitle">1v1 Queue</h3>
+        <p>Find opponents for rated 1v1 games!</p>
+      </button>
+
       <button *ngIf="competitions.length"
               mat-button
               class="card"
