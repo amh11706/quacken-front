@@ -38,8 +38,6 @@ const compareRating = (n1: MapOption, n2: MapOption, direction: number) => {
   if (n1.id <= 1) return -1;
   if (n2.id <= 1) return 1;
 
-  if (!n1.ratingCount && !n2.ratingCount) return n2.id - n1.id;
-  if ((n1.ratingCount > 1) !== (n2.ratingCount > 1)) return n2.ratingCount - n1.ratingCount;
   if (!n1.ratingCount) return 1;
   if (!n2.ratingCount) return -1;
   if (n1.ratingAverage !== n2.ratingAverage) {
@@ -298,7 +296,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       });
       return tagMatched;
     });
-    this.maplist.next(this.filteredMapList);
+    this.sort(this.selectedSortOption);
   }
 
   removeLastTag(): void {
@@ -325,5 +323,6 @@ export class MapListComponent implements OnInit, OnDestroy {
   sort(value: SortOptions): void {
     this.filteredMapList.sort(SortCompare[value]);
     this.maplist.next(this.filteredMapList);
+    // console.log(JSON.stringify(this.filteredMapList.map(m => m.id)));
   }
 }
