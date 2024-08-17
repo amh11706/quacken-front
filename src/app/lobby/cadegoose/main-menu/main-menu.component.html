@@ -7,7 +7,7 @@
   </div>
   <ng-template #teams>
     <ng-container *ngrxLet="(ms.status | async) || 0 as status">
-      <h3>{{status > 1 ? 'Pause Voting' : 'Team Selection'}}</h3>
+      <h3>{{status > 1 && status < 4 ? 'Pause Voting' : 'Team Selection'}}</h3>
       <div id="flexmenu"
            *ngrxLet="es.open$ as open">
         <div class="teamwrap"
@@ -30,7 +30,7 @@
                 <mat-icon [matTooltip]="voteOptions[m.v]?.text || ''">{{voteOptions[m.v]?.icon}}</mat-icon>
                 <span matTooltip="Pause credits">{{m.pc}}</span>
               </ng-template>
-              <ng-container *ngIf="status < 2; else playerVote">
+              <ng-container *ngIf="status < 2 || status === 4; else playerVote">
                 <img *ngIf="m.sId === ws.sId && ws.connected; else boatImage"
                      [matMenuTriggerFor]="jobbers"
                      src="./assets/boats/{{links[m.b]}}.png"
@@ -65,7 +65,7 @@
 
         <div class="settings">
           <ng-container *ngIf="open">
-            <div *ngIf="status > 1 && ms.myTeam < 99"
+            <div *ngIf="status > 1 && status < 4 && ms.myTeam < 99"
                  class="settingRow">
               <button mat-raised-button
                       [disabled]="!open"

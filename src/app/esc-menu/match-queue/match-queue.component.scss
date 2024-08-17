@@ -1,0 +1,21 @@
+mat-card {
+  max-width: 900px;
+  margin: auto;
+  margin-top: 16px;
+  background-color: rgb(94, 92, 92);
+}
+
+mat-card-header {
+  justify-content: center;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+mat-card-actions {
+  justify-content: center;
+}

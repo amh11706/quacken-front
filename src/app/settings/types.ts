@@ -54,7 +54,7 @@ export class Setting {
     return new Setting(this.ss, this.inputConfig, this.value, { ...this.data });
   }
 
-  toDBSetting(): DBSetting {
+  toDBSetting<T extends keyof ServerSettingGroup>(): DBSetting<T> {
     return {
       id: this.inputConfig.id,
       name: this.inputConfig.name,
@@ -62,7 +62,7 @@ export class Setting {
       title: this.inputConfig.label || this.inputConfig.name,
       value: this.value,
       data: this.setLabel(this.cloneData()),
-    };
+    } as DBSetting<T>;
   }
 
   private setLabel(data: unknown): string | { label: string } | unknown {

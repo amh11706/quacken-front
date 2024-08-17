@@ -1,0 +1,21 @@
+<mat-card>
+  <mat-card-header>
+    <h2>Matchmaking Queue</h2>
+  </mat-card-header>
+  <mat-card-content>
+    <p>Number of players in queue: {{ queueLength | async }}</p>
+    <h3 class="centered-header">Settings</h3>
+    <q-setting [disabled]="ms.inQueue || (pending | async) === true"
+               [name]="'minTurnTime'"></q-setting>
+    <q-setting [disabled]="ms.inQueue || (pending | async) === true"
+               [name]="'maxTurnTime'"></q-setting>
+    <q-setting [disabled]="ms.inQueue || (pending | async) === true"
+               [name]="'deltaRank'"></q-setting>
+    <p>You'll get a notification when a match is found. You can close this menu safely.</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button [disabled]="(ws.connected$ | async) === false || (pending | async)"
+            [color]="ms.inQueue ? 'warn' : 'primary'"
+            (click)="ms.inQueue ? leaveQueue() : joinQueue()">{{ms.inQueue ? 'Leave' : 'Join 1v1'}} Queue</button>
+  </mat-card-actions>
+</mat-card>

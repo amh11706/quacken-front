@@ -54,6 +54,10 @@ export const enum OutCmd {
   SearchNames,
   SearchNamesOnline,
   SetUserEmoji,
+  WatchQueue,
+	UnwatchQueue,
+	JoinQueue,
+	LeaveQueue,
 
   LobbyCreate = 101,
   LobbyApply,
@@ -123,6 +127,8 @@ export const enum InCmd {
   Reload,
   SetUser,
   UpdateUser,
+  QueueLength,
+	QueueMatch,
 
   LobbyUpdate = 101,
   LobbyList,

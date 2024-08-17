@@ -103,6 +103,13 @@
           <q-settings></q-settings>
         </ng-template>
       </mat-tab>
+
+      <mat-tab label="MATCHMAKING"
+               [disabled]="!open">
+        <ng-template matTabContent>
+          <q-match-queue></q-match-queue>
+        </ng-template>
+      </mat-tab>
     </mat-tab-group>
 
     <div id="chatframe"

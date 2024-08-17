@@ -7,6 +7,7 @@ export const enum LobbyStatus {
   MidMatch,
   Voting,
   Paused,
+  Waiting,
 }
 
 export interface Lobby {

@@ -24,6 +24,11 @@ export interface TokenUser {
   providedIn: 'root',
 })
 export class WsService implements OnDestroy {
+  getUsername(): string {
+    // Simulate a server call
+    return 'player4';
+  } // This would be dynamically fetched in a real scenario
+
   static reason?: string;
   private socket?: WebSocket;
   private token = '';
@@ -42,6 +47,8 @@ export class WsService implements OnDestroy {
   copy?: number;
 
   constructor(private router: Router) {
+    this.connected$.next(false);
+
     this.subscribe(InCmd.Kick, (reason: string) => {
       this.close();
       WsService.reason = reason;
@@ -101,6 +108,7 @@ export class WsService implements OnDestroy {
 
     this.socket.onclose = () => {
       this.connected = false;
+      this.connected$.next(false);
       this.dispatchMessage({
         cmd: InCmd.ChatMessage,
         data: { type: 1, message: 'Connection closed, attempting to reconnect...', from: '' },

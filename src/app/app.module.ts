@@ -16,4 +16,5 @@ import { RecordComponent } from './record/record.component';
   ],
   bootstrap: [AppComponent],
 })
+
 export class AppModule { }
