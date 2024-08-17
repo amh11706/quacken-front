@@ -1,62 +1,21 @@
-.queue-container {
+mat-card {
+  max-width: 900px;
+  margin: auto;
+  margin-top: 16px;
+  background-color: rgb(94, 92, 92);
+}
+
+mat-card-header {
+  justify-content: center;
+}
+
+mat-card-content {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Center items vertically */
-  align-items: center; /* Center items horizontally */
-  height: 100%; /* Ensure the container takes up full height */
-  padding: 20px; /* Optional: Add some padding around the container */
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-.queue-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center content horizontally */
-  width: 100%; /* Ensure content takes full width */
-}
-
-.sliders-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center sliders horizontally */
-  width: 100%;
-  gap: 20px; /* Space between slider rows */
-  margin-top: 10px; /* Adjust margin as needed */
-}
-
-.queue-footer {
-  text-align: center;
-  padding: 10px;
-  margin-top: 20px; /* Optional: Add some space between content and footer */
-}
-
-.join-btn, .leave-btn {
-  padding: 10px 20px;
-  font-size: 13.2px;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin: 5px;
-}
-
-.join-btn {
-  background-color: #b22222;
-}
-
-.join-btn:hover {
-  background-color: #23272b;
-}
-
-.leave-btn {
-  background-color: #b22222;
-}
-
-.leave-btn:hover {
-  background-color: #23272b;
+mat-card-actions {
+  justify-content: center;
 }

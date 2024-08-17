@@ -1,44 +1,40 @@
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
-import { FormsModule, FormControl } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { MainMenuService } from '../../lobby/cadegoose/main-menu/main-menu.service';
-import { FriendsService } from '../../chat/friends/friends.service';
-import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { MatCardModule } from '@angular/material/card';
 import { SettingsService } from '../../settings/settings.service';
 import { WsService } from '../../ws/ws.service';
-import { EscMenuService } from '../esc-menu.service';
 import { SettingsModule } from '../../settings/settings.module';
+import { MatchmakingService } from './matchmaking.service';
+import { InCmd, OutCmd } from '../../ws/ws-messages';
+import { ServerSettingGroup } from '../../settings/setting/settings';
+import { ServerSettingMap } from '../../settings/types';
 
 @Component({
   selector: 'q-match-queue',
   standalone: true,
-  imports: [MatButtonModule, CommonModule, MatSliderModule, FormsModule, SettingsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatButtonModule, CommonModule, MatSliderModule, FormsModule, SettingsModule, MatCardModule],
   templateUrl: './match-queue.component.html',
   styleUrls: ['./match-queue.component.scss'],
-  providers: [MainMenuService],
 })
 export class MatchQueueComponent implements OnInit {
-  players: { name: string, username: string }[] = []; // Initially empty
-
-  // Form controls for sliders
-  minTurnTime = new FormControl(20); // Default value for minTurnTime
-  maxTurnTime = new FormControl(35); // Default value for maxTurnTime
-
-  subscriptions: Subscription[] = [];
+  queueLength = new Subject<number>();
+  pending = new BehaviorSubject<boolean>(false);
+  private subscriptions: Subscription[] = [];
   private matchSettings = this.ss.prefetch('matchmaking');
-  matchmakingService: any;
 
   constructor(
     public ws: WsService,
     private ss: SettingsService,
-    private fs: FriendsService,
-    private kbs: KeyBindingService,
-    private es: EscMenuService,
-  ) { void ss.getGroup('matchmaking'); }
+    public ms: MatchmakingService,
+  ) {
+    void ss.getGroup('matchmaking');
+  }
 
   ngOnInit() {
     // Subscribe to settings value changes using SettingsService
@@ -55,28 +51,43 @@ export class MatchQueueComponent implements OnInit {
           this.matchSettings.minTurnTime.value = (value);
         }
       }));
+
+    this.subscriptions.push(
+      this.ws.connected$.subscribe(value => {
+        if (value) {
+          this.ws.send(OutCmd.WatchQueue);
+        }
+      }));
+
+    this.subscriptions.push(
+      this.ws.subscribe(InCmd.QueueLength, length => {
+        this.queueLength.next(length);
+      }));
   }
 
   ngOnDestroy() {
     // Unsubscribe to prevent memory leaks
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.ws.send(OutCmd.UnwatchQueue);
   }
 
-  joinQueue(): void {
-    const username = this.ws.getUsername(); // Get the username from WsService
-    if (!this.players.find(player => player.username === username)) {
-      const newPlayer = { name: `Player ${this.players.length + 1}`, username };
-      this.players.push(newPlayer);
-    } else {
-      console.warn(`User ${username} is already in the queue.`);
+  async joinQueue(): Promise<void> {
+    const settings = {} as ServerSettingMap<'matchmaking'>;
+    for (const [name, setting] of Object.entries(this.matchSettings)) {
+      settings[name as ServerSettingGroup['matchmaking']] = setting.toDBSetting<'matchmaking'>();
     }
+    this.pending.next(true);
+    const res = await this.ws.request(OutCmd.JoinQueue, settings);
+    this.pending.next(false);
+    if (res) {
+      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: res } as any });
+      return;
+    }
+    this.ms.inQueue = true;
   }
 
-  leaveQueue(username: string): void {
-    this.players = this.players.filter(player => player.username !== username);
-  }
-
-  simulateMatchFound(): void {
-    this.matchmakingService.triggerMatchFound(); // Call a method to simulate match found
+  leaveQueue(): void {
+    this.ws.send(OutCmd.LeaveQueue);
+    this.ms.inQueue = false;
   }
 }

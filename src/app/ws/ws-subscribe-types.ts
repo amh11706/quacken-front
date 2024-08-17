@@ -85,4 +85,6 @@ export type SubscribeData = {
   [InCmd.Sit]: Player;
   [InCmd.Card]: { id: number, position: number };
   [InCmd.Playing]: { id: number, quantity: number };
+  [InCmd.QueueLength]: number;
+  [InCmd.QueueMatch]: number;
 } & InternalData;

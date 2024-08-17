@@ -50,6 +50,8 @@ type OutCmdInputs = {
   [OutCmd.StructureSetGet]: number;
   [OutCmd.TileSetList]: undefined;
   [OutCmd.StructureSetList]: undefined;
+
+  [OutCmd.JoinQueue]: ServerSettingMap<'matchmaking'>;
 }
 
 export type OutCmdInputTypes = OutCmdInputs & EmptyCmdBody;
@@ -94,6 +96,7 @@ type OutCmdReturns = {
   [OutCmd.TMapSetGet]: DBTile[];
   [OutCmd.TileSetGet]: DBTile[];
   [OutCmd.StructureSetGet]: DBTile[];
+  [OutCmd.JoinQueue]: string;
 }
 
 // we will get undefined if the request crashes on the backend.

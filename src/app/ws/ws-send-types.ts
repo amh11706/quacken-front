@@ -46,4 +46,7 @@ export type SendCmdInputless =
   OutCmd.LobbyListJoin |
   OutCmd.EditorJoin |
   OutCmd.Jump |
-  OutCmd.DeclineBlind;
+  OutCmd.DeclineBlind |
+  OutCmd.LeaveQueue |
+  OutCmd.WatchQueue |
+  OutCmd.UnwatchQueue;
