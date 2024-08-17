@@ -16,6 +16,6 @@
   <mat-card-actions>
     <button mat-raised-button [disabled]="(ws.connected$ | async) === false || (pending | async)"
             [color]="ms.inQueue ? 'warn' : 'primary'"
-            (click)="ms.inQueue ? leaveQueue() : joinQueue()">{{ms.inQueue ? 'Leave' : 'Join'}} Queue</button>
+            (click)="ms.inQueue ? leaveQueue() : joinQueue()">{{ms.inQueue ? 'Leave' : 'Join 1v1'}} Queue</button>
   </mat-card-actions>
 </mat-card>
