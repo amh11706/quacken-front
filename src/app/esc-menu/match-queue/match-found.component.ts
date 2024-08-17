@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Sounds, SoundService } from '../../sound.service';
 
 @Component({
   standalone: true,
@@ -34,10 +35,13 @@ export class MatchFoundDialogComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<MatchFoundDialogComponent>,
+    private sound: SoundService,
     @Inject(MAT_DIALOG_DATA) public lobbyId: number,
   ) { }
 
   ngOnInit() {
+    void this.sound.play(Sounds.BattleStart);
+
     setTimeout(() => {
       this.expired = true;
     }, 10000);
