@@ -289,10 +289,11 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (!this.selectedFilters) this.maplist.next(this.servermapList);
     this.filteredMapList = this.servermapList.filter(map => {
       const tagMatched = this.selectedFilters.every(filter => {
+        const starRating = filter.match(/\d/) && +filter;
+        if (starRating) return map.ratingAverage >= starRating;
         return map.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
           map.description.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ||
-          filter === map.username ||
-          +filter <= map.ratingAverage || map.tags?.includes(filter);
+          filter === map.username || map.tags?.includes(filter);
       });
       return tagMatched;
     });
@@ -312,7 +313,6 @@ export class MapListComponent implements OnInit, OnDestroy {
     if (this.selectedFilters.indexOf(tag) !== -1) {
       MapListComponent.selectedFilters = this.selectedFilters.filter(el => el !== tag);
     } else {
-      if (this.selectedFilters.some(r => [1, 2, 3, 4].includes(+r))) return;
       this.selectedFilters.push(tag);
     }
 
