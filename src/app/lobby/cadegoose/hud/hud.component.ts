@@ -87,7 +87,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
           const tokens = t.t[i];
           if (!tokens) continue;
           this.tokenStrings[i] = tokens.reverse().join(', ');
-          for (const count of tokens) this.totalTokens.moves[i] += count;
+          for (const count of tokens) this.totalTokens.moves[i]! += count;
         }
       }
       if (this.lastMoveReset >= this.turn) {

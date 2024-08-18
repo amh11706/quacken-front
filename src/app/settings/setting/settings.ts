@@ -59,7 +59,7 @@ type ClientSettingGroup = {
   'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
   'l/cade': 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'cadePublicMode' | 'cadeMaxPlayers' |
     'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' | 'cadeMap' | 'cadeTeams' | 'cadeShowMoves' | 'cadeShowDamage' |
-    'cadeRated' | 'fishBoats' | 'allowGuests',
+    'cadeRated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
   'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode',
@@ -75,7 +75,7 @@ export type ServerSettingGroup = {
   sounds: 'master' | 'notification' | 'ship' | 'alert',
   'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
   'l/cade': 'jobberQuality' | 'turnTime' | 'turns' | 'bots' | 'botDifficulty' | 'publicMode' | 'maxPlayers' | 'spawnDelay' |
-    'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests',
+    'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
   'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode'
@@ -408,6 +408,15 @@ export const Settings: SettingList = {
   },
   flagSteal: {
     admin: true, id: 59, group: 'l/flaggames', name: 'flagSteal', type: 'checkbox', label: 'Stealable flags on sink',
+  },
+  overtime: {
+    admin: true,
+    id: 74,
+    group: 'l/cade',
+    name: 'overtime',
+    type: 'option',
+    label: 'Overtime',
+    options: ['Disabled', 'Sudden Death', '5 turns + SD', '10 turns + SD', '5 + 5 turns', '10 + 10 turns'],
   },
 };
 

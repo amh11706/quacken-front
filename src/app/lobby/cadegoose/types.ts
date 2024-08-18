@@ -1,5 +1,6 @@
 import { ChatMessage, Message } from '../../chat/types';
-import { BoatStatus, BoatSync, BoatTick, Clutter, Sync, Turn } from '../quacken/boats/types';
+import { ServerSettingMap } from '../../settings/types';
+import { BoatStatus, BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync, Turn } from '../quacken/boats/types';
 import { StatRow } from './stats/types';
 
 export const enum LobbyStatus {
@@ -16,16 +17,29 @@ export interface Lobby {
   players: any;
   playing?: boolean;
   scores?: number[];
-  map?: string;
-  boats?: { [key: string]: BoatSync };
   treasure?: number[];
-  clutter?: Clutter[];
-  turn?: number;
+  turnsLeft: number;
   seconds?: number;
   stats?: Record<number, StatRow>;
   type: 'Quacken' | 'Spades' | 'CadeGoose';
+  settings: ServerSettingMap;
   inProgress: LobbyStatus;
-  [key: string]: any;
+}
+
+export interface ListLobby extends Lobby {
+  group: Partial<ServerSettingMap>;
+  name: string;
+}
+
+export interface CadeLobby extends Lobby {
+  map: string;
+  seed: string;
+  flags: Turn['flags'];
+  boats: { [key: string]: BoatSync };
+  clutter?: Clutter[];
+  points: number[];
+  myMoves?: MoveMessageIncoming;
+  moves?: MoveMessageIncoming[];
 }
 
 export interface TeamMessage extends ChatMessage {

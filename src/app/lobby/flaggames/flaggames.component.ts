@@ -76,14 +76,14 @@ export class FlaggamesComponent extends CadegooseComponent {
 
   setTile(x: number, y: number, v: number): MapTile | void {
     if (this.advancedMapOpen) return super.setTile(x, y, v);
-    if (this.lobby?.turn === 0) return; // Don't allow clutter based editing before the game starts.
+    if (this.lobby?.inProgress) return; // Don't allow clutter based editing before the game starts.
 
     const row = this.map[y];
     if (!row) return;
     row[x] = v;
     window.clearTimeout(this.redrawDebounce);
     this.redrawDebounce = window.setTimeout(() => {
-      void this.renderer?.fillMap(this.map, this.lobby?.flags);
+      void this.renderer?.fillMap(this.map, this.lobby?.flags || []);
     }, 100);
   }
 }

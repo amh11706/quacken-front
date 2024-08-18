@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
-import { Scene } from 'three';
 import { UntypedFormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { startWith, map } from 'rxjs/operators';
@@ -17,7 +16,7 @@ import { Penalties, PenaltyComponent } from './penalty/penalty.component';
 import { SettingsService } from '../../settings/settings.service';
 import { ParseTurns } from './parse-turns';
 import { GuBoat, Point } from '../../lobby/cadegoose/twod-render/gu-boats/gu-boat';
-import { Lobby, ParsedTurn } from '../../lobby/cadegoose/types';
+import { CadeLobby, Lobby, ParsedTurn } from '../../lobby/cadegoose/types';
 import { BoatTick } from '../../lobby/quacken/boats/types';
 import { AiBoatData, AiData, ClaimOptions, Points, ScoreResponse } from './types';
 import { InMessage } from '../../ws/ws-subscribe-types';
@@ -72,7 +71,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   boats: Boat[] = [];
   boatTicks: Record<number, BoatTick> = {};
   activeBoat?: Boat;
-  lobby?: Lobby;
+  lobby?: CadeLobby;
   aiData?: AiData;
   aiTeam = 1;
   activeAiBoat?: AiBoatData;
@@ -170,17 +169,17 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Boats, (boats: Boat[]) => {
+    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Boats, boats => {
       this.boats = [...boats];
       this.findMyBoat();
     }));
-    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Lobby, (lobby: Lobby) => {
-      this.lobby = lobby;
+    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Lobby, lobby => {
+      this.lobby = lobby as CadeLobby;
     }));
-    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Scene, (scene: Scene) => {
+    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Scene, scene => {
       scene.add(this.aiRender.object);
     }));
-    this.subs.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, (boat: Boat) => {
+    this.subs.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, boat => {
       this.clickBoat(boat, true);
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, ticks => {
@@ -333,7 +332,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (this.aiData.map && this.lobby) {
       this.ws.fakeWs?.dispatchMessage({
         cmd: InCmd.LobbyJoin,
-        data: { ...this.lobby, map: this.aiData.map, flags: this.aiData.flags },
+        data: { ...this.lobby, map: this.aiData.map, flags: this.aiData.flags } as Lobby,
       });
     }
 

@@ -8,7 +8,7 @@ import { SettingName } from '../../settings/setting/settings';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { TimerComponent } from './timer/timer.component';
-import { spots } from './spot/spot.component';
+import { SpadeLobby, spots } from './spot/spot.component';
 import { Card } from './card/card.component';
 import { Lobby } from '../cadegoose/types';
 
@@ -23,9 +23,10 @@ const ownerSettings: SettingName[] = [
 })
 export class SpadesComponent implements OnInit, OnDestroy {
   @ViewChild(TimerComponent, { static: false }) timer?: TimerComponent;
-  private _lobby = { id: 0, owner: false, type: 'Spades', players: [{}, {}, {}, {}] } as Lobby;
-  @Input() set lobby(l: Lobby) {
-    if (!l) return;
+  private _lobby = { id: 0, owner: false, type: 'Spades', players: [{}, {}, {}, {}] } as SpadeLobby;
+  @Input() set lobby(lobby: Lobby) {
+    if (!lobby) return;
+    const l = lobby as SpadeLobby;
     if (!l.played) l.played = [];
     if (!l.lastTrick) l.lastTrick = [];
     this._lobby = l;
@@ -53,7 +54,7 @@ export class SpadesComponent implements OnInit, OnDestroy {
     l.lastTrick = newPlayed;
   }
 
-  get lobby(): Lobby {
+  get lobby(): SpadeLobby {
     return this._lobby;
   }
 

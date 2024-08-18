@@ -9,9 +9,8 @@ import { SoundService, Sounds } from '../../../sound.service';
 import { Internal, InCmd, OutCmd } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
 import { Boat } from '../../quacken/boats/boat';
-import { MoveMessageIncoming } from '../../quacken/boats/types';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
-import { TeamMessage, LobbyStatus, Lobby } from '../types';
+import { TeamMessage, LobbyStatus, CadeLobby } from '../types';
 
 @Injectable()
 export class MainMenuService implements OnDestroy {
@@ -41,7 +40,7 @@ export class MainMenuService implements OnDestroy {
   private subs = new Subscription();
   private firstJoin = true;
   group = 'l/cade' as SettingGroup;
-  lobby?: Lobby;
+  lobby?: CadeLobby;
   seeds: string[] = [];
 
   constructor(
@@ -54,12 +53,17 @@ export class MainMenuService implements OnDestroy {
     if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
     if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
 
-    this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
+    this.subs.add(this.ws.subscribe(Internal.Lobby, message => {
+      const m = message as CadeLobby;
+      if (this.lobby && this.status.value === 0 && m.inProgress > 0) {
+        void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
+      }
+      this.statsOpen = false;
+
       if (this.lobby?.seed && !this.seeds.includes(this.lobby.seed)) this.seeds.push(this.lobby.seed);
-      this.lobby = m;
+      this.lobby = m as CadeLobby;
       if (m.settings) this.ss.setSettings(this.group, m.settings);
       this.status.next(m.inProgress);
-      if (m.turn === 1) void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       if (m.players?.length) this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
       if (this.firstJoin) {
         this.firstJoin = false;
@@ -70,11 +74,11 @@ export class MainMenuService implements OnDestroy {
       this.teamPlayers$.next(teamPlayers);
 
       if (m.myMoves) {
-        const ms = m.myMoves as MoveMessageIncoming;
+        const ms = m.myMoves;
         this.ws.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: ms.m, shots: ms.s || [] } });
       }
       if (m.moves) {
-        this.ws.dispatchMessage({ cmd: InCmd.Moves, data: m.moves as MoveMessageIncoming[] });
+        this.ws.dispatchMessage({ cmd: InCmd.Moves, data: m.moves });
       }
     }));
     this.subs.add(this.fs.lobby$.subscribe(r => {
@@ -111,13 +115,12 @@ export class MainMenuService implements OnDestroy {
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
       this.myBoat = b;
     }));
-    this.subs.add(this.ws.subscribe(InCmd.Turn, async t => {
+    this.subs.add(this.ws.subscribe(InCmd.Turn, t => {
       this.statsOpen = false;
       this.lastMapId = this.settings.map.value;
-      const maxTurns = (await this.ss.get(this.group, 'turns'))?.value;
-      const roundGoing = (maxTurns && t.turn && t.turn < maxTurns) || false;
-      if (roundGoing) return;
-      if (this.lobby) this.lobby.turn = 0;
+      if (!this.lobby) return;
+      this.lobby.turnsLeft = t.turnsLeft;
+      if (t.turnsLeft > 0) return;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat = new Boat('');
     }));

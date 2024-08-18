@@ -8,7 +8,7 @@ import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
-import { Lobby } from '../cadegoose/types';
+import { CadeLobby, Lobby } from '../cadegoose/types';
 
 const ownerSettings: SettingName[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
@@ -23,15 +23,16 @@ export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy duc
   styleUrls: ['./quacken.component.css'],
 })
 export class QuackenComponent implements OnInit, OnDestroy {
-  private _lobby?: Lobby;
-  @Input() set lobby(l: Lobby | undefined) {
+  private _lobby?: CadeLobby;
+  @Input() set lobby(lobby: Lobby) {
+    const l = lobby as CadeLobby;
     if (!l) return;
     this._lobby = l;
     if (l.map) this.setMapB64(l.map);
     setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.Lobby, data: l }), 100);
   }
 
-  get lobby(): Lobby | undefined {
+  get lobby(): CadeLobby | undefined {
     return this._lobby;
   }
 

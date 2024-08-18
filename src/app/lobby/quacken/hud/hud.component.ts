@@ -84,6 +84,7 @@ export class HudComponent implements OnInit, OnDestroy {
   myBoat = new Boat('');
 
   turn = 0;
+  protected turnsLeft = 0;
   lastMoveReset = 0;
   dragContext = { source: 8, move: 0, type: 'move' };
   resetMoves$ = new Subject<void>();
@@ -123,9 +124,8 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
-      if (m.map === undefined) return;
+      if (m.inProgress) this.turn = 1;
       this.lastMoveReset = 0;
-      this.turn = m.turn ?? this.turn;
       this.myBoat.ready = false;
       this.resetMoves();
 
@@ -135,7 +135,9 @@ export class HudComponent implements OnInit, OnDestroy {
       }
       if (!this.timeInterval && m.inProgress === LobbyStatus.MidMatch) this.startTimer();
       else this.stopTimer();
-      this.setTurn(this.maxTurn - this.turn, this.secondsPerTurn - (m.seconds || -1) - 2);
+      // m.turn for backwards compatibility with replays
+      const turnsLeft = m.turnsLeft - 1 || this.maxTurn - (m as any).turn || 0;
+      this.setTurn(turnsLeft, this.secondsPerTurn - (m.seconds || -1) - 2);
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
@@ -148,10 +150,11 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => {
-      const turnNumber = turn.turn + 1;
-      this.turn = turnNumber;
+      this.turn++;
       this.startTimer();
-      this.setTurn(this.maxTurn - turnNumber);
+      // turn.turn for backwards compatibility with replays
+      const turnsLeft = turn.turnsLeft - 1 || this.maxTurn - (turn as any).turn || 0;
+      this.setTurn(turnsLeft);
 
       if (!this.myBoat.moveLock) this.myBoat.moveLock = 99;
       if (this.myBoat.bomb) this.myBoat.tokenPoints = 0;
@@ -260,11 +263,12 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   setTurn(turn: number, sec: number = this.secondsPerTurn - 1): void {
-    if (turn === this.maxTurn) sec = 0;
+    if (this.turn === 0) sec = 0;
     else if (turn < 0) {
       this.endRound();
       return;
     }
+    this.turnsLeft = turn;
 
     this.updateTurnStart(sec);
     this.turnSecondsRemaining = sec;
@@ -311,7 +315,7 @@ export class HudComponent implements OnInit, OnDestroy {
   protected updatetime(): void {
     this.seconds$.next(Math.floor(this.turnSecondsRemaining * 76 / this.secondsPerTurn) - 4);
     const totalSeconds = Math.max(
-      Math.floor((this.maxTurn - this.turn) * this.secondsPerTurn + this.turnSecondsRemaining),
+      Math.floor(this.turnsLeft * this.secondsPerTurn + this.turnSecondsRemaining),
       0);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = String(totalSeconds % 60).padStart(2, '0');

@@ -14,7 +14,7 @@ import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { BoatSync } from '../lobby/quacken/boats/types';
 import { ServerSettingMap } from '../settings/types';
 import { InMessage } from '../ws/ws-subscribe-types';
-import { Lobby } from '../lobby/cadegoose/types';
+import { CadeLobby } from '../lobby/cadegoose/types';
 import { SettingGroup } from '../settings/setting/settings';
 import { BoatRender } from '../lobby/cadegoose/boat-render';
 
@@ -41,7 +41,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   private id = 0;
   tick = 0;
   seed = '';
-  private lobbyMessage?: { cmd: InCmd.LobbyJoin, data: Lobby };
+  private lobbyMessage?: { cmd: InCmd.LobbyJoin, data: CadeLobby };
 
   constructor(
     private location: Location,
@@ -114,7 +114,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       this.fakeMessages();
       this.ss.admin$.next(true);
       const m = this.messages[0]?.shift();
-      if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m;
+      if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m as any;
       if (!this.lobbyMessage) return;
       const firstSync: InMessage = {
         cmd: InCmd.Sync,

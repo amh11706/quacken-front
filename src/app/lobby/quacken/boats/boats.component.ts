@@ -9,6 +9,7 @@ import { boatToSync, syncToBoat } from './convert';
 import { weapons } from '../hud/hud.component';
 import { BoatRender } from '../../cadegoose/boat-render';
 import { Clutter, Turn, BoatSync, Sync, MoveMessageIncoming } from './types';
+import { CadeLobby } from '../../cadegoose/types';
 
 @Component({
   selector: 'q-boats',
@@ -84,21 +85,22 @@ export class BoatsComponent implements OnInit, OnDestroy {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
     this.subs.add(this.ws.subscribe(Internal.ResetBoats, () => this.resetBoats()));
-    this.subs.add(this.ws.subscribe(Internal.Lobby, m => {
-      if (!m.boats) return;
+    this.subs.add(this.ws.subscribe(Internal.Lobby, lobby => {
+      const l = lobby as CadeLobby;
+      if (!l.boats) return;
       clearTimeout(this.animateTimeout);
       clearTimeout(this.animateTimeout2);
       clearTimeout(this.animateTimeout3);
       delete this.animateTimeout;
       delete this.turn;
       this.myBoat.isMe = this._boats[this.myBoat.id] === this.myBoat;
-      this.setBoats(Object.values(m.boats));
-      m.boats = this.boats.map(boatToSync) as any;
+      this.setBoats(Object.values(l.boats));
+      l.boats = this.boats.map(boatToSync) as any;
       this.clutter = [];
-      const clutter = m.clutter || [];
+      const clutter = l.clutter || [];
       this.handleUpdate(clutter, 0);
       setTimeout(() => {
-        this.handleTurn(m as any);
+        this.handleTurn(l as any);
       }, 100);
     }));
     this.subs.add(this.ws.subscribe(InCmd.NewBoat, boat => this.setBoats(Array.isArray(boat) ? boat : [boat], false)));
@@ -185,14 +187,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
     clearTimeout(this.animateTimeout2);
     clearTimeout(this.animateTimeout3);
     delete this.animateTimeout;
-    // first turn is only for starting the entry
-    if (turn.turn === 0) {
-      setTimeout(() => {
-        for (const boat of this.boats) boat.ready = false;
-        this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined });
-      }, 1000);
-      return;
-    }
 
     this.turn = turn;
     this.step = 0;

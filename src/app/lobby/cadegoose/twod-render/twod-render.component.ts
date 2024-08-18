@@ -15,7 +15,7 @@ import { BoatRender } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { MapEditor, MapTile } from '../../../map-editor/types';
 import { Turn } from '../../quacken/boats/types';
-import { Lobby } from '../types';
+import { CadeLobby } from '../types';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = 0 | 1 | 2 | 3;
@@ -41,7 +41,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
   @ViewChild('frame') frame?: ElementRef<HTMLElement>;
-  @Input() lobby: Lobby | undefined;
+  @Input() lobby: CadeLobby | undefined;
   @Input() hoveredTeam = -1;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
@@ -335,13 +335,13 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   }
 
   mousedown(event: MouseEvent): void {
-    if (this.lobby?.turn) return;
+    if (this.lobby?.inProgress) return;
     const p = this.extractCoord(event);
     this.mapUtil.clickTile(event, p.x, p.y);
   }
 
   mouseup(event: MouseEvent): void {
-    if (this.lobby?.turn) return;
+    if (this.lobby?.inProgress) return;
     const p = this.extractCoord(event);
     this.mapUtil.mouseUp(event, p.x, p.y);
   }

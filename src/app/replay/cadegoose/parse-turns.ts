@@ -1,5 +1,5 @@
 import { InCmd } from '../../ws/ws-messages';
-import { ParsedTurn } from '../../lobby/cadegoose/types';
+import { CadeLobby, ParsedTurn } from '../../lobby/cadegoose/types';
 import { Turn, Sync, BoatTick } from '../../lobby/quacken/boats/types';
 import { Message } from '../../chat/types';
 import { InMessage } from '../../ws/ws-subscribe-types';
@@ -21,8 +21,8 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
     for (const m of group) {
       switch (m.cmd) {
         case InCmd.LobbyJoin:
-          lastSync = { sync: Object.values(m.data.boats || {}), cSync: [], turn: lastTurn.turn };
-          map = m.data.map || '';
+          lastSync = { sync: Object.values((m.data as CadeLobby).boats || {}), cSync: [], turn: lastTurn.turn };
+          map = (m.data as CadeLobby).map || '';
           break;
         case InCmd.Moves:
           Array.isArray(m.data)

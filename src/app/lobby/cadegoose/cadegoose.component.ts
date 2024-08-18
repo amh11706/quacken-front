@@ -27,8 +27,8 @@ const ownerSettings: SettingList = [
   'enableBots', 'botDifficulty',
   'cadePublicMode', 'cadeHotEntry',
   'cadeShowStats', 'allowGuests',
-  'cadeShowMoves', 'cadeShowDamage',
-  'fishBoats',
+  'overtime', 'cadeShowMoves',
+  'fishBoats', 'cadeShowDamage',
 ];
 
 export const CadeDesc = 'Cadesim: Use your ship to contest flags and sink enemy ships in a battle for points.';
@@ -100,8 +100,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     }));
     this.sub.add(this.ws.subscribe(Internal.SetMap, (m: string) => this.setMapB64(m)));
     this.sub.add(this.ws.subscribe(Internal.OpenAdvanced, () => {
-      this.mapSeed = this.lobby?.seed;
-      if (this.lobby?.turn === 0) this.advancedMapOpen = !this.advancedMapOpen;
+      this.mapSeed = this.lobby?.seed || '';
+      if (!this.lobby?.inProgress) this.advancedMapOpen = !this.advancedMapOpen;
     }));
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
       if (this.lobby) this.lobby.stats = t.stats;
@@ -143,7 +143,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   }
 
   ngAfterViewInit(): void {
-    void this.renderer?.fillMap(this.map, this.lobby?.flags);
+    void this.renderer?.fillMap(this.map, this.lobby?.flags || []);
   }
 
   ngOnDestroy(): void {
@@ -152,7 +152,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
   protected setMapB64(map: string): void {
     super.setMapB64(map);
-    void this.renderer?.fillMap(this.map, this.lobby?.flags);
+    void this.renderer?.fillMap(this.map, this.lobby?.flags || []);
     this.editor.selectedTile.data = this.map;
   }
 

@@ -11,7 +11,7 @@ import { Note, Notes } from '../news/notes';
 import { Competitions } from '../competition/competition';
 import { CompetitionComponent } from '../competition/competition.component';
 import { Message } from '../../chat/types';
-import { Lobby } from '../../lobby/cadegoose/types';
+import { ListLobby } from '../../lobby/cadegoose/types';
 
 @Component({
   selector: 'q-lobby-list',
@@ -19,7 +19,7 @@ import { Lobby } from '../../lobby/cadegoose/types';
   styleUrls: ['./lobby-list.component.scss'],
 })
 export class LobbyListComponent implements OnInit, OnDestroy {
-  lobbies = new BehaviorSubject<Lobby[]>([]);
+  lobbies = new BehaviorSubject<ListLobby[]>([]);
   note = Notes[0] as Note;
   private sub = new Subscription();
   @Input() message: Message = {} as Message;
@@ -71,14 +71,14 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     void this.es.openTab(4);
   }
 
-  join(l: Lobby, e: MouseEvent): void {
+  join(l: ListLobby, e: MouseEvent): void {
     if (l.group.publicMode?.value && !e.ctrlKey) {
       e.preventDefault();
       this.ws.send(OutCmd.LobbyApply, l.id);
     }
   }
 
-  trackByLobbyId(_: number, l: Lobby): number {
+  trackByLobbyId(_: number, l: ListLobby): number {
     return l.id;
   }
 

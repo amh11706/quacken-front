@@ -8,14 +8,24 @@ import { Player } from '../types';
 
 export const spots = ['south', 'west', 'north', 'east'];
 
+export type SpadeLobby = Lobby & {
+  sitting: number;
+  played: any[];
+  lastTrick: any[];
+  playingP: number;
+  bidding: number;
+  playTo: number;
+  spadeBroke: boolean;
+ };
+
 @Component({
   selector: 'q-spot',
   templateUrl: './spot.component.html',
   styleUrls: ['./spot.component.css'],
 })
 export class SpotComponent implements OnInit, OnDestroy {
-  private _lobby: Lobby = {} as Lobby;
-  @Input() set lobby(l: Lobby) {
+  private _lobby = {} as SpadeLobby;
+  @Input() set lobby(l: SpadeLobby) {
     this._lobby = l;
     l.sitting = -1;
 
@@ -34,7 +44,7 @@ export class SpotComponent implements OnInit, OnDestroy {
     this.rotateSpots(mySpot);
   }
 
-  get lobby(): Lobby {
+  get lobby(): SpadeLobby {
     return this._lobby;
   }
 

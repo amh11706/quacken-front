@@ -72,7 +72,7 @@ export interface MoveMessage {
 export interface MoveMessageIncoming { t: number, m: number[], s?: number[] }
 
 export interface Turn {
-  turn: number;
+  turnsLeft: number;
   steps: BoatStatus[][];
   cSteps: Clutter[][];
   treasure: number[];
