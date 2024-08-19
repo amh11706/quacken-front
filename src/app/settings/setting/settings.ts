@@ -62,7 +62,7 @@ type ClientSettingGroup = {
     'cadeRated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode',
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'queueRated',
   'l/flaggames': 'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' |
     'flagTurns' | 'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagRespawn' | 'flagSteal',
 };
@@ -78,7 +78,7 @@ export type ServerSettingGroup = {
     'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode'
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated',
   'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
     'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
 }
@@ -312,6 +312,9 @@ export const Settings: SettingList = {
   },
   gameMode: {
     id: 73, group: 'matchmaking', type: 'option', label: 'Game Mode', options: ['1v1', '2v2'], name: 'gameMode', default: 0,
+  },
+  queueRated: {
+    id: 75, group: 'matchmaking', type: 'checkbox', label: 'Rated', name: 'rated',
   },
   updateLinked: {
     id: 33, group: 'controls', type: 'checkbox', label: 'Update linked settings', name: 'updateLinked',

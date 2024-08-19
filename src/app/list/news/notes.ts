@@ -31,7 +31,7 @@ export const Notes: Note[] = [
       'There are several overtime modes to choose from in the lobby settings.',
       'The default mode is "5 + 5 turns" which extends the game 5 turns at a time up to 2 times.',
       'The match queue now has an unrated option. This means guests can now use the queue as well.',
-      'Maps can now be rated directly from the map search.',
+      'Maps can now be rated directly from the map search. Click again to remove your rating.',
     ],
   },
   {

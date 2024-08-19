@@ -14,7 +14,10 @@
     <p>You'll get a notification when a match is found. You can close this menu safely.</p>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button [disabled]="(ws.connected$ | async) === false || (pending | async)"
+    <q-setting [disabled]="ms.inQueue || (pending | async) === true"
+               [name]="'queueRated'"></q-setting>
+    <button mat-raised-button
+            [disabled]="(ws.connected$ | async) === false || (pending | async)"
             [color]="ms.inQueue ? 'warn' : 'primary'"
             (click)="ms.inQueue ? leaveQueue() : joinQueue()">{{ms.inQueue ? 'Leave' : 'Join 1v1'}} Queue</button>
   </mat-card-actions>
