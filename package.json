@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build --configuration=production",
     "build:dev": "ng build --configuration=production,dev",
-    "deploy": "npm run build && rsync -auzv --delete dist quacken:",
+    "deploy": "npm run build && scp -r dist quacken:",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
