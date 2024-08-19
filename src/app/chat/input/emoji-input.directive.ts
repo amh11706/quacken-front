@@ -7,6 +7,67 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { CustomEmojis } from '../../settings/account/account.component';
 import { EmojiSearchResultsComponent } from '../emoji-search-results/emoji-search-results.component';
 
+const Smileys: Record<string, string> = {
+  ':)': ':slightly_smiling_face',
+  ':-)': ':slightly_smiling_face',
+  '=)': ':slightly_smiling_face',
+  ':]': ':slightly_smiling_face',
+  ':3': ':smiley_cat',
+  ':D': ':grinning',
+  ':-D': ':grinning',
+  '=D': ':grinning',
+  ';)': ':wink',
+  ';-)': ':wink',
+  ';D': ':wink',
+  ';-D': ':wink',
+  '>:)': ':smiling_imp',
+  '>;)': ':wink',
+  '>:D': ':smiling_imp',
+  '>:-D': ':smiling_imp',
+  '>:(': ':angry',
+  '>:-(': ':angry',
+  '>:[': ':angry',
+  '>:-[': ':angry',
+  ':(': ':disappointed',
+  ':-(': ':disappointed',
+  ':[': ':disappointed',
+  ':-[': ':disappointed',
+  ':|': ':neutral_face',
+  ':/': ':confused',
+  ':-/': ':confused',
+  ':\\': ':confused',
+  ':-\\': ':confused',
+  ':o': ':open_mouth',
+  ':O': ':open_mouth',
+  ':-o': ':open_mouth',
+  ':-O': ':open_mouth',
+  ':0': ':open_mouth',
+  ':-0': ':open_mouth',
+  ':p': ':stuck_out_tongue',
+  ':P': ':stuck_out_tongue',
+  ':-p': ':stuck_out_tongue',
+  ':-P': ':stuck_out_tongue',
+  ':b': ':stuck_out_tongue',
+  ':B': ':stuck_out_tongue',
+  ':-b': ':stuck_out_tongue',
+  ':-B': ':stuck_out_tongue',
+  ':x': ':no_mouth',
+  ':X': ':no_mouth',
+  ':-x': ':no_mouth',
+  ':-X': ':no_mouth',
+  ':*': ':kiss',
+  ':-*': ':kiss',
+  ':v': ':fingers_crossed',
+  ':V': ':fingers_crossed',
+  ':-v': ':fingers_crossed',
+  ':-V': ':fingers_crossed',
+  ':s': ':grimacing',
+  ':S': ':grimacing',
+  ':-s': ':grimacing',
+  ':-S': ':grimacing',
+  ':$': ':flushed',
+};
+
 @Directive({
   selector: 'input[qEmojiInput]',
   standalone: true,
@@ -61,7 +122,7 @@ export class EmojiInputDirective implements OnInit {
     if (input.value === EmojiInputDirective.lastValue) return;
     EmojiInputDirective.lastValue = input.value;
 
-    const { start, end, word } = this.getCursorWord();
+    const { start, end, word } = this.getCursorWord((this.ref.nativeElement.selectionStart || 1) - 1);
     this.cursorWordStart = start;
     this.cursorWordEnd = end;
     this.overlayContext.searchResults = [];
@@ -132,18 +193,23 @@ export class EmojiInputDirective implements OnInit {
     return results;
   }
 
-  getCursorWord(): {start: number, end: number, word: string} {
+  private getCursorWord(cursor: number): { start: number, end: number, word: string } {
     const input = this.ref.nativeElement;
-    const cursor = input.selectionStart;
     if (!cursor) return { start: 0, end: 0, word: '' };
     const value = input.value;
     const before = value.substring(0, cursor);
     const lastSpace = before.lastIndexOf(' ');
 
     const start = lastSpace + 1;
-    let end = value.indexOf(' ', cursor);
+    let end = value.indexOf(' ', cursor + 1);
     if (end === -1) end = value.length;
-    const word = value.substring(start, end);
+    let word = value.substring(start, end).trim();
+    if (Smileys[word]) {
+      word = Smileys[word] || word;
+      if (value[end - 1] === ' ') word += ':';
+    } else if (value[end - 1] === ' ') {
+      word = '';
+    }
     return { start, end, word };
   }
 
