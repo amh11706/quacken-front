@@ -15,7 +15,7 @@
               [removable]="true"
               (removed)="toggleTag(tag)">
       <ng-container *ngIf="+tag else string">
-        <q-rating [rating]="+tag"
+        <q-rating [myRating]="+tag"
                   [forTags]="true"></q-rating>
       </ng-container>
       <ng-template #string>{{tag}}</ng-template>

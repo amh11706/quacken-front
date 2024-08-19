@@ -19,6 +19,8 @@
         <div class="flex-subitem1">
           <q-rating [isPecentage]="true"
                     [rating]="map.ratingAverage"
+                    [myRating]="map.ratingMine"
+                    (ratingUpdated)="updateRating($event)"
                     [count]="map.ratingCount"></q-rating>
         </div>
         <div class="subitem">

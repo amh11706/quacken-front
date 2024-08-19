@@ -1,43 +1,38 @@
-<div *ngIf="isPecentage else standard">
+<div>
+  <ng-container *ngIf="isPecentage">
     <div class="background">
-        <span class="stars">
-            <span class="star-i" [ngStyle]="{ 'width': getStars(rating || 0) }"></span>
-        </span>
-        <span class="percent-rating">{{rating || 0}} ({{count || 0}})</span>
+      <div class="stars">
+        <span class="star-i"
+              [ngStyle]="{ 'width': getStars(rating || 0) }"></span>
+      </div>
+    </div>&nbsp;
+    <span class="percent-rating">{{rating?.toFixed(1) || 0}} ({{count || 0}})</span>
+  </ng-container>
+
+  <ng-container *ngIf="!forTags else tag">
+    <div class="map-rating background"
+         [class.visible]="!isPecentage">
+      <button class="star"
+              mat-icon-button
+              *ngFor="let ratingId of ratingArr; index as i"
+              (click)="onClick(i+1)"
+              [matTooltip]="ratingId+1 + ' star'"
+              matTooltipPosition="above">
+        <mat-icon>
+          {{showIcon(i)}}
+        </mat-icon>
+      </button>
     </div>
-</div>
+  </ng-container>
 
-<ng-template #standard>
-    <ng-container *ngIf="!forTags else tag">
-        <div class="map-rating">
-            <div class="title">
-                Rate the current map:
-            </div>
-            <button class="star"
-                    mat-icon-button
-                    *ngFor="let ratingId of ratingArr;index as i" 
-                    [id]="'star_'+i" 
-                    (click)="onClick(i+1)" 
-                    [matTooltip]="ratingId+1 + ' star'" 
-                    matTooltipPosition="above">
-                <mat-icon>
-                  {{showIcon(i)}}
-                </mat-icon>
-            </button>
-            <div *ngIf="alreadyVoted">
-                You've already voted {{this.rating}}/{{this.starCount}} for this map!
-            </div>
-        </div>
-    </ng-container>
-</ng-template>
-
-<ng-template #tag>
-    <span *ngFor="let ratingId of ratingArr;index as i" >
-        <span class="star">
-            <mat-icon>
-                {{showIcon(i)}}
-            </mat-icon>
-        </span>
+  <ng-template #tag>
+    <span *ngFor="let ratingId of ratingArr; index as i">
+      <span class="star">
+        <mat-icon>
+          {{showIcon(i)}}
+        </mat-icon>
+      </span>
     </span>
     <span class="description">&Up</span>
-</ng-template>
+  </ng-template>
+</div>

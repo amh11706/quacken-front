@@ -1,5 +1,6 @@
-<q-rating *ngIf="rating"
-          (ratingUpdated)="rateMap.emit($event)"></q-rating>
+<ng-container *ngIf="true">
+  <h4>Map Rating: <q-rating (ratingUpdated)="rateMap.emit($event)"></q-rating></h4>
+</ng-container>
 
 <h2 class="title">Round Summary</h2>
 

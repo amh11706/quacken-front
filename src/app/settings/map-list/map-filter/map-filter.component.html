@@ -13,7 +13,7 @@
                 *ngFor="let rating of [4,3,2,1]"
                 [removable]="false"
                 (click)="onClick(rating.toString())">
-        <q-rating [rating]="rating"
+        <q-rating [myRating]="rating"
                   [forTags]="true"></q-rating>
       </mat-chip>
     </mat-chip-listbox>

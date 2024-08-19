@@ -10,7 +10,7 @@ export type SendCmdInputs = {
   [OutCmd.Ready]: Partial<MoveMessage> & { ready: boolean } | undefined;
   [OutCmd.SetMyJobbers]: number;
   [OutCmd.Vote]: number;
-  [OutCmd.RateMap]: number;
+  [OutCmd.RateMap]: { id: number, rating: number };
   [OutCmd.WantManeuver]: number;
   [OutCmd.WantMove]: number;
   [OutCmd.SetMapData]: string;

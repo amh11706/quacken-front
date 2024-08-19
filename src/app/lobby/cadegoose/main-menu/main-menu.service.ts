@@ -184,7 +184,7 @@ export class MainMenuService implements OnDestroy {
   }
 
   submitRating(value: number): void {
-    this.ws.send(OutCmd.RateMap, value);
+    this.ws.send(OutCmd.RateMap, { id: this.lastMapId, rating: value });
   }
 
   private gotBoat() {

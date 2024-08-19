@@ -55,9 +55,10 @@ export const enum OutCmd {
   SearchNamesOnline,
   SetUserEmoji,
   WatchQueue,
-	UnwatchQueue,
-	JoinQueue,
-	LeaveQueue,
+  UnwatchQueue,
+  JoinQueue,
+  LeaveQueue,
+  RateMap,
 
   LobbyCreate = 101,
   LobbyApply,
@@ -95,7 +96,6 @@ export const enum OutCmd {
   DeclineBlind,
 
   ShuffleTeams,
-  RateMap,
   SetMapData,
   SetMyJobbers,
   Vote,
@@ -128,7 +128,7 @@ export const enum InCmd {
   SetUser,
   UpdateUser,
   QueueLength,
-	QueueMatch,
+  QueueMatch,
 
   LobbyUpdate = 101,
   LobbyList,

@@ -28,6 +28,31 @@ export class MapCardComponent {
     this.selectedMap.emit(id);
   }
 
+  updateRating(rating: number): void {
+    if (!this.map) return;
+    const m = this.map;
+    if (rating === m.ratingMine) rating = 0;
+    this.ws.send(OutCmd.RateMap, { id: m.id, rating });
+    if (!m.ratingCount) m.ratingCount = 0;
+    if (!m.ratingAverage) m.ratingAverage = 0;
+
+    if (m.ratingMine) {
+      if (m.ratingCount === 1) {
+        if (rating === 0) m.ratingCount = 0;
+        m.ratingMine = rating;
+        m.ratingAverage = rating;
+        return;
+      }
+      m.ratingAverage = (m.ratingAverage * m.ratingCount - m.ratingMine) / (m.ratingCount - 1);
+      m.ratingCount--;
+    }
+    m.ratingMine = rating;
+    if (rating === 0) return;
+
+    m.ratingAverage = (m.ratingAverage * m.ratingCount + rating) / (m.ratingCount + 1);
+    m.ratingCount++;
+  }
+
   updateSeed(seed: string): void {
     this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
   }
