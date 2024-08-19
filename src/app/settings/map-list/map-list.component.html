@@ -27,7 +27,7 @@
            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
            (matChipInputTokenEnd)="toggleTag($event.value); search.value = ''"
            [matAutocomplete]="auto"
-           (keydown.backspace)="!search.value && removeLastTag()"
+           (keydown.backspace)="search.value ? undefined : removeLastTag()"
            (blur)="search.value = ''; searchCtrl.setValue('');"
            placeholder="1v1, practice, etc."
            [formControl]="searchCtrl">
