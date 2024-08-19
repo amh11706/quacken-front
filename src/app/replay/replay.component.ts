@@ -42,6 +42,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   tick = 0;
   seed = '';
   private lobbyMessage?: { cmd: InCmd.LobbyJoin, data: CadeLobby };
+  private lastSync: InMessage = { cmd: InCmd.Sync, data: { sync: [], cSync: [], turn: 0 } };
 
   constructor(
     private location: Location,
@@ -116,15 +117,15 @@ export class ReplayComponent implements OnInit, OnDestroy {
       const m = this.messages[0]?.shift();
       if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m as any;
       if (!this.lobbyMessage) return;
-      const firstSync: InMessage = {
+      this.lastSync = {
         cmd: InCmd.Sync,
-        data: { sync: Object.values(this.lobbyMessage.data?.boats || {}) },
+        data: { sync: Object.values(this.lobbyMessage.data?.boats || {}), cSync: [], turn: 0 },
       };
-      this.messages[0]?.push(firstSync);
-      this.checkMessage(firstSync);
+      this.messages[0]?.push(this.lastSync);
+      this.checkMessage(this.lastSync);
       setTimeout(() => {
         void this.esc.openMenu(false);
-      });
+      }, 1000);
       setTimeout(() => { // temporary fix for starting replay
         this.playTo(Number(this.route.snapshot.queryParams.tick));
       }, 500);
@@ -132,7 +133,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   private sendSync() {
-    this.fakeWs.dispatchMessage({ cmd: InCmd.Sync, data: { sync: this.boats } });
+    this.fakeWs.dispatchMessage(this.lastSync);
   }
 
   private addBoat(b: BoatSync | BoatSync[]): void {
@@ -150,6 +151,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
     switch (m.cmd) {
       case InCmd.Sync:
         this.boats = [...m.data.sync];
+        this.lastSync = m;
         break;
       case InCmd.NewBoat:
         this.addBoat(m.data);

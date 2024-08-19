@@ -72,6 +72,7 @@ export interface MoveMessage {
 export interface MoveMessageIncoming { t: number, m: number[], s?: number[] }
 
 export interface Turn {
+  turn: number;
   turnsLeft: number;
   steps: BoatStatus[][];
   cSteps: Clutter[][];
@@ -83,6 +84,6 @@ export interface Turn {
 
 export interface Sync {
   sync: BoatSync[];
-  cSync?: Clutter[];
-  turn?: number;
+  cSync: Clutter[];
+  turn: number;
 }

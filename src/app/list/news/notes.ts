@@ -30,7 +30,7 @@ export const Notes: Note[] = [
       'Overtime!',
       'There are several overtime modes to choose from in the lobby settings.',
       'The default mode is "5 + 5 turns" which extends the game 5 turns at a time up to 2 times.',
-      'The match queue now has an unrated option. This means guests can now use the queue as well.',
+      'The match queue now has an unrated option. This means guests can use the queue as well.',
       'Maps can now be rated directly from the map search. Click again to remove your rating.',
     ],
   },
@@ -41,7 +41,6 @@ export const Notes: Note[] = [
       '1v1 games are rated separately from team games. 1v1 games can only be rated thru the 1v1 queue.',
       'The queue chooses a random top rated map. Make sure to rate your favorite maps to see them in the queue later!',
       'Your boat outline is now lighter than your team color.',
-      'Respawns are now limited to once every 5 seconds.',
     ],
   },
   {

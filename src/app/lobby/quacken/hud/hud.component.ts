@@ -150,7 +150,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => {
-      this.turn++;
+      this.turn = turn.turn;
       this.startTimer();
       // turn.turn for backwards compatibility with replays
       const turnsLeft = turn.turnsLeft - 1 || this.maxTurn - (turn as any).turn || 0;
