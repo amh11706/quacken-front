@@ -37,13 +37,7 @@ export class MapCardComponent {
     if (!m.ratingAverage) m.ratingAverage = 0;
 
     if (m.ratingMine) {
-      if (m.ratingCount === 1) {
-        if (rating === 0) m.ratingCount = 0;
-        m.ratingMine = rating;
-        m.ratingAverage = rating;
-        return;
-      }
-      m.ratingAverage = (m.ratingAverage * m.ratingCount - m.ratingMine) / (m.ratingCount - 1);
+      m.ratingAverage = (m.ratingAverage * m.ratingCount - m.ratingMine) / (m.ratingCount - 1) || 0;
       m.ratingCount--;
     }
     m.ratingMine = rating;
