@@ -12,19 +12,23 @@ mat-card-header {
 mat-card-content {
   display: flex;
   flex-direction: column;
+  row-gap: 16px;
   align-items: center;
   margin-bottom: 16px;
 }
 
-mat-card-actions {
-  justify-content: center;
+mat-expansion-panel {
+  max-width: 460px;
+}
 
-  button {
-    // fixed width to prevent button from changing size when text changes
-    width: 131px;
-  }
-  
-  q-setting {
-    margin-bottom: 0;
-  }
+.advanced {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+button {
+  // fixed width to prevent button from changing size when text changes
+  width: 131px;
 }

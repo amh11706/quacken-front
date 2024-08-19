@@ -1,12 +1,11 @@
 /* eslint-disable @angular-eslint/use-lifecycle-interface */
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSliderModule } from '@angular/material/slider';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { SettingsService } from '../../settings/settings.service';
 import { WsService } from '../../ws/ws.service';
 import { SettingsModule } from '../../settings/settings.module';
@@ -20,7 +19,12 @@ import { ServerSettingMap } from '../../settings/types';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatButtonModule, CommonModule, MatSliderModule, FormsModule, SettingsModule, MatCardModule, MatTooltipModule,
+    MatButtonModule,
+    CommonModule,
+    SettingsModule,
+    MatCardModule,
+    MatTooltipModule,
+    MatExpansionModule,
   ],
   templateUrl: './match-queue.component.html',
   styleUrls: ['./match-queue.component.scss'],
@@ -30,7 +34,7 @@ export class MatchQueueComponent implements OnInit {
   pending = new BehaviorSubject<boolean>(false);
   isGuest = this.ws.user.id === 0;
   private subscriptions: Subscription[] = [];
-  private matchSettings = this.ss.prefetch('matchmaking');
+  matchSettings = this.ss.prefetch('matchmaking');
 
   constructor(
     public ws: WsService,

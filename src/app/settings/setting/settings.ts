@@ -62,7 +62,7 @@ type ClientSettingGroup = {
     'cadeRated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'queueRated',
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'queueRated' | 'showAdvanced' | 'mapPreference',
   'l/flaggames': 'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' |
     'flagTurns' | 'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagRespawn' | 'flagSteal',
 };
@@ -78,7 +78,7 @@ export type ServerSettingGroup = {
     'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated',
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated' | 'showAdvanced' | 'mapPreference',
   'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
     'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
 }
@@ -314,7 +314,13 @@ export const Settings: SettingList = {
     id: 73, group: 'matchmaking', type: 'option', label: 'Game Mode', options: ['1v1', '2v2'], name: 'gameMode', default: 0,
   },
   queueRated: {
-    id: 75, group: 'matchmaking', type: 'checkbox', label: 'Rated', name: 'rated',
+    id: 75, group: 'matchmaking', type: 'option', label: 'Rated', name: 'rated', options: ['No', 'Yes', 'Any'], default: 2,
+  },
+  showAdvanced: {
+    id: 76, group: 'matchmaking', type: 'checkbox', label: 'Show Advanced', name: 'showAdvanced', default: 0,
+  },
+  mapPreference: {
+    id: 77, group: 'matchmaking', type: 'option', label: 'Map Preference', options: ['Random', 'Any', 'Ocean'], name: 'mapPreference', default: 0,
   },
   updateLinked: {
     id: 33, group: 'controls', type: 'checkbox', label: 'Update linked settings', name: 'updateLinked',
