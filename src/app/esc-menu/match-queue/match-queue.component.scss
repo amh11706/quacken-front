@@ -18,6 +18,11 @@ mat-card-content {
 
 mat-card-actions {
   justify-content: center;
+
+  button {
+    // fixed width to prevent button from changing size when text changes
+    width: 131px;
+  }
   
   q-setting {
     margin-bottom: 0;

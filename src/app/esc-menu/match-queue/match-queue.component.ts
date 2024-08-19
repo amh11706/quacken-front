@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SettingsService } from '../../settings/settings.service';
 import { WsService } from '../../ws/ws.service';
 import { SettingsModule } from '../../settings/settings.module';
@@ -18,13 +19,16 @@ import { ServerSettingMap } from '../../settings/types';
   selector: 'q-match-queue',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatButtonModule, CommonModule, MatSliderModule, FormsModule, SettingsModule, MatCardModule],
+  imports: [
+    MatButtonModule, CommonModule, MatSliderModule, FormsModule, SettingsModule, MatCardModule, MatTooltipModule,
+  ],
   templateUrl: './match-queue.component.html',
   styleUrls: ['./match-queue.component.scss'],
 })
 export class MatchQueueComponent implements OnInit {
   queueLength = new Subject<number>();
   pending = new BehaviorSubject<boolean>(false);
+  isGuest = this.ws.user.id === 0;
   private subscriptions: Subscription[] = [];
   private matchSettings = this.ss.prefetch('matchmaking');
 
@@ -33,10 +37,12 @@ export class MatchQueueComponent implements OnInit {
     private ss: SettingsService,
     public ms: MatchmakingService,
   ) {
-    void ss.getGroup('matchmaking');
   }
 
   ngOnInit() {
+    void this.ss.getGroup('matchmaking').then(() => {
+      if (this.isGuest) this.matchSettings.rated.value = 0;
+    });
     // Subscribe to settings value changes using SettingsService
     this.subscriptions.push(
       this.matchSettings.minTurnTime.userStream.subscribe((value) => {

@@ -14,7 +14,8 @@
     <p>You'll get a notification when a match is found. You can close this menu safely.</p>
   </mat-card-content>
   <mat-card-actions>
-    <q-setting [disabled]="ms.inQueue || (pending | async) === true"
+    <q-setting [disabled]="ms.inQueue || (pending | async) === true || isGuest"
+    [matTooltip]="isGuest ? 'Make an account to play rated matches.' : ''"
                [name]="'queueRated'"></q-setting>
     <button mat-raised-button
             [disabled]="(ws.connected$ | async) === false || (pending | async)"
