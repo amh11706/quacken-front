@@ -29,20 +29,30 @@ export class LeaderCardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     void this.getTop3();
     this.startTimer();
+    document.addEventListener('visibilitychange', this.visibilityChange);
   }
 
   ngOnDestroy() {
     this.stopTimer();
+    document.removeEventListener('visibilitychange', this.visibilityChange);
   }
 
-  startTimer() {
+  visibilityChange = () => {
+    if (document.hidden) {
+      this.stopTimer();
+    } else {
+      this.startTimer();
+    }
+  };
+
+  startTimer = () => {
     this.stopTimer();
     this.timer = window.setInterval(() => this.advance(), 10000);
-  }
+  };
 
-  stopTimer() {
+  stopTimer = () => {
     clearInterval(this.timer);
-  }
+  };
 
   private async getTop3() {
     this.top3 = await this.ws.request(OutCmd.RanksTop3, 2) || [];
