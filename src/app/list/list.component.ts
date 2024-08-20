@@ -9,7 +9,9 @@ import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 
 @Component({
   selector: 'q-lobby-list',
-  providers: [WsService, ChatService, StatService, SettingsService, FriendsService, EscMenuService, KeyBindingService],
+  providers: [
+    WsService, ChatService, StatService, SettingsService, FriendsService, EscMenuService, KeyBindingService,
+  ],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
 })

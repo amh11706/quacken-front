@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnDestroy, Injector } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -55,6 +55,7 @@ export class SettingComponent implements OnDestroy {
     public ss: SettingsService,
     private ws: WsService,
     private dialog: MatDialog,
+    private injector: Injector,
   ) { }
 
   ngOnDestroy(): void {
@@ -73,6 +74,7 @@ export class SettingComponent implements OnDestroy {
   openAdvanced(): void {
     const copy = this.settingValue.clone();
     this.dialog.open(AdvancedComponent, {
+      injector: this.injector,
       data: {
         component: this.setting.advancedComponent,
         setting: copy,

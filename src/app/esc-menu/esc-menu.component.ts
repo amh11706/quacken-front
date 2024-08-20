@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WsService } from '../ws/ws.service';
 import { EscMenuService } from './esc-menu.service';
@@ -19,6 +19,7 @@ export class EscMenuComponent {
     public fs: FriendsService,
     public ws: WsService,
     private dialog: MatDialog,
+    private injector: Injector,
   ) { }
 
   onTabChange(index: number) {
@@ -30,6 +31,6 @@ export class EscMenuComponent {
   }
 
   logout(): void {
-    this.dialog.open(LogoutConfirmComponent, { width: '90%', maxWidth: '300px' });
+    this.dialog.open(LogoutConfirmComponent, { width: '90%', maxWidth: '300px', injector: this.injector });
   }
 }

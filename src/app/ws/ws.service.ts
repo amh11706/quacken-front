@@ -69,6 +69,7 @@ export class WsService implements OnDestroy {
     });
     this.subscribe(InCmd.SetUser, user => {
       this.user = Object.assign({}, this.user, user);
+      console.log(this.user);
     });
     this.subscribe(InCmd.Reload, () => {
       const lastReload = sessionStorage.getItem('reloadTime');
@@ -97,6 +98,7 @@ export class WsService implements OnDestroy {
     this.token = token;
     if (token === 'guest') this.user = { id: 0, name: 'Guest', admin: 0 };
     else this.user = this.tokenParser.decodeToken(token) || { id: 0, name: 'Guest', admin: 0 };
+    console.log(this.user);
 
     this.socket = new WebSocket(environment.ws);
 

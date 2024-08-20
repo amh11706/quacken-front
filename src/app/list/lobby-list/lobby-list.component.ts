@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Injector } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { StatService } from '../../esc-menu/profile/stat.service';
@@ -30,6 +30,7 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     public ws: WsService,
     private dialog: MatDialog,
     public es: EscMenuService,
+    private injector: Injector,
   ) { }
 
   ngOnInit(): void {
@@ -87,14 +88,14 @@ export class LobbyListComponent implements OnInit, OnDestroy {
   }
 
   createLobby(): void {
-    this.dialog.open(CreateComponent, { maxHeight: '90vh' });
+    this.dialog.open(CreateComponent, { maxHeight: '90vh', injector: this.injector });
   }
 
   openCompetitions(): void {
-    this.dialog.open(CompetitionComponent, { maxHeight: '90vh' });
+    this.dialog.open(CompetitionComponent, { maxHeight: '90vh', injector: this.injector });
   }
 
   openNews(): void {
-    this.dialog.open(NewsComponent, { maxHeight: '90vh' });
+    this.dialog.open(NewsComponent, { maxHeight: '90vh', injector: this.injector });
   }
 }
