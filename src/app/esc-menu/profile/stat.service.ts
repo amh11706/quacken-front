@@ -15,9 +15,7 @@ const placeholderRank = {
   level: 0,
 } as UserRank;
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class StatService implements OnDestroy {
   private _profileTab$ = new BehaviorSubject(0);
   profileTab$ = this._profileTab$.asObservable();

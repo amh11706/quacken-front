@@ -12,9 +12,7 @@ import { ChatMessage, Command } from './types';
 
 dayjs.extend(relativeTime);
 
-@Injectable({
-  providedIn: 'any',
-})
+@Injectable()
 export class ChatService implements OnDestroy {
   commandHistory: string[] = [];
   messages: ChatMessage[] = [];

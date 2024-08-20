@@ -5,9 +5,7 @@ import { KeyActions } from '../settings/key-binding/key-actions';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { WsService } from '../ws/ws.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class EscMenuService {
   private _queryParams$: BehaviorSubject<Params>;
   private _open$ = new BehaviorSubject(false);

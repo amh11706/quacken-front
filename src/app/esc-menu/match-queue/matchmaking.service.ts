@@ -4,9 +4,7 @@ import { MatchFoundDialogComponent } from './match-found.component';
 import { WsService } from '../../ws/ws.service';
 import { InCmd } from '../../ws/ws-messages';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class MatchmakingService {
   inQueue = false;
 

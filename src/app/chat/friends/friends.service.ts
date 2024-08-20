@@ -6,9 +6,7 @@ import { WsService } from '../../ws/ws.service';
 import { Invite } from '../types';
 import { TeamMessage } from '../../lobby/cadegoose/types';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class FriendsService {
   allowInvite = false;
   fakeFs?: FriendsService;

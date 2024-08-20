@@ -6,11 +6,21 @@ import { SettingsService } from '../settings/settings.service';
 import { FriendsService } from '../chat/friends/friends.service';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
+import { MatchmakingService } from '../esc-menu/match-queue/matchmaking.service';
+import { SoundService } from '../sound.service';
 
 @Component({
   selector: 'q-lobby-list',
   providers: [
-    WsService, ChatService, StatService, SettingsService, FriendsService, EscMenuService, KeyBindingService,
+    WsService,
+    ChatService,
+    StatService,
+    SettingsService,
+    SoundService,
+    FriendsService,
+    EscMenuService,
+    KeyBindingService,
+    MatchmakingService,
   ],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],

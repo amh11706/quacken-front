@@ -19,9 +19,7 @@ interface LocalSettingsReady extends Map<SettingGroup, Promise<SettingMap<Settin
   set<T extends SettingGroup>(group: T, subject: Promise<SettingMap<T>>): this;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SettingsService implements OnDestroy {
   private settings: LocalSettings = new Map();
   private ready: LocalSettingsReady = new Map();

@@ -42,9 +42,7 @@ const SoundFiles: Record<Sounds, SoundFile> = {
   [Sounds.Notification]: { file: 'notification.mp3', group: SoundGroups.Notification, minDelay: 1500, volume: 5 },
 };
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SoundService {
   private loaded = new Map<Sounds, Promise<AudioBuffer>>();
   private settings = this.ss.prefetch('sounds');

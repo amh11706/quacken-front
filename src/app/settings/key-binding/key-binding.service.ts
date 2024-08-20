@@ -51,9 +51,7 @@ function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBi
   return merged;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class KeyBindingService {
   private bindSub?: Subject<string>;
   private subMap = new Map<KeyActions, Subject<boolean>>();
