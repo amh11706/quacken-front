@@ -63,6 +63,10 @@ export class LobbyListComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  openLeaders(): void {
+    void this.stat.openLeaders(199);
+  }
+
   openUserMatches(): void {
     this.stat.openUserMatches();
   }

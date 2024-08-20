@@ -20,6 +20,7 @@ import { FriendsModule } from '../chat/friends/friends.module';
 import { EscMenuModule } from '../esc-menu/esc-menu.module';
 import { NameModule } from '../chat/name/name.module';
 import { CompetitionComponent } from './competition/competition.component';
+import { LeaderCardComponent } from './leader-card/leader-card.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { CompetitionComponent } from './competition/competition.component';
     FriendsModule,
     EscMenuModule,
     NameModule,
+    LeaderCardComponent,
   ],
   exports: [ListComponent],
 })

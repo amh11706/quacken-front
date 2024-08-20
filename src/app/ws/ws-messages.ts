@@ -41,6 +41,7 @@ export const enum OutCmd {
   StatsTop,
   RanksUser,
   RanksTop,
+  RanksTop3,
   MatchesUser,
   GetWinLoss,
   MatchData,

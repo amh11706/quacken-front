@@ -118,24 +118,22 @@ export class StatService {
     }
   }
 
+  static formatLeader(stat: RankLeader) {
+    stat.from = stat.userName;
+    stat.ti = stat.tier;
+    stat.sc = stat.score;
+  }
+
   private async getRankLeaders() {
     const rankLeaders = await this.ws.request(OutCmd.RanksTop, this.group + 1);
     this.leaders$.next(null);
     if (!rankLeaders) return;
 
     for (const variation of rankLeaders.tier) {
-      for (const l of variation) {
-        l.from = l.userName;
-        l.ti = l.tier;
-        l.sc = l.score;
-      }
+      for (const l of variation) StatService.formatLeader(l);
     }
     for (const variation of rankLeaders.xp) {
-      for (const l of variation) {
-        l.from = l.userName;
-        l.ti = l.tier;
-        l.sc = l.score;
-      }
+      for (const l of variation) StatService.formatLeader(l);
     }
     this.rankLeaders$.next(rankLeaders);
   }

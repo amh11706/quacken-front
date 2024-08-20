@@ -1,1 +1,10 @@
-<p>leader-card works!</p>
+<div (mouseenter)="stopTimer()"
+     (mouseleave)="startTimer()">
+  <h3 class="cardTitle">{{displayVariation}} Leaders</h3>
+  <div *ngFor="let p of displayedLeaders | async; let i = index"
+       class="lobbyPlayer">
+    <span>{{i + 1}}. </span>
+    <q-name (click)="$event.stopPropagation()"
+            [message]="p"></q-name>
+  </div>
+</div>

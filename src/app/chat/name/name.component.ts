@@ -101,7 +101,7 @@ export class NameComponent implements OnChanges {
   }
 
   openEmoji(): void {
-    void this.esc.openTab(4);
+    void this.esc.openTab(3);
     this.ss.tabIndex = 4;
   }
 

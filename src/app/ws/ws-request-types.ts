@@ -16,6 +16,7 @@ type EmptyCmdBody = {
 type OutCmdInputs = {
   [OutCmd.StatsTop]: number;
   [OutCmd.RanksTop]: number;
+  [OutCmd.RanksTop3]: number;
   [OutCmd.GetWinLoss]: { name: string, rankArea: number };
   [OutCmd.RanksUser]: string;
   [OutCmd.StatsUser]: string;
@@ -61,6 +62,7 @@ export type InputlessCmds = Exclude<OutCmd, keyof OutCmdInputs>;
 type OutCmdReturns = {
   [OutCmd.StatsTop]: Leader[];
   [OutCmd.RanksTop]: { xp: RankLeader[][], tier: RankLeader[][] };
+  [OutCmd.RanksTop3]: RankLeader[][];
   [OutCmd.GetWinLoss]: WinLoss;
   [OutCmd.RanksUser]: UserRank[];
   [OutCmd.StatsUser]: Stat[];
