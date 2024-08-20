@@ -41,7 +41,7 @@ export class LeaderCardComponent implements OnInit, OnDestroy {
     if (document.hidden) {
       this.stopTimer();
     } else {
-      this.startTimer();
+      void this.getTop3().then(this.startTimer);
     }
   };
 
