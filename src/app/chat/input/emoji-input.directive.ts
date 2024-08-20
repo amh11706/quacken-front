@@ -57,15 +57,18 @@ const Smileys: Record<string, string> = {
   ':-X': ':no_mouth',
   ':*': ':kiss',
   ':-*': ':kiss',
-  ':v': ':fingers_crossed',
-  ':V': ':fingers_crossed',
-  ':-v': ':fingers_crossed',
-  ':-V': ':fingers_crossed',
+  ':v': ':crossed_fingers',
+  ':V': ':crossed_fingers',
+  ':-v': ':crossed_fingers',
+  ':-V': ':crossed_fingers',
   ':s': ':grimacing',
   ':S': ':grimacing',
   ':-s': ':grimacing',
   ':-S': ':grimacing',
   ':$': ':flushed',
+  '<3': ':heart',
+  '</3': ':broken_heart',
+  tm: ':tm',
 };
 
 @Directive({
