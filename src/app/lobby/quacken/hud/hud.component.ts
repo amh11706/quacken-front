@@ -136,7 +136,9 @@ export class HudComponent implements OnInit, OnDestroy {
       if (!this.timeInterval && m.inProgress === LobbyStatus.MidMatch) this.startTimer();
       else this.stopTimer();
       // m.turn for backwards compatibility with replays
-      const turnsLeft = m.turnsLeft - 1 || this.maxTurn - (m as any).turn || 0;
+      const turnsLeft = m.turnsLeft === undefined
+        ? this.maxTurn - (m as any).turn || 0
+        : m.turnsLeft - 1;
       this.setTurn(turnsLeft, this.secondsPerTurn - (m.seconds || -1) - 2);
     }));
 
@@ -153,7 +155,9 @@ export class HudComponent implements OnInit, OnDestroy {
       this.turn = turn.turn;
       this.startTimer();
       // turn.turn for backwards compatibility with replays
-      const turnsLeft = turn.turnsLeft - 1 || this.maxTurn - (turn as any).turn || 0;
+      const turnsLeft = turn.turnsLeft === undefined
+        ? this.maxTurn - (turn as any).turn || 0
+        : turn.turnsLeft - 1;
       this.setTurn(turnsLeft);
 
       if (!this.myBoat.moveLock) this.myBoat.moveLock = 99;
