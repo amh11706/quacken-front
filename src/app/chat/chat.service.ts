@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import * as dayjs from 'dayjs';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
 import { InCmd, OutCmd } from '../ws/ws-messages';
@@ -13,9 +13,9 @@ import { ChatMessage, Command } from './types';
 dayjs.extend(relativeTime);
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'any',
 })
-export class ChatService {
+export class ChatService implements OnDestroy {
   commandHistory: string[] = [];
   messages: ChatMessage[] = [];
   messages$ = new BehaviorSubject<ChatMessage[]>([]);
@@ -25,6 +25,7 @@ export class ChatService {
   selectedCommand$ = new BehaviorSubject<Command>({ params: [] } as any);
   nameCommands: Command[] = [];
   commandParams = new Map<string, { name: string, value: string }>();
+  private subs = new Subscription();
 
   constructor(
     private ws: WsService,
@@ -32,7 +33,7 @@ export class ChatService {
     sound: SoundService,
   ) {
     this.messages$.next(this.messages);
-    this.ws.subscribe(InCmd.ChatCommands, commands => {
+    this.subs.add(this.ws.subscribe(InCmd.ChatCommands, commands => {
       const lobbyCommands = commands.lobby as Command[];
       lobbyCommands.push(...commands.global);
       if (commands.lobbyAdmin) lobbyCommands.push(...commands.lobbyAdmin);
@@ -56,9 +57,9 @@ export class ChatService {
       if (!cmdFound) this.selectedCommand$.next(lobbyCommands[0] ?? selectedCommand);
       this.nameCommands = lobbyCommands.filter(cmd => cmd.params[0]?.name === 'name' || cmd.params[0]?.name === 'nameany');
       this.commands$.next(lobbyCommands);
-    });
+    }));
 
-    this.ws.subscribe(InCmd.ChatMessage, (message: ChatMessage) => {
+    this.subs.add(this.ws.subscribe(InCmd.ChatMessage, (message: ChatMessage) => {
       // if (message.type === 6) return;
       if ((document.hidden && message.type === 5) || [8, 9].includes(message.type)) {
         void sound.play(Sounds.Notification);
@@ -78,10 +79,11 @@ export class ChatService {
       }
       message.receivedTime = dayjs().format('HH:mm:ss');
       this.messages$.next(this.messages);
-    });
-    this.ws.connected$.subscribe(value => {
-      if (!value) this.messages = [];
-    });
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   sendCommand(text: string): void {

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { InCmd, OutCmd } from '../ws/ws-messages';
 
@@ -22,7 +22,7 @@ interface LocalSettingsReady extends Map<SettingGroup, Promise<SettingMap<Settin
 @Injectable({
   providedIn: 'root',
 })
-export class SettingsService {
+export class SettingsService implements OnDestroy {
   private settings: LocalSettings = new Map();
   private ready: LocalSettingsReady = new Map();
 
@@ -31,9 +31,10 @@ export class SettingsService {
   lAdminSettings: SettingList = [];
   showMapChoice = false;
   rankArea = 2;
+  private subs = new Subscription();
 
   constructor(private ws: WsService) {
-    ws.subscribe(InCmd.SettingSet, s => {
+    this.subs = ws.subscribe(InCmd.SettingSet, s => {
       const group = this.settings.get(s.group);
       const setting = group?.[s.name];
       if (setting) {
@@ -41,6 +42,10 @@ export class SettingsService {
         setting.setServerValue(s.value);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   setSettings<T extends SettingGroup>(group: T, settings: ServerSettingMap<T>): void {

@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
-import { BehaviorSubject, distinctUntilChanged, filter, map } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, map, Subscription } from 'rxjs';
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
-import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { EscMenuService } from '../esc-menu.service';
 import { UserRank, Leader, RankLeader, Stat, WinLoss } from './types';
 
@@ -19,7 +18,7 @@ const placeholderRank = {
 @Injectable({
   providedIn: 'root',
 })
-export class StatService {
+export class StatService implements OnDestroy {
   private _profileTab$ = new BehaviorSubject(0);
   profileTab$ = this._profileTab$.asObservable();
   target = this.ws.user?.name || '';
@@ -40,19 +39,23 @@ export class StatService {
   columns = StatColumns;
 
   winLoss: WinLoss = { wins: 0, losses: 0 };
+  private subs = new Subscription();
 
   constructor(
     private ws: WsService,
     private es: EscMenuService,
-    private kbs: KeyBindingService,
   ) {
-    this.es.queryParams$.pipe(
+    this.subs = this.es.queryParams$.pipe(
       filter(p => p.profileTab !== undefined),
       map(p => +p.profileTab),
       distinctUntilChanged(),
     ).subscribe(v => {
       this._profileTab$.next(v);
     });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
   async updateWinLoss(): Promise<void> {
