@@ -10,7 +10,7 @@ import { Sounds, SoundService } from '../../sound.service';
   selector: 'q-match-found-dialog',
   imports: [MatButtonModule, MatDialogModule, CommonModule],
   template: `
-    <h1 mat-dialog-title>Match Found</h1>
+    <h1 mat-dialog-title>{{data.rated ? 'Rated' : 'Unrated'}} Match Found</h1>
     <div mat-dialog-content>
       <p *ngIf="!expired; else expiredMessage">Time left to accept: {{ timeLeft | async }} seconds</p>
       <ng-template #expiredMessage>
@@ -21,7 +21,7 @@ import { Sounds, SoundService } from '../../sound.service';
       <button *ngIf="expired; else options" mat-button (click)="decline()">Close</button>
       <ng-template #options>
         <a mat-raised-button [color]="'primary'"
-           target="_blank" [href]="'/#/lobby/' + lobbyId" (click)="accept()">Accept</a>
+           target="_blank" [href]="'/#/lobby/' + data.lobbyId" (click)="accept()">Accept</a>
         <button mat-raised-button [color]="'warn'" (click)="decline()">Decline</button>
       </ng-template>
     </div>
@@ -36,7 +36,7 @@ export class MatchFoundDialogComponent implements OnInit {
   constructor(
     private dialogRef: MatDialogRef<MatchFoundDialogComponent>,
     private sound: SoundService,
-    @Inject(MAT_DIALOG_DATA) public lobbyId: number,
+    @Inject(MAT_DIALOG_DATA) public data: {lobbyId: number, rated: boolean},
   ) { }
 
   ngOnInit() {

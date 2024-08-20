@@ -53,6 +53,7 @@ type OutCmdInputs = {
   [OutCmd.StructureSetList]: undefined;
 
   [OutCmd.JoinQueue]: ServerSettingMap<'matchmaking'>;
+  [OutCmd.GetBotMatch]: ServerSettingMap<'matchmaking'>;
 }
 
 export type OutCmdInputTypes = OutCmdInputs & EmptyCmdBody;
@@ -99,6 +100,7 @@ type OutCmdReturns = {
   [OutCmd.TileSetGet]: DBTile[];
   [OutCmd.StructureSetGet]: DBTile[];
   [OutCmd.JoinQueue]: string;
+  [OutCmd.GetBotMatch]: number;
 }
 
 // we will get undefined if the request crashes on the backend.

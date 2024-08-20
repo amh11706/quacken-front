@@ -6,6 +6,8 @@ import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { Router } from '@angular/router';
+import { LetDirective } from '@ngrx/component';
 import { SettingsService } from '../../settings/settings.service';
 import { WsService } from '../../ws/ws.service';
 import { SettingsModule } from '../../settings/settings.module';
@@ -25,6 +27,7 @@ import { ServerSettingMap } from '../../settings/types';
     MatCardModule,
     MatTooltipModule,
     MatExpansionModule,
+    LetDirective,
   ],
   templateUrl: './match-queue.component.html',
   styleUrls: ['./match-queue.component.scss'],
@@ -40,8 +43,8 @@ export class MatchQueueComponent implements OnInit {
     public ws: WsService,
     private ss: SettingsService,
     public ms: MatchmakingService,
-  ) {
-  }
+    private router: Router,
+  ) { }
 
   ngOnInit() {
     void this.ss.getGroup('matchmaking').then(() => {
@@ -81,13 +84,17 @@ export class MatchQueueComponent implements OnInit {
     this.ws.send(OutCmd.UnwatchQueue);
   }
 
-  async joinQueue(): Promise<void> {
+  private formatSettings(): ServerSettingMap<'matchmaking'> {
     const settings = {} as ServerSettingMap<'matchmaking'>;
     for (const [name, setting] of Object.entries(this.matchSettings)) {
       settings[name as ServerSettingGroup['matchmaking']] = setting.toDBSetting<'matchmaking'>();
     }
+    return settings;
+  }
+
+  async joinQueue(): Promise<void> {
     this.pending.next(true);
-    const res = await this.ws.request(OutCmd.JoinQueue, settings);
+    const res = await this.ws.request(OutCmd.JoinQueue, this.formatSettings());
     this.pending.next(false);
     if (res) {
       this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: res } as any });
@@ -99,5 +106,13 @@ export class MatchQueueComponent implements OnInit {
   leaveQueue(): void {
     this.ws.send(OutCmd.LeaveQueue);
     this.ms.inQueue = false;
+  }
+
+  async getBotMatch(): Promise<boolean> {
+    const id = await this.ws.request(OutCmd.GetBotMatch, this.formatSettings());
+    if (id) {
+      return this.router.navigate(['/lobby', id]);
+    }
+    return false;
   }
 }

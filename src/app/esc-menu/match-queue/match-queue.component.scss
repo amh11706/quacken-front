@@ -17,6 +17,12 @@ mat-card-content {
   margin-bottom: 16px;
 }
 
+.queue-buttons {
+  display: flex;
+  flex-direction: row;
+  column-gap: 32px;
+}
+
 mat-expansion-panel {
   max-width: 460px;
 }

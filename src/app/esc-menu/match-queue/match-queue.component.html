@@ -3,12 +3,18 @@
     <h2>Matchmaking Queue</h2>
   </mat-card-header>
 
-  <mat-card-content>
+  <mat-card-content *ngrxLet="(ws.connected$ | async) === false || (pending | async) || false as disabled">
     <span>Number of players in queue: {{ queueLength | async }}</span>
-    <button mat-raised-button
-            [disabled]="(ws.connected$ | async) === false || (pending | async)"
-            [color]="ms.inQueue ? 'warn' : 'primary'"
-            (click)="ms.inQueue ? leaveQueue() : joinQueue()">{{ms.inQueue ? 'Leave' : 'Join 1v1'}} Queue</button>
+    <div class="queue-buttons">
+      <button mat-raised-button
+              [disabled]="disabled"
+              [color]="ms.inQueue ? 'warn' : 'primary'"
+              (click)="ms.inQueue ? leaveQueue() : joinQueue()">{{ms.inQueue ? 'Leave' : 'Join 1v1'}} Queue</button>
+      <button mat-raised-button
+              [disabled]="disabled"
+              [color]="'primary'"
+              (click)="getBotMatch()">Play vs Bot (unrated)</button>
+    </div>
     <span>You'll get a notification when a match is found. You can close this menu safely.</span>
 
     <q-setting [disabled]="ms.inQueue || (pending | async) === true || isGuest"
@@ -22,11 +28,11 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="advanced">
-        <q-setting [disabled]="ms.inQueue || (pending | async) === true"
+        <q-setting [disabled]="disabled"
                    [name]="'minTurnTime'"></q-setting>
-        <q-setting [disabled]="ms.inQueue || (pending | async) === true"
+        <q-setting [disabled]="disabled"
                    [name]="'maxTurnTime'"></q-setting>
-        <q-setting [disabled]="ms.inQueue || (pending | async) === true"
+        <q-setting [disabled]="disabled"
                    [name]="'deltaRank'"></q-setting>
       </div>
     </mat-expansion-panel>

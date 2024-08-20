@@ -18,17 +18,17 @@ export class MatchmakingService {
       this.inQueue = false;
     });
 
-    this.ws.subscribe(InCmd.QueueMatch, id => {
-      this.openMatchFoundDialog(id);
+    this.ws.subscribe(InCmd.QueueMatch, message => {
+      this.openMatchFoundDialog(message);
     });
   }
 
-  private openMatchFoundDialog(lobbyId: number): void {
+  private openMatchFoundDialog(m: {lobbyId: number, rated: boolean}): void {
     this.inQueue = false;
     const dialogRef = this.dialog.open(MatchFoundDialogComponent, {
       width: '300px',
       disableClose: true,
-      data: lobbyId,
+      data: m,
     });
 
     dialogRef.afterClosed().subscribe(() => {

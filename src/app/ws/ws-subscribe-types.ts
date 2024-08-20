@@ -86,5 +86,5 @@ export type SubscribeData = {
   [InCmd.Card]: { id: number, position: number };
   [InCmd.Playing]: { id: number, quantity: number };
   [InCmd.QueueLength]: number;
-  [InCmd.QueueMatch]: number;
+  [InCmd.QueueMatch]: { lobbyId: number, rated: boolean };
 } & InternalData;

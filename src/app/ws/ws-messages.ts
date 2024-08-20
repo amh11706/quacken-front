@@ -60,6 +60,7 @@ export const enum OutCmd {
   JoinQueue,
   LeaveQueue,
   RateMap,
+  GetBotMatch,
 
   LobbyCreate = 101,
   LobbyApply,
