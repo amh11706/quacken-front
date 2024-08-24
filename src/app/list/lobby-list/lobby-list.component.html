@@ -24,11 +24,9 @@
 
       <button mat-button
               class="card"
-              (click)="createLobby()">
-        <div class="createCard">
-          <h3 class="cardTitle">Create Lobby</h3>
-          <mat-icon id="addLobby">add</mat-icon>
-        </div>
+              (click)="openUserMatches()">
+        <h3 class="cardTitle">Replays</h3>
+        <p>Watch replays of previous matches!</p>
       </button>
 
       <button mat-button
@@ -38,6 +36,14 @@
         <p>Find opponents for 1v1 games!</p>
       </button>
 
+      <button mat-button
+              class="card"
+              (click)="createLobby()">
+        <div class="createCard">
+          <h3 class="cardTitle">Create Lobby</h3>
+          <mat-icon id="addLobby">add</mat-icon>
+        </div>
+      </button>
       <button *ngIf="competitions.length"
               mat-button
               class="card"
