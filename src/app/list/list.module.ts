@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { HttpClientModule } from '@angular/common/http';
 import { ChatModule } from '../chat/chat.module';
 import { ListComponent } from './list.component';
 import { SettingsModule } from '../settings/settings.module';
@@ -48,6 +49,7 @@ import { LeaderCardComponent } from './leader-card/leader-card.component';
     EscMenuModule,
     NameModule,
     LeaderCardComponent,
+    HttpClientModule,
   ],
   exports: [ListComponent],
 })

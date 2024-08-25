@@ -1,8 +1,9 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, Subscription, ReplaySubject } from 'rxjs';
+import { Subject, Subscription, ReplaySubject, firstValueFrom } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
 import { AuthGuard } from '../auth.guard';
@@ -10,7 +11,7 @@ import { InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes } from '.
 import { SendCmdInputless, SendCmdInputs } from './ws-send-types';
 import { InMessage, SubscribeData } from './ws-subscribe-types';
 
-const ClientVersion = 72;
+const ClientVersion = 73;
 
 export interface TokenUser {
   id: number;
@@ -44,7 +45,7 @@ export class WsService implements OnDestroy {
   sId?: number;
   copy?: number;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private http: HttpClient) {
     this.connected$.next(false);
 
     this.subscribe(InCmd.Kick, (reason: string) => {
@@ -71,7 +72,7 @@ export class WsService implements OnDestroy {
     this.subscribe(InCmd.Reload, () => {
       const lastReload = sessionStorage.getItem('reloadTime');
       if (lastReload && +lastReload > new Date().valueOf() - 30000) {
-        this.dispatchMessage({
+        void this.dispatchMessage({
           cmd: InCmd.ChatMessage,
           data: { type: 0, message: 'Outdated client. Please clear your cache then refresh the page.', from: '' },
         });
@@ -107,7 +108,7 @@ export class WsService implements OnDestroy {
     this.socket.onclose = () => {
       this.connected = false;
       this.connected$.next(false);
-      this.dispatchMessage({
+      void this.dispatchMessage({
         cmd: InCmd.ChatMessage,
         data: { type: 1, message: 'Connection closed, attempting to reconnect...', from: '' },
       });
@@ -126,7 +127,11 @@ export class WsService implements OnDestroy {
     return newSub.subscribe(next, error, complete);
   }
 
-  dispatchMessage(message: InMessage): void {
+  async dispatchMessage(message: InMessage & {httpid?: string}): Promise<void> {
+    if (message.httpid) {
+      message = await firstValueFrom(this.http.get(environment.api + '/httpmsg/' + message.httpid)) as any as InMessage;
+      console.log('httpmsg', message);
+    }
     if (message.id) {
       const cb = this.requests.get(message.id);
       this.requests.delete(message.id);
