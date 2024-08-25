@@ -12,6 +12,6 @@ export class LobbyCardComponent {
   @Input() lobby = {} as ListLobby;
   publicModes = ['Public', 'Public Invitation', 'Private'];
   descriptions = Descriptions;
-  titles = { CadeGoose: 'Cadesim' } as any;
+  titles = { CadeGoose: 'Blockade' } as any;
   showPlayers = false;
 }

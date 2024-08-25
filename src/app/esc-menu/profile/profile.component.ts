@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
 
   tierTitles = TierTitles;
-  titles = { Cadegoose: 'Cadesim' } as any;
+  titles = { Cadegoose: 'Blockade' } as any;
 
   constructor(
     public stat: StatService,

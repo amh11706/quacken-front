@@ -288,7 +288,7 @@ export const Settings: SettingList = {
     label: 'Create Type',
     type: 'option',
     options: [
-      'Quacken', 'Spades', 'Cadesim', 'Sea Battle', 'Capture the Flag',
+      'Quacken', 'Spades', 'Blockade', 'Sea Battle', 'Capture the Flag',
     ],
     default: 2,
   },
