@@ -31,3 +31,11 @@ q-gu-boats {
   bottom: 0;
   z-index: 1000;
 }
+
+#overlay {
+  position: absolute;
+  top: 0;
+  scale: 0.905;
+  transform: rotateX(41.4deg) rotateZ(-45deg) translate(55%, 4%);
+  pointer-events: none;
+}

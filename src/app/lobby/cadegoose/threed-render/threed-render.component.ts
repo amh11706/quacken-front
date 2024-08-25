@@ -3,6 +3,7 @@ import {
   Scene, PerspectiveCamera, WebGLRenderer, BufferGeometry, MeshBasicMaterial, Object3D, Vector3, Vector2,
   Raycaster, ACESFilmicToneMapping, Fog, AmbientLight, MOUSE, Material, PlaneBufferGeometry, TextureLoader,
   RepeatWrapping, MeshStandardMaterial, Mesh, ShaderMaterial, PMREMGenerator, Box3, LinearFilter, Group,
+  CanvasTexture,
 } from 'three';
 import { MapControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Water } from 'three/examples/jsm/objects/Water2';
@@ -97,6 +98,10 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private mouseMoved = false;
   private rayCaster = new Raycaster();
 
+  private overlay = new Group();
+  private canvas?: HTMLCanvasElement;
+  private overlayTexture?: CanvasTexture;
+
   constructor(
     private bs: BoatService,
     private ws: WsService,
@@ -114,17 +119,38 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const light = new AmbientLight(0x404040, 6); // soft white light
     this.scene.add(light);
+    this.scene.add(this.overlay);
 
     this.buildWater();
     this.buildSky();
 
     window.addEventListener('resize', this.onWindowResize, false);
-    this.ws.dispatchMessage({ cmd: Internal.Scene, data: this.mapScene });
   }
 
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
     this.sub.add(this.ws.subscribe(Internal.CenterOnBoat, this.centerOnBoat.bind(this)));
+
+    this.sub.add(this.ws.subscribe(Internal.Canvas, c => {
+      if (this.canvas === c && this.overlayTexture) {
+        this.overlayTexture.needsUpdate = true;
+        return;
+      }
+
+      this.overlayTexture?.dispose();
+      this.overlay.remove(...this.overlay.children);
+      this.canvas = c;
+      this.overlayTexture = new CanvasTexture(c);
+      const mapObject = new Mesh(new PlaneBufferGeometry(25, 36), new MeshBasicMaterial({
+        map: this.overlayTexture,
+        transparent: true,
+        depthWrite: false,
+      }));
+      mapObject.rotateX(-Math.PI / 2);
+      mapObject.position.set(12.5, -0.04, 18);
+      this.overlay.add(mapObject);
+    }));
+
     this.buildGrid();
   }
 

@@ -9,7 +9,7 @@ export const enum Internal {
   MyMoves,
   CenterOnBoat,
   BoatClicked,
-  Scene,
+  Canvas,
   OpenAdvanced,
   SetMap,
 }

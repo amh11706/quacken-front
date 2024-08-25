@@ -1,4 +1,3 @@
-import { Scene } from 'three';
 import { Boat } from '../lobby/quacken/boats/boat';
 import { BoatSync, BoatTick, MoveMessage, MoveMessageIncoming, Sync, Turn } from '../lobby/quacken/boats/types';
 import { InCmd, Internal } from './ws-messages';
@@ -18,7 +17,7 @@ type InternalData = {
   [Internal.BoatClicked]: Boat;
   [Internal.MyBoat]: Boat;
   [Internal.Boats]: Boat[];
-  [Internal.Scene]: Scene;
+  [Internal.Canvas]: HTMLCanvasElement;
   [Internal.SetMap]: string;
   [Internal.Time]: string;
   [Internal.MyMoves]: MoveMessage;

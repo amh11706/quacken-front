@@ -78,7 +78,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   aiMetric: keyof Points = 'BoatAt';
   aiStep = 0;
   aiRadius = 4;
-  aiRender = new AiRender();
+  aiRender = new AiRender(this.ws, 20, 36);
   randomMap = '';
   scores?: ScoreResponse;
   maxPenalty = 0;
@@ -175,9 +175,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(Internal.Lobby, lobby => {
       this.lobby = lobby as CadeLobby;
-    }));
-    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Scene, scene => {
-      scene.add(this.aiRender.object);
     }));
     this.subs.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, boat => {
       this.clickBoat(boat, true);

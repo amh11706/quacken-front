@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Scene } from 'three';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { TeamColorsCss } from '../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 import { GuBoat, Point } from '../lobby/cadegoose/twod-render/gu-boats/gu-boat';
@@ -67,7 +66,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
   maxScore = 0;
   teamColors = TeamColorsCss;
   myBoat = new Boat('');
-  private aiRender = new AiRender();
+  private aiRender = new AiRender(this.ws, 20, 36);
 
   constructor(
     private ws: WsService,
@@ -91,9 +90,6 @@ export class TrainingComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, this.clickBoat.bind(this)));
     this.sub.add(this.ws.fakeWs?.subscribe(Internal.Boats, () => null));
     this.sub.add(this.ws.fakeWs?.outMessages$.subscribe(this.handleFakeWs.bind(this)));
-    this.sub.add(this.ws.fakeWs?.subscribe(Internal.Scene, (scene: Scene) => {
-      scene.add(this.aiRender.object);
-    }));
   }
 
   ngOnDestroy(): void {

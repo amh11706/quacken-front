@@ -119,6 +119,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     }
   };
 
+  @ViewChild('overlay', { static: false }) overlay?: ElementRef<HTMLDivElement>;
+
   constructor(
     private ss: SettingsService,
     private ws: WsService,
@@ -127,6 +129,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   ) { }
 
   ngOnInit(): void {
+    this.sub.add(this.ws.subscribe(Internal.Canvas, c => {
+      console.log(this.overlay);
+      this.overlay?.nativeElement.appendChild(c);
+    }));
+
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
       if (!t.flags) return;
       if (this.lobby) this.lobby.flags = t.flags;

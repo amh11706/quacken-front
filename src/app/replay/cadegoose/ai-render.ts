@@ -1,5 +1,5 @@
-import { Object3D, PlaneBufferGeometry, Mesh, BoxHelper, CanvasTexture, MeshBasicMaterial, Group } from 'three';
-import { BoatService } from '../../lobby/cadegoose/boat.service';
+import { Internal } from '../../ws/ws-messages';
+import { WsService } from '../../ws/ws.service';
 import { AiBoatData, Points } from './types';
 
 const Colors = {
@@ -13,29 +13,17 @@ const Colors = {
 };
 
 export class AiRender {
-  object = new Group();
   private boat?: AiBoatData;
   private metric: keyof Points = 'BoatAt';
   private step = 0;
   private radius = 4;
 
-  private claims = new Object3D();
   private ctx: CanvasRenderingContext2D;
-  private tex: CanvasTexture;
 
-  constructor() {
+  constructor(private ws: WsService, width: number, height: number) {
     this.ctx = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
-    this.ctx.canvas.height = 50 * 36;
-    this.ctx.canvas.width = 50 * 25;
-    this.tex = new CanvasTexture(this.ctx.canvas);
-    const mapObject = new Mesh(new PlaneBufferGeometry(25, 36), new MeshBasicMaterial({
-      map: this.tex,
-      transparent: true,
-      depthWrite: false,
-    }));
-    mapObject.rotateX(-Math.PI / 2);
-    mapObject.position.set(12.5, -0.04, 18);
-    this.object.add(mapObject);
+    this.ctx.canvas.height = 50 * height;
+    this.ctx.canvas.width = 50 * width;
   }
 
   setBoat(boat?: AiBoatData): void {
@@ -44,21 +32,23 @@ export class AiRender {
   }
 
   setClaims(claims: { x: number, y: number, size: number }[]): void {
-    BoatService.dispose(this.claims);
-    this.claims.remove(...this.claims.children);
-    this.object.add(this.claims);
-    if (!claims.length) return;
+    // TODO: use the canvas to draw the claims
 
-    for (const c of claims) {
-      const claimGeo = new PlaneBufferGeometry(c.size, c.size);
-      claimGeo.rotateX(-Math.PI / 2);
-      const claimObj = new Mesh(claimGeo);
-      claimObj.position.x = c.x + c.size / 2;
-      claimObj.position.z = c.y + c.size / 2;
-      const box = new BoxHelper(claimObj, c.x === this.boat?.claim?.x && c.y === this.boat?.claim?.y ? 'cyan' : 'blue');
-      box.renderOrder = 2;
-      this.claims.add(box);
-    }
+    // BoatService.dispose(this.claims);
+    // this.claims.remove(...this.claims.children);
+    // this.object.add(this.claims);
+    // if (!claims.length) return;
+
+    // for (const c of claims) {
+    //   const claimGeo = new PlaneBufferGeometry(c.size, c.size);
+    //   claimGeo.rotateX(-Math.PI / 2);
+    //   const claimObj = new Mesh(claimGeo);
+    //   claimObj.position.x = c.x + c.size / 2;
+    //   claimObj.position.z = c.y + c.size / 2;
+    //   const box = new BoxHelper(claimObj, c.x === this.boat?.claim?.x && c.y === this.boat?.claim?.y ? 'cyan' : 'blue');
+    //   box.renderOrder = 2;
+    //   this.claims.add(box);
+    // }
   }
 
   setMetric(metric: keyof Points): void {
@@ -126,7 +116,6 @@ export class AiRender {
     ctx.textAlign = 'center';
     ctx.lineWidth = 4;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    this.tex.needsUpdate = true;
     if (!this.boat) return;
     const { min, max } = this.findRange();
 
@@ -151,5 +140,7 @@ export class AiRender {
       ctx.fillStyle = 'white';
       ctx.fillText(String(value), x + 25, y + 40);
     }
+
+    (this.ws.fakeWs || this.ws).dispatchMessage({ cmd: Internal.Canvas, data: ctx.canvas });
   }
 }
