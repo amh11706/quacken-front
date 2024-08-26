@@ -2,9 +2,9 @@
                 [floatLabel]="'always'">
   <mat-label>Search ({{(maplist | async)?.length}})</mat-label>
   <mat-autocomplete #auto="matAutocomplete"
-                    [autoSelectActiveOption]="false"
-                    (optionSelected)="toggleTag($event.option.value)"
-                    [autoActiveFirstOption]="false">
+                    [autoSelectActiveOption]="true"
+                    (optionSelected)="toggleTag($event.option.value); search.value = ''"
+                    [autoActiveFirstOption]="true">
     <mat-option *ngFor="let option of searchResults | async"
                 [value]="option">
       {{option}}

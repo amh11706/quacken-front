@@ -80,6 +80,11 @@ export class MatchesComponent implements OnInit, OnDestroy {
     clearTimeout(this.initTimer);
   }
 
+  removeLastTag(): void {
+    this.searchTerms.pop();
+    this.applyFilter('');
+  }
+
   async fetchMatches(name = this.stat.target): Promise<void> {
     if (name !== this.stat.target) {
       this.stat.target = name;
