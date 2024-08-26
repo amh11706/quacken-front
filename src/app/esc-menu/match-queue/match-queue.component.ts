@@ -15,6 +15,7 @@ import { MatchmakingService } from './matchmaking.service';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { ServerSettingGroup } from '../../settings/setting/settings';
 import { ServerSettingMap } from '../../settings/types';
+import { NotificationService } from './notification.service';
 
 @Component({
   selector: 'q-match-queue',
@@ -44,6 +45,7 @@ export class MatchQueueComponent implements OnInit {
     private ss: SettingsService,
     public ms: MatchmakingService,
     private router: Router,
+    private ns: NotificationService,
   ) { }
 
   ngOnInit() {
@@ -97,10 +99,11 @@ export class MatchQueueComponent implements OnInit {
     const res = await this.ws.request(OutCmd.JoinQueue, this.formatSettings());
     this.pending.next(false);
     if (res) {
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: res } as any });
+      void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: res } as any });
       return;
     }
     this.ms.inQueue = true;
+    void this.ns.getPermission();
   }
 
   leaveQueue(): void {

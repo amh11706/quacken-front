@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatchFoundDialogComponent } from './match-found.component';
 import { WsService } from '../../ws/ws.service';
 import { InCmd } from '../../ws/ws-messages';
+import { NotificationService } from './notification.service';
 
 @Injectable()
 export class MatchmakingService {
@@ -12,6 +13,7 @@ export class MatchmakingService {
     private ws: WsService,
     private dialog: MatDialog,
     private injector: Injector,
+    private ns: NotificationService,
   ) {
     this.ws.connected$.subscribe(() => {
       this.inQueue = false;
@@ -34,5 +36,7 @@ export class MatchmakingService {
     dialogRef.afterClosed().subscribe(() => {
       this.inQueue = false;
     });
+
+    this.ns.notify('Match found!');
   }
 }
