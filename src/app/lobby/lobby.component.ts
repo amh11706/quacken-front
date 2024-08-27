@@ -5,7 +5,6 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { WsService } from '../ws/ws.service';
 import { SettingsService } from '../settings/settings.service';
 import { InCmd, OutCmd } from '../ws/ws-messages';
-import { Lobby } from './cadegoose/types';
 
 @Component({
   selector: 'q-lobby',
@@ -13,7 +12,7 @@ import { Lobby } from './cadegoose/types';
   styleUrls: ['./lobby.component.css'],
 })
 export class LobbyComponent implements OnInit, OnDestroy {
-  lobby = new BehaviorSubject<Lobby | undefined>(undefined);
+  lobby = new BehaviorSubject<any | undefined>(undefined);
   id?: number;
   private sub = new Subscription();
   private sent = false;

@@ -11,7 +11,7 @@ import { InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes } from '.
 import { SendCmdInputless, SendCmdInputs } from './ws-send-types';
 import { InMessage, SubscribeData } from './ws-subscribe-types';
 
-const ClientVersion = 73;
+const ClientVersion = 74;
 
 export interface TokenUser {
   id: number;
@@ -23,11 +23,6 @@ export interface TokenUser {
 
 @Injectable()
 export class WsService implements OnDestroy {
-  getUsername(): string {
-    // Simulate a server call
-    return 'player4';
-  } // This would be dynamically fetched in a real scenario
-
   static reason?: string;
   private socket?: WebSocket;
   private token = '';
@@ -129,8 +124,7 @@ export class WsService implements OnDestroy {
 
   async dispatchMessage(message: InMessage & {httpid?: string}): Promise<void> {
     if (message.httpid) {
-      message = await firstValueFrom(this.http.get(environment.api + '/httpmsg/' + message.httpid)) as any as InMessage;
-      console.log('httpmsg', message);
+      message = await firstValueFrom(this.http.get<InMessage>(environment.api + '/httpmsg/' + message.httpid));
     }
     if (message.id) {
       const cb = this.requests.get(message.id);

@@ -10,11 +10,14 @@ const Colors = {
   Flags: 'rgba(255, 0, 255, %d)',
   Claims: 'rgba(255, 255, 0, %d)',
   EndBonus: 'rgba(0, 0, 255, %d)',
+  spawn: 'rgba(0, 255, 0, %d)',
+  flags: 'rgba(255, 0, 0, %d)',
+  coverMoves: 'rgba(0, 0, 255, %d)',
 };
 
 export class AiRender {
   private boat?: AiBoatData;
-  private metric: keyof Points = 'BoatAt';
+  private metrics: (keyof Points)[] = ['BoatAt'];
   private step = 0;
   private radius = 4;
 
@@ -27,6 +30,7 @@ export class AiRender {
   }
 
   setBoat(boat?: AiBoatData): void {
+    if (this.boat === boat) return;
     this.boat = boat;
     this.updateRender();
   }
@@ -51,8 +55,9 @@ export class AiRender {
     // }
   }
 
-  setMetric(metric: keyof Points): void {
-    this.metric = metric;
+  setMetric(metric: (keyof Points)[] | keyof Points): void {
+    if (!Array.isArray(metric)) metric = [metric];
+    this.metrics = metric;
     this.updateRender();
   }
 
@@ -66,14 +71,14 @@ export class AiRender {
     this.updateRender();
   }
 
-  private findRange(): { min: number, max: number } {
+  private findRange(metric: keyof Points): { min: number, max: number } {
     const range = { min: 0, max: 1 };
     if (!this.boat) return range;
     for (const coordString in this.boat.pm) {
       if (!this.boat.pm.hasOwnProperty(coordString)) continue;
       const points = this.boat.pm[coordString];
-      const index = this.metric === 'Flags' || this.metric === 'Claims' ? this.radius : this.step;
-      const value = (this.metric === 'EndBonus' ? points?.[this.metric] : points?.[this.metric][index]) || 0;
+      if (!points) continue;
+      const value = this.getValue(points, metric);
 
       if (Array.isArray(value)) range.max = Math.max(range.max, ...value);
       else {
@@ -81,11 +86,11 @@ export class AiRender {
         if (value < range.min) range.min = value - 1;
       }
     }
-    range.max = range.max * 1.33 - range.min;
+    range.max = range.max * 2 - range.min;
     return range;
   }
 
-  private drawShots(x: number, y: number, shots: number[], max: number) {
+  private drawShots(x: number, y: number, shots: number[], max: number, color: string) {
     const ctx = this.ctx;
     ctx.translate(x + 25, y + 25);
     for (let i = 0; i < shots.length; i++) {
@@ -99,7 +104,7 @@ export class AiRender {
       ctx.lineTo(25, 25);
       ctx.lineTo(-25, 25);
       ctx.closePath();
-      ctx.fillStyle = Colors[this.metric].replace('%d', String((shot + 10) / max));
+      ctx.fillStyle = color.replace('%d', String((shot + 10) / max));
       ctx.fill();
       ctx.fillStyle = 'black';
       ctx.strokeText(String(shot), 0, 15);
@@ -110,6 +115,14 @@ export class AiRender {
     ctx.resetTransform();
   }
 
+  private getValue(points: Points, metric: keyof Points): number | number[] {
+    const values = points?.[metric];
+    if (!Array.isArray(values)) return values || 0;
+    if (values.length === 6) return values[this.radius] || 0;
+    else if (values.length === 4 && !Array.isArray(values[0])) return values as number[];
+    return values[this.step] || 0;
+  }
+
   private updateRender() {
     const ctx = this.ctx;
     ctx.textBaseline = 'middle';
@@ -117,30 +130,34 @@ export class AiRender {
     ctx.lineWidth = 4;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     if (!this.boat) return;
-    const { min, max } = this.findRange();
+    for (const metric of this.metrics) {
+      const color = Colors[metric];
+      if (!color) continue;
+      const { min, max } = this.findRange(metric);
 
-    for (const coordString in this.boat.pm) {
-      if (!this.boat.pm.hasOwnProperty(coordString)) continue;
-      const coords = coordString.split(',');
-      const x = +(coords[0] || 0) * 50;
-      const y = +(coords[1] || 0) * 50;
-      const points = this.boat.pm[coordString];
-      const index = this.metric === 'Flags' || this.metric === 'Claims' ? this.radius : this.step;
-      const value = this.metric === 'EndBonus' ? points?.[this.metric] : points?.[this.metric][index];
-      if (!value) continue;
-      if (Array.isArray(value)) {
-        this.drawShots(x, y, value, max);
-        continue;
+      for (const coordString in this.boat.pm) {
+        if (!this.boat.pm.hasOwnProperty(coordString)) continue;
+        const coords = coordString.split(',');
+        const x = +(coords[0] || 0) * 50;
+        const y = +(coords[1] || 0) * 50;
+        const points = this.boat.pm[coordString];
+        if (!points) continue;
+        const value = this.getValue(points, metric);
+        if (!value) continue;
+        if (Array.isArray(value)) {
+          this.drawShots(x, y, value, max, color);
+          continue;
+        }
+
+        ctx.fillStyle = color.replace('%d', String((value - min + max / 8) / max));
+        ctx.fillRect(x, y, 50, 50);
+        ctx.fillStyle = 'black';
+        ctx.strokeText(String(value), x + 25, y + 40);
+        ctx.fillStyle = 'white';
+        ctx.fillText(String(value), x + 25, y + 40);
       }
-
-      ctx.fillStyle = Colors[this.metric].replace('%d', String((value - min + max / 8) / max));
-      ctx.fillRect(x, y, 50, 50);
-      ctx.fillStyle = 'black';
-      ctx.strokeText(String(value), x + 25, y + 40);
-      ctx.fillStyle = 'white';
-      ctx.fillText(String(value), x + 25, y + 40);
     }
 
-    (this.ws.fakeWs || this.ws).dispatchMessage({ cmd: Internal.Canvas, data: ctx.canvas });
+    void (this.ws.fakeWs || this.ws).dispatchMessage({ cmd: Internal.Canvas, data: ctx.canvas });
   }
 }

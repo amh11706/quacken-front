@@ -1,0 +1,17 @@
+<div #background>
+  <q-twod-render #renderer
+                 [speed]="graphicSettings.speed.value"
+                 [ctrlZoom]="advancedMapOpen"
+                 [setTile]="advancedMapOpen ? setTile.bind(this) : 0"
+                 [undo]="undo"
+                 [editor]="editor"
+                 [lobby]="$any(lobby)"
+                 [graphicSettings]="graphicSettings"></q-twod-render>
+
+</div>
+<q-obstacles *ngIf="advancedMapOpen"
+             [map]="editor"
+             [background]="background">
+</q-obstacles>
+
+<q-mapinfo-hud [mapInfo]="mapInfo"></q-mapinfo-hud>

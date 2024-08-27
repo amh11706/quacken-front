@@ -15,6 +15,7 @@ export const Descriptions = {
   Spades: 'A classic card game.',
   CadeGoose: CadeDesc,
   SeaBattle: SbDesc,
+  mapinfo: 'View map information.',
 };
 
 const groups = ['quacken', 'spades', 'cade', 'cade', 'flaggames'];

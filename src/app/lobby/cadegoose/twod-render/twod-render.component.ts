@@ -130,7 +130,6 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(Internal.Canvas, c => {
-      console.log(this.overlay);
       this.overlay?.nativeElement.appendChild(c);
     }));
 

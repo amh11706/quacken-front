@@ -26,7 +26,11 @@ import { SoundService } from '../sound.service';
   styleUrls: ['./list.component.scss'],
 })
 export class ListComponent {
-  constructor(ws: WsService) {
+  constructor(
+    ws: WsService,
+    // make sure services loaded so their subscriptions are active
+    public chatService: ChatService,
+  ) {
     const token = window.localStorage.getItem('token');
     if (!ws.connected && token) ws.connect(token);
     if (token === 'guest') window.addEventListener('beforeunload', () => window.localStorage.removeItem('token'));

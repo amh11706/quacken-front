@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Map Info</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p>Hotspot: A tile that covers the maximum flags (Warfrig).</p>
+    <p>-1 Hotspot: A hotspot that leaks 1 point from the maximum.</p>
+    <hr>
+    <p>Spawn rating: How many spawn spots have the fastest route to a hotspot.</p>
+    <p>Hotspot rating: 1 point per hotspot, 0.5 per -1 hotspot.</p>
+    <p>Maneuverability: How many moves on average from a hotspot or -1 hotspot also land on a hotspot.</p>
+    <hr>
+
+    <p>Spawns (green): Moves faster than the slowest spawn. +50 if it's the fastest.</p>
+    <p>Hotspots (red): 2 for hotspot, 1 for -1 hotspot.</p>
+    <p>Moves (blue): Number of moves from each hotspot or -1 hotspot that land on a hotspot without rock bumps.</p>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button (click)="es.openMenu(false)">Close</button>
+  </mat-card-actions>
+</mat-card>
