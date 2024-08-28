@@ -52,7 +52,21 @@ export class LoginFormComponent implements AfterViewInit {
       .subscribe(
         resp => {
           window.localStorage.setItem('token', resp);
-          void this.router.navigate([AuthGuard.triedPath || 'list']);
+          if (!AuthGuard.triedPath) {
+            void this.router.navigate(['list']);
+            return;
+          }
+
+          const [path, query] = AuthGuard.triedPath.split('?');
+          if (query) {
+            const parsed = {} as Record<string, string>;
+            new URLSearchParams(query).forEach((value, key) => {
+              parsed[key] = value;
+            });
+            void this.router.navigate([path], { queryParams: parsed });
+          } else {
+            void this.router.navigate([AuthGuard.triedPath]);
+          }
           AuthGuard.triedPath = '';
         },
         (err: unknown) => {

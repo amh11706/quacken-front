@@ -12,7 +12,7 @@ export class AuthGuard {
   canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const token = window.localStorage.getItem('token');
     if (!token) {
-      AuthGuard.triedPath = state.url.split('?')[0] || '';
+      AuthGuard.triedPath = state.url || '';
       void this.router.navigateByUrl('/auth/login');
       return false;
     }
