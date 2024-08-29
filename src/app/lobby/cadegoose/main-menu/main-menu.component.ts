@@ -40,6 +40,10 @@ export class MainMenuComponent {
     return index;
   }
 
+  trackPlayerBy(index: number, m: TeamMessage): number {
+    return m.sId || index;
+  }
+
   plural(length: number): string {
     if (length === 1) return length + ' player';
     return length + ' players';

@@ -158,7 +158,8 @@ export class MainMenuService implements OnDestroy {
     this.teamRanks = Array(teamPlayers.length).fill(0);
     teamPlayers.forEach((team, i) => {
       let sum = 0;
-      team.forEach((p) => sum += Math.max(...p.sc));
+      const variation = team.length > 1 ? 1 : 0;
+      team.forEach((p) => sum += p.sc[variation] || 0);
       this.teamRanks[i] = Math.round(sum / (team.length || 1));
     });
   }
