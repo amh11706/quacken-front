@@ -64,7 +64,7 @@ export class MainMenuService implements OnDestroy {
       this.lobby = m as CadeLobby;
       if (m.settings) this.ss.setSettings(this.group, m.settings);
       this.status.next(m.inProgress);
-      if (m.players?.length) this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
+      if (m.players?.length) void this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
       if (this.firstJoin) {
         this.firstJoin = false;
         void this.es.openTab(0, false, { lobbyTab: 0 });
@@ -75,10 +75,10 @@ export class MainMenuService implements OnDestroy {
 
       if (m.myMoves) {
         const ms = m.myMoves;
-        this.ws.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: ms.m, shots: ms.s || [] } });
+        void this.ws.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: ms.m, shots: ms.s || [] } });
       }
       if (m.moves) {
-        this.ws.dispatchMessage({ cmd: InCmd.Moves, data: m.moves });
+        void this.ws.dispatchMessage({ cmd: InCmd.Moves, data: m.moves });
       }
     }));
     this.subs.add(this.fs.lobby$.subscribe(r => {
