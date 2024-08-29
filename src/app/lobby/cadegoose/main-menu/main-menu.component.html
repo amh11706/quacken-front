@@ -22,7 +22,6 @@
           <div class="team"
                [style.borderColor]="teamColors[i]">
             <div *ngFor="let m of team; trackBy: trackPlayerBy"
-                 [
                  class="lobbyPlayer vote{{m.v}}"
                  [class.ready]="m.r">
               <q-name [message]="m"></q-name>
