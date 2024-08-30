@@ -17,7 +17,7 @@
     </div>
     <span>You'll get a notification when a match is found. You can close this menu safely.</span>
 
-    <q-setting [disabled]="ms.inQueue || (pending | async) === true || isGuest"
+    <q-setting [disabled]="ms.inQueue || disabled || isGuest"
                [matTooltip]="isGuest ? 'Make an account to play rated matches.' : ''"
                [name]="'queueRated'"></q-setting>
     <mat-expansion-panel [expanded]="!!matchSettings.showAdvanced.value"
@@ -28,11 +28,11 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="advanced">
-        <q-setting [disabled]="disabled"
+        <q-setting [disabled]="disabled || ms.inQueue"
                    [name]="'minTurnTime'"></q-setting>
-        <q-setting [disabled]="disabled"
+        <q-setting [disabled]="disabled || ms.inQueue"
                    [name]="'maxTurnTime'"></q-setting>
-        <q-setting [disabled]="disabled"
+        <q-setting [disabled]="disabled || ms.inQueue"
                    [name]="'deltaRank'"></q-setting>
       </div>
     </mat-expansion-panel>
