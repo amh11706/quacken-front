@@ -7,11 +7,20 @@
                  [editor]="editor"
                  [lobby]="$any(lobby)"
                  [graphicSettings]="graphicSettings"></q-twod-render>
-
 </div>
 <q-obstacles *ngIf="advancedMapOpen"
              [map]="editor"
              [background]="background">
 </q-obstacles>
+
+<div [hidden]="!advancedMapOpen"
+     id="advancedMap"
+     class="container"
+     [qDrag]="handle"
+     [bindToWindow]="true">
+  <div #handle
+       class="handle"></div>
+  <q-advanced-map (seedChange)="updateSeed($event)"></q-advanced-map>
+</div>
 
 <q-mapinfo-hud [mapInfo]="mapInfo"></q-mapinfo-hud>

@@ -39,3 +39,7 @@ $theme: mat.define-dark-theme(
 // @include mat.tooltip-theme($theme);
 // @include mat.card-theme($theme);
 // @include mat.button-theme($theme);
+
+:root {
+  --mat-standard-button-toggle-label-text-size: 0.75rem; // Set your desired text size here
+}

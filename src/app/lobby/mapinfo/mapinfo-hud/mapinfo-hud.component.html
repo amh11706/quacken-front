@@ -1,16 +1,12 @@
 <div class="container noselect"
      id="hud">
   <div>
-    <p>Spawn rating: {{mapInfo.spawnRating}}</p>
-    <p>Hotspot rating: {{mapInfo.hotspotRating}}</p>
-    <p>Maneuverability: {{mapInfo.maneuverabilityRating.toFixed(2)}}</p>
-
     <mat-button-toggle-group [(value)]="selectedOverlay"
                              (change)="setOverlay($event.value)"
                              multiple>
-      <mat-button-toggle value="spawn">Spawns</mat-button-toggle>
-      <mat-button-toggle value="flags">Hotspots</mat-button-toggle>
-      <mat-button-toggle value="coverMoves">Moves</mat-button-toggle>
+      <mat-button-toggle value="spawn">Spawns {{mapInfo.spawnRating}}</mat-button-toggle>
+      <mat-button-toggle value="flags">Hotspots {{mapInfo.hotspotRating}}</mat-button-toggle>
+      <mat-button-toggle value="coverMoves">Moves {{mapInfo.maneuverabilityRating.toFixed(2)}}</mat-button-toggle>
     </mat-button-toggle-group>
   </div>
   <div id="chat">

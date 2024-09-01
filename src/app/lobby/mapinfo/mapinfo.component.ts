@@ -15,6 +15,7 @@ import { MapInfo, MapinfoHudComponent } from './mapinfo-hud/mapinfo-hud.componen
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { MapinfoMenuComponent } from './mapinfo-menu/mapinfo-menu.component';
+import { QdragModule } from '../../qdrag/qdrag.module';
 
 interface MapInfoLobby extends Lobby {
   type: 'mapinfo';
@@ -25,7 +26,7 @@ interface MapInfoLobby extends Lobby {
 @Component({
   selector: 'q-mapinfo',
   standalone: true,
-  imports: [CommonModule, MapEditorModule, TwodRenderModule, CadegooseModule, MapinfoHudComponent],
+  imports: [CommonModule, MapEditorModule, TwodRenderModule, CadegooseModule, MapinfoHudComponent, QdragModule],
   templateUrl: './mapinfo.component.html',
   styleUrl: './mapinfo.component.scss',
 })
@@ -61,6 +62,7 @@ export class MapinfoComponent implements OnInit, OnDestroy {
 
   private subs = new Subscription();
   private mapDataDebounce = new Subject<void>();
+  private mapDebounce = new Subject<string>();
 
   constructor(
     private es: EscMenuService,
@@ -98,11 +100,19 @@ export class MapinfoComponent implements OnInit, OnDestroy {
       const tile = this.editor.selectedTile;
       if (v && tile.undos.length) this.undo(tile.undos, tile.redos);
     }));
+
+    this.subs.add(this.mapDebounce.pipe(debounceTime(100)).subscribe(seed => {
+      this.ws.send(OutCmd.ChatCommand, '/seed ' + seed);
+    }));
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
     this.es.setLobby(null);
+  }
+
+  updateSeed(seed: string): void {
+    this.mapDebounce.next(seed);
   }
 
   protected setMapB64(map: string): void {
@@ -119,6 +129,7 @@ export class MapinfoComponent implements OnInit, OnDestroy {
     }
 
     void this.renderer?.fillMap(this.map, []);
+    this.editor.selectedTile.data = this.map;
   }
 
   protected initMap(): void {
