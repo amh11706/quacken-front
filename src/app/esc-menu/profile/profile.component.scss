@@ -108,3 +108,7 @@ mat-expansion-panel {
 .offline {
   color: #aaa;
 }
+
+a:not(:visited) {
+  color: rgb(255, 193, 7);
+}
