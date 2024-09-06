@@ -25,6 +25,15 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 06 September 2024',
+    points: [
+      'Maneuver selection is now saved between boats.',
+      'Unwatched replays are now highlighted.',
+      'The time to accept a match has been increased from 10 to 20 seconds.',
+      'The match queue now uses a map generator rather than a list of maps.',
+    ],
+  },
+  {
     title: 'Release 20 August 2024',
     points: [
       'Overtime!',
