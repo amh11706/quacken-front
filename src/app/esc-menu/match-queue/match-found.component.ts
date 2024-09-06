@@ -5,6 +5,8 @@ import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Sounds, SoundService } from '../../sound.service';
 
+const TimeLimit = 20;
+
 @Component({
   standalone: true,
   selector: 'q-match-found-dialog',
@@ -44,14 +46,14 @@ export class MatchFoundDialogComponent implements OnInit {
 
     setTimeout(() => {
       this.expired = true;
-    }, 10000);
+    }, TimeLimit * 1000);
 
     this.timeLeft.next(10);
     this.timer = window.setInterval(() => {
       if (this.expired) {
         return;
       }
-      const timeLeft = 10 - Math.floor((Date.now() - this.openTime) / 1000);
+      const timeLeft = TimeLimit - Math.floor((Date.now() - this.openTime) / 1000);
       this.timeLeft.next(timeLeft);
       if (timeLeft <= 0) {
         this.expired = true;
