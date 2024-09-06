@@ -59,6 +59,7 @@ export class MatchFoundDialogComponent implements OnInit {
         this.expired = true;
       }
     }, 1000);
+    this.timeLeft.next(TimeLimit);
   }
 
   accept(): void {
