@@ -69,7 +69,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
         if (m.cmd === OutCmd.Sync) this.sendSync();
       }));
     }
-    this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id' || 0))));
+    this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id'))));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) this.ws.send(OutCmd.BnavJoin);
     }));

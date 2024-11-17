@@ -5,16 +5,16 @@ import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { TeamColorsCss } from '../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 import { GuBoat, Point } from '../lobby/cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../lobby/quacken/boats/boat';
-import { AiRender } from '../replay/cadegoose/ai-render';
 import { ParseTurns } from '../replay/cadegoose/parse-turns';
 import { SettingsService } from '../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../ws/ws-messages';
 import { WsService } from '../ws/ws.service';
 import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
-import { AiBoatData, MoveNode, MoveTiers } from '../replay/cadegoose/types';
+import { MoveNode, MoveTiers } from '../replay/cadegoose/types';
 import { ParsedTurn } from '../lobby/cadegoose/types';
 import { MoveMessageIncoming } from '../lobby/quacken/boats/types';
 import { SettingGroup } from '../settings/setting/settings';
+import { InMessage } from '../ws/ws-subscribe-types';
 
 function mapMoves(m: number | string): string {
   return ['_', 'L', 'F', 'R'][+m] || 'S';
@@ -66,7 +66,6 @@ export class TrainingComponent implements OnInit, OnDestroy {
   maxScore = 0;
   teamColors = TeamColorsCss;
   myBoat = new Boat('');
-  private aiRender = new AiRender(this.ws, 20, 36);
 
   constructor(
     private ws: WsService,
@@ -76,14 +75,13 @@ export class TrainingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.aiRender.setMetric('EndBonus');
     if (this.lobbyWrapper) {
       this.ws.fakeWs = this.lobbyWrapper.ws;
       this.ws.fakeWs.user = this.ws.user;
     }
 
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Welcome to 1v1 training.', from: '' } });
-    this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id' || 0))));
+    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Welcome to 1v1 training. Choose a turn and click a boat to begin.', from: '' } });
+    this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id'))));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) this.ws.send(OutCmd.BnavJoin);
     }));
@@ -123,10 +121,10 @@ export class TrainingComponent implements OnInit, OnDestroy {
       tick.t[2][0] = 4;
       this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.BoatTick, data: tick });
     }
+    const myMoves = this.activeTurn?.moves[this.myBoat.id];
     setTimeout(() => {
       this.myBoat.moveLock = -1;
       if (this.myBoat.isMe) {
-        const myMoves = this.activeTurn?.moves[this.myBoat.id];
         if (myMoves) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
       }
     });
@@ -158,14 +156,16 @@ export class TrainingComponent implements OnInit, OnDestroy {
       case OutCmd.Shots:
         m.data = [...m.data];
         // eslint-disable-next-line no-case-declarations
-        const myMoves = this.activeTurn?.moves[this.myBoat.id];
+        const moves = this.activeTurn?.moves[this.myBoat.id];
+        if (!moves) return;
+        const myMoves = { moves: [...moves.moves], shots: [...moves.shots] };
         if (m.cmd === OutCmd.Moves) {
           this.myBoat.moves = m.data;
           if (myMoves) myMoves.moves = m.data;
         } else if (myMoves) {
           myMoves.shots = m.data;
         }
-        // this.ws.fakeWs?.dispatchMessage(m as InMessage<InCmd.Moves>);
+        this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
         delete this.activeMove;
         break;
       case OutCmd.Ready:
@@ -178,6 +178,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
   private async imReady(moveMessage: { moves: number[], shots: number[] }) {
     const turn = this.activeTurn;
     if (!turn || !this.myBoat.isMe) return;
+    const oldMoves = turn.moves[this.myBoat.id];
+    if (!oldMoves) return;
     turn.moves[this.myBoat.id] = moveMessage;
 
     // if (this.myBoat !== this.rawMoves.boat || this.activeTurn !== this.rawMoves.turn) {
@@ -187,18 +189,15 @@ export class TrainingComponent implements OnInit, OnDestroy {
       map: this.map,
       myBoat: this.myBoat.id,
     });
+    turn.moves[this.myBoat.id] = oldMoves;
     if (!response) return;
 
-    this.aiRender.setBoat({
-      pm: response.points,
-    } as AiBoatData);
     this.rawMoves = {
       moves: new Map(Object.entries(response.nodes)),
       boat: this.myBoat,
       turn: this.activeTurn,
     };
     this.parseMoves();
-    // }
 
     this.activeMove = this.moves[this.myBoat.moves.join('')];
     this.updateShotsMissed();
@@ -226,10 +225,12 @@ export class TrainingComponent implements OnInit, OnDestroy {
     this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Sync, data: turn.sync });
     const moves: MoveMessageIncoming[] = [];
     for (const [id, m] of Object.entries(this.activeTurn?.moves || {})) {
-      moves.push({ t: +id, m: m.moves, s: m.shots });
+      moves.push({ t: +id, m: [...m.moves], s: [...m.shots] });
     }
 
-    this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
+    setTimeout(() => {
+      this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
+    });
     this.updateBoat();
   }
 
