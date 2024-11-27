@@ -154,16 +154,13 @@ export class TrainingComponent implements OnInit, OnDestroy {
     switch (m.cmd) {
       case OutCmd.Moves:
       case OutCmd.Shots:
-        m.data = [...m.data];
-        // eslint-disable-next-line no-case-declarations
-        const moves = this.activeTurn?.moves[this.myBoat.id];
-        if (!moves) return;
-        const myMoves = { moves: [...moves.moves], shots: [...moves.shots] };
+        const myMoves = { moves: [...this.myBoat.moves], shots: [...this.myBoat.shots] };
         if (m.cmd === OutCmd.Moves) {
+          myMoves.moves = m.data;
           this.myBoat.moves = m.data;
-          if (myMoves) myMoves.moves = m.data;
-        } else if (myMoves) {
+        } else {
           myMoves.shots = m.data;
+          this.myBoat.shots = m.data;
         }
         this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
         delete this.activeMove;
@@ -178,18 +175,13 @@ export class TrainingComponent implements OnInit, OnDestroy {
   private async imReady(moveMessage: { moves: number[], shots: number[] }) {
     const turn = this.activeTurn;
     if (!turn || !this.myBoat.isMe) return;
-    const oldMoves = turn.moves[this.myBoat.id];
-    if (!oldMoves) return;
-    turn.moves[this.myBoat.id] = moveMessage;
 
     // if (this.myBoat !== this.rawMoves.boat || this.activeTurn !== this.rawMoves.turn) {
     const response = await this.ws.request(OutCmd.MatchTraining, {
       sync: turn.sync.sync,
-      moves: turn.moves,
       map: this.map,
       myBoat: this.myBoat.id,
     });
-    turn.moves[this.myBoat.id] = oldMoves;
     if (!response) return;
 
     this.rawMoves = {
@@ -263,7 +255,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     });
 
     moves.sort((b, a) => a.Score - b.Score);
-    this.bestMoves.score = moves.slice(0, 4).map(m => m.Moves);
+    this.bestMoves.score = moves.slice(0, 4).filter(m => m.Score >= maxScore * 0.8).map(m => m.Moves);
     moves.sort((b, a) => a.PointGain - b.PointGain);
     this.bestMoves.points = moves.slice(0, 4).map(m => m.Moves);
     moves.sort((a, b) => a.ShotsTaken - b.ShotsTaken);

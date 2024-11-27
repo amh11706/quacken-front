@@ -34,7 +34,7 @@ type OutCmdInputs = {
   [OutCmd.Bomb]: number;
   [OutCmd.Shots]: number[];
 
-  [OutCmd.MatchTraining]: { sync: BoatSync[], moves: ParsedTurn['moves'], map: string, myBoat: number, };
+  [OutCmd.MatchTraining]: { sync: BoatSync[], map: string, myBoat: number, };
   [OutCmd.MatchData]: number;
   [OutCmd.MatchScore]: { turns: ParsedTurn[], map: string };
   [OutCmd.MatchAi]: MatchAiRequest;
