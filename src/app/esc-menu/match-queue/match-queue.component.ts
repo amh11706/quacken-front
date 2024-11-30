@@ -86,9 +86,11 @@ export class MatchQueueComponent implements OnInit {
     this.ws.send(OutCmd.UnwatchQueue);
   }
 
-  private formatSettings(): ServerSettingMap<'matchmaking'> {
+  private async formatSettings(): Promise<ServerSettingMap<'matchmaking'>> {
+    // make sure we wait for the real settings, not the prefilled defaults
+    const matchSettings = await this.ss.getGroup('matchmaking');
     const settings = {} as ServerSettingMap<'matchmaking'>;
-    for (const [name, setting] of Object.entries(this.matchSettings)) {
+    for (const [name, setting] of Object.entries(matchSettings)) {
       settings[name as ServerSettingGroup['matchmaking']] = setting.toDBSetting<'matchmaking'>();
     }
     return settings;
@@ -96,7 +98,7 @@ export class MatchQueueComponent implements OnInit {
 
   async joinQueue(): Promise<void> {
     this.pending.next(true);
-    const res = await this.ws.request(OutCmd.JoinQueue, this.formatSettings());
+    const res = await this.ws.request(OutCmd.JoinQueue, await this.formatSettings());
     this.pending.next(false);
     if (res) {
       void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: res } as any });
@@ -112,7 +114,9 @@ export class MatchQueueComponent implements OnInit {
   }
 
   async getBotMatch(): Promise<boolean> {
-    const id = await this.ws.request(OutCmd.GetBotMatch, this.formatSettings());
+    this.pending.next(true);
+    const id = await this.ws.request(OutCmd.GetBotMatch, await this.formatSettings());
+    this.pending.next(false);
     if (id) {
       return this.router.navigate(['/lobby', id]);
     }
