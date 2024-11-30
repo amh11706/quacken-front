@@ -17,7 +17,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { ParseTurns } from './parse-turns';
 import { GuBoat, Point } from '../../lobby/cadegoose/twod-render/gu-boats/gu-boat';
 import { CadeLobby, Lobby, ParsedTurn } from '../../lobby/cadegoose/types';
-import { BoatTick } from '../../lobby/quacken/boats/types';
+import { BoatTick, MoveMessageIncoming } from '../../lobby/quacken/boats/types';
 import { AiBoatData, AiData, ClaimOptions, Points, ScoreResponse } from './types';
 import { InMessage } from '../../ws/ws-subscribe-types';
 
@@ -50,6 +50,17 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     else {
       delete this.aiData;
       this.selectAiBoat();
+    }
+
+    if (this.activeTurn && value + 2 === this.activeTurn.index) {
+      const moves: MoveMessageIncoming[] = [];
+      for (const [id, m] of Object.entries(this.activeTurn.moves || {})) {
+        moves.push({ t: +id, m: [...m.moves], s: [...m.shots] });
+      }
+
+      setTimeout(() => {
+        this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
+      });
     }
   }
 
@@ -261,7 +272,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
 
     if (this.ws.fakeWs) {
       this.ws.fakeWs.dispatchMessage({ cmd: Internal.MyBoat, data: this.activeBoat });
-      this.ws.fakeWs.sId = boat.id;
+      this.ws.fakeWs.sId = this.activeBoat.id || undefined;
     }
     if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat, data: undefined });
     if (this.boatTicks[boat.id]) this.updateBoat();
