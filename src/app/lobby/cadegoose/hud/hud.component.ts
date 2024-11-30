@@ -70,6 +70,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
         this.localBoat.shots = [...moves.shots];
         this.serverBoat.shots = [...moves.shots];
       }
+      this.serverBoatPending = { ...this.serverBoat };
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.Turn, () => {

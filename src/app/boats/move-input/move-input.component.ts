@@ -379,6 +379,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   private checkMaxShots() {
+    if (this.locked) return;
     this.unusedTokens.shots = this._totalTokens.shots;
     this.unusedTokens.maneuvers[0] = this._totalTokens.maneuvers[0];
     for (let i = 0; i < this.input.shots.length; i++) {
@@ -389,9 +390,9 @@ export class MoveInputComponent implements OnInit, OnDestroy {
         const rounded = Math.floor(shot / 4) * 4;
         const index = this.maneuvers.findIndex(m => m.id === rounded);
         const points = this.unusedTokens.maneuvers[index] || 0;
-        if (points === 200) this.input.shots[i] |= 0b1;
+        if (points === 200) this.input.shots[i]! |= 0b1;
         else if (points < 100) this.input.shots[i] = 0;
-        this.unusedTokens.maneuvers[index] -= points - points % 100;
+        this.unusedTokens.maneuvers[index]! -= points - points % 100;
         if (shot < 6) continue;
         shot = 1;
       }
@@ -405,6 +406,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   checkMaxMoves(): void {
+    if (this.locked) return;
     this.unusedTokens.moves = [...this._totalTokens.moves];
     this.unusedTokens.maneuvers[1] = this._totalTokens.maneuvers[1];
     this.unusedTokens.maneuvers[2] = this._totalTokens.maneuvers[2];
@@ -423,10 +425,10 @@ export class MoveInputComponent implements OnInit, OnDestroy {
         const rounded = Math.floor(move / 4) * 4;
         const maneuver = this.maneuvers.findIndex(m => m.id === rounded);
         const points = this.unusedTokens.maneuvers[maneuver] || 0;
-        if (points === 200) this.input.moves[i] |= 0b1;
+        if (points === 200) this.input.moves[i]! |= 0b1;
         else if (points < 100) this.input.moves[i] = 0;
-        this.unusedTokens.maneuvers[maneuver] -= points - points % 100;
-      } else if (this.unusedTokens.moves[move - 1]) this.unusedTokens.moves[move - 1]--;
+        this.unusedTokens.maneuvers[maneuver]! -= points - points % 100;
+      } else if (this.unusedTokens.moves[move - 1]) this.unusedTokens.moves[move - 1]!--;
       else this.input.moves[i] = 0;
     }
     this.unusedTokensChange.emit(this.unusedTokens);

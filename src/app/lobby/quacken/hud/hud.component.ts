@@ -197,6 +197,7 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.turn <= this.lastMoveReset) return;
     }
     if (this.myBoat.moveLock === 99) this.myBoat.moveLock = 0;
+    this.myBoat.ready = false;
     this.lastMoveReset = this.turn;
     this.totalTokens = { ...this.totalTokens };
     for (const i in this.serverBoat.moves) this.serverBoat.moves[i] = 0;
@@ -240,6 +241,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   async sendMoves(): Promise<void> {
+    if (this.myBoat.ready) return
     void this.sendShots();
     if (this.arrayEqual(this.serverBoatPending.moves, this.localBoat.moves)) return;
     this.serverBoatPending.moves = [...this.localBoat.moves];
