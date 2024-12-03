@@ -75,9 +75,15 @@ export class MoveNode {
   ShotsTakenArray: number[] = [];
 
   tier: MoveTiers = MoveTiers.Poor;
-  WreckedBy: string[] = [];
-  Wrecks: string[] = [];
-  BlockedBy: string[] = [];
-  Blocks: string[] = [];
-  Moves = '';
+  WreckedBy: number[][] = [];
+  Wrecks: number[][] = [];
+  BlockedBy: number[][] = [];
+  Blocks: number[][]  = [];
+  Moves: number[]= [0, 0, 0, 0];
+
+  wreckedByString: string[] = []; // for display
+  wrecksString: string[] = []; // for display
+  blockedByString: string[] = []; // for display
+  blocksString: string[] = []; // for display
+  movesString: string = ''; // for display
 }

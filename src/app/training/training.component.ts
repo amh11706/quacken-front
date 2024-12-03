@@ -245,22 +245,22 @@ export class TrainingComponent implements OnInit, OnDestroy {
       else if (n.Score >= maxScore * 0.4) n.tier = MoveTiers.Fine;
       else n.tier = MoveTiers.Poor;
 
-      if (n.WreckedBy) n.WreckedBy = n.WreckedBy.map(m => m.split('').map(mapMoves).join(''));
-      if (n.Wrecks) n.Wrecks = n.Wrecks.map(m => m.split('').map(mapMoves).join(''));
-      if (n.BlockedBy) n.BlockedBy = n.BlockedBy.map(m => m.split('').map(mapMoves).join(''));
-      if (n.Blocks) n.Blocks = n.Blocks.map(m => m.split('').map(mapMoves).join(''));
-      n.Moves = m.split('').map(mapMoves).join('');
+      if (n.WreckedBy) n.wreckedByString = n.WreckedBy.map(m => m.map(mapMoves).join(''));
+      if (n.Wrecks) n.wrecksString = n.Wrecks.map(m => m.map(mapMoves).join(''));
+      if (n.BlockedBy) n.blockedByString = n.BlockedBy.map(m => m.map(mapMoves).join(''));
+      if (n.Blocks) n.blocksString = n.Blocks.map(m => m.map(mapMoves).join(''));
+      n.movesString = m.split('').map(mapMoves).join('');
       moves.push(n);
       this.moves[m] = n;
     });
 
     moves.sort((b, a) => a.Score - b.Score);
-    this.bestMoves.score = moves.slice(0, 4).filter(m => m.Score >= maxScore * 0.8).map(m => m.Moves);
+    this.bestMoves.score = moves.slice(0, 4).filter(m => m.Score >= maxScore * 0.8).map(m => m.movesString);
     moves.sort((b, a) => a.PointGain - b.PointGain);
-    this.bestMoves.points = moves.slice(0, 4).map(m => m.Moves);
+    this.bestMoves.points = moves.slice(0, 4).map(m => m.movesString);
     moves.sort((a, b) => a.ShotsTaken - b.ShotsTaken);
-    this.bestMoves.safest = moves.slice(0, 4).map(m => m.Moves);
+    this.bestMoves.safest = moves.slice(0, 4).map(m => m.movesString);
     moves.sort((b, a) => a.ShotsHit - a.ShotsTaken - b.ShotsHit + b.ShotsTaken);
-    this.bestMoves.plusShots = moves.slice(0, 4).map(m => m.Moves);
+    this.bestMoves.plusShots = moves.slice(0, 4).map(m => m.movesString);
   }
 }

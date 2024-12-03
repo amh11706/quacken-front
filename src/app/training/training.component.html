@@ -45,17 +45,17 @@
 
       <div #moveTab id="moveTab">
         <ng-container *ngIf="activeMove; else noActiveMove">
-          <p>Your move {{activeMove.Moves}} is {{activeMove.tier}} based on available options.</p>
+          <p>Your move {{activeMove.movesString}} is {{activeMove.tier}} based on available options.</p>
           <p>Rating: {{activeMove.Score.toFixed(2)}}</p>
           <p>Shot Incline: {{(activeMove.ShotsHit - activeMove.ShotsTaken).toFixed(2)}}</p>
           <p>Point Incline: {{activeMove.PointGain.toFixed(2)}}</p>
           <p>Rocks Eaten: {{activeMove.RocksBumped.toFixed(2)}}</p>
           <p *ngIf="missedShots.length" class="alert">Missed shots ({{missedShots.length}}): {{missedShots.join(', ')}}</p>
           <br>
-          <p *ngIf="activeMove.WreckedBy?.length">Moves that wreck you ({{activeMove.WreckedBy.length}}): {{activeMove.WreckedBy.join(', ')}}</p>
-          <p *ngIf="activeMove.Wrecks?.length">Moves that you wreck ({{activeMove.Wrecks.length}}): {{activeMove.Wrecks.join(', ')}}</p>
-          <p *ngIf="activeMove.BlockedBy?.length">Moves that block you ({{activeMove.BlockedBy.length}}): {{activeMove.BlockedBy.join(', ')}}</p>
-          <p *ngIf="activeMove.Blocks?.length">Moves that you block ({{activeMove.Blocks.length}}): {{activeMove.Blocks.join(', ')}}</p>
+          <p *ngIf="activeMove.WreckedBy?.length">Moves that wreck you ({{activeMove.WreckedBy.length}}): {{activeMove.wreckedByString.join(', ')}}</p>
+          <p *ngIf="activeMove.Wrecks?.length">Moves that you wreck ({{activeMove.Wrecks.length}}): {{activeMove.wrecksString.join(', ')}}</p>
+          <p *ngIf="activeMove.BlockedBy?.length">Moves that block you ({{activeMove.BlockedBy.length}}): {{activeMove.blockedByString.join(', ')}}</p>
+          <p *ngIf="activeMove.Blocks?.length">Moves that you block ({{activeMove.Blocks.length}}): {{activeMove.blocksString.join(', ')}}</p>
           <br>
           <p>Your best moves: {{bestMoves.score.join(', ')}}</p>
           <p>Your safest moves: {{bestMoves.safest.join(', ')}}</p>
