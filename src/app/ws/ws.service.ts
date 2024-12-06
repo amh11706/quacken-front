@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, Subscription, ReplaySubject, firstValueFrom } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Title } from '@angular/platform-browser';
 
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -40,7 +41,11 @@ export class WsService implements OnDestroy {
   sId?: number;
   copy?: number;
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(
+    private router: Router,
+     private http: HttpClient,
+    private title: Title, 
+    ) {
     this.connected$.next(false);
 
     this.subscribe(InCmd.Kick, (reason: string) => {
@@ -60,9 +65,11 @@ export class WsService implements OnDestroy {
     });
     this.subscribe(InCmd.Copy, copy => {
       this.copy = copy;
+      this.setTitle();
     });
     this.subscribe(InCmd.SetUser, user => {
       this.user = Object.assign({}, this.user, user);
+      this.setTitle();
     });
     this.subscribe(InCmd.Reload, () => {
       const lastReload = sessionStorage.getItem('reloadTime');
@@ -81,6 +88,12 @@ export class WsService implements OnDestroy {
 
   ngOnDestroy(): void {
     this.close();
+  }
+
+  setTitle(): void {
+    if (!this.connected) this.title.setTitle('Global Cadesim');
+    else if (this.copy && this.copy > 1)    this.title.setTitle(`${this.user.name}(${this.copy}) - Global Cadesim`);
+    else this.title.setTitle(`${this.user.name} - Global Cadesim`);
   }
 
   connect(token = this.token): void {
@@ -146,6 +159,7 @@ export class WsService implements OnDestroy {
     this.socket.onclose = null;
     this.socket.close(1000, 'Logged out');
     delete this.socket;
+    this.setTitle();
   }
 
   send<T extends SendCmdInputless>(cmd: T): void;

@@ -69,7 +69,7 @@ export class AccountComponent {
     this.pending = true;
     const res = await this.ws.request(OutCmd.ChangeName, { name, password });
     this.pending = false;
-    const message = res === 'Success' ? 'Name changed! This will take effect next time you log in.' : res || 'Error';
+    const message = res === 'Success' ? 'Name changed! This will take full effect next time you log in.' : res || 'Error';
     if (res === 'Success') window.localStorage.removeItem('token');
     this.dialog.open(MessageComponent, { data: message });
   }
