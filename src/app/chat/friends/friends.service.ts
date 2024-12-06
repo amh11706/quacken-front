@@ -38,12 +38,12 @@ export class FriendsService {
     this.ws.subscribe(InCmd.BlockUser, m => {
       this.blocked.push(m);
       this.blockedMap.add(m);
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been blocked.' } });
+      this.refresh();
     });
     this.ws.subscribe(InCmd.UnblockUser, m => {
       this.blocked = this.blocked.filter(n => m !== n);
       this.blockedMap.delete(m);
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 3, from: m, message: 'has been unblocked.' } });
+      this.refresh();
     });
   }
 
@@ -105,20 +105,20 @@ export class FriendsService {
       this.friends.push(u.from);
       this.friendMap.add(u.from);
       this.invites = this.invites.filter(i => i.ty !== 0 || i.f !== u.from);
-      this.ws.dispatchMessage({
-        cmd: InCmd.ChatMessage,
-        data: { ...u, copy: 1, type: 3, message: 'has been added to your friend list.' },
-      });
+      this.refresh();
     });
     this.ws.subscribe(InCmd.FriendRemove, u => {
       this.friends = this.friends.filter(f => f !== u.from);
       this.offline = this.offline.filter(f => f !== u.from);
       this.friendMap.delete(u.from);
-      this.ws.dispatchMessage({
-        cmd: InCmd.ChatMessage,
-        data: { ...u, copy: 1, type: 3, message: 'has been removed from your friend list.' },
-      });
+      this.refresh();
     });
+  }
+
+  refresh(): void {
+    const value = this.lobby$.getValue();
+    this.lobby$.next([]);
+    setTimeout(() => this.lobby$.next(value));
   }
 
   isFriend(name: string): boolean {

@@ -57,10 +57,14 @@ export class NameComponent implements OnChanges {
     this.bot = this.message.copy === 0 || BotRegex.test(this.lastFrom);
     this.emoji = '';
     if (this.message.d) this.emoji = this.findCustomEmoji(this.message.d) as string;
-    this.menuItems = this.getMenuItems(this.lastFrom);
   }
 
-  private getMenuItems(from: string): MenuOption[] {
+  updateMenu(): void {
+    this.menuItems = this.getMenuItems();
+  }
+
+  private getMenuItems(): MenuOption[] {
+    const from = this.message.from;
     if (this.bot) {
       return [{
         label: 'It\'s a bot',
@@ -83,7 +87,9 @@ export class NameComponent implements OnChanges {
     return [
       { label: 'Profile', action: () => this.openProfile() },
       ...this.chat.nameCommands.map(cmd => ({ label: cmd.title, action: () => this.sendCmd(cmd) })),
-      { label: 'Add Friend', action: () => this.add() },
+      this.fs.isFriend(from)
+        ? { label: 'Remove Friend', action: () => this.remove() }
+        : { label: 'Add Friend', action: () => this.add() },
       this.fs.isBlocked(from)
         ? { label: 'Unblock', action: () => this.unblock() }
         : { label: 'Block', action: () => this.block() },
@@ -117,6 +123,10 @@ export class NameComponent implements OnChanges {
 
   add(): void {
     if (this.message.from) this.ws.send(OutCmd.FriendInvite, this.message.from);
+  }
+
+  remove(): void {
+    if (this.message.from) this.ws.send(OutCmd.FriendRemove, this.message.from);
   }
 
   block(): void {

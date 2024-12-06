@@ -1,4 +1,5 @@
-<span [matMenuTriggerFor]="nameMenu">
+<span [matMenuTriggerFor]="nameMenu"
+      (menuOpened)="updateMenu()">
   <span [class.friend]="friend"
         [class.bot]="bot"
         [class.you]="message.from === ws.user.name"
