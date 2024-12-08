@@ -414,7 +414,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   }
 
   autoMoveBlock(): void {
-    if (this.blockedPosition === 4) return;
+    if (!this.input.moves[this.blockedPosition]) return;
     for (let i = 3; i >= 0; i--) {
       if (!this.input.moves[i]) {
         this.blockedPosition = i;
