@@ -4,7 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { getManeuverIcon } from '../maneuver-source/maneuver-source.component';
-import { Maneuver } from '../../lobby/quacken/boats/types';
+import { Maneuver, MoveMessage } from '../../lobby/quacken/boats/types';
 
 export interface Tokens {
   moves: [number, number, number],
@@ -18,7 +18,15 @@ export interface Tokens {
   styleUrls: ['./move-input.component.scss'],
 })
 export class MoveInputComponent implements OnInit, OnDestroy {
-  @Input() input = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
+  private _input: MoveMessage = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
+  @Input() set input(v: MoveMessage) {
+    this._input = v;
+    this.selected = 0;
+    this.autoMoveBlock();
+  }
+  get input(): MoveMessage {
+    return this._input;
+  }
   @Input() serverInput = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
   @Output() inputChange = new EventEmitter<{ moves: number[], shots: number[] }>();
   @Input() reset?: Subject<void>;
@@ -403,6 +411,16 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       }
     }
     this.unusedTokensChange.emit(this.unusedTokens);
+  }
+
+  autoMoveBlock(): void {
+    if (this.blockedPosition === 4) return;
+    for (let i = 3; i >= 0; i--) {
+      if (!this.input.moves[i]) {
+        this.blockedPosition = i;
+        break;
+      }
+    }
   }
 
   checkMaxMoves(): void {
