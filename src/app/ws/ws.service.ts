@@ -12,7 +12,7 @@ import { InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes } from '.
 import { SendCmdInputless, SendCmdInputs } from './ws-send-types';
 import { InMessage, SubscribeData } from './ws-subscribe-types';
 
-const ClientVersion = 77;
+const ClientVersion = 79;
 
 export interface TokenUser {
   id: number;

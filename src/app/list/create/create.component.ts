@@ -63,17 +63,19 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  createLobby(): void {
+  async createLobby(): Promise<void> {
+    this.created = true;
     this.createGroup.createType = this.settings.createType ?? this.createGroup.createType;
     const group = {} as ServerSettingMap;
+    // ensure createGroup is populated
+    await this.changeType(false);
     Object.entries(this.createGroup).forEach(([key, value]) => {
       if (value) group[key as ServerSettingGroup[SettingGroup]] = value.toDBSetting();
     });
     this.ws.send(OutCmd.LobbyCreate, group);
-    this.created = true;
   }
 
-  async changeType(): Promise<void> {
-    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType?.value || 0] as SettingGroup, true);
+  async changeType(update = true): Promise<void> {
+    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType?.value || 0] as SettingGroup, update);
   }
 }

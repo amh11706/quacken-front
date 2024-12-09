@@ -1,11 +1,13 @@
 <mat-dialog-content>
   <ng-container *ngIf="ws.user?.id">
     <h2 id="create"><q-setting name="createType"
+                 [disabled]="created"
                  (valueChange)="changeType()"></q-setting>
     </h2>
     <p>{{idDescriptions[settings.createType.value || 0]}}</p>
     <div id="lsettings">
       <q-setting *ngFor="let setting of typeSettings[settings.createType?.value || 0]"
+                 [disabled]="created"
                  [name]="setting"></q-setting>
     </div>
 
