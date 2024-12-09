@@ -1,6 +1,6 @@
 import { Leader, RankLeader, WinLoss, UserRank, Stat, Match } from '../esc-menu/profile/types';
 import { ParsedTurn } from '../lobby/cadegoose/types';
-import { BoatSync } from '../lobby/quacken/boats/types';
+import { BoatSync, BoatTick } from '../lobby/quacken/boats/types';
 import { DBTile } from '../map-editor/types';
 import { AiData, MatchAiRequest, MoveNode, Points, ScoreResponse } from '../replay/cadegoose/types';
 import { MapOption } from '../settings/map-list/map-card/types';
@@ -34,7 +34,7 @@ type OutCmdInputs = {
   [OutCmd.Bomb]: number;
   [OutCmd.Shots]: number[];
 
-  [OutCmd.MatchTraining]: { sync: BoatSync[], map: string, myBoat: number, };
+  [OutCmd.MatchTraining]: { sync: BoatSync[], map: string, myBoat: number, tick?: BoatTick, };
   [OutCmd.MatchData]: number;
   [OutCmd.MatchScore]: { turns: ParsedTurn[], map: string };
   [OutCmd.MatchAi]: MatchAiRequest;

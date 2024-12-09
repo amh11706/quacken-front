@@ -17,7 +17,7 @@ import { SettingGroup } from '../settings/setting/settings';
 import { InMessage } from '../ws/ws-subscribe-types';
 
 function mapMoves(m: number | string): string {
-  return ['_', 'L', 'F', 'R'][+m] || 'S';
+  return ['_', 'L', 'F', 'R', , , , , '<', , '>'][+m] || 'S';
 }
 
 const shotNames = [
@@ -119,6 +119,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
       tick.t[0][0] = 4;
       tick.t[1][0] = 4;
       tick.t[2][0] = 4;
+      tick.attr = { 1: 100 }
       this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.BoatTick, data: tick });
     }
     const myMoves = this.activeTurn?.moves[this.myBoat.id];
@@ -181,6 +182,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
       sync: turn.sync.sync,
       map: this.map,
       myBoat: this.myBoat.id,
+      tick: this.myBoat.moves.some(m => m > 3) && turn.ticks[this.myBoat.id] || undefined,
     });
     if (!response) return;
 
@@ -191,7 +193,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     };
     this.parseMoves();
 
-    this.activeMove = this.moves[this.myBoat.moves.join('')];
+    this.activeMove = this.moves[this.myBoat.moves.join(',')];
     this.updateShotsMissed();
     this.tabIndex = 1;
   }
@@ -249,7 +251,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
       if (n.Wrecks) n.wrecksString = n.Wrecks.map(m => m.map(mapMoves).join(''));
       if (n.BlockedBy) n.blockedByString = n.BlockedBy.map(m => m.map(mapMoves).join(''));
       if (n.Blocks) n.blocksString = n.Blocks.map(m => m.map(mapMoves).join(''));
-      n.movesString = m.split('').map(mapMoves).join('');
+      n.movesString = m.split(',').map(mapMoves).join('');
       moves.push(n);
       this.moves[m] = n;
     });
