@@ -30,7 +30,7 @@ export class MainMenuService implements OnDestroy {
 
   links = links;
   teamPlayers$ = new BehaviorSubject<TeamMessage[][]>([]);
-  status = new BehaviorSubject<LobbyStatus>(LobbyStatus.PreMatch);
+  status = new BehaviorSubject<LobbyStatus>(LobbyStatus.Waiting);
   teamRanks: number[] = [];
   myBoat = new Boat('');
   myTeam = 99;

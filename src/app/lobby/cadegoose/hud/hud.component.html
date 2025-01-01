@@ -43,7 +43,7 @@
                    [updateWantToken]="updateWantMove$"
                    [wantMove]="lastTick.wt"
                    (wantMoveChange)="setWantMove($event)"></q-move-source>
-    <button *ngIf="isUnlimitedTime"
+    <button *ngIf="(lobbySettings.turnTime.stream | async) === 65"
             mat-icon-button
             [color]="'accent'"
             [disabled]="!myBoat.isMe"
