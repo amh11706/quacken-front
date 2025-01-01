@@ -78,7 +78,7 @@ export class GuBoat {
 
   rebuildHeader(): void {
     for (const f of this.flags) {
-      const team = this.boat.isMe ? 98 : f.t;
+      const team = f.t === GuBoat.myTeam ? 98 : f.t;
       f.offset = 220 - ((FlagColorOffsets[team] ?? 9) + f.p) * 10 + 'px';
     }
   }
