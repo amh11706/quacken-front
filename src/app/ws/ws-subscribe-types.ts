@@ -18,6 +18,7 @@ type InternalData = {
   [Internal.Time]: string;
   [Internal.MyMoves]: MoveMessage;
 
+  [Internal.ResetMoves]: undefined;
   [Internal.OpenAdvanced]: undefined;
 }
 
