@@ -7,7 +7,7 @@ import { WsService } from '../../../ws/ws.service';
 import { Boat } from './boat';
 import { boatToSync, syncToBoat } from './convert';
 import { weapons } from '../hud/hud.component';
-import { BoatRender } from '../../cadegoose/boat-render';
+import { BoatRender3d } from '../../cadegoose/boat-render';
 import { Clutter, Turn, BoatSync, Sync, MoveMessageIncoming } from './types';
 import { CadeLobby } from '../../cadegoose/types';
 
@@ -117,7 +117,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, t => this.handleTurn(t)));
     this.subs.add(this.ws.subscribe(InCmd.Sync, this.syncBoats));
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, b => this.myBoat = b));
   }
 
   ngOnDestroy(): void {
@@ -144,7 +143,6 @@ export class BoatsComponent implements OnInit, OnDestroy {
   protected deleteBoat(id: number): void {
     if (id === this.myBoat.id) {
       const pos = this.myBoat.pos;
-      this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: new Boat('').setPos(pos.x, pos.y) });
       this.myBoat.isMe = false;
     }
     if (this.turn) return;
@@ -160,13 +158,13 @@ export class BoatsComponent implements OnInit, OnDestroy {
     this.blurred = document.hidden;
 
     if (this.blurred) {
-      if (!this.turn || BoatRender.paused) return;
+      if (!this.turn || BoatRender3d.paused) return;
       clearTimeout(this.animateTimeout);
       clearTimeout(this.animateTimeout2);
       clearTimeout(this.animateTimeout3);
       delete this.animateTimeout;
       TWEEN.update(Infinity);
-      BoatRender.tweens.update(Infinity);
+      BoatRender3d.tweens.update(Infinity);
       if (this.step >= 0 || this.turn) {
         for (const boat of this.boats) boat.resetMoves();
       }
@@ -182,7 +180,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
       // console.log('got turn while in turn', this.turn);
       return;
     }
-    BoatRender.tweens.update(Infinity);
+    BoatRender3d.tweens.update(Infinity);
     clearTimeout(this.animateTimeout);
     clearTimeout(this.animateTimeout2);
     clearTimeout(this.animateTimeout3);
@@ -224,11 +222,10 @@ export class BoatsComponent implements OnInit, OnDestroy {
       if (boat.rotateTransition === 0) boat.rotateTransition = 1;
       boat.setTreasure(u.t)
         .setPos(u.x, u.y)
-        .setTransition(u.tf, u.tm)
-        .draw();
+        .setTransition(u.tf, u.tm);
 
       if (u.s) {
-        boat.face += boat.spinDeg * u.s;
+        boat.face += 90 * u.s;
         if (u.s > -2) {
           boat.rotateTransition = 4;
           this.animateTimeout3 = window.setTimeout(() => {
@@ -299,19 +296,16 @@ export class BoatsComponent implements OnInit, OnDestroy {
 
       if (!boat.isMe || !this.ws.connected) continue;
       if (boat === this.myBoat) {
-        if (boat.oId !== this.myBoat.oId) this.myBoat.moves = [0, 0, 0, 0];
         if (this.myBoat.damage >= this.myBoat.maxDamage) {
           this.myBoat.damage = 0;
           setTimeout(() => {
             // console.log('sunk boat refresh');
-            this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
             this.map?.dispatchEvent(new Event('dblclick'));
           });
         }
         continue;
       }
       setTimeout(() => {
-        if (boat) this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: boat });
         // console.log('new boat refresh');
         this.map?.dispatchEvent(new Event('dblclick'));
       });
@@ -319,13 +313,12 @@ export class BoatsComponent implements OnInit, OnDestroy {
     }
     this._boats = newBoats;
     this.boats = Object.values(this._boats);
-    if (!this.ws.connected) this.ws.dispatchMessage({ cmd: Internal.Boats, data: this.boats });
+    // if (!this.ws.connected) this.ws.dispatchMessage({ cmd: Internal.Boats, data: this.boats });
     this.sortBoats();
 
     const sId = this.ws.sId || 0;
     if (this.myBoat.isMe && !this._boats[sId] && !this._boats[-sId]) {
       this.myBoat = new Boat('');
-      this.ws.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
     }
   }
 

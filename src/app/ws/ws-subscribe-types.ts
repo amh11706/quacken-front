@@ -14,15 +14,11 @@ export type InMessage = {
 
 type InternalData = {
   [Internal.Lobby]: Lobby;
-  [Internal.BoatClicked]: Boat;
-  [Internal.MyBoat]: Boat;
-  [Internal.Boats]: Boat[];
   [Internal.Canvas]: HTMLCanvasElement;
   [Internal.SetMap]: string;
   [Internal.Time]: string;
   [Internal.MyMoves]: MoveMessage;
 
-  [Internal.CenterOnBoat]: undefined;
   [Internal.ResetBoats]: undefined;
   [Internal.ResetMoves]: undefined;
   [Internal.OpenAdvanced]: undefined;
@@ -75,7 +71,7 @@ export type SubscribeData = {
 
   [InCmd.OfferBlind]: undefined;
   [InCmd.Over]: undefined;
-  [InCmd.Ready]: { id: number, ready: boolean } | number;
+  [InCmd.Ready]: { id: number, ready: boolean };
   [InCmd.Bidding]: number;
   [InCmd.Take]: number;
   [InCmd.PlayTo]: number;

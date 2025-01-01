@@ -36,16 +36,15 @@ export class WsService implements OnDestroy {
   connected = false;
   connected$ = new ReplaySubject<boolean>(1);
   outMessages$ = new Subject<{ cmd: OutCmd, data: any, id?: number }>();
-  fakeWs?: WsService;
 
   sId?: number;
   copy?: number;
 
   constructor(
     private router: Router,
-     private http: HttpClient,
-    private title: Title, 
-    ) {
+    private http: HttpClient,
+    private title: Title,
+  ) {
     this.connected$.next(false);
 
     this.subscribe(InCmd.Kick, (reason: string) => {
@@ -92,7 +91,7 @@ export class WsService implements OnDestroy {
 
   setTitle(): void {
     if (!this.connected) this.title.setTitle('Global Cadesim');
-    else if (this.copy && this.copy > 1)    this.title.setTitle(`${this.user.name}(${this.copy}) - Global Cadesim`);
+    else if (this.copy && this.copy > 1) this.title.setTitle(`${this.user.name}(${this.copy}) - Global Cadesim`);
     else this.title.setTitle(`${this.user.name} - Global Cadesim`);
   }
 
@@ -135,7 +134,7 @@ export class WsService implements OnDestroy {
     return newSub.subscribe(next, error, complete);
   }
 
-  async dispatchMessage(message: InMessage & {httpid?: string}): Promise<void> {
+  async dispatchMessage(message: InMessage & { httpid?: string }): Promise<void> {
     if (message.httpid) {
       message = await firstValueFrom(this.http.get<InMessage>(environment.api + '/httpmsg/' + message.httpid));
     }

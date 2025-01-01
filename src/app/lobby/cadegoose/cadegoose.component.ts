@@ -19,6 +19,7 @@ import { Turn } from '../quacken/boats/types';
 import { SettingMap } from '../../settings/types';
 import { SettingGroup } from '../../settings/setting/settings';
 import { MainMenuService } from './main-menu/main-menu.service';
+import { BoatsService } from '../quacken/boats/boats.service';
 
 const ownerSettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',
@@ -81,6 +82,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     private kbs: KeyBindingService,
     es: EscMenuService,
     private injector: Injector,
+    private boats: BoatsService,
   ) {
     super(ws, ss, fs, es);
 
@@ -94,7 +96,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     void this.es.setLobby(this.menuComponent, this.injector);
     void this.es.openMenu();
 
-    this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
+    this.sub.add(this.boats.myBoat$.subscribe((b: Boat) => {
       this.myBoat = b;
       this.advancedMapOpen = false;
     }));

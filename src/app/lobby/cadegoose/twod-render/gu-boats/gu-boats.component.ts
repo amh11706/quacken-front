@@ -1,16 +1,14 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
-import { Tween } from '@tweenjs/tween.js';
-import { WsService } from '../../../../ws/ws.service';
 import { Boat } from '../../../../lobby/quacken/boats/boat';
-import { InCmd, Internal } from '../../../../ws/ws-messages';
 import { Sounds, SoundService } from '../../../../sound.service';
 import { ImageService } from '../../../../image.service';
 import { GuBoat } from './gu-boat';
-import { BoatService } from '../../boat.service';
 import { TeamColorsCss } from '../../cade-entry-status/cade-entry-status.component';
 import { MovableClutter } from './clutter';
 import { Clutter, Turn } from '../../../quacken/boats/types';
-import { BoatRender } from '../../boat-render';
+import { BoatsService } from '../../../quacken/boats/boats.service';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { TurnService } from '../../../quacken/boats/turn.service';
 
 export const FlagColorOffsets: Readonly<Record<number, number>> = {
   0: 3,
@@ -33,31 +31,26 @@ const CannonSounds: Record<number, Sounds> = {
   templateUrl: './gu-boats.component.html',
   styleUrls: ['./gu-boats.component.scss'],
 })
-export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
+export class GuBoatsComponent implements OnInit, OnDestroy {
   @Input() showIsland = false;
   protected _speed = 15;
   @Input() set speed(v: number) {
     this._speed = v;
     this.el.nativeElement.style.setProperty('--speed', (10 / v));
   }
-
   get speed(): number {
     return this._speed;
   }
 
   @Input() fishBoats = 0;
+  private _hoveredTeam = -1;
   @Input() set hoveredTeam(v: number) {
     this._hoveredTeam = v;
-    for (const boat of this.boats) {
-      boat.render?.showInfluence(boat.team === v);
-    }
   }
-
   get hoveredTeam(): number {
     return this._hoveredTeam;
   }
 
-  private _hoveredTeam = -1;
   @Input() map?: HTMLElement;
   @Input() checkSZ = (pos: { x: number, y: number }): boolean => {
     if (!this.showIsland) return false;
@@ -80,33 +73,37 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
     }
   };
 
+  private subs = new Subscription();
+  private boatRenders = new Map<number, GuBoat>();
+  boatRenders$ = new BehaviorSubject<GuBoat[]>([]);
+  myBoat = new Boat('');
+
   constructor(
-    ws: WsService, sound: SoundService,
+    private sound: SoundService,
     private image: ImageService,
     private el: ElementRef,
-  ) {
-    super(ws, sound);
-    this.blockRender = false;
-  }
+    private boats: BoatsService,
+    private turn: TurnService,
+  ) { }
 
   ngOnInit(): void {
-    // no super to prevent double init thanks to extended class not being a component
-    this.subs.add(this.ws.subscribe(InCmd.BoatTicks, ticks => {
-      for (const boat of this.boats) {
-        const tick = ticks[boat.id];
-        if (!tick) continue;
-        boat.damage = tick.d;
-        boat.bilge = tick.b;
-      }
+    this.subs.add(this.boats.myBoat$.subscribe(b => {
+      if (!this.boatRenders.has(b.id)) this.boatRenders.set(b.id, new GuBoat(b));
+      GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
+      this.boatRenders.forEach(r => {
+        void r.updateTeam();
+      });
+      this.myBoat = b;
     }));
 
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => {
-      if (!b.render) b.render = new GuBoat(b, undefined as any);
-      GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
-      for (const boat of this.boats) {
-        void this.render(boat)?.updateTeam?.(boat);
-      }
+    this.subs.add(this.boats.boats$.subscribe(b => this.checkBoats(b)));
+    this.subs.add(this.boats.clutter$.subscribe(c => this.handleUpdate(c)));
+    this.subs.add(this.turn.turn$.subscribe(t => {
+      this.clutter = [];
+      this.setHeaderFlags(t.flags);
     }));
+    this.subs.add(this.turn.clutterStep$.subscribe(c => this.handleUpdate(c)));
+
     void this.sound.load(Sounds.CannonFireBig);
     void this.sound.load(Sounds.CannonFireMedium);
     void this.sound.load(Sounds.CannonFireSmall);
@@ -140,20 +137,15 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    super.ngOnDestroy();
+    this.subs.unsubscribe();
     GuBoat.myTeam = 99;
   }
 
   clickBoat(boat: Boat): void {
-    this.ws.dispatchMessage({ cmd: Internal.BoatClicked, data: boat });
+    this.boats.clickBoat(boat);
   }
 
-  render(boat: Boat): GuBoat {
-    return (boat.render || { orientation: {} }) as GuBoat;
-  }
-
-  protected handleUpdate(updates: Clutter[], step: number): Promise<void> {
-    if (updates.length === 0) return Promise.resolve();
+  protected handleUpdate(updates: Clutter[]) {
     const startTime = new Date().valueOf();
     for (const u of updates) {
       if (u.u && this.setTile) {
@@ -181,43 +173,50 @@ export class GuBoatsComponent extends BoatService implements OnInit, OnDestroy {
         if (u.dbl) void this.sound.play(Sounds.CannonSplash2, 10000 / this.speed);
       }
     }
-    if (step % 2 !== 1) return Promise.resolve();
-    return new Promise(resolve => {
-      const start = new Date().valueOf();
-      new Tween({}, BoatRender.tweens).to({}, 7000 / this.speed).onComplete(() => resolve()).start(start);
-    });
   }
 
   protected setHeaderFlags(flags: Turn['flags']): void {
-    for (const boat of this.boats) if (boat.render) boat.render.flags = [];
+    this.boatRenders.forEach(r => r.flags = []);
     for (const f of flags) {
       if (f.cs) {
         for (const id of f.cs) {
-          const team = f.t === this.myBoat.team ? 98 : f.t;
-          this._boats[id]?.render?.flags.push({
+          const team = f.t === GuBoat.myTeam ? 98 : f.t;
+          this.boatRenders.get(id)?.flags.push({
             p: f.p, t: f.t, offset: 220 - ((FlagColorOffsets[team] ?? 9) + f.p) * 10 + 'px',
-          } as any);
+          });
         }
       }
     }
-    for (const boat of this.boats) {
-      if (!boat.render) continue;
-      boat.render.flags.sort((a, b) => {
+    this.boatRenders.forEach(r => {
+      r.flags.sort((a, b) => {
         if (a.p > b.p) return -1;
         if (a.p < b.p) return 1;
         return b.t - a.t;
       });
-    }
+    });
   }
 
-  protected checkNewShips(): never[] {
-    for (const boat of this.boats) {
-      if (boat.render) continue;
-      let newBoat = this._boats[boat.id];
-      if (!newBoat || (newBoat.render && boat.render !== newBoat.render)) newBoat = this._boats[-boat.id];
-      if (!newBoat || newBoat.render) continue;
-      boat.render = new GuBoat(boat, undefined as any);
+  trackBoat(_: number, boat: GuBoat): number {
+    return boat.boat.id;
+  }
+
+  protected checkBoats(boats: Iterable<Boat>): void {
+    const touchedBoats = new Set<number>();
+    for (const b of boats) {
+      touchedBoats.add(b.id);
+      if (!this.boatRenders.has(b.id)) this.boatRenders.set(b.id, new GuBoat(b));
+      const r = this.boatRenders.get(b.id);
+      if (!r) continue;
+      r.boat = b;
     }
-    return [];
+    this.boatRenders.forEach((r, id) => {
+      if (!touchedBoats.has(id)) {
+        this.boatRenders.delete(id);
+        return;
+      }
+      r.update(false);
+    });
+    this.boatRenders$.next(Array.from(this.boatRenders.values()));
+    this.turn.setBoats(this.boatRenders$.value);
   }
 }

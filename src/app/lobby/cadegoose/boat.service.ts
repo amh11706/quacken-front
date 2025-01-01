@@ -13,7 +13,7 @@ import { OutCmd, Internal } from '../../ws/ws-messages';
 import { Sounds, SoundService } from '../../sound.service';
 import { BoatsComponent } from '../quacken/boats/boats.component';
 import { Cannonball } from './clutter/cannonball';
-import { BoatRender } from './boat-render';
+import { BoatRender3d } from './boat-render';
 import { JobQueue } from './job-queue';
 import { ObstacleConfig } from './threed-render/threed-render.component';
 import { Team, BoatSync, Turn, BoatStatus, Clutter } from '../quacken/boats/types';
@@ -53,7 +53,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
   constructor(ws: WsService, protected sound: SoundService) {
     super(ws);
     super.ngOnInit();
-    BoatRender.updateCam = (br) => this.updateCam(br);
+    BoatRender3d.updateCam = (br) => this.updateCam(br);
 
     // this.subs.add(this.ws.subscribe(Internal.Boats, (m: Lobby) => {
     //   this.flagData = m.flags || [];
@@ -213,7 +213,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
       this.step = -1;
       await new Promise<void>(resolve => {
         const start = new Date().valueOf();
-        new Tween({}, BoatRender.tweens).to({}, 30000 / this.speed).onComplete(() => resolve()).start(start);
+        new Tween({}, BoatRender3d.tweens).to({}, 30000 / this.speed).onComplete(() => resolve()).start(start);
       });
     });
     void this.worker.addJob(() => {
@@ -277,17 +277,17 @@ export class BoatService extends BoatsComponent implements OnDestroy {
     return Promise.resolve();
   }
 
-  private updateCam(br: BoatRender) {
+  private updateCam(br: BoatRender3d) {
     if (!this.camera || !this.controls) return;
-    if (br.obj.position.x !== BoatRender.myLastPos.x) {
-      this.camera.position.x += br.obj.position.x - BoatRender.myLastPos.x;
-      this.controls.target.x += br.obj.position.x - BoatRender.myLastPos.x;
-      BoatRender.myLastPos.x = br.obj.position.x;
+    if (br.obj.position.x !== BoatRender3d.myLastPos.x) {
+      this.camera.position.x += br.obj.position.x - BoatRender3d.myLastPos.x;
+      this.controls.target.x += br.obj.position.x - BoatRender3d.myLastPos.x;
+      BoatRender3d.myLastPos.x = br.obj.position.x;
     }
-    if (br.obj.position.z !== BoatRender.myLastPos.z) {
-      this.camera.position.z += br.obj.position.z - BoatRender.myLastPos.z;
-      this.controls.target.z += br.obj.position.z - BoatRender.myLastPos.z;
-      BoatRender.myLastPos.z = br.obj.position.z;
+    if (br.obj.position.z !== BoatRender3d.myLastPos.z) {
+      this.camera.position.z += br.obj.position.z - BoatRender3d.myLastPos.z;
+      this.controls.target.z += br.obj.position.z - BoatRender3d.myLastPos.z;
+      BoatRender3d.myLastPos.z = br.obj.position.z;
     }
   }
 
@@ -364,7 +364,7 @@ export class BoatService extends BoatsComponent implements OnDestroy {
         let newBoat = this._boats[boat.id];
         if (newBoat?.render && boat.render !== newBoat.render) newBoat = this._boats[-boat.id];
         if (!this.camera || !newBoat || newBoat.render) return;
-        boat.render = new BoatRender(boat, gltf).scaleHeader(this.camera);
+        boat.render = new BoatRender3d(boat, gltf).scaleHeader(this.camera);
         this.scene?.add(boat.render.obj);
       }));
     }

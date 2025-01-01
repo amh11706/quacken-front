@@ -1,6 +1,5 @@
 <div #background>
   <q-twod-render #renderer
-                 *ngIf="graphicSettings.renderMode?.value === 0"
                  [hoveredTeam]="hoveredTeam"
                  [speed]="graphicSettings.speed.value"
                  [fishBoats]="lobbySettings.fishBoats.value"
@@ -13,14 +12,13 @@
                  [editor]="editor"
                  [lobby]="lobby"
                  [showIsland]="false"
-                 [graphicSettings]="graphicSettings"
-                 [myBoat]="myBoat"></q-twod-render>
-  <q-threed-render #renderer
+                 [graphicSettings]="graphicSettings"></q-twod-render>
+  <!-- <q-threed-render #renderer
                    *ngIf="graphicSettings.renderMode?.value === 1"
                    [hoveredTeam]="hoveredTeam"
                    [mapHeight]="mapHeight"
                    [mapWidth]="mapWidth"
-                   [graphicSettings]="graphicSettings"></q-threed-render>
+                   [graphicSettings]="graphicSettings"></q-threed-render> -->
 </div>
 <q-obstacles *ngIf="advancedMapOpen"
              [map]="editor"

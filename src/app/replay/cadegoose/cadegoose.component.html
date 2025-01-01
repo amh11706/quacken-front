@@ -42,9 +42,7 @@
             [color]="boat === activeBoat ? 'primary' : undefined"
             class="boat"
             [style.borderColor]="teamColors[boat.team || 0]"
-            (click)="clickBoat(boat)"
-            (mouseover)="hoverBoat(boat)"
-            (mouseleave)="hoverBoat(boat, false)">
+            (click)="clickBoat(boat)">
       {{boat.title}}
       <ng-container *ngIf="boatTicks[boat.id]">
         <br>

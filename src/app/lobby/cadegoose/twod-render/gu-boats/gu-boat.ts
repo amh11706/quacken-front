@@ -1,13 +1,13 @@
-import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as TWEEN from '@tweenjs/tween.js';
 
 import { Boat } from '../../../../lobby/quacken/boats/boat';
 import { BoatTypes } from '../../../../lobby/quacken/boats/boat-types';
 import { SpriteData, Orientation } from '../sprite';
 import { Boats } from './objects';
-import { BoatRender, TeamColors, moveEase } from '../../boat-render';
+import { BoatRender3d, TeamColors, moveEase } from '../../boat-render';
 import { Team } from '../../../quacken/boats/types';
 import { FlagColorOffsets } from './gu-boats.component';
+import { JobQueue } from '../../job-queue';
 
 // pixel coordinates relative to top left of canvas
 export class Point {
@@ -39,32 +39,41 @@ export class Position {
   }
 }
 
-export class GuBoat extends BoatRender {
+export class GuBoat {
   static widthOffset = 19;
   static myTeam: Team = 99;
   static teamImages = new Map<string, Promise<string>>();
-  coords?: Point;
+  coords: Point;
+  pos: { x: number, y: number };
+  protected rotateDeg: number;
   private spriteData?: SpriteData;
   orientation?: Orientation;
   img?: string;
   imgPosition?: string;
+  opacity = 1;
   flags: { p: number, t: Team, offset: string }[] = [];
   static hovering = 0;
 
-  constructor(boat: Boat, gltf: GLTF) {
-    super(boat, gltf);
-  }
+  private worker = new JobQueue();
 
-  init(boat: Boat): void {
+  constructor(public boat: Boat) {
+    this.pos = { ...boat.pos };
+    this.rotateDeg = boat.face;
     this.coords = new Point().fromPosition(boat.pos);
     this.spriteData = Boats[boat.type as BoatTypes]?.sail;
     if (!this.spriteData) return;
     this.updateImage();
-    void this.updateTeam(boat);
+    void this.updateTeam();
   }
 
-  showInfluence(): void {
-    // .
+  update(animate = true, trigger?: () => void): Promise<void> {
+    if (!animate) this.worker.clearJobs();
+    const boat = { ...this.boat } as Boat;
+    const job = this.worker.addJob(() => {
+      trigger?.();
+      return this._update(animate, boat);
+    });
+    return job;
   }
 
   rebuildHeader(): void {
@@ -74,13 +83,9 @@ export class GuBoat extends BoatRender {
     }
   }
 
-  updateMoves(): BoatRender {
-    return this;
-  }
-
   protected _update(animate: boolean, boat: Boat): Promise<any> {
     const startTime = animate ? new Date().valueOf() : 0;
-    BoatRender.tweenProgress = startTime;
+    BoatRender3d.tweenProgress = startTime;
     const promises: Promise<any>[] = [];
 
     if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y ||
@@ -89,19 +94,20 @@ export class GuBoat extends BoatRender {
       promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
     }
 
-    if (!startTime || boat.face !== this.rotateDeg || boat.imageOpacity === 0) {
-      promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, boat.imageOpacity));
+    const sinking = boat.moveLock === 101;
+    if (!startTime || boat.face !== this.rotateDeg || sinking) {
+      promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, sinking ? 0 : 1));
     }
 
     if (!startTime) {
-      void this.updateTeam(boat);
+      void this.updateTeam();
     }
 
     if (!promises.length && startTime) {
       // add an empty tween promise to let pause and play work
       promises.push(new Promise(resolve => {
-        new TWEEN.Tween({}, BoatRender.tweens)
-          .to({}, 5000 / BoatRender.speed)
+        new TWEEN.Tween({}, BoatRender3d.tweens)
+          .to({}, 5000 / BoatRender3d.speed)
           .onComplete(resolve)
           .start(startTime);
       }));
@@ -144,17 +150,14 @@ export class GuBoat extends BoatRender {
     return prom;
   }
 
-  public async updateTeam(boat: Boat): Promise<void> {
+  public async updateTeam(): Promise<void> {
     if (!this.spriteData) return;
     await new Promise(resolve => setTimeout(resolve));
-    let team = boat.team === GuBoat.myTeam ? 99 : boat.team ?? 99;
-    if (boat.isMe) team = 4;
+    let team = this.boat.team === GuBoat.myTeam ? 99 : this.boat.team ?? 99;
+    if (this.boat.isMe) team = 4;
     this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sail') + ')';
-    if (Boats[boat.type as BoatTypes]?.sink) void this.getTeamImage(team, this.spriteData.name + '/sink');
-  }
-
-  scaleHeader(): BoatRender {
-    return this;
+    if (Boats[this.boat.type as BoatTypes]?.sink) void this.getTeamImage(team, this.spriteData.name + '/sink');
+    this.rebuildHeader();
   }
 
   protected updateBoatPos(
@@ -167,19 +170,19 @@ export class GuBoat extends BoatRender {
       new Promise<void | { x: number, y: number }>(resolve => {
         const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
-          new TWEEN.Tween(this.pos, BoatRender.tweens)
-            .to({ x: x + offsetX }, 5000 / BoatRender.speed)
-            .delay(3500 / BoatRender.speed)
-            .repeatDelay(500 / BoatRender.speed)
+          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
+            .to({ x: x + offsetX }, 5000 / BoatRender3d.speed)
+            .delay(3500 / BoatRender3d.speed)
+            .repeatDelay(500 / BoatRender3d.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
             .onComplete(resolve);
         } else if (startTime && transitions[0]) {
-          new TWEEN.Tween(this.pos, BoatRender.tweens)
+          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
             .easing(moveEase[transitions[0]])
-            .to({ x }, 10000 / BoatRender.speed)
-            .delay(3000 / BoatRender.speed)
+            .to({ x }, 10000 / BoatRender3d.speed)
+            .delay(3000 / BoatRender3d.speed)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
             .onComplete(resolve);
@@ -194,19 +197,19 @@ export class GuBoat extends BoatRender {
       new Promise<void | { x: number, y: number }>(resolve => {
         const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
-          new TWEEN.Tween(this.pos, BoatRender.tweens)
-            .to({ y: y + offsetY }, 5000 / BoatRender.speed)
-            .delay(3500 / BoatRender.speed)
-            .repeatDelay(500 / BoatRender.speed)
+          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
+            .to({ y: y + offsetY }, 5000 / BoatRender3d.speed)
+            .delay(3500 / BoatRender3d.speed)
+            .repeatDelay(500 / BoatRender3d.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
-          new TWEEN.Tween(this.pos, BoatRender.tweens)
+          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
             .easing(moveEase[transitions[1]])
-            .to({ y }, 10000 / BoatRender.speed)
-            .delay(3000 / BoatRender.speed)
+            .to({ y }, 10000 / BoatRender3d.speed)
+            .delay(3000 / BoatRender3d.speed)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.pos))
             .onComplete(resolve);
@@ -236,16 +239,16 @@ export class GuBoat extends BoatRender {
     if (startTime && (transition || !opacity)) {
       promises.push(new Promise(resolve => {
         if (transition === 1 || transition === 4) {
-          new TWEEN.Tween(this, BoatRender.tweens)
+          new TWEEN.Tween(this, BoatRender3d.tweens)
             .easing(TWEEN.Easing.Linear.None)
-            .to({ rotateDeg: face }, 8000 / BoatRender.speed)
-            .delay(3000 / BoatRender.speed)
+            .to({ rotateDeg: face }, 8000 / BoatRender3d.speed)
+            .delay(3000 / BoatRender3d.speed)
             .start(startTime)
             .onUpdate(() => this.updateImage())
             .onComplete(resolve);
         } else {
           this.updateImage();
-          setTimeout(resolve, 10000 / BoatRender.speed);
+          setTimeout(resolve, 10000 / BoatRender3d.speed);
         }
       }).then(() => this.rotateDeg = face));
     }
@@ -253,8 +256,8 @@ export class GuBoat extends BoatRender {
     // sink animation
     if (startTime && transition > 1 && transition !== 4) {
       promises.push(new Promise<void>(resolve => {
-        const delay = 2000 / BoatRender.speed;
-        const delayOffset = 10000 / BoatRender.speed;
+        const delay = 2000 / BoatRender3d.speed;
+        const delayOffset = 10000 / BoatRender3d.speed;
         const f = this.rotateDeg / 90 * 4 + 46;
         // spin left to straight down to line up with first frame of the sink
         for (let i = 1; i < 17; i++) {
@@ -265,7 +268,7 @@ export class GuBoat extends BoatRender {
             setTimeout(async () => {
               this.spriteData = Boats[this.boat.type as BoatTypes]?.sink;
               if (!this.spriteData) return;
-              const team = this.team === GuBoat.myTeam ? 99 : this.team;
+              const team = this.boat.team === GuBoat.myTeam ? 99 : this.boat.team ?? 99;
               this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sink') + ')';
               for (let i2 = 0; i2 < 50; i2++) {
                 setTimeout(() => {

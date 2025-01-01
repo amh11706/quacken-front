@@ -12,7 +12,6 @@ import { FlaggamesComponent } from './flaggames.component';
 import { FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
 import { TwodRenderModule } from '../cadegoose/twod-render/twod-render.module';
-import { ThreedRenderModule } from '../cadegoose/threed-render/threed-render.module';
 import { SettingsModule } from '../../settings/settings.module';
 import { NameModule } from '../../chat/name/name.module';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
@@ -28,7 +27,6 @@ import { FgHelpComponent } from './fg-help/fg-help.component';
     CommonModule,
     CadegooseModule,
     TwodRenderModule,
-    ThreedRenderModule,
     SettingsModule,
     NameModule,
     MatCardModule,

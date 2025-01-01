@@ -1,4 +1,3 @@
-import { BoatRender } from '../../cadegoose/boat-render';
 import { Team } from './types';
 
 export class Boat {
@@ -9,7 +8,6 @@ export class Boat {
   moves = [0, 0, 0, 0];
   shots: number[] = [];
   id = 0;
-  oId?: number;
   team?: Team;
   title = '';
   maxDamage = 3;
@@ -20,21 +18,13 @@ export class Boat {
 
   bomb = 0;
   tokenPoints = 0;
-  moveTransition = [0, 0];
-  tryFace = 0;
   face = 0;
+  crunchDir = 0;
+  moveTransition = [0, 0];
   rotateTransition = 0;
-  opacity = 1;
-  imageOpacity = 1;
-  enteringSZ = false;
   ready = false;
-  offsetX = 0;
-  offsetY = 0;
   moveLock = 0;
-  spinDeg = 90;
-  render?: BoatRender;
-  crunchDir = -1;
-  maneuvers: {id: number, name: string, class: string, directional?: boolean}[] = [];
+  maneuvers: { id: number, name: string, class: string, directional?: boolean }[] = [];
 
   constructor(
     public name: string,
@@ -50,25 +40,17 @@ export class Boat {
     return this;
   }
 
-  draw(offsetX = 0, offsetY = 0): Boat {
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
-    return this;
-  }
-
-  setPos(x: number, y: number, checkSZ = true): Boat {
-    if (checkSZ && this.checkSZ({ x, y }) && !this.checkSZ(this.pos)) this.enterSZ();
+  setPos(x: number, y: number): Boat {
     this.pos = { x, y };
     return this;
   }
 
   rotateByMove(m: number): Boat {
-    if (m && m < 6) this.face += (m - 2) * this.spinDeg;
+    if (m && m < 6) this.face += (m - 2) * 90;
     return this;
   }
 
   setTransition(transition: number, move: number): Boat {
-    this.tryFace = transition;
     if (move === 2) this.moveTransition = [1, 1];
     else if (transition % 2) this.moveTransition = [2, 3];
     else this.moveTransition = [3, 2];
@@ -92,7 +74,6 @@ export class Boat {
   addDamage(crunchDir: number, damage = 1): Boat {
     this.crunchDir = crunchDir;
     if (damage >= 100) {
-      // this.damage = this.maxDamage;
       this.sink();
     }
     setTimeout(() => this.crunch(crunchDir), 100);
@@ -101,27 +82,16 @@ export class Boat {
 
   private crunch(direction: number) {
     if (direction > 3) return;
-    const decodeX = this.spinDeg === 90 ? [0, 5, 0, -5] : [0, 4, 4, 0, -4, -4];
-    const decodeY = this.spinDeg === 90 ? [-5, 0, 5, 0] : [-5, -2, 2, 5, 2, -2];
     this.moveTransition = [4, 4];
-    this.draw(decodeX[direction], decodeY[direction]);
-    setTimeout(() => this.draw(), 110);
+    this.crunchDir = direction;
   }
 
   private sink() {
     this.rotateTransition = 2;
-    this.face += 720;
-    this.imageOpacity = 0;
     this.moveLock = 101;
   }
 
   checkSZ = (pos: { x: number, y: number }): boolean => {
     return pos.y > 48 && pos.y < 52 && pos.x >= 0 && pos.x < 25;
   };
-
-  private enterSZ() {
-    this.enteringSZ = true;
-    this.opacity = 0;
-    this.imageOpacity = 0;
-  }
 }

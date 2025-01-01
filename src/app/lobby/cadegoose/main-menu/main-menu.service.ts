@@ -11,6 +11,8 @@ import { WsService } from '../../../ws/ws.service';
 import { Boat } from '../../quacken/boats/boat';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 import { TeamMessage, LobbyStatus, CadeLobby } from '../types';
+import { LobbyWrapperService } from '../../../replay/lobby-wrapper/lobby-wrapper.service';
+import { BoatsService } from '../../quacken/boats/boats.service';
 
 @Injectable()
 export class MainMenuService implements OnDestroy {
@@ -49,9 +51,12 @@ export class MainMenuService implements OnDestroy {
     public es: EscMenuService,
     public ss: SettingsService,
     private sound: SoundService,
+    private wrapper: LobbyWrapperService,
+    private boats: BoatsService,
   ) {
-    if (this.ws.fakeWs) this.ws = this.ws.fakeWs;
-    if (this.fs.fakeFs) this.fs = this.fs.fakeFs;
+    if (this.wrapper.ws) this.ws = this.wrapper.ws;
+    if (this.wrapper.fs) this.fs = this.wrapper.fs;
+    if (this.wrapper.boats) this.boats = this.wrapper.boats;
 
     this.subs.add(this.ws.subscribe(Internal.Lobby, message => {
       const m = message as CadeLobby;
@@ -106,7 +111,7 @@ export class MainMenuService implements OnDestroy {
       }
       void this.es.openTab(0, false, { lobbyTab: 0 });
     }));
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, b => {
+    this.subs.add(this.boats.myBoat$.subscribe(b => {
       if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {
         this.myBoat.isMe = false;
         void this.es.openTab(0, false, { lobbyTab: 0 });

@@ -9,6 +9,7 @@ import { CadegooseComponent } from '../cadegoose/cadegoose.component';
 import { FgColumns, FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { MapTile } from '../../map-editor/types';
 import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
+import { BoatsService } from '../quacken/boats/boats.service';
 
 export const FgDesc = 'Flag games: Plant flags in the enemy base to score points!';
 const ownerSettings: SettingList = [
@@ -65,8 +66,9 @@ export class FlaggamesComponent extends CadegooseComponent {
     kbs: KeyBindingService,
     es: EscMenuService,
     injector: Injector,
+    boats: BoatsService,
   ) {
-    super(ws, ss, fs, kbs, es, injector);
+    super(ws, ss, fs, kbs, es, injector, boats);
 
     this.group = 'l/flaggames';
     this.ss.setLobbySettings(ownerSettings, true, 4);

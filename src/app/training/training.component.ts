@@ -3,18 +3,16 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { TeamColorsCss } from '../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
-import { GuBoat, Point } from '../lobby/cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../lobby/quacken/boats/boat';
 import { ParseTurns } from '../replay/cadegoose/parse-turns';
 import { SettingsService } from '../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../ws/ws-messages';
 import { WsService } from '../ws/ws.service';
-import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
 import { MoveNode, MoveTiers } from '../replay/cadegoose/types';
 import { ParsedTurn } from '../lobby/cadegoose/types';
 import { MoveMessageIncoming } from '../lobby/quacken/boats/types';
 import { SettingGroup } from '../settings/setting/settings';
-import { InMessage } from '../ws/ws-subscribe-types';
+import { LobbyWrapperService } from '../replay/lobby-wrapper/lobby-wrapper.service';
 
 function mapMoves(m: number | string): string {
   return ['_', 'L', 'F', 'R', , , , , '<', , '>'][+m] || 'S';
@@ -37,7 +35,6 @@ const shotNames = [
   styleUrls: ['./training.component.scss'],
 })
 export class TrainingComponent implements OnInit, OnDestroy {
-  @ViewChild(LobbyWrapperComponent, { static: true }) private lobbyWrapper?: LobbyWrapperComponent;
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;
   mapMoves = mapMoves;
 
@@ -72,12 +69,12 @@ export class TrainingComponent implements OnInit, OnDestroy {
     private ss: SettingsService,
     private route: ActivatedRoute,
     public esc: EscMenuService,
+    private wrapper: LobbyWrapperService
   ) { }
 
   ngOnInit(): void {
-    if (this.lobbyWrapper) {
-      this.ws.fakeWs = this.lobbyWrapper.ws;
-      this.ws.fakeWs.user = this.ws.user;
+    if (this.wrapper.ws) {
+      this.wrapper.ws.user = this.ws.user;
     }
 
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Welcome to 1v1 training. Choose a turn and click a boat to begin.', from: '' } });
@@ -85,9 +82,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) this.ws.send(OutCmd.BnavJoin);
     }));
-    this.sub.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, this.clickBoat.bind(this)));
-    this.sub.add(this.ws.fakeWs?.subscribe(Internal.Boats, () => null));
-    this.sub.add(this.ws.fakeWs?.outMessages$.subscribe(this.handleFakeWs.bind(this)));
+    this.sub.add(this.wrapper.boats?.clickedBoat$.subscribe(this.clickBoat.bind(this)));
+    this.sub.add(this.wrapper.ws?.outMessages$.subscribe(this.handleFakeWs.bind(this)));
   }
 
   ngOnDestroy(): void {
@@ -95,20 +91,16 @@ export class TrainingComponent implements OnInit, OnDestroy {
   }
 
   private clickBoat(b: Boat) {
-    if (this.ws.fakeWs) this.ws.fakeWs.sId = 0;
+    if (this.wrapper.ws) this.wrapper.ws.sId = 0;
     this.myBoat.isMe = false;
-    this.myBoat.render?.rebuildHeader?.();
     if (b === this.myBoat) {
       this.myBoat = new Boat('');
-      this.myBoat.render = {} as any;
-      (this.myBoat.render as GuBoat).coords = { ...(b.render as GuBoat)?.coords } as Point;
     } else {
       b.isMe = true;
-      b.render?.rebuildHeader();
       this.myBoat = b;
-      if (this.ws.fakeWs) this.ws.fakeWs.sId = b.id;
+      if (this.wrapper.ws) this.wrapper.ws.sId = b.id;
     }
-    this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyBoat, data: this.myBoat });
+    this.wrapper.boats?.setMyBoat(this.myBoat);
     this.updateBoat();
   }
 
@@ -120,13 +112,13 @@ export class TrainingComponent implements OnInit, OnDestroy {
       tick.t[1][0] = 4;
       tick.t[2][0] = 4;
       tick.attr = { 1: 100 }
-      this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.BoatTick, data: tick });
+      this.wrapper.ws?.dispatchMessage({ cmd: InCmd.BoatTick, data: tick });
     }
     const myMoves = this.activeTurn?.moves[this.myBoat.id];
     setTimeout(() => {
       this.myBoat.moveLock = -1;
       if (this.myBoat.isMe) {
-        if (myMoves) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
+        if (myMoves) this.wrapper.ws?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
       }
     });
     delete this.activeMove;
@@ -137,7 +129,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     if (!match || !match.data) return;
     [this.turns, this.map, this.maxScore] = ParseTurns(match.data.messages);
     const join = match.data?.messages[0]?.[0];
-    if (join) this.ws.fakeWs?.dispatchMessage({ ...join });
+    if (join) this.wrapper.ws?.dispatchMessage({ ...join });
     setTimeout(() => {
       this.clickTurn(this.turns[0]);
       void this.esc.openMenu(false);
@@ -163,11 +155,11 @@ export class TrainingComponent implements OnInit, OnDestroy {
           myMoves.shots = m.data;
           this.myBoat.shots = m.data;
         }
-        this.ws.fakeWs?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
+        this.wrapper.ws?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
         delete this.activeMove;
         break;
       case OutCmd.Ready:
-        if (this.activeTurn?.sync) this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Sync, data: this.activeTurn?.sync });
+        if (this.activeTurn?.sync) this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Sync, data: this.activeTurn?.sync });
         void this.imReady(m.data);
         break;
     }
@@ -215,15 +207,15 @@ export class TrainingComponent implements OnInit, OnDestroy {
     });
     if (!turn) return;
     const rawTurn = this.activeTurn?.rawTurn;
-    if (rawTurn) this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Turn, data: rawTurn });
-    this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Sync, data: turn.sync });
+    if (rawTurn) this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Turn, data: rawTurn });
+    this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Sync, data: turn.sync });
     const moves: MoveMessageIncoming[] = [];
     for (const [id, m] of Object.entries(this.activeTurn?.moves || {})) {
       moves.push({ t: +id, m: [...m.moves], s: [...m.shots] });
     }
 
     setTimeout(() => {
-      this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
+      this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
     });
     this.updateBoat();
   }

@@ -49,13 +49,13 @@ export const moveEase: any[] = [
   TWEEN.Easing.Linear.None,
 ];
 
-export class BoatRender {
+export class BoatRender3d {
   private static circle?: THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial>;
   static tweens = new TWEEN.Group();
   static tweenProgress = 0;
   static paused = false;
   static speed = 10;
-  static updateCam: (br: BoatRender) => void;
+  static updateCam: (br: BoatRender3d) => void;
   static myLastPos = { x: 0, z: 0 };
 
   obj = new THREE.Group();
@@ -78,7 +78,7 @@ export class BoatRender {
   private nameTimeout = 0;
   protected worker = new JobQueue();
 
-  constructor(public boat: Boat, gltf: GLTF) {
+  constructor(public boat: Boat, gltf?: GLTF) {
     this.type = boat.type;
     this.pos = { ...boat.pos };
     this.rotateDeg = boat.face;
@@ -86,17 +86,17 @@ export class BoatRender {
     this.team = boat.team || 0;
     this.moves = [...boat.moves];
 
-    this.init(boat, gltf);
+    if (gltf) this.init(boat, gltf);
   }
 
   protected init(boat: Boat, gltf: GLTF): void {
-    if (!BoatRender.circle) {
+    if (!BoatRender3d.circle) {
       const circle = new THREE.EllipseCurve(0, 0, 0.5, 0.5, 0, 2 * Math.PI, false, 0);
       const circleGeo = new THREE.BufferGeometry().setFromPoints(circle.getPoints(50));
       circleGeo.rotateX(-Math.PI / 2);
       circleGeo.translate(0, 0.02, 0);
-      BoatRender.circle = new THREE.Line(circleGeo, teamMaterials[0]);
-      BoatRender.circle.visible = false;
+      BoatRender3d.circle = new THREE.Line(circleGeo, teamMaterials[0]);
+      BoatRender3d.circle.visible = false;
     }
 
     this.obj.add(gltf.scene.clone());
@@ -104,7 +104,7 @@ export class BoatRender {
     this.obj.position.z = boat.pos.y + 0.5;
     this.obj.rotation.y = -boat.face * Math.PI / 180;
 
-    this.influence = BoatRender.circle.clone();
+    this.influence = BoatRender3d.circle.clone();
     this.influence.scale.setScalar(boat.influence * 2);
     this.influence.material = teamMaterials[boat.team ?? 0]?.clone() ?? this.influence.material;
     this.obj.add(this.influence);
@@ -166,7 +166,7 @@ export class BoatRender {
     }, 200);
   }
 
-  updateMoves(): BoatRender {
+  updateMoves(): BoatRender3d {
     for (let i = 0; i < this.moves.length; i++) {
       if (this.boat.moves[i] !== this.moves[i]) {
         this.rebuildHeader();
@@ -197,8 +197,9 @@ export class BoatRender {
       promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
     }
 
-    if (!startTime || boat.face !== this.rotateDeg || boat.imageOpacity === 0) {
-      promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, boat.imageOpacity));
+    const sinking = boat.moveLock === 101;
+    if (!startTime || boat.face !== this.rotateDeg || sinking) {
+      promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, sinking ? 0 : 1));
     }
 
     if (this.team !== boat.team && this.influence) {
@@ -225,7 +226,7 @@ export class BoatRender {
     this.moves = [...this.boat.moves];
   }
 
-  scaleHeader(cam: THREE.Camera): BoatRender {
+  scaleHeader(cam: THREE.Camera): BoatRender3d {
     let scale = (cam.position.distanceTo(this.obj.position) || 16) / 36;
     if (scale > 0.5) {
       this.header.scale.setScalar(0.65 / scale);
@@ -235,7 +236,7 @@ export class BoatRender {
     return this;
   }
 
-  private makeHeader(size = 36): BoatRender {
+  private makeHeader(size = 36): BoatRender3d {
     const ctx = this.headerCtx;
     if (!ctx) return this;
     ctx.restore();
@@ -299,18 +300,18 @@ export class BoatRender {
       new Promise<Vector3 | void>(resolve => {
         const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
-          new TWEEN.Tween(this.obj.position, BoatRender.tweens)
-            .to({ x: x + offsetX + 0.5 }, 5000 / BoatRender.speed)
-            .delay(7500 / BoatRender.speed)
-            .repeatDelay(500 / BoatRender.speed)
+          new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
+            .to({ x: x + offsetX + 0.5 }, 5000 / BoatRender3d.speed)
+            .delay(7500 / BoatRender3d.speed)
+            .repeatDelay(500 / BoatRender3d.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
             .onComplete(resolve);
         } else if (startTime && transitions[0]) {
-          t = new TWEEN.Tween(this.obj.position, BoatRender.tweens)
+          t = new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
             .easing(moveEase[transitions[0]])
-            .to({ x: x + 0.5 }, 10000 / BoatRender.speed)
-            .delay(5000 / BoatRender.speed)
+            .to({ x: x + 0.5 }, 10000 / BoatRender3d.speed)
+            .delay(5000 / BoatRender3d.speed)
             .start(startTime)
             .onComplete(resolve);
         } else {
@@ -324,18 +325,18 @@ export class BoatRender {
       new Promise<Vector3 | void>(resolve => {
         const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
-          new TWEEN.Tween(this.obj.position, BoatRender.tweens)
-            .to({ z: y + offsetY + 0.5 }, 5000 / BoatRender.speed)
-            .delay(7500 / BoatRender.speed)
-            .repeatDelay(500 / BoatRender.speed)
+          new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
+            .to({ z: y + offsetY + 0.5 }, 5000 / BoatRender3d.speed)
+            .delay(7500 / BoatRender3d.speed)
+            .repeatDelay(500 / BoatRender3d.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
-          t = new TWEEN.Tween(this.obj.position, BoatRender.tweens)
+          t = new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
             .easing(moveEase[transitions[1]])
-            .to({ z: y + 0.5 }, 10000 / BoatRender.speed)
-            .delay(5000 / BoatRender.speed)
+            .to({ z: y + 0.5 }, 10000 / BoatRender3d.speed)
+            .delay(5000 / BoatRender3d.speed)
             .start(startTime)
             .onComplete(resolve);
         } else {
@@ -348,8 +349,8 @@ export class BoatRender {
     ];
 
     if (this.boat.isMe && t) {
-      BoatRender.myLastPos = { ...this.obj.position };
-      t.onUpdate(() => BoatRender.updateCam(this));
+      BoatRender3d.myLastPos = { ...this.obj.position };
+      t.onUpdate(() => BoatRender3d.updateCam(this));
     }
 
     return p;
@@ -361,16 +362,16 @@ export class BoatRender {
     if (startTime && (transition || !opacity)) {
       promises.push(new Promise(resolve => {
         if (transition === 1) {
-          new TWEEN.Tween(this.obj.rotation, BoatRender.tweens)
-            .to({ y: -face * Math.PI / 180 }, 9000 / BoatRender.speed)
-            .delay(5000 / BoatRender.speed)
+          new TWEEN.Tween(this.obj.rotation, BoatRender3d.tweens)
+            .to({ y: -face * Math.PI / 180 }, 9000 / BoatRender3d.speed)
+            .delay(5000 / BoatRender3d.speed)
             .easing(TWEEN.Easing.Quadratic.InOut)
-            .start(startTime + 1000 / BoatRender.speed)
+            .start(startTime + 1000 / BoatRender3d.speed)
             .onComplete(resolve);
         } else {
-          new TWEEN.Tween(this.obj.rotation, BoatRender.tweens)
-            .to({ y: -face * Math.PI / 180 }, 50000 / BoatRender.speed)
-            .delay(30000 / BoatRender.speed)
+          new TWEEN.Tween(this.obj.rotation, BoatRender3d.tweens)
+            .to({ y: -face * Math.PI / 180 }, 50000 / BoatRender3d.speed)
+            .delay(30000 / BoatRender3d.speed)
             .easing(TWEEN.Easing.Quadratic.In)
             .delay(500)
             .start(startTime)
@@ -381,15 +382,15 @@ export class BoatRender {
 
     if (startTime && transition > 1) {
       promises.push(new Promise(resolve => {
-        new TWEEN.Tween(this.obj.position, BoatRender.tweens)
-          .to({ y: -5 }, 40000 / BoatRender.speed)
-          .delay(30000 / BoatRender.speed)
+        new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
+          .to({ y: -5 }, 40000 / BoatRender3d.speed)
+          .delay(30000 / BoatRender3d.speed)
           .easing(TWEEN.Easing.Quadratic.In)
           .start(startTime)
           .onComplete(resolve);
-        new TWEEN.Tween(this.obj.scale, BoatRender.tweens)
-          .to({ x: 0, y: 0, z: 0 }, 40000 / BoatRender.speed)
-          .delay(35000 / BoatRender.speed)
+        new TWEEN.Tween(this.obj.scale, BoatRender3d.tweens)
+          .to({ x: 0, y: 0, z: 0 }, 40000 / BoatRender3d.speed)
+          .delay(35000 / BoatRender3d.speed)
           .start(startTime);
       }));
     }

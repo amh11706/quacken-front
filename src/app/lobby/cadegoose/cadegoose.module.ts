@@ -27,7 +27,6 @@ import { StatsComponent } from './stats/stats.component';
 import { StatEndComponent } from './stat-end/stat-end.component';
 import { RatingModule } from '../../settings/rating/rating.module';
 import { AdvancedMapComponent } from './advanced-map/advanced-map.component';
-import { ThreedRenderModule } from './threed-render/threed-render.module';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
 import { MoveSourceModule } from '../../boats/move-source/move-source.module';
 import { ManeuverSourceModule } from '../../boats/maneuver-source/maneuver-source.module';
@@ -56,7 +55,6 @@ import { ManeuverSourceModule } from '../../boats/maneuver-source/maneuver-sourc
     QuackenModule,
     NameModule,
     TwodRenderModule,
-    ThreedRenderModule,
     RatingModule,
     MapEditorModule,
     MoveInputModule,

@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 import { Internal } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
 import { Boat } from '../../quacken/boats/boat';
-import { BoatRender } from '../boat-render';
+import { BoatRender3d } from '../boat-render';
 import { BoatService, flagMats } from '../boat.service';
 import { Team } from '../../quacken/boats/types';
 import { SettingsService } from '../../../settings/settings.service';
@@ -256,10 +256,10 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private render = () => {
     if (!this.alive || !this.controls) return;
     this.bs.speed = this.graphicSettings.speed?.value || 15;
-    BoatRender.speed = this.bs.speed;
+    BoatRender3d.speed = this.bs.speed;
     const time = new Date().valueOf();
     TWEEN.update(time);
-    BoatRender.tweens.update(time);
+    BoatRender3d.tweens.update(time);
 
     this.controls.mouseButtons.RIGHT = this.controlSettings.lockAngle ? MOUSE.PAN : MOUSE.ROTATE;
     if (time - this.lastFrame > 50 && this.slowFrames < 50) this.slowFrames++;

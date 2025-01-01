@@ -1,14 +1,10 @@
 /* eslint no-unused-vars: "off" */
 export const enum Internal {
   Lobby = -100,
-  MyBoat,
   ResetMoves,
   Time,
   ResetBoats,
-  Boats,
   MyMoves,
-  CenterOnBoat,
-  BoatClicked,
   Canvas,
   OpenAdvanced,
   SetMap,

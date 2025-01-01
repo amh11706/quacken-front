@@ -23,7 +23,12 @@ export class AiRender {
 
   private ctx: CanvasRenderingContext2D;
 
-  constructor(private ws: WsService, width: number, height: number) {
+  constructor(
+    private ws: WsService,
+    width: number,
+    height: number,
+    private fakeWs?: WsService,
+  ) {
     this.ctx = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
     this.ctx.canvas.height = 50 * height;
     this.ctx.canvas.width = 50 * width;
@@ -158,6 +163,6 @@ export class AiRender {
       }
     }
 
-    void (this.ws.fakeWs || this.ws).dispatchMessage({ cmd: Internal.Canvas, data: ctx.canvas });
+    void (this.fakeWs || this.ws).dispatchMessage({ cmd: Internal.Canvas, data: ctx.canvas });
   }
 }

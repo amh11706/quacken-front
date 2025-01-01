@@ -23,20 +23,14 @@ export function boatToSync(boat: Boat): BoatSync {
 }
 
 export function syncToBoat(boat: Boat, sBoat: BoatSync): void {
-  boat.setPos(sBoat.x, sBoat.y)
-    .setTreasure(sBoat.t)
-    .draw();
+  boat.pos = { x: sBoat.x, y: sBoat.y };
+  boat.treasure = sBoat.t;
   if (sBoat.ti) boat.title = sBoat.ti;
-  boat.rotateTransition = 0;
-  boat.imageOpacity = 1;
-  boat.opacity = 1;
-  boat.moveTransition = [0, 0];
-  boat.face = sBoat.f * boat.spinDeg;
+  boat.face = sBoat.f * 90;
   boat.moveLock = sBoat.ml;
   boat.tokenPoints = sBoat.tp;
   boat.bomb = sBoat.b;
   boat.id = sBoat.id;
-  boat.oId = sBoat.oId;
   boat.team = sBoat.team ?? boat.team;
   boat.inSZ = sBoat.inSZ;
   boat.maxDamage = sBoat.mDamage;

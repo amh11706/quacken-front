@@ -12,6 +12,7 @@ import { Tokens } from '../../../boats/move-input/move-input.component';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { SettingGroup } from '../../../settings/setting/settings';
 import { LobbyStatus } from '../../cadegoose/types';
+import { BoatsService } from '../boats/boats.service';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -108,12 +109,13 @@ export class HudComponent implements OnInit, OnDestroy {
     protected kbs: KeyBindingService,
     protected ss: SettingsService,
     public es: EscMenuService,
+    protected boats: BoatsService,
   ) { }
 
   ngOnInit(): void {
     void this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
     this.handleKeys();
-    this.subs.add(this.ws.subscribe(Internal.MyBoat, b => {
+    this.subs.add(this.boats.myBoat$.subscribe(b => {
       this.myBoat = b;
       this.resetMoves(true);
     }));

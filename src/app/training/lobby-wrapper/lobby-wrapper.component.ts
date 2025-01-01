@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { WsService } from '../../ws/ws.service';
+import { LobbyWrapperService } from '../../replay/lobby-wrapper/lobby-wrapper.service';
 
 @Component({
   selector: 'q-lobby-wrapper',
@@ -7,6 +8,15 @@ import { WsService } from '../../ws/ws.service';
   styleUrls: ['./lobby-wrapper.component.scss'],
   providers: [WsService],
 })
-export class LobbyWrapperComponent {
-  constructor(public ws: WsService) { }
+export class LobbyWrapperComponent implements OnDestroy {
+  constructor(
+    ws: WsService,
+    private wrapper: LobbyWrapperService,
+  ) {
+    wrapper.ws = ws;
+  }
+
+  ngOnDestroy() {
+    delete this.wrapper.ws;
+  }
 }

@@ -11,11 +11,12 @@ import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
 import { FlagData } from './objects/flags';
 import { GuBoat, Point, Position } from './gu-boats/gu-boat';
-import { BoatRender } from '../boat-render';
+import { BoatRender3d } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { MapEditor, MapTile } from '../../../map-editor/types';
 import { Turn } from '../../quacken/boats/types';
 import { CadeLobby } from '../types';
+import { BoatsService } from '../../quacken/boats/boats.service';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = 0 | 1 | 2 | 3;
@@ -47,12 +48,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   @Input() mapWidth = 20;
   @Input() safeZone = true;
   @Input() showIsland = this.safeZone;
-  private _myBoat = new Boat('');
-  get myBoat(): Boat { return this._myBoat; }
-  @Input() set myBoat(b: Boat) {
-    this._myBoat = b;
-    this.colorFlags();
-  }
+  myBoat = new Boat('');
 
   @Input() speed = 15;
   @Input() fishBoats = 0;
@@ -105,8 +101,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
-  getXOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.x ?? this.getWidth() / 2;
-  getYOff = (boat: Boat): number => (boat.render as GuBoat)?.coords?.y ?? this.getHeight() / 2;
+  getXOff = (boat: Boat): number => boat.isMe ? this.getX(boat.pos) : this.getWidth() / 2;
+  getYOff = (boat: Boat): number => boat.isMe ? this.getY(boat.pos) : this.getHeight() / 2;
 
   moveTransition = (transition: number): string => {
     switch (transition) {
@@ -126,11 +122,16 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     private ws: WsService,
     private ngZone: NgZone,
     private cd: ChangeDetectorRef,
+    private boats: BoatsService,
   ) { }
 
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(Internal.Canvas, c => {
       this.overlay?.nativeElement.appendChild(c);
+    }));
+    this.sub.add(this.boats.myBoat$.subscribe(b => {
+      this.myBoat = b;
+      this.colorFlags();
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.Turn, (t: Turn) => {
@@ -140,7 +141,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
       for (const f of t.flags) flagMap.set(`${f.x},${f.y}`, f);
       this.colorFlags(flagMap);
     }));
-    this.sub.add(this.ws.subscribe(Internal.CenterOnBoat, () => {
+    this.sub.add(this.boats.focusMyBoat$.subscribe(() => {
       this.frame?.nativeElement.dispatchEvent(new Event('dblclick'));
     }));
 
@@ -184,11 +185,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     }
     this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
 
-    BoatRender.speed = this.speed;
+    BoatRender3d.speed = this.speed;
     // progress 0 means no animations are running, so we can skip the update
-    if (!BoatRender.paused && BoatRender.tweenProgress > 0) {
-      BoatRender.tweenProgress += (t - this.lastFrame);
-      BoatRender.tweens.update(BoatRender.tweenProgress);
+    if (!BoatRender3d.paused && BoatRender3d.tweenProgress > 0) {
+      BoatRender3d.tweenProgress += (t - this.lastFrame);
+      BoatRender3d.tweens.update(BoatRender3d.tweenProgress);
       this.cd.detectChanges();
     }
     this.stats?.update();

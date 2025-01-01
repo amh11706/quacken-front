@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -6,7 +6,6 @@ import { ChatService } from '../chat/chat.service';
 import { SettingsService } from '../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../ws/ws-messages';
 import { WsService } from '../ws/ws.service';
-import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
 import { FriendsService } from '../chat/friends/friends.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { KeyActions } from '../settings/key-binding/key-actions';
@@ -16,7 +15,8 @@ import { ServerSettingMap } from '../settings/types';
 import { InMessage } from '../ws/ws-subscribe-types';
 import { CadeLobby } from '../lobby/cadegoose/types';
 import { SettingGroup } from '../settings/setting/settings';
-import { BoatRender } from '../lobby/cadegoose/boat-render';
+import { BoatRender3d } from '../lobby/cadegoose/boat-render';
+import { LobbyWrapperService } from './lobby-wrapper/lobby-wrapper.service';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
@@ -26,7 +26,6 @@ const joinMessage = 'Match replay: Use the replay controls to see a previous mat
   styleUrls: ['./replay.component.scss'],
 })
 export class ReplayComponent implements OnInit, OnDestroy {
-  @ViewChild(LobbyWrapperComponent, { static: true }) private lobbyWrapper?: LobbyWrapperComponent;
   set animationPlayState(v: string) {
     this.el.nativeElement.style.setProperty('--playState', v);
   }
@@ -53,22 +52,22 @@ export class ReplayComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private kbs: KeyBindingService,
     private el: ElementRef,
+    private wrapper: LobbyWrapperService,
   ) { }
 
   ngOnInit(): void {
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage, from: '' } });
-    if (this.lobbyWrapper) {
-      this.fakeChat = this.lobbyWrapper.chat;
-      this.fakeWs = this.lobbyWrapper.ws;
-      this.ws.fakeWs = this.fakeWs;
-      this.fakeWs.user = this.ws.user;
-      this.fs.fakeFs = this.lobbyWrapper.fs;
-      this.fs.fakeFs.isFriend = this.fs.isFriend.bind(this.fs);
-      this.fs.fakeFs.isBlocked = this.fs.isBlocked.bind(this.fs);
-      this.sub.add(this.fakeWs.outMessages$.subscribe(m => {
-        if (m.cmd === OutCmd.Sync) this.sendSync();
-      }));
+    this.fakeChat = this.wrapper.chat ?? this.fakeChat;
+    this.fakeWs = this.wrapper.ws ?? this.fakeWs;
+    this.fakeWs.user = this.ws.user;
+    if (this.wrapper.fs) {
+      this.wrapper.fs.isFriend = this.fs.isFriend.bind(this.fs);
+      this.wrapper.fs.isBlocked = this.fs.isBlocked.bind(this.fs);
     }
+    this.sub.add(this.fakeWs.outMessages$.subscribe(m => {
+      if (m.cmd === OutCmd.Sync) this.sendSync();
+    }));
+
     this.route.paramMap.subscribe(map => this.getMatch(Number(map.get('id'))));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (v) this.ws.send(OutCmd.BnavJoin);
@@ -86,8 +85,6 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    delete this.ws.fakeWs;
-    delete this.fs.fakeFs;
     this.sub.unsubscribe();
   }
 
@@ -169,7 +166,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   togglePlay(): void {
-    BoatRender.paused = !!this.tickInterval;
+    BoatRender3d.paused = !!this.tickInterval;
     if (this.tickInterval) {
       this.animationPlayState = 'paused';
       clearInterval(this.tickInterval);
@@ -189,8 +186,8 @@ export class ReplayComponent implements OnInit, OnDestroy {
   nextTurn(): void {
     if (this.tickInterval) {
       this.togglePlay();
-      BoatRender.tweens.update(Infinity);
-      BoatRender.tweens.removeAll();
+      BoatRender3d.tweens.update(Infinity);
+      BoatRender3d.tweens.removeAll();
       this.togglePlay();
     }
     // setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));

@@ -16,7 +16,6 @@ import { SbStatsComponent } from './sb-stats/sb-stats.component';
 import { SbEntryStatusComponent } from './sb-entry-status/sb-entry-status.component';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
 import { SeabattleComponent } from './seabattle.component';
-import { ThreedRenderModule } from '../cadegoose/threed-render/threed-render.module';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
 
 @NgModule({
@@ -25,7 +24,6 @@ import { MapEditorModule } from '../../map-editor/map-editor.module';
     CommonModule,
     CadegooseModule,
     TwodRenderModule,
-    ThreedRenderModule,
     MatButtonModule,
     MatCardModule,
     MatTooltipModule,

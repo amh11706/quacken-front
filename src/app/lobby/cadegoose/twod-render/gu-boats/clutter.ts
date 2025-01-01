@@ -1,5 +1,5 @@
 import * as TWEEN from '@tweenjs/tween.js';
-import { BoatRender, moveEase } from '../../boat-render';
+import { BoatRender3d, moveEase } from '../../boat-render';
 import { Point } from './gu-boat';
 import { Clutter } from '../../../quacken/boats/types';
 
@@ -41,10 +41,10 @@ export class MovableClutter implements Clutter {
     const p = [
       new Promise<void | { x: number, y: number }>(resolve => {
         if (startTime && this.transitions[0]) {
-          new TWEEN.Tween(this.pos, BoatRender.tweens)
+          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
             .easing(moveEase[this.transitions[0]])
-            .to({ x }, 10000 / BoatRender.speed)
-            .delay(3000 / BoatRender.speed)
+            .to({ x }, 10000 / BoatRender3d.speed)
+            .delay(3000 / BoatRender3d.speed)
             .start(startTime)
             .onUpdate(() => this.coords.fromPosition(this.pos))
             .onComplete(resolve);
@@ -58,10 +58,10 @@ export class MovableClutter implements Clutter {
 
       new Promise<void | { x: number, y: number }>(resolve => {
         if (startTime && this.transitions[1]) {
-          new TWEEN.Tween(this.pos, BoatRender.tweens)
+          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
             .easing(moveEase[this.transitions[1]])
-            .to({ y }, 10000 / BoatRender.speed)
-            .delay(3000 / BoatRender.speed)
+            .to({ y }, 10000 / BoatRender3d.speed)
+            .delay(3000 / BoatRender3d.speed)
             .start(startTime)
             .onUpdate(() => this.coords.fromPosition(this.pos))
             .onComplete(resolve);

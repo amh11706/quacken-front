@@ -15,11 +15,11 @@ import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entr
 import { Penalties, PenaltyComponent } from './penalty/penalty.component';
 import { SettingsService } from '../../settings/settings.service';
 import { ParseTurns } from './parse-turns';
-import { GuBoat, Point } from '../../lobby/cadegoose/twod-render/gu-boats/gu-boat';
 import { CadeLobby, Lobby, ParsedTurn } from '../../lobby/cadegoose/types';
 import { BoatTick, MoveMessageIncoming } from '../../lobby/quacken/boats/types';
 import { AiBoatData, AiData, ClaimOptions, Points, ScoreResponse } from './types';
 import { InMessage } from '../../ws/ws-subscribe-types';
+import { LobbyWrapperService } from '../lobby-wrapper/lobby-wrapper.service';
 
 @Component({
   selector: 'q-replay-cadegoose',
@@ -59,7 +59,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       }
 
       setTimeout(() => {
-        this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
+        this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
       });
     }
   }
@@ -141,7 +141,12 @@ export class CadegooseComponent implements OnInit, OnDestroy {
 
   private subs = new Subscription();
 
-  constructor(public ws: WsService, private dialog: MatDialog, private ss: SettingsService) {
+  constructor(
+    public ws: WsService,
+    private dialog: MatDialog,
+    private ss: SettingsService,
+    private wrapper: LobbyWrapperService,
+  ) {
     this.filteredShips = this.shipCtrl.valueChanges.pipe(
       startWith(null),
       map((ship: string | null) => ship ? this._filter(ship) : this.ships.slice()));
@@ -180,17 +185,17 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Boats, boats => {
+    this.subs.add(this.wrapper.boats?.boats$.subscribe(boats => {
       this.boats = [...boats];
       this.findMyBoat();
     }));
-    this.subs.add(this.ws.fakeWs?.subscribe(Internal.Lobby, lobby => {
+    this.subs.add(this.wrapper.ws?.subscribe(Internal.Lobby, lobby => {
       this.lobby = lobby as CadeLobby;
     }));
-    this.subs.add(this.ws.fakeWs?.subscribe(Internal.BoatClicked, boat => {
+    this.subs.add(this.wrapper.boats?.clickedBoat$.subscribe(boat => {
       this.clickBoat(boat, true);
     }));
-    this.subs.add(this.ws.fakeWs?.subscribe(InCmd.BoatTicks, ticks => {
+    this.subs.add(this.wrapper.ws?.subscribe(InCmd.BoatTicks, ticks => {
       this.boatTicks = ticks;
       for (const boat of this.boats) {
         const tick = ticks[boat.id];
@@ -200,7 +205,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       }
       this.updateBoat();
     }));
-    this.subs.add(this.ws.fakeWs?.subscribe(InCmd.Moves, moves => {
+    this.subs.add(this.wrapper.ws?.subscribe(InCmd.Moves, moves => {
       if (!Array.isArray(moves)) moves = [moves];
       for (const move of moves) if (this.activeBoat?.id === move.t) this.updateBoat();
     }));
@@ -233,10 +238,10 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (!this.activeBoat) return;
     const ticks = this.boatTicks[this.activeBoat.id];
     if (!ticks) return;
-    this.ws.fakeWs?.dispatchMessage({ cmd: InCmd.BoatTick, data: ticks });
+    this.wrapper.ws?.dispatchMessage({ cmd: InCmd.BoatTick, data: ticks });
     setTimeout(() => {
       if (!this.activeBoat) return;
-      this.ws.fakeWs?.dispatchMessage({
+      this.wrapper.ws?.dispatchMessage({
         cmd: Internal.MyMoves,
         data: { moves: this.activeBoat.moves, shots: this.activeBoat.shots },
       });
@@ -246,35 +251,26 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   clickTurn(turn?: ParsedTurn): void {
     if (!turn) return;
     this.playTo.emit(turn.index - 2);
-    // if (this.tabIndex < 2) setTimeout(() => this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat }));
-  }
-
-  hoverBoat(boat: Boat, enter = true): void {
-    boat.render?.showInfluence(enter);
+    // if (this.tabIndex < 2) setTimeout(() => this.wrapper.ws?.dispatchMessage({ cmd: Internal.CenterOnBoat }));
   }
 
   clickBoat(boat: Boat, center = true, selectAi = true): void {
     if (selectAi) this.selectAiBoat(this.aiData?.boats.find(b => b.id === boat.id), false);
     if (this.activeBoat) {
       this.activeBoat.isMe = false;
-      this.activeBoat.render?.rebuildHeader?.();
     }
     if (this.activeBoat === boat && selectAi) {
       center = false;
       this.activeBoat = new Boat('');
-      this.activeBoat.render = {} as any;
-      (this.activeBoat.render as GuBoat).coords = { ...(boat.render as GuBoat)?.coords } as Point;
     } else {
-      boat.isMe = true;
-      boat.render?.rebuildHeader();
       this.activeBoat = boat;
     }
 
-    if (this.ws.fakeWs) {
-      this.ws.fakeWs.dispatchMessage({ cmd: Internal.MyBoat, data: this.activeBoat });
-      this.ws.fakeWs.sId = this.activeBoat.id || undefined;
+    if (this.wrapper.ws) {
+      this.wrapper.ws.sId = this.activeBoat.id || undefined;
     }
-    if (center) this.ws.fakeWs?.dispatchMessage({ cmd: Internal.CenterOnBoat, data: undefined });
+    this.wrapper.boats?.setMyBoat(this.activeBoat);
+    if (center) this.wrapper.boats?.focusMyBoat();
     if (this.boatTicks[boat.id]) this.updateBoat();
   }
 
@@ -338,7 +334,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (!this.aiData) return;
 
     if (this.aiData.map && this.lobby) {
-      this.ws.fakeWs?.dispatchMessage({
+      this.wrapper.ws?.dispatchMessage({
         cmd: InCmd.LobbyJoin,
         data: { ...this.lobby, map: this.aiData.map, flags: this.aiData.flags } as Lobby,
       });

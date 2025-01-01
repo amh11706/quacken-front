@@ -9,7 +9,6 @@ import { TeamMessage } from '../../lobby/cadegoose/types';
 @Injectable()
 export class FriendsService {
   allowInvite = false;
-  fakeFs?: FriendsService;
 
   lobby$ = new BehaviorSubject<TeamMessage[]>([]);
   friends: string[] = [];

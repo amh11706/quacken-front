@@ -62,7 +62,6 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby();
 
-    this.sub.add(this.ws.subscribe(Internal.MyBoat, b => this.myBoat = b));
     this.sub.add(this.ws.subscribe(Internal.SetMap, m => this.setMapB64(m)));
   }
 
