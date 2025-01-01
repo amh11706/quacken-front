@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 
 import { Internal, InCmd } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
+import { LobbyService } from '../../lobby.service';
+import { CadeLobby } from '../../cadegoose/types';
 
 @Component({
   selector: 'q-entry-status',
@@ -16,12 +18,12 @@ export class EntryStatusComponent implements OnInit, OnDestroy {
   time = '30:00';
   protected subs = new Subscription();
 
-  constructor(protected ws: WsService) { }
+  constructor(protected ws: WsService, protected lobbyService: LobbyService<CadeLobby>) { }
 
   ngOnInit(): void {
     this.subs.add(this.ws.subscribe(Internal.Time, time => this.time = time));
     this.subs.add(this.ws.subscribe(InCmd.Turn, t => this.treasure = t.treasure));
-    this.subs.add(this.ws.subscribe(Internal.Lobby, l => this.treasure = l.treasure || this.treasure));
+    this.subs.add(this.lobbyService.get().subscribe(l => this.treasure = l.treasure || this.treasure));
   }
 
   ngOnDestroy(): void {

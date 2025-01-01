@@ -10,6 +10,7 @@ import { MatchmakingService } from '../esc-menu/match-queue/matchmaking.service'
 import { SoundService } from '../sound.service';
 import { BoatsService } from '../lobby/quacken/boats/boats.service';
 import { TurnService } from '../lobby/quacken/boats/turn.service';
+import { LobbyService } from '../lobby/lobby.service';
 
 @Component({
   selector: 'q-lobby-list',
@@ -25,6 +26,7 @@ import { TurnService } from '../lobby/quacken/boats/turn.service';
     MatchmakingService,
     BoatsService,
     TurnService,
+    LobbyService,
   ],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],

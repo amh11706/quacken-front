@@ -101,7 +101,6 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
     this.subs.add(this.turn.turn$.subscribe(t => {
       this.clutter = [];
       this.setHeaderFlags(t.flags);
-      console.log('turn', t.turn);
     }));
     this.subs.add(this.turn.clutterStep$.subscribe(c => this.handleUpdate(c)));
 

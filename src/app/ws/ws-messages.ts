@@ -1,7 +1,6 @@
 /* eslint no-unused-vars: "off" */
 export const enum Internal {
-  Lobby = -100,
-  ResetMoves,
+  ResetMoves = -100,
   Time,
   MyMoves,
   Canvas,

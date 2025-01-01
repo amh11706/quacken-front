@@ -5,6 +5,8 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { WsService } from '../ws/ws.service';
 import { SettingsService } from '../settings/settings.service';
 import { InCmd, OutCmd } from '../ws/ws-messages';
+import { LobbyService } from './lobby.service';
+import { Lobby } from './cadegoose/types';
 
 @Component({
   selector: 'q-lobby',
@@ -21,6 +23,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private ws: WsService,
     private ss: SettingsService,
+    private lobbyService: LobbyService<Lobby>,
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +39,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
     this.sub.add(this.ws.subscribe(InCmd.LobbyJoin, l => {
       this.sent = false;
       this.lobby.next(l);
+      const oldLobby = this.lobbyService.lobby.value;
+      if (oldLobby.type === l.type) l = Object.assign(oldLobby, l);
+      this.lobbyService.lobby.next(l);
     }));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v || !this.id) return;

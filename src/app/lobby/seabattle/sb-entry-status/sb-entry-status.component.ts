@@ -12,7 +12,7 @@ export class SbEntryStatusComponent extends CadeEntryStatusComponent implements 
   ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, t => this.updatePoints(t.stats)));
-    this.subs.add(this.ws.subscribe(Internal.Lobby, l => l.stats && this.updatePoints(l.stats)));
+    this.subs.add(this.lobbyService.get().subscribe(l => l.stats && this.updatePoints(l.stats)));
   }
 
   private updatePoints(stats: Record<number, StatRow>) {

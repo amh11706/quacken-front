@@ -1,6 +1,6 @@
 <mat-card id="menu">
   <div *ngIf="ms.statsOpen; else teams">
-    <q-stat-end [stats]="ms.lobby?.stats"
+    <q-stat-end [stats]="ms.lobby.stats"
                 [columns]="SB_STATS"
                 (closeStats)="ms.statsOpen = false"
                 [rating]=false></q-stat-end>

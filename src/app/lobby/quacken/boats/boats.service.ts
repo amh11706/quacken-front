@@ -5,6 +5,8 @@ import { BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync } from "./types"
 import { WsService } from "../../../ws/ws.service";
 import { InCmd, Internal } from "../../../ws/ws-messages";
 import { syncToBoat } from "./convert";
+import { LobbyService } from "../../lobby.service";
+import { CadeLobby } from "../../cadegoose/types";
 
 @Injectable()
 export class BoatsService {
@@ -25,7 +27,7 @@ export class BoatsService {
 
   private subs = new Subscription();
 
-  constructor(private ws: WsService) {
+  constructor(private ws: WsService, private lobby: LobbyService<CadeLobby>) {
     this.initSubs();
   }
 
@@ -36,15 +38,22 @@ export class BoatsService {
     this.subs.add(this.ws.subscribe(InCmd.Ready, m => this.handleReady(m)));
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => this.handleSync(s)));
     this.subs.add(this.ws.subscribe(InCmd.BoatTicks, ticks => this.handleTicks(ticks)));
+    this.subs.add(this.lobby.get().subscribe(l => {
+      if (l.boats) setTimeout(() => this.setBoats(Object.values(l.boats), true));
+      if (l.clutter) this.clutter.next(l.clutter);
+    }));
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
 
+  resetMymoves() {
+    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined }));
+  }
+
   resetBoats(): void {
     for (const boat of this.boats) boat.resetMoves();
-    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined }));
   }
 
   focusMyBoat() {
@@ -71,6 +80,7 @@ export class BoatsService {
   }
 
   private handleSync(s: Sync) {
+    this.resetBoats();
     this.setBoats(s.sync);
     this.clutter.next(s.cSync);
   }
@@ -98,9 +108,9 @@ export class BoatsService {
   private updateMyBoat() {
     if (!this.ws.sId) return;
     const oldBoat = this.myBoat.value;
-    if (oldBoat.id === this.ws.sId) return;
     oldBoat.isMe = false;
     const boat = this.boatMap.get(this.ws.sId) || new Boat('');
+    boat.isMe = boat.id === this.ws.sId;
     this.myBoat.next(boat);
   }
 

@@ -13,13 +13,11 @@ export type InMessage = {
 }[keyof SubscribeData];
 
 type InternalData = {
-  [Internal.Lobby]: Lobby;
   [Internal.Canvas]: HTMLCanvasElement;
   [Internal.SetMap]: string;
   [Internal.Time]: string;
   [Internal.MyMoves]: MoveMessage;
 
-  [Internal.ResetMoves]: undefined;
   [Internal.OpenAdvanced]: undefined;
 }
 

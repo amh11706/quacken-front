@@ -20,6 +20,7 @@ import { BoatTick, MoveMessageIncoming } from '../../lobby/quacken/boats/types';
 import { AiBoatData, AiData, ClaimOptions, Points, ScoreResponse } from './types';
 import { InMessage } from '../../ws/ws-subscribe-types';
 import { LobbyWrapperService } from '../lobby-wrapper/lobby-wrapper.service';
+import { LobbyService } from '../../lobby/lobby.service';
 
 @Component({
   selector: 'q-replay-cadegoose',
@@ -82,7 +83,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   boats: Boat[] = [];
   boatTicks: Record<number, BoatTick> = {};
   activeBoat?: Boat;
-  lobby?: CadeLobby;
+  get lobby() { return this.lobbyService.get().value; }
   aiData?: AiData;
   aiTeam = 1;
   activeAiBoat?: AiBoatData;
@@ -146,6 +147,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private ss: SettingsService,
     private wrapper: LobbyWrapperService,
+    private lobbyService: LobbyService<CadeLobby>,
   ) {
     this.filteredShips = this.shipCtrl.valueChanges.pipe(
       startWith(null),
@@ -188,9 +190,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     this.subs.add(this.wrapper.boats?.boats$.subscribe(boats => {
       this.boats = [...boats];
       this.findMyBoat();
-    }));
-    this.subs.add(this.wrapper.ws?.subscribe(Internal.Lobby, lobby => {
-      this.lobby = lobby as CadeLobby;
     }));
     this.subs.add(this.wrapper.boats?.clickedBoat$.subscribe(boat => {
       this.clickBoat(boat, true);
@@ -326,7 +325,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       team: this.aiTeam,
       boats: this.activeTurn?.sync.sync,
       ticks: this.activeTurn?.ticks,
-      map: sendMap ? this.randomMap || this.lobby?.map : undefined,
+      map: sendMap ? this.randomMap || this.lobby.map : undefined,
       seed: this.seed,
       claimOptions: this.claimOptions,
       claimsOnly,

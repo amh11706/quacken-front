@@ -20,7 +20,7 @@ interface BoatRender {
 @Injectable()
 export class TurnService {
   private turn?: Turn;
-  private _turn = new ReplaySubject<Turn>();
+  private _turn = new ReplaySubject<Turn>(1);
   turn$ = this._turn.asObservable();
 
   private clutterStep = new ReplaySubject<Clutter[]>();
@@ -41,6 +41,7 @@ export class TurnService {
     private boatsService: BoatsService,
   ) {
     this.initSubs();
+    document.addEventListener('visibilitychange', this.visibilityChange);
   }
 
   private initSubs() {
@@ -50,7 +51,24 @@ export class TurnService {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+    document.removeEventListener('visibilitychange', this.visibilityChange);
   }
+
+  private visibilityChange = () => {
+    this.blurred = document.hidden;
+
+    if (this.blurred) {
+      if (!this.turn || BoatRender3d.paused) return;
+      clearTimeout(this.animateTimeout);
+      delete this.animateTimeout;
+      BoatRender3d.tweens.update(Infinity);
+      for (const boat of this.boats) boat.boat.resetMoves();
+      delete this.turn;
+      this.ws.send(OutCmd.Sync);
+    } else {
+      this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined });
+    }
+  };
 
   protected handleSync() {
     this.worker.clearJobs();
@@ -128,7 +146,7 @@ export class TurnService {
 
   private _playTurn(step: number) {
     if (!this.turn) return;
-    if (step === 4) this.boatsService.resetBoats();
+    if (step === 4) this.boatsService.resetMymoves();
     const promises: Promise<any>[] = [];
     if (step % 2 === 0) promises.push(this.handleUpdate(this.turn?.cSteps[step] || [], step));
     else promises.push(this.handleUpdate(this.turn?.cSteps[step]?.filter(c => c.id) || [], step));

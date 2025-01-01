@@ -1,14 +1,8 @@
-import { Component, Injector } from '@angular/core';
+import { Component } from '@angular/core';
 import { KeyActions } from '../../settings/key-binding/key-actions';
-import { CadegooseComponent } from '../cadegoose/cadegoose.component';
+import { CadegooseComponent, CadeSettings } from '../cadegoose/cadegoose.component';
 import { SbMainMenuComponent } from './sb-main-menu/sb-main-menu.component';
-import { FriendsService } from '../../chat/friends/friends.service';
-import { EscMenuService } from '../../esc-menu/esc-menu.service';
-import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
-import { SettingsService } from '../../settings/settings.service';
-import { WsService } from '../../ws/ws.service';
 import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
-import { BoatsService } from '../quacken/boats/boats.service';
 
 export const SbDesc = 'Sea Battle: Sink the enemy ship to win!';
 
@@ -45,18 +39,9 @@ export class SeabattleComponent extends CadegooseComponent {
     back: KeyActions.SBBack,
   };
 
-  constructor(
-    ws: WsService,
-    ss: SettingsService,
-    fs: FriendsService,
-    kbs: KeyBindingService,
-    es: EscMenuService,
-    injector: Injector,
-    boats: BoatsService,
-  ) {
-    super(ws, ss, fs, kbs, es, injector, boats);
-
-    this.ss.setLobbySettings(ss.lAdminSettings, true, 3);
+  protected setType() {
+    this.group = 'l/cade';
+    this.ss.setLobbySettings(CadeSettings, true, 3);
   }
 
   protected isInBounds(x: number, y: number): boolean {

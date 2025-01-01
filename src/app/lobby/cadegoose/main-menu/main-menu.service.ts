@@ -13,6 +13,7 @@ import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status
 import { TeamMessage, LobbyStatus, CadeLobby } from '../types';
 import { LobbyWrapperService } from '../../../replay/lobby-wrapper/lobby-wrapper.service';
 import { BoatsService } from '../../quacken/boats/boats.service';
+import { LobbyService } from '../../lobby.service';
 
 @Injectable()
 export class MainMenuService implements OnDestroy {
@@ -42,7 +43,7 @@ export class MainMenuService implements OnDestroy {
   private subs = new Subscription();
   private firstJoin = true;
   group = 'l/cade' as SettingGroup;
-  lobby?: CadeLobby;
+  get lobby() { return this.lobbyService.get().value; }
   seeds: string[] = [];
 
   constructor(
@@ -53,20 +54,19 @@ export class MainMenuService implements OnDestroy {
     private sound: SoundService,
     private wrapper: LobbyWrapperService,
     private boats: BoatsService,
+    private lobbyService: LobbyService<CadeLobby>,
   ) {
     if (this.wrapper.ws) this.ws = this.wrapper.ws;
     if (this.wrapper.fs) this.fs = this.wrapper.fs;
     if (this.wrapper.boats) this.boats = this.wrapper.boats;
 
-    this.subs.add(this.ws.subscribe(Internal.Lobby, message => {
-      const m = message as CadeLobby;
-      if (this.lobby && this.status.value === 0 && m.inProgress > 0) {
+    this.subs.add(this.lobbyService.get().subscribe(m => {
+      if (this.status.value === 0 && m.inProgress > 0) {
         void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       }
       this.statsOpen = false;
 
-      if (this.lobby?.seed && !this.seeds.includes(this.lobby.seed)) this.seeds.push(this.lobby.seed);
-      this.lobby = m as CadeLobby;
+      if (this.lobby.seed && !this.seeds.includes(this.lobby.seed)) this.seeds.push(this.lobby.seed);
       if (m.settings) this.ss.setSettings(this.group, m.settings);
       this.status.next(m.inProgress);
       if (m.players?.length) void this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
@@ -113,7 +113,7 @@ export class MainMenuService implements OnDestroy {
     }));
     this.subs.add(this.boats.myBoat$.subscribe(b => {
       if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {
-        this.myBoat.isMe = false;
+        this.myBoat = new Boat('');
         void this.es.openTab(0, false, { lobbyTab: 0 });
         return;
       }
@@ -127,7 +127,7 @@ export class MainMenuService implements OnDestroy {
       this.lobby.turnsLeft = t.turnsLeft;
       if (t.turnsLeft > 0) return;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
-      this.myBoat = new Boat('');
+      this.boats.setMyBoat(new Boat(''));
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {

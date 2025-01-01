@@ -13,6 +13,8 @@ import { MapFilterComponent } from './map-filter/map-filter.component';
 import { ServerSettingGroup, Settings } from '../setting/settings';
 import { MapOption } from './map-card/types';
 import { MainMenuService } from '../../lobby/cadegoose/main-menu/main-menu.service';
+import { LobbyService } from '../../lobby/lobby.service';
+import { CadeLobby } from '../../lobby/cadegoose/types';
 
 const starRatings = [
   '4+ Stars',
@@ -130,6 +132,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
     public ws: WsService,
     public ss: SettingsService,
+    private lobbyService: LobbyService<CadeLobby>,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -145,7 +148,7 @@ export class MapListComponent implements OnInit, OnDestroy {
     this.selectedMap = await this.ss.get(this.setting.group, this.setting.name as ServerSettingGroup['l/cade']);
 
     this.initGenerated();
-    this.subs.add(this.ws.subscribe(Internal.Lobby, () => {
+    this.subs.add(this.lobbyService.get().subscribe(() => {
       if (this.selectedMap.value === 0) this.updateGenerated();
     }));
     this.filteredMapList = this.servermapList;

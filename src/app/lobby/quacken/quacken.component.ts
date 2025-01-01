@@ -9,6 +9,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { CadeLobby, Lobby } from '../cadegoose/types';
+import { LobbyService } from '../lobby.service';
 
 const ownerSettings: SettingName[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
@@ -23,18 +24,7 @@ export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy duc
   styleUrls: ['./quacken.component.css'],
 })
 export class QuackenComponent implements OnInit, OnDestroy {
-  private _lobby?: CadeLobby;
-  @Input() set lobby(lobby: Lobby) {
-    const l = lobby as CadeLobby;
-    if (!l) return;
-    this._lobby = l;
-    if (l.map) this.setMapB64(l.map);
-    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.Lobby, data: l }), 100);
-  }
-
-  get lobby(): CadeLobby | undefined {
-    return this._lobby;
-  }
+  protected get lobby() { return this.lobbyService.get().value; }
 
   protected group: 'l/quacken' | 'l/cade' | 'l/flaggames' = 'l/quacken';
   map: number[][] = [];
@@ -53,6 +43,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
     protected ss: SettingsService,
     protected fs: FriendsService,
     protected es: EscMenuService,
+    protected lobbyService: LobbyService<CadeLobby>,
   ) {
     void this.getSettings();
   }
@@ -63,6 +54,9 @@ export class QuackenComponent implements OnInit, OnDestroy {
     this.es.setLobby();
 
     this.sub.add(this.ws.subscribe(Internal.SetMap, m => this.setMapB64(m)));
+    this.sub.add(this.lobbyService.get().subscribe(l => {
+      if (l.map) this.setMapB64(l.map);
+    }));
   }
 
   ngOnDestroy(): void {
@@ -81,12 +75,12 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
     if (graphicSettings.mapScale && graphicSettings.speed) this.graphicSettings = graphicSettings as this['graphicSettings'];
     if (controlSettings.kbControls) this.controlSettings = controlSettings as this['controlSettings'];
-    this.sub.add(this.graphicSettings.renderMode?.stream.subscribe(() => {
-      setTimeout(() => {
-        this.setMapB64(this._lobby?.map || '');
-        this.ws.send(OutCmd.Sync);
-      }, 0);
-    }));
+    // this.sub.add(this.graphicSettings.renderMode?.stream.subscribe(() => {
+    //   setTimeout(() => {
+    //     this.setMapB64(this.lobby.map || '');
+    //     if (this.lobby.inProgress) this.ws.send(OutCmd.Sync);
+    //   }, 0);
+    // }));
   }
 
   protected setMapB64(map: string): void {

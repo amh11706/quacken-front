@@ -22,8 +22,7 @@ export class CadeEntryStatusComponent extends EntryStatusComponent implements On
   ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, t => this.points = t.points));
-    this.subs.add(this.ws.subscribe(Internal.Lobby, lobby => {
-      const l = lobby as CadeLobby;
+    this.subs.add(this.lobbyService.get().subscribe(l => {
       l.points && (this.points = l.points);
     }));
   }

@@ -1,15 +1,10 @@
-import { Component, Injector } from '@angular/core';
-import { FriendsService } from '../../chat/friends/friends.service';
-import { EscMenuService } from '../../esc-menu/esc-menu.service';
+import { Component } from '@angular/core';
 import { KeyActions } from '../../settings/key-binding/key-actions';
-import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
-import { SettingList, SettingsService } from '../../settings/settings.service';
-import { WsService } from '../../ws/ws.service';
+import { SettingList } from '../../settings/settings.service';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
 import { FgColumns, FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { MapTile } from '../../map-editor/types';
 import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
-import { BoatsService } from '../quacken/boats/boats.service';
 
 export const FgDesc = 'Flag games: Plant flags in the enemy base to score points!';
 const ownerSettings: SettingList = [
@@ -59,17 +54,7 @@ export class FlaggamesComponent extends CadegooseComponent {
     return pos.y < 3 || pos.y > this.mapHeight - 4;
   };
 
-  constructor(
-    ws: WsService,
-    ss: SettingsService,
-    fs: FriendsService,
-    kbs: KeyBindingService,
-    es: EscMenuService,
-    injector: Injector,
-    boats: BoatsService,
-  ) {
-    super(ws, ss, fs, kbs, es, injector, boats);
-
+  protected setType() {
     this.group = 'l/flaggames';
     this.ss.setLobbySettings(ownerSettings, true, 4);
   }

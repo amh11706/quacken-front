@@ -17,6 +17,7 @@ import { MapEditor, MapTile } from '../../../map-editor/types';
 import { Turn } from '../../quacken/boats/types';
 import { CadeLobby } from '../types';
 import { BoatsService } from '../../quacken/boats/boats.service';
+import { LobbyService } from '../../lobby.service';
 
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
 type index = 0 | 1 | 2 | 3;
@@ -42,7 +43,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
   @ViewChild('frame') frame?: ElementRef<HTMLElement>;
-  @Input() lobby: CadeLobby | undefined;
+  private get lobby() { return this.lobbyService.get().value; }
   @Input() hoveredTeam = -1;
   @Input() mapHeight = 36;
   @Input() mapWidth = 20;
@@ -123,6 +124,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     private ngZone: NgZone,
     private cd: ChangeDetectorRef,
     private boats: BoatsService,
+    private lobbyService: LobbyService<CadeLobby>,
   ) { }
 
   ngOnInit(): void {

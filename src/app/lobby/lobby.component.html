@@ -5,16 +5,12 @@
 
 <ng-container *ngIf="lobby | async as lobby"
               [ngSwitch]="lobby.type">
-  <q-quacken *ngSwitchCase="'Quacken'"
-             [lobby]="lobby"></q-quacken>
+  <q-quacken *ngSwitchCase="'Quacken'"></q-quacken>
   <q-spades *ngSwitchCase="'Spades'"
             [lobby]="lobby"></q-spades>
-  <q-cadegoose *ngSwitchCase="'CadeGoose'"
-               [lobby]="lobby"></q-cadegoose>
-  <q-seabattle *ngSwitchCase="'SeaBattle'"
-               [lobby]="lobby"></q-seabattle>
-  <q-flaggames *ngSwitchCase="'FlagGames'"
-               [lobby]="lobby"></q-flaggames>
+  <q-cadegoose *ngSwitchCase="'CadeGoose'"></q-cadegoose>
+  <q-seabattle *ngSwitchCase="'SeaBattle'"></q-seabattle>
+  <q-flaggames *ngSwitchCase="'FlagGames'"></q-flaggames>
   <q-mapinfo *ngSwitchCase="'mapinfo'"
              [lobby]="lobby"></q-mapinfo>
 

@@ -10,7 +10,6 @@
                  [checkSZ]="checkSZ"
                  [undo]="undo"
                  [editor]="editor"
-                 [lobby]="lobby"
                  [showIsland]="false"
                  [graphicSettings]="graphicSettings"></q-twod-render>
   <!-- <q-threed-render #renderer
@@ -30,7 +29,7 @@
 <q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
          [hoveredTeam]="hoveredTeam"
          [statOpacity]="statOpacity"
-         [stats]="lobby?.stats"
+         [stats]="lobby.stats"
          [columns]="columns"
          [myTeam]="myBoat.team"></q-stats>
 

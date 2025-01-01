@@ -20,8 +20,10 @@ import { SettingMap } from '../../settings/types';
 import { SettingGroup } from '../../settings/setting/settings';
 import { MainMenuService } from './main-menu/main-menu.service';
 import { BoatsService } from '../quacken/boats/boats.service';
+import { LobbyService } from '../lobby.service';
+import { CadeLobby } from './types';
 
-const ownerSettings: SettingList = [
+export const CadeSettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',
   'cadeTurnTime', 'cadeTurns',
   'cadeSpawnDelay', 'cadeTeams',
@@ -81,14 +83,18 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     fs: FriendsService,
     private kbs: KeyBindingService,
     es: EscMenuService,
+    lobbyService: LobbyService<CadeLobby>,
     private injector: Injector,
     private boats: BoatsService,
   ) {
-    super(ws, ss, fs, es);
-
-    this.group = 'l/cade';
+    super(ws, ss, fs, es, lobbyService);
+    this.setType();
     this.lobbySettings = this.ss.prefetch(this.group) as SettingMap<SettingGroup>;
-    this.ss.setLobbySettings(ownerSettings, this.showMapChoice);
+  }
+
+  protected setType() {
+    this.group = 'l/cade';
+    this.ss.setLobbySettings(CadeSettings, this.showMapChoice);
   }
 
   ngOnInit(): void {
@@ -101,6 +107,10 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
       this.advancedMapOpen = false;
     }));
     this.sub.add(this.ws.subscribe(Internal.SetMap, (m: string) => this.setMapB64(m)));
+    this.sub.add(this.lobbyService.get().subscribe(l => {
+      if (l.map) this.setMapB64(l.map);
+    }));
+
     this.sub.add(this.ws.subscribe(Internal.OpenAdvanced, () => {
       this.mapSeed = this.lobby?.seed || '';
       if (!this.lobby?.inProgress) this.advancedMapOpen = !this.advancedMapOpen;
