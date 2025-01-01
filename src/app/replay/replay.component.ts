@@ -229,7 +229,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
         if (i > value || !syncFound) continue;
         this.tick = i;
-        this.fakeWs.dispatchMessage({ cmd: Internal.ResetBoats, data: undefined });
+        this.wrapper.boats?.resetBoats();
         this.fakeMessages(true);
         break;
       }
@@ -257,7 +257,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       }
       if (!skipTurn) continue;
 
-      this.fakeWs.dispatchMessage?.({ cmd: Internal.ResetBoats, data: undefined });
+      this.wrapper.boats?.resetBoats();
       this.fakeWs.dispatchMessage?.(m);
     }
   }

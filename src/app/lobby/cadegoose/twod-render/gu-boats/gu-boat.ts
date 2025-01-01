@@ -91,7 +91,7 @@ export class GuBoat {
     if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y ||
       (boat.crunchDir !== -1 && boat.crunchDir < 4)
     ) {
-      promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
+      promises.push(...this.updateBoatPos(startTime, this.pos.x, this.pos.y, boat.crunchDir, boat.moveTransition));
     }
 
     const sinking = boat.moveLock === 101;
@@ -170,54 +170,54 @@ export class GuBoat {
       new Promise<void | { x: number, y: number }>(resolve => {
         const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
-          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
+          new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
             .to({ x: x + offsetX }, 5000 / BoatRender3d.speed)
             .delay(3500 / BoatRender3d.speed)
             .repeatDelay(500 / BoatRender3d.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
-            .onUpdate(() => this.coords?.fromPosition(this.pos))
+            .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else if (startTime && transitions[0]) {
-          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
+          new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
             .easing(moveEase[transitions[0]])
             .to({ x }, 10000 / BoatRender3d.speed)
             .delay(3000 / BoatRender3d.speed)
             .start(startTime)
-            .onUpdate(() => this.coords?.fromPosition(this.pos))
+            .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else {
           resolve();
         }
       }).then(() => {
-        this.pos = { x, y };
-        this.coords?.fromPosition(this.pos);
+        this.boat.pos = { x, y };
+        this.coords?.fromPosition(this.boat.pos);
       }),
 
       new Promise<void | { x: number, y: number }>(resolve => {
         const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
-          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
+          new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
             .to({ y: y + offsetY }, 5000 / BoatRender3d.speed)
             .delay(3500 / BoatRender3d.speed)
             .repeatDelay(500 / BoatRender3d.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
-            .onUpdate(() => this.coords?.fromPosition(this.pos))
+            .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
-          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
+          new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
             .easing(moveEase[transitions[1]])
             .to({ y }, 10000 / BoatRender3d.speed)
             .delay(3000 / BoatRender3d.speed)
             .start(startTime)
-            .onUpdate(() => this.coords?.fromPosition(this.pos))
+            .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else {
           resolve();
         }
       }).then(() => {
-        this.pos = { x, y };
+        this.boat.pos = { x, y };
         this.coords?.fromPosition(this.pos);
       }),
     ];

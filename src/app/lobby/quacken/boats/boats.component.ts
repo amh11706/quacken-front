@@ -84,7 +84,7 @@ export class BoatsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     document.addEventListener('visibilitychange', this.visibilityChange);
 
-    this.subs.add(this.ws.subscribe(Internal.ResetBoats, () => this.resetBoats()));
+    // this.subs.add(this.ws.subscribe(Internal.ResetBoats, () => this.resetBoats()));
     this.subs.add(this.ws.subscribe(Internal.Lobby, lobby => {
       const l = lobby as CadeLobby;
       if (!l.boats) return;

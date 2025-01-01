@@ -101,6 +101,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
     this.subs.add(this.turn.turn$.subscribe(t => {
       this.clutter = [];
       this.setHeaderFlags(t.flags);
+      console.log('turn', t.turn);
     }));
     this.subs.add(this.turn.clutterStep$.subscribe(c => this.handleUpdate(c)));
 
@@ -208,6 +209,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
       const r = this.boatRenders.get(b.id);
       if (!r) continue;
       r.boat = b;
+      r.pos = b.pos;
     }
     this.boatRenders.forEach((r, id) => {
       if (!touchedBoats.has(id)) {

@@ -9,6 +9,7 @@ import { BoatRender3d } from "../../cadegoose/boat-render";
 import { JobQueue } from "../../cadegoose/job-queue";
 import { Boat } from "./boat";
 import { SettingsService } from "../../../settings/settings.service";
+import { BoatsService } from "./boats.service";
 
 interface BoatRender {
   update(animate: boolean, trigger?: () => void): Promise<void>;
@@ -37,6 +38,7 @@ export class TurnService {
     private ws: WsService,
     private ss: SettingsService,
     private sound: SoundService,
+    private boatsService: BoatsService,
   ) {
     this.initSubs();
   }
@@ -70,7 +72,7 @@ export class TurnService {
     if (!moveFound) for (const step of turn.cSteps) if (step && step.length) moveFound = true;
 
     if (!moveFound || this.blurred) {
-      this.resetBoats();
+      this.boatsService.resetBoats();
       this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 1000);
       delete this.turn;
       return;
@@ -81,11 +83,6 @@ export class TurnService {
 
   setBoats(boats: BoatRender[]) {
     this.boats = boats;
-  }
-
-  protected resetBoats(): void {
-    for (const boat of this.boats) boat.boat.resetMoves();
-    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined }));
   }
 
   protected sortBoats(): void {
@@ -131,7 +128,7 @@ export class TurnService {
 
   private _playTurn(step: number) {
     if (!this.turn) return;
-    if (step === 4) this.resetBoats();
+    if (step === 4) this.boatsService.resetBoats();
     const promises: Promise<any>[] = [];
     if (step % 2 === 0) promises.push(this.handleUpdate(this.turn?.cSteps[step] || [], step));
     else promises.push(this.handleUpdate(this.turn?.cSteps[step]?.filter(c => c.id) || [], step));
@@ -160,9 +157,10 @@ export class TurnService {
       }
       if (u.tm === undefined || u.tf === undefined) continue;
       if (boat.boat.rotateTransition === 0) boat.boat.rotateTransition = 1;
-      boat.boat.setPos(u.x, u.y)
-        .setTransition(u.tf, u.tm)
+      boat.boat.setTransition(u.tf, u.tm)
         .rotateByMove(u.tm);
+      boat.pos.x = u.x;
+      boat.pos.y = u.y;
 
       const p = boat.update(true);
       if (p) promises.push(p);

@@ -3,7 +3,6 @@ export const enum Internal {
   Lobby = -100,
   ResetMoves,
   Time,
-  ResetBoats,
   MyMoves,
   Canvas,
   OpenAdvanced,

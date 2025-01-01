@@ -255,6 +255,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   }
 
   clickBoat(boat: Boat, center = true, selectAi = true): void {
+    console.log('clickBoat', boat);
     if (selectAi) this.selectAiBoat(this.aiData?.boats.find(b => b.id === boat.id), false);
     if (this.activeBoat) {
       this.activeBoat.isMe = false;

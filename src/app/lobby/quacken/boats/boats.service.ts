@@ -3,7 +3,7 @@ import { BehaviorSubject, Subject, Subscription } from "rxjs";
 import { Boat } from "./boat";
 import { BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync } from "./types";
 import { WsService } from "../../../ws/ws.service";
-import { InCmd } from "../../../ws/ws-messages";
+import { InCmd, Internal } from "../../../ws/ws-messages";
 import { syncToBoat } from "./convert";
 
 @Injectable()
@@ -40,6 +40,11 @@ export class BoatsService {
 
   ngOnDestroy() {
     this.subs.unsubscribe();
+  }
+
+  resetBoats(): void {
+    for (const boat of this.boats) boat.resetMoves();
+    setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined }));
   }
 
   focusMyBoat() {
@@ -93,6 +98,7 @@ export class BoatsService {
   private updateMyBoat() {
     if (!this.ws.sId) return;
     const oldBoat = this.myBoat.value;
+    if (oldBoat.id === this.ws.sId) return;
     oldBoat.isMe = false;
     const boat = this.boatMap.get(this.ws.sId) || new Boat('');
     this.myBoat.next(boat);
