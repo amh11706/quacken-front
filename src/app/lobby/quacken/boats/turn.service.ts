@@ -181,7 +181,6 @@ export class TurnService {
         boat.pos.y = u.y;
       }
 
-      console.log('boat', boat.boat.title, boat.boat.moveLock);
       const p = boat.update(true);
       if (p) promises.push(p);
     }

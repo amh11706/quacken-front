@@ -133,7 +133,6 @@ export class HudComponent implements OnInit, OnDestroy {
       this.myBoat.ready = false;
       this.resetMoves();
       this.lastMoveReset = -1;
-      this.turn = this.maxTurn - m.turnsLeft;
 
       if (m.seconds) {
         if (m.seconds > 20) m.seconds = 20;
@@ -173,6 +172,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
       this.myBoat.ready = false;
       this.turn = s.turn ?? this.turn;
+      this.resetMoves();
       const myBoat = s.sync.find(boat => boat.id === this.myBoat.id);
       if (myBoat) this.myBoat.moveLock = myBoat.ml;
       if (this.myBoat.moveLock > this.maxTurn) return;
@@ -201,7 +201,7 @@ export class HudComponent implements OnInit, OnDestroy {
       if (!this.ws.connected || !this.myBoat.isMe) return;
       if (this.turn <= this.lastMoveReset) return;
     }
-    if (this.myBoat.moveLock < 100) this.myBoat.moveLock = 0;
+    if (this.myBoat.moveLock <= this.turn) this.myBoat.moveLock = 0;
     this.myBoat.ready = false;
     this.lastMoveReset = this.turn;
     this.totalTokens = { ...this.totalTokens };
@@ -232,7 +232,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.myBoat.ready) return;
     this.stopTimer();
     this.myBoat.ready = true;
-    this.myBoat.moveLock = this.turn + 2;
+    this.myBoat.moveLock = this.turn + 1;
     this.ws.send(OutCmd.Ready, { ready: true, ...this.localBoat });
   }
 
