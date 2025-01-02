@@ -31,13 +31,13 @@ interface SoundFile {
 
 const SoundFiles: Record<Sounds, SoundFile> = {
   [Sounds.BattleStart]: { file: 'battle_starting.ogg', group: SoundGroups.Alert, minDelay: 1500 },
-  [Sounds.CannonFireBig]: { file: 'cannon_fire_big.ogg', group: SoundGroups.Ship, minDelay: 50 },
-  [Sounds.CannonFireMedium]: { file: 'cannon_fire_medium.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.7 },
-  [Sounds.CannonFireSmall]: { file: 'cannon_fire_small.ogg', group: SoundGroups.Ship, minDelay: 50, volume: 0.4 },
-  [Sounds.CannonHit]: { file: 'cannonball_hit.ogg', group: SoundGroups.Ship, minDelay: 50 },
-  [Sounds.CannonSplash]: { file: 'cannonball_splash.ogg', group: SoundGroups.Ship, minDelay: 100, volume: 0.7 },
-  [Sounds.CannonSplash2]: { file: 'cannonball_splash2.ogg', group: SoundGroups.Ship, minDelay: 100, volume: 0.7 },
-  [Sounds.RockDamage]: { file: 'rock_damage.ogg', group: SoundGroups.Ship, minDelay: 100 },
+  [Sounds.CannonFireBig]: { file: 'cannon_fire_big.ogg', group: SoundGroups.Ship, minDelay: 200 },
+  [Sounds.CannonFireMedium]: { file: 'cannon_fire_medium.ogg', group: SoundGroups.Ship, minDelay: 200, volume: 0.7 },
+  [Sounds.CannonFireSmall]: { file: 'cannon_fire_small.ogg', group: SoundGroups.Ship, minDelay: 200, volume: 0.4 },
+  [Sounds.CannonHit]: { file: 'cannonball_hit.ogg', group: SoundGroups.Ship, minDelay: 200 },
+  [Sounds.CannonSplash]: { file: 'cannonball_splash.ogg', group: SoundGroups.Ship, minDelay: 200, volume: 0.7 },
+  [Sounds.CannonSplash2]: { file: 'cannonball_splash2.ogg', group: SoundGroups.Ship, minDelay: 200, volume: 0.7 },
+  [Sounds.RockDamage]: { file: 'rock_damage.ogg', group: SoundGroups.Ship, minDelay: 200 },
   [Sounds.Sink]: { file: 'ship_sunk.ogg', group: SoundGroups.Ship, minDelay: 500 },
   [Sounds.Notification]: { file: 'notification.mp3', group: SoundGroups.Notification, minDelay: 1500, volume: 5 },
 };
@@ -68,11 +68,13 @@ export class SoundService {
     const file = SoundFiles[sound];
     if (!file) throw new Error('Sound not found: ' + sound);
     if (delay) {
-      setTimeout(() => this.play(sound, 0, fallback));
+      setTimeout(() => this.play(sound, 0, fallback), delay);
       return;
     }
     const now = new Date().valueOf();
-    if (file.lastPlayed && file.lastPlayed + file.minDelay > now) return;
+    if (file.lastPlayed && file.lastPlayed + file.minDelay > now) {
+      return;
+    }
     file.lastPlayed = now;
 
     const groupVolume = (this.settings[file.group]?.value ?? 50);
