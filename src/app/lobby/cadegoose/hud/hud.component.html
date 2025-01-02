@@ -9,7 +9,6 @@
     <q-move-input id="moves"
                   (inputChange)="sendMoves()"
                   (unusedTokensChange)="unusedTokens = $event"
-                  [reset]="resetMoves$"
                   [input]="localBoat"
                   [maneuvers]="myBoat.maneuvers"
                   [kbControls]="kbControls"

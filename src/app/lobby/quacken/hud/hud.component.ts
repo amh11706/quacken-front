@@ -72,7 +72,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   totalTokens: Tokens = {
     moves: [5, 5, 5],
-    shots: 0,
+    shots: 16,
     maneuvers: [0, 0, 0, 0],
   };
 
@@ -89,7 +89,6 @@ export class HudComponent implements OnInit, OnDestroy {
   protected turnsLeft = 0;
   lastMoveReset = -1;
   dragContext = { source: 8, move: 0, type: 'move' };
-  resetMoves$ = new Subject<void>();
   protected subs = new Subscription();
   protected lobbySettings = this.ss.prefetch('l/cade');
   protected get maxTurn(): number { return this.lobbySettings.turns?.value || 90; }
@@ -120,7 +119,6 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.boats.myBoat$.subscribe(b => {
       if (b === this.myBoat) return;
       this.myBoat = b;
-      this.resetMoves(true);
     }));
     this.subs.add(this.ws.subscribe(Internal.ResetMoves, this.resetMoves.bind(this)));
     this.subs.add(this.ws.subscribe(InCmd.BoatTick, t => {
@@ -128,12 +126,14 @@ export class HudComponent implements OnInit, OnDestroy {
       this.totalTokens.shots = t.tp >= 2 ? 1 : 0;
     }));
 
-    this.subs.add(this.lobbyService.get().subscribe(m => {
+    this.subs.add(this.lobbyService.get().subscribe(async m => {
       if (m.inProgress) this.turn = 1;
       this.myBoat.ready = false;
       this.resetMoves();
       this.lastMoveReset = -1;
 
+      // make sure the settings are loaded so we don't start the timer with the wrong settings
+      await this.ss.getGroup(this.group);
       if (m.seconds) {
         if (m.seconds > 20) m.seconds = 20;
         m.seconds = Math.round(m.seconds * this.secondsPerTurn / 30);
@@ -144,7 +144,7 @@ export class HudComponent implements OnInit, OnDestroy {
       const turnsLeft = m.turnsLeft === undefined
         ? this.maxTurn - (m as any).turn || 0
         : m.turnsLeft - 1;
-      this.setTurn(turnsLeft, this.secondsPerTurn - (m.seconds || -1) + 2);
+      this.setTurn(turnsLeft, this.secondsPerTurn - (m.seconds || -1) - 2);
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
@@ -172,9 +172,9 @@ export class HudComponent implements OnInit, OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => {
       this.myBoat.ready = false;
       this.turn = s.turn ?? this.turn;
-      this.resetMoves();
       const myBoat = s.sync.find(boat => boat.id === this.myBoat.id);
       if (myBoat) this.myBoat.moveLock = myBoat.ml;
+      this.resetMoves();
       if (this.myBoat.moveLock > this.maxTurn) return;
       if (this.turn === 0 || !this.myBoat.isMe) return;
       if (this.myBoat.moveLock > this.turn) {
@@ -196,6 +196,11 @@ export class HudComponent implements OnInit, OnDestroy {
     this.stopTimer();
   }
 
+  protected zeroFill(input: number[]): number[] {
+    for (const i in input) input[i] = 0;
+    return input;
+  }
+
   protected resetMoves(force = false): void {
     if (!force) {
       if (!this.ws.connected || !this.myBoat.isMe) return;
@@ -205,11 +210,13 @@ export class HudComponent implements OnInit, OnDestroy {
     this.myBoat.ready = false;
     this.lastMoveReset = this.turn;
     this.totalTokens = { ...this.totalTokens };
-    for (const i in this.serverBoat.moves) this.serverBoat.moves[i] = 0;
-    for (const i in this.serverBoat.shots) this.serverBoat.shots[i] = 0;
-    for (const i in this.serverBoatPending.moves) this.serverBoatPending.moves[i] = 0;
-    for (const i in this.serverBoatPending.shots) this.serverBoatPending.shots[i] = 0;
-    this.resetMoves$.next();
+    this.zeroFill(this.localBoat.moves);
+    this.zeroFill(this.localBoat.shots);
+    this.localBoat = { ...this.localBoat };
+    this.zeroFill(this.serverBoat.moves);
+    this.zeroFill(this.serverBoat.shots);
+    this.zeroFill(this.serverBoatPending.moves);
+    this.zeroFill(this.serverBoatPending.shots);
   }
 
   private handleKeys() {
@@ -232,7 +239,7 @@ export class HudComponent implements OnInit, OnDestroy {
     if (this.myBoat.ready) return;
     this.stopTimer();
     this.myBoat.ready = true;
-    this.myBoat.moveLock = this.turn + 1;
+    this.myBoat.moveLock += 100;
     this.ws.send(OutCmd.Ready, { ready: true, ...this.localBoat });
   }
 

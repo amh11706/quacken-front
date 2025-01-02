@@ -23,13 +23,14 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     this._input = v;
     this.selected = 0;
     this.autoMoveBlock();
+    this.checkMaxMoves();
+    this.checkMaxShots();
   }
   get input(): MoveMessage {
     return this._input;
   }
   @Input() serverInput = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
   @Output() inputChange = new EventEmitter<{ moves: number[], shots: number[] }>();
-  @Input() reset?: Subject<void>;
   private _totalTokens: Tokens = {
     moves: [0, 0, 0],
     shots: 0,
@@ -95,12 +96,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    if (this.reset) {
-      this.subs.add(this.reset.subscribe(() => {
-        this.resetMoves();
-        this.selected = 0;
-      }));
-    }
     this.subs.add(this.kbs.subscribe(this.actions.back, v => {
       if (this.locked || !v || !this.kbControls) return;
 

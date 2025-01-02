@@ -39,7 +39,7 @@ export class BoatsService {
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => this.handleSync(s)));
     this.subs.add(this.ws.subscribe(InCmd.BoatTicks, ticks => this.handleTicks(ticks)));
     this.subs.add(this.lobby.get().subscribe(l => {
-      if (l.boats) setTimeout(() => this.setBoats(Object.values(l.boats), true));
+      if (l.boats) this.setBoats(Object.values(l.boats), true);
       if (l.clutter) this.clutter.next(l.clutter);
     }));
   }
