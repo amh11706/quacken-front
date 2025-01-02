@@ -65,9 +65,11 @@
        [style.height]="render.boat.influence*92 + 'px'"
        class="influence"></div>
 
-  <q-sprite-img [class.ghostly]="render.boat.type === 28"
-                [render]="render"
-                (click)="clickBoat(render.boat)"
-                (mouseenter)="hoveredTeam = render.boat.team || 0;"
-                (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
+  <div [style.transform]="'rotate(' + render.rotateAdjust + 'deg)'">
+    <q-sprite-img [class.ghostly]="render.boat.type === 28"
+                  [render]="render"
+                  (click)="clickBoat(render.boat)"
+                  (mouseenter)="hoveredTeam = render.boat.team || 0;"
+                  (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
+  </div>
 </div>

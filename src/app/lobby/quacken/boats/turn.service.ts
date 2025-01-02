@@ -146,6 +146,9 @@ export class TurnService {
 
   private _playTurn(step: number) {
     if (!this.turn) return;
+    const startTime = new Date().valueOf();
+    BoatRender3d.tweenProgress = startTime;
+
     if (step === 4) this.boatsService.resetMymoves();
     const promises: Promise<any>[] = [];
     if (step % 2 === 0) promises.push(this.handleUpdate(this.turn?.cSteps[step] || [], step));
@@ -159,32 +162,38 @@ export class TurnService {
       const u = updates.get(boat.boat.id);
       boat.boat.crunchDir = -1;
       if (!u) {
-        const p = boat.update(true);
-        if (p) promises.push(p);
         continue;
       };
       if (u.c) {
         boat.boat.addDamage(u.c - 1, u.cd);
         if (u.cd === 100) void this.sound.play(Sounds.Sink, 10000 / this.speed);
-        if (u.c < 5) void this.sound.play(Sounds.RockDamage, 3500 / this.speed);
+        if (u.c < 5) void this.sound.play(Sounds.RockDamage, 7500 / this.speed);
       }
-      // ignore spin if the boat sank as the animations will conflict
-      if (u.s && boat.boat.moveLock !== 101) {
+      if (u.s) {
         boat.boat.face += 90 * u.s;
         boat.boat.rotateTransition = 4;
       }
-      if (u.tm === undefined || u.tf === undefined) continue;
-      if (boat.boat.rotateTransition === 0) boat.boat.rotateTransition = 1;
-      boat.boat.setTransition(u.tf, u.tm)
-        .rotateByMove(u.tm);
-      boat.pos.x = u.x;
-      boat.pos.y = u.y;
+      if (u.tm && u.tf !== undefined) {
+        if (boat.boat.rotateTransition === 0) boat.boat.rotateTransition = 1;
+        boat.boat.setTransition(u.tf, u.tm)
+          .rotateByMove(u.tm);
+        boat.pos.x = u.x;
+        boat.pos.y = u.y;
+      }
 
+      console.log('boat', boat.boat.title, boat.boat.moveLock);
       const p = boat.update(true);
       if (p) promises.push(p);
     }
 
     this.sortBoats();
+    // set a minimum time for the step animation
+    promises.push(new Promise(resolve => {
+      new Tween({}, BoatRender3d.tweens)
+        .to({}, 5000 / BoatRender3d.speed)
+        .onComplete(resolve)
+        .start(startTime);
+    }));
     return Promise.all(promises);
   }
 }

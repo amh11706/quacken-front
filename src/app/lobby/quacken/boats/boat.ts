@@ -1,3 +1,4 @@
+import { BoatTypes } from './boat-types';
 import { Team } from './types';
 
 export class Boat {
@@ -28,7 +29,7 @@ export class Boat {
 
   constructor(
     public name: string,
-    public type = 0,
+    public type = BoatTypes.WarFrig,
     public isMe = false,
   ) { }
 
@@ -88,7 +89,7 @@ export class Boat {
 
   private sink() {
     this.rotateTransition = 2;
-    this.moveLock = 101;
+    if (this.moveLock < 100) this.moveLock = 101;
   }
 
   checkSZ = (pos: { x: number, y: number }): boolean => {

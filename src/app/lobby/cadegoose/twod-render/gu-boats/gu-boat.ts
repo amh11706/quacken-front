@@ -1,7 +1,6 @@
 import * as TWEEN from '@tweenjs/tween.js';
 
 import { Boat } from '../../../../lobby/quacken/boats/boat';
-import { BoatTypes } from '../../../../lobby/quacken/boats/boat-types';
 import { SpriteData, Orientation } from '../sprite';
 import { Boats } from './objects';
 import { BoatRender3d, TeamColors, moveEase } from '../../boat-render';
@@ -46,6 +45,7 @@ export class GuBoat {
   coords: Point;
   pos: { x: number, y: number };
   protected rotateDeg: number;
+  rotateAdjust = 0;
   private spriteData?: SpriteData;
   orientation?: Orientation;
   img?: string;
@@ -60,7 +60,7 @@ export class GuBoat {
     this.pos = { ...boat.pos };
     this.rotateDeg = boat.face;
     this.coords = new Point().fromPosition(boat.pos);
-    this.spriteData = Boats[boat.type as BoatTypes]?.sail;
+    this.spriteData = Boats[boat.type]?.sail;
     if (!this.spriteData) return;
     this.updateImage();
     void this.updateTeam();
@@ -95,23 +95,18 @@ export class GuBoat {
     }
 
     const sinking = boat.moveLock === 101;
+    if (boat.moveLock < 100) {
+      this.updateAnimation('sail');
+    }
     if (!startTime || boat.face !== this.rotateDeg || sinking) {
       promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, sinking ? 0 : 1));
     }
+    if (sinking) boat.moveLock++; // prevent multiple sink animations
 
     if (!startTime) {
       void this.updateTeam();
     }
 
-    if (!promises.length && startTime) {
-      // add an empty tween promise to let pause and play work
-      promises.push(new Promise(resolve => {
-        new TWEEN.Tween({}, BoatRender3d.tweens)
-          .to({}, 5000 / BoatRender3d.speed)
-          .onComplete(resolve)
-          .start(startTime);
-      }));
-    }
     return Promise.all(promises);
   }
 
@@ -150,13 +145,22 @@ export class GuBoat {
     return prom;
   }
 
+  protected get team(): Team {
+    if (this.boat.isMe) return 4;
+    return this.boat.team === GuBoat.myTeam ? 99 : this.boat.team ?? 99;
+  }
+
+  private async updateAnimation(state: 'sail' | 'sink'): Promise<void> {
+    this.spriteData = Boats[this.boat.type]?.[state];
+    if (!this.spriteData) return;
+    this.img = 'url(' + await this.getTeamImage(this.team, this.spriteData.name + '/' + state) + ')';
+  }
+
   public async updateTeam(): Promise<void> {
     if (!this.spriteData) return;
     await new Promise(resolve => setTimeout(resolve));
-    let team = this.boat.team === GuBoat.myTeam ? 99 : this.boat.team ?? 99;
-    if (this.boat.isMe) team = 4;
-    this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sail') + ')';
-    if (Boats[this.boat.type as BoatTypes]?.sink) void this.getTeamImage(team, this.spriteData.name + '/sink');
+    this.updateAnimation('sail');
+    if (Boats[this.boat.type]?.sink) void this.getTeamImage(this.team, this.spriteData.name + '/sink');
     this.rebuildHeader();
   }
 
@@ -165,6 +169,7 @@ export class GuBoat {
   ): Promise<void>[] {
     const decodeX = [0, 0.4, 0, -0.4];
     const decodeY = [-0.4, 0, 0.4, 0];
+    let updateHooked = false;
 
     const p = [
       new Promise<void | { x: number, y: number }>(resolve => {
@@ -178,6 +183,7 @@ export class GuBoat {
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
+          updateHooked = true;
         } else if (startTime && transitions[0]) {
           new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
             .easing(moveEase[transitions[0]])
@@ -186,6 +192,7 @@ export class GuBoat {
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
+          updateHooked = true;
         } else {
           resolve();
         }
@@ -203,7 +210,7 @@ export class GuBoat {
             .repeatDelay(500 / BoatRender3d.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
-            .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
+            .onUpdate(() => !updateHooked && this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
           new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
@@ -211,7 +218,7 @@ export class GuBoat {
             .to({ y }, 10000 / BoatRender3d.speed)
             .delay(3000 / BoatRender3d.speed)
             .start(startTime)
-            .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
+            .onUpdate(() => !updateHooked && this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else {
           resolve();
@@ -225,70 +232,78 @@ export class GuBoat {
     return p;
   }
 
-  private updateImage(index = (Math.round(this.rotateDeg / 22.5) + 46) % 16) {
+  private get frame(): number {
+    const degrees = this.normalizeDegrees(this.rotateDeg);
+    return (Math.round((degrees + 325) / 22.5)) % 16;
+  }
+
+  private updateImage(index?: number): void {
+    if (!index) {
+      index = this.frame;
+      this.rotateAdjust = (this.normalizeDegrees(this.rotateDeg - index * 22.5 + 135) - 180) / 2.7;
+      this.rotateAdjust = +this.rotateAdjust.toFixed(2);
+    } else {
+      this.rotateAdjust = 0;
+    }
     const newOrientation = this.spriteData?.orientations[index];
     if (!newOrientation || this.orientation === newOrientation) return;
     this.orientation = newOrientation;
     this.imgPosition = (-this.orientation.x) + 'px ' + (-this.orientation.y) + 'px';
   }
 
+  protected normalizeDegrees(deg: number) { return ((deg % 360) + 360) % 360 }
+
   protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number): Promise<any>[] {
     const promises: Promise<any>[] = [];
-
-    // normal rotation
-    if (startTime && (transition || !opacity)) {
-      promises.push(new Promise(resolve => {
-        if (transition === 1 || transition === 4) {
-          new TWEEN.Tween(this, BoatRender3d.tweens)
-            .easing(TWEEN.Easing.Linear.None)
-            .to({ rotateDeg: face }, 8000 / BoatRender3d.speed)
-            .delay(3000 / BoatRender3d.speed)
-            .start(startTime)
-            .onUpdate(() => this.updateImage())
-            .onComplete(resolve);
-        } else {
-          this.updateImage();
-          setTimeout(resolve, 10000 / BoatRender3d.speed);
-        }
-      }).then(() => this.rotateDeg = face));
-    }
-
-    // sink animation
-    if (startTime && transition > 1 && transition !== 4) {
-      promises.push(new Promise<void>(resolve => {
-        const delay = 2000 / BoatRender3d.speed;
-        const delayOffset = 10000 / BoatRender3d.speed;
-        const f = this.rotateDeg / 90 * 4 + 46;
-        // spin left to straight down to line up with first frame of the sink
-        for (let i = 1; i < 17; i++) {
-          const index = (f + 15 * i) % 16;
-          if (index === 8) {
-            resolve();
-            // swap to sink sprites when facing down
-            setTimeout(async () => {
-              this.spriteData = Boats[this.boat.type as BoatTypes]?.sink;
-              if (!this.spriteData) return;
-              const team = this.boat.team === GuBoat.myTeam ? 99 : this.boat.team ?? 99;
-              this.img = 'url(' + await this.getTeamImage(team, this.spriteData.name + '/sink') + ')';
-              for (let i2 = 0; i2 < 50; i2++) {
-                setTimeout(() => {
-                  this.updateImage(i2);
-                  if (i2 === 49) this.spriteData = Boats[this.boat.type as BoatTypes]?.sail;
-                }, delay / 2 * i2);
-              }
-            }, delayOffset + delay * i + 1);
-            break;
-          }
-
-          setTimeout(() => this.updateImage(index), delayOffset + delay * i);
-        }
-      }));
-    }
-
     if (!startTime) {
       this.rotateDeg = face;
       this.updateImage();
+      return promises;
     }
+
+
+    const normalRotate = new TWEEN.Tween(this, BoatRender3d.tweens)
+      .easing(TWEEN.Easing.Linear.None)
+      .to({ rotateDeg: face }, 8000 / BoatRender3d.speed)
+      .delay(3000 / BoatRender3d.speed)
+      .start(startTime)
+      .onUpdate(() => this.updateImage());
+
+    promises.push(new Promise<void>(resolve => {
+      normalRotate.onComplete(() => {
+        this.rotateDeg = this.normalizeDegrees(face);
+        this.boat.face = this.rotateDeg;
+        resolve();
+      });
+    }));
+
+    if (opacity > 0) return promises;
+
+    // rotate counter clockwise to the nearest straight down position before sinking
+    const targetRotation = face < 225 ? 225 - 360 : 225;
+    const timePerDegree = 8000 / BoatRender3d.speed / 90;
+    const duration = Math.abs(this.rotateDeg - targetRotation) * timePerDegree;
+    const sinkLineup = new TWEEN.Tween(this, BoatRender3d.tweens)
+      .easing(TWEEN.Easing.Linear.None)
+      .to({ rotateDeg: targetRotation }, duration)
+      .delay(15000 / BoatRender3d.speed)
+      .start(startTime)
+      .onUpdate(() => this.updateImage())
+      .onComplete(() => {
+        this.updateAnimation('sink');
+      });
+
+    normalRotate.chain(sinkLineup);
+
+    // sink animation
+    const sinkFrame = { frame: 0 };
+    const frameTime = 1000 / BoatRender3d.speed;
+    sinkLineup.chain(new TWEEN.Tween(sinkFrame, BoatRender3d.tweens)
+      .easing(TWEEN.Easing.Linear.None)
+      .to({ frame: 49 }, frameTime * 50)
+      .onUpdate(() => {
+        this.updateImage(Math.round(sinkFrame.frame + 0.5));
+      }));
 
     return promises;
   }

@@ -97,9 +97,11 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.boats.boats$.subscribe(b => this.checkBoats(b)));
-    this.subs.add(this.boats.clutter$.subscribe(c => this.handleUpdate(c)));
-    this.subs.add(this.turn.turn$.subscribe(t => {
+    this.subs.add(this.boats.clutter$.subscribe(c => {
       this.clutter = [];
+      this.handleUpdate(c)
+    }));
+    this.subs.add(this.turn.turn$.subscribe(t => {
       this.setHeaderFlags(t.flags);
     }));
     this.subs.add(this.turn.clutterStep$.subscribe(c => this.handleUpdate(c)));
@@ -166,11 +168,11 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
       void this.sound.play(fireSound);
       if (u.dbl) void this.sound.play(fireSound, 1000 / this.speed);
       if (u.dis < 4) {
-        void this.sound.play(Sounds.CannonHit, (2500 * u.dis + 1500) / this.speed);
-        if (u.dbl) void this.sound.play(Sounds.CannonHit, (2500 * u.dis + 2500) / this.speed);
+        void this.sound.play(Sounds.CannonHit, (2000 * u.dis + 1000) / this.speed);
+        if (u.dbl) void this.sound.play(Sounds.CannonHit, (2000 * u.dis + 2000) / this.speed);
       } else {
-        void this.sound.play(Sounds.CannonSplash, 9000 / this.speed);
-        if (u.dbl) void this.sound.play(Sounds.CannonSplash2, 10000 / this.speed);
+        void this.sound.play(Sounds.CannonSplash, 7000 / this.speed);
+        // if (u.dbl) void this.sound.play(Sounds.CannonSplash2, 8000 / this.speed);
       }
     }
   }
