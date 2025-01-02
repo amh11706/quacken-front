@@ -144,7 +144,7 @@ export class HudComponent implements OnInit, OnDestroy {
       const turnsLeft = m.turnsLeft === undefined
         ? this.maxTurn - (m as any).turn || 0
         : m.turnsLeft - 1;
-      this.setTurn(turnsLeft, this.secondsPerTurn - (m.seconds || -1) - 2);
+      this.setTurn(turnsLeft, this.secondsPerTurn - (m.seconds || -1) + 2);
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
@@ -157,7 +157,7 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => {
-      this.turn = turn.turn + 1;
+      this.turn = turn.turn;
       this.startTimer();
       // turn.turn for backwards compatibility with replays
       const turnsLeft = turn.turnsLeft === undefined

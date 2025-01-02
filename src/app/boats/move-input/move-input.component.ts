@@ -52,7 +52,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   };
 
   @Input() dragContext = { source: 8, move: 0, type: 'move' };
-  @Input() private cannonForce = false;
+  @Input() private singleShot = false;
   @Input() locked = true;
   @Input() maneuvers: Maneuver[] = [];
   private _maxMoves = 4;
@@ -217,7 +217,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   addShot(e: MouseEvent, i: number): void {
     if (this.locked) return;
     const oldShots = this.input.shots[i] || 0;
-    if (this.cannonForce && !oldShots) {
+    if (this.singleShot && !oldShots) {
       for (const s in this.input.shots) this.input.shots[s] = 0;
       this.unusedTokens.shots = this._totalTokens.shots;
     }
@@ -368,7 +368,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   dropCannon(slot: number): void {
     if (this.locked) return;
     const oldShots = this.input.shots[slot] || 0;
-    if (this.cannonForce && !oldShots) {
+    if (this.singleShot && !oldShots) {
       for (const s in this.input.shots) this.input.shots[s] = 0;
       this.unusedTokens.shots = this._totalTokens.shots;
     }

@@ -62,11 +62,11 @@ export class TurnService {
       clearTimeout(this.animateTimeout);
       delete this.animateTimeout;
       BoatRender3d.tweens.update(Infinity);
-      for (const boat of this.boats) boat.boat.resetMoves();
+      this.boatsService.resetBoats();
       delete this.turn;
       this.ws.send(OutCmd.Sync);
     } else {
-      this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined });
+      this.boatsService.resetMymoves();
     }
   };
 
