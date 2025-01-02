@@ -197,7 +197,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   private touchStartSlot = 0;
 
   touchStartCannon(e: TouchEvent | MouseEvent, i: number): void {
-    e.preventDefault();
     this.touchStartSlot = i;
     this.touchStartTime = Date.now();
   }
