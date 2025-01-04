@@ -1,4 +1,3 @@
-import { Boat } from '../lobby/quacken/boats/boat';
 import { BoatSync, BoatTick, MoveMessage, MoveMessageIncoming, Sync, Turn } from '../lobby/quacken/boats/types';
 import { InCmd, Internal } from './ws-messages';
 import { DBSetting } from '../settings/types';

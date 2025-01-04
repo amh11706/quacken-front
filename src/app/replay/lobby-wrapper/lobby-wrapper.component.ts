@@ -12,7 +12,7 @@ import { TurnService } from '../../lobby/quacken/boats/turn.service';
   styleUrls: ['./lobby-wrapper.component.scss'],
   providers: [WsService, ChatService, FriendsService, BoatsService, TurnService],
 })
-export class LobbyWrapperComponent implements OnDestroy {
+export class ReplayWrapperComponent implements OnDestroy {
   constructor(
     ws: WsService,
     chat: ChatService,

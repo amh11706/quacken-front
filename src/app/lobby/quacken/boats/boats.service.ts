@@ -68,6 +68,7 @@ export class BoatsService {
     this.myBoat.value.isMe = false;
     boat.isMe = boat.id === this.ws.sId;
     this.myBoat.next(boat);
+    this.focusMyBoat();
   }
 
   private handleTicks(ticks: Record<number, BoatTick>) {

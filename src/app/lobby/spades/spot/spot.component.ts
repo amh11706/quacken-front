@@ -16,7 +16,7 @@ export type SpadeLobby = Lobby & {
   bidding: number;
   playTo: number;
   spadeBroke: boolean;
- };
+};
 
 @Component({
   selector: 'q-spot',
@@ -124,7 +124,7 @@ export class SpotComponent implements OnInit, OnDestroy {
 
   kick(spot: number): void { this.ws.send(OutCmd.Kick, spot); }
 
-  ready(): void { this.ws.send(OutCmd.Ready, undefined); }
+  ready(): void { this.ws.send(OutCmd.Ready, undefined as any); }
 
   showCards(): void {
     this.offerBlind = false;

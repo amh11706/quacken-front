@@ -16,7 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { SettingsModule } from '../settings/settings.module';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { CadegooseComponent } from './cadegoose/cadegoose.component';
-import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
+import { ReplayWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
 import { LobbyModule } from '../lobby/lobby.module';
 import { ReplayRoutingModule } from './replay-routing.module';
 import { ReplayComponent } from './replay.component';
@@ -24,7 +24,7 @@ import { MapDebugComponent } from './cadegoose/map-debug/map-debug.component';
 import { PenaltyComponent } from './cadegoose/penalty/penalty.component';
 
 @NgModule({
-  declarations: [ReplayComponent, LobbyWrapperComponent, CadegooseComponent, MapDebugComponent, PenaltyComponent],
+  declarations: [ReplayComponent, ReplayWrapperComponent, CadegooseComponent, MapDebugComponent, PenaltyComponent],
   imports: [
     CommonModule,
     FormsModule,

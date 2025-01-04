@@ -243,9 +243,10 @@ export class ReplayComponent implements OnInit, OnDestroy {
     if (value === this.tick) return;
 
     if (value < this.tick) {
+      this.wrapper.boats?.resetBoats();
       const syncTick = this.lastSyncBefore(value);
       this.rewindChat(syncTick);
-      this.tick = syncTick;
+      this.tick = syncTick - 1;
       if (this.lobbyMessage?.data.type === 'FlagGames' && this.lobbyMessage?.data.map) {
         // reset the map because it could have changed in capture the flag mode
         this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
@@ -259,19 +260,14 @@ export class ReplayComponent implements OnInit, OnDestroy {
     this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
   }
 
-  private fakeMessages(skipTurn = false, tick = this.tick): void {
+  private fakeMessages(includeSync = false, tick = this.tick): void {
     const messages = this.messages[tick];
     if (!messages) return;
     for (const m of messages) {
       this.checkMessage(m);
-      if (m.cmd !== InCmd.Sync && m.cmd !== InCmd.Turn) {
-        this.fakeWs.dispatchMessage?.(m);
-        continue;
-      }
-      if (!skipTurn) continue;
-
-      // this.wrapper.boats?.resetBoats();
-      this.fakeWs.dispatchMessage?.(m);
+      // skip sync messages when playing because the lobby asks for them when it's ready
+      if (!includeSync && m.cmd === InCmd.Sync) continue;
+      this.fakeWs.dispatchMessage(m);
     }
   }
 }

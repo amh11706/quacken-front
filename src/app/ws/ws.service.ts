@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { InCmd, Internal, OutCmd } from './ws-messages';
 import { AuthGuard } from '../auth.guard';
-import { InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes } from './ws-request-types';
-import { SendCmdInputless, SendCmdInputs } from './ws-send-types';
+import { InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes, OutRequest } from './ws-request-types';
+import { OutMessage, SendCmdInputless, SendCmdInputs } from './ws-send-types';
 import { InMessage, SubscribeData } from './ws-subscribe-types';
 
 const ClientVersion = 79;
@@ -35,7 +35,7 @@ export class WsService implements OnDestroy {
   user: TokenUser = { id: 0, name: 'Guest', admin: 0 };
   connected = false;
   connected$ = new ReplaySubject<boolean>(1);
-  outMessages$ = new Subject<{ cmd: OutCmd, data: any, id?: number }>();
+  outMessages$ = new Subject<OutMessage | OutRequest>();
 
   sId?: number;
   copy?: number;
@@ -165,7 +165,7 @@ export class WsService implements OnDestroy {
   send<T extends keyof SendCmdInputs>(cmd: T, data: SendCmdInputs[T], force?: boolean): void;
   send<T extends keyof SendCmdInputs>(cmd: T, data?: SendCmdInputs[T], force = false): void {
     const message = { cmd, data };
-    this.outMessages$.next(message);
+    this.outMessages$.next(message as OutMessage);
     if (this.connected || force) this.sendRaw(JSON.stringify(message));
   }
 
@@ -178,12 +178,13 @@ export class WsService implements OnDestroy {
       this.requests.set(this.nextId, resolve);
       this.nextId++;
     });
-    this.outMessages$.next(message);
+    this.outMessages$.next(message as OutRequest);
     return p;
   }
 
   private sendRaw(data: string) {
-    if (this.connected && this.socket) return this.socket.send(data);
+    if (!this.socket) return;
+    if (this.connected) return this.socket.send(data);
     const sub = this.connected$.subscribe((connected: boolean) => {
       if (!connected) return;
       this.socket?.send(data);

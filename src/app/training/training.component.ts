@@ -13,6 +13,8 @@ import { ParsedTurn } from '../lobby/cadegoose/types';
 import { MoveMessageIncoming } from '../lobby/quacken/boats/types';
 import { SettingGroup } from '../settings/setting/settings';
 import { LobbyWrapperService } from '../replay/lobby-wrapper/lobby-wrapper.service';
+import { OutMessage } from '../ws/ws-send-types';
+import { OutRequest } from '../ws/ws-request-types';
 
 function mapMoves(m: number | string): string {
   return ['_', 'L', 'F', 'R', , , , , '<', , '>'][+m] || 'S';
@@ -75,6 +77,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.wrapper.ws) {
       this.wrapper.ws.user = this.ws.user;
+      // pretend to be connected so the hud lets us input moves
+      this.wrapper.ws.connected = true;
     }
 
     this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: 'Welcome to 1v1 training. Choose a turn and click a boat to begin.', from: '' } });
@@ -116,7 +120,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     }
     const myMoves = this.activeTurn?.moves[this.myBoat.id];
     setTimeout(() => {
-      this.myBoat.moveLock = -1;
+      this.myBoat.moveLock = 0;
       if (this.myBoat.isMe) {
         if (myMoves) this.wrapper.ws?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
       }
@@ -143,7 +147,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleFakeWs(m: { cmd: OutCmd, data: any, id?: number }) {
+  private handleFakeWs(m: OutMessage | OutRequest) {
     switch (m.cmd) {
       case OutCmd.Moves:
       case OutCmd.Shots:
@@ -159,13 +163,12 @@ export class TrainingComponent implements OnInit, OnDestroy {
         delete this.activeMove;
         break;
       case OutCmd.Ready:
-        if (this.activeTurn?.sync) this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Sync, data: this.activeTurn?.sync });
-        void this.imReady(m.data);
+        if (m.data.ready) void this.imReady();
         break;
     }
   }
 
-  private async imReady(moveMessage: { moves: number[], shots: number[] }) {
+  private async imReady() {
     const turn = this.activeTurn;
     if (!turn || !this.myBoat.isMe) return;
 
@@ -193,7 +196,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
   private updateShotsMissed() {
     this.missedShots = [];
     if (!this.activeMove) return;
-    const myShots = this.activeTurn?.moves[this.myBoat.id]?.shots;
+    const myShots = this.myBoat.shots;
     this.activeMove.ShotsHitArray.forEach((s, i) => {
       if (s && myShots?.[i] !== this.myBoat.maxShots) this.missedShots.push(shotNames[i] || '');
     });

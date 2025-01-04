@@ -9,6 +9,10 @@ import { DBSetting, ServerSettingMap } from '../settings/types';
 import { OutCmd } from './ws-messages';
 import { InMessage } from './ws-subscribe-types';
 
+export type OutRequest = {
+  [K in keyof OutCmdInputs]: { cmd: K, data: OutCmdInputs[K] };
+}[keyof OutCmdInputs] & { id: number };
+
 type EmptyCmdBody = {
   [cmd: string]: undefined;
 }

@@ -3,11 +3,19 @@ import { MoveMessage } from '../lobby/quacken/boats/types';
 import { ServerSettingMap, DBSetting } from '../settings/types';
 import { OutCmd } from './ws-messages';
 
+type OutMessageWithData = {
+  [K in keyof (SendCmdInputs)]: { cmd: K, data: SendCmdInputs[K] };
+}[keyof SendCmdInputs];
+
+type OutMessageNoData = { cmd: SendCmdInputless };
+
+export type OutMessage = OutMessageWithData | OutMessageNoData;
+
 export type SendCmdInputs = {
   [OutCmd.Team]: number;
   [OutCmd.SpawnSide]: number;
   [OutCmd.NextBoat]: number;
-  [OutCmd.Ready]: Partial<MoveMessage> & { ready: boolean } | undefined;
+  [OutCmd.Ready]: Partial<MoveMessage> & { ready: boolean };
   [OutCmd.SetMyJobbers]: number;
   [OutCmd.Vote]: number;
   [OutCmd.RateMap]: { id: number, rating: number };

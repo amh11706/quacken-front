@@ -12,13 +12,13 @@ import { MoveSourceModule } from '../boats/move-source/move-source.module';
 import { ManeuverSourceModule } from '../boats/maneuver-source/maneuver-source.module';
 import { MoveInputModule } from '../boats/move-input/move-input.module';
 import { ChatModule } from '../chat/chat.module';
-import { LobbyWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
+import { TrainingWrapperComponent } from './lobby-wrapper/lobby-wrapper.component';
 import { LobbyModule } from '../lobby/lobby.module';
 
 @NgModule({
   declarations: [
     TrainingComponent,
-    LobbyWrapperComponent,
+    TrainingWrapperComponent,
   ],
   imports: [
     TrainingRoutingModule,
