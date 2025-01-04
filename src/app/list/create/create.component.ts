@@ -9,12 +9,14 @@ import { ServerSettingGroup, SettingGroup, SettingName } from '../../settings/se
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { ServerSettingMap } from '../../settings/types';
+import { FgDesc } from '../../lobby/flaggames/flaggames.component';
 
 export const Descriptions = {
   Quacken: QuackenDesc,
   Spades: 'A classic card game.',
   CadeGoose: CadeDesc,
   SeaBattle: SbDesc,
+  FlagGames: FgDesc,
   mapinfo: 'View map information.',
 };
 

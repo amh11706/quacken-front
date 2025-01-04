@@ -215,49 +215,62 @@ export class ReplayComponent implements OnInit, OnDestroy {
     this.playTo(1);
   }
 
+  private lastSyncBefore(tick: number): number {
+    for (let i = tick; i >= 0; i--) {
+      if (this.messages[i]?.find(el => el.cmd === InCmd.Sync)) return i;
+    }
+    return 0;
+  }
+
+  private rewindChat(tick: number): void {
+    for (let i = tick; i < this.tick; i++) {
+      const messages = this.messages[i];
+      if (!messages) continue;
+      for (const m of messages) {
+        if (m.cmd === InCmd.ChatMessage) {
+          const chatIndex = this.fakeChat.messages.findIndex(c => c === m.data);
+          if (chatIndex > 0) {
+            this.fakeChat.messages.splice(chatIndex);
+            this.fakeChat.messages$.next(this.fakeChat.messages);
+          }
+          return;
+        }
+      }
+    }
+  }
+
   playTo(value: number): void {
     if (value === this.tick) return;
 
     if (value < this.tick) {
-      for (let i = this.tick; i >= 0; i--) {
-        let syncFound = false;
-        for (let i2 = (this.messages[i]?.length || 0) - 1; i2 >= 0; i2--) {
-          const m = this.messages[i]?.[i2];
-          if (m?.cmd === InCmd.Sync) syncFound = true;
-          else if (m?.data === this.fakeChat.messages[this.fakeChat.messages.length - 1]) this.fakeChat.messages.pop();
-        }
-
-        if (i > value || !syncFound) continue;
-        this.tick = i;
-        this.wrapper.boats?.resetBoats();
-        this.fakeMessages(true);
-        break;
-      }
-      if (this.lobbyMessage?.data.map) {
+      const syncTick = this.lastSyncBefore(value);
+      this.rewindChat(syncTick);
+      this.tick = syncTick;
+      if (this.lobbyMessage?.data.type === 'FlagGames' && this.lobbyMessage?.data.map) {
         // reset the map because it could have changed in capture the flag mode
         this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
       }
-    } else this.sendSync();
-
-    while (value > this.tick) {
-      this.tick++;
-      this.fakeMessages(true);
     }
+
+    for (let i = this.tick + 1; i <= value; i++) {
+      this.fakeMessages(true, i);
+    }
+    this.tick = value;
     this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
   }
 
-  private fakeMessages(skipTurn = false) {
-    const messages = this.messages[this.tick];
+  private fakeMessages(skipTurn = false, tick = this.tick): void {
+    const messages = this.messages[tick];
     if (!messages) return;
     for (const m of messages) {
       this.checkMessage(m);
-      if (m.cmd !== InCmd.Sync) {
+      if (m.cmd !== InCmd.Sync && m.cmd !== InCmd.Turn) {
         this.fakeWs.dispatchMessage?.(m);
         continue;
       }
       if (!skipTurn) continue;
 
-      this.wrapper.boats?.resetBoats();
+      // this.wrapper.boats?.resetBoats();
       this.fakeWs.dispatchMessage?.(m);
     }
   }
