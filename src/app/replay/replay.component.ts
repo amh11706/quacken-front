@@ -223,18 +223,14 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   private rewindChat(tick: number): void {
-    for (let i = tick; i < this.tick; i++) {
-      const messages = this.messages[i];
-      if (!messages) continue;
+    for (const messages of this.messages.slice(tick, this.tick + 1)) {
       for (const m of messages) {
-        if (m.cmd === InCmd.ChatMessage) {
-          const chatIndex = this.fakeChat.messages.findIndex(c => c === m.data);
-          if (chatIndex > 0) {
-            this.fakeChat.messages.splice(chatIndex);
-            this.fakeChat.messages$.next(this.fakeChat.messages);
-          }
-          return;
-        }
+        if (m.cmd !== InCmd.ChatMessage) continue;
+        const chatIndex = this.fakeChat.messages.findIndex(c => c === m.data);
+        if (chatIndex <= 0) continue;
+        this.fakeChat.messages.splice(chatIndex);
+        this.fakeChat.messages$.next(this.fakeChat.messages);
+        return;
       }
     }
   }
