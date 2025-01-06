@@ -21,6 +21,7 @@ export class BoatListComponent implements OnDestroy {
   @Output() boatsChange = new EventEmitter<Boat[]>();
   @Output() activeBoatChange = new EventEmitter<Boat>();
   @Input() activeBoat = DefaultBoat;
+  @Input() highlightedBoats = new Set<number>();
   DefaultBoat = DefaultBoat;
 
   private sub = new Subscription();

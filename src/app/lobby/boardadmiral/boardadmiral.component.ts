@@ -4,14 +4,14 @@ import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
 import { TwodRenderModule } from '../cadegoose/twod-render/twod-render.module';
 import { HudComponent } from './hud/hud.component';
-import { BABoatSettings, BaRender } from './ba-render';
+import { BABoatSettings, BaRender, BoatCoverMode } from './ba-render';
 import { InCmd, Internal } from '../../ws/ws-messages';
 import { TileEvent } from '../cadegoose/twod-render/twod-render.component';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { BoatListComponent, DefaultBoat } from './boat-list/boat-list.component';
 import { BoatSync } from '../quacken/boats/types';
 import { BoatTypes } from '../quacken/boats/boat-types';
-import { GuBoat } from '../cadegoose/twod-render/gu-boats/gu-boat';
+import { GuBoat, Position } from '../cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../quacken/boats/boat';
 import { BaMainMenuComponent } from './main-menu/main-menu.component';
 
@@ -53,7 +53,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
   protected menuComponent = BaMainMenuComponent;
   protected joinMessage = BoardadmiralDesc;
   private render = new BaRender();
-  private defaultBoat = new BABoatSettings(DefaultBoat);
+  private defaultBoat = new BABoatSettings(DefaultBoat, this.ws);
   activeBoatSettings = this.defaultBoat;
   activeBoat = DefaultBoat;
   boatSettings = new Map<number, BABoatSettings>();
@@ -62,9 +62,9 @@ export class BoardadmiralComponent extends CadegooseComponent {
   private undoTicker = 0;
 
   private fakeBoats() {
-    this.ss.getGroup('graphics').then(() => {
-      this.es.openMenu(false);
-    });
+    // this.ss.getGroup('graphics').then(() => {
+    //   this.es.openMenu(false);
+    // });
 
     GuBoat.myTeam = 0;
     this.ws.dispatchMessage({
@@ -108,8 +108,8 @@ export class BoardadmiralComponent extends CadegooseComponent {
     DefaultBoat.isMe = true;
     this.boats.setMyBoat(DefaultBoat, false);
 
-    this.activeBoatSettings = this.boatSettings.get(boat.id) || new BABoatSettings(boat);
-    this.render.drawBoats(this.boatSettings, this.activeBoatSettings);
+    this.activeBoatSettings = this.boatSettings.get(boat.id) || new BABoatSettings(boat, this.ws);
+    this.redrawOverlay();
   }
 
   private undos: BaAction[] = [];
@@ -129,6 +129,11 @@ export class BoardadmiralComponent extends CadegooseComponent {
     if (!action) return;
     const redo = this.doAction(action);
     if (redo) redos.push(redo);
+    this.redrawOverlay();
+  }
+
+  redrawOverlay() {
+    this.highlightTile();
     this.render.drawBoats(this.boatSettings, this.activeBoatSettings);
   }
 
@@ -136,9 +141,10 @@ export class BoardadmiralComponent extends CadegooseComponent {
     this.boatList = boats;
     const settings = new Map<number, BABoatSettings>();
     for (const boat of boats) {
-      const boatSettings = this.boatSettings.get(boat.id) || new BABoatSettings(boat);
+      const boatSettings = this.boatSettings.get(boat.id) || new BABoatSettings(boat, this.ws);
       settings.set(boat.id, boatSettings);
     }
+    settings.set(0, this.defaultBoat);
     this.boatSettings = settings;
   }
 
@@ -166,15 +172,24 @@ export class BoardadmiralComponent extends CadegooseComponent {
     return { cmd: 'addTile', data: { x, y } };
   }
 
-  private addTile(x: number, y: number, a?: number): BaAction {
+  private addTile(x: number, y: number, a?: number): BaAction | undefined {
+    if (this.tileIsSet(x, y)) return;
+    if (this.activeBoatSettings.coverMode === BoatCoverMode.Flags) {
+      if (!this.isFlag(x, y)) return;
+    }
     this.activeBoatSettings.coverage[this.activeBoatSettings.coverMode].push({ x, y, a });
     return { cmd: 'removeTile', data: { x, y } };
   }
 
+  private isFlag(x: number, y: number): boolean {
+    const tile = this.map?.[y]?.[x] || 0;
+    return (tile >= 21 && tile < 24);
+  }
+
   private toggleTile(x: number, y: number, a?: number): void {
-    if (this.tileIsSet(x, y)) this.undos.push(this.removeTile(x, y));
-    else this.undos.push(this.addTile(x, y, a));
-    this.render.drawBoats(this.boatSettings, this.activeBoatSettings);
+    const action = this.tileIsSet(x, y) ? this.removeTile(x, y) : this.addTile(x, y, a);
+    if (action) this.undos.push(action);
+    this.redrawOverlay();
   }
 
   private painting = false;
@@ -183,9 +198,9 @@ export class BoardadmiralComponent extends CadegooseComponent {
   hoverTile(e: TileEvent) {
     if (this.activeBoat.id === 0) return;
     if (!this.painting) return;
-    if (this.paintMode === 'erase') this.undos.push(this.removeTile(e.tile.x, e.tile.y));
-    else if (!this.tileIsSet(e.tile.x, e.tile.y)) this.undos.push(this.addTile(e.tile.x, e.tile.y));
-    this.render.drawBoats(this.boatSettings, this.activeBoatSettings);
+    const action = this.paintMode === 'erase' ? this.removeTile(e.tile.x, e.tile.y) : this.addTile(e.tile.x, e.tile.y);
+    if (action) this.undos.push(action);
+    this.redrawOverlay();
   }
 
   private mouseDownCoords?: { x: number, y: number };
@@ -211,9 +226,22 @@ export class BoardadmiralComponent extends CadegooseComponent {
       else this.activeBoatChange(nearest);
       return;
     }
-    if (this.activeBoat.id === 0) return;
     if (Math.abs(e.clientX - this.mouseDownCoords!.x) > 5 || Math.abs(e.clientY - this.mouseDownCoords!.y) > 5) return;
+    this.defaultBoat.selectedTile = e.tile;
+    if (this.activeBoat.id === 0) return this.redrawOverlay();
     this.toggleTile(e.tile.x, e.tile.y);
-    this.render.drawBoats(this.boatSettings, this.activeBoatSettings);
+    this.redrawOverlay();
+  }
+
+  highlightedBoats = new Set<number>();
+
+  highlightTile(tile = this.defaultBoat.selectedTile): void {
+    this.defaultBoat.selectedTile = tile;
+    this.highlightedBoats.clear();
+    if (!tile) return
+    this.boatSettings.forEach(settings => {
+      const coverage = settings.coverage[settings.coverMode];
+      if (coverage.some(t => t.x === tile.x && t.y === tile.y)) this.highlightedBoats.add(settings.boat.id);
+    });
   }
 }

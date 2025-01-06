@@ -3,3 +3,31 @@
 #hud {
   grid-template-columns: [left]400px [middle]0.01fr [right]1fr;
 }
+
+#boatsettings {
+  color: #ddd;
+  grid-column: span 2;
+  grid-row: span 3;
+}
+
+.label {
+  min-width: 120px;
+}
+
+table {
+  column-gap: 4px;
+}
+
+p {
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+mat-slider {
+  margin-top: -12px;
+  margin-bottom: -12px;
+}
+
+button {
+  height: 24px;
+}

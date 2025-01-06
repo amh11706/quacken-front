@@ -10,6 +10,7 @@
   <h4>Your Boats</h4>
 
   <q-boat-button *ngFor="let boat of boats"
+                 [class.highlight]="highlightedBoats.has(boat.id)"
                  [boat]="boat"
                  [active]="activeBoat === boat"
                  (click)="selectBoat(boat)"></q-boat-button>

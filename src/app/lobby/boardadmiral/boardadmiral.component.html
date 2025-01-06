@@ -26,8 +26,10 @@
          [myTeam]="myBoat.team"></q-stats>
 
 <q-ba-hud [activeBoat]="activeBoatSettings"
+          (activeBoatChange)="redrawOverlay()"
           [boatSettings]="boatSettings"></q-ba-hud>
 
 <q-boat-list (boatsChange)="gotBoats($event)"
              [activeBoat]="activeBoat"
+             [highlightedBoats]="highlightedBoats"
              (activeBoatChange)="activeBoatChange($event)"></q-boat-list>

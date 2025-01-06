@@ -1,5 +1,6 @@
 import { Subject } from "rxjs";
 import { Boat } from "../quacken/boats/boat";
+import { WsService } from "../../ws/ws.service";
 
 export const enum BoatCoverMode {
   Flags,
@@ -7,7 +8,7 @@ export const enum BoatCoverMode {
 }
 
 export class BABoatSettings {
-  constructor(public boat: Boat) { }
+  constructor(public boat: Boat, private ws: WsService) { }
   coverMode = BoatCoverMode.Flags;
   coverage: Record<BoatCoverMode, { x: number, y: number, a?: number }[]> = {
     [BoatCoverMode.Flags]: [],
@@ -16,11 +17,16 @@ export class BABoatSettings {
   Aggro = 50;
   Flag = 50;
   Defense = 50;
+  selectedTile?: { x: number, y: number };
+
+  save(): void {
+    // this.ws.send('boatSettings', this);
+  }
 }
 
 const Colors: Record<BoatCoverMode, string> = {
-  [BoatCoverMode.Flags]: 'rgba(255, 0, 255, %d)',
-  [BoatCoverMode.Tiles]: 'rgba(0, 255, 255, %d)',
+  [BoatCoverMode.Flags]: 'rgba(255, 255, 0, %d)',
+  [BoatCoverMode.Tiles]: 'rgba(255, 0, 255, %d)',
 }
 
 export class BaRender {
@@ -57,6 +63,11 @@ export class BaRender {
     for (const { x, y, a } of coverage) {
       ctx.fillStyle = color.replace('%d', String(a || alpha));
       ctx.fillRect(x * 50, y * 50, 50, 50);
+    }
+
+    if (boat.selectedTile) {
+      ctx.strokeStyle = 'rgb(0, 255, 255)';
+      ctx.strokeRect(boat.selectedTile.x * 50, boat.selectedTile.y * 50, 50, 50);
     }
     this.sendCanvas();
   }
