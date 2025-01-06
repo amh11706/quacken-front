@@ -90,7 +90,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   aiMetric: keyof Points = 'BoatAt';
   aiStep = 0;
   aiRadius = 4;
-  aiRender = new AiRender(this.ws, 20, 36);
+  aiRender = new AiRender(this.wrapper.ws!, 20, 36);
   randomMap = '';
   scores?: ScoreResponse;
   maxPenalty = 0;

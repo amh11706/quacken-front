@@ -21,7 +21,7 @@ export interface Lobby {
   turnsLeft: number;
   seconds?: number;
   stats?: Record<number, StatRow>;
-  type: 'Quacken' | 'Spades' | 'CadeGoose' | 'FlagGames' | 'mapinfo';
+  type: 'Quacken' | 'Spades' | 'CadeGoose' | 'FlagGames' | 'mapinfo' | 'BA';
   settings: ServerSettingMap;
   inProgress: LobbyStatus;
 }

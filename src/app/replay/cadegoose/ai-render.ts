@@ -27,7 +27,6 @@ export class AiRender {
     private ws: WsService,
     width: number,
     height: number,
-    private fakeWs?: WsService,
   ) {
     this.ctx = document.createElement('canvas').getContext('2d') as CanvasRenderingContext2D;
     this.ctx.canvas.height = 50 * height;
@@ -163,6 +162,6 @@ export class AiRender {
       }
     }
 
-    void (this.fakeWs || this.ws).dispatchMessage({ cmd: Internal.Canvas, data: ctx.canvas });
+    void this.ws.dispatchMessage({ cmd: Internal.Canvas, data: ctx.canvas });
   }
 }

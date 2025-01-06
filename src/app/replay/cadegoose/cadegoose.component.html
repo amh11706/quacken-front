@@ -37,27 +37,11 @@
       <mat-icon>sailing</mat-icon>
     </ng-template>
 
-    <button mat-button
-            *ngFor="let boat of boats"
-            [color]="boat === activeBoat ? 'primary' : undefined"
-            class="boat"
-            [style.borderColor]="teamColors[boat.team || 0]"
-            (click)="clickBoat(boat)">
-      {{boat.title}}
-      <ng-container *ngIf="boatTicks[boat.id]">
-        <br>
-        <div class="damage"
-             matTooltip="{{boat.getDamage()}}%">
-          <div class="damagebar"
-               [style.transform]="'translateX(' + boat.getDamage() / 2 + 'px)'"></div>
-        </div>
-        <div class="bilge"
-             matTooltip="{{boatTicks[boat.id]?.b || 0}}%">
-          <div class="bilgebar"
-               [style.transform]="'translateX(' + (boatTicks[boat.id]?.b || 0) / 2 + 'px)'"></div>
-        </div>
-      </ng-container>
-    </button>
+    <q-boat-button *ngFor="let boat of boats"
+                   [boat]="boat"
+                   [active]="boat === activeBoat"
+                   (click)="clickBoat(boat)">
+    </q-boat-button>
   </mat-tab>
 
   <mat-tab *ngIf="ws.user?.admin === 5">

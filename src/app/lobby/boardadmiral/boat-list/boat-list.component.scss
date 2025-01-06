@@ -1,0 +1,22 @@
+#boatlist {
+  position: absolute;
+  left: 10px;
+  top: calc(50% - 220px);
+  width: 170px;
+  height: 400px;
+  padding: 0;
+  padding-top: 24px;
+  text-align: center;
+  border: 1px solid black;
+  background-color: rgba(66, 66, 66, 0.85);
+  color: #eee;
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  cursor: grab;
+}

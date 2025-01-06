@@ -3,6 +3,7 @@
 :host {
   width: 0;
   height: 0;
+  pointer-events: none;
 }
 
 .damage,
@@ -130,6 +131,7 @@ q-sprite-img {
 .sameteam {
   color: rgb(137, 187, 233) !important;
 }
+
 .isme {
   color: rgb(214, 247, 255) !important;
 }
@@ -138,32 +140,39 @@ q-sprite-img {
   from {
     background: url("/assets/clutter/hit.png") 0 no-repeat;
   }
+
   to {
     background: url("/assets/clutter/hit.png") -640px no-repeat;
   }
 }
+
 @keyframes splash {
   from {
     background: url("/assets/clutter/splash_large.png") 0 no-repeat;
   }
+
   to {
     background: url("/assets/clutter/splash_large.png") -520px no-repeat;
   }
 }
+
 @keyframes rotate {
   to {
     transform: translate(var(--tranX, 0), var(--tranY, 0)) rotate(360deg);
   }
 }
+
 @keyframes move {
   to {
     transform: translate(var(--tranX, 0), var(--tranY, 0)) rotate(360deg) scale(var(--scale, 1));
   }
 }
+
 @keyframes smoke {
   from {
     background-position-x: 0;
   }
+
   to {
     background-position-x: var(--endX);
   }
@@ -174,16 +183,20 @@ q-sprite-img {
     opacity: 0.7;
     transform: scale(1);
   }
+
   25% {
     opacity: 0.95;
   }
+
   50% {
     opacity: 1;
     transform: scale(1.01);
   }
+
   75% {
     opacity: 0.95;
   }
+
   100% {
     opacity: 0.7;
     transform: scale(1);
@@ -194,15 +207,18 @@ q-sprite-img {
   --movetime: 0.3s;
   --distance: 1;
 }
+
 .shot.dis2 {
   --movetime: 0.5s;
   --distance: 2;
 }
+
 .shot.dis3,
 .shot.dis4 {
   --movetime: 0.7s;
   --distance: 3;
 }
+
 .size28 .shot.dis4,
 .size29 .shot.dis4,
 .size28 .shot.dis5,
@@ -216,14 +232,17 @@ q-sprite-img {
   top: 10px;
   --delay: calc(var(--speed) * 0.2s);
 }
+
 .clutter {
   z-index: 2000;
   pointer-events: none;
 }
+
 .clutter16,
 .clutter17 {
   z-index: 5;
 }
+
 .shot,
 .smoke {
   position: absolute;
@@ -247,46 +266,58 @@ q-sprite-img {
 .size1 .shot {
   background-image: url("/assets/clutter/cannonball_small.png");
 }
+
 .size2 .shot {
   background-image: url("/assets/clutter/cannonball_medium.png");
 }
+
 .size3 .shot {
   background-image: url("/assets/clutter/cannonball_large.png");
 }
+
 .size28 .shot {
   background-image: url("/assets/clutter/cannonball_long.png");
   --scale: 1.5;
 }
+
 .size29 .shot {
   background-image: url("/assets/clutter/cannonball_long_gold.png");
   --scale: 2;
 }
+
 .size36 .shot {
   background-image: url("/assets/clutter/cannonball_healing.png");
 }
+
 .size37 .shot {
   background-image: url("/assets/clutter/cannonball_healing_gold.png");
 }
+
 .size4 .shot,
 .size6 .shot {
   background-image: url("/assets/clutter/chain_cannonball.png");
 }
+
 .size5 .shot,
 .size7 .shot {
   background-image: url("/assets/clutter/flaming_cannonball.png");
 }
+
 .shot.dis4,
 .shot.dis5 {
   animation-name: move, splash;
   animation-timing-function: linear, steps(13);
 }
+
 .smoke {
   animation: smoke calc(var(--speed) * 1s) steps(18) both;
 }
+
 .smoke {
   --endX: -720px;
   background-image: url("/assets/clutter/explode_small.png");
 }
+
 .size2 .smoke,
 .size4 .smoke,
 .size5 .smoke,
@@ -295,11 +326,13 @@ q-sprite-img {
   --endX: -720px;
   background-image: url("/assets/clutter/explode_medium.png");
 }
+
 .size3 .smoke {
   --endX: -960px;
   animation-timing-function: steps(24);
   background-image: url("/assets/clutter/explode_large.png");
 }
+
 .size20 .shot,
 .size21 .shot,
 .size22 .shot,
@@ -312,14 +345,17 @@ q-sprite-img {
 .shot.dir1 {
   --tranY: calc(0px - var(--distance) * 24px);
 }
+
 .shot.dir2,
 .shot.dir3 {
   --tranY: calc(var(--distance) * 24px);
 }
+
 .shot.dir1,
 .shot.dir2 {
   --tranX: calc(var(--distance) * 32px);
 }
+
 .shot.dir0,
 .shot.dir3 {
   --tranX: calc(0px - var(--distance) * 32px);
@@ -335,9 +371,11 @@ q-sprite-img {
   from {
     transform: rotate(var(--rotate, 0)) scale(calc(var(--scaleX) / 4), calc(var(--scaleY) / 4));
   }
+
   60% {
     opacity: 1;
   }
+
   to {
     transform: rotate(var(--rotate, 0)) scale(var(--scaleX), var(--scaleY));
     opacity: 0;
@@ -367,6 +405,7 @@ q-sprite-img {
   animation-delay: 0;
   animation-duration: calc(var(--speed, 1) * 0.4s);
 }
+
 .clutter12 .clutterimg.dir0,
 .clutter20 .clutterimg.dir0,
 .clutter21 .clutterimg.dir0,
@@ -377,6 +416,7 @@ q-sprite-img {
   --scaleX: 1;
   --scaleY: -1;
 }
+
 .clutter12 .clutterimg.dir1,
 .clutter20 .clutterimg.dir1,
 .clutter21 .clutterimg.dir1,
@@ -387,6 +427,7 @@ q-sprite-img {
   --scaleX: -1;
   --scaleY: -1;
 }
+
 .clutter12 .clutterimg.dir2,
 .clutter20 .clutterimg.dir2,
 .clutter21 .clutterimg.dir2,
@@ -397,6 +438,7 @@ q-sprite-img {
   --scaleX: -1;
   --scaleY: 1;
 }
+
 .clutter12 .clutterimg.dir3,
 .clutter20 .clutterimg.dir3,
 .clutter21 .clutterimg.dir3,
@@ -413,19 +455,23 @@ q-sprite-img {
   top: -24px;
   left: -32px;
 }
+
 .clutter8 .clutterimg.dir0 {
   --scaleX: 1;
   --scaleY: 1;
 }
+
 .clutter8 .clutterimg.dir1 {
   --scaleX: -1;
   --scaleY: 1;
 }
+
 .clutter8 .clutterimg.dir2 {
   --scaleX: -1;
   --scaleY: 1.25;
   --rotate: 90deg;
 }
+
 .clutter8 .clutterimg.dir3 {
   --scaleX: 1;
   --scaleY: 1.25;
@@ -435,6 +481,7 @@ q-sprite-img {
 .clutter16 .clutterimg {
   background-image: url("/assets/clutter/flotsam.png");
 }
+
 .clutter17 .clutterimg {
   background-image: url("/assets/clutter/flaming_flotsam.png");
 }
@@ -459,8 +506,10 @@ q-sprite-img {
     animation: explode calc(var(--speed) * 1s) steps(16) forwards;
   }
 }
+
 .clutter25 .clutterimg {
   background-image: url("/assets/images/powderkeg_gold.png");
+
   &.popped {
     scale: 1.5;
   }

@@ -1,0 +1,35 @@
+.boat,
+.turn {
+  width: 100%;
+  line-height: 16px;
+  padding-top: 8px;
+}
+
+.boat {
+  border-left: 3px solid green;
+}
+
+.damage,
+.bilge {
+  position: relative;
+  display: inline-block;
+  margin: 4px;
+  width: 50px;
+  height: 5px;
+  background-color: #aaaaaa;
+  overflow: hidden;
+}
+
+.damagebar,
+.bilgebar {
+  position: relative;
+  background: red;
+  height: 100%;
+  left: -100%;
+  transition: 0.3s linear;
+  pointer-events: none;
+}
+
+.bilgebar {
+  background: blue;
+}

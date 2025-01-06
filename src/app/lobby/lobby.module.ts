@@ -9,6 +9,7 @@ import { SeabattleModule } from './seabattle/seabattle.module';
 import { LobbyRoutingModule } from './lobby-routing.module';
 import { FlaggamesModule } from './flaggames/flaggames.module';
 import { MapinfoComponent } from './mapinfo/mapinfo.component';
+import { BoardadmiralComponent } from './boardadmiral/boardadmiral.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MapinfoComponent } from './mapinfo/mapinfo.component';
     SeabattleModule,
     FlaggamesModule,
     MapinfoComponent,
+    BoardadmiralComponent,
   ],
   exports: [LobbyComponent],
 })

@@ -81,11 +81,11 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     ws: WsService,
     ss: SettingsService,
     fs: FriendsService,
-    private kbs: KeyBindingService,
+    protected kbs: KeyBindingService,
     es: EscMenuService,
     lobbyService: LobbyService<CadeLobby>,
     private injector: Injector,
-    private boats: BoatsService,
+    protected boats: BoatsService,
   ) {
     super(ws, ss, fs, es, lobbyService);
     this.setType();

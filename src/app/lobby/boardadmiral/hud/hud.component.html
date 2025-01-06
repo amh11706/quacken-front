@@ -1,0 +1,24 @@
+<div class="container noselect"
+     id="hud">
+  <div id="boatcontrol"
+       (contextmenu)="$event.preventDefault()">
+    <div id="time">
+      <div id="timebar"
+           [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
+    </div>
+
+    <button *ngIf="(lobbySettings.turnTime.stream | async) === 65"
+            mat-icon-button
+            [color]="'accent'"
+            [disabled]="!myBoat.isMe"
+            [class.ready]="!myBoat.ready"
+            id="hudReady"
+            (click)="toggleReady()">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+  </div>
+
+  <div id="chat">
+    <q-chat [disabled]="(es.open$ | async) || false"></q-chat>
+  </div>
+</div>

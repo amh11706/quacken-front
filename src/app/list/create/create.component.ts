@@ -10,6 +10,7 @@ import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { ServerSettingMap } from '../../settings/types';
 import { FgDesc } from '../../lobby/flaggames/flaggames.component';
+import { BoardadmiralDesc } from '../../lobby/boardadmiral/boardadmiral.component';
 
 export const Descriptions = {
   Quacken: QuackenDesc,
@@ -18,6 +19,7 @@ export const Descriptions = {
   SeaBattle: SbDesc,
   FlagGames: FgDesc,
   mapinfo: 'View map information.',
+  BA: BoardadmiralDesc,
 };
 
 const groups = ['quacken', 'spades', 'cade', 'cade', 'flaggames'];

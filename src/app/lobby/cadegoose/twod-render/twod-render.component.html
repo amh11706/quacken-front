@@ -19,9 +19,9 @@
         <div
              [style.transform]="'translate(50%, 50%) translate(' + -getXOff(myBoat) + 'px, ' + -getYOff(myBoat) + 'px)'">
           <canvas id="mapCanvas"
-                  (mousedown)="mousedown($event)"
-                  (mouseup)="mouseup($event)"
-                  (mousemove)="mousemove($event)"
+                  (mousedown)="mouseDown($event)"
+                  (mouseup)="mouseUp($event)"
+                  (mousemove)="mouseMove($event)"
                   #canvas></canvas>
 
           <ng-container *ngFor="let obstacle of obstacles;">
@@ -43,7 +43,8 @@
                       [getY]="getY">
           </q-gu-boats>
 
-          <div #overlay id="overlay"></div>
+          <div #overlay
+               id="overlay"></div>
         </div>
       </div>
     </div>

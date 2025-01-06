@@ -22,6 +22,7 @@ import { ReplayRoutingModule } from './replay-routing.module';
 import { ReplayComponent } from './replay.component';
 import { MapDebugComponent } from './cadegoose/map-debug/map-debug.component';
 import { PenaltyComponent } from './cadegoose/penalty/penalty.component';
+import { BoatButtonComponent } from './boat-button/boat-button.component';
 
 @NgModule({
   declarations: [ReplayComponent, ReplayWrapperComponent, CadegooseComponent, MapDebugComponent, PenaltyComponent],
@@ -44,6 +45,7 @@ import { PenaltyComponent } from './cadegoose/penalty/penalty.component';
     LobbyModule,
     SettingsModule,
     QdragModule,
+    BoatButtonComponent,
   ],
 })
 export class ReplayModule { }

@@ -64,11 +64,10 @@ export class BoatsService {
     this.clickedBoat.next(boat);
   }
 
-  setMyBoat(boat: Boat) {
-    this.myBoat.value.isMe = false;
-    boat.isMe = boat.id === this.ws.sId;
+  setMyBoat(boat: Boat, focus = true) {
+    boat.isMe = true;
     this.myBoat.next(boat);
-    this.focusMyBoat();
+    if (focus) this.focusMyBoat();
   }
 
   private handleTicks(ticks: Record<number, BoatTick>) {

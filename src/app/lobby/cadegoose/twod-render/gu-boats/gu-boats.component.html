@@ -67,9 +67,6 @@
 
   <div [style.transform]="'rotate(' + render.rotateAdjust + 'deg)'">
     <q-sprite-img [class.ghostly]="render.boat.type === 28"
-                  [render]="render"
-                  (click)="clickBoat(render.boat)"
-                  (mouseenter)="hoveredTeam = render.boat.team || 0;"
-                  (mouseleave)="hoveredTeam = -1;"></q-sprite-img>
+                  [render]="render"></q-sprite-img>
   </div>
 </div>

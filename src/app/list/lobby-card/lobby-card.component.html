@@ -62,14 +62,14 @@
 
 
 <p class="settingsView">
-  <ng-container
-                *ngTemplateOutlet="{
+  <ng-container *ngTemplateOutlet="{
                   Quacken: quackenView,
                   Spades: spadesView,
                   CadeGoose: cadeView,
                   SeaBattle: cadeView,
                   FlagGames: cadeView,
                   mapinfo: cadeView,
+                  BA: cadeView,
                 }[lobby.type]; context: {settings: lobby.group}">
   </ng-container>
 </p>

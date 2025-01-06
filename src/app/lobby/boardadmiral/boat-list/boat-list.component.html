@@ -1,0 +1,16 @@
+<div id="boatlist"
+     class="container"
+     [qDrag]="handle"
+     [bindToWindow]="true">
+  <div #handle
+       class="handle"></div>
+  <q-boat-button [boat]="DefaultBoat"
+                 [active]="activeBoat === DefaultBoat"
+                 (click)="selectBoat(DefaultBoat)"></q-boat-button>
+  <h4>Your Boats</h4>
+
+  <q-boat-button *ngFor="let boat of boats"
+                 [boat]="boat"
+                 [active]="activeBoat === boat"
+                 (click)="selectBoat(boat)"></q-boat-button>
+</div>

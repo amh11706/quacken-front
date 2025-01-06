@@ -3,8 +3,9 @@
   <p>Loading...</p>
 </div>
 
-<ng-container *ngIf="lobby | async as lobby"
-              [ngSwitch]="lobby.type">
+<div *ngIf="lobby | async as lobby"
+     id="lobby"
+     [ngSwitch]="lobby.type">
   <q-quacken *ngSwitchCase="'Quacken'"></q-quacken>
   <q-spades *ngSwitchCase="'Spades'"
             [lobby]="lobby"></q-spades>
@@ -13,5 +14,6 @@
   <q-flaggames *ngSwitchCase="'FlagGames'"></q-flaggames>
   <q-mapinfo *ngSwitchCase="'mapinfo'"
              [lobby]="lobby"></q-mapinfo>
+  <q-boardadmiral *ngSwitchCase="'BA'"></q-boardadmiral>
 
-</ng-container>
+</div>

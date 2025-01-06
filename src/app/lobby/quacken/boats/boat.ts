@@ -31,7 +31,9 @@ export class Boat {
     public name: string,
     public type = BoatTypes.WarFrig,
     public isMe = false,
-  ) { }
+  ) {
+    this.title = name;
+  }
 
   resetMoves(): Boat {
     this.moves = [0, 0, 0, 0];
