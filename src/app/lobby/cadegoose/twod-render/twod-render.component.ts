@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
@@ -343,21 +343,38 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     return position;
   }
 
-  mousedown(event: MouseEvent): void {
+  @Output() mouseDownTile = new EventEmitter<Position>();
+  private mouseDownPos?: Position;
+
+  mouseDown(event: MouseEvent): void {
+    this.mouseDownPos = this.hoveredTile;
+    this.mouseDownTile.emit(this.hoveredTile);
     if (this.lobby?.inProgress) return;
     const p = this.extractCoord(event);
     this.mapUtil.clickTile(event, p.x, p.y);
   }
 
-  mouseup(event: MouseEvent): void {
+  @Output() clickTile = new EventEmitter<Position>();
+
+  mouseUp(event: MouseEvent): void {
+    const mouseDownPos = this.mouseDownPos;
+    this.mouseDownPos = undefined;
+    if (this.hoveredTile !== mouseDownPos) return;
+    this.clickTile.emit(this.hoveredTile);
     if (this.lobby?.inProgress) return;
     const p = this.extractCoord(event);
     this.mapUtil.mouseUp(event, p.x, p.y);
   }
 
-  mousemove(event: MouseEvent): void {
-    if (!this.mapUtil.painting) return;
+  @Output() hoverTile = new EventEmitter<Position>();
+  private hoveredTile?: Position;
+
+  mouseMove(event: MouseEvent): void {
     const p = this.extractCoord(event);
+    if (this.hoveredTile?.x === p.x && this.hoveredTile?.y === p.y) return;
+    this.hoveredTile = p;
+    this.hoverTile.emit(p);
+    if (!this.mapUtil.painting) return;
     this.mapUtil.clickTile(event, p.x, p.y);
   }
 

@@ -112,11 +112,6 @@ export class MainMenuService implements OnDestroy {
       void this.es.openTab(0, false, { lobbyTab: 0 });
     }));
     this.subs.add(this.boats.myBoat$.subscribe(b => {
-      if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {
-        this.myBoat = new Boat('');
-        void this.es.openTab(0, false, { lobbyTab: 0 });
-        return;
-      }
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
       this.myBoat = b;
     }));
@@ -128,6 +123,7 @@ export class MainMenuService implements OnDestroy {
       if (t.turnsLeft > 0) return;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.boats.setMyBoat(new Boat(''));
+      this.es.openTab(0, false, { lobbyTab: 0 });
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {

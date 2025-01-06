@@ -104,7 +104,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
 
     this.sub.add(this.boats.myBoat$.subscribe((b: Boat) => {
       this.myBoat = b;
-      this.advancedMapOpen = false;
+      if (this.myBoat.isMe) this.advancedMapOpen = false;
     }));
     this.sub.add(this.ws.subscribe(Internal.SetMap, (m: string) => this.setMapB64(m)));
     this.sub.add(this.lobbyService.get().subscribe(l => {
