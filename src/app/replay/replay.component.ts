@@ -124,7 +124,8 @@ export class ReplayComponent implements OnInit, OnDestroy {
         void this.esc.openMenu(false);
       }, 1000);
       setTimeout(() => { // temporary fix for starting replay
-        this.playTo(Number(this.route.snapshot.queryParams.tick));
+        const tick = Number(this.route.snapshot.queryParams.tick);
+        if (tick) this.playTo(tick);
       }, 500);
     });
   }
