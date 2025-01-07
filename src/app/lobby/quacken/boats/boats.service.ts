@@ -65,7 +65,6 @@ export class BoatsService {
   }
 
   setMyBoat(boat: Boat, focus = true) {
-    boat.isMe = true;
     this.myBoat.next(boat);
     if (focus) this.focusMyBoat();
   }
@@ -108,9 +107,9 @@ export class BoatsService {
   private updateMyBoat() {
     if (!this.ws.sId) return;
     const oldBoat = this.myBoat.value;
-    oldBoat.isMe = false;
     const boat = this.boatMap.get(this.ws.sId) || new Boat('');
-    boat.isMe = boat.id === this.ws.sId;
+    if (boat === oldBoat) return;
+    oldBoat.isMe = false;
     this.myBoat.next(boat);
   }
 

@@ -77,7 +77,7 @@ export class HudComponent implements OnInit, OnDestroy {
   };
 
   unusedTokens: Tokens = {
-    moves: [0, 0, 0],
+    moves: [2, 4, 2],
     shots: 0,
     maneuvers: [0, 0, 0, 0],
   };

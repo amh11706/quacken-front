@@ -91,9 +91,10 @@ export class CadeHudComponent extends HudComponent implements OnInit {
           for (const count of tokens) this.totalTokens.moves[i]! += count;
         }
       }
-      if (this.lastMoveReset >= this.turn) {
-        this.totalTokens = { ...this.totalTokens };
-      } else {
+      this.totalTokens = { ...this.totalTokens };
+      this.updateWantMove$.next(false);
+      // if our moves haven't reset yet, we haven't used any tokens yet this turn
+      if (this.lastMoveReset < this.turn) {
         this.unusedTokens.moves = [...this.totalTokens.moves];
         this.unusedTokens.shots = this.totalTokens.shots;
       }
@@ -102,7 +103,7 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   }
 
   private updateMaxMoves(): void {
-    this.maxMoves = this.lastTick.attr[255] ?? this.turn < 0 ? this.myBoat.maxMoves - 1 : this.myBoat.maxMoves;
+    this.maxMoves = this.lastTick.attr[255] ?? this.turn < -1 ? this.myBoat.maxMoves - 1 : this.myBoat.maxMoves;
   }
 
   setWantMove(value: number): void {

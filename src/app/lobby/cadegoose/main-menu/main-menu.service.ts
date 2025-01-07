@@ -110,6 +110,7 @@ export class MainMenuService implements OnDestroy {
         return;
       }
       void this.es.openTab(0, false, { lobbyTab: 0 });
+      this.myBoat.isMe = false;
     }));
     this.subs.add(this.boats.myBoat$.subscribe(b => {
       if (b.isMe && !this.myBoat.isMe) this.gotBoat();
@@ -122,7 +123,8 @@ export class MainMenuService implements OnDestroy {
       this.lobby.turnsLeft = t.turnsLeft;
       if (t.turnsLeft > 0) return;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
-      this.boats.setMyBoat(new Boat(''));
+      this.myBoat.isMe = false;
+      this.boats.setMyBoat(this.myBoat, false);
       this.es.openTab(0, false, { lobbyTab: 0 });
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
@@ -190,7 +192,7 @@ export class MainMenuService implements OnDestroy {
   }
 
   private gotBoat() {
-    if (this.status.value >= LobbyStatus.Voting) return;
+    if ([LobbyStatus.Voting, LobbyStatus.Paused].includes(this.status.value)) return;
     void this.es.openMenu(false);
     this.ready = false;
     for (const p of Object.values(this.fs.lobby$.getValue())) p.r = false;

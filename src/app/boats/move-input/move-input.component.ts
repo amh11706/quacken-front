@@ -20,6 +20,7 @@ export interface Tokens {
 export class MoveInputComponent implements OnInit, OnDestroy {
   private _input: MoveMessage = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
   @Input() set input(v: MoveMessage) {
+    this.blockedPosition = this._maxMoves === 4 ? 4 : 3;
     this._input = v;
     this.selected = 0;
     this.autoMoveBlock();

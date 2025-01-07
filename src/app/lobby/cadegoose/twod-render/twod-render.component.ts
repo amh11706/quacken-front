@@ -103,8 +103,8 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   getX = (p: { x: number, y: number }): number => (p.x + p.y) * 32;
   getY = (p: { x: number, y: number }): number => (p.y - p.x + this.mapWidth - 1) * 24;
-  getXOff = (boat: Boat): number => boat.isMe ? this.getX(boat.pos) : this.getWidth() / 2;
-  getYOff = (boat: Boat): number => boat.isMe ? this.getY(boat.pos) : this.getHeight() / 2;
+  getXOff = (boat: Boat): number => this.getX(boat.pos);
+  getYOff = (boat: Boat): number => this.getY(boat.pos);
 
   moveTransition = (transition: number): string => {
     switch (transition) {

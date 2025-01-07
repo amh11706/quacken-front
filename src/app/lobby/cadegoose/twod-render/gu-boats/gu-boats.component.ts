@@ -84,7 +84,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subs.add(this.boats.myBoat$.subscribe(b => {
       if (b.isMe && !this.boatRenders.has(b.id)) this.boatRenders.set(b.id, new GuBoat(b));
-      GuBoat.myTeam = b.isMe ? b.team ?? 99 : 99;
+      GuBoat.myTeam = b.team ?? 99;
       this.boatRenders.forEach(r => {
         void r.updateTeam();
       });
