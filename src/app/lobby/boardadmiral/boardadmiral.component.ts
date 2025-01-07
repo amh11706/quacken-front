@@ -11,7 +11,7 @@ import { KeyActions } from '../../settings/key-binding/key-actions';
 import { BoatListComponent, DefaultBoat } from './boat-list/boat-list.component';
 import { BoatSync } from '../quacken/boats/types';
 import { BoatTypes } from '../quacken/boats/boat-types';
-import { GuBoat, Position } from '../cadegoose/twod-render/gu-boats/gu-boat';
+import { GuBoat } from '../cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../quacken/boats/boat';
 import { BaMainMenuComponent } from './main-menu/main-menu.component';
 
@@ -37,6 +37,8 @@ const fakeBoat: BoatSync = {
 
 interface BaAction {
   cmd: 'addTile' | 'removeTile';
+  id: number;
+  coverMode: BoatCoverMode;
   data: any;
 }
 
@@ -54,7 +56,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
   protected joinMessage = BoardadmiralDesc;
   private render = new BaRender();
   private defaultBoat = new BABoatSettings(DefaultBoat, this.ws);
-  activeBoatSettings = this.defaultBoat;
+  activeBoatSettings?: BABoatSettings;
   activeBoat = DefaultBoat;
   boatSettings = new Map<number, BABoatSettings>();
   private boatList: Boat[] = [];
@@ -108,7 +110,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
     DefaultBoat.isMe = true;
     this.boats.setMyBoat(DefaultBoat, false);
 
-    this.activeBoatSettings = this.boatSettings.get(boat.id) || new BABoatSettings(boat, this.ws);
+    this.activeBoatSettings = this.boatSettings.get(boat.id);
     this.redrawOverlay();
   }
 
@@ -162,23 +164,28 @@ export class BoardadmiralComponent extends CadegooseComponent {
   }
 
   private tileIsSet(x: number, y: number): boolean {
+    if (!this.activeBoatSettings) return false;
     return this.activeBoatSettings.coverage[this.activeBoatSettings.coverMode].some(tile => tile.x === x && tile.y === y);
   }
 
-  private removeTile(x: number, y: number): BaAction {
-    const coverage = this.activeBoatSettings.coverage[this.activeBoatSettings.coverMode];
+  private removeTile(x: number, y: number): BaAction | undefined {
+    if (!this.activeBoatSettings) return;
+    const coverMode = this.activeBoatSettings.coverMode;
+    const coverage = this.activeBoatSettings.coverage[coverMode];
     const index = coverage.findIndex(tile => tile.x === x && tile.y === y);
     if (index !== -1) coverage.splice(index, 1);
-    return { cmd: 'addTile', data: { x, y } };
+    return { cmd: 'addTile', data: { x, y }, coverMode, id: this.activeBoat.id };
   }
 
   private addTile(x: number, y: number, a?: number): BaAction | undefined {
+    if (!this.activeBoatSettings) return;
     if (this.tileIsSet(x, y)) return;
     if (this.activeBoatSettings.coverMode === BoatCoverMode.Flags) {
       if (!this.isFlag(x, y)) return;
     }
-    this.activeBoatSettings.coverage[this.activeBoatSettings.coverMode].push({ x, y, a });
-    return { cmd: 'removeTile', data: { x, y } };
+    const coverMode = this.activeBoatSettings.coverMode;
+    this.activeBoatSettings.coverage[coverMode].push({ x, y, a });
+    return { cmd: 'removeTile', data: { x, y }, coverMode, id: this.activeBoat.id };
   }
 
   private isFlag(x: number, y: number): boolean {
@@ -222,7 +229,10 @@ export class BoardadmiralComponent extends CadegooseComponent {
     if (e.shiftKey) {
       const nearest = this.findNearestBoat(e.tile.x, e.tile.y);
       if (!nearest) return;
-      if (nearest.id === this.activeBoatSettings.boat.id) this.activeBoatChange(DefaultBoat);
+      if (nearest.id === this.activeBoat.id) {
+        this.activeBoatChange(DefaultBoat);
+        delete this.activeBoatSettings;
+      }
       else this.activeBoatChange(nearest);
       return;
     }

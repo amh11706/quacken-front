@@ -42,7 +42,7 @@ export class BaRender {
     this.ctx.canvas.width = 50 * width;
   }
 
-  drawBoats(boats: Map<number, BABoatSettings>, activeBoat: BABoatSettings): void {
+  drawBoats(boats: Map<number, BABoatSettings>, activeBoat?: BABoatSettings): void {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 

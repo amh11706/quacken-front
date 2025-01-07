@@ -7,7 +7,16 @@
            [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
     </div>
 
-    <div id="boatsettings">
+    <ng-template #noboat>
+      <div id="noboat">
+        <p>Shift click a boat on the map to select it.</p>
+        <p>Click flags to assign them to the selected boat.</p>
+        <p>Click a tile to highlight boats assigned to it.</p>
+      </div>
+    </ng-template>
+
+    <div id="boatsettings"
+         *ngIf="activeBoat; else noboat">
       <p>Settings for "{{activeBoat.boat.title}}"</p>
       <table>
         <tr>

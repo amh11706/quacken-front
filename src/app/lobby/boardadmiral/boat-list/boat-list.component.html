@@ -4,9 +4,9 @@
      [bindToWindow]="true">
   <div #handle
        class="handle"></div>
-  <q-boat-button [boat]="DefaultBoat"
+  <!-- <q-boat-button [boat]="DefaultBoat"
                  [active]="activeBoat === DefaultBoat"
-                 (click)="selectBoat(DefaultBoat)"></q-boat-button>
+                 (click)="selectBoat(DefaultBoat)"></q-boat-button> -->
   <h4>Your Boats</h4>
 
   <q-boat-button *ngFor="let boat of boats"
