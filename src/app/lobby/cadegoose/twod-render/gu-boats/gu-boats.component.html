@@ -59,7 +59,7 @@
     </div>
   </div>
 
-  <div [style.opacity]="render.boat.team === hoveredTeam ? 1 : 0"
+  <div [style.opacity]="render.boat.team === hoveredTeam || hoveredTile?.x === render.pos.x && hoveredTile?.y === render.pos.y ? 1 : 0"
        [style.borderColor]="teamColors[render.boat.team || 0]"
        [style.width]="render.boat.influence*92 + 'px'"
        [style.height]="render.boat.influence*92 + 'px'"

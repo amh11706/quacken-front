@@ -369,7 +369,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   }
 
   @Output() hoverTile = new EventEmitter<TileEvent>();
-  private hoveredTile?: Position;
+  hoveredTile?: Position;
 
   mouseMove(event: MouseEvent): void {
     const p = this.extractCoord(event);
