@@ -4,17 +4,19 @@ export interface Note {
 }
 
 /* Done but not released:
+'Blocked player messages no longer show in chat.',
+'Sinks no longer break replay pause.',
+'Replay rewind is much less laggy.',
+'Shot hit and splash sounds now work correctly.',
+'Match end in an empty lobby is now always a tie.',
 */
 
 /* In progress:
-'Make your boat stand out more from your team.',
-'Improve mobile scaling and zooming.',
+'BA mode.',
 */
 
 /* Planned:
 'smoother boat turning.',
-'1v1 queue.',
-'1v1 map generation.',
 'You can now add notes to a replay.',
 'Map creators can now see a list of matches using their map. Viewable from the map editor.',
 'New "Map Browser" page to view highlighted maps and creators.',

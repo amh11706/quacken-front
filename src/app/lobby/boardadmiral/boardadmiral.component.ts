@@ -151,7 +151,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
   }
 
   private findNearestBoat(x: number, y: number): Boat | undefined {
-    let minDist = 1000;
+    let minDist = 3;
     let nearest: Boat | undefined;
     for (const boat of this.boatList) {
       const dist = Math.abs(boat.pos.x - x) + Math.abs(boat.pos.y - y);
@@ -228,8 +228,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
     }
     if (e.shiftKey) {
       const nearest = this.findNearestBoat(e.tile.x, e.tile.y);
-      if (!nearest) return;
-      if (nearest.id === this.activeBoat.id) {
+      if (!nearest || nearest.id === this.activeBoat.id) {
         this.activeBoatChange(DefaultBoat);
         delete this.activeBoatSettings;
       }
