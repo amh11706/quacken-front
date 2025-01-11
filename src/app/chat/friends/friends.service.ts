@@ -5,6 +5,9 @@ import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { Invite } from '../types';
 import { TeamMessage } from '../../lobby/cadegoose/types';
+import { ChatService } from '../chat.service';
+
+const unblockableMessageTypes = new Set([3, 7, 9]);
 
 @Injectable()
 export class FriendsService {
@@ -18,7 +21,7 @@ export class FriendsService {
   private blockedMap = new Set<string>();
   invites: Invite[] = [];
 
-  constructor(private ws: WsService) {
+  constructor(private ws: WsService, private chat: ChatService) {
     this.handleBlocks();
     this.handlePlayers();
     this.handleFriends();
@@ -34,9 +37,18 @@ export class FriendsService {
   }
 
   private handleBlocks() {
+    this.chat.messages$.subscribe(messages => {
+      const last = messages[messages.length - 1];
+      if (!last || unblockableMessageTypes.has(last.type)) return;
+      if (this.isBlocked(last.from)) messages.pop();
+    });
     this.ws.subscribe(InCmd.BlockUser, m => {
       this.blocked.push(m);
       this.blockedMap.add(m);
+      this.chat.messages = this.chat.messages.filter(n => {
+        return n.from !== m || unblockableMessageTypes.has(n.type);
+      });
+      this.chat.messages$.next(this.chat.messages);
       this.refresh();
     });
     this.ws.subscribe(InCmd.UnblockUser, m => {

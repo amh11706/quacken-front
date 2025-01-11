@@ -7,8 +7,7 @@
                                  [maxBufferPx]="200"
                                  class="textbox">
       <ng-container *cdkVirtualFor="let m of chat.messages$">
-        <p *ngIf="!m.blocked"
-           [style.backgroundColor]="colors[m.type]"
+        <p [style.backgroundColor]="colors[m.type]"
            [matTooltipShowDelay]="500"
            [matTooltipPosition]="'right'"
            [matTooltip]="m.receivedTime">
