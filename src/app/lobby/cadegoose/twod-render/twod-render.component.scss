@@ -32,7 +32,7 @@ q-gu-boats {
   z-index: 1000;
 }
 
-#overlay {
+::ng-deep #overlay canvas {
   position: absolute;
   top: 0;
   scale: 0.905;

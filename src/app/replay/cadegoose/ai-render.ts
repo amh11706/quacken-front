@@ -119,10 +119,13 @@ export class AiRender {
     ctx.resetTransform();
   }
 
+  private noOrientation = new Set(['GetShot'])
+
   private getValue(points: Points, metric: keyof Points): number | number[] {
     const values = points?.[metric];
     if (!Array.isArray(values)) return values || 0;
     if (values.length === 6) return values[this.radius] || 0;
+    if (this.noOrientation.has(metric)) return values[this.step] || 0;
     else if (values.length === 4 && !Array.isArray(values[0])) return values as number[];
     return values[this.step] || 0;
   }
