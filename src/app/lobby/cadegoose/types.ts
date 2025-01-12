@@ -1,6 +1,6 @@
 import { ChatMessage, Message } from '../../chat/types';
 import { ServerSettingMap } from '../../settings/types';
-import { BoatStatus, BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync, Turn } from '../quacken/boats/types';
+import { BoatStatus, BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync, Team, Turn } from '../quacken/boats/types';
 import { StatRow } from './stats/types';
 
 export const enum LobbyStatus {
@@ -14,7 +14,7 @@ export const enum LobbyStatus {
 export interface Lobby {
   id: number;
   owner: boolean;
-  players: any;
+  players: any[];
   playing?: boolean;
   scores?: number[];
   treasure?: number[];
@@ -32,6 +32,7 @@ export interface ListLobby extends Lobby {
 }
 
 export interface CadeLobby extends Lobby {
+  players: TeamMessage[];
   map: string;
   seed: string;
   flags: Turn['flags'];

@@ -187,14 +187,12 @@ export class TurnService {
 
     this.sortBoats();
     // set a minimum time for the step animation
-    if (step % 2 === 0) {
-      promises.push(new Promise(resolve => {
-        new Tween({}, BoatRender3d.tweens)
-          .to({}, 10000 / BoatRender3d.speed)
-          .onComplete(resolve)
-          .start(startTime);
-      }));
-    }
+    promises.push(new Promise(resolve => {
+      new Tween({}, BoatRender3d.tweens)
+        .to({}, 2000 / BoatRender3d.speed)
+        .onComplete(resolve)
+        .start(startTime);
+    }));
     return Promise.all(promises);
   }
 }

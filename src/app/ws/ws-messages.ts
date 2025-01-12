@@ -95,6 +95,9 @@ export const enum OutCmd {
   SetMapData,
   SetMyJobbers,
   Vote,
+
+  BASettings,
+  BASettingsGet,
 }
 
 export const enum InCmd {
@@ -157,4 +160,6 @@ export const enum InCmd {
   OfferBlind,
 
   LobbyStatus,
+
+  BASettings,
 }

@@ -49,7 +49,9 @@ export class SoundService {
   private ctx = new AudioContext();
 
   constructor(private ss: SettingsService) {
-    void ss.getGroup('sounds').then(settings => this.settings = settings);
+    void ss.getGroup('sounds').then(settings => {
+      this.settings = settings
+    });
   }
 
   load(sound: Sounds): Promise<AudioBuffer> {

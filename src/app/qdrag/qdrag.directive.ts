@@ -11,13 +11,13 @@ export class QdragDirective implements OnInit, OnDestroy {
   @Input() scale = 1;
   private _offset = { x: 0, y: 0 };
   get offset() { return this._offset; }
-  @Input() set offset(value: {x: number, y: number}) {
+  @Input() set offset(value: { x: number, y: number }) {
     this._offset = typeof value === 'object' ? value || this._offset : this._offset;
     this.updateTransform(false);
     setTimeout(() => this.bindToWindow && this.bindWindow(false, false), 0);
   }
 
-  @Output() offsetChange = new EventEmitter<{x: number, y: number}>();
+  @Output() offsetChange = new EventEmitter<{ x: number, y: number }>();
 
   private rightGap?: number;
   private startX = 0;
@@ -32,7 +32,8 @@ export class QdragDirective implements OnInit, OnDestroy {
 
     if (!this.qDrag) this.qDrag = this.el.nativeElement;
     if (!this.qDrag) return;
-    this.qDrag.addEventListener('dblclick', () => {
+    this.qDrag.addEventListener('dblclick', e => {
+      if (e.button !== 0) return;
       this._offset.x = 0;
       this._offset.y = 0;
       this.updateTransform();

@@ -12,7 +12,7 @@ import { InputCmds, InputlessCmds, OutCmdInputTypes, OutCmdReturnTypes, OutReque
 import { OutMessage, SendCmdInputless, SendCmdInputs } from './ws-send-types';
 import { InMessage, SubscribeData } from './ws-subscribe-types';
 
-const ClientVersion = 79;
+const ClientVersion = 80;
 
 export interface TokenUser {
   id: number;
@@ -183,8 +183,7 @@ export class WsService implements OnDestroy {
   }
 
   private sendRaw(data: string) {
-    if (!this.socket) return;
-    if (this.connected) return this.socket.send(data);
+    if (this.connected) return this.socket?.send(data);
     const sub = this.connected$.subscribe((connected: boolean) => {
       if (!connected) return;
       this.socket?.send(data);

@@ -4,36 +4,20 @@ import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
 import { TwodRenderModule } from '../cadegoose/twod-render/twod-render.module';
 import { HudComponent } from './hud/hud.component';
-import { BABoatSettings, BaRender, BoatCoverMode } from './ba-render';
-import { InCmd, Internal } from '../../ws/ws-messages';
+import { BABoatSettings, BaRender, BoatCoverMode, ServerBASettings } from './ba-render';
+import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
 import { TileEvent } from '../cadegoose/twod-render/twod-render.component';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { BoatListComponent, DefaultBoat } from './boat-list/boat-list.component';
-import { BoatSync } from '../quacken/boats/types';
-import { BoatTypes } from '../quacken/boats/boat-types';
 import { GuBoat } from '../cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../quacken/boats/boat';
-import { BaMainMenuComponent } from './main-menu/main-menu.component';
+import { LobbyStatus } from '../cadegoose/types';
+import { QdragModule } from '../../qdrag/qdrag.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MapEditorModule } from '../../map-editor/map-editor.module';
+import { CommonModule } from '@angular/common';
 
 export const BoardadmiralDesc = 'Board Admiral: Command your fleet to victory in a game of naval strategy and tactics.';
-
-const fakeBoat: BoatSync = {
-  id: 0,
-  team: 0,
-  x: 0,
-  y: 0,
-  t: 0,
-  inSZ: false,
-  n: 'Boat 1',
-  f: 0,
-  b: 0,
-  tp: 50,
-  ty: BoatTypes.WarFrig,
-  ml: 0,
-  mDamage: 100,
-  mMoves: 3,
-  inSq: 16,
-};
 
 interface BaAction {
   cmd: 'addTile' | 'removeTile';
@@ -45,14 +29,23 @@ interface BaAction {
 @Component({
   selector: 'q-boardadmiral',
   standalone: true,
-  imports: [CadegooseModule, TwodRenderModule, HudComponent, BoatListComponent],
+  imports: [
+    CommonModule,
+    CadegooseModule,
+    TwodRenderModule,
+    HudComponent,
+    BoatListComponent,
+    QdragModule,
+    MatButtonModule,
+    MapEditorModule,
+  ],
   templateUrl: './boardadmiral.component.html',
   styleUrl: './boardadmiral.component.scss',
   providers: [MainMenuService],
 
 })
 export class BoardadmiralComponent extends CadegooseComponent {
-  protected menuComponent = BaMainMenuComponent;
+  // protected menuComponent = BaMainMenuComponent;
   protected joinMessage = BoardadmiralDesc;
   private render = new BaRender();
   private defaultBoat = new BABoatSettings(DefaultBoat, this.ws);
@@ -62,27 +55,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
   private boatList: Boat[] = [];
 
   private undoTicker = 0;
-
-  private fakeBoats() {
-    // this.ss.getGroup('graphics').then(() => {
-    //   this.es.openMenu(false);
-    // });
-
-    GuBoat.myTeam = 0;
-    this.ws.dispatchMessage({
-      cmd: InCmd.Sync, data: {
-        turn: 0, cSync: [],
-        sync: [
-          { ...fakeBoat, x: 10, y: 10, n: 'Boat 1', id: 1 },
-          { ...fakeBoat, x: 10, y: 15, n: 'Boat 2', id: 2 },
-          { ...fakeBoat, x: 15, y: 10, n: 'Boat 3', id: 3 },
-          { ...fakeBoat, x: 15, y: 15, n: 'Boat 4', id: 4 },
-        ]
-      }
-    });
-    DefaultBoat.isMe = true;
-    this.boats.setMyBoat(DefaultBoat, false);
-  }
+  private lastStatus = LobbyStatus.Waiting;
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -100,7 +73,44 @@ export class BoardadmiralComponent extends CadegooseComponent {
       this.undoTicker = window.setInterval(() => this.doUndo(this.undos, this.redos), 200);
     }));
 
-    this.fakeBoats();
+    this.sub.add(this.ws.subscribe(InCmd.BASettings, s => this.updateBoatSetting(s)));
+    // prevent map jumping when switching boats
+    this.sub.add(this.boats.myBoat$.subscribe(b => {
+      DefaultBoat.pos = { ...b.pos };
+      DefaultBoat.team = b.team;
+      if (this.myBoat === b) return;
+    }));
+    this.sub.add(this.lobbyService.status.subscribe(s => {
+      if (this.lastStatus === LobbyStatus.PreMatch && s !== LobbyStatus.PreMatch) {
+        this.boatSettings.clear();
+        this.gotBoats(this.boats.boats);
+        this.activeBoatChange(DefaultBoat);
+      }
+      this.lastStatus = s;
+    }));
+    this.sub.add(this.fs.lobby$.subscribe(l => {
+      const me = l.find(p => p.sId === this.ws.sId);
+      const lastTeam = GuBoat.myTeam;
+      GuBoat.myTeam = me?.t ?? 99;
+      if (lastTeam === GuBoat.myTeam) return;
+      DefaultBoat.team = GuBoat.myTeam;
+      this.boats.refreshBoats();
+      this.boats.setMyBoat(DefaultBoat, false);
+      if (GuBoat.myTeam < 4) {
+        this.ws.request(OutCmd.BASettingsGet).then(s => this.updateBoatSetting(s || []));
+      }
+    }));
+  }
+
+  private updateBoatSetting(ss: ServerBASettings | ServerBASettings[]) {
+    if (!Array.isArray(ss)) ss = [ss];
+    for (const s of ss) {
+      const boat = this.boatList.find(b => b.id === s.Id);
+      if (!boat) return;
+      const settings = this.boatSettings.get(s.Id) || new BABoatSettings(boat, this.ws);
+      this.boatSettings.set(s.Id, settings.fromJSON(s));
+    }
+    this.redrawOverlay(false);
   }
 
   activeBoatChange(boat: Boat) {
@@ -108,10 +118,13 @@ export class BoardadmiralComponent extends CadegooseComponent {
     this.activeBoat = boat;
     boat.isMe = true;
     DefaultBoat.isMe = true;
+    DefaultBoat.team = GuBoat.myTeam;
+    if (DefaultBoat.team === 99) DefaultBoat.team = 4;
     this.boats.setMyBoat(DefaultBoat, false);
 
     this.activeBoatSettings = this.boatSettings.get(boat.id);
-    this.redrawOverlay();
+    if (boat === DefaultBoat) delete this.activeBoatSettings;
+    this.redrawOverlay(false);
   }
 
   private undos: BaAction[] = [];
@@ -134,9 +147,10 @@ export class BoardadmiralComponent extends CadegooseComponent {
     this.redrawOverlay();
   }
 
-  redrawOverlay() {
+  redrawOverlay(save = true) {
     this.highlightTile();
     this.render.drawBoats(this.boatSettings, this.activeBoatSettings);
+    if (save) this.activeBoatSettings?.save();
   }
 
   gotBoats(boats: Boat[]): void {
@@ -154,6 +168,8 @@ export class BoardadmiralComponent extends CadegooseComponent {
     let minDist = 3;
     let nearest: Boat | undefined;
     for (const boat of this.boatList) {
+      // our boat is just there for show
+      if (boat.id === this.ws.sId) continue;
       const dist = Math.abs(boat.pos.x - x) + Math.abs(boat.pos.y - y);
       if (dist < minDist) {
         minDist = dist;
@@ -195,8 +211,10 @@ export class BoardadmiralComponent extends CadegooseComponent {
 
   private toggleTile(x: number, y: number, a?: number): void {
     const action = this.tileIsSet(x, y) ? this.removeTile(x, y) : this.addTile(x, y, a);
-    if (action) this.undos.push(action);
-    this.redrawOverlay();
+    if (action) {
+      this.undos.push(action);
+      this.redrawOverlay();
+    }
   }
 
   private painting = false;
@@ -206,8 +224,10 @@ export class BoardadmiralComponent extends CadegooseComponent {
     if (this.activeBoat.id === 0) return;
     if (!this.painting) return;
     const action = this.paintMode === 'erase' ? this.removeTile(e.tile.x, e.tile.y) : this.addTile(e.tile.x, e.tile.y);
-    if (action) this.undos.push(action);
-    this.redrawOverlay();
+    if (action) {
+      this.undos.push(action);
+      this.redrawOverlay();
+    }
   }
 
   private mouseDownCoords?: { x: number, y: number };
@@ -226,20 +246,22 @@ export class BoardadmiralComponent extends CadegooseComponent {
       this.painting = false;
       return;
     }
-    if (e.shiftKey) {
+    // right click to select a boat
+    if (e.button === 2) {
       const nearest = this.findNearestBoat(e.tile.x, e.tile.y);
-      if (!nearest || nearest.id === this.activeBoat.id) {
-        this.activeBoatChange(DefaultBoat);
-        delete this.activeBoatSettings;
-      }
+      if (!nearest || nearest.id === this.activeBoat.id) this.activeBoatChange(DefaultBoat);
       else this.activeBoatChange(nearest);
       return;
     }
+    // shift click to clear all tiles
+    if ((e.shiftKey || e.button === 1) && this.activeBoatSettings) {
+      this.activeBoatSettings.coverage = { 0: [], 1: [] };
+    }
     if (Math.abs(e.clientX - this.mouseDownCoords!.x) > 5 || Math.abs(e.clientY - this.mouseDownCoords!.y) > 5) return;
     this.defaultBoat.selectedTile = e.tile;
-    if (this.activeBoat.id === 0) return this.redrawOverlay();
+    // redraw to update the highlight regardless of if a tile was toggled
+    this.redrawOverlay(false);
     this.toggleTile(e.tile.x, e.tile.y);
-    this.redrawOverlay();
   }
 
   highlightedBoats = new Set<number>();

@@ -6,6 +6,7 @@ import { Player } from '../lobby/spades/types';
 import { Command, Invite, Message } from '../chat/types';
 import { InvUpdate, Inventory } from '../esc-menu/profile/types';
 import { TokenUser } from './ws.service';
+import { ServerBASettings } from '../lobby/boardadmiral/ba-render';
 
 export type InMessage = {
   [K in keyof SubscribeData]: { cmd: K, id?: number, data: SubscribeData[K] };
@@ -79,4 +80,6 @@ export type SubscribeData = {
   [InCmd.Playing]: { id: number, quantity: number };
   [InCmd.QueueLength]: number;
   [InCmd.QueueMatch]: { lobbyId: number, rated: boolean };
+
+  [InCmd.BASettings]: ServerBASettings | ServerBASettings[];
 } & InternalData;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { QdragModule } from '../../../qdrag/qdrag.module';
 import { BoatButtonComponent } from '../../../replay/boat-button/boat-button.component';
 import { BoatsService } from '../../quacken/boats/boats.service';
@@ -16,7 +16,7 @@ export const DefaultBoat = new Boat('Boat Defaults')
   templateUrl: './boat-list.component.html',
   styleUrl: './boat-list.component.scss'
 })
-export class BoatListComponent implements OnDestroy {
+export class BoatListComponent implements OnInit, OnDestroy {
   boats: Boat[] = [];
   @Output() boatsChange = new EventEmitter<Boat[]>();
   @Output() activeBoatChange = new EventEmitter<Boat>();
@@ -26,11 +26,17 @@ export class BoatListComponent implements OnDestroy {
 
   private sub = new Subscription();
 
-  constructor(private boatsService: BoatsService) {
+  constructor(private boatsService: BoatsService) { }
+
+  ngOnInit() {
     this.sub.add(this.boatsService.boats$.subscribe(boats => {
       DefaultBoat.team = GuBoat.myTeam;
-      if (DefaultBoat.team === 99) DefaultBoat.team = 0;
+      if (DefaultBoat.team === 99) {
+        DefaultBoat.team = 4;
+        DefaultBoat.pos = { x: 10, y: 18 };
+      }
       this.boats = boats.filter(boat => boat.team === GuBoat.myTeam);
+      this.boats.sort((a, b) => a.id - b.id);
       this.boatsChange.emit(this.boats);
     }));
   }

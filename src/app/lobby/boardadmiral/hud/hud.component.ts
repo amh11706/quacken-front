@@ -24,6 +24,9 @@ export class HudComponent extends CadeHudComponent {
     if (!this.activeBoat) return;
     this.boatSettings.forEach(boat => {
       if (!this.activeBoat) return;
+      if (boat.boat.id === 0) return;
+      if (boat === this.activeBoat) return;
+      if (boat[key] === this.activeBoat[key]) return;
       boat[key] = this.activeBoat[key];
       boat.save();
     });
@@ -31,7 +34,6 @@ export class HudComponent extends CadeHudComponent {
 
   update(): void {
     if (!this.activeBoat) return;
-    this.activeBoat.save();
     this.activeBoatChange.emit(this.activeBoat);
   }
 

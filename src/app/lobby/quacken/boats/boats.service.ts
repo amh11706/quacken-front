@@ -52,6 +52,10 @@ export class BoatsService {
     setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined }));
   }
 
+  refreshBoats() {
+    this._boats.next(this.boats);
+  }
+
   resetBoats(): void {
     for (const boat of this.boats) boat.resetMoves();
   }
@@ -104,13 +108,16 @@ export class BoatsService {
     this._boats.next([...this.boatMap.values()]);
   }
 
+  private myLastBoat?: Boat;
+
   private updateMyBoat() {
     if (!this.ws.sId) return;
-    const oldBoat = this.myBoat.value;
-    const boat = this.boatMap.get(this.ws.sId) || new Boat('');
-    if (boat === oldBoat) return;
-    oldBoat.isMe = false;
+    const boat = this.boatMap.get(this.ws.sId);
+    if (!boat) return;
+    if (boat === this.myLastBoat) return;
+    if (this.myLastBoat) this.myLastBoat.isMe = false;
     this.myBoat.next(boat);
+    this.myLastBoat = boat;
   }
 
   private setBoats(boats: BoatSync[], reset = true) {

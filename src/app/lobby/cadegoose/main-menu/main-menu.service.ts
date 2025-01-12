@@ -30,7 +30,6 @@ export class MainMenuService implements OnDestroy {
 
   links = links;
   teamPlayers$ = new BehaviorSubject<TeamMessage[][]>([]);
-  status = new BehaviorSubject<LobbyStatus>(LobbyStatus.Waiting);
   teamRanks: number[] = [];
   myBoat = new Boat('');
   myTeam = 99;
@@ -44,6 +43,7 @@ export class MainMenuService implements OnDestroy {
   private firstJoin = true;
   group = 'l/cade' as SettingGroup;
   get lobby() { return this.lobbyService.get().value; }
+  get status() { return this.lobbyService.status; }
   seeds: string[] = [];
 
   constructor(
@@ -68,7 +68,6 @@ export class MainMenuService implements OnDestroy {
 
       if (this.lobby.seed && !this.seeds.includes(this.lobby.seed)) this.seeds.push(this.lobby.seed);
       if (m.settings) this.ss.setSettings(this.group, m.settings);
-      this.status.next(m.inProgress);
       if (m.players?.length) void this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
       if (this.firstJoin) {
         this.firstJoin = false;
@@ -100,7 +99,6 @@ export class MainMenuService implements OnDestroy {
       this.removeUser(m);
     }));
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
-      this.status.next(m);
       if (!this.ws.connected) return;
       if (m === LobbyStatus.MidMatch) {
         void this.es.openMenu(false);

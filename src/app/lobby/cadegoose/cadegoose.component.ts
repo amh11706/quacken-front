@@ -103,6 +103,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     void this.es.openMenu();
 
     this.sub.add(this.boats.myBoat$.subscribe((b: Boat) => {
+      if (this.myBoat === b) return;
       this.myBoat = b;
       if (this.myBoat.isMe) this.advancedMapOpen = false;
     }));

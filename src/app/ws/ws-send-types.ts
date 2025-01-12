@@ -1,4 +1,5 @@
 import { Invite } from '../chat/types';
+import { ServerBASettings } from '../lobby/boardadmiral/ba-render';
 import { MoveMessage } from '../lobby/quacken/boats/types';
 import { ServerSettingMap, DBSetting } from '../settings/types';
 import { OutCmd } from './ws-messages';
@@ -45,6 +46,8 @@ export type SendCmdInputs = {
   [OutCmd.Bid]: number;
   [OutCmd.Kick]: number;
   [OutCmd.Card]: number[];
+
+  [OutCmd.BASettings]: ServerBASettings;
 }
 
 export type SendCmdInputless =

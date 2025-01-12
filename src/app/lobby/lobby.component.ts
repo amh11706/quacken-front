@@ -42,7 +42,9 @@ export class LobbyComponent implements OnInit, OnDestroy {
       const oldLobby = this.lobbyService.lobby.value;
       if (oldLobby.type === l.type) l = Object.assign(oldLobby, l);
       this.lobbyService.lobby.next(l);
+      this.lobbyService.status.next(l.inProgress);
     }));
+    this.sub.add(this.ws.subscribe(InCmd.LobbyStatus, s => this.lobbyService.status.next(s)));
     this.sub.add(this.ws.connected$.subscribe(v => {
       if (!v || !this.id) return;
       if (!this.sent) this.ws.send(OutCmd.LobbyJoin, this.id);

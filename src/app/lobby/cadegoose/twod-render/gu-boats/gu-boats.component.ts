@@ -174,6 +174,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
 
   protected setHeaderFlags(flags: Turn['flags']): void {
     this.boatRenders.forEach(r => r.flags = []);
+    if (!flags) return;
     for (const f of flags) {
       if (f.cs) {
         for (const id of f.cs) {

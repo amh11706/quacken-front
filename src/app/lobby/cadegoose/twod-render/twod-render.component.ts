@@ -145,7 +145,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
       this.colorFlags(flagMap);
     }));
     this.sub.add(this.boats.focusMyBoat$.subscribe(() => {
-      this.frame?.nativeElement.dispatchEvent(new Event('dblclick'));
+      this.frame?.nativeElement.dispatchEvent(new MouseEvent('dblclick', { button: 0 }));
     }));
 
     this.frameRequested = false;

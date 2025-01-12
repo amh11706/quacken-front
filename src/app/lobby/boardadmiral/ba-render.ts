@@ -1,10 +1,20 @@
 import { Subject } from "rxjs";
 import { Boat } from "../quacken/boats/boat";
 import { WsService } from "../../ws/ws.service";
+import { OutCmd } from "../../ws/ws-messages";
 
 export const enum BoatCoverMode {
   Flags,
   Tiles,
+}
+
+export interface ServerBASettings {
+  Id: number;
+  Aggro: number;
+  Flag: number;
+  Defense: number;
+  CoverMode: BoatCoverMode;
+  Coverage: { x: number, y: number }[];
 }
 
 export class BABoatSettings {
@@ -20,7 +30,27 @@ export class BABoatSettings {
   selectedTile?: { x: number, y: number };
 
   save(): void {
-    // this.ws.send('boatSettings', this);
+    this.ws.send(OutCmd.BASettings, this.toJSON());
+  }
+
+  toJSON(): ServerBASettings {
+    return {
+      Id: this.boat.id,
+      Aggro: this.Aggro,
+      Flag: this.Flag,
+      Defense: this.Defense,
+      CoverMode: this.coverMode,
+      Coverage: this.coverage[this.coverMode].map(({ x, y }) => ({ x, y })),
+    };
+  }
+
+  fromJSON(data: ServerBASettings): this {
+    this.Aggro = data.Aggro;
+    this.Flag = data.Flag;
+    this.Defense = data.Defense;
+    this.coverMode = data.CoverMode;
+    this.coverage[data.CoverMode] = data.Coverage;
+    return this;
   }
 }
 

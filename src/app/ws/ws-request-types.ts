@@ -1,4 +1,5 @@
 import { Leader, RankLeader, WinLoss, UserRank, Stat, Match } from '../esc-menu/profile/types';
+import { ServerBASettings } from '../lobby/boardadmiral/ba-render';
 import { ParsedTurn } from '../lobby/cadegoose/types';
 import { BoatSync, BoatTick } from '../lobby/quacken/boats/types';
 import { DBTile } from '../map-editor/types';
@@ -105,6 +106,7 @@ type OutCmdReturns = {
   [OutCmd.StructureSetGet]: DBTile[];
   [OutCmd.JoinQueue]: string;
   [OutCmd.GetBotMatch]: number;
+  [OutCmd.BASettingsGet]: ServerBASettings[];
 }
 
 // we will get undefined if the request crashes on the backend.
