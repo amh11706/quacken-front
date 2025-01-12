@@ -251,6 +251,8 @@ export class BoardadmiralComponent extends CadegooseComponent {
       this.painting = false;
       return;
     }
+    // ignore drag
+    if (Math.abs(e.clientX - this.mouseDownCoords!.x) > 5 || Math.abs(e.clientY - this.mouseDownCoords!.y) > 5) return;
     // right click to select a boat
     if (e.button === 2) {
       const nearest = this.findNearestBoat(e.tile.x, e.tile.y);
@@ -262,7 +264,6 @@ export class BoardadmiralComponent extends CadegooseComponent {
     if ((e.shiftKey || e.button === 1) && this.activeBoatSettings) {
       this.activeBoatSettings.coverage = { 0: [], 1: [] };
     }
-    if (Math.abs(e.clientX - this.mouseDownCoords!.x) > 5 || Math.abs(e.clientY - this.mouseDownCoords!.y) > 5) return;
     this.defaultBoat.selectedTile = e.tile;
     // redraw to update the highlight regardless of if a tile was toggled
     this.redrawOverlay(false);
