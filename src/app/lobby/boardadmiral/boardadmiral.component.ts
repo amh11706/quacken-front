@@ -16,6 +16,7 @@ import { QdragModule } from '../../qdrag/qdrag.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
 import { CommonModule } from '@angular/common';
+import { Team } from '../quacken/boats/types';
 
 export const BoardadmiralDesc = 'Board Admiral: Command your fleet to victory in a game of naval strategy and tactics.';
 
@@ -78,7 +79,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
     this.sub.add(this.boats.myBoat$.subscribe(b => {
       DefaultBoat.pos = { ...b.pos };
       DefaultBoat.team = b.team;
-      if (this.myBoat === b) return;
+      if (b.team !== undefined) this.updateMyTeam(b.team);
     }));
     this.sub.add(this.lobbyService.status.subscribe(s => {
       if (this.lastStatus === LobbyStatus.PreMatch && s !== LobbyStatus.PreMatch) {
@@ -90,17 +91,21 @@ export class BoardadmiralComponent extends CadegooseComponent {
     }));
     this.sub.add(this.fs.lobby$.subscribe(l => {
       const me = l.find(p => p.sId === this.ws.sId);
-      const lastTeam = GuBoat.myTeam;
-      GuBoat.myTeam = me?.t ?? 99;
-      if (lastTeam === GuBoat.myTeam) return;
-      DefaultBoat.team = GuBoat.myTeam;
-      this.boats.refreshBoats();
-      this.boats.setMyBoat(DefaultBoat, false);
-      if (GuBoat.myTeam < 4) {
-        this.ws.request(OutCmd.BASettingsGet).then(s => this.updateBoatSetting(s || []));
-      }
+      if (me?.t !== undefined) this.updateMyTeam(me.t);
     }));
   }
+
+  private updateMyTeam(team: Team) {
+    if (DefaultBoat.team === team) return;
+    DefaultBoat.team = team;
+    this.boatSettings.clear();
+    this.boats.setMyBoat(DefaultBoat, false);
+    this.boats.refreshBoats();
+    if (team < 4) {
+      this.ws.request(OutCmd.BASettingsGet).then(s => this.updateBoatSetting(s || []))
+    }
+  }
+
 
   private updateBoatSetting(ss: ServerBASettings | ServerBASettings[]) {
     if (!Array.isArray(ss)) ss = [ss];
@@ -117,7 +122,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
     this.activeBoat.isMe = false;
     this.activeBoat = boat;
     boat.isMe = true;
-    DefaultBoat.isMe = true;
+    DefaultBoat.isMe = false;
     DefaultBoat.team = GuBoat.myTeam;
     if (DefaultBoat.team === 99) DefaultBoat.team = 4;
     this.boats.setMyBoat(DefaultBoat, false);
