@@ -14,6 +14,7 @@ export class Boat {
   maxDamage = 3;
   maxMoves = 4;
   influence = 1;
+  showInfluence = false;
   maxShots = 1;
   inSZ = false;
 

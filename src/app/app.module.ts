@@ -6,6 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { RecordComponent } from './record/record.component';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
+
+const customTooltipDefaults: MatTooltipDefaultOptions = {
+  showDelay: 0,
+  hideDelay: 0,
+  touchendHideDelay: 1500,
+  position: 'above',
+};
 
 @NgModule({
   declarations: [AppComponent, RecordComponent],
@@ -13,6 +21,9 @@ import { RecordComponent } from './record/record.component';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+  ],
+  providers: [
+    { provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: customTooltipDefaults }
   ],
   bootstrap: [AppComponent],
 })

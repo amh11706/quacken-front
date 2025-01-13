@@ -278,7 +278,12 @@ export class BoardadmiralComponent extends CadegooseComponent {
     if (!tile) return
     this.boatSettings.forEach(settings => {
       const coverage = settings.coverage[settings.coverMode];
-      if (coverage.some(t => t.x === tile.x && t.y === tile.y)) this.highlightedBoats.add(settings.boat.id);
+      const boat = settings.boat;
+      if (tile.x !== boat.pos.x || tile.y !== boat.pos.y) settings.boat.showInfluence = false;
+      if (coverage.some(t => t.x === tile.x && t.y === tile.y)) {
+        boat.showInfluence = true;
+        this.highlightedBoats.add(boat.id);
+      }
     });
   }
 }

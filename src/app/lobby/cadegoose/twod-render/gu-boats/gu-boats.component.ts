@@ -44,7 +44,6 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
 
   @Input() fishBoats = 0;
   @Input() hoveredTeam = -1;
-  @Input() hoveredTile?: { x: number, y: number } | null;
 
   @Input() map?: HTMLElement;
   @Input() checkSZ = (pos: { x: number, y: number }): boolean => {

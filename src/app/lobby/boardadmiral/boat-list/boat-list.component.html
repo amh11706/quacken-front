@@ -11,7 +11,9 @@
 
   <q-boat-button *ngFor="let boat of boats"
                  [style.display]="boat.moveLock ? 'none' : 'block'"
-                 [class.highlight]="highlightedBoats.has(boat.id)"
+                 [class.highlight]="boat.showInfluence || highlightedBoats.has(boat.id)"
+                 (mouseover)="boat.showInfluence = true"
+                 (mouseout)="boat.showInfluence = false"
                  [boat]="boat"
                  [fishNames]="fishnames"
                  [active]="activeBoat === boat"
