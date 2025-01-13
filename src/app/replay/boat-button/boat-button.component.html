@@ -2,7 +2,7 @@
         [color]="active ? 'primary' : undefined"
         class="boat"
         [style.borderColor]="teamColors[boat.team || 0]">
-  {{boat.title}}
+  {{fishNames ? boat.name : boat.title}}
   <br>
   <div class="damage"
        matTooltip="{{boat.getDamage()}}%">

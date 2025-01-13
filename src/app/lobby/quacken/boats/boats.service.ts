@@ -61,7 +61,7 @@ export class BoatsService {
   }
 
   focusMyBoat() {
-    if (this.myBoat.value.isMe) this._focusMyBoat.next();
+    this._focusMyBoat.next();
   }
 
   clickBoat(boat: Boat) {

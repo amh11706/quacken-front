@@ -14,5 +14,6 @@ import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entr
 export class BoatButtonComponent {
   @Input() boat = new Boat('');
   @Input() active = false;
+  @Input() fishNames = false;
   teamColors = TeamColorsCss;
 }

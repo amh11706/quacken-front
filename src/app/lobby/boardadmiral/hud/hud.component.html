@@ -17,7 +17,7 @@
 
     <div id="boatsettings"
          *ngIf="activeBoat; else noboat">
-      <p>Settings for "{{activeBoat.boat.title}}"</p>
+      <p>{{boatName(activeBoat)}}</p>
       <table>
         <tr>
           <td class="label">Aggro: ({{activeBoat.Aggro}})</td>

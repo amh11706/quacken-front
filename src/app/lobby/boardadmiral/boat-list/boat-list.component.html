@@ -13,6 +13,7 @@
                  [style.display]="boat.moveLock ? 'none' : 'block'"
                  [class.highlight]="highlightedBoats.has(boat.id)"
                  [boat]="boat"
+                 [fishNames]="fishnames"
                  [active]="activeBoat === boat"
                  (click)="selectBoat(boat)"></q-boat-button>
 </div>

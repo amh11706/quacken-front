@@ -67,7 +67,11 @@ export class MainMenuService implements OnDestroy {
       this.statsOpen = false;
 
       if (this.lobby.seed && !this.seeds.includes(this.lobby.seed)) this.seeds.push(this.lobby.seed);
-      if (m.settings) this.ss.setSettings(this.group, m.settings);
+      if (m.settings) {
+        this.ss.setSettings(this.group, m.settings);
+        // prevent calling this multiple time with outdated settings
+        delete m.settings;
+      }
       if (m.players?.length) void this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
       if (this.firstJoin) {
         this.firstJoin = false;
@@ -123,7 +127,6 @@ export class MainMenuService implements OnDestroy {
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat.isMe = false;
       this.boats.setMyBoat(this.myBoat, false);
-      this.es.openTab(0, false, { lobbyTab: 0 });
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {

@@ -17,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
 })
 export class HudComponent extends CadeHudComponent {
   @Input() activeBoat?: BABoatSettings;
+  @Input() fishnames = false;
   @Output() activeBoatChange = new EventEmitter<BABoatSettings>();
   @Input() boatSettings = new Map<number, BABoatSettings>();
 
@@ -30,6 +31,10 @@ export class HudComponent extends CadeHudComponent {
       boat[key] = this.activeBoat[key];
       boat.save();
     });
+  }
+
+  boatName(boat: BABoatSettings): string {
+    return this.fishnames ? boat.boat.name : boat.boat.title;
   }
 
   update(): void {

@@ -226,9 +226,10 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
         if (flag) flag.t = flags.get(`${flag.x},${flag.y}`)?.t ?? flag.t;
       }
     }
+    const myTeam = this.myBoat.team === 99 ? 98 : this.myBoat.team;
     for (const f of this.flags) {
       if (f.points === undefined) continue;
-      const team = f.t !== undefined && f.t === this.myBoat.team ? 98 : f.t;
+      const team = f.t !== undefined && f.t === myTeam ? 98 : f.t;
       const offset = FlagColorOffsets[team] ?? FlagColorOffsets[99] ?? 9;
       const pixel = FlagData.orientations[(f.points + offset).toString() as flagIndex];
       f.sprite.imgPosition = `-${pixel.x}px -${pixel.y}px`;

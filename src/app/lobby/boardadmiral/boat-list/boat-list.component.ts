@@ -20,6 +20,7 @@ export class BoatListComponent implements OnInit, OnDestroy {
   boats: Boat[] = [];
   @Output() boatsChange = new EventEmitter<Boat[]>();
   @Output() activeBoatChange = new EventEmitter<Boat>();
+  @Input() fishnames = false;
   @Input() activeBoat = DefaultBoat;
   @Input() highlightedBoats = new Set<number>();
   DefaultBoat = DefaultBoat;

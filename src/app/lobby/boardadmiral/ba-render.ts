@@ -78,25 +78,32 @@ export class BaRender {
 
     boats.forEach(boat => {
       if (boat === activeBoat) return;
-      this.drawBoat(boat, 0.2);
+      this.drawBoat(boat, 0.3, true);
     });
 
     this.drawBoat(activeBoat);
   }
 
-  private drawBoat(boat?: BABoatSettings, alpha = 0.5): void {
+  private drawBoat(boat?: BABoatSettings, alpha = 0.5, border = false): void {
     const ctx = this.ctx;
+    ctx.lineWidth = 4;
     if (!boat) return;
     const coverage = boat.coverage[boat.coverMode];
     const color = Colors[boat.coverMode];
 
     for (const { x, y, a } of coverage) {
       ctx.fillStyle = color.replace('%d', String(a || alpha));
-      ctx.fillRect(x * 50, y * 50, 50, 50);
+      if (border) {
+        ctx.strokeStyle = ctx.fillStyle;
+        ctx.strokeRect(x * 50, y * 50, 50, 50);
+      } else {
+        ctx.fillRect(x * 50, y * 50, 50, 50);
+      }
     }
 
     if (boat.selectedTile) {
       ctx.strokeStyle = 'rgb(0, 255, 255)';
+      ctx.lineWidth = 2;
       ctx.strokeRect(boat.selectedTile.x * 50, boat.selectedTile.y * 50, 50, 50);
     }
     this.sendCanvas();

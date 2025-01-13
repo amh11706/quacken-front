@@ -11,7 +11,6 @@
                  [undo]="undo"
                  [editor]="editor"
                  [graphicSettings]="graphicSettings"></q-twod-render>
-
 </div>
 
 <q-cade-entry-status (hoveredTeam)="hoveredTeam = $event"
@@ -26,10 +25,12 @@
          [myTeam]="myBoat.team"></q-stats>
 
 <q-ba-hud [activeBoat]="activeBoatSettings"
+          [fishnames]="!!lobbySettings.fishBoats.value"
           (activeBoatChange)="redrawOverlay()"
           [boatSettings]="boatSettings"></q-ba-hud>
 
 <q-boat-list (boatsChange)="gotBoats($event)"
+             [fishnames]="!!lobbySettings.fishBoats.value"
              [activeBoat]="activeBoat"
              [highlightedBoats]="highlightedBoats"
              (activeBoatChange)="activeBoatChange($event)"></q-boat-list>

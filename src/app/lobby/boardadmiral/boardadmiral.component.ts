@@ -83,9 +83,9 @@ export class BoardadmiralComponent extends CadegooseComponent {
     }));
     this.sub.add(this.lobbyService.status.subscribe(s => {
       if (this.lastStatus === LobbyStatus.PreMatch && s !== LobbyStatus.PreMatch) {
-        this.boatSettings.clear();
-        this.gotBoats(this.boats.boats);
-        this.activeBoatChange(DefaultBoat);
+        DefaultBoat.team = 99;
+        const me = this.lobbyService.lobby.value.players.find(p => p.sId === this.ws.sId);
+        if (me?.t !== undefined) this.updateMyTeam(me.t);
       }
       this.lastStatus = s;
     }));
@@ -174,7 +174,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
     let nearest: Boat | undefined;
     for (const boat of this.boatList) {
       // our boat is just there for show
-      if (boat.id === this.ws.sId) continue;
+      if (boat.moveLock >= 99) continue;
       const dist = Math.abs(boat.pos.x - x) + Math.abs(boat.pos.y - y);
       if (dist < minDist) {
         minDist = dist;
