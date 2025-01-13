@@ -371,14 +371,17 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   @Output() hoverTile = new EventEmitter<TileEvent>();
   private hoveredTile?: Position;
+  private hoveredBoat?: Boat;
 
   mouseMove(event: MouseEvent): void {
     const p = this.extractCoord(event);
     if (this.hoveredTile?.x === p.x && this.hoveredTile?.y === p.y) return;
-    const old = this.hoveredTile;
-    this.boats.boats.forEach(b => { if (b.pos.x === old?.x && b.pos.y === old.y) b.showInfluence = false });
+
+    if (this.hoveredBoat) this.hoveredBoat.showInfluence = false;
     this.hoveredTile = p;
-    this.boats.boats.forEach(b => { if (b.pos.x === p.x && b.pos.y === p.y) b.showInfluence = true });
+    this.hoveredBoat = this.boats.boats.find(b => b.pos.x === p.x && b.pos.y === p.y);
+    if (this.hoveredBoat) this.hoveredBoat.showInfluence = true;
+
     const te = event as TileEvent;
     te.tile = this.hoveredTile;
     this.hoverTile.emit(te);

@@ -111,7 +111,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
     if (!Array.isArray(ss)) ss = [ss];
     for (const s of ss) {
       const boat = this.boatList.find(b => b.id === s.Id);
-      if (!boat) return;
+      if (!boat) continue;
       const settings = this.boatSettings.get(s.Id) || new BABoatSettings(boat, this.ws);
       this.boatSettings.set(s.Id, settings.fromJSON(s));
     }

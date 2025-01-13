@@ -16,7 +16,7 @@
 }
 
 table {
-  column-gap: 4px;
+  border-spacing: 0 8px;
 }
 
 p {
@@ -31,4 +31,11 @@ mat-slider {
 
 button {
   height: 24px;
+}
+
+#coverage {
+  mat-select {
+    width: 50%;
+    margin-top: 4px;
+  }
 }

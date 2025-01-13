@@ -9,7 +9,7 @@ import { RecordComponent } from './record/record.component';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 
 const customTooltipDefaults: MatTooltipDefaultOptions = {
-  showDelay: 0,
+  showDelay: 800,
   hideDelay: 0,
   touchendHideDelay: 1500,
   position: 'above',

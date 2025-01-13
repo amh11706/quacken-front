@@ -7,19 +7,71 @@ import { CadeHudComponent } from '../../cadegoose/hud/hud.component';
 import { CommonModule } from '@angular/common';
 import { BABoatSettings, BoatCoverMode } from '../ba-render';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'q-ba-hud',
   standalone: true,
-  imports: [CommonModule, ChatModule, MatTooltipModule, MatIconModule, MatButtonModule, MatSliderModule],
+  imports: [CommonModule, ChatModule, MatTooltipModule, MatIconModule, MatButtonModule, MatSliderModule, MatSelectModule],
   templateUrl: './hud.component.html',
   styleUrl: './hud.component.scss'
 })
 export class HudComponent extends CadeHudComponent {
-  @Input() activeBoat?: BABoatSettings;
   @Input() fishnames = false;
-  @Output() activeBoatChange = new EventEmitter<BABoatSettings>();
   @Input() boatSettings = new Map<number, BABoatSettings>();
+  private _activeBoat?: BABoatSettings
+  @Input() set activeBoat(value: BABoatSettings | undefined) {
+    this._activeBoat = value;
+    this.buildBoatList();
+  };
+  get activeBoat(): BABoatSettings | undefined {
+    return this._activeBoat;
+  }
+  @Output() activeBoatChange = new EventEmitter<BABoatSettings>();
+
+  boatList: BABoatSettings[] = [];
+  selectedBoat: BABoatSettings | undefined;
+
+  private buildBoatList(): void {
+    const boat = this.activeBoat?.boat;
+    if (!boat) return;
+    this.boatList = Array.from(this.boatSettings.values()).filter(boat => {
+      return boat.boat.id !== 0 && boat !== this.activeBoat && boat.boat.moveLock < 99;
+    });
+    this.boatList.sort((a, b) => {
+      const aDistance = (a.boat.pos.x - boat.pos.x) ** 2 + (a.boat.pos.y - boat.pos.y) ** 2;
+      const bDistance = (b.boat.pos.x - boat.pos.x) ** 2 + (b.boat.pos.y - boat.pos.y) ** 2;
+      return bDistance - aDistance;
+    });
+    this.selectedBoat = this.boatList[0];
+  }
+
+  swapBoat?: BABoatSettings;
+
+  swapCoverageWith(boat: BABoatSettings): void {
+    if (!this.activeBoat) return;
+    const tempCoverage = this.activeBoat.coverage;
+    const tempCoverMode = this.activeBoat.coverMode;
+    this.activeBoat.coverage = boat.coverage;
+    this.activeBoat.coverMode = boat.coverMode;
+    boat.coverage = tempCoverage;
+    boat.coverMode = tempCoverMode;
+    boat.save();
+    this.update();
+  }
+
+  copyBoat?: BABoatSettings;
+
+  copyCoverageTo(boat: BABoatSettings): void {
+    if (!this.activeBoat) return;
+    boat.coverage = {
+      [BoatCoverMode.Flags]: [...this.activeBoat.coverage[BoatCoverMode.Flags]],
+      [BoatCoverMode.Tiles]: [...this.activeBoat.coverage[BoatCoverMode.Tiles]],
+    };
+    boat.coverMode = this.activeBoat.coverMode;
+    boat.save();
+    this.update();
+  }
 
   syncToOtherBoats(key: 'Aggro' | 'Defense' | 'Flag'): void {
     if (!this.activeBoat) return;
@@ -39,6 +91,8 @@ export class HudComponent extends CadeHudComponent {
 
   update(): void {
     if (!this.activeBoat) return;
+    // simplify aggro/defense to inverse of each other to free up space
+    this.activeBoat.Defense = 100 - this.activeBoat.Aggro;
     this.activeBoatChange.emit(this.activeBoat);
   }
 

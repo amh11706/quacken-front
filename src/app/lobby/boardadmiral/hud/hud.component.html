@@ -31,44 +31,43 @@
             </mat-slider>
           </td>
           <td><button mat-raised-button
+                    matTooltip="Sync aggro to all boats"
                     (click)="syncToOtherBoats('Aggro')">Sync</button></td>
         </tr>
         <tr>
-          <td class="label">Defense: ({{activeBoat.Defense}})</td>
-          <td>
-            <mat-slider [min]="0"
-                        [max]="100"
-                        [step]="10">
-              <input matSliderThumb
-                     [(value)]="activeBoat.Defense"
-                     (valueChange)="update()">
-            </mat-slider>
-          </td>
           <td><button mat-raised-button
-                    (click)="syncToOtherBoats('Defense')">Sync</button></td>
-        </tr>
-        <tr>
-          <td class="label">Coverage: ({{activeBoat.Flag}})</td>
-          <td>
-            <mat-slider [min]="0"
-                        [max]="100"
-                        [step]="10">
-              <input matSliderThumb
-                     [(value)]="activeBoat.Flag"
-                     (valueChange)="update()">
-            </mat-slider>
-          </td>
-          <td><button mat-raised-button
-                    (click)="syncToOtherBoats('Flag')">Sync</button></td>
-        </tr>
-        <tr>
-          <td><button mat-raised-button
+                    matTooltip="Cover specific flags"
                     (click)="activeBoat.coverMode = 0; update()"
                     [color]="activeBoat.coverMode === 0 ? 'primary' : ''">Cover Flags</button></td>
           <td><button mat-raised-button
+                    matTooltip="Only end on specific tiles"
                     (click)="activeBoat.coverMode = 1; update()"
                     [color]="activeBoat.coverMode === 1 ? 'primary' : ''">Cover Tiles</button></td>
+          <td><button mat-raised-button
+                    matTooltip="Clear coverage for this boat"
+                    (click)="resetCoverage()">Clear</button></td>
       </table>
+
+      <div id="coverage">
+        <mat-select #swap
+                    [placeholder]="'Swap with'"
+                    (selectionChange)="swapCoverageWith($event.value); swap.value = null"
+                    matTooltip="Swap coverage with a boat">
+          <mat-option *ngFor="let boat of boatList"
+                      [value]="boat">
+            {{boatName(boat)}}
+          </mat-option>
+        </mat-select>
+        <mat-select #copy
+                    [placeholder]="'Copy to'"
+                    (selectionChange)="copyCoverageTo($event.value); copy.value = null"
+                    matTooltip="Copy coverage to a boat">
+          <mat-option *ngFor="let boat of boatList"
+                      [value]="boat">
+            {{boatName(boat)}}
+          </mat-option>
+        </mat-select>
+      </div>
     </div>
 
     <button *ngIf="(lobbySettings.turnTime.stream | async) === 65"
