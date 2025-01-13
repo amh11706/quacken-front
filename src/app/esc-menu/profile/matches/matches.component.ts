@@ -98,7 +98,7 @@ export class MatchesComponent implements OnInit, OnDestroy {
     // matches.push(...matches);
     // matches.push(...matches);
     // matches.push(...matches);
-    this.matches = [[], [], [], []];
+    this.matches = [[], [], [], [], []];
     if (!matches) return this.updateDataSource();
     let newest = { createdAt: 0 } as Match;
     for (const m of matches) {

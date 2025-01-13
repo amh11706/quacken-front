@@ -18,11 +18,11 @@ export const Descriptions = {
   CadeGoose: CadeDesc,
   SeaBattle: SbDesc,
   FlagGames: FgDesc,
-  mapinfo: 'View map information.',
   BA: BoardadmiralDesc,
+  mapinfo: 'View map information.',
 };
 
-const groups = ['quacken', 'spades', 'cade', 'cade', 'flaggames'];
+const groups = ['quacken', 'spades', 'cade', 'cade', 'flaggames', 'cade'];
 
 @Component({
   selector: 'q-create',
@@ -41,6 +41,7 @@ export class CreateComponent implements OnInit, OnDestroy {
     ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
     ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
     ['flagMaxPlayers', 'flagHotEntry', 'flagPublicMode', 'flagAllowGuests'],
+    ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
   ];
 
   private sub = new Subscription();

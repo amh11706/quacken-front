@@ -58,13 +58,13 @@ type ClientSettingGroup = {
   sounds: 'soundMaster' | 'soundNotify' | 'soundShip' | 'soundAlert',
   'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
   'l/cade': 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'cadePublicMode' | 'cadeMaxPlayers' |
-    'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' | 'cadeMap' | 'cadeTeams' | 'cadeShowMoves' | 'cadeShowDamage' |
-    'cadeRated' | 'fishBoats' | 'allowGuests' | 'overtime',
+  'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' | 'cadeMap' | 'cadeTeams' | 'cadeShowMoves' | 'cadeShowDamage' |
+  'cadeRated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
   'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'queueRated' | 'showAdvanced' | 'mapPreference',
   'l/flaggames': 'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' |
-    'flagTurns' | 'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagRespawn' | 'flagSteal',
+  'flagTurns' | 'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagRespawn' | 'flagSteal',
 };
 
 export type ServerSettingGroup = {
@@ -75,12 +75,12 @@ export type ServerSettingGroup = {
   sounds: 'master' | 'notification' | 'ship' | 'alert',
   'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
   'l/cade': 'jobberQuality' | 'turnTime' | 'turns' | 'bots' | 'botDifficulty' | 'publicMode' | 'maxPlayers' | 'spawnDelay' |
-    'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
+  'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
   'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated' | 'showAdvanced' | 'mapPreference',
   'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
-    'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
+  'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
 }
 
 export type SettingName = ClientSettingGroup[SettingGroup];
@@ -288,7 +288,7 @@ export const Settings: SettingList = {
     label: 'Create Type',
     type: 'option',
     options: [
-      'Quacken', 'Spades', 'Blockade', 'Sea Battle', 'Capture the Flag',
+      'Quacken', 'Spades', 'Blockade', 'Sea Battle', 'Capture the Flag', 'Board Admiral'
     ],
     default: 2,
   },
