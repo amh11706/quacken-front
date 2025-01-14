@@ -8,6 +8,7 @@ import { ChatService } from '../../chat/chat.service';
 import { TierTitles } from './leaders/leaders.component';
 import { StatService } from './stat.service';
 import { Stat, UserRank } from './types';
+import { ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
 
 @Component({
   selector: 'q-profile',
@@ -20,6 +21,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   tierTitles = TierTitles;
   titles = { Cadegoose: 'Blockade' } as any;
+  lobbyTypes = ActiveLobbyTypes;
 
   constructor(
     public stat: StatService,

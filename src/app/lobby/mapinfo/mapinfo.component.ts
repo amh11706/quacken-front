@@ -16,9 +16,10 @@ import { KeyActions } from '../../settings/key-binding/key-actions';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { MapinfoMenuComponent } from './mapinfo-menu/mapinfo-menu.component';
 import { QdragModule } from '../../qdrag/qdrag.module';
+import { LobbyType } from '../cadegoose/lobby-type';
 
 interface MapInfoLobby extends Lobby {
-  type: 'mapinfo';
+  type: LobbyType.mapinfo;
   map: string;
   mapInfo: MapInfo;
 }

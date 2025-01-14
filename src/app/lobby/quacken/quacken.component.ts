@@ -10,13 +10,12 @@ import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
 import { CadeLobby, Lobby } from '../cadegoose/types';
 import { LobbyService } from '../lobby.service';
+import { QuackenDesc } from '../cadegoose/lobby-type';
 
 const ownerSettings: SettingName[] = [
   'startNew', 'publicMode', 'hotEntry', 'hideMoves', 'duckLvl',
   'maxPlayers', 'autoGen',
 ];
-
-export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy ducks to steal their food and bring it home.';
 
 @Component({
   selector: 'q-quacken',

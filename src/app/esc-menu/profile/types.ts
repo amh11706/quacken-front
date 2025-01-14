@@ -1,3 +1,4 @@
+import { RankArea } from '../../lobby/cadegoose/lobby-type';
 import { TeamImages, TeamMessage } from '../../lobby/cadegoose/types';
 
 export interface Leader extends TeamMessage {
@@ -54,7 +55,7 @@ export interface Match {
   xp: number;
   tier: number;
   level: number;
-  rankArea: number;
+  rankArea: RankArea;
   createdAt: number;
   createdAtString: string;
   lobby: string;

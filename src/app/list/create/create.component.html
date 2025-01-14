@@ -4,19 +4,21 @@
                  [disabled]="created"
                  (valueChange)="changeType()"></q-setting>
     </h2>
-    <p>{{idDescriptions[settings.createType.value || 0]}}</p>
-    <div id="lsettings">
-      <q-setting *ngFor="let setting of typeSettings[settings.createType?.value || 0]"
-                 [disabled]="created"
-                 [name]="setting"></q-setting>
-    </div>
+    <ng-container *ngIf="lobbyType as lobby">
+      <p>{{lobby.desc}}</p>
+      <div id="lsettings">
+        <q-setting *ngFor="let setting of typeSettings[lobby.id]"
+                   [disabled]="created"
+                   [name]="setting"></q-setting>
+      </div>
 
-    <p>
-      <button mat-raised-button
-              color="accent"
-              (click)="createLobby()"
-              [disabled]="created">Create</button>
-    </p>
+      <p>
+        <button mat-raised-button
+                color="accent"
+                (click)="createLobby()"
+                [disabled]="created">Create</button>
+      </p>
+    </ng-container>
   </ng-container>
 
   <p *ngIf="!ws.user?.id"

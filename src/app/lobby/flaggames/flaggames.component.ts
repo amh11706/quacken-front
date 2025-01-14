@@ -5,8 +5,8 @@ import { CadegooseComponent } from '../cadegoose/cadegoose.component';
 import { FgColumns, FgMainMenuComponent } from './fg-main-menu/fg-main-menu.component';
 import { MapTile } from '../../map-editor/types';
 import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
+import { FgDesc } from '../cadegoose/lobby-type';
 
-export const FgDesc = 'Flag games: Plant flags in the enemy base to score points!';
 const ownerSettings: SettingList = [
   'flagMaxPlayers', 'flagJobberQuality',
   'flagTurnTime', 'flagTurns',

@@ -1,28 +1,12 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
-import { CadeDesc } from '../../lobby/cadegoose/cadegoose.component';
-import { QuackenDesc } from '../../lobby/quacken/quacken.component';
-import { SbDesc } from '../../lobby/seabattle/seabattle.component';
 import { SettingsService } from '../../settings/settings.service';
 import { ServerSettingGroup, SettingGroup, SettingName } from '../../settings/setting/settings';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { ServerSettingMap } from '../../settings/types';
-import { FgDesc } from '../../lobby/flaggames/flaggames.component';
-import { BoardadmiralDesc } from '../../lobby/boardadmiral/boardadmiral.component';
-
-export const Descriptions = {
-  Quacken: QuackenDesc,
-  Spades: 'A classic card game.',
-  CadeGoose: CadeDesc,
-  SeaBattle: SbDesc,
-  FlagGames: FgDesc,
-  BA: BoardadmiralDesc,
-  mapinfo: 'View map information.',
-};
-
-const groups = ['quacken', 'spades', 'cade', 'cade', 'flaggames', 'cade'];
+import { LobbyTypes, RankArea, LobbyTypeInfo, ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
 
 @Component({
   selector: 'q-create',
@@ -34,8 +18,8 @@ export class CreateComponent implements OnInit, OnDestroy {
   created = false;
   settings = this.ss.prefetch('l/create');
   createGroup = this.ss.prefetch('l/create');
-  idDescriptions = Object.values(Descriptions);
-  typeSettings: SettingName[][] = [
+  lobbyTypes = LobbyTypes;
+  typeSettings: Record<RankArea, SettingName[]> = [
     ['maxPlayers', 'hotEntry', 'publicMode'],
     ['turnTime', 'playTo', 'watchers'],
     ['cadeMaxPlayers', 'cadeHotEntry', 'cadePublicMode', 'allowGuests'],
@@ -68,9 +52,16 @@ export class CreateComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  get lobbyType(): LobbyTypeInfo {
+    const lobby = ActiveLobbyTypes.find(l => l.id === this.settings.createType?.value as RankArea) ??
+      ActiveLobbyTypes[0]!;
+    this.settings.createType.setServerValue(lobby.id);
+    return lobby;
+  }
+
   async createLobby(): Promise<void> {
     this.created = true;
-    this.createGroup.createType = this.settings.createType ?? this.createGroup.createType;
+    this.createGroup.createType = this.settings.createType;
     const group = {} as ServerSettingMap;
     // ensure createGroup is populated
     await this.changeType(false);
@@ -81,6 +72,6 @@ export class CreateComponent implements OnInit, OnDestroy {
   }
 
   async changeType(update = true): Promise<void> {
-    this.createGroup = await this.ss.getGroup('l/' + groups[this.settings.createType?.value || 0] as SettingGroup, update);
+    this.createGroup = await this.ss.getGroup(this.lobbyType.sGroup, update);
   }
 }

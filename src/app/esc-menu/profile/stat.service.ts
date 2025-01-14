@@ -5,6 +5,7 @@ import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
 import { EscMenuService } from '../esc-menu.service';
 import { UserRank, Leader, RankLeader, Stat, WinLoss } from './types';
+import { RankArea } from '../../lobby/cadegoose/lobby-type';
 
 const StatColumns = ['position', 'name', 'value'];
 const StatColumnsWithReplay = [...StatColumns, 'replay'];
@@ -22,7 +23,7 @@ export class StatService implements OnDestroy {
   target = this.ws.user?.name || '';
 
   id = 199;
-  group = 1;
+  group = RankArea.Cade;
   leaders$ = new BehaviorSubject<Leader[] | null>(null);
   rankLeaders$ = new BehaviorSubject<{ tier: RankLeader[][], xp: RankLeader[][] } | null>(null);
 
@@ -57,7 +58,7 @@ export class StatService implements OnDestroy {
   }
 
   async updateWinLoss(): Promise<void> {
-    const winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group + 1 });
+    const winLoss = await this.ws.request(OutCmd.GetWinLoss, { name: this.target, rankArea: this.group });
     this.winLoss = winLoss || { wins: 0, losses: 0 };
   }
 
@@ -103,7 +104,7 @@ export class StatService implements OnDestroy {
   private fillGroupStats(stats: Stat[]) {
     const groupStats: Record<number, Stat[]> = {};
     for (const s of stats) {
-      const group = Math.floor(s.id / 100);
+      const group = Math.floor(s.id / 100) + 1;
       const arr = groupStats[group] || [];
       if (!arr.length) groupStats[group] = arr;
       arr.push(s);
@@ -111,12 +112,9 @@ export class StatService implements OnDestroy {
     this.groupStats$.next(groupStats);
   }
 
-  changeGroup(): Promise<void> | void {
-    this.leaders$.next(null);
-    if (this.id % 100 === 99) {
-      this.id = this.group * 100 + 99;
-      return this.getRankLeaders();
-    }
+  changeGroup(): Promise<void> {
+    this.id = this.group * 100 - 1;
+    return this.getRankLeaders();
   }
 
   static formatLeader(stat: RankLeader) {
@@ -126,7 +124,7 @@ export class StatService implements OnDestroy {
   }
 
   private async getRankLeaders() {
-    const rankLeaders = await this.ws.request(OutCmd.RanksTop, this.group + 1);
+    const rankLeaders = await this.ws.request(OutCmd.RanksTop, this.group);
     this.leaders$.next(null);
     if (!rankLeaders) return;
 
@@ -142,7 +140,7 @@ export class StatService implements OnDestroy {
   async refreshLeaders(): Promise<void> {
     this.columns = StatColumns;
     if (!this.id) return;
-    this.group = Math.floor(this.id / 100);
+    this.group = Math.floor(this.id / 100) + 1;
     if (this.id % 100 === 99) return this.getRankLeaders();
 
     const leaders = await this.ws.request(OutCmd.StatsTop, this.id);

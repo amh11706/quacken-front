@@ -22,6 +22,7 @@ import { MainMenuService } from './main-menu/main-menu.service';
 import { BoatsService } from '../quacken/boats/boats.service';
 import { LobbyService } from '../lobby.service';
 import { CadeLobby } from './types';
+import { CadeDesc } from './lobby-type';
 
 export const CadeSettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',
@@ -33,8 +34,6 @@ export const CadeSettings: SettingList = [
   'overtime', 'cadeShowMoves',
   'fishBoats', 'cadeShowDamage',
 ];
-
-export const CadeDesc = 'Blockade: Use your ship to contest flags and sink enemy ships in a battle for points.';
 
 @Component({
   selector: 'q-cadegoose',

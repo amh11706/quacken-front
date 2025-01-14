@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LobbyStatus } from './cadegoose/types';
+import { LobbyStatus } from './cadegoose/lobby-type';
 
 const inPgrogressValues = new Set([LobbyStatus.MidMatch, LobbyStatus.Paused, LobbyStatus.Voting]);
 

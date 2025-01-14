@@ -35,11 +35,10 @@
           <mat-select [(value)]="stat.group"
                       (valueChange)="stat.updateWinLoss()"
                       placeholder="Category">
-            <mat-option [value]="0">Quacken</mat-option>
-            <mat-option [value]="1">Blockade</mat-option>
-            <mat-option [value]="2">Sea Battle</mat-option>
-            <mat-option [value]="3">Capture the Flag</mat-option>
-            <mat-option [value]="4">Board Admiral</mat-option>
+            <mat-option *ngFor="let t of lobbyTypes"
+                        [value]="t.id">
+              {{t.name}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 

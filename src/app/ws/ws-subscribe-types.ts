@@ -1,12 +1,13 @@
 import { BoatSync, BoatTick, MoveMessage, MoveMessageIncoming, Sync, Turn } from '../lobby/quacken/boats/types';
 import { InCmd, Internal } from './ws-messages';
 import { DBSetting } from '../settings/types';
-import { ListLobby, Lobby, LobbyStatus, TeamMessage } from '../lobby/cadegoose/types';
+import { ListLobby, Lobby, TeamMessage } from '../lobby/cadegoose/types';
 import { Player } from '../lobby/spades/types';
 import { Command, Invite, Message } from '../chat/types';
 import { InvUpdate, Inventory } from '../esc-menu/profile/types';
 import { TokenUser } from './ws.service';
 import { ServerBASettings } from '../lobby/boardadmiral/ba-render';
+import { LobbyStatus } from '../lobby/cadegoose/lobby-type';
 
 export type InMessage = {
   [K in keyof SubscribeData]: { cmd: K, id?: number, data: SubscribeData[K] };

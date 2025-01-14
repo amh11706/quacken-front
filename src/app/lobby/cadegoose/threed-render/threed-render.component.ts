@@ -16,9 +16,9 @@ import { Internal } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
 import { Boat } from '../../quacken/boats/boat';
 import { BoatRender3d } from '../boat-render';
-import { BoatService, flagMats } from '../boat.service';
 import { Team } from '../../quacken/boats/types';
 import { SettingsService } from '../../../settings/settings.service';
+import { BoatsService } from '../../quacken/boats/boats.service';
 
 const sunSettings = {
   turbidity: 20,
@@ -60,7 +60,7 @@ const obstacleModels: Record<number, ObstacleConfig> = {
   selector: 'q-threed-render',
   templateUrl: './threed-render.component.html',
   styleUrls: ['./threed-render.component.scss'],
-  providers: [BoatService],
+  providers: [BoatsService],
 })
 export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('frame') frame?: ElementRef;
@@ -103,12 +103,12 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   private overlayTexture?: CanvasTexture;
 
   constructor(
-    private bs: BoatService,
+    private bs: BoatsService,
     private ws: WsService,
     private ss: SettingsService,
     private ngZone: NgZone,
   ) {
-    void bs.setScene(this.scene, this.loadObj, this.camera);
+    // void bs.setScene(this.scene, this.loadObj, this.camera);
 
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -128,8 +128,8 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sub.add(this.ws.subscribe(Internal.MyBoat, (b: Boat) => this.myBoat = b));
-    this.sub.add(this.ws.subscribe(Internal.CenterOnBoat, this.centerOnBoat.bind(this)));
+    this.sub.add(this.bs.myBoat$.subscribe(b => this.myBoat = b));
+    this.sub.add(this.bs.focusMyBoat$.subscribe(this.centerOnBoat.bind(this)));
 
     this.sub.add(this.ws.subscribe(Internal.Canvas, c => {
       if (this.canvas === c && this.overlayTexture) {
@@ -157,7 +157,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.frame?.nativeElement.appendChild(this.renderer.domElement);
     this.frame?.nativeElement.addEventListener('dblclick', this.centerOnBoat.bind(this));
-    this.bs.map = this.frame?.nativeElement;
+    // this.bs.map = this.frame?.nativeElement;
 
     this.camera.position.set(5, 15, 38);
 
@@ -171,7 +171,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.controls.rotateSpeed = 0.75;
     this.controls.addEventListener('change', this.requestRender);
     this.controls.update();
-    this.bs.setControls(this.controls);
+    // this.bs.setControls(this.controls);
 
     this.stats = Stats();
     this.fps?.nativeElement.appendChild(this.stats.dom);
@@ -191,7 +191,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.controls?.dispose();
     this.tileGeometry?.dispose();
     for (const [, m] of this.tiles) m.dispose();
-    for (const [, o] of this.tileObjects) BoatService.dispose(o);
+    // for (const [, o] of this.tileObjects) BoatService.dispose(o);
   }
 
   private centerOnBoat() {
@@ -221,13 +221,13 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   private click = () => {
-    this.bs.findClick(this.rayCaster.ray);
+    // this.bs.findClick(this.rayCaster.ray);
   };
 
   protected updateIntersects(): void {
     if (!this.mouseMoved && this.hoveredTeam === -1) return;
     this.rayCaster.setFromCamera(this.mouse, this.camera);
-    this.bs.showInfluence(this.rayCaster.ray, this.hoveredTeam);
+    // this.bs.showInfluence(this.rayCaster.ray, this.hoveredTeam);
     this.mouseMoved = false;
   }
 
@@ -255,8 +255,8 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private render = () => {
     if (!this.alive || !this.controls) return;
-    this.bs.speed = this.graphicSettings.speed?.value || 15;
-    BoatRender3d.speed = this.bs.speed;
+    // this.bs.speed = this.graphicSettings.speed?.value || 15;
+    BoatRender3d.speed = this.graphicSettings.speed?.value || 15;
     const time = new Date().valueOf();
     TWEEN.update(time);
     BoatRender3d.tweens.update(time);
@@ -421,7 +421,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     square.position.y = GRID_DEPTH;
     square.renderOrder = 2;
     let flagIndex = 0;
-    this.bs.flags = [];
+    // this.bs.flags = [];
 
     for (let y = 0; y < map.length; y++) {
       const row = map[y];
@@ -455,8 +455,8 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
             else {
               const flag = centered.getObjectByName('flag');
               if (flag instanceof Mesh) {
-                flag.material = flagMats[flags[thisFlag]?.t || 0] || flag.material;
-                this.bs.flags[thisFlag] = flag;
+                // flag.material = flagMats[flags[thisFlag]?.t || 0] || flag.material;
+                // this.bs.flags[thisFlag] = flag;
               }
             }
             this.scene.add(centered);

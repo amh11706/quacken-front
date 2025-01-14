@@ -10,9 +10,10 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { OutCmd } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
 import { StatService } from '../stat.service';
-import { TeamImages } from '../../../lobby/cadegoose/types';
 import { Match, TeamPlayer } from '../types';
 import { TierTitles } from '../leaders/leaders.component';
+import { RankArea, ActiveLobbyTypes, LobbyTypes } from '../../../lobby/cadegoose/lobby-type';
+import { TeamImages } from '../../../lobby/cadegoose/types';
 
 const Results = ['N/A', 'Loss', 'Draw', 'Win'];
 const PlayerCountRegex = /^\d{1,2}$/;
@@ -40,9 +41,10 @@ function searchMatch(match: Match, term: string): boolean {
 })
 export class MatchesComponent implements OnInit, OnDestroy {
   tierTitles = TierTitles;
-  matches: Match[][] = [[], [], [], []];
+  matches: Partial<Record<RankArea, Match[]>> = {};
   teamImages = TeamImages;
   results = Results;
+  lobbyTypes = ActiveLobbyTypes;
 
   dataSource = new TableVirtualScrollDataSource<Match>();
   displayedColumns = ['lobby', 'createdAt', 'score', 'result', 'team', 'players', 'view'];
@@ -98,22 +100,21 @@ export class MatchesComponent implements OnInit, OnDestroy {
     // matches.push(...matches);
     // matches.push(...matches);
     // matches.push(...matches);
-    this.matches = [[], [], [], [], []];
+    this.matches = Object.values(LobbyTypes).reduce((acc, type) => {
+      acc[type.id] = [];
+      return acc;
+    }, {} as this['matches']);
     if (!matches) return this.updateDataSource();
     let newest = { createdAt: 0 } as Match;
     for (const m of matches) {
       if (m.createdAt > newest.createdAt) newest = m;
       m.createdAtString = dayjs.unix(m.createdAt).format('D MMM YYYY HH:mm');
       m.teams = this.parseTeams(m.players);
-      this.matches[m.rankArea - 1]?.push(m);
+      this.matches[m.rankArea]?.push(m);
     }
     const oldGroup = this.stat.group;
-    this.stat.group = (newest.rankArea ?? 2) - 1;
+    this.stat.group = (newest.rankArea ?? RankArea.Cade);
     if (oldGroup !== this.stat.group) void this.stat.changeGroup();
-
-    if (!this.matches[this.stat.group]?.length) {
-      for (let i = 0; i < this.matches.length; i++) if (this.matches[i]?.length) this.stat.group = i;
-    }
     this.updateDataSource();
   }
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Descriptions } from '../create/create.component';
 import { ListLobby } from '../../lobby/cadegoose/types';
+import { LobbyTypes } from '../../lobby/cadegoose/lobby-type';
 
 @Component({
   selector: 'q-lobby-card',
@@ -11,7 +11,10 @@ import { ListLobby } from '../../lobby/cadegoose/types';
 export class LobbyCardComponent {
   @Input() lobby = {} as ListLobby;
   publicModes = ['Public', 'Public Invitation', 'Private'];
-  descriptions = Descriptions;
   titles = { CadeGoose: 'Blockade' } as any;
   showPlayers = false;
+
+  description(lobby: ListLobby): string {
+    return LobbyTypes[lobby.type].desc;
+  }
 }

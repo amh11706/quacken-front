@@ -1,15 +1,9 @@
 import { ChatMessage, Message } from '../../chat/types';
 import { ServerSettingMap } from '../../settings/types';
-import { BoatStatus, BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync, Team, Turn } from '../quacken/boats/types';
+import { BoatStatus, BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync, Turn } from '../quacken/boats/types';
+import { LobbyType, LobbyStatus } from './lobby-type';
 import { StatRow } from './stats/types';
 
-export const enum LobbyStatus {
-  PreMatch,
-  MidMatch,
-  Voting,
-  Paused,
-  Waiting,
-}
 
 export interface Lobby {
   id: number;
@@ -21,7 +15,7 @@ export interface Lobby {
   turnsLeft: number;
   seconds?: number;
   stats?: Record<number, StatRow>;
-  type: 'Quacken' | 'Spades' | 'CadeGoose' | 'FlagGames' | 'mapinfo' | 'BA';
+  type: LobbyType;
   settings?: ServerSettingMap;
   inProgress: LobbyStatus;
 }

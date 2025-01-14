@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { StatService } from '../stat.service';
 import { Variations } from '../../../chat/rank-circle/rank-circle.component';
+import { ActiveLobbyTypes } from '../../../lobby/cadegoose/lobby-type';
 
 export const TierTitles = [
   'Bronze 1', 'Bronze 2', 'Bronze 3',
@@ -22,6 +23,7 @@ export class LeadersComponent implements OnInit, OnDestroy {
   @Input() name?: string;
   tierTitles = TierTitles;
   variations = Variations;
+  lobbyTypes = ActiveLobbyTypes;
   private initTimer = 0;
 
   constructor(

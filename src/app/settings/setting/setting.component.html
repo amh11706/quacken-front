@@ -29,8 +29,10 @@
     <mat-select [value]="settingValue.stream | async"
                 (selectionChange)="save($event.value)"
                 [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
-      <mat-option *ngFor="let option of setting.options; let i = index"
-                  [value]="i">{{option}}</mat-option>
+      <ng-container *ngFor="let option of setting.options; let i = index">
+        <mat-option *ngIf="option"
+                    [value]="i">{{option}}</mat-option>
+      </ng-container>
     </mat-select>
   </mat-form-field>
   <mat-icon *ngIf="setting.advancedComponent"

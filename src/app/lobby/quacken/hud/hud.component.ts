@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subscription, BehaviorSubject, Subject } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { FriendsService } from '../../../chat/friends/friends.service';
 import { InCmd, Internal, OutCmd } from '../../../ws/ws-messages';
@@ -11,9 +11,10 @@ import { WsService } from '../../../ws/ws.service';
 import { Tokens } from '../../../boats/move-input/move-input.component';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
 import { SettingGroup } from '../../../settings/setting/settings';
-import { CadeLobby, LobbyStatus } from '../../cadegoose/types';
+import { CadeLobby } from '../../cadegoose/types';
 import { BoatsService } from '../boats/boats.service';
 import { LobbyService } from '../../lobby.service';
+import { LobbyStatus } from '../../cadegoose/lobby-type';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',

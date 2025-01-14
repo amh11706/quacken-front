@@ -3,8 +3,7 @@ import { KeyActions } from '../../settings/key-binding/key-actions';
 import { CadegooseComponent, CadeSettings } from '../cadegoose/cadegoose.component';
 import { SbMainMenuComponent } from './sb-main-menu/sb-main-menu.component';
 import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
-
-export const SbDesc = 'Sea Battle: Sink the enemy ship to win!';
+import { SbDesc } from '../cadegoose/lobby-type';
 
 @Component({
   selector: 'q-seabattle',

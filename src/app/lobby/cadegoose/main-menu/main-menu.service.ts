@@ -10,10 +10,11 @@ import { Internal, InCmd, OutCmd } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
 import { Boat } from '../../quacken/boats/boat';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
-import { TeamMessage, LobbyStatus, CadeLobby } from '../types';
+import { TeamMessage, CadeLobby } from '../types';
 import { LobbyWrapperService } from '../../../replay/lobby-wrapper/lobby-wrapper.service';
 import { BoatsService } from '../../quacken/boats/boats.service';
 import { LobbyService } from '../../lobby.service';
+import { LobbyStatus } from '../lobby-type';
 
 @Injectable()
 export class MainMenuService implements OnDestroy {

@@ -46,7 +46,7 @@
 
 <h3 class="cardTitle"
     [class.inProgress]="lobby.inProgress"
-    [matTooltip]="descriptions[lobby.type]">{{titles[lobby.type] || lobby.type}}</h3>
+    [matTooltip]="description(lobby)">{{titles[lobby.type] || lobby.type}}</h3>
 <h4>{{lobby.name}}</h4>
 <div class="playerCount"
      (mouseover)="lobby.players.length && showPlayers = true"

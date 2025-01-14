@@ -11,14 +11,12 @@ import { KeyActions } from '../../settings/key-binding/key-actions';
 import { BoatListComponent, DefaultBoat } from './boat-list/boat-list.component';
 import { GuBoat } from '../cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../quacken/boats/boat';
-import { LobbyStatus } from '../cadegoose/types';
 import { QdragModule } from '../../qdrag/qdrag.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
 import { CommonModule } from '@angular/common';
 import { Team } from '../quacken/boats/types';
-
-export const BoardadmiralDesc = 'Board Admiral: Command your fleet to victory in a game of naval strategy and tactics.';
+import { BoardadmiralDesc, LobbyStatus } from '../cadegoose/lobby-type';
 
 interface BaAction {
   cmd: 'addTile' | 'removeTile';
