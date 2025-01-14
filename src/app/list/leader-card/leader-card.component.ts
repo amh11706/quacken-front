@@ -1,14 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
-import { Variations } from '../../chat/rank-circle/rank-circle.component';
 import { RankLeader } from '../../esc-menu/profile/types';
 import { NameModule } from '../../chat/name/name.module';
 import { StatService } from '../../esc-menu/profile/stat.service';
+import { ActiveLobbyTypes, RankArea } from '../../lobby/cadegoose/lobby-type';
 
-const Titles = Variations[1] || [];
+export interface Top3Area {
+  top3: RankLeader[];
+  area: RankArea;
+  title: string;
+}
 
 @Component({
   selector: 'q-leader-card',
@@ -19,12 +23,11 @@ const Titles = Variations[1] || [];
 })
 export class LeaderCardComponent implements OnInit, OnDestroy {
   private timer = 0;
-  private top3: RankLeader[][] = [];
+  private top3: Top3Area[] = [];
   private index = 0;
-  displayedLeaders = new BehaviorSubject<RankLeader[]>([]);
-  displayVariation = Titles[0];
+  displayedLeaders = new Subject<Top3Area>();
 
-  constructor(private ws: WsService) { }
+  constructor(private ws: WsService, private stat: StatService) { }
 
   ngOnInit() {
     void this.getTop3();
@@ -35,6 +38,10 @@ export class LeaderCardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.stopTimer();
     document.removeEventListener('visibilitychange', this.visibilityChange);
+  }
+
+  openLeaders(area: RankArea): void {
+    void this.stat.openLeaders(area * 100 - 1);
   }
 
   visibilityChange = () => {
@@ -55,25 +62,26 @@ export class LeaderCardComponent implements OnInit, OnDestroy {
   };
 
   private async getTop3() {
-    this.top3 = await this.ws.request(OutCmd.RanksTop3, 2) || [];
+    this.top3 = await this.ws.request(OutCmd.RanksTop3) || [];
     for (const leaders of this.top3) {
-      for (const leader of leaders) {
+      leaders.title = (ActiveLobbyTypes.find(l => l.id === leaders.area)?.name || '') +
+        leaders.title;
+      for (const leader of leaders.top3) {
         StatService.formatLeader(leader);
       }
     }
-
     this.index = 0;
-    this.displayedLeaders.next(this.top3[this.index] || []);
-    this.displayVariation = Titles[this.index];
+    const leaders = this.top3[this.index];
+    if (leaders) this.displayedLeaders.next(leaders);
   }
 
   private advance() {
     this.index = (this.index + 1);
-    if (this.index >= this.top3.length) {
+    const leaders = this.top3[this.index];
+    if (!leaders) {
       void this.getTop3();
       return;
     }
-    this.displayedLeaders.next(this.top3[this.index] || []);
-    this.displayVariation = Titles[this.index];
+    this.displayedLeaders.next(leaders);
   }
 }

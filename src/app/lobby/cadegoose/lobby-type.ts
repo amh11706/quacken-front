@@ -33,7 +33,7 @@ export interface LobbyTypeInfo {
 export const LobbyTypes: Record<LobbyType, LobbyTypeInfo> = {
   [LobbyType.Spades]: { name: 'Spades', id: RankArea.Spades, sGroup: 'l/spades', desc: 'A classic card game.' },
   [LobbyType.Quacken]: { name: 'Quacken', id: RankArea.Quacken, sGroup: 'l/quacken', desc: QuackenDesc },
-  [LobbyType.CadeGoose]: { name: 'Cade Goose', id: RankArea.Cade, sGroup: 'l/cade', desc: CadeDesc },
+  [LobbyType.CadeGoose]: { name: 'Blockade', id: RankArea.Cade, sGroup: 'l/cade', desc: CadeDesc },
   [LobbyType.SeaBattle]: { name: 'Sea Battle', id: RankArea.SeaBattle, sGroup: 'l/cade', desc: SbDesc },
   [LobbyType.FlagGames]: { name: 'Flag Games', id: RankArea.FlagGames, sGroup: 'l/flaggames', desc: FgDesc },
   [LobbyType.BA]: { name: 'Board Admiral', id: RankArea.BoardAdmiral, sGroup: 'l/cade', desc: BoardadmiralDesc },

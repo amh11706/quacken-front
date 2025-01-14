@@ -4,7 +4,7 @@ import { TierTitles } from '../../esc-menu/profile/leaders/leaders.component';
 import { CommonModule } from '@angular/common';
 
 export const Variations: Record<number, string[]> = {
-  1: ['1v1', 'Teams'],
+  2: ['1v1', 'Teams'],
 }
 
 @Component({
@@ -33,7 +33,7 @@ export class RankCircleComponent {
       return;
     }
 
-    this.title += ' (' ;
+    this.title += ' (';
     for (const [i, score] of this.score.entries()) {
       if (i) this.title += ', ';
       this.title += Variations[1]![i] + ': ' + score;

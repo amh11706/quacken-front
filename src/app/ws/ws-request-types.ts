@@ -1,4 +1,5 @@
 import { Leader, RankLeader, WinLoss, UserRank, Stat, Match } from '../esc-menu/profile/types';
+import { Top3Area } from '../list/leader-card/leader-card.component';
 import { ServerBASettings } from '../lobby/boardadmiral/ba-render';
 import { ParsedTurn } from '../lobby/cadegoose/types';
 import { BoatSync, BoatTick } from '../lobby/quacken/boats/types';
@@ -21,7 +22,6 @@ type EmptyCmdBody = {
 type OutCmdInputs = {
   [OutCmd.StatsTop]: number;
   [OutCmd.RanksTop]: number;
-  [OutCmd.RanksTop3]: number;
   [OutCmd.GetWinLoss]: { name: string, rankArea: number };
   [OutCmd.RanksUser]: string;
   [OutCmd.StatsUser]: string;
@@ -54,8 +54,6 @@ type OutCmdInputs = {
   [OutCmd.TMapSetGet]: number;
   [OutCmd.TileSetGet]: number;
   [OutCmd.StructureSetGet]: number;
-  [OutCmd.TileSetList]: undefined;
-  [OutCmd.StructureSetList]: undefined;
 
   [OutCmd.JoinQueue]: ServerSettingMap<'matchmaking'>;
   [OutCmd.GetBotMatch]: ServerSettingMap<'matchmaking'>;
@@ -68,7 +66,7 @@ export type InputlessCmds = Exclude<OutCmd, keyof OutCmdInputs>;
 type OutCmdReturns = {
   [OutCmd.StatsTop]: Leader[];
   [OutCmd.RanksTop]: { xp: RankLeader[][], tier: RankLeader[][] };
-  [OutCmd.RanksTop3]: RankLeader[][];
+  [OutCmd.RanksTop3]: Top3Area[];
   [OutCmd.GetWinLoss]: WinLoss;
   [OutCmd.RanksUser]: UserRank[];
   [OutCmd.StatsUser]: Stat[];
