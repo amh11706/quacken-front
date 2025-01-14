@@ -35,7 +35,7 @@ export const LobbyTypes: Record<LobbyType, LobbyTypeInfo> = {
   [LobbyType.Quacken]: { name: 'Quacken', id: RankArea.Quacken, sGroup: 'l/quacken', desc: QuackenDesc },
   [LobbyType.CadeGoose]: { name: 'Blockade', id: RankArea.Cade, sGroup: 'l/cade', desc: CadeDesc },
   [LobbyType.SeaBattle]: { name: 'Sea Battle', id: RankArea.SeaBattle, sGroup: 'l/cade', desc: SbDesc },
-  [LobbyType.FlagGames]: { name: 'Flag Games', id: RankArea.FlagGames, sGroup: 'l/flaggames', desc: FgDesc },
+  [LobbyType.FlagGames]: { name: 'Capture the Flag', id: RankArea.FlagGames, sGroup: 'l/flaggames', desc: FgDesc },
   [LobbyType.BA]: { name: 'Board Admiral', id: RankArea.BoardAdmiral, sGroup: 'l/cade', desc: BoardadmiralDesc },
   [LobbyType.mapinfo]: { name: 'Map Info', id: 0, sGroup: 'l/cade', desc: 'Map debugging.' },
 };
