@@ -51,7 +51,7 @@ export interface TeamMessage extends ChatMessage {
   a: boolean;
   jq: number;
   ti: number[];
-  sc: number[];
+  sc?: number[];
   v: number;
   pc: number;
   h?: boolean;
