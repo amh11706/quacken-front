@@ -11,12 +11,17 @@ export class NotificationService {
   }
 
   notify(title: string, options?: NotificationOptions) {
-    if (document.visibilityState === 'visible') return;
     if (!this.hasPermission) return;
     const n = new Notification(title, options);
     n.onclick = () => {
       window.focus();
       n.close();
     };
+  }
+
+  test() {
+    this.getPermission().then(() => {
+      this.notify('Quacken Test', { body: 'If you can see this, your notifications are working!' });
+    });
   }
 }

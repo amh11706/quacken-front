@@ -16,6 +16,12 @@ import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { ServerSettingGroup } from '../../settings/setting/settings';
 import { ServerSettingMap } from '../../settings/types';
 import { NotificationService } from './notification.service';
+import { LobbyType, LobbyTypes } from '../../lobby/cadegoose/lobby-type';
+
+const QueueTypes = [
+  LobbyTypes[LobbyType.CadeGoose],
+  LobbyTypes[LobbyType.BA],
+]
 
 @Component({
   selector: 'q-match-queue',
@@ -39,6 +45,7 @@ export class MatchQueueComponent implements OnInit {
   isGuest = this.ws.user.id === 0;
   private subscriptions: Subscription[] = [];
   matchSettings = this.ss.prefetch('matchmaking');
+  queueTypes = QueueTypes;
 
   constructor(
     public ws: WsService,
@@ -121,5 +128,9 @@ export class MatchQueueComponent implements OnInit {
       return this.router.navigate(['/lobby', id]);
     }
     return false;
+  }
+
+  testNotification(): void {
+    this.ns.test();
   }
 }

@@ -7,7 +7,7 @@ import { Command, Invite, Message } from '../chat/types';
 import { InvUpdate, Inventory } from '../esc-menu/profile/types';
 import { TokenUser } from './ws.service';
 import { ServerBASettings } from '../lobby/boardadmiral/ba-render';
-import { LobbyStatus } from '../lobby/cadegoose/lobby-type';
+import { LobbyStatus, RankArea } from '../lobby/cadegoose/lobby-type';
 
 export type InMessage = {
   [K in keyof SubscribeData]: { cmd: K, id?: number, data: SubscribeData[K] };
@@ -80,7 +80,7 @@ export type SubscribeData = {
   [InCmd.Card]: { id: number, position: number };
   [InCmd.Playing]: { id: number, quantity: number };
   [InCmd.QueueLength]: number;
-  [InCmd.QueueMatch]: { lobbyId: number, rated: boolean };
+  [InCmd.QueueMatch]: { lobbyId: number, rated: boolean, area: RankArea };
 
   [InCmd.BASettings]: ServerBASettings | ServerBASettings[];
 } & InternalData;

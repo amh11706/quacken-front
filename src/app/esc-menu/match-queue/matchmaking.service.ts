@@ -4,6 +4,8 @@ import { MatchFoundDialogComponent } from './match-found.component';
 import { WsService } from '../../ws/ws.service';
 import { InCmd } from '../../ws/ws-messages';
 import { NotificationService } from './notification.service';
+import { ActiveLobbyTypes, RankArea } from '../../lobby/cadegoose/lobby-type';
+import { SubscribeData } from '../../ws/ws-subscribe-types';
 
 @Injectable()
 export class MatchmakingService {
@@ -24,7 +26,7 @@ export class MatchmakingService {
     });
   }
 
-  private openMatchFoundDialog(m: {lobbyId: number, rated: boolean}): void {
+  private openMatchFoundDialog(m: SubscribeData[InCmd.QueueMatch]): void {
     this.inQueue = false;
     const dialogRef = this.dialog.open(MatchFoundDialogComponent, {
       width: '300px',
@@ -37,6 +39,8 @@ export class MatchmakingService {
       this.inQueue = false;
     });
 
-    this.ns.notify('Match found!');
+    if (document.visibilityState === 'visible') return;
+    const lobbyName = ActiveLobbyTypes.find(l => l.id === m.area)?.name;
+    this.ns.notify('Match found', { body: `You have a ${lobbyName} match ready!` });
   }
 }

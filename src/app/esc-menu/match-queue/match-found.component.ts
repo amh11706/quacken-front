@@ -4,6 +4,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Sounds, SoundService } from '../../sound.service';
+import { ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
+import { SubscribeData } from '../../ws/ws-subscribe-types';
+import { InCmd } from '../../ws/ws-messages';
 
 const TimeLimit = 20;
 
@@ -12,7 +15,7 @@ const TimeLimit = 20;
   selector: 'q-match-found-dialog',
   imports: [MatButtonModule, MatDialogModule, CommonModule],
   template: `
-    <h1 mat-dialog-title>{{data.rated ? 'Rated' : 'Unrated'}} Match Found</h1>
+    <h1 mat-dialog-title>{{data.rated ? 'Rated' : 'Unrated'}} {{areaName}} Match Found</h1>
     <div mat-dialog-content>
       <p *ngIf="!expired; else expiredMessage">Time left to accept: {{ timeLeft | async }} seconds</p>
       <ng-template #expiredMessage>
@@ -34,15 +37,17 @@ export class MatchFoundDialogComponent implements OnInit {
   timeLeft = new Subject<number>();
   private timer = 0;
   expired = false;
+  areaName?: string;
 
   constructor(
     private dialogRef: MatDialogRef<MatchFoundDialogComponent>,
     private sound: SoundService,
-    @Inject(MAT_DIALOG_DATA) public data: {lobbyId: number, rated: boolean},
+    @Inject(MAT_DIALOG_DATA) public data: SubscribeData[InCmd.QueueMatch],
   ) { }
 
   ngOnInit() {
     void this.sound.play(Sounds.BattleStart);
+    this.areaName = ActiveLobbyTypes.find(l => l.id === this.data.area)?.name;
 
     setTimeout(() => {
       this.expired = true;

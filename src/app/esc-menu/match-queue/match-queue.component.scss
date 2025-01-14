@@ -17,6 +17,10 @@ mat-card-content {
   margin-bottom: 16px;
 }
 
+.dropdown {
+  margin-left: 20px;
+}
+
 .queue-buttons {
   display: flex;
   flex-direction: row;
@@ -27,8 +31,11 @@ mat-expansion-panel {
   max-width: 460px;
 }
 
-.advanced {
+.advanced,
+.basic {
   display: flex;
+  width: 100%;
+  max-width: 420px;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;

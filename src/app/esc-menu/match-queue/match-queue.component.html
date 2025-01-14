@@ -5,6 +5,15 @@
 
   <mat-card-content *ngrxLet="(ws.connected$ | async) === false || (pending | async) || false as disabled">
     <span>Number of players in queue: {{ queueLength | async }}</span>
+    <div class="basic">
+      <q-setting class="dropdown"
+                 [disabled]="disabled || ms.inQueue"
+                 [name]="'lobbyType'"></q-setting>
+      <q-setting class="dropdown"
+                 [disabled]="ms.inQueue || disabled || isGuest"
+                 [matTooltip]="isGuest ? 'Make an account to play rated matches.' : ''"
+                 [name]="'queueRated'"></q-setting>
+    </div>
     <div class="queue-buttons">
       <button mat-raised-button
               [disabled]="disabled"
@@ -17,9 +26,9 @@
     </div>
     <span>You'll get a notification when a match is found. You can close this menu safely.</span>
 
-    <q-setting [disabled]="ms.inQueue || disabled || isGuest"
-               [matTooltip]="isGuest ? 'Make an account to play rated matches.' : ''"
-               [name]="'queueRated'"></q-setting>
+    <button mat-raised-button
+            (click)="testNotification()">Test Notification</button>
+
     <mat-expansion-panel [expanded]="!!matchSettings.showAdvanced.value"
                          (expandedChange)="matchSettings.showAdvanced.value = +$event">
       <mat-expansion-panel-header>
