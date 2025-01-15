@@ -78,7 +78,7 @@ export type ServerSettingGroup = {
   'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated' | 'showAdvanced' | 'mapPreference' | 'lobbyType',
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated' | 'showAdvanced' | 'lobbyType',
   'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
   'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
 }

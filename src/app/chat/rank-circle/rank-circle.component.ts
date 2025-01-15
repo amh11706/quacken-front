@@ -36,7 +36,7 @@ export class RankCircleComponent {
     this.title += ' (';
     for (const [i, score] of this.score.entries()) {
       if (i) this.title += ', ';
-      this.title += Variations[1]![i] + ': ' + score;
+      this.title += Variations[2]?.[i] + ': ' + score;
     }
     this.title += ')';
   }

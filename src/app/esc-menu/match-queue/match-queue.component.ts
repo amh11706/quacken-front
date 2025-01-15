@@ -13,10 +13,10 @@ import { WsService } from '../../ws/ws.service';
 import { SettingsModule } from '../../settings/settings.module';
 import { MatchmakingService } from './matchmaking.service';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
-import { ServerSettingGroup } from '../../settings/setting/settings';
-import { ServerSettingMap } from '../../settings/types';
 import { NotificationService } from './notification.service';
-import { LobbyType, LobbyTypes } from '../../lobby/cadegoose/lobby-type';
+import { LobbyType, LobbyTypes, RankArea } from '../../lobby/cadegoose/lobby-type';
+import { OutCmdInputTypes } from '../../ws/ws-request-types';
+import { Setting } from '../../settings/types';
 
 const QueueTypes = [
   LobbyTypes[LobbyType.CadeGoose],
@@ -43,7 +43,7 @@ export class MatchQueueComponent implements OnInit {
   queueLength = new Subject<number>();
   pending = new BehaviorSubject<boolean>(false);
   isGuest = this.ws.user.id === 0;
-  private subscriptions: Subscription[] = [];
+  private subs: Subscription[] = [];
   matchSettings = this.ss.prefetch('matchmaking');
   queueTypes = QueueTypes;
 
@@ -60,45 +60,70 @@ export class MatchQueueComponent implements OnInit {
       if (this.isGuest) this.matchSettings.rated.value = 0;
     });
     // Subscribe to settings value changes using SettingsService
-    this.subscriptions.push(
-      this.matchSettings.minTurnTime.userStream.subscribe((value) => {
-        if (value > this.matchSettings.maxTurnTime.value) {
-          this.matchSettings.maxTurnTime.value = (value);
-        }
-      }));
+    this.subs.push(this.matchSettings.minTurnTime.userStream.subscribe(value => {
+      if (value > this.matchSettings.maxTurnTime.value) {
+        this.matchSettings.maxTurnTime.value = value;
+      }
+      this.setSettingData(this.matchSettings.minTurnTime, value);
+    }));
 
-    this.subscriptions.push(
-      this.matchSettings.maxTurnTime.userStream.subscribe((value) => {
-        if (value < this.matchSettings.minTurnTime.value) {
-          this.matchSettings.minTurnTime.value = (value);
-        }
-      }));
+    this.subs.push(this.matchSettings.maxTurnTime.userStream.subscribe(value => {
+      if (value < this.matchSettings.minTurnTime.value) {
+        this.matchSettings.minTurnTime.value = value;
+      }
+      this.setSettingData(this.matchSettings.maxTurnTime, value);
+    }));
 
-    this.subscriptions.push(
-      this.ws.connected$.subscribe(value => {
-        if (value) {
-          this.ws.send(OutCmd.WatchQueue);
-        }
-      }));
+    this.subs.push(this.matchSettings.deltaRank.userStream.subscribe(value => {
+      this.setSettingData(this.matchSettings.deltaRank, value);
+    }));
 
-    this.subscriptions.push(
-      this.ws.subscribe(InCmd.QueueLength, length => {
-        this.queueLength.next(length);
-      }));
+    this.subs.push(this.matchSettings.rated.userStream.subscribe(value => {
+      this.setSettingData(this.matchSettings.rated, value);
+    }));
+
+    this.subs.push(this.matchSettings.lobbyType.userStream.subscribe(() => {
+      this.syncSettingData(this.matchSettings.minTurnTime);
+      this.syncSettingData(this.matchSettings.maxTurnTime);
+      this.syncSettingData(this.matchSettings.deltaRank);
+      this.syncSettingData(this.matchSettings.rated);
+    }));
+
+    this.subs.push(this.ws.connected$.subscribe(value => {
+      if (value) this.ws.send(OutCmd.WatchQueue);
+    }));
+
+    this.subs.push(this.ws.subscribe(InCmd.QueueLength, length => {
+      this.queueLength.next(length);
+    }));
   }
 
   ngOnDestroy() {
     // Unsubscribe to prevent memory leaks
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subs.forEach(sub => sub.unsubscribe());
     this.ws.send(OutCmd.UnwatchQueue);
   }
 
-  private async formatSettings(): Promise<ServerSettingMap<'matchmaking'>> {
+  get lobbyType(): RankArea {
+    return this.matchSettings.lobbyType.value;
+  }
+
+  private setSettingData(setting: Setting, value: number): void {
+    if (!setting.data) setting.data = {};
+    setting.data[this.lobbyType] = value;
+  }
+
+  private syncSettingData(setting: Setting) {
+    setting.setServerValue(setting.data?.[this.lobbyType] ?? setting.value);
+  }
+
+  private async formatSettings(): Promise<OutCmdInputTypes[OutCmd.JoinQueue]> {
     // make sure we wait for the real settings, not the prefilled defaults
     const matchSettings = await this.ss.getGroup('matchmaking');
-    const settings = {} as ServerSettingMap<'matchmaking'>;
+    const settings = {} as OutCmdInputTypes[OutCmd.JoinQueue];
+    const t = this.lobbyType;
     for (const [name, setting] of Object.entries(matchSettings)) {
-      settings[name as ServerSettingGroup['matchmaking']] = setting.toDBSetting<'matchmaking'>();
+      settings[name as keyof typeof settings] = setting.data?.[t] ?? setting.value;
     }
     return settings;
   }

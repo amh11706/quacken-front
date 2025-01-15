@@ -6,7 +6,7 @@ import { BoatSync, BoatTick } from '../lobby/quacken/boats/types';
 import { DBTile } from '../map-editor/types';
 import { AiData, MatchAiRequest, MoveNode, Points, ScoreResponse } from '../replay/cadegoose/types';
 import { MapOption } from '../settings/map-list/map-card/types';
-import { SettingGroup } from '../settings/setting/settings';
+import { ServerSettingGroup, SettingGroup } from '../settings/setting/settings';
 import { DBSetting, ServerSettingMap } from '../settings/types';
 import { OutCmd } from './ws-messages';
 import { InMessage } from './ws-subscribe-types';
@@ -55,8 +55,8 @@ type OutCmdInputs = {
   [OutCmd.TileSetGet]: number;
   [OutCmd.StructureSetGet]: number;
 
-  [OutCmd.JoinQueue]: ServerSettingMap<'matchmaking'>;
-  [OutCmd.GetBotMatch]: ServerSettingMap<'matchmaking'>;
+  [OutCmd.JoinQueue]: Record<ServerSettingGroup['matchmaking'], number>;
+  [OutCmd.GetBotMatch]: OutCmdInputs[OutCmd.JoinQueue];
 }
 
 export type OutCmdInputTypes = OutCmdInputs & EmptyCmdBody;
