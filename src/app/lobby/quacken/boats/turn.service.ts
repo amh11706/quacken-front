@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { InCmd, Internal, OutCmd } from "../../../ws/ws-messages";
+import { InCmd, OutCmd } from "../../../ws/ws-messages";
 import { ReplaySubject, Subscription } from "rxjs";
 import { WsService } from "../../../ws/ws.service";
 import { BoatStatus, Clutter, Turn } from "./types";
@@ -71,16 +71,21 @@ export class TurnService {
   };
 
   protected handleSync() {
-    this.worker.clearJobs();
-    clearTimeout(this.animateTimeout);
-    delete this.animateTimeout;
-    delete this.turn;
+    if (this.turn) return this.skipToEnd(false);
   }
 
-  protected handleTurn(turn: Turn): void {
+  private skipToEnd(requestSync = true) {
+    this.worker.clearJobs();
     BoatRender3d.tweens.update(Infinity);
     clearTimeout(this.animateTimeout);
     delete this.animateTimeout;
+    this.boatsService.resetBoats();
+    delete this.turn;
+    if (requestSync) this.ws.send(OutCmd.Sync);
+  }
+
+  protected handleTurn(turn: Turn): void {
+    if (this.turn) return this.skipToEnd();
 
     this.turn = turn;
     this._turn.next(turn);
@@ -129,6 +134,7 @@ export class TurnService {
       });
     });
     void this.worker.addJob(() => {
+      delete this.turn;
       this.ws.send(OutCmd.Sync);
     });
   }
