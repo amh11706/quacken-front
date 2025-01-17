@@ -67,7 +67,7 @@ export class GuBoat {
   }
 
   update(animate = true, trigger?: () => void): Promise<void> {
-    if (!animate) this.worker.clearJobs();
+    // if (!animate) this.worker.clearJobs();
     const boat = { ...this.boat } as Boat;
     const job = this.worker.addJob(() => {
       trigger?.();
@@ -85,7 +85,7 @@ export class GuBoat {
 
   protected _update(animate: boolean, boat: Boat): Promise<any> {
     const startTime = animate ? new Date().valueOf() : 0;
-    BoatRender3d.tweenProgress = startTime;
+    if (animate) BoatRender3d.tweenProgress = startTime;
     const promises: Promise<any>[] = [];
 
     if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y ||
@@ -169,7 +169,6 @@ export class GuBoat {
   ): Promise<void>[] {
     const decodeX = [0, 0.4, 0, -0.4];
     const decodeY = [-0.4, 0, 0.4, 0];
-    let updateHooked = false;
 
     const p = [
       new Promise<void | { x: number, y: number }>(resolve => {
@@ -183,7 +182,6 @@ export class GuBoat {
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
-          updateHooked = true;
         } else if (startTime && transitions[0]) {
           new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
             .easing(moveEase[transitions[0]])
@@ -192,7 +190,6 @@ export class GuBoat {
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
-          updateHooked = true;
         } else {
           resolve();
         }
@@ -210,7 +207,7 @@ export class GuBoat {
             .repeatDelay(500 / BoatRender3d.speed)
             .repeat(1).yoyo(true)
             .start(startTime)
-            .onUpdate(() => !updateHooked && this.coords?.fromPosition(this.boat.pos))
+            .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
           new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
@@ -218,7 +215,7 @@ export class GuBoat {
             .to({ y }, 10000 / BoatRender3d.speed)
             .delay(3000 / BoatRender3d.speed)
             .start(startTime)
-            .onUpdate(() => !updateHooked && this.coords?.fromPosition(this.boat.pos))
+            .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else {
           resolve();

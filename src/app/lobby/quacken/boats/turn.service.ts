@@ -46,7 +46,6 @@ export class TurnService {
 
   private initSubs() {
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => this.handleTurn(turn)));
-    this.subs.add(this.ws.subscribe(InCmd.Sync, () => this.handleSync()));
   }
 
   ngOnDestroy() {
@@ -58,30 +57,20 @@ export class TurnService {
     this.blurred = document.hidden;
 
     if (this.blurred) {
-      if (!this.turn || BoatRender3d.paused) return;
-      clearTimeout(this.animateTimeout);
-      delete this.animateTimeout;
-      BoatRender3d.tweens.update(Infinity);
-      this.boatsService.resetBoats();
-      delete this.turn;
-      this.ws.send(OutCmd.Sync);
+      if (this.turn) return this.skipToEnd(true);
     } else {
       this.boatsService.resetMymoves();
     }
   };
 
-  protected handleSync() {
-    if (this.turn) return this.skipToEnd(false);
-  }
-
-  private skipToEnd(requestSync = true) {
+  skipToEnd(requestSync = true) {
     this.worker.clearJobs();
     BoatRender3d.tweens.update(Infinity);
     clearTimeout(this.animateTimeout);
     delete this.animateTimeout;
     this.boatsService.resetBoats();
     delete this.turn;
-    if (requestSync) this.ws.send(OutCmd.Sync);
+    if (requestSync) setTimeout(() => this.ws.send(OutCmd.Sync));
   }
 
   protected handleTurn(turn: Turn): void {

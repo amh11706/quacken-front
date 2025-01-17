@@ -8,11 +8,13 @@ import { CommonModule } from '@angular/common';
 import { BABoatSettings, BoatCoverMode } from '../ba-render';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
+import { LetDirective } from '@ngrx/component';
 
 @Component({
   selector: 'q-ba-hud',
   standalone: true,
-  imports: [CommonModule, ChatModule, MatTooltipModule, MatIconModule, MatButtonModule, MatSliderModule, MatSelectModule],
+  imports: [CommonModule, LetDirective,
+    ChatModule, MatTooltipModule, MatIconModule, MatButtonModule, MatSliderModule, MatSelectModule],
   templateUrl: './hud.component.html',
   styleUrl: './hud.component.scss'
 })

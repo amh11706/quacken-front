@@ -198,6 +198,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
   }
 
   protected checkBoats(boats: Iterable<Boat>): void {
+    this.turn.skipToEnd(false);
     const touchedBoats = new Set<number>();
     for (const b of boats) {
       touchedBoats.add(b.id);

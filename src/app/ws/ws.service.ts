@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, Subscription, ReplaySubject, firstValueFrom } from 'rxjs';
+import { Subject, Subscription, firstValueFrom, BehaviorSubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Title } from '@angular/platform-browser';
 
@@ -34,7 +34,7 @@ export class WsService implements OnDestroy {
   private tokenParser = new JwtHelperService();
   user: TokenUser = { id: 0, name: 'Guest', admin: 0 };
   connected = false;
-  connected$ = new ReplaySubject<boolean>(1);
+  connected$ = new BehaviorSubject<boolean>(false);
   outMessages$ = new Subject<OutMessage | OutRequest>();
 
   sId?: number;
@@ -45,8 +45,6 @@ export class WsService implements OnDestroy {
     private http: HttpClient,
     private title: Title,
   ) {
-    this.connected$.next(false);
-
     this.subscribe(InCmd.Kick, (reason: string) => {
       this.close();
       WsService.reason = reason;

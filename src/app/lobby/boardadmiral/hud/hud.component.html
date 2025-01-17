@@ -1,4 +1,5 @@
 <div class="container noselect"
+     *ngrxLet="!(ws.connected$ | async) as disabled"
      id="hud">
   <div id="boatcontrol"
        (contextmenu)="$event.preventDefault()">
@@ -22,7 +23,8 @@
         <tr>
           <td class="label">Aggro: ({{activeBoat.Aggro}})</td>
           <td>
-            <mat-slider [min]="0"
+            <mat-slider [disabled]="disabled"
+                        [min]="0"
                         [max]="100"
                         [step]="10">
               <input matSliderThumb
@@ -31,6 +33,7 @@
             </mat-slider>
           </td>
           <td><button mat-raised-button
+                    [disabled]="disabled"
                     matTooltip="Sync aggro to all boats"
                     (click)="syncToOtherBoats('Aggro')">Sync</button></td>
         </tr>
@@ -50,6 +53,7 @@
 
       <div id="coverage">
         <mat-select #swap
+                    [disabled]="disabled"
                     [placeholder]="'Swap with'"
                     (selectionChange)="swapCoverageWith($event.value); swap.value = null"
                     matTooltip="Swap coverage with a boat">
@@ -59,6 +63,7 @@
           </mat-option>
         </mat-select>
         <mat-select #copy
+                    [disabled]="disabled"
                     [placeholder]="'Copy to'"
                     (selectionChange)="copyCoverageTo($event.value); copy.value = null"
                     matTooltip="Copy coverage to a boat">
@@ -71,6 +76,7 @@
     </div>
 
     <button *ngIf="(lobbySettings.turnTime.stream | async) === 65"
+            [disabled]="disabled"
             mat-icon-button
             [color]="'accent'"
             [disabled]="!myBoat.isMe"
