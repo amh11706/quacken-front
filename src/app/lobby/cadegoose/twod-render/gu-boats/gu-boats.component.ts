@@ -198,7 +198,8 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
   }
 
   protected checkBoats(boats: Iterable<Boat>): void {
-    this.turn.skipToEnd(false);
+    if (this.turn.animating) return; // don't interrupt the turn animation
+    this.turn.skipToEnd(false); // cancel pending animations just in case
     const touchedBoats = new Set<number>();
     for (const b of boats) {
       touchedBoats.add(b.id);

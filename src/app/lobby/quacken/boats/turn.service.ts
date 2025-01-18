@@ -22,6 +22,7 @@ export class TurnService {
   private turn?: Turn;
   private _turn = new ReplaySubject<Turn>(1);
   turn$ = this._turn.asObservable();
+  animating = false;
 
   private clutterStep = new ReplaySubject<Clutter[]>();
   clutterStep$ = this.clutterStep.asObservable();
@@ -70,6 +71,7 @@ export class TurnService {
     delete this.animateTimeout;
     this.boatsService.resetBoats();
     delete this.turn;
+    this.animating = false;
     if (requestSync) setTimeout(() => this.ws.send(OutCmd.Sync));
   }
 
@@ -107,6 +109,7 @@ export class TurnService {
 
   protected playTurn(): void {
     this.worker.clearJobs();
+    this.animating = true;
     for (let step = 0; step < 8; step++) {
       void this.worker.addJob(() => this._playTurn(step));
       if (step % 2 === 1) {
@@ -124,6 +127,7 @@ export class TurnService {
     });
     void this.worker.addJob(() => {
       delete this.turn;
+      this.animating = false;
       this.ws.send(OutCmd.Sync);
     });
   }
