@@ -185,16 +185,17 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   nextTurn(): void {
-    if (this.tickInterval) {
-      this.togglePlay();
-      BoatRender3d.tweens.update(Infinity);
-      BoatRender3d.tweens.removeAll();
-      this.togglePlay();
-    }
-    // setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));
+    // if (this.tickInterval) {
+    //   this.togglePlay();
+    //   BoatRender3d.tweens.update(Infinity);
+    //   BoatRender3d.tweens.removeAll();
+    //   this.togglePlay();
+    // }
+
     for (let target = this.tick + 3; target < this.messages.length; target++) {
       if (this.messages[target]?.find(el => el.cmd === InCmd.Turn)) {
         this.playTo(target - 2);
+        this.sendSync();
         return;
       }
     }

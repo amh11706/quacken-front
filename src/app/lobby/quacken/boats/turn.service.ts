@@ -47,6 +47,7 @@ export class TurnService {
 
   private initSubs() {
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => this.handleTurn(turn)));
+    this.subs.add(this.ws.subscribe(InCmd.Sync, () => this.skipToEnd(false)));
   }
 
   ngOnDestroy() {
@@ -58,7 +59,7 @@ export class TurnService {
     this.blurred = document.hidden;
 
     if (this.blurred) {
-      if (this.turn) return this.skipToEnd(true);
+      if (this.animating) return this.skipToEnd(true);
     } else {
       this.boatsService.resetMymoves();
     }
@@ -67,16 +68,16 @@ export class TurnService {
   skipToEnd(requestSync = true) {
     this.worker.clearJobs();
     BoatRender3d.tweens.update(Infinity);
+    BoatRender3d.tweens.removeAll();
     clearTimeout(this.animateTimeout);
     delete this.animateTimeout;
     this.boatsService.resetBoats();
-    delete this.turn;
     this.animating = false;
     if (requestSync) setTimeout(() => this.ws.send(OutCmd.Sync));
   }
 
   protected handleTurn(turn: Turn): void {
-    if (this.turn) return this.skipToEnd();
+    if (this.animating) return this.skipToEnd();
 
     this.turn = turn;
     this._turn.next(turn);
@@ -88,7 +89,6 @@ export class TurnService {
     if (!moveFound || this.blurred) {
       this.boatsService.resetBoats();
       this.animateTimeout = window.setTimeout(() => this.ws.send(OutCmd.Sync), 1000);
-      delete this.turn;
       return;
     }
 
@@ -119,14 +119,12 @@ export class TurnService {
       }
     }
     void this.worker.addJob(async () => {
-      delete this.turn;
       await new Promise<void>(resolve => {
         const start = new Date().valueOf();
         new Tween({}, BoatRender3d.tweens).to({}, 30000 / this.speed).onComplete(() => resolve()).start(start);
       });
     });
     void this.worker.addJob(() => {
-      delete this.turn;
       this.animating = false;
       this.ws.send(OutCmd.Sync);
     });
