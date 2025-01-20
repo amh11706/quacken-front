@@ -189,11 +189,11 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
 
     BoatRender3d.speed = this.speed;
-    // progress 0 means no animations are running, so we can skip the update
-    if (!BoatRender3d.paused && BoatRender3d.tweenProgress > 0) {
+    if (!BoatRender3d.paused) {
       BoatRender3d.tweenProgress += (t - this.lastFrame);
-      BoatRender3d.tweens.update(BoatRender3d.tweenProgress);
-      this.cd.detectChanges();
+      if (BoatRender3d.tweens.update(BoatRender3d.tweenProgress)) {
+        this.cd.detectChanges();
+      }
     }
     this.stats?.update();
     this.frameRequested = false;

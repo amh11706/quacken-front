@@ -82,8 +82,10 @@ export class BoatsService {
     }
   }
 
-  private handleSync(s: Sync) {
+  private async handleSync(s: Sync) {
     this.resetBoats();
+    // delay to make sure the turn service handles the sync first
+    await new Promise(r => setTimeout(r));
     this.setBoats(s.sync);
     this.clutter.next(s.cSync);
   }

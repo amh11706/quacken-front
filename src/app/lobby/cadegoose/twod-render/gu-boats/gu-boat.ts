@@ -85,7 +85,6 @@ export class GuBoat {
 
   protected _update(animate: boolean, boat: Boat): Promise<any> {
     const startTime = animate ? new Date().valueOf() : 0;
-    if (animate) BoatRender3d.tweenProgress = startTime;
     const promises: Promise<any>[] = [];
 
     if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y ||
