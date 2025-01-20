@@ -1,14 +1,16 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ChatModule } from '../../../chat/chat.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { CadeHudComponent } from '../../cadegoose/hud/hud.component';
 import { CommonModule } from '@angular/common';
-import { BABoatSettings, BoatCoverMode } from '../ba-render';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { LetDirective } from '@ngrx/component';
+
+import { BABoatSettings, BoatCoverMode } from '../ba-render';
+import { CadeHudComponent } from '../../cadegoose/hud/hud.component';
+import { ChatModule } from '../../../chat/chat.module';
+import { OutCmd } from '../../../ws/ws-messages';
 
 @Component({
   selector: 'q-ba-hud',
@@ -16,19 +18,21 @@ import { LetDirective } from '@ngrx/component';
   imports: [CommonModule, LetDirective,
     ChatModule, MatTooltipModule, MatIconModule, MatButtonModule, MatSliderModule, MatSelectModule],
   templateUrl: './hud.component.html',
-  styleUrl: './hud.component.scss'
+  styleUrl: './hud.component.scss',
 })
 export class HudComponent extends CadeHudComponent {
   @Input() fishnames = false;
   @Input() boatSettings = new Map<number, BABoatSettings>();
-  private _activeBoat?: BABoatSettings
+  private _activeBoat?: BABoatSettings;
   @Input() set activeBoat(value: BABoatSettings | undefined) {
     this._activeBoat = value;
     this.buildBoatList();
   };
+
   get activeBoat(): BABoatSettings | undefined {
     return this._activeBoat;
   }
+
   @Output() activeBoatChange = new EventEmitter<BABoatSettings>();
 
   boatList: BABoatSettings[] = [];
@@ -102,5 +106,13 @@ export class HudComponent extends CadeHudComponent {
     if (!this.activeBoat) return;
     for (const i in this.activeBoat.coverage) this.activeBoat.coverage[+i as BoatCoverMode] = [];
     this.update();
+  }
+
+  getDamageReport() {
+    void this.ws.request(OutCmd.BADamageReport, this.activeBoat?.boat.id || 0);
+  }
+
+  toggleSink() {
+    void this.ws.request(OutCmd.BAToggleSink, this.activeBoat?.boat.id || 0);
   }
 }

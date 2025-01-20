@@ -98,6 +98,8 @@ export const enum OutCmd {
 
   BASettings,
   BASettingsGet,
+  BADamageReport,
+  BAToggleSink,
 }
 
 export const enum InCmd {
