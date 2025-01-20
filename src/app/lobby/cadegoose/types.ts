@@ -4,7 +4,6 @@ import { BoatStatus, BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync, Tur
 import { LobbyType, LobbyStatus } from './lobby-type';
 import { StatRow } from './stats/types';
 
-
 export interface Lobby {
   id: number;
   owner: boolean;

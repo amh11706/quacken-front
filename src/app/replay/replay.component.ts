@@ -56,7 +56,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage, from: '' } });
+    void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage, from: '' } });
     this.fakeChat = this.wrapper.chat ?? this.fakeChat;
     this.fakeWs = this.wrapper.ws ?? this.fakeWs;
     this.fakeWs.user = this.ws.user;
@@ -131,7 +131,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   private sendSync() {
-    this.fakeWs.dispatchMessage(this.lastSync);
+    void this.fakeWs.dispatchMessage(this.lastSync);
   }
 
   private addBoat(b: BoatSync | BoatSync[]): void {
@@ -247,7 +247,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       this.tick = syncTick - 1;
       if (this.lobbyMessage?.data.type === 'FlagGames' && this.lobbyMessage?.data.map) {
         // reset the map because it could have changed in capture the flag mode
-        this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
+        void this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
       }
     }
 
@@ -265,7 +265,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       this.checkMessage(m);
       // skip sync messages when playing because the lobby asks for them when it's ready
       if (!includeSync && m.cmd === InCmd.Sync) continue;
-      this.fakeWs.dispatchMessage(m);
+      void this.fakeWs.dispatchMessage(m);
     }
   }
 }

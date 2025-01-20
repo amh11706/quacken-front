@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InCmd, Internal } from '../../../ws/ws-messages';
+import { InCmd } from '../../../ws/ws-messages';
 import { CadeEntryStatusComponent } from '../../cadegoose/cade-entry-status/cade-entry-status.component';
 import { StatRow, Stat } from '../../cadegoose/stats/types';
 

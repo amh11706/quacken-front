@@ -78,8 +78,8 @@ export class MoveNode {
   WreckedBy: number[][] = [];
   Wrecks: number[][] = [];
   BlockedBy: number[][] = [];
-  Blocks: number[][]  = [];
-  Moves: number[]= [0, 0, 0, 0];
+  Blocks: number[][] = [];
+  Moves: number[] = [0, 0, 0, 0];
 
   wreckedByString: string[] = []; // for display
   wrecksString: string[] = []; // for display

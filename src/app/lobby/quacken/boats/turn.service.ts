@@ -1,15 +1,16 @@
-import { Injectable } from "@angular/core";
-import { InCmd, OutCmd } from "../../../ws/ws-messages";
-import { ReplaySubject, Subscription } from "rxjs";
-import { WsService } from "../../../ws/ws.service";
-import { BoatStatus, Clutter, Turn } from "./types";
-import { Tween } from "@tweenjs/tween.js";
-import { Sounds, SoundService } from "../../../sound.service";
-import { BoatRender3d } from "../../cadegoose/boat-render";
-import { JobQueue } from "../../cadegoose/job-queue";
-import { Boat } from "./boat";
-import { SettingsService } from "../../../settings/settings.service";
-import { BoatsService } from "./boats.service";
+import { Injectable, OnDestroy } from '@angular/core';
+import { ReplaySubject, Subscription } from 'rxjs';
+import { Tween } from '@tweenjs/tween.js';
+
+import { InCmd, OutCmd } from '../../../ws/ws-messages';
+import { WsService } from '../../../ws/ws.service';
+import { BoatStatus, Clutter, Turn } from './types';
+import { Sounds, SoundService } from '../../../sound.service';
+import { BoatRender3d } from '../../cadegoose/boat-render';
+import { JobQueue } from '../../cadegoose/job-queue';
+import { Boat } from './boat';
+import { SettingsService } from '../../../settings/settings.service';
+import { BoatsService } from './boats.service';
 
 interface BoatRender {
   update(animate: boolean, trigger?: () => void): Promise<void>;
@@ -18,13 +19,13 @@ interface BoatRender {
 }
 
 @Injectable()
-export class TurnService {
+export class TurnService implements OnDestroy {
   private turn?: Turn;
   private _turn = new ReplaySubject<Turn>(1);
   turn$ = this._turn.asObservable();
   animating = false;
 
-  private clutterStep = new ReplaySubject<Clutter[]>();
+  private clutterStep = new ReplaySubject<Clutter[]>(1);
   clutterStep$ = this.clutterStep.asObservable();
 
   private boats: BoatRender[] = [];

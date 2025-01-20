@@ -52,7 +52,7 @@ export class MapCardComponent {
   }
 
   openAdvanced(): void {
-    this.ws.dispatchMessage({ cmd: Internal.OpenAdvanced, data: undefined });
+    void this.ws.dispatchMessage({ cmd: Internal.OpenAdvanced, data: undefined });
     void this.es.openMenu(false);
   }
 }

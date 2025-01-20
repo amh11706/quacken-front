@@ -9,15 +9,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
+import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { MatMenuModule } from '@angular/material/menu';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { NameSearchComponent } from './name-search/name-search.component';
 import { InputComponent } from './input/input.component';
 import { QdragModule } from '../qdrag/qdrag.module';
 import { ChatComponent } from './chat.component';
 import { NameModule } from './name/name.module';
 import { EmojiInputDirective } from './input/emoji-input.directive';
-import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
-import { MatMenuModule } from '@angular/material/menu';
-import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   declarations: [ChatComponent, InputComponent, NameSearchComponent],

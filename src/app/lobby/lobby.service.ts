@@ -5,7 +5,7 @@ import { LobbyStatus } from './cadegoose/lobby-type';
 const inPgrogressValues = new Set([LobbyStatus.MidMatch, LobbyStatus.Paused, LobbyStatus.Voting]);
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LobbyService<T> {
   lobby = new BehaviorSubject<T>({} as T);

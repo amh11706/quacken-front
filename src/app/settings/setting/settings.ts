@@ -288,7 +288,7 @@ export const Settings: SettingList = {
     label: 'Create Type',
     type: 'option',
     options: [
-      '', '', 'Blockade', 'Sea Battle', 'Capture the Flag', 'Board Admiral'
+      '', '', 'Blockade', 'Sea Battle', 'Capture the Flag', 'Board Admiral',
     ],
     default: 2,
   },

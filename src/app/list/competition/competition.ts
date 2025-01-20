@@ -1,34 +1,34 @@
 import { DBSetting } from '../../settings/types';
 
-const BaseSettings = {
-  createType: { value: 2 },
-  maxPlayers: { id: 24, value: 40 },
-  publicMode: { id: 25, value: 0, data: 'Public' },
-  hotEntry: { id: 26, value: 0, data: 'false' },
-  jobberQuality: {
-    id: 27,
-    value: 105,
-    data: {
-      Sail: 80,
-      Carp: 80,
-      Bilge: 80,
-      Cannon: 100,
-      Maneuver: 20,
-      label: 'Sail: 80, Carp: 80, Bilge: 80, Cannon: 100, Maneuver: 20',
-    },
-  },
-  turnTime: { id: 30, value: 20 },
-  turns: { id: 34, value: 60 },
-  bots: { id: 35, value: 0 },
-  botDifficulty: { id: 36, value: 100 },
-  spawnDelay: { id: 42, value: 1 },
-  teams: { id: 43, value: 2 },
-  fishBoats: { id: 45, value: 0 },
-  allowGuests: { id: 46, value: 0 },
-  showStats: { id: 66, value: 0 },
-  showMoves: { id: 67, value: 1 },
-  showDamage: { id: 69, value: 1 },
-};
+// const BaseSettings = {
+//   createType: { value: 2 },
+//   maxPlayers: { id: 24, value: 40 },
+//   publicMode: { id: 25, value: 0, data: 'Public' },
+//   hotEntry: { id: 26, value: 0, data: 'false' },
+//   jobberQuality: {
+//     id: 27,
+//     value: 105,
+//     data: {
+//       Sail: 80,
+//       Carp: 80,
+//       Bilge: 80,
+//       Cannon: 100,
+//       Maneuver: 20,
+//       label: 'Sail: 80, Carp: 80, Bilge: 80, Cannon: 100, Maneuver: 20',
+//     },
+//   },
+//   turnTime: { id: 30, value: 20 },
+//   turns: { id: 34, value: 60 },
+//   bots: { id: 35, value: 0 },
+//   botDifficulty: { id: 36, value: 100 },
+//   spawnDelay: { id: 42, value: 1 },
+//   teams: { id: 43, value: 2 },
+//   fishBoats: { id: 45, value: 0 },
+//   allowGuests: { id: 46, value: 0 },
+//   showStats: { id: 66, value: 0 },
+//   showMoves: { id: 67, value: 1 },
+//   showDamage: { id: 69, value: 1 },
+// };
 
 interface Competition {
   description: string,

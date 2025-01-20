@@ -39,26 +39,6 @@ export class AiRender {
     this.updateRender();
   }
 
-  setClaims(claims: { x: number, y: number, size: number }[]): void {
-    // TODO: use the canvas to draw the claims
-
-    // BoatService.dispose(this.claims);
-    // this.claims.remove(...this.claims.children);
-    // this.object.add(this.claims);
-    // if (!claims.length) return;
-
-    // for (const c of claims) {
-    //   const claimGeo = new PlaneBufferGeometry(c.size, c.size);
-    //   claimGeo.rotateX(-Math.PI / 2);
-    //   const claimObj = new Mesh(claimGeo);
-    //   claimObj.position.x = c.x + c.size / 2;
-    //   claimObj.position.z = c.y + c.size / 2;
-    //   const box = new BoxHelper(claimObj, c.x === this.boat?.claim?.x && c.y === this.boat?.claim?.y ? 'cyan' : 'blue');
-    //   box.renderOrder = 2;
-    //   this.claims.add(box);
-    // }
-  }
-
   setMetric(metric: (keyof Points)[] | keyof Points): void {
     if (!Array.isArray(metric)) metric = [metric];
     this.metrics = metric;
@@ -119,7 +99,7 @@ export class AiRender {
     ctx.resetTransform();
   }
 
-  private noOrientation = new Set(['GetShot'])
+  private noOrientation = new Set(['GetShot']);
 
   private getValue(points: Points, metric: keyof Points): number | number[] {
     const values = points?.[metric];

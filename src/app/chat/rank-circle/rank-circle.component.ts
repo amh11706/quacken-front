@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TierTitles } from '../../esc-menu/profile/leaders/leaders.component';
 import { CommonModule } from '@angular/common';
+import { TierTitles } from '../../esc-menu/profile/leaders/leaders.component';
 
 export const Variations: Record<number, string[]> = {
   2: ['1v1', 'Teams'],
-}
+};
 
 @Component({
   selector: 'q-rank-circle',
@@ -15,7 +15,7 @@ export const Variations: Record<number, string[]> = {
   styleUrl: './rank-circle.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RankCircleComponent {
+export class RankCircleComponent implements OnChanges {
   @Input() score: number | number[] = 0;
   @Input() tier: number | number[] = 0;
   bestTier = 0;

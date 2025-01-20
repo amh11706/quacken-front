@@ -6,7 +6,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { debounceTime, map, startWith } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { COMMA, SPACE } from '@angular/cdk/keycodes';
-import { Internal, OutCmd } from '../../ws/ws-messages';
+import { OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../settings.service';
 import { MapFilterComponent } from './map-filter/map-filter.component';

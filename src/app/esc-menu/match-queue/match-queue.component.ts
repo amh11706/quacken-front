@@ -21,7 +21,7 @@ import { Setting } from '../../settings/types';
 const QueueTypes = [
   LobbyTypes[LobbyType.CadeGoose],
   LobbyTypes[LobbyType.BA],
-]
+];
 
 @Component({
   selector: 'q-match-queue',
@@ -156,6 +156,6 @@ export class MatchQueueComponent implements OnInit {
   }
 
   testNotification(): void {
-    this.ns.test();
+    void this.ns.test();
   }
 }

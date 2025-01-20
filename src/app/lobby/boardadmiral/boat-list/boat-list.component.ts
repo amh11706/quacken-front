@@ -1,20 +1,20 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { QdragModule } from '../../../qdrag/qdrag.module';
 import { BoatButtonComponent } from '../../../replay/boat-button/boat-button.component';
 import { BoatsService } from '../../quacken/boats/boats.service';
 import { Boat } from '../../quacken/boats/boat';
 import { GuBoat } from '../../cadegoose/twod-render/gu-boats/gu-boat';
-import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
 
-export const DefaultBoat = new Boat('Boat Defaults')
+export const DefaultBoat = new Boat('Boat Defaults');
 
 @Component({
   selector: 'q-boat-list',
   standalone: true,
   imports: [CommonModule, QdragModule, BoatButtonComponent],
   templateUrl: './boat-list.component.html',
-  styleUrl: './boat-list.component.scss'
+  styleUrl: './boat-list.component.scss',
 })
 export class BoatListComponent implements OnInit, OnDestroy {
   boats: Boat[] = [];

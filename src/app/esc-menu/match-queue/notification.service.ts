@@ -19,9 +19,8 @@ export class NotificationService {
     };
   }
 
-  test() {
-    this.getPermission().then(() => {
-      this.notify('Quacken Test', { body: 'If you can see this, your notifications are working!' });
-    });
+  async test() {
+    await this.getPermission();
+    this.notify('Quacken Test', { body: 'If you can see this, your notifications are working!' });
   }
 }

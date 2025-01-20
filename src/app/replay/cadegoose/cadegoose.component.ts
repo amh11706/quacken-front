@@ -60,7 +60,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       }
 
       setTimeout(() => {
-        this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
+        void this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
       });
     }
   }
@@ -237,10 +237,10 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (!this.activeBoat) return;
     const ticks = this.boatTicks[this.activeBoat.id];
     if (!ticks) return;
-    this.wrapper.ws?.dispatchMessage({ cmd: InCmd.BoatTick, data: ticks });
+    void this.wrapper.ws?.dispatchMessage({ cmd: InCmd.BoatTick, data: ticks });
     setTimeout(() => {
       if (!this.activeBoat) return;
-      this.wrapper.ws?.dispatchMessage({
+      void this.wrapper.ws?.dispatchMessage({
         cmd: Internal.MyMoves,
         data: { moves: this.activeBoat.moves, shots: this.activeBoat.shots },
       });
@@ -333,7 +333,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (!this.aiData) return;
 
     if (this.aiData.map && this.lobby) {
-      this.wrapper.ws?.dispatchMessage({
+      void this.wrapper.ws?.dispatchMessage({
         cmd: InCmd.LobbyJoin,
         data: { ...this.lobby, map: this.aiData.map, flags: this.aiData.flags } as Lobby,
       });
@@ -358,7 +358,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       if (boatRender) this.clickBoat(boatRender, false, false);
     }
     this.aiRender.setBoat(boat);
-    this.aiRender.setClaims(this.aiData?.claims || []);
   }
 
   setAiMetric(): void {

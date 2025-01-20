@@ -1,15 +1,16 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Subject, Subscription } from "rxjs";
-import { Boat } from "./boat";
-import { BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync } from "./types";
-import { WsService } from "../../../ws/ws.service";
-import { InCmd, Internal } from "../../../ws/ws-messages";
-import { syncToBoat } from "./convert";
-import { LobbyService } from "../../lobby.service";
-import { CadeLobby } from "../../cadegoose/types";
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+
+import { Boat } from './boat';
+import { BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync } from './types';
+import { WsService } from '../../../ws/ws.service';
+import { InCmd, Internal } from '../../../ws/ws-messages';
+import { syncToBoat } from './convert';
+import { LobbyService } from '../../lobby.service';
+import { CadeLobby } from '../../cadegoose/types';
 
 @Injectable()
-export class BoatsService {
+export class BoatsService implements OnDestroy {
   private boatMap = new Map<number, Boat>();
   private _boats = new BehaviorSubject<Boat[]>([]);
   get boats() { return this._boats.value; }
@@ -85,7 +86,7 @@ export class BoatsService {
   private async handleSync(s: Sync) {
     this.resetBoats();
     // delay to make sure the turn service handles the sync first
-    await new Promise(r => setTimeout(r));
+    await new Promise(resolve => setTimeout(resolve));
     this.setBoats(s.sync);
     this.clutter.next(s.cSync);
   }

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
@@ -27,9 +27,11 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     this.checkMaxMoves();
     this.checkMaxShots();
   }
+
   get input(): MoveMessage {
     return this._input;
   }
+
   @Input() serverInput = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
   @Output() inputChange = new EventEmitter<{ moves: number[], shots: number[] }>();
   private _totalTokens: Tokens = {

@@ -95,7 +95,7 @@ export class GuBoat {
 
     const sinking = boat.moveLock === 101;
     if (boat.moveLock < 100) {
-      this.updateAnimation('sail');
+      void this.updateAnimation('sail');
     }
     if (!startTime || boat.face !== this.rotateDeg || sinking) {
       promises.push(...this.updateBoatRot(startTime, boat.face, boat.rotateTransition, sinking ? 0 : 1));
@@ -158,7 +158,7 @@ export class GuBoat {
   public async updateTeam(): Promise<void> {
     if (!this.spriteData) return;
     await new Promise(resolve => setTimeout(resolve));
-    this.updateAnimation('sail');
+    await this.updateAnimation('sail');
     if (Boats[this.boat.type]?.sink) void this.getTeamImage(this.team, this.spriteData.name + '/sink');
     this.rebuildHeader();
   }
@@ -247,7 +247,7 @@ export class GuBoat {
     this.imgPosition = (-this.orientation.x) + 'px ' + (-this.orientation.y) + 'px';
   }
 
-  protected normalizeDegrees(deg: number) { return ((deg % 360) + 360) % 360 }
+  protected normalizeDegrees(deg: number) { return ((deg % 360) + 360) % 360; }
 
   protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number): Promise<any>[] {
     const promises: Promise<any>[] = [];
@@ -256,7 +256,6 @@ export class GuBoat {
       this.updateImage();
       return promises;
     }
-
 
     const normalRotate = new TWEEN.Tween(this, BoatRender3d.tweens)
       .easing(TWEEN.Easing.Linear.None)
@@ -286,7 +285,7 @@ export class GuBoat {
       .start(startTime)
       .onUpdate(() => this.updateImage())
       .onComplete(() => {
-        this.updateAnimation('sink');
+        void this.updateAnimation('sink');
       });
 
     normalRotate.chain(sinkLineup);

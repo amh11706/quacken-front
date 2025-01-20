@@ -50,7 +50,7 @@ export class SoundService {
 
   constructor(private ss: SettingsService) {
     void ss.getGroup('sounds').then(settings => {
-      this.settings = settings
+      this.settings = settings;
     });
   }
 

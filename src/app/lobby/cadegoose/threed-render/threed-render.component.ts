@@ -410,7 +410,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     grid.add(sz);
   }
 
-  fillMap(map: number[][], flags: { x: number, y: number, t: Team, p: number, cs: number[] }[]): void {
+  fillMap(map: number[][], _flags: { x: number, y: number, t: Team, p: number, cs: number[] }[]): void {
     for (const o of this.mapObjects) o.parent?.remove(o);
     this.mapObjects = [];
 
@@ -420,7 +420,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
     let square = new Mesh(geometry, new MeshBasicMaterial({ transparent: true, fog: false }));
     square.position.y = GRID_DEPTH;
     square.renderOrder = 2;
-    let flagIndex = 0;
+    // let flagIndex = 0;
     // this.bs.flags = [];
 
     for (let y = 0; y < map.length; y++) {
@@ -443,8 +443,8 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
             this.tileObjects.set(tile, prom);
           }
 
-          const thisFlag = flagIndex;
-          if (tile <= 23) flagIndex++;
+          // const thisFlag = flagIndex;
+          // if (tile <= 23) flagIndex++;
           void prom.then(model => {
             const newObj = model.scene.clone();
             const centered = new Group();

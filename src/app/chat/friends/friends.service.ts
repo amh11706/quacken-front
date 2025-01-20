@@ -76,7 +76,7 @@ export class FriendsService {
       if (m.copy === 0) return;
       m.type = 3;
       m.message = 'has joined the lobby.';
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: m });
+      void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: m });
     });
     this.ws.subscribe(InCmd.PlayerRemove, m => {
       const lobby = this.lobby$.getValue().filter(n => m !== n.sId);
@@ -87,7 +87,7 @@ export class FriendsService {
   private handleInvites() {
     this.ws.subscribe(InCmd.InviteAdd, u => {
       this.invites.push(u);
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 8, message: u, from: u.f } });
+      void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 8, message: u, from: u.f } });
     });
     this.ws.subscribe(InCmd.InviteRemove, u => {
       this.invites = this.invites.filter(i => i.tg !== u.tg || i.ty !== u.ty);
@@ -105,12 +105,12 @@ export class FriendsService {
     this.ws.subscribe(InCmd.FriendOnline, u => {
       this.friends.push(u.from);
       this.offline = this.offline.filter(f => f !== u.from);
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 1, type: 3, message: 'has logged on.' } });
+      void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 1, type: 3, message: 'has logged on.' } });
     });
     this.ws.subscribe(InCmd.FriendOffline, u => {
       this.offline.push(u.from);
       this.friends = this.friends.filter(f => f !== u.from);
-      this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 1, type: 3, message: 'has logged off.' } });
+      void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { ...u, copy: 1, type: 3, message: 'has logged off.' } });
     });
     this.ws.subscribe(InCmd.FriendAdd, u => {
       this.friends.push(u.from);

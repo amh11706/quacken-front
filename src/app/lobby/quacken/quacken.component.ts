@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { SettingName } from '../../settings/setting/settings';
-import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
+import { InCmd, Internal } from '../../ws/ws-messages';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { WsService } from '../../ws/ws.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Boat } from './boats/boat';
 import { FriendsService } from '../../chat/friends/friends.service';
-import { CadeLobby, Lobby } from '../cadegoose/types';
+import { CadeLobby } from '../cadegoose/types';
 import { LobbyService } from '../lobby.service';
 import { QuackenDesc } from '../cadegoose/lobby-type';
 
@@ -48,7 +48,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc, from: '' } });
+    void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: QuackenDesc, from: '' } });
     this.ss.setLobbySettings(ownerSettings);
     this.es.setLobby();
 

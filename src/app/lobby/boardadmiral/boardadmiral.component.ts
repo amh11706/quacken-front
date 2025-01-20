@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule } from '@angular/common';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
 import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
@@ -12,9 +14,7 @@ import { BoatListComponent, DefaultBoat } from './boat-list/boat-list.component'
 import { GuBoat } from '../cadegoose/twod-render/gu-boats/gu-boat';
 import { Boat } from '../quacken/boats/boat';
 import { QdragModule } from '../../qdrag/qdrag.module';
-import { MatButtonModule } from '@angular/material/button';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
-import { CommonModule } from '@angular/common';
 import { Team } from '../quacken/boats/types';
 import { BoardadmiralDesc, LobbyStatus } from '../cadegoose/lobby-type';
 
@@ -43,7 +43,7 @@ interface BaAction {
   providers: [MainMenuService],
 
 })
-export class BoardadmiralComponent extends CadegooseComponent {
+export class BoardadmiralComponent extends CadegooseComponent implements OnInit {
   // protected menuComponent = BaMainMenuComponent;
   protected joinMessage = BoardadmiralDesc;
   private render = new BaRender();
@@ -59,7 +59,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
   ngOnInit(): void {
     super.ngOnInit();
     this.sub.add(this.render.canvasChange$.subscribe(canvas => {
-      this.ws.dispatchMessage({ cmd: Internal.Canvas, data: canvas });
+      void this.ws.dispatchMessage({ cmd: Internal.Canvas, data: canvas });
     }));
     this.sub.add(this.kbs.subscribe(KeyActions.Redo, v => {
       if (!v) return clearInterval(this.undoTicker);
@@ -100,10 +100,9 @@ export class BoardadmiralComponent extends CadegooseComponent {
     this.boats.setMyBoat(DefaultBoat, false);
     this.boats.refreshBoats();
     if (team < 4) {
-      this.ws.request(OutCmd.BASettingsGet).then(s => this.updateBoatSetting(s || []))
+      void this.ws.request(OutCmd.BASettingsGet).then(s => this.updateBoatSetting(s || []));
     }
   }
-
 
   private updateBoatSetting(ss: ServerBASettings | ServerBASettings[]) {
     if (!Array.isArray(ss)) ss = [ss];
@@ -148,7 +147,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
     const redo = this.doAction(action);
     if (redo) redos.push(redo);
     this.redrawOverlay();
-  }
+  };
 
   redrawOverlay(save = true) {
     this.highlightTile();
@@ -184,7 +183,8 @@ export class BoardadmiralComponent extends CadegooseComponent {
 
   private tileIsSet(x: number, y: number): boolean {
     if (!this.activeBoatSettings) return false;
-    return this.activeBoatSettings.coverage[this.activeBoatSettings.coverMode].some(tile => tile.x === x && tile.y === y);
+    return this.activeBoatSettings.coverage[this.activeBoatSettings.coverMode]
+      .some(tile => tile.x === x && tile.y === y);
   }
 
   private removeTile(x: number, y: number): BaAction | undefined {
@@ -273,7 +273,7 @@ export class BoardadmiralComponent extends CadegooseComponent {
   highlightTile(tile = this.defaultBoat.selectedTile): void {
     this.defaultBoat.selectedTile = tile;
     this.highlightedBoats.clear();
-    if (!tile) return
+    if (!tile) return;
     this.boatSettings.forEach(settings => {
       const coverage = settings.coverage[settings.coverMode];
       const boat = settings.boat;

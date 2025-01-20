@@ -1,7 +1,7 @@
-import { Subject } from "rxjs";
-import { Boat } from "../quacken/boats/boat";
-import { WsService } from "../../ws/ws.service";
-import { OutCmd } from "../../ws/ws-messages";
+import { Subject } from 'rxjs';
+import { Boat } from '../quacken/boats/boat';
+import { WsService } from '../../ws/ws.service';
+import { OutCmd } from '../../ws/ws-messages';
 
 export const enum BoatCoverMode {
   Flags,
@@ -24,6 +24,7 @@ export class BABoatSettings {
     [BoatCoverMode.Flags]: [],
     [BoatCoverMode.Tiles]: [],
   };
+
   Aggro = 50;
   Flag = 50;
   Defense = 50;
@@ -57,7 +58,7 @@ export class BABoatSettings {
 const Colors: Record<BoatCoverMode, string> = {
   [BoatCoverMode.Flags]: 'rgba(255, 255, 0, %d)',
   [BoatCoverMode.Tiles]: 'rgba(255, 0, 255, %d)',
-}
+};
 
 export class BaRender {
   private ctx: CanvasRenderingContext2D;

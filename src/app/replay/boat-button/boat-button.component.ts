@@ -9,7 +9,7 @@ import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entr
   standalone: true,
   imports: [MatButtonModule, MatTooltipModule],
   templateUrl: './boat-button.component.html',
-  styleUrls: ['./boat-button.component.scss']
+  styleUrls: ['./boat-button.component.scss'],
 })
 export class BoatButtonComponent {
   @Input() boat = new Boat('');

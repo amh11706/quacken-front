@@ -1,4 +1,4 @@
-import { SettingGroup } from "../../settings/setting/settings";
+import { SettingGroup } from '../../settings/setting/settings';
 
 export const SbDesc = 'Sea Battle: Sink the enemy ship to win!';
 export const QuackenDesc = 'Quacken: Sneak or fight your way past the greedy ducks to steal their food and bring it home.';

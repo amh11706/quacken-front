@@ -4,7 +4,7 @@ import { MatchFoundDialogComponent } from './match-found.component';
 import { WsService } from '../../ws/ws.service';
 import { InCmd } from '../../ws/ws-messages';
 import { NotificationService } from './notification.service';
-import { ActiveLobbyTypes, RankArea } from '../../lobby/cadegoose/lobby-type';
+import { ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
 import { SubscribeData } from '../../ws/ws-subscribe-types';
 
 @Injectable()

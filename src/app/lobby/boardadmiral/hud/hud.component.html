@@ -1,5 +1,5 @@
 <div class="container noselect"
-     *ngrxLet="!(ws.connected$ | async) as disabled"
+     *ngrxLet="(ws.connected$ | async) === false as disabled"
      id="hud">
   <div id="boatcontrol"
        (contextmenu)="$event.preventDefault()">

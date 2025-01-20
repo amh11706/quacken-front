@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Boat } from '../../../../lobby/quacken/boats/boat';
 import { Sounds, SoundService } from '../../../../sound.service';
 import { ImageService } from '../../../../image.service';
@@ -7,7 +8,6 @@ import { TeamColorsCss } from '../../cade-entry-status/cade-entry-status.compone
 import { MovableClutter } from './clutter';
 import { Clutter, Turn } from '../../../quacken/boats/types';
 import { BoatsService } from '../../../quacken/boats/boats.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
 import { TurnService } from '../../../quacken/boats/turn.service';
 
 export const FlagColorOffsets: Readonly<Record<number, number>> = {
@@ -38,6 +38,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
     this._speed = v;
     this.el.nativeElement.style.setProperty('--speed', (10 / v));
   }
+
   get speed(): number {
     return this._speed;
   }
@@ -93,7 +94,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
     this.subs.add(this.boats.boats$.subscribe(b => this.checkBoats(b)));
     this.subs.add(this.boats.clutter$.subscribe(c => {
       this.clutter = [];
-      this.handleUpdate(c)
+      this.handleUpdate(c);
     }));
     this.subs.add(this.turn.turn$.subscribe(t => {
       this.setHeaderFlags(t.flags);
@@ -214,7 +215,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
         this.boatRenders.delete(id);
         return;
       }
-      r.update(false);
+      void r.update(false);
     });
     this.boatRenders$.next(Array.from(this.boatRenders.values()));
     this.turn.setBoats(this.boatRenders$.value);

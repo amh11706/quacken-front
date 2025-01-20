@@ -127,6 +127,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.totalTokens.shots = t.tp >= 2 ? 1 : 0;
     }));
 
+    // eslint-disable-next-line rxjs/no-async-subscribe
     this.subs.add(this.lobbyService.get().subscribe(async m => {
       if (m.inProgress) this.turn = 1;
       this.myBoat.ready = false;
@@ -179,12 +180,12 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.myBoat.moveLock > this.maxTurn) return;
       if (this.turn === 0 || !this.myBoat.isMe) return;
       if (this.myBoat.moveLock > this.turn) {
-        this.ws.dispatchMessage({
+        void this.ws.dispatchMessage({
           cmd: InCmd.ChatMessage,
           data: { type: 1, message: 'Unlocking moves in ' + (this.myBoat.moveLock - this.turn + 1) + ' turns.', from: '' },
         });
       } else if (this.myBoat.moveLock === this.turn) {
-        this.ws.dispatchMessage({
+        void this.ws.dispatchMessage({
           cmd: InCmd.ChatMessage,
           data: { type: 1, message: 'Unlocking moves next turn.', from: '' },
         });
@@ -254,7 +255,7 @@ export class HudComponent implements OnInit, OnDestroy {
   }
 
   async sendMoves(): Promise<void> {
-    if (this.myBoat.ready) return
+    if (this.myBoat.ready) return;
     void this.sendShots();
     if (this.arrayEqual(this.serverBoatPending.moves, this.localBoat.moves)) return;
     this.serverBoatPending.moves = [...this.localBoat.moves];
@@ -338,6 +339,6 @@ export class HudComponent implements OnInit, OnDestroy {
       0);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = String(totalSeconds % 60).padStart(2, '0');
-    this.ws.dispatchMessage({ cmd: Internal.Time, data: minutes + ':' + seconds });
+    void this.ws.dispatchMessage({ cmd: Internal.Time, data: minutes + ':' + seconds });
   }
 }
