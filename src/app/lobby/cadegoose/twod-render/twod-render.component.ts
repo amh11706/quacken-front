@@ -345,6 +345,10 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     return position;
   }
 
+  protected checkBounds(p: Position): boolean {
+    return p.x >= 0 && p.x < this.mapWidth && p.y >= 0 && p.y < this.mapHeight;
+  }
+
   @Output() mouseDownTile = new EventEmitter<TileEvent>();
 
   mouseDown(event: MouseEvent): void {
@@ -375,6 +379,10 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   mouseMove(event: MouseEvent): void {
     const p = this.extractCoord(event);
+    if (!this.checkBounds(p)) {
+      delete this.hoveredTile;
+      return;
+    }
     if (this.hoveredTile?.x === p.x && this.hoveredTile?.y === p.y) return;
 
     if (this.hoveredBoat) this.hoveredBoat.showInfluence = false;
