@@ -57,9 +57,6 @@ type OutCmdInputs = {
 
   [OutCmd.JoinQueue]: Record<ServerSettingGroup['matchmaking'], number>;
   [OutCmd.GetBotMatch]: OutCmdInputs[OutCmd.JoinQueue];
-
-  [OutCmd.BADamageReport]: number;
-  [OutCmd.BAToggleSink]: number;
 }
 
 export type OutCmdInputTypes = OutCmdInputs & EmptyCmdBody;

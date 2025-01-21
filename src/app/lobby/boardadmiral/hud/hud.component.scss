@@ -34,6 +34,14 @@ button {
 }
 
 #coverage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  button {
+    margin-left: 36px;
+  }
+
   mat-select {
     width: 50%;
     margin-top: 4px;

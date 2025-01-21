@@ -35,8 +35,46 @@ export class HudComponent extends CadeHudComponent {
 
   @Output() activeBoatChange = new EventEmitter<BABoatSettings>();
 
+  readonly BoatCommands = [
+    {
+      name: 'Swap with',
+      tooltip: 'Swap coverage with a selected boat',
+      type: 'boat',
+      text: 'Select',
+      trigger: this.swapCoverageWith.bind(this),
+    },
+    {
+      name: 'Copy to',
+      tooltip: 'Copy coverage to a selected boat',
+      type: 'boat',
+      text: 'Select',
+      trigger: this.copyCoverageTo.bind(this),
+    },
+    {
+      name: 'Copy from',
+      tooltip: 'Copy coverage from a selected boat',
+      type: 'boat',
+      text: 'Select',
+      trigger: this.copyCoverageFrom.bind(this),
+    },
+    {
+      name: 'Damage Report',
+      tooltip: 'Get estimated damage for nearby boats',
+      type: 'button',
+      text: 'Request',
+      trigger: this.getDamageReport.bind(this),
+    },
+    {
+      name: 'Toggle Sink',
+      tooltip: 'Mark this boat to be sunk by your team',
+      type: 'button',
+      text: 'Request',
+      trigger: this.toggleSink.bind(this),
+    },
+  ];
+
+  activeCommand = this.BoatCommands[0]!;
   boatList: BABoatSettings[] = [];
-  selectedBoat: BABoatSettings | undefined;
 
   private buildBoatList(): void {
     const boat = this.activeBoat?.boat;
@@ -49,7 +87,6 @@ export class HudComponent extends CadeHudComponent {
       const bDistance = (b.boat.pos.x - boat.pos.x) ** 2 + (b.boat.pos.y - boat.pos.y) ** 2;
       return bDistance - aDistance;
     });
-    this.selectedBoat = this.boatList[0];
   }
 
   swapBoat?: BABoatSettings;
@@ -76,6 +113,16 @@ export class HudComponent extends CadeHudComponent {
     };
     boat.coverMode = this.activeBoat.coverMode;
     boat.save();
+    this.update();
+  }
+
+  copyCoverageFrom(boat: BABoatSettings): void {
+    if (!this.activeBoat) return;
+    this.activeBoat.coverage = {
+      [BoatCoverMode.Flags]: [...boat.coverage[BoatCoverMode.Flags]],
+      [BoatCoverMode.Tiles]: [...boat.coverage[BoatCoverMode.Tiles]],
+    };
+    this.activeBoat.coverMode = boat.coverMode;
     this.update();
   }
 
@@ -109,10 +156,10 @@ export class HudComponent extends CadeHudComponent {
   }
 
   getDamageReport() {
-    void this.ws.request(OutCmd.BADamageReport, this.activeBoat?.boat.id || 0);
+    void this.ws.send(OutCmd.BADamageReport, this.activeBoat?.boat.id || 0);
   }
 
   toggleSink() {
-    void this.ws.request(OutCmd.BAToggleSink, this.activeBoat?.boat.id || 0);
+    void this.ws.send(OutCmd.BAToggleSink, this.activeBoat?.boat.id || 0);
   }
 }

@@ -48,6 +48,8 @@ export type SendCmdInputs = {
   [OutCmd.Card]: number[];
 
   [OutCmd.BASettings]: ServerBASettings;
+  [OutCmd.BADamageReport]: number;
+  [OutCmd.BAToggleSink]: number;
 }
 
 export type SendCmdInputless =

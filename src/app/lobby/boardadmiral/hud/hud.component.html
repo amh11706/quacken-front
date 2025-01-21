@@ -54,24 +54,32 @@
       <div id="coverage">
         <mat-select #swap
                     [disabled]="disabled"
-                    [placeholder]="'Swap with'"
-                    (selectionChange)="swapCoverageWith($event.value); swap.value = null"
-                    matTooltip="Swap coverage with a boat">
-          <mat-option *ngFor="let boat of boatList"
-                      [value]="boat">
-            {{boatName(boat)}}
+                    [(value)]="activeCommand"
+                    [matTooltip]="activeCommand.tooltip">
+          <mat-option *ngFor="let c of BoatCommands"
+                      [matTooltip]="c.tooltip"
+                      [matTooltipShowDelay]="100"
+                      [value]="c">
+            {{c.name}}
           </mat-option>
         </mat-select>
-        <mat-select #copy
-                    [disabled]="disabled"
-                    [placeholder]="'Copy to'"
-                    (selectionChange)="copyCoverageTo($event.value); copy.value = null"
-                    matTooltip="Copy coverage to a boat">
-          <mat-option *ngFor="let boat of boatList"
-                      [value]="boat">
-            {{boatName(boat)}}
-          </mat-option>
-        </mat-select>
+        <ng-container [ngSwitch]="activeCommand.type">
+          <button *ngSwitchCase="'button'"
+                  mat-raised-button
+                  [disabled]="disabled"
+                  (click)="activeCommand.trigger(activeBoat)">{{activeCommand.text}}</button>
+
+          <mat-select *ngSwitchCase="'boat'"
+                      #select
+                      [disabled]="disabled"
+                      [placeholder]="activeCommand.text"
+                      (selectionChange)="activeCommand.trigger($event.value); select.value = null">
+            <mat-option *ngFor="let boat of boatList"
+                        [value]="boat">
+              {{boatName(boat)}}
+            </mat-option>
+          </mat-select>
+        </ng-container>
       </div>
     </div>
 
