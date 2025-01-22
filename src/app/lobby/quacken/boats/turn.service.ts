@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { Tween } from '@tweenjs/tween.js';
 
 import { InCmd, OutCmd } from '../../../ws/ws-messages';
@@ -21,11 +21,11 @@ interface BoatRender {
 @Injectable()
 export class TurnService implements OnDestroy {
   private turn?: Turn;
-  private _turn = new ReplaySubject<Turn>(1);
+  private _turn = new Subject<Turn>();
   turn$ = this._turn.asObservable();
   animating = false;
 
-  private clutterStep = new ReplaySubject<Clutter[]>(1);
+  private clutterStep = new Subject<Clutter[]>();
   clutterStep$ = this.clutterStep.asObservable();
 
   private boats: BoatRender[] = [];
@@ -109,6 +109,7 @@ export class TurnService implements OnDestroy {
   }
 
   protected playTurn(): void {
+    if (this.animating) return;
     this.worker.clearJobs();
     this.animating = true;
     for (let step = 0; step < 8; step++) {
