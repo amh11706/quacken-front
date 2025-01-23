@@ -27,6 +27,7 @@ export class BoatsService implements OnDestroy {
   focusMyBoat$ = this._focusMyBoat.asObservable();
 
   private subs = new Subscription();
+  private lobbyId?: number;
 
   constructor(private ws: WsService, private lobby: LobbyService<CadeLobby>) {
     this.initSubs();
@@ -40,6 +41,11 @@ export class BoatsService implements OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => this.handleSync(s)));
     this.subs.add(this.ws.subscribe(InCmd.BoatTicks, ticks => this.handleTicks(ticks)));
     this.subs.add(this.lobby.get().subscribe(l => {
+      if (l.id !== this.lobbyId) {
+        this.lobbyId = l.id;
+        this.boatMap.clear();
+        this.myBoat.next(new Boat(''));
+      }
       if (l.boats) this.setBoats(Object.values(l.boats), true);
       if (l.clutter) this.clutter.next(l.clutter);
     }));
