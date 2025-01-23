@@ -25,7 +25,7 @@ export const Notes: Note[] = [
     title: 'Release 23 January 2025',
     points: [
       'BA mode!',
-      'Command a fleet of bot ships to victory.',
+      'Command a fleet of bot ships to victory. Check the Discord for more info.',
       'Blocked player messages no longer show in chat.',
       'Entering the safezone no longer locks your moves for the next turn.',
       'Sinks no longer break replay pause.',

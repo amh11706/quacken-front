@@ -127,12 +127,12 @@ export class MainMenuService implements OnDestroy {
       if (t.turnsLeft > 0) return;
       this.statsOpen = !!(t.stats && Object.keys(t.stats).length);
       this.myBoat.isMe = false;
-      this.boats.setMyBoat(this.myBoat, false);
     }));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       if (this.status.value === LobbyStatus.PreMatch && this.ws.connected) {
         void this.es.openTab(0, false, { lobbyTab: 0 });
         this.teamPlayers$.next(this.teamPlayers$.getValue());
+        this.boats.setMyBoat(this.myBoat, false);
       }
     }));
     this.subs.add(this.settings.teams.stream.subscribe((v) => {
