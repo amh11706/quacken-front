@@ -4,19 +4,14 @@ export interface Note {
 }
 
 /* Done but not released:
-'Blocked player messages no longer show in chat.',
-'Sinks no longer break replay pause.',
-'Replay rewind is much less laggy.',
-'Shot hit and splash sounds now work correctly.',
-'Match end in an empty lobby is now always a tie.',
+
 */
 
 /* In progress:
-'BA mode.',
+
 */
 
 /* Planned:
-'smoother boat turning.',
 'You can now add notes to a replay.',
 'Map creators can now see a list of matches using their map. Viewable from the map editor.',
 'New "Map Browser" page to view highlighted maps and creators.',
@@ -26,6 +21,19 @@ export interface Note {
 */
 
 export const Notes: Note[] = [
+  {
+    title: 'Release 23 January 2025',
+    points: [
+      'BA mode!',
+      'Command a fleet of bot ships to victory.',
+      'Blocked player messages no longer show in chat.',
+      'Entering the safezone no longer locks your moves for the next turn.',
+      'Sinks no longer break replay pause.',
+      'Replay rewind is much less laggy.',
+      'Shot hit and splash sounds now work correctly.',
+      'Match end in an empty lobby is now always a tie.',
+    ],
+  },
   {
     title: 'Release 06 September 2024',
     points: [
