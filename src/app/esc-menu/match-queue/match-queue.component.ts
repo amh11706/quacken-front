@@ -109,12 +109,13 @@ export class MatchQueueComponent implements OnInit {
   }
 
   private setSettingData(setting: Setting, value: number): void {
-    if (!setting.data) setting.data = {};
+    if (!setting.data || typeof setting.data !== 'object') setting.data = {};
     setting.data[this.lobbyType] = value;
   }
 
   private syncSettingData(setting: Setting) {
-    setting.setServerValue(setting.data?.[this.lobbyType] ?? setting.value);
+    const lobbySetting = setting.data?.[this.lobbyType];
+    setting.setServerValue(typeof lobbySetting === 'number' ? lobbySetting : setting.value);
   }
 
   private async formatSettings(): Promise<OutCmdInputTypes[OutCmd.JoinQueue]> {
