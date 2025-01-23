@@ -16,10 +16,10 @@ export class BoatsService implements OnDestroy {
   get boats() { return this._boats.value; }
   boats$ = this._boats.asObservable();
 
-  private clutter = new BehaviorSubject<Clutter[]>([]);
+  private clutter = new Subject<Clutter[]>();
   clutter$ = this.clutter.asObservable();
 
-  private myBoat = new BehaviorSubject<Boat>(new Boat(''));
+  private myBoat = new Subject<Boat>();
   myBoat$ = this.myBoat.asObservable();
   private clickedBoat = new Subject<Boat>();
   clickedBoat$ = this.clickedBoat.asObservable();
