@@ -1,6 +1,5 @@
 <div *ngIf="displayedLeaders | async as l"
      class="card"
-     (click)="openLeaders(l.area)"
      (mouseenter)="stopTimer()"
      (mouseleave)="startTimer()">
   <h3 class="cardTitle">{{l.title}} Leaders</h3>

@@ -17,8 +17,9 @@
       </a>
 
       <button mat-button
+              (click)="leaderCard.openLeaders()"
               class="card">
-        <q-leader-card></q-leader-card>
+        <q-leader-card #leaderCard></q-leader-card>
       </button>
 
       <button mat-button

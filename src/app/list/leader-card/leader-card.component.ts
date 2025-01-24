@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
@@ -25,7 +25,7 @@ export class LeaderCardComponent implements OnInit, OnDestroy {
   private timer = 0;
   private top3: Top3Area[] = [];
   private index = 0;
-  displayedLeaders = new Subject<Top3Area>();
+  displayedLeaders = new BehaviorSubject<Top3Area>({ area: RankArea.BoardAdmiral } as Top3Area);
 
   constructor(private ws: WsService, private stat: StatService) { }
 
@@ -40,7 +40,7 @@ export class LeaderCardComponent implements OnInit, OnDestroy {
     document.removeEventListener('visibilitychange', this.visibilityChange);
   }
 
-  openLeaders(area: RankArea): void {
+  openLeaders(area: RankArea = this.displayedLeaders.value.area): void {
     void this.stat.openLeaders(area * 100 - 1);
   }
 
