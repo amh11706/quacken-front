@@ -79,7 +79,7 @@ export class TurnService implements OnDestroy {
 
   protected handleTurn(turn: Turn): void {
     if (this.animating) return this.skipToEnd();
-    clearTimeout(this.animateTimeout);
+    this.animating = true;
 
     this.turn = turn;
     this._turn.next(turn);
@@ -110,7 +110,6 @@ export class TurnService implements OnDestroy {
   }
 
   protected playTurn(): void {
-    if (this.animating) return;
     this.worker.clearJobs();
     this.animating = true;
     for (let step = 0; step < 8; step++) {
