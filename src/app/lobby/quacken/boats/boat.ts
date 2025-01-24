@@ -80,14 +80,7 @@ export class Boat {
     if (damage >= 100) {
       this.sink();
     }
-    setTimeout(() => this.crunch(crunchDir), 100);
     return this;
-  }
-
-  private crunch(direction: number) {
-    if (direction > 3) return;
-    this.moveTransition = [4, 4];
-    this.crunchDir = direction;
   }
 
   private sink() {

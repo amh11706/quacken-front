@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
@@ -43,7 +43,7 @@ interface BaAction {
   providers: [MainMenuService],
 
 })
-export class BoardadmiralComponent extends CadegooseComponent implements OnInit {
+export class BoardadmiralComponent extends CadegooseComponent implements OnInit, OnDestroy {
   // protected menuComponent = BaMainMenuComponent;
   protected joinMessage = BoardadmiralDesc;
   private render = new BaRender();
@@ -91,6 +91,11 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit 
       const me = l.find(p => p.sId === this.ws.sId);
       if (me?.t !== undefined) this.updateMyTeam(me.t);
     }));
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+    DefaultBoat.team = 99;
   }
 
   private updateMyTeam(team: Team) {
