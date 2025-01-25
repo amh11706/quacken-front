@@ -11,6 +11,7 @@ import { BABoatSettings, BoatCoverMode } from '../ba-render';
 import { CadeHudComponent } from '../../cadegoose/hud/hud.component';
 import { ChatModule } from '../../../chat/chat.module';
 import { OutCmd } from '../../../ws/ws-messages';
+import { KeyActions } from '../../../settings/key-binding/key-actions';
 
 @Component({
   selector: 'q-ba-hud',
@@ -89,7 +90,50 @@ export class HudComponent extends CadeHudComponent {
     });
   }
 
-  swapBoat?: BABoatSettings;
+  protected bindKeys(): void {
+    this.subs.add(this.kbs.subscribe(KeyActions.BACoverFlags, v => {
+      if (!v || !this.activeBoat) return;
+      if (this.activeBoat.coverMode === BoatCoverMode.Flags) return;
+      this.activeBoat.coverMode = BoatCoverMode.Flags;
+      this.update();
+    }));
+    this.subs.add(this.kbs.subscribe(KeyActions.BACoverTiles, v => {
+      if (!v || !this.activeBoat) return;
+      if (this.activeBoat.coverMode === BoatCoverMode.Tiles) return;
+      this.activeBoat.coverMode = BoatCoverMode.Tiles;
+      this.update();
+    }));
+    this.subs.add(this.kbs.subscribe(KeyActions.BAResetCoverage, v => {
+      if (!v || !this.activeBoat) return;
+      this.resetCoverage();
+    }));
+
+    this.subs.add(this.kbs.subscribe(KeyActions.BADecreaseAggro, v => {
+      if (!v || !this.activeBoat) return;
+      if (this.activeBoat.Aggro <= 0) return;
+      this.activeBoat.Aggro -= 10;
+      this.update();
+    }));
+    this.subs.add(this.kbs.subscribe(KeyActions.BAIncreaseAggro, v => {
+      if (!v || !this.activeBoat) return;
+      if (this.activeBoat.Aggro >= 100) return;
+      this.activeBoat.Aggro += 10;
+      this.update();
+    }));
+    this.subs.add(this.kbs.subscribe(KeyActions.BASyncAggro, v => {
+      if (!v || !this.activeBoat) return;
+      this.syncToOtherBoats('Aggro');
+    }));
+
+    this.subs.add(this.kbs.subscribe(KeyActions.BADamageReport, v => {
+      if (!v || !this.activeBoat) return;
+      this.getDamageReport();
+    }));
+    this.subs.add(this.kbs.subscribe(KeyActions.BAToggleSink, v => {
+      if (!v || !this.activeBoat) return;
+      this.toggleSink();
+    }));
+  }
 
   swapCoverageWith(boat: BABoatSettings): void {
     if (!this.activeBoat) return;
@@ -102,8 +146,6 @@ export class HudComponent extends CadeHudComponent {
     boat.save();
     this.update();
   }
-
-  copyBoat?: BABoatSettings;
 
   copyCoverageTo(boat: BABoatSettings): void {
     if (!this.activeBoat) return;

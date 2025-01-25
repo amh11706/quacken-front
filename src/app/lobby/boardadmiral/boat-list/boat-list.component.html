@@ -9,8 +9,7 @@
                  (click)="selectBoat(DefaultBoat)"></q-boat-button> -->
   <h4>Your Boats</h4>
 
-  <q-boat-button *ngFor="let boat of boats"
-                 [style.display]="boat.moveLock ? 'none' : 'block'"
+  <q-boat-button *ngFor="let boat of filteredBoats"
                  [class.highlight]="boat.showInfluence || highlightedBoats.has(boat.id)"
                  (mouseover)="boat.showInfluence = true"
                  (mouseout)="boat.showInfluence = false"

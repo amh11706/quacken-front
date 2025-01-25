@@ -116,7 +116,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     void this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
-    this.handleKeys();
+    this.bindKeys();
     this.subs.add(this.boats.myBoat$.subscribe(b => {
       if (b === this.myBoat) return;
       this.myBoat = b;
@@ -221,7 +221,7 @@ export class HudComponent implements OnInit, OnDestroy {
     this.zeroFill(this.serverBoatPending.shots);
   }
 
-  private handleKeys() {
+  protected bindKeys() {
     if (this.actions.ready) {
       this.subs.add(this.kbs.subscribe(this.actions.ready, v => {
         if (!v || !this.kbControls || this.lobbySettings.turnTime.value !== 65) return;

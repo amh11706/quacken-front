@@ -73,6 +73,23 @@ export const enum KeyActions {
   Play = 500,
   PrevTurn,
   NextTurn,
+
+  // Board Admiral
+  BADecreaseAggro = 600,
+  BAIncreaseAggro,
+  BASyncAggro,
+  BACoverFlags,
+  BACoverTiles,
+  BAResetCoverage,
+  BANextShip,
+  BAPrevShip,
+  BA1stShip,
+  BA2ndShip,
+  BA3rdShip,
+  BA4thShip,
+  BA5thShip,
+  BADamageReport,
+  BAToggleSink,
 }
 
 export const NotActive = 'n/a';
@@ -94,8 +111,9 @@ export interface KeyBinding {
 export class KeyBindings {
   'Global': KeyBinding[] = [];
   'Cadegoose': KeyBinding[] = [];
+  'Board Admiral': KeyBinding[] = [];
   'Sea battle': KeyBinding[] = [];
-  'Quacken': KeyBinding[] = [];
+  // 'Quacken': KeyBinding[] = [];
   'Map editor': KeyBinding[] = [];
   'Match replay': KeyBinding[] = [];
 }
@@ -199,6 +217,25 @@ export const DefaultBindings: StaticKeyBindings = {
     { action: KeyActions.CRightChainshot, title: 'Left chainshot', bindings: ['Shift + C', NotActive] },
     { action: KeyActions.CLeftChainshot, title: 'Right chainshot', bindings: ['Shift + Z', NotActive] },
   ],
+  'Board Admiral': [
+    { action: KeyActions.BADecreaseAggro, title: 'Decrease aggro', bindings: ['a', NotActive] },
+    { action: KeyActions.BAIncreaseAggro, title: 'Increase aggro', bindings: ['d', NotActive] },
+    // Sync aggro not active by default because it messes with your whole team
+    { action: KeyActions.BASyncAggro, title: 'Sync aggro', bindings: [NotActive, NotActive] },
+    { action: KeyActions.BACoverFlags, title: 'Cover flags', bindings: ['q', NotActive] },
+    { action: KeyActions.BACoverTiles, title: 'Cover tiles', bindings: ['e', NotActive] },
+    // Reset coverage not active by default because it's a disruptive action
+    { action: KeyActions.BAResetCoverage, title: 'Reset coverage', bindings: [NotActive, NotActive] },
+    { action: KeyActions.BADamageReport, title: 'Damage report', bindings: ['z', NotActive] },
+    { action: KeyActions.BAToggleSink, title: 'Toggle sink', bindings: ['x', NotActive] },
+    { action: KeyActions.BAPrevShip, title: 'Previous ship', bindings: ['w', NotActive] },
+    { action: KeyActions.BANextShip, title: 'Next ship', bindings: ['s', NotActive] },
+    { action: KeyActions.BA1stShip, title: 'Ship 1', bindings: ['1', NotActive] },
+    { action: KeyActions.BA2ndShip, title: 'Ship 2', bindings: ['2', NotActive] },
+    { action: KeyActions.BA3rdShip, title: 'Ship 3', bindings: ['3', NotActive] },
+    { action: KeyActions.BA4thShip, title: 'Ship 4', bindings: ['4', NotActive] },
+    { action: KeyActions.BA5thShip, title: 'Ship 5', bindings: ['5', NotActive] },
+  ],
   'Sea battle': [
     {
       action: KeyActions.SBShowStats,
@@ -274,76 +311,76 @@ export const DefaultBindings: StaticKeyBindings = {
     },
     { action: KeyActions.SBReady, title: 'Ready', bindings: ['Space', NotActive], linkGroup: LinkGroups.Ready },
   ],
-  Quacken: [
-    {
-      action: KeyActions.QLeft,
-      title: 'Left',
-      bindings: ['a', 'ArrowLeft'],
-      linkGroup: LinkGroups.Left,
-    },
-    {
-      action: KeyActions.QForward,
-      title: 'Forward',
-      bindings: ['w', 'ArrowUp'],
-      linkGroup: LinkGroups.Forward,
-    },
-    {
-      action: KeyActions.QRight,
-      title: 'Right',
-      bindings: ['d', 'ArrowRight'],
-      linkGroup: LinkGroups.Right,
-    },
-    {
-      action: KeyActions.QBlank,
-      title: 'Blank',
-      bindings: ['s', 'ArrowDown'],
-      linkGroup: LinkGroups.Blank,
-    },
-    {
-      action: KeyActions.QNextSlot,
-      title: 'Next slot',
-      bindings: ['Shift + S', 'Shift + ArrowDown'],
-      linkGroup: LinkGroups.NextSlot,
-    },
-    {
-      action: KeyActions.QPrevSlot,
-      title: 'Previous slot',
-      bindings: ['Shift + W', 'Shift + ArrowUp'],
-      linkGroup: LinkGroups.PrevSlot,
-    },
-    {
-      action: KeyActions.QBack,
-      title: 'Back',
-      bindings: ['Backspace', 'Ctrl + z'],
-      linkGroup: LinkGroups.Back,
-    },
-    {
-      action: KeyActions.QBombLeft,
-      title: 'Bomb left',
-      bindings: ['q', 'Shift + ArrowLeft'],
-      linkGroup: LinkGroups.BombLeft,
-    },
-    {
-      action: KeyActions.QBombRight,
-      title: 'Bomb right',
-      bindings: ['e', 'Shift + ArrowRight'],
-      linkGroup: LinkGroups.BombRight,
-    },
-    {
-      action: KeyActions.QBombLeftStrict,
-      title: 'Bomb left strict',
-      bindings: ['Shift + A', 'Shift + Q'],
-      linkGroup: LinkGroups.BombLeftStrict,
-    },
-    {
-      action: KeyActions.QBombRightStrict,
-      title: 'Bomb right strict',
-      bindings: ['Shift + D', 'Shift + E'],
-      linkGroup: LinkGroups.BombRightStrict,
-    },
-    { action: KeyActions.QToken, title: 'Token', bindings: ['x', NotActive] },
-    { action: KeyActions.QReady, title: 'Ready', bindings: ['Space', NotActive] },
-  ],
+  // Quacken: [
+  //   {
+  //     action: KeyActions.QLeft,
+  //     title: 'Left',
+  //     bindings: ['a', 'ArrowLeft'],
+  //     linkGroup: LinkGroups.Left,
+  //   },
+  //   {
+  //     action: KeyActions.QForward,
+  //     title: 'Forward',
+  //     bindings: ['w', 'ArrowUp'],
+  //     linkGroup: LinkGroups.Forward,
+  //   },
+  //   {
+  //     action: KeyActions.QRight,
+  //     title: 'Right',
+  //     bindings: ['d', 'ArrowRight'],
+  //     linkGroup: LinkGroups.Right,
+  //   },
+  //   {
+  //     action: KeyActions.QBlank,
+  //     title: 'Blank',
+  //     bindings: ['s', 'ArrowDown'],
+  //     linkGroup: LinkGroups.Blank,
+  //   },
+  //   {
+  //     action: KeyActions.QNextSlot,
+  //     title: 'Next slot',
+  //     bindings: ['Shift + S', 'Shift + ArrowDown'],
+  //     linkGroup: LinkGroups.NextSlot,
+  //   },
+  //   {
+  //     action: KeyActions.QPrevSlot,
+  //     title: 'Previous slot',
+  //     bindings: ['Shift + W', 'Shift + ArrowUp'],
+  //     linkGroup: LinkGroups.PrevSlot,
+  //   },
+  //   {
+  //     action: KeyActions.QBack,
+  //     title: 'Back',
+  //     bindings: ['Backspace', 'Ctrl + z'],
+  //     linkGroup: LinkGroups.Back,
+  //   },
+  //   {
+  //     action: KeyActions.QBombLeft,
+  //     title: 'Bomb left',
+  //     bindings: ['q', 'Shift + ArrowLeft'],
+  //     linkGroup: LinkGroups.BombLeft,
+  //   },
+  //   {
+  //     action: KeyActions.QBombRight,
+  //     title: 'Bomb right',
+  //     bindings: ['e', 'Shift + ArrowRight'],
+  //     linkGroup: LinkGroups.BombRight,
+  //   },
+  //   {
+  //     action: KeyActions.QBombLeftStrict,
+  //     title: 'Bomb left strict',
+  //     bindings: ['Shift + A', 'Shift + Q'],
+  //     linkGroup: LinkGroups.BombLeftStrict,
+  //   },
+  //   {
+  //     action: KeyActions.QBombRightStrict,
+  //     title: 'Bomb right strict',
+  //     bindings: ['Shift + D', 'Shift + E'],
+  //     linkGroup: LinkGroups.BombRightStrict,
+  //   },
+  //   { action: KeyActions.QToken, title: 'Token', bindings: ['x', NotActive] },
+  //   { action: KeyActions.QReady, title: 'Ready', bindings: ['Space', NotActive] },
+  // ],
   'Map editor': [
     { action: KeyActions.Save, title: 'Save', bindings: ['Ctrl + s', NotActive] },
     { action: KeyActions.Undo, title: 'Undo', bindings: ['Ctrl + z', NotActive] },

@@ -58,18 +58,9 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.bindKeys();
     this.sub.add(this.render.canvasChange$.subscribe(canvas => {
       void this.ws.dispatchMessage({ cmd: Internal.Canvas, data: canvas });
-    }));
-    this.sub.add(this.kbs.subscribe(KeyActions.Redo, v => {
-      if (!v) return clearInterval(this.undoTicker);
-      this.doUndo(this.redos, this.undos);
-      this.undoTicker = window.setInterval(() => this.doUndo(this.redos, this.undos), 200);
-    }));
-    this.sub.add(this.kbs.subscribe(KeyActions.Undo, v => {
-      if (!v) return clearInterval(this.undoTicker);
-      this.doUndo(this.undos, this.redos);
-      this.undoTicker = window.setInterval(() => this.doUndo(this.undos, this.redos), 200);
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.BASettings, s => this.updateBoatSetting(s)));
@@ -96,6 +87,19 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
   ngOnDestroy(): void {
     super.ngOnDestroy();
     DefaultBoat.team = 99;
+  }
+
+  private bindKeys() {
+    this.sub.add(this.kbs.subscribe(KeyActions.Redo, v => {
+      if (!v) return clearInterval(this.undoTicker);
+      this.doUndo(this.redos, this.undos);
+      this.undoTicker = window.setInterval(() => this.doUndo(this.redos, this.undos), 200);
+    }));
+    this.sub.add(this.kbs.subscribe(KeyActions.Undo, v => {
+      if (!v) return clearInterval(this.undoTicker);
+      this.doUndo(this.undos, this.redos);
+      this.undoTicker = window.setInterval(() => this.doUndo(this.undos, this.redos), 200);
+    }));
   }
 
   private updateMyTeam(team: Team) {
