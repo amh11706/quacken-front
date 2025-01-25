@@ -53,6 +53,46 @@ export class BABoatSettings {
     this.coverage[data.CoverMode] = data.Coverage;
     return this;
   }
+
+  static circles = [
+    [0],
+    [0, 1, 0],
+    [0, 1, 2, 1, 0],
+    [0, 2, 2, 3, 2, 2, 0],
+    [0, 2, 3, 3, 4, 3, 3, 2, 0],
+    [0, 2, 3, 4, 4, 5, 4, 4, 3, 2, 0],
+  ];
+
+  isCoveragePossible(withAdded: { x: number, y: number }): boolean {
+    if (this.coverMode === BoatCoverMode.Tiles) return true;
+    const flags = [...this.coverage[BoatCoverMode.Flags], withAdded];
+    return this.hasIntersection(flags, this.boat.influence);
+  }
+
+  // returns true if there is at least one tile that all of the provided circles contain
+  protected hasIntersection(centers: { x: number, y: number }[], radius: number): boolean {
+    const circleRows = BABoatSettings.circles[radius];
+    if (!circleRows) return false;
+    const firstCircle = centers[0];
+    if (!firstCircle) return false;
+
+    const yOff = circleRows.length / 2;
+    let y = firstCircle.y - yOff;
+    for (const xOff of circleRows) {
+      for (let x = firstCircle.x - xOff; x <= firstCircle.x + xOff; x++) {
+        if (centers.every(c => {
+          const dx = c.x - x;
+          const dy = c.y - y;
+          return dx * dx + dy * dy <= radius * radius;
+        })) {
+          return true;
+        }
+      }
+      // move to the next row
+      y++;
+    }
+    return false;
+  }
 }
 
 const Colors: Record<BoatCoverMode, string> = {

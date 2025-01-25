@@ -207,6 +207,18 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
     if (this.activeBoatSettings.coverMode === BoatCoverMode.Flags) {
       if (!this.isFlag(x, y)) return;
     }
+    if (!this.activeBoatSettings.isCoveragePossible({ x, y })) {
+      void this.ws.dispatchMessage({
+        cmd: InCmd.ChatMessage,
+        data: {
+          type: 1,
+          from: 'Board Admiral',
+          message: 'Invalid coverage. Middle click to clear or right click to select a different boat.',
+        },
+      });
+      return;
+    }
+
     const coverMode = this.activeBoatSettings.coverMode;
     this.activeBoatSettings.coverage[coverMode].push({ x, y, a });
     return { cmd: 'removeTile', data: { x, y }, coverMode, id: this.activeBoat.id };
