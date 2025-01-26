@@ -30,9 +30,9 @@ export interface MatchAiRequest {
 
 export interface AiBoatData {
   id: number;
-  claim: { x: number, y: number };
-  moveOptions: number[][];
-  shots: number[];
+  moveOptions: {
+    Moves: number[],
+  }[];
   name?: string;
   pm: Record<string, Points>;
 }

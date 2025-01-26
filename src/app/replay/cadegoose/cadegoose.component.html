@@ -131,9 +131,8 @@
           </ng-container>
 
           <p>moves</p>
-          {{activeAiBoat.shots}}
           <p *ngFor="let moves of activeAiBoat.moveOptions">
-            {{moves.join('')}}
+            {{moves.Moves.join('')}}
           </p>
 
         </ng-container>
