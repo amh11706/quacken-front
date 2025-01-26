@@ -76,7 +76,7 @@ export class BABoatSettings {
     const firstCircle = centers[0];
     if (!firstCircle) return false;
 
-    const yOff = circleRows.length / 2;
+    const yOff = Math.floor(circleRows.length / 2);
     let y = firstCircle.y - yOff;
     for (const xOff of circleRows) {
       for (let x = firstCircle.x - xOff; x <= firstCircle.x + xOff; x++) {
