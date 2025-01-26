@@ -57,6 +57,7 @@ export class MatchQueueComponent implements OnInit {
 
   ngOnInit() {
     void this.ss.getGroup('matchmaking').then(() => {
+      this.updateSettings();
       if (this.isGuest) this.matchSettings.rated.value = 0;
     });
     // Subscribe to settings value changes using SettingsService
@@ -83,10 +84,7 @@ export class MatchQueueComponent implements OnInit {
     }));
 
     this.subs.push(this.matchSettings.lobbyType.userStream.subscribe(() => {
-      this.syncSettingData(this.matchSettings.minTurnTime);
-      this.syncSettingData(this.matchSettings.maxTurnTime);
-      this.syncSettingData(this.matchSettings.deltaRank);
-      this.syncSettingData(this.matchSettings.rated);
+      this.updateSettings();
     }));
 
     this.subs.push(this.ws.connected$.subscribe(value => {
@@ -102,6 +100,13 @@ export class MatchQueueComponent implements OnInit {
     // Unsubscribe to prevent memory leaks
     this.subs.forEach(sub => sub.unsubscribe());
     this.ws.send(OutCmd.UnwatchQueue);
+  }
+
+  private updateSettings() {
+    this.syncSettingData(this.matchSettings.minTurnTime);
+    this.syncSettingData(this.matchSettings.maxTurnTime);
+    this.syncSettingData(this.matchSettings.deltaRank);
+    this.syncSettingData(this.matchSettings.rated);
   }
 
   get lobbyType(): RankArea {
@@ -124,7 +129,8 @@ export class MatchQueueComponent implements OnInit {
     const settings = {} as OutCmdInputTypes[OutCmd.JoinQueue];
     const t = this.lobbyType;
     for (const [name, setting] of Object.entries(matchSettings)) {
-      settings[name as keyof typeof settings] = setting.data?.[t] ?? setting.value;
+      const value = setting.data?.[t];
+      settings[name as keyof typeof settings] = typeof value === 'number' ? value : setting.value;
     }
     return settings;
   }
