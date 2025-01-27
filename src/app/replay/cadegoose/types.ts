@@ -1,4 +1,4 @@
-import { BoatSync, BoatTick, MoveMessageIncoming } from '../../lobby/quacken/boats/types';
+import { BoatSync, BoatTick } from '../../lobby/quacken/boats/types';
 
 export interface Points {
   Shoot: number[][];
@@ -25,7 +25,6 @@ export interface MatchAiRequest {
   seed?: string;
   claimOptions: ClaimOptions;
   claimsOnly: boolean;
-  moves?: MoveMessageIncoming[];
 }
 
 export interface AiBoatData {

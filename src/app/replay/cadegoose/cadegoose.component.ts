@@ -324,7 +324,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       seed: this.seed,
       claimOptions: this.claimOptions,
       claimsOnly,
-      moves: this.activeTurn?.sync.moves,
     });
     if (!this.aiData) return;
 
