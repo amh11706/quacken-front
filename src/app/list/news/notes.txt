@@ -1,0 +1,18 @@
+move slow stat save and AI out of lobby lock
+<!-- show BA data in replays - half done. stats show, but break on jumping turns or switching teams -->
+<!-- include non zero moves in turn sync -->
+<!-- include BA settings in turn sync -->
+<!-- last turn animation skipped for watcher sometimes -->
+<!-- moves clear when someone leaves lobby -->
+
+<!-- discourage moves that are wrecked by sitting -->
+<!-- team damage sum before divide -->
+<!-- fix map generate check for BA -->
+<!-- block impossible flag coverage -->
+<!-- key bindings for BA -->
+
+update old teams and 1v1 ai to use new structure
+ready button regardless of timer setting
+BA statistics
+add BA specific lobby settings like team ships
+optimize turn simulation / reduce memory allocations
