@@ -1,3 +1,4 @@
+import { ServerBASettings } from '../../boardadmiral/ba-render';
 import { StatRow } from '../../cadegoose/stats/types';
 
 export type Team = 0 | 1 | 2 | 3 | 4 | 99 | 100;
@@ -85,5 +86,8 @@ export interface Turn {
 export interface Sync {
   sync: BoatSync[];
   cSync: Clutter[];
+  moves?: MoveMessageIncoming[];
+  myMoves?: MoveMessageIncoming;
+  baData?: ServerBASettings[];
   turn: number;
 }

@@ -46,8 +46,7 @@ export class BoatsService implements OnDestroy {
         this.boatMap.clear();
         this.myBoat.next(new Boat(''));
       }
-      if (l.boats) this.setBoats(Object.values(l.boats), true);
-      if (l.clutter) this.clutter.next(l.clutter);
+      if (l.sync) void this.handleSync(l.sync);
     }));
   }
 
@@ -90,11 +89,12 @@ export class BoatsService implements OnDestroy {
   }
 
   private async handleSync(s: Sync) {
-    this.resetBoats();
     // delay to make sure the turn service handles the sync first
     await new Promise(resolve => setTimeout(resolve));
     this.setBoats(s.sync);
     this.clutter.next(s.cSync);
+    this.resetBoats();
+    this.handleMoves(s.moves || []);
   }
 
   private handleReady(m: { id: number, ready: boolean }) {

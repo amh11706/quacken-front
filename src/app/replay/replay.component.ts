@@ -41,7 +41,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   tick = 0;
   seed = '';
   private lobbyMessage?: { cmd: InCmd.LobbyJoin, data: CadeLobby };
-  private lastSync: InMessage = { cmd: InCmd.Sync, data: { sync: [], cSync: [], turn: 0 } };
+  private lastSync: InMessage = { cmd: InCmd.Sync, data: { sync: [], cSync: [], moves: [], turn: 0 } };
 
   constructor(
     private location: Location,
@@ -108,26 +108,38 @@ export class ReplayComponent implements OnInit, OnDestroy {
       this.ss.setSettings(group as SettingGroup, setting);
     }
 
+    // setTimeout(() => {
+    const m = this.messages[0]?.[0];
+    if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m as any;
+    if (!this.lobbyMessage) return;
+    const lobby = this.lobbyMessage.data;
+    this.lastSync = {
+      cmd: InCmd.Sync,
+      // .sync is the new format, but keep .boats for backwards compatibility
+      data: lobby.sync || {
+        sync: Object.values((lobby as any).boats || {}),
+        cSync: (lobby as any).clutter || [],
+        moves: [],
+        turn: 0,
+      },
+    };
+    // feed the sync back to the lobby just in case we're dealing with an old replay
+    lobby.sync = this.lastSync.data;
+    this.messages[0]?.push(this.lastSync);
+    this.checkMessage(this.lastSync);
+
+    this.fakeMessages();
+    this.messages[0]?.shift();
+    this.ss.admin$.next(true);
+
     setTimeout(() => {
-      this.fakeMessages();
-      this.ss.admin$.next(true);
-      const m = this.messages[0]?.shift();
-      if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m as any;
-      if (!this.lobbyMessage) return;
-      this.lastSync = {
-        cmd: InCmd.Sync,
-        data: { sync: Object.values(this.lobbyMessage.data?.boats || {}), cSync: [], turn: 0 },
-      };
-      this.messages[0]?.push(this.lastSync);
-      this.checkMessage(this.lastSync);
-      setTimeout(() => {
-        void this.esc.openMenu(false);
-      }, 1000);
-      setTimeout(() => { // temporary fix for starting replay
-        const tick = Number(this.route.snapshot.queryParams.tick);
-        if (tick) this.playTo(tick);
-      }, 500);
-    });
+      void this.esc.openMenu(false);
+    }, 1000);
+    setTimeout(() => { // temporary fix for starting replay
+      const tick = Number(this.route.snapshot.queryParams.tick);
+      if (tick) this.playTo(tick);
+    }, 500);
+    // });
   }
 
   private sendSync() {

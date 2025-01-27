@@ -1,6 +1,6 @@
 import { ChatMessage, Message } from '../../chat/types';
 import { ServerSettingMap } from '../../settings/types';
-import { BoatStatus, BoatSync, BoatTick, Clutter, MoveMessageIncoming, Sync, Turn } from '../quacken/boats/types';
+import { BoatStatus, BoatTick, Clutter, Sync, Turn } from '../quacken/boats/types';
 import { LobbyType, LobbyStatus } from './lobby-type';
 import { StatRow } from './stats/types';
 
@@ -29,11 +29,8 @@ export interface CadeLobby extends Lobby {
   map: string;
   seed: string;
   flags: Turn['flags'];
-  boats: { [key: string]: BoatSync };
-  clutter?: Clutter[];
   points: number[];
-  myMoves?: MoveMessageIncoming;
-  moves?: MoveMessageIncoming[];
+  sync: Sync;
 }
 
 export interface TeamMessage extends ChatMessage {
@@ -61,7 +58,6 @@ export interface ParsedTurn {
   }[];
   sync: Sync;
   ticks: Record<number, BoatTick>;
-  moves: Record<number, { shots: number[], moves: number[] }>;
   steps: BoatStatus[][];
   cSteps: Clutter[][];
   stats: Record<number, StatRow>;

@@ -64,6 +64,9 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
     }));
 
     this.sub.add(this.ws.subscribe(InCmd.BASettings, s => this.updateBoatSetting(s)));
+    this.sub.add(this.ws.subscribe(InCmd.Sync, s => {
+      if (s.baData) this.updateBoatSetting(s.baData);
+    }));
     // prevent map jumping when switching boats
     this.sub.add(this.boats.myBoat$.subscribe(b => {
       DefaultBoat.pos = { ...b.pos };

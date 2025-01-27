@@ -82,12 +82,13 @@ export class MainMenuService implements OnDestroy {
       while (teamPlayers.length < m.points.length) teamPlayers.push([]);
       this.teamPlayers$.next(teamPlayers);
 
-      if (m.myMoves) {
-        const ms = m.myMoves;
-        void this.ws.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: ms.m, shots: ms.s || [] } });
+      const myMoves = m.sync.myMoves;
+      if (myMoves) {
+        void this.ws.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: myMoves.m, shots: myMoves.s || [] } });
       }
-      if (m.moves) {
-        void this.ws.dispatchMessage({ cmd: InCmd.Moves, data: m.moves });
+      const moves = m.sync.moves;
+      if (moves) {
+        void this.ws.dispatchMessage({ cmd: InCmd.Moves, data: moves });
       }
     }));
     this.subs.add(this.fs.lobby$.subscribe(r => {

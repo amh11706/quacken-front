@@ -3,6 +3,7 @@ import { CadeLobby, ParsedTurn } from '../../lobby/cadegoose/types';
 import { Turn, Sync, BoatTick } from '../../lobby/quacken/boats/types';
 import { Message } from '../../chat/types';
 import { InMessage } from '../../ws/ws-subscribe-types';
+import { ServerBASettings } from '../../lobby/boardadmiral/ba-render';
 
 export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, number] {
   const turns: ParsedTurn[] = [];
@@ -11,9 +12,11 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
   let map = '';
   let lastTurn = { teams: [{}, {}, {}, {}] } as ParsedTurn;
   let lastTurnRaw: Turn | undefined;
-  let lastSync: Sync = { sync: [], cSync: [], turn: 0 };
+  let lastSync: Sync = { sync: [], cSync: [], moves: [], turn: 0 };
   let moves: Record<number, { shots: number[], moves: number[] }> = {};
   let ticks: Record<number, BoatTick> = {};
+  const baSettings = new Map<number, ServerBASettings>();
+
   for (let i = 0; i < messages.length; i++) {
     const group = messages[i];
     if (!group) continue;
@@ -21,8 +24,19 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
     for (const m of group) {
       switch (m.cmd) {
         case InCmd.LobbyJoin:
-          lastSync = { sync: Object.values((m.data as CadeLobby).boats || {}), cSync: [], turn: lastTurn.turn };
+          // .sync is the new format, but keep .boats for backwards compatibility
+          lastSync = (m.data as CadeLobby).sync || {
+            sync: Object.values((m.data as any).boats || {}),
+            cSync: (m.data as any).clutter || [],
+            moves: [],
+            turn: lastTurn.turn,
+          };
           map = (m.data as CadeLobby).map || '';
+          break;
+        case InCmd.BASettings:
+          Array.isArray(m.data)
+            ? m.data.forEach(m => baSettings.set(m.Id, m))
+            : baSettings.set(m.data.Id, m.data);
           break;
         case InCmd.Moves:
           Array.isArray(m.data)
@@ -44,10 +58,11 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
         case InCmd.Turn:
           // eslint-disable-next-line no-case-declarations
           const turn: Turn = m.data;
+          lastSync.baData = Array.from(baSettings.values());
+          lastSync.moves = Object.entries(moves).map(([t, m]) => ({ t: +t, m: m.moves, s: m.shots }));
           // eslint-disable-next-line no-case-declarations
           const parsed: ParsedTurn = {
             ticks,
-            moves,
             sync: lastSync,
             turn: turns.length + 1,
             rawTurn: lastTurnRaw || turn,

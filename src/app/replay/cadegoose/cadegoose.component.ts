@@ -16,7 +16,7 @@ import { Penalties, PenaltyComponent } from './penalty/penalty.component';
 import { SettingsService } from '../../settings/settings.service';
 import { ParseTurns } from './parse-turns';
 import { CadeLobby, Lobby, ParsedTurn } from '../../lobby/cadegoose/types';
-import { BoatTick, MoveMessageIncoming } from '../../lobby/quacken/boats/types';
+import { BoatTick } from '../../lobby/quacken/boats/types';
 import { AiBoatData, AiData, ClaimOptions, Points, ScoreResponse } from './types';
 import { InMessage } from '../../ws/ws-subscribe-types';
 import { LobbyWrapperService } from '../lobby-wrapper/lobby-wrapper.service';
@@ -54,11 +54,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     }
 
     if (this.activeTurn && value + 2 === this.activeTurn.index) {
-      const moves: MoveMessageIncoming[] = [];
-      for (const [id, m] of Object.entries(this.activeTurn.moves || {})) {
-        moves.push({ t: +id, m: [...m.moves], s: [...m.shots] });
-      }
-
+      const moves = this.activeTurn.sync.moves || [];
       setTimeout(() => {
         void this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
       });
@@ -328,7 +324,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       seed: this.seed,
       claimOptions: this.claimOptions,
       claimsOnly,
-      moves: this.activeTurn?.moves,
+      moves: this.activeTurn?.sync.moves,
     });
     if (!this.aiData) return;
 

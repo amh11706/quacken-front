@@ -10,7 +10,6 @@ import { InCmd, Internal, OutCmd } from '../ws/ws-messages';
 import { WsService } from '../ws/ws.service';
 import { MoveNode, MoveTiers } from '../replay/cadegoose/types';
 import { ParsedTurn } from '../lobby/cadegoose/types';
-import { MoveMessageIncoming } from '../lobby/quacken/boats/types';
 import { SettingGroup } from '../settings/setting/settings';
 import { LobbyWrapperService } from '../replay/lobby-wrapper/lobby-wrapper.service';
 import { OutMessage } from '../ws/ws-send-types';
@@ -119,11 +118,18 @@ export class TrainingComponent implements OnInit, OnDestroy {
       tick.attr = { 1: 100 };
       void this.wrapper.ws?.dispatchMessage({ cmd: InCmd.BoatTick, data: tick });
     }
-    const myMoves = this.activeTurn?.moves[this.myBoat.id];
+
+    const myMoves = this.activeTurn?.sync.moves?.find(m => m.t === this.myBoat.id);
     setTimeout(() => {
       this.myBoat.moveLock = 0;
-      if (this.myBoat.isMe) {
-        if (myMoves) void this.wrapper.ws?.dispatchMessage({ cmd: Internal.MyMoves, data: myMoves });
+      if (this.myBoat.isMe && myMoves) {
+        void this.wrapper.ws?.dispatchMessage({
+          cmd: Internal.MyMoves,
+          data: {
+            moves: myMoves.m,
+            shots: myMoves.s || [],
+          },
+        });
       }
     });
     delete this.activeMove;
@@ -214,11 +220,8 @@ export class TrainingComponent implements OnInit, OnDestroy {
     const rawTurn = this.activeTurn?.rawTurn;
     if (rawTurn) void this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Turn, data: rawTurn });
     void this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Sync, data: turn.sync });
-    const moves: MoveMessageIncoming[] = [];
-    for (const [id, m] of Object.entries(this.activeTurn?.moves || {})) {
-      moves.push({ t: +id, m: [...m.moves], s: [...m.shots] });
-    }
 
+    const moves = this.activeTurn?.sync.moves || [];
     setTimeout(() => {
       void this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
     });
