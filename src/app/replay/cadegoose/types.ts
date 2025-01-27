@@ -32,6 +32,10 @@ export interface AiBoatData {
   id: number;
   moveOptions: {
     Moves: number[],
+    ShotsHit: number,
+    ShotsTaken: number,
+    EndBonus: number,
+    Score: number,
   }[];
   name?: string;
   pm: Record<string, Points>;

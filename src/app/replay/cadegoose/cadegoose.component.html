@@ -132,7 +132,7 @@
 
           <p>moves</p>
           <p *ngFor="let moves of activeAiBoat.moveOptions">
-            {{moves.Moves.join('')}}
+            {{moves.Moves.join('')}} {{moves.Score}}
           </p>
 
         </ng-container>
