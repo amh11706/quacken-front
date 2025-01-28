@@ -33,6 +33,7 @@ export interface AiBoatData {
     Moves: number[],
     ShotsHit: number,
     ShotsTaken: number,
+    RocksHit: number,
     EndBonus: number,
     Score: number,
   }[];

@@ -79,6 +79,10 @@ export class TurnService implements OnDestroy {
 
   protected handleTurn(turn: Turn): void {
     if (this.animating) return this.skipToEnd();
+    if (this.animateTimeout) {
+      clearTimeout(this.animateTimeout);
+      delete this.animateTimeout;
+    }
 
     this.turn = turn;
     this._turn.next(turn);
