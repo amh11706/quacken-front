@@ -52,6 +52,7 @@ export class TurnService implements OnDestroy {
   }
 
   ngOnDestroy() {
+    this.skipToEnd(false);
     this.subs.unsubscribe();
     document.removeEventListener('visibilitychange', this.visibilityChange);
   }

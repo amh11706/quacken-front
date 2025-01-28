@@ -159,11 +159,11 @@ export class HudComponent implements OnInit, OnDestroy {
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => {
-      this.turn = turn.turn;
+      this.turn = turn.turn + 1;
       this.startTimer();
       // turn.turn for backwards compatibility with replays
       const turnsLeft = turn.turnsLeft === undefined
-        ? this.maxTurn - (turn as any).turn || 0
+        ? this.maxTurn - turn.turn || 0
         : turn.turnsLeft - 1;
       this.setTurn(turnsLeft);
 
@@ -209,6 +209,7 @@ export class HudComponent implements OnInit, OnDestroy {
       if (this.turn <= this.lastMoveReset) return;
     }
     if (this.myBoat.moveLock <= this.turn) this.myBoat.moveLock = 0;
+    else this.myBoat.moveLock %= 100;
     this.myBoat.ready = false;
     this.lastMoveReset = this.turn;
     this.totalTokens = { ...this.totalTokens };
