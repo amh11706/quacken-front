@@ -7,9 +7,15 @@ import { SettingsService } from '../settings/settings.service';
 import { InCmd, OutCmd } from '../ws/ws-messages';
 import { LobbyService } from './lobby.service';
 import { Lobby } from './cadegoose/types';
+import { BoatsService } from './quacken/boats/boats.service';
+import { TurnService } from './quacken/boats/turn.service';
 
 @Component({
   selector: 'q-lobby',
+  providers: [
+    BoatsService,
+    TurnService,
+  ],
   templateUrl: './lobby.component.html',
   styleUrls: ['./lobby.component.css'],
 })
