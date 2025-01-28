@@ -67,6 +67,7 @@
 
   <div [style.transform]="'rotate(' + render.rotateAdjust + 'deg)'">
     <q-sprite-img [class.ghostly]="render.boat.type === 28"
+                  (click)="clickBoat(render.boat)"
                   [render]="render"></q-sprite-img>
   </div>
 </div>

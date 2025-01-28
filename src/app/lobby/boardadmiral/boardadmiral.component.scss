@@ -1,1 +1,5 @@
 @import '../cadegoose/cadegoose.component.scss';
+
+:host ::ng-deep q-gu-boats {
+  pointer-events: none;
+}
