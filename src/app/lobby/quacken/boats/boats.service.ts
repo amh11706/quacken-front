@@ -85,6 +85,7 @@ export class BoatsService implements OnDestroy {
       if (!tick) continue;
       boat.damage = tick.d;
       boat.bilge = tick.b;
+      boat.attr = tick.attr;
     }
   }
 

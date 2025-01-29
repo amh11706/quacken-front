@@ -27,6 +27,7 @@ export class Boat {
   ready = false;
   moveLock = 0;
   maneuvers: { id: number, name: string, class: string, directional?: boolean }[] = [];
+  attr: Record<number, number> = {};
 
   constructor(
     public name: string,
