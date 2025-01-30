@@ -15,4 +15,7 @@ update old teams and 1v1 ai to use new structure
 ready button regardless of timer setting
 BA statistics
 add BA specific lobby settings like team ships
-optimize turn simulation / reduce memory allocations
+<!-- icon for ship marked to sink -->
+show ship type in side menu
+<!-- single tile coverage should not move if already on the tile -->
+<!-- optimize turn simulation / reduce memory allocations -->
