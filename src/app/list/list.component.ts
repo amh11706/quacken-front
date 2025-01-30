@@ -8,6 +8,8 @@ import { EscMenuService } from '../esc-menu/esc-menu.service';
 import { KeyBindingService } from '../settings/key-binding/key-binding.service';
 import { MatchmakingService } from '../esc-menu/match-queue/matchmaking.service';
 import { SoundService } from '../sound.service';
+import { BoatsService } from '../lobby/quacken/boats/boats.service';
+import { TurnService } from '../lobby/quacken/boats/turn.service';
 import { LobbyService } from '../lobby/lobby.service';
 
 @Component({
@@ -22,6 +24,8 @@ import { LobbyService } from '../lobby/lobby.service';
     EscMenuService,
     KeyBindingService,
     MatchmakingService,
+    BoatsService,
+    TurnService,
     LobbyService,
   ],
   templateUrl: './list.component.html',
