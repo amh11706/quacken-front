@@ -1,11 +1,9 @@
 <button mat-button
         [color]="active ? 'primary' : undefined"
         class="boat"
-        [style.borderColor]="teamColors[boat.team || 0]">
-  <span>
-    {{fishNames ? boat.name : boat.title}} <mat-icon *ngIf="boat.attr?.[50]"
-              matTooltip="This boat will be targetted by teammates">warning</mat-icon>
-  </span>
+        [matTooltip]="boat.attr?.[50] ? 'This boat will be targetted by teammates' : ''"
+        [style.borderColor]="boat.attr?.[50] ? 'orange' : teamColors[boat.team || 0]">
+  {{fishNames ? boat.name : boat.title}}
   <br>
   <div class="damage"
        matTooltip="{{boat.getDamage()}}%">

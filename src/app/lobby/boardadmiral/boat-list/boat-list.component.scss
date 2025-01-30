@@ -24,6 +24,7 @@
 q-boat-button {
   display: inline-block;
   width: 100%;
+  border-right: 3px solid transparent; // prevent layout shift when highlighting
 }
 
 .highlight {
