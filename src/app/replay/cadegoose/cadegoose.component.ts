@@ -320,7 +320,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       team: this.aiTeam,
       boats: this.activeTurn?.sync.sync,
       ticks: this.activeTurn?.ticks,
-      map: sendMap ? this.randomMap || this.lobby.map : undefined,
+      map: sendMap ? this.randomMap || this.lobby?.map : undefined,
       seed: this.seed,
       claimOptions: this.claimOptions,
       claimsOnly,

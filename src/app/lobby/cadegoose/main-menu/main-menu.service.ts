@@ -62,12 +62,13 @@ export class MainMenuService implements OnDestroy {
     if (this.wrapper.boats) this.boats = this.wrapper.boats;
 
     this.subs.add(this.lobbyService.get().subscribe(m => {
+      if (!m) return;
       if (this.status.value === 0 && m.inProgress > 0) {
         void this.sound.play(Sounds.BattleStart, 0, Sounds.Notification);
       }
       this.statsOpen = false;
 
-      if (this.lobby.seed && !this.seeds.includes(this.lobby.seed)) this.seeds.push(this.lobby.seed);
+      if (m.seed && !this.seeds.includes(m.seed)) this.seeds.push(m.seed);
       if (m.settings) {
         this.ss.setSettings(this.group, m.settings);
         // prevent calling this multiple time with outdated settings

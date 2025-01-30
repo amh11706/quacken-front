@@ -76,7 +76,7 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
     this.sub.add(this.lobbyService.status.subscribe(s => {
       if (this.lastStatus === LobbyStatus.PreMatch && s !== LobbyStatus.PreMatch) {
         DefaultBoat.team = 99;
-        const me = this.lobbyService.lobby.value.players.find(p => p.sId === this.ws.sId);
+        const me = this.lobbyService.lobby.value?.players.find(p => p.sId === this.ws.sId);
         if (me?.t !== undefined) this.updateMyTeam(me.t);
       }
       this.lastStatus = s;

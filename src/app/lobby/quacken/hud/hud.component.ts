@@ -129,6 +129,7 @@ export class HudComponent implements OnInit, OnDestroy {
 
     // eslint-disable-next-line rxjs/no-async-subscribe
     this.subs.add(this.lobbyService.get().subscribe(async m => {
+      if (!m) return;
       if (m.inProgress) this.turn = 1;
       this.myBoat.ready = false;
       this.resetMoves();

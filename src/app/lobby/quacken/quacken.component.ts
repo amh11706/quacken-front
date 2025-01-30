@@ -54,7 +54,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
 
     this.sub.add(this.ws.subscribe(Internal.SetMap, m => this.setMapB64(m)));
     this.sub.add(this.lobbyService.get().subscribe(l => {
-      if (l.map) this.setMapB64(l.map);
+      if (l?.map) this.setMapB64(l.map);
     }));
   }
 
