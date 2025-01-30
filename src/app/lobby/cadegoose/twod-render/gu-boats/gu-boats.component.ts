@@ -136,6 +136,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subs.unsubscribe();
     GuBoat.myTeam = 99;
+    this.turn.skipToEnd(false);
   }
 
   clickBoat(boat: Boat): void {

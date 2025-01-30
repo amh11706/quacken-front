@@ -40,7 +40,7 @@ export class LobbyComponent implements OnInit, OnDestroy {
       this.sent = false;
       this.lobby.next(l);
       const oldLobby = this.lobbyService.lobby.value;
-      if (oldLobby.type === l.type) l = Object.assign(oldLobby, l);
+      if (oldLobby?.type === l.type) l = Object.assign(oldLobby, l);
       this.lobbyService.lobby.next(l);
       this.lobbyService.status.next(l.inProgress);
     }));
@@ -55,5 +55,6 @@ export class LobbyComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.sub.unsubscribe();
     this.ss.admin$.next(true);
+    this.lobbyService.lobby.next(null);
   }
 }

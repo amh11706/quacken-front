@@ -8,7 +8,7 @@ const inPgrogressValues = new Set([LobbyStatus.MidMatch, LobbyStatus.Paused, Lob
   providedIn: 'root',
 })
 export class LobbyService<T> {
-  lobby = new BehaviorSubject<T>({} as T);
+  lobby = new BehaviorSubject<T | null>({} as T);
   status = new BehaviorSubject<LobbyStatus>(LobbyStatus.Waiting);
 
   get() {

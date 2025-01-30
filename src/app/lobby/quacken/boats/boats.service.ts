@@ -41,12 +41,12 @@ export class BoatsService implements OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Sync, s => this.handleSync(s)));
     this.subs.add(this.ws.subscribe(InCmd.BoatTicks, ticks => this.handleTicks(ticks)));
     this.subs.add(this.lobby.get().subscribe(l => {
-      if (l.id !== this.lobbyId) {
-        this.lobbyId = l.id;
+      if (l?.id !== this.lobbyId) {
+        this.lobbyId = l?.id;
         this.boatMap.clear();
         this.myBoat.next(new Boat(''));
       }
-      if (l.sync) void this.handleSync(l.sync);
+      if (l?.sync) void this.handleSync(l.sync);
     }));
   }
 
