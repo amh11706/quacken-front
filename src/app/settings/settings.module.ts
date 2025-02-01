@@ -29,6 +29,7 @@ import { BotSettingComponent } from './bot-setting/bot-setting.component';
 import { AdvancedComponent } from './advanced/advanced.component';
 import { JobberQualityComponent } from './jobber-quality/jobber-quality.component';
 import { BaShipSettingComponent } from './ba-ship-setting/ba-ship-setting';
+import { ShipListComponent } from './ship-list/ship-list.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { BaShipSettingComponent } from './ba-ship-setting/ba-ship-setting';
     AdvancedComponent,
     JobberQualityComponent,
     BaShipSettingComponent,
+    ShipListComponent,
   ],
   imports: [
     CommonModule,

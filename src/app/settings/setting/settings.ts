@@ -1,8 +1,9 @@
 /* eslint-disable no-sparse-arrays */
 import { OutCmd } from '../../ws/ws-messages';
-import { BaShipSettingComponent, BoatTitles } from '../ba-ship-setting/ba-ship-setting';
+import { BaShipSettingComponent } from '../ba-ship-setting/ba-ship-setting';
 import { BotSettingComponent } from '../bot-setting/bot-setting.component';
 import { JobberQualityComponent } from '../jobber-quality/jobber-quality.component';
+import { BoatTitles } from '../ship-list/ship-list.component';
 import { Setting } from '../types';
 
 interface BaseSetting {
