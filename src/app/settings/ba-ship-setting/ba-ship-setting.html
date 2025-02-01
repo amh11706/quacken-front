@@ -1,24 +1,20 @@
 <p>Each team will get the following ships:</p>
+<p>Total cost: {{cost}}<span *ngIf="budget"> / {{budget}}</span> </p>
 <div class="boatList">
   <div *ngFor="let boatType of setting.data.custom; let i = index"
        class="boat">
-    <mat-select [(ngModel)]="setting.data.custom[i]">
-      <mat-select-trigger>
-        <img [src]="getShipLink(boatType)"
-             [matTooltip]="Ships.titles[boatType] || ''">
-      </mat-select-trigger>
-      <mat-option *ngFor="let o of Ships.groups[0]?.options"
-                  [value]="o">
-        <img [src]="getShipLink(o)"
-             class="boatoption"
-             height="25px"
-             width="25px">{{Ships.titles[o]}}
-      </mat-option>
-    </mat-select>
+    <span>{{shipLabel(boatType)}}</span>
+    <img [src]="getShipLink(boatType)"
+         [matTooltip]="ShipTypeMap.get(boatType)?.name || ''">
     <mat-icon (click)="removeCustom(i)">cancel</mat-icon>
   </div>
-  <div class="boat"
-       (click)="addCustom()">
-    <mat-icon>add</mat-icon>
-  </div>
 </div>
+<p>Add ship</p>
+<mat-chip-listbox>
+  <mat-chip *ngFor="let boatType of ShipTypes"
+            [matTooltip]="boatType.name!"
+            [disabled]="cost + boatType.cost > budget"
+            (click)="addCustom(boatType.id)">
+    {{boatType.title}} ({{boatType.cost}})
+  </mat-chip>
+</mat-chip-listbox>

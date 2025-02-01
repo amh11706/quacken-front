@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { MatChipsModule } from '@angular/material/chips';
 import { SettingComponent } from './setting/setting.component';
 import { SettingsComponent } from './settings.component';
 import { AccountComponent } from './account/account.component';
@@ -59,6 +60,7 @@ import { BaShipSettingComponent } from './ba-ship-setting/ba-ship-setting';
     MatExpansionModule,
     MatDialogModule,
     MatMenuModule,
+    MatChipsModule,
     PickerComponent,
     EmojiComponent,
   ],

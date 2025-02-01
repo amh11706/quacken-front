@@ -15,8 +15,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  column-gap: 4px;
   text-align: center;
-  font-size: 18px;
+  font-size: 14px;
   padding: 4px;
   margin: 4px 8px;
   border: 1px solid black;
@@ -32,16 +33,14 @@
   }
 }
 
-::ng-deep .cdk-overlay-pane {
-  width: fit-content !important;
-}
-
-.boatoption {
-  position: relative;
-  top: 6px;
-  margin-right: 4px;
-}
-
 mat-icon {
   cursor: pointer;
+}
+
+mat-chip-listbox {
+  max-width: 250px;
+
+  mat-chip {
+    cursor: pointer;
+  }
 }

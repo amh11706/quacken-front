@@ -1,14 +1,9 @@
 /* eslint-disable no-sparse-arrays */
 import { OutCmd } from '../../ws/ws-messages';
-import { BaShipSettingComponent } from '../ba-ship-setting/ba-ship-setting';
+import { BaShipSettingComponent, BoatTitles } from '../ba-ship-setting/ba-ship-setting';
 import { BotSettingComponent } from '../bot-setting/bot-setting.component';
 import { JobberQualityComponent } from '../jobber-quality/jobber-quality.component';
 import { Setting } from '../types';
-
-export const BoatTitles = [, , , , , , , , , , , , , ,
-  'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
-  'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate', 'Black Ship',
-];
 
 interface BaseSetting {
   readonly default?: number;
