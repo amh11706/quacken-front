@@ -69,11 +69,6 @@ export class MainMenuService implements OnDestroy {
       this.statsOpen = false;
 
       if (m.seed && !this.seeds.includes(m.seed)) this.seeds.push(m.seed);
-      if (m.settings) {
-        this.ss.setSettings(this.group, m.settings);
-        // prevent calling this multiple time with outdated settings
-        delete m.settings;
-      }
       if (m.players?.length) void this.ws.dispatchMessage({ cmd: InCmd.PlayerList, data: m.players });
       if (this.firstJoin) {
         this.firstJoin = false;

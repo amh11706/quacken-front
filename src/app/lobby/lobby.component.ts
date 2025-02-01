@@ -7,6 +7,18 @@ import { SettingsService } from '../settings/settings.service';
 import { InCmd, OutCmd } from '../ws/ws-messages';
 import { LobbyService } from './lobby.service';
 import { Lobby } from './cadegoose/types';
+import { LobbyType } from './cadegoose/lobby-type';
+import { ServerSettingGroup } from '../settings/setting/settings';
+
+const LobbySettingGroups: Record<LobbyType, keyof ServerSettingGroup> = {
+  CadeGoose: 'l/cade',
+  FlagGames: 'l/flaggames',
+  BA: 'l/cade',
+  SeaBattle: 'l/cade',
+  Quacken: 'l/quacken',
+  Spades: 'l/spades',
+  mapinfo: 'internal',
+};
 
 @Component({
   selector: 'q-lobby',
@@ -41,6 +53,11 @@ export class LobbyComponent implements OnInit, OnDestroy {
       this.lobby.next(l);
       const oldLobby = this.lobbyService.lobby.value;
       if (oldLobby?.type === l.type) l = Object.assign(oldLobby, l);
+      if (l.settings) {
+        this.ss.setSettings(LobbySettingGroups[l.type], l.settings);
+        // prevent calling this multiple time with outdated settings
+        delete l.settings;
+      }
       this.lobbyService.lobby.next(l);
       this.lobbyService.status.next(l.inProgress);
     }));
