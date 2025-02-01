@@ -1,0 +1,24 @@
+<p>Each team will get the following ships:</p>
+<div class="boatList">
+  <div *ngFor="let boatType of setting.data.custom; let i = index"
+       class="boat">
+    <mat-select [(ngModel)]="setting.data.custom[i]">
+      <mat-select-trigger>
+        <img [src]="getShipLink(boatType)"
+             [matTooltip]="Ships.titles[boatType] || ''">
+      </mat-select-trigger>
+      <mat-option *ngFor="let o of Ships.groups[0]?.options"
+                  [value]="o">
+        <img [src]="getShipLink(o)"
+             class="boatoption"
+             height="25px"
+             width="25px">{{Ships.titles[o]}}
+      </mat-option>
+    </mat-select>
+    <mat-icon (click)="removeCustom(i)">cancel</mat-icon>
+  </div>
+  <div class="boat"
+       (click)="addCustom()">
+    <mat-icon>add</mat-icon>
+  </div>
+</div>

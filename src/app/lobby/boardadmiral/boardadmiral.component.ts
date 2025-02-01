@@ -17,6 +17,18 @@ import { QdragModule } from '../../qdrag/qdrag.module';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
 import { Team } from '../quacken/boats/types';
 import { BoardadmiralDesc, LobbyStatus } from '../cadegoose/lobby-type';
+import { SettingList } from '../../settings/settings.service';
+
+export const BASettings: SettingList = [
+  'cadeMaxPlayers', 'jobberQuality',
+  'cadeTurnTime', 'cadeTurns',
+  'cadeSpawnDelay', 'cadeTeams',
+  'baships', 'botDifficulty',
+  'cadePublicMode', 'cadeHotEntry',
+  'cadeShowStats', 'allowGuests',
+  'overtime', 'cadeShowMoves',
+  'fishBoats', 'cadeShowDamage',
+];
 
 interface BaAction {
   cmd: 'addTile' | 'removeTile';
@@ -55,6 +67,11 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
 
   private undoTicker = 0;
   private lastStatus = LobbyStatus.Waiting;
+
+  protected setType() {
+    super.setType();
+    this.ss.setLobbySettings(BASettings, this.showMapChoice);
+  }
 
   ngOnInit(): void {
     super.ngOnInit();

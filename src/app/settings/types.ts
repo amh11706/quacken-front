@@ -66,6 +66,8 @@ export class Setting {
   }
 
   private setLabel(data: unknown): string | { label: string } | unknown {
+    const newData = this.inputConfig.setLabel?.(this);
+    if (newData !== undefined) return newData;
     let label: string | undefined;
     switch (this.inputConfig.type) {
       case 'checkbox':
@@ -75,7 +77,6 @@ export class Setting {
         label = this.inputConfig.options[this.value];
         break;
       case 'slider':
-        if (this.inputConfig.setLabel) return this.inputConfig.setLabel(this);
         label = this.inputConfig.stepLabels?.[this.value];
         break;
       default:

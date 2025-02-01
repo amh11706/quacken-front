@@ -27,6 +27,7 @@ import { ExitPromptComponent } from './key-binding/exit-prompt/exit-prompt.compo
 import { BotSettingComponent } from './bot-setting/bot-setting.component';
 import { AdvancedComponent } from './advanced/advanced.component';
 import { JobberQualityComponent } from './jobber-quality/jobber-quality.component';
+import { BaShipSettingComponent } from './ba-ship-setting/ba-ship-setting';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { JobberQualityComponent } from './jobber-quality/jobber-quality.componen
     BotSettingComponent,
     AdvancedComponent,
     JobberQualityComponent,
+    BaShipSettingComponent,
   ],
   imports: [
     CommonModule,

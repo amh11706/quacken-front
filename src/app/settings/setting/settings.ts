@@ -1,8 +1,14 @@
 /* eslint-disable no-sparse-arrays */
 import { OutCmd } from '../../ws/ws-messages';
+import { BaShipSettingComponent } from '../ba-ship-setting/ba-ship-setting';
 import { BotSettingComponent } from '../bot-setting/bot-setting.component';
 import { JobberQualityComponent } from '../jobber-quality/jobber-quality.component';
 import { Setting } from '../types';
+
+export const BoatTitles = [, , , , , , , , , , , , , ,
+  'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
+  'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate', 'Black Ship',
+];
 
 interface BaseSetting {
   readonly default?: number;
@@ -14,6 +20,7 @@ interface BaseSetting {
   readonly advancedComponent?: any;
   readonly trigger?: OutCmd.NextBoat | OutCmd.SpawnSide | OutCmd.ChatCommand;
   readonly cmd?: OutCmd;
+  readonly setLabel?: (s: Setting) => string | Setting['data'] | undefined;
 }
 
 interface ButtonSetting extends BaseSetting {
@@ -34,7 +41,6 @@ export interface SliderSetting extends BaseSetting {
   readonly max: number,
   readonly step: number,
   readonly stepLabels?: Record<number, string>;
-  readonly setLabel?: (s: Setting) => string | { label: string };
 }
 
 export interface OptionSetting extends BaseSetting {
@@ -57,7 +63,7 @@ type ClientSettingGroup = {
   controls: 'lockAngle' | 'kbControls' | 'alwaysChat' | 'shiftSpecials' | 'updateLinked',
   sounds: 'soundMaster' | 'soundNotify' | 'soundShip' | 'soundAlert',
   'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
-  'l/cade': 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'cadePublicMode' | 'cadeMaxPlayers' |
+  'l/cade': 'jobberQuality' | 'cadeTurnTime' | 'cadeTurns' | 'enableBots' | 'botDifficulty' | 'cadePublicMode' | 'cadeMaxPlayers' | 'baships' |
   'cadeSpawnDelay' | 'cadeHotEntry' | 'cadeShowStats' | 'cadeMap' | 'cadeTeams' | 'cadeShowMoves' | 'cadeShowDamage' |
   'cadeRated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
@@ -74,7 +80,7 @@ export type ServerSettingGroup = {
   controls: 'lockAngle' | 'kbControls' | 'alwaysChat' | 'shiftSpecials' | 'updateLinked' | 'bindings',
   sounds: 'master' | 'notification' | 'ship' | 'alert',
   'l/quacken': 'duckLvl' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'autoGen' | 'hideMoves',
-  'l/cade': 'jobberQuality' | 'turnTime' | 'turns' | 'bots' | 'botDifficulty' | 'publicMode' | 'maxPlayers' | 'spawnDelay' |
+  'l/cade': 'jobberQuality' | 'turnTime' | 'turns' | 'bots' | 'botDifficulty' | 'publicMode' | 'maxPlayers' | 'spawnDelay' | 'baships' |
   'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
@@ -113,10 +119,7 @@ export const Settings: SettingList = {
     name: 'cade',
     type: 'boat',
     trigger: OutCmd.NextBoat,
-    titles: [, , , , , , , , , , , , , ,
-      'Sloop', 'Cutter', 'Dhow', 'Fanchuan', 'Longship', 'Baghlah', 'Merchant Brig', 'Junk',
-      'War Brig', 'Merchant Galleon', 'Xebec', 'War Galleon', 'War Frigate', 'Grand Frigate', 'Black Ship',
-    ],
+    titles: BoatTitles,
     groups: [
       { name: 'Next Ship', options: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28] },
     ],
@@ -197,7 +200,20 @@ export const Settings: SettingList = {
     advancedComponent: BotSettingComponent,
   },
   botDifficulty: {
-    admin: true, id: 36, group: 'l/cade', name: 'botDifficulty', type: 'slider', label: 'Bot difficulty', min: 25, max: 100, step: 25,
+    admin: true, id: 36, group: 'l/cade', name: 'botDifficulty', type: 'slider', label: 'Bot skill', min: 25, max: 100, step: 25,
+  },
+  baships: {
+    admin: true,
+    id: 78,
+    group: 'l/cade',
+    name: 'baships',
+    type: 'option',
+    label: 'Ships',
+    options: [
+      '5v5 Frigs', 'Custom',
+    ],
+    advancedComponent: BaShipSettingComponent,
+    setLabel: BaShipSettingComponent.setLabel,
   },
 
   soundMaster: { id: 37, group: 'sounds', name: 'master', type: 'slider', label: 'Master Volume', min: 0, max: 100, step: 5 },
