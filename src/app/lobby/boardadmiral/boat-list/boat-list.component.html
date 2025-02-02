@@ -37,6 +37,7 @@
               <p *ngIf="spawnBoats.length === 0"
                  class="empty">Click boat types below to spawn ships.</p>
               <div *ngFor="let boat of spawnBoats"
+                   (click)="selectBoat(boat)"
                    class="boat">
                 <span>{{ShipTypeMap.get(boat.type)?.title}}</span>
                 <span class="name">{{fishNames ? boat.name : boat.title}}</span>
