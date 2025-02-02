@@ -235,15 +235,16 @@ export class HudComponent implements OnInit, OnDestroy {
   toggleReady(): void {
     if (!this.myBoat.ready) return this.imReady();
     this.myBoat.ready = false;
-    this.myBoat.moveLock %= 100;
+    // 102 used for BA
+    if (this.myBoat.moveLock !== 102) this.myBoat.moveLock %= 100;
     this.ws.send(OutCmd.Ready, { ready: false, ...this.localBoat });
   }
 
   imReady(): void {
     if (this.myBoat.ready) return;
-    this.stopTimer();
+    //  this.stopTimer();
     this.myBoat.ready = true;
-    this.myBoat.moveLock += 100;
+    if (this.myBoat.moveLock !== 102) this.myBoat.moveLock += 100;
     this.ws.send(OutCmd.Ready, { ready: true, ...this.localBoat });
   }
 
