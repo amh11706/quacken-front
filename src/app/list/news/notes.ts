@@ -22,6 +22,16 @@ export interface Note {
 
 export const Notes: Note[] = [
   {
+    title: 'Release 02 February 2025',
+    points: [
+      'BA update!',
+      'New influence cap variation where you choose which ships to spawn.',
+      'Ships marked for sink now have an orange border in the side menu.',
+      'Bots now behave better with rock traps.',
+      'Keybindings added for BA mode. Check Settings -> Controls -> Key Bindings for defaults. Note: You need to disable \'Always focus chat\' to use keybindings.',
+    ],
+  },
+  {
     title: 'Release 23 January 2025',
     points: [
       'BA mode!',
