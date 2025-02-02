@@ -3,7 +3,7 @@
         class="boat"
         [matTooltip]="boat.attr?.[50] ? 'This boat will be targetted by teammates' : ''"
         [style.borderColor]="boat.attr?.[50] ? 'orange' : teamColors[boat.team || 0]">
-  {{fishNames ? boat.name : boat.title}}
+  {{ShipTypeMap.get(boat.type)?.title}} - {{fishNames ? boat.name : boat.title}}
   <br>
   <div class="damage"
        matTooltip="{{boat.getDamage()}}%">

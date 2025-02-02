@@ -1,3 +1,46 @@
+:host ::ng-deep div.mdc-tab {
+  min-width: 20px;
+  max-width: 59%;
+  padding: 0 12px;
+}
+
+mat-tab-group {
+  height: 100%;
+}
+
+.empty {
+  color: #bbb;
+  margin: 0 8px;
+  margin-bottom: 8px;
+}
+
+.boat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 4px;
+  text-align: center;
+  font-size: 14px;
+  width: 150px;
+  padding: 4px;
+  margin: 4px;
+  border: 1px solid black;
+
+  mat-icon {
+    cursor: pointer;
+  }
+
+  .name {
+    max-width: 88px;
+    overflow: hidden;
+  }
+}
+
+.half {
+  height: 50%;
+  overflow-y: auto;
+}
+
 #boatlist {
   position: absolute;
   left: 10px;

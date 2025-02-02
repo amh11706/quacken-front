@@ -30,7 +30,7 @@
           [boatSettings]="boatSettings"></q-ba-hud>
 
 <q-boat-list (boatsChange)="gotBoats($event)"
-             [fishnames]="!!lobbySettings.fishBoats.value"
+             [fishNames]="!!lobbySettings.fishBoats.value"
              [activeBoat]="activeBoat"
              [highlightedBoats]="highlightedBoats"
              (activeBoatChange)="activeBoatChange($event)"></q-boat-list>

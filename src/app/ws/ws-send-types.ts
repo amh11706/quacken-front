@@ -50,6 +50,8 @@ export type SendCmdInputs = {
   [OutCmd.BASettings]: ServerBASettings;
   [OutCmd.BADamageReport]: number;
   [OutCmd.BAToggleSink]: number;
+  [OutCmd.BAAddBoat]: number;
+  [OutCmd.BARemoveBoat]: number;
 }
 
 export type SendCmdInputless =

@@ -66,6 +66,6 @@ import { ShipListComponent } from './ship-list/ship-list.component';
     PickerComponent,
     EmojiComponent,
   ],
-  exports: [SettingComponent, SettingsComponent],
+  exports: [SettingComponent, SettingsComponent, ShipListComponent],
 })
 export class SettingsModule { }

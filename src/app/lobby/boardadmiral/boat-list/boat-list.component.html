@@ -4,17 +4,47 @@
      [bindToWindow]="true">
   <div #handle
        class="handle"></div>
-  <!-- <q-boat-button [boat]="DefaultBoat"
-                 [active]="activeBoat === DefaultBoat"
-                 (click)="selectBoat(DefaultBoat)"></q-boat-button> -->
-  <h4>Your Boats</h4>
+  <mat-tab-group [selectedIndex]="1">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon matTooltip="Your Boats">sailing</mat-icon>
+      </ng-template>
+      <q-boat-button *ngFor="let boat of filteredBoats"
+                     [class.highlight]="boat.showInfluence || highlightedBoats.has(boat.id)"
+                     (mouseover)="boat.showInfluence = true"
+                     (mouseout)="boat.showInfluence = false"
+                     [boat]="boat"
+                     [fishNames]="fishNames"
+                     [active]="activeBoat === boat"
+                     (click)="selectBoat(boat)"></q-boat-button>
+    </mat-tab>
 
-  <q-boat-button *ngFor="let boat of filteredBoats"
-                 [class.highlight]="boat.showInfluence || highlightedBoats.has(boat.id)"
-                 (mouseover)="boat.showInfluence = true"
-                 (mouseout)="boat.showInfluence = false"
-                 [boat]="boat"
-                 [fishNames]="fishnames"
-                 [active]="activeBoat === boat"
-                 (click)="selectBoat(boat)"></q-boat-button>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon matTooltip="Ship Spawning">add</mat-icon>
+      </ng-template>
+      <div class="half">
+        <p>Cost: {{cost}} / {{settings.baships.data.budget < 1010
+            ?
+            settings.baships.data.budget
+            : '∞'
+            }}</p>
+            <p *ngIf="spawnBoats.length === 0"
+               class="empty">Click boat types below to spawn ships.</p>
+            <div *ngFor="let boat of spawnBoats"
+                 class="boat">
+              <span>{{ShipTypeMap.get(boat.type)?.title}}</span>
+              <span class="name">{{fishNames ? boat.name : boat.title}}</span>
+              <mat-icon (click)="removeBoat(boat.id)">cancel</mat-icon>
+            </div>
+      </div>
+
+      <div class="half">
+        <q-ship-list [showList]="false"
+                     [ships]="boatTypes"
+                     [budget]="settings.baships.data.budget"
+                     (shipAdd)="addBoat($event)"></q-ship-list>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>

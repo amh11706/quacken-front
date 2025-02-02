@@ -22,11 +22,6 @@
   margin: 4px 8px;
   border: 1px solid black;
 
-  mat-select {
-    width: 40px;
-    margin-right: 8px;
-  }
-
   img {
     width: 25px;
     height: 25px;
@@ -41,6 +36,6 @@ mat-chip-listbox {
   max-width: 250px;
 
   mat-chip {
-    cursor: pointer;
+    --mdc-chip-label-text-size: 13px;
   }
 }

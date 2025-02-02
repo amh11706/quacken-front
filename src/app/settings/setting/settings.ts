@@ -206,7 +206,7 @@ export const Settings: SettingList = {
     type: 'option',
     label: 'Ships',
     options: [
-      '5v5 Frigs', 'Custom',
+      '5v5 Frigs', 'Custom', 'Influence cap',
     ],
     advancedComponent: BaShipSettingComponent,
     setLabel: BaShipSettingComponent.setLabel,

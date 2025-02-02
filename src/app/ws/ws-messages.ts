@@ -100,6 +100,8 @@ export const enum OutCmd {
   BASettingsGet,
   BADamageReport,
   BAToggleSink,
+  BAAddBoat,
+  BARemoveBoat,
 }
 
 export const enum InCmd {

@@ -1,2 +1,31 @@
-<p>Each team will get the following ships:</p>
-<q-ship-list [(ships)]="setting.data.custom"></q-ship-list>
+<mat-form-field class="setting">
+  <mat-label>{{ShipSetting.label}}</mat-label>
+  <mat-select [(value)]="setting.value"
+              [disabled]="ShipSetting.admin && (ss.admin$ | async) === false">
+    <mat-option *ngFor="let option of ShipSetting.options; let i = index"
+                [value]="i">{{option}}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<q-ship-list *ngIf="setting.value === 1"
+             [(ships)]="setting.data.custom"></q-ship-list>
+
+<br>
+<div *ngIf="setting.value === 2"
+     class="setting slider mat-mdc-form-field">
+  <span class="label">Limit ({{slider.valueAsNumber < 1010
+      ?
+      slider.value
+      : 'Unlimited'
+      }})</span>
+      <mat-slider [min]="10"
+                  [max]="1010"
+                  [step]="10"
+                  [color]="'accent'"
+                  [disabled]="ShipSetting.admin && (ss.admin$ | async) === false">
+        <input matSliderThumb
+               [disabled]="ShipSetting.admin && (ss.admin$ | async) === false"
+               [(value)]="setting.data.budget"
+               #slider>
+      </mat-slider>
+</div>

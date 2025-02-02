@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { Boat } from '../../lobby/quacken/boats/boat';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
+import { ShipTypeMap } from '../../settings/ship-list/ship-list.component';
 
 @Component({
   selector: 'q-boat-button',
@@ -18,4 +19,5 @@ export class BoatButtonComponent {
   @Input() active = false;
   @Input() fishNames = false;
   teamColors = TeamColorsCss;
+  ShipTypeMap = ShipTypeMap;
 }
