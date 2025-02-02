@@ -9,7 +9,7 @@ export const BoatTitles = [, , , , , , , , , , , , , ,
 ];
 
 export const ShipTypes: { id: BoatTypes; name: string; title: string; cost: number; }[] = [
-  { id: 27, name: BoatTitles[27]!, title: 'GF', cost: 50 },
+  { id: 27, name: BoatTitles[27]!, title: 'GF', cost: 60 },
   { id: 26, name: BoatTitles[26]!, title: 'WF', cost: 40 },
   { id: 25, name: BoatTitles[25]!, title: 'WG', cost: 30 },
   { id: 24, name: BoatTitles[24]!, title: 'Xb', cost: 30 },
@@ -59,7 +59,6 @@ export class ShipListComponent implements OnChanges {
   }
 
   private updateCost(): void {
-    if (!this.showList) return;
     this.cost = ShipListComponent.getCost(this.ships);
     if (this.budget > 0 && this.budget < 1010 && this.cost > this.budget) {
       this.ships.pop();
