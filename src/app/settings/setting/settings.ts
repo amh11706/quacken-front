@@ -64,7 +64,7 @@ type ClientSettingGroup = {
   'cadeRated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'queueRated' | 'showAdvanced' | 'lobbyType',
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'queueRated' | 'showAdvanced' | 'lobbyType' | 'variation',
   'l/flaggames': 'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' |
   'flagTurns' | 'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagRespawn' | 'flagSteal',
 };
@@ -80,7 +80,7 @@ export type ServerSettingGroup = {
   'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated' | 'showAdvanced' | 'lobbyType',
+  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated' | 'showAdvanced' | 'lobbyType' | 'variation',
   'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
   'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
 }
@@ -333,6 +333,9 @@ export const Settings: SettingList = {
   },
   lobbyType: {
     id: 77, group: 'matchmaking', type: 'option', label: 'Lobby Type', options: ['', '', 'Blockade', '', '', 'Board Admiral'], name: 'lobbyType', default: 0,
+  },
+  variation: {
+    id: 79, group: 'matchmaking', type: 'option', label: 'Variation', options: ['Any', '5v5 frigs', 'Influence cap'], name: 'variation', default: 0,
   },
   updateLinked: {
     id: 33, group: 'controls', type: 'checkbox', label: 'Update linked settings', name: 'updateLinked',

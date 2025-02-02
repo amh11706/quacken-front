@@ -4,7 +4,7 @@
      [bindToWindow]="true">
   <div #handle
        class="handle"></div>
-  <mat-tab-group [selectedIndex]="1">
+  <mat-tab-group [selectedIndex]="settings.baships.value === 2 ? 1 : 0">
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon matTooltip="Your Boats">sailing</mat-icon>
@@ -23,28 +23,34 @@
       <ng-template mat-tab-label>
         <mat-icon matTooltip="Ship Spawning">add</mat-icon>
       </ng-template>
-      <div class="half">
-        <p>Cost: {{cost}} / {{settings.baships.data.budget < 1010
-            ?
-            settings.baships.data.budget
-            : '∞'
-            }}</p>
-            <p *ngIf="spawnBoats.length === 0"
-               class="empty">Click boat types below to spawn ships.</p>
-            <div *ngFor="let boat of spawnBoats"
-                 class="boat">
-              <span>{{ShipTypeMap.get(boat.type)?.title}}</span>
-              <span class="name">{{fishNames ? boat.name : boat.title}}</span>
-              <mat-icon (click)="removeBoat(boat.id)">cancel</mat-icon>
-            </div>
-      </div>
+      <ng-template #fixedShips>
+        <p class="empty">You can only spawn ships in influence cap mode.</p>
+      </ng-template>
 
-      <div class="half">
-        <q-ship-list [showList]="false"
-                     [ships]="boatTypes"
-                     [budget]="settings.baships.data.budget"
-                     (shipAdd)="addBoat($event)"></q-ship-list>
-      </div>
+      <ng-container *ngIf="settings.baships.value === 2; else fixedShips">
+        <div class="half">
+          <p>Cost: {{cost}} / {{settings.baships.data.budget < 1010
+              ?
+              settings.baships.data.budget
+              : '∞'
+              }}</p>
+              <p *ngIf="spawnBoats.length === 0"
+                 class="empty">Click boat types below to spawn ships.</p>
+              <div *ngFor="let boat of spawnBoats"
+                   class="boat">
+                <span>{{ShipTypeMap.get(boat.type)?.title}}</span>
+                <span class="name">{{fishNames ? boat.name : boat.title}}</span>
+                <mat-icon (click)="removeBoat(boat.id)">cancel</mat-icon>
+              </div>
+        </div>
+
+        <div class="half">
+          <q-ship-list [showList]="false"
+                       [ships]="boatTypes"
+                       [budget]="settings.baships.data.budget"
+                       (shipAdd)="addBoat($event)"></q-ship-list>
+        </div>
+      </ng-container>
     </mat-tab>
   </mat-tab-group>
 </div>
