@@ -118,16 +118,17 @@ export class BoatsService implements OnDestroy {
     this._boats.next([...this.boatMap.values()]);
   }
 
-  private myLastBoat?: Boat;
+  private myLastBoat?: string;
 
   private updateMyBoat() {
     if (!this.ws.sId) return;
     const boat = this.boatMap.get(this.ws.sId);
     if (!boat) return;
-    if (boat === this.myLastBoat) return;
-    if (this.myLastBoat) this.myLastBoat.isMe = false;
+    if (boat.name === this.myLastBoat) return;
+    boat.isMe = true;
     this.myBoat.next(boat);
-    this.myLastBoat = boat;
+    this.myLastBoat = boat.name;
+    this.focusMyBoat();
   }
 
   private setBoats(boats: BoatSync[], reset = true) {

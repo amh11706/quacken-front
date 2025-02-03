@@ -122,8 +122,10 @@ export class BoatListComponent implements OnInit, OnDestroy {
     this.boatsService.focusMyBoat();
   }
 
-  addBoat(id: BoatTypes): void {
-    this.ws.send(OutCmd.BAAddBoat, id);
+  async addBoat(id: BoatTypes): Promise<void> {
+    const boatId = await this.ws.request(OutCmd.BAAddBoat, id);
+    const boat = this.boats.find(b => b.id === boatId);
+    if (boat) this.selectBoat(boat);
   }
 
   removeBoat(id: number): void {
