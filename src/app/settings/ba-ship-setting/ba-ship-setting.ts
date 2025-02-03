@@ -33,7 +33,7 @@ export class BaShipSettingComponent {
   static setLabel(s: Setting): BaShipSetting['data'] | undefined {
     if (s.value === 0) return;
 
-    const data: BaShipSetting['data'] = s.data ?? { custom: [] };
+    const data: BaShipSetting['data'] = s.data ?? { custom: [], budget: 200 };
     if (s.value === 2) {
       if (s.data.budget === 1010) data.label = 'Influence cap: ∞';
       else data.label = 'Influence cap: ' + s.data.budget;
