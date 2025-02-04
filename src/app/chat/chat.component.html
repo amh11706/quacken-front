@@ -2,11 +2,12 @@
   <div class="output">
     <cdk-virtual-scroll-viewport (wheel)="scrolled($event)"
                                  (scroll)="scrolledAny($event)"
-                                 [itemSize]="25"
+                                 [itemSize]="27"
                                  [minBufferPx]="100"
                                  [maxBufferPx]="200"
                                  class="textbox">
-      <ng-container *cdkVirtualFor="let m of chat.messages$">
+      <div *cdkVirtualFor="let m of chat.messages$"
+           class="message">
         <p [style.backgroundColor]="colors[m.type]"
            [matTooltipShowDelay]="500"
            [matTooltipPosition]="'right'"
@@ -87,7 +88,7 @@
             </span>
           </ng-container>
         </p>
-      </ng-container>
+      </div>
     </cdk-virtual-scroll-viewport>
   </div>
 

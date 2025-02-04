@@ -67,9 +67,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     else this.isScrolling = false;
   }
 
+  private lastScroll = 0;
   scrolledAny(event: Event): void {
     const el = event.target as HTMLElement;
-    this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 35;
+    if (this.lastScroll > el.scrollTop) this.scrolledToBottom = false;
+    else this.scrolledToBottom = el.scrollHeight - el.scrollTop < el.clientHeight + 35;
+    this.lastScroll = el.scrollTop;
     if (!this.isScrolling) this.scrollTarget = el.scrollTop;
   }
 
