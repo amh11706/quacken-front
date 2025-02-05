@@ -33,6 +33,7 @@ export class MainMenuService implements OnDestroy {
   teamPlayers$ = new BehaviorSubject<TeamMessage[][]>([]);
   teamRanks: number[] = [];
   myBoat = new Boat('');
+  private myBoatName = '';
   myTeam = 99;
   myJobbers = 100;
   myVote = 0;
@@ -104,16 +105,17 @@ export class MainMenuService implements OnDestroy {
       if (!this.ws.connected) return;
       if (m === LobbyStatus.MidMatch) {
         void this.es.openMenu(false);
+        this.myBoat.isMe = true;
         return;
       } else if (m === LobbyStatus.PreMatch) {
         this.myBoat.isMe = false;
         return;
       }
       void this.es.openTab(0, false, { lobbyTab: 0 });
-      this.myBoat.isMe = false;
     }));
     this.subs.add(this.boats.myBoat$.subscribe(b => {
-      if (b.isMe && !this.myBoat.isMe) this.gotBoat();
+      if (b.isMe && b.name !== this.myBoatName) this.gotBoat();
+      this.myBoatName = b.name;
       this.myBoat = b;
     }));
     this.subs.add(this.ws.subscribe(InCmd.Turn, t => {

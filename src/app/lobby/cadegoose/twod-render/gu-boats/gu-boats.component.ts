@@ -201,7 +201,6 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
 
   protected checkBoats(boats: Iterable<Boat>): void {
     if (this.turn.animating) return; // don't interrupt the turn animation
-    console.log('checkBoats', boats);
 
     const newRenders = new Map<number, GuBoat>();
     for (const b of boats) {
