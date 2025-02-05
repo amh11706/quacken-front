@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { firstValueFrom, Subject, Subscription } from 'rxjs';
 import { Tween } from '@tweenjs/tween.js';
 
 import { InCmd, OutCmd } from '../../../ws/ws-messages';
@@ -35,6 +35,7 @@ export class TurnService implements OnDestroy {
   private get speed() { return this.graphicSettings.speed.value; }
   private animateTimeout?: number;
   private blurred = false;
+  private syncDone$ = new Subject<void>();
 
   constructor(
     private ws: WsService,
@@ -48,7 +49,10 @@ export class TurnService implements OnDestroy {
 
   private initSubs() {
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => this.handleTurn(turn)));
-    this.subs.add(this.ws.subscribe(InCmd.Sync, () => this.skipToEnd(false)));
+    this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
+      this.skipToEnd(false);
+      setTimeout(() => this.syncDone$.next());
+    }));
   }
 
   ngOnDestroy() {
@@ -79,7 +83,11 @@ export class TurnService implements OnDestroy {
   }
 
   protected handleTurn(turn: Turn): void {
-    if (this.animating) return this.skipToEnd();
+    if (this.animating) {
+      void firstValueFrom(this.syncDone$).then(() => this.handleTurn(turn));
+      this.ws.send(OutCmd.Sync);
+      return;
+    }
     if (this.animateTimeout) {
       clearTimeout(this.animateTimeout);
       delete this.animateTimeout;
