@@ -252,10 +252,14 @@ export class ReplayComponent implements OnInit, OnDestroy {
   playTo(value: number): void {
     if (value === this.tick) return;
 
-    if (value < this.tick) {
-      this.wrapper.boats?.resetBoats();
-      const syncTick = this.lastSyncBefore(value);
+    this.wrapper.boats?.resetBoats();
+    const thisSyncTick = this.lastSyncBefore(this.tick);
+    const syncTick = this.lastSyncBefore(value);
+    if (syncTick !== thisSyncTick) {
       this.rewindChat(syncTick);
+      for (let i = this.tick + 1; i < syncTick; i++) {
+        this.sendFakeChat(i);
+      }
       this.tick = syncTick - 1;
       if (this.lobbyMessage?.data.type === 'FlagGames' && this.lobbyMessage?.data.map) {
         // reset the map because it could have changed in capture the flag mode
@@ -266,8 +270,19 @@ export class ReplayComponent implements OnInit, OnDestroy {
     for (let i = this.tick + 1; i <= value; i++) {
       this.fakeMessages(true, i);
     }
+
     this.tick = value;
     this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
+  }
+
+  private sendFakeChat(tick = this.tick): void {
+    const messages = this.messages[tick];
+    if (!messages) return;
+    for (const m of messages) {
+      if (m.cmd !== InCmd.ChatMessage) continue;
+      this.fakeChat.messages.push(m.data);
+      this.fakeChat.messages$.next(this.fakeChat.messages);
+    }
   }
 
   private fakeMessages(includeSync = false, tick = this.tick): void {
