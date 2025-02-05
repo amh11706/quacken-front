@@ -238,20 +238,18 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
   playTo(value: number): void {
     if (value === this.tick) return;
+    const wasPLaying = this.tickInterval !== 0;
+    if (wasPLaying) this.pause();
 
-    // this.wrapper.boats?.resetBoats();
-    const thisSyncTick = this.lastSyncBefore(this.tick);
     const syncTick = this.lastSyncBefore(value);
-    if (syncTick !== thisSyncTick || this.tick > value) {
-      this.rewindChat(syncTick);
-      for (let i = this.tick + 1; i < syncTick; i++) {
-        this.sendFakeChat(i);
-      }
-      if (syncTick !== thisSyncTick) this.tick = syncTick - 1;
-      if (this.lobbyMessage?.data.type === 'FlagGames' && this.lobbyMessage?.data.map) {
-        // reset the map because it could have changed in capture the flag mode
-        void this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
-      }
+    this.rewindChat(syncTick);
+    for (let i = this.tick + 1; i < syncTick; i++) {
+      this.sendFakeChat(i);
+    }
+    this.tick = syncTick - 1;
+    if (this.lobbyMessage?.data.type === 'FlagGames' && this.lobbyMessage?.data.map) {
+      // reset the map because it could have changed in capture the flag mode
+      void this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });
     }
 
     for (let i = this.tick + 1; i <= value; i++) {
@@ -260,6 +258,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
     this.tick = value;
     this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
+    if (wasPLaying) this.togglePlay();
   }
 
   private sendFakeChat(tick = this.tick): void {

@@ -83,9 +83,10 @@ export class TurnService implements OnDestroy {
   }
 
   protected handleTurn(turn: Turn): void {
+    if (BoatRender3d.paused) return;
     if (this.animating) {
-      void firstValueFrom(this.syncDone$).then(() => this.handleTurn(turn));
       this.ws.send(OutCmd.Sync);
+      void firstValueFrom(this.syncDone$).then(() => this.handleTurn(turn));
       return;
     }
     if (this.animateTimeout) {
