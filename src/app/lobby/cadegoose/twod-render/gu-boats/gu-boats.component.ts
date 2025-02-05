@@ -201,22 +201,11 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
 
   protected checkBoats(boats: Iterable<Boat>): void {
     if (this.turn.animating) return; // don't interrupt the turn animation
-    const touchedBoats = new Set<number>();
+
+    this.boatRenders.clear();
     for (const b of boats) {
-      touchedBoats.add(b.id);
-      if (!this.boatRenders.has(b.id)) this.boatRenders.set(b.id, new GuBoat(b));
-      const r = this.boatRenders.get(b.id);
-      if (!r) continue;
-      r.boat = b;
-      r.pos = b.pos;
+      this.boatRenders.set(b.id, new GuBoat(b));
     }
-    this.boatRenders.forEach((r, id) => {
-      if (!touchedBoats.has(id)) {
-        this.boatRenders.delete(id);
-        return;
-      }
-      void r.update(false);
-    });
     this.boatRenders$.next(Array.from(this.boatRenders.values()));
     this.turn.setBoats(this.boatRenders$.value);
   }
