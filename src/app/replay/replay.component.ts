@@ -91,8 +91,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   protected async getMatch(id: number): Promise<void> {
     this.tick = 0;
     this.id = id;
-    clearInterval(this.tickInterval);
-    this.tickInterval = 0;
+    this.pause();
     const match = await this.ws.request(OutCmd.MatchData, +id);
     if (!match?.data) return;
     this.messages = match.data.messages;
@@ -144,6 +143,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
   private sendSync() {
     void this.fakeWs.dispatchMessage(this.lastSync);
+    if (this.tick === this.messages.length - 1) this.pause();
   }
 
   private addBoat(b: BoatSync | BoatSync[]): void {
@@ -174,20 +174,20 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   pause(): void {
+    this.animationPlayState = 'paused';
+    BoatRender3d.paused = true;
     clearInterval(this.tickInterval);
     this.tickInterval = 0;
   }
 
   togglePlay(): void {
-    BoatRender3d.paused = !!this.tickInterval;
     if (this.tickInterval) {
-      this.animationPlayState = 'paused';
-      clearInterval(this.tickInterval);
-      this.tickInterval = 0;
+      this.pause();
       return;
     }
 
     this.animationPlayState = 'running';
+    BoatRender3d.paused = false;
     this.tickInterval = window.setInterval(() => {
       if (this.tick + 1 === this.messages.length) return;
       if (this.tick % 30 === 28) this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
