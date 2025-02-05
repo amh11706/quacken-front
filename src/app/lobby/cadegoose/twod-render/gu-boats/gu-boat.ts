@@ -157,7 +157,6 @@ export class GuBoat {
 
   public async updateTeam(): Promise<void> {
     if (!this.spriteData) return;
-    await new Promise(resolve => setTimeout(resolve));
     await this.updateAnimation('sail');
     if (Boats[this.boat.type]?.sink) void this.getTeamImage(this.team, this.spriteData.name + '/sink');
     this.rebuildHeader();

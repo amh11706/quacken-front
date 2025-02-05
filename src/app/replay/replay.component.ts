@@ -197,17 +197,9 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   nextTurn(): void {
-    // if (this.tickInterval) {
-    //   this.togglePlay();
-    //   BoatRender3d.tweens.update(Infinity);
-    //   BoatRender3d.tweens.removeAll();
-    //   this.togglePlay();
-    // }
-
     for (let target = this.tick + 3; target < this.messages.length; target++) {
       if (this.messages[target]?.find(el => el.cmd === InCmd.Turn)) {
         this.playTo(target - 2);
-        this.sendSync();
         return;
       }
     }
@@ -215,11 +207,6 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   prevTurn(): void {
-    if (this.tickInterval) {
-      this.togglePlay();
-      this.togglePlay();
-    }
-    // setTimeout(() => this.fakeWs.dispatchMessage({ cmd: Internal.CenterOnBoat }));
     for (let target = this.tick - 1; target > 0; target--) {
       if (this.messages[target]?.find(el => el.cmd === InCmd.Turn)) {
         this.playTo(target - 2);
@@ -252,15 +239,15 @@ export class ReplayComponent implements OnInit, OnDestroy {
   playTo(value: number): void {
     if (value === this.tick) return;
 
-    this.wrapper.boats?.resetBoats();
+    // this.wrapper.boats?.resetBoats();
     const thisSyncTick = this.lastSyncBefore(this.tick);
     const syncTick = this.lastSyncBefore(value);
-    if (syncTick !== thisSyncTick) {
+    if (syncTick !== thisSyncTick || this.tick > value) {
       this.rewindChat(syncTick);
       for (let i = this.tick + 1; i < syncTick; i++) {
         this.sendFakeChat(i);
       }
-      this.tick = syncTick - 1;
+      if (syncTick !== thisSyncTick) this.tick = syncTick - 1;
       if (this.lobbyMessage?.data.type === 'FlagGames' && this.lobbyMessage?.data.map) {
         // reset the map because it could have changed in capture the flag mode
         void this.fakeWs.dispatchMessage({ cmd: Internal.SetMap, data: this.lobbyMessage.data.map });

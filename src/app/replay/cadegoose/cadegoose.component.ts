@@ -52,13 +52,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
       delete this.aiData;
       this.selectAiBoat();
     }
-
-    if (this.activeTurn && value + 2 === this.activeTurn.index) {
-      const moves = this.activeTurn.sync.moves || [];
-      setTimeout(() => {
-        void this.wrapper.ws?.dispatchMessage({ cmd: InCmd.Moves, data: moves });
-      });
-    }
   }
 
   @Input() set messages(messages: InMessage[][]) {
