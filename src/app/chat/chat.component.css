@@ -43,7 +43,8 @@
 
 .message {
   min-height: 27px;
-  padding-left: 2px;
+  padding: 2px;
+  padding-top: 0;
   width: 100%;
 }
 
