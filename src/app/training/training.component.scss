@@ -1,5 +1,9 @@
 @import '../replay/cadegoose/cadegoose.component.scss';
 
+:host ::ng-deep q-gu-boats {
+  pointer-events: unset !important;
+}
+
 .container.noselect {
   height: 50vh;
   min-height: 120px;
@@ -47,6 +51,7 @@ p {
   .container {
     height: 40vh;
   }
+
   .move {
     height: 9vh;
   }

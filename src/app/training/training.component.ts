@@ -229,7 +229,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
   }
 
   private parseMoves() {
-    let maxScore = -100;
+    let maxScore = -Infinity;
     this.rawMoves.moves?.forEach(n => {
       n.Score = n.Score / 100 + 5;
       n.ShotsHit /= 100;
@@ -238,6 +238,13 @@ export class TrainingComponent implements OnInit, OnDestroy {
       n.RocksBumped /= 100;
       if (n.Score > maxScore) maxScore = n.Score;
     });
+    if (maxScore < 10) {
+      const oldMax = maxScore;
+      this.rawMoves.moves?.forEach(n => {
+        n.Score += 10 - oldMax;
+        if (n.Score > maxScore) maxScore = n.Score;
+      });
+    }
 
     const moves: MoveNode[] = [];
     this.rawMoves.moves?.forEach((n, m) => {
