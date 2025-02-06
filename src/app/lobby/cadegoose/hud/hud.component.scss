@@ -16,10 +16,10 @@
 #hudReady {
   grid-column: 3;
   grid-row: 3;
-  line-height: 1.8;
+  scale: 0.6;
 }
 
-#hudReady.ready {
+#hudReady.ready:not(:disabled) {
   color: rgb(125, 236, 80);
 }
 
@@ -74,7 +74,8 @@ q-chat {
     white-space: normal;
   }
 
-  @media screen and (max-width: 600px), screen and (max-height: 600px) {
+  @media screen and (max-width: 600px),
+  screen and (max-height: 600px) {
     transform-origin: center center;
     transform: translate(-50%, 15%) scale(0.75);
     width: 130%;
@@ -148,6 +149,7 @@ q-chat {
   width: 13px;
   height: 13px;
 }
+
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -164,6 +166,7 @@ q-chat {
   .container {
     height: 40vh;
   }
+
   .move {
     height: 9vh;
   }

@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { firstValueFrom, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Tween } from '@tweenjs/tween.js';
 
 import { InCmd, OutCmd } from '../../../ws/ws-messages';
@@ -23,7 +23,9 @@ export class TurnService implements OnDestroy {
   private turn?: Turn;
   private _turn = new Subject<Turn>();
   turn$ = this._turn.asObservable();
-  animating = false;
+  animating$ = new BehaviorSubject<boolean>(false);
+  get animating() { return this.animating$.value; }
+  set animating(v: boolean) { this.animating$.next(v); }
 
   private clutterStep = new Subject<Clutter[]>();
   clutterStep$ = this.clutterStep.asObservable();
@@ -35,7 +37,6 @@ export class TurnService implements OnDestroy {
   private get speed() { return this.graphicSettings.speed.value; }
   private animateTimeout?: number;
   private blurred = false;
-  private syncDone$ = new Subject<void>();
 
   constructor(
     private ws: WsService,
@@ -51,7 +52,6 @@ export class TurnService implements OnDestroy {
     this.subs.add(this.ws.subscribe(InCmd.Turn, turn => this.handleTurn(turn)));
     this.subs.add(this.ws.subscribe(InCmd.Sync, () => {
       this.skipToEnd(false);
-      setTimeout(() => this.syncDone$.next());
     }));
   }
 
@@ -84,11 +84,7 @@ export class TurnService implements OnDestroy {
 
   protected handleTurn(turn: Turn): void {
     if (BoatRender3d.paused) return;
-    if (this.animating) {
-      this.ws.send(OutCmd.Sync);
-      void firstValueFrom(this.syncDone$).then(() => this.handleTurn(turn));
-      return;
-    }
+    if (this.animating) return;
     if (this.animateTimeout) {
       clearTimeout(this.animateTimeout);
       delete this.animateTimeout;

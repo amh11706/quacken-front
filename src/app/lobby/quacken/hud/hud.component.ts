@@ -15,6 +15,7 @@ import { CadeLobby } from '../../cadegoose/types';
 import { BoatsService } from '../boats/boats.service';
 import { LobbyService } from '../../lobby.service';
 import { LobbyStatus } from '../../cadegoose/lobby-type';
+import { TurnService } from '../boats/turn.service';
 
 export const weapons = [
   '', '', 'powderkeg', '', '', '', '', '', '', '',
@@ -112,6 +113,7 @@ export class HudComponent implements OnInit, OnDestroy {
     public es: EscMenuService,
     protected boats: BoatsService,
     protected lobbyService: LobbyService<CadeLobby>,
+    public turnService: TurnService,
   ) { }
 
   ngOnInit(): void {
