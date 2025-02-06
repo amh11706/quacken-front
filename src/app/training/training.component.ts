@@ -14,6 +14,7 @@ import { SettingGroup } from '../settings/setting/settings';
 import { LobbyWrapperService } from '../replay/lobby-wrapper/lobby-wrapper.service';
 import { OutMessage } from '../ws/ws-send-types';
 import { OutRequest } from '../ws/ws-request-types';
+import { AiRender } from '../replay/cadegoose/ai-render';
 
 function mapMoves(m: number | string): string {
   // eslint-disable-next-line no-sparse-arrays
@@ -45,6 +46,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
   tabIndex = 0;
   turns: ParsedTurn[] = [];
   private moves: Record<string, MoveNode> = {};
+  private overlay = new AiRender(this.ws, 20, 36);
   private rawMoves: {
     moves?: Map<string, MoveNode>;
     boat?: Boat;
@@ -76,6 +78,7 @@ export class TrainingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.wrapper.ws) {
+      this.overlay = new AiRender(this.wrapper.ws, 20, 36);
       this.wrapper.ws.user = this.ws.user;
       // pretend to be connected so the hud lets us input moves
       this.wrapper.ws.connected = true;
@@ -195,6 +198,10 @@ export class TrainingComponent implements OnInit, OnDestroy {
       turn: this.activeTurn,
     };
     this.parseMoves();
+    // this.overlay.setBoat({
+    //   pm: response.points,
+    // } as AiBoatData);
+    // this.overlay.setMetric('EndBonus');
 
     this.activeMove = this.moves[this.myBoat.moves.join(',')];
     this.updateShotsMissed();
