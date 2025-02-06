@@ -83,11 +83,12 @@
       </div>
     </div>
 
-    <button [disabled]="disabled"
-            mat-icon-button
+    <button mat-icon-button
+            *ngrxLet="!myBoat.isMe || (turnService.animating$ | async) as disabled"
+            matTooltip="Ready"
             [color]="'accent'"
-            [disabled]="!myBoat.isMe"
-            [class.ready]="!myBoat.ready"
+            [disabled]="disabled"
+            [class.ready]="!myBoat.ready && !disabled"
             id="hudReady"
             (click)="toggleReady()">
       <mat-icon>play_arrow</mat-icon>
