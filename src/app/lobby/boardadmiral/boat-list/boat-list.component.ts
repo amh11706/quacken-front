@@ -76,7 +76,7 @@ export class BoatListComponent implements OnInit, OnDestroy {
       this.boatsChange.emit(this.boats);
       this.filteredBoats = this.boats.filter(boat => boat.moveLock === 0);
       this.boatTypes = this.boats.map(boat => boat.type);
-      this.spawnBoats = this.boats.filter(boat => boat.inSZ);
+      this.spawnBoats = this.filteredBoats.filter(boat => boat.inSZ);
       this.cost = ShipListComponent.getCost(this.boatTypes);
     }));
   }
