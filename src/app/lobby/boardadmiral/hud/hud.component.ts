@@ -10,7 +10,7 @@ import { LetDirective } from '@ngrx/component';
 import { BABoatSettings, BoatCoverMode } from '../ba-render';
 import { CadeHudComponent } from '../../cadegoose/hud/hud.component';
 import { ChatModule } from '../../../chat/chat.module';
-import { OutCmd } from '../../../ws/ws-messages';
+import { InCmd, OutCmd } from '../../../ws/ws-messages';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
 
 @Component({
@@ -137,34 +137,71 @@ export class HudComponent extends CadeHudComponent {
 
   swapCoverageWith(boat: BABoatSettings): void {
     if (!this.activeBoat) return;
-    const tempCoverage = this.activeBoat.coverage;
-    const tempCoverMode = this.activeBoat.coverMode;
-    this.activeBoat.coverage = boat.coverage;
-    this.activeBoat.coverMode = boat.coverMode;
-    boat.coverage = tempCoverage;
-    boat.coverMode = tempCoverMode;
+    const activeCoverage = this.activeBoat.coverage;
+    const activeCoverMode = this.activeBoat.coverMode;
+    const boatCoverage = boat.coverage;
+    const boatCoverMode = boat.coverMode;
+
+    this.activeBoat.coverage = boatCoverage;
+    this.activeBoat.coverMode = boatCoverMode;
+    boat.coverage = activeCoverage;
+    boat.coverMode = activeCoverMode;
+
+    if (!this.activeBoat.isCoveragePossible() || !boat.isCoveragePossible()) {
+      this.activeBoat.coverage = activeCoverage;
+      this.activeBoat.coverMode = activeCoverMode;
+      boat.coverage = boatCoverage;
+      boat.coverMode = boatCoverMode;
+      this.notifyError('Swap with');
+      return;
+    }
+
     boat.save();
     this.update();
   }
 
   copyCoverageTo(boat: BABoatSettings): void {
     if (!this.activeBoat) return;
+
+    const originalCoverage = boat.coverage;
+    const originalCoverMode = boat.coverMode;
+
     boat.coverage = {
       [BoatCoverMode.Flags]: [...this.activeBoat.coverage[BoatCoverMode.Flags]],
       [BoatCoverMode.Tiles]: [...this.activeBoat.coverage[BoatCoverMode.Tiles]],
     };
     boat.coverMode = this.activeBoat.coverMode;
+
+    if (!boat.isCoveragePossible()) {
+      boat.coverage = originalCoverage;
+      boat.coverMode = originalCoverMode;
+      this.notifyError('Copy to');
+      return;
+    }
+
     boat.save();
     this.update();
   }
 
   copyCoverageFrom(boat: BABoatSettings): void {
     if (!this.activeBoat) return;
+
+    const originalCoverage = this.activeBoat.coverage;
+    const originalCoverMode = this.activeBoat.coverMode;
+
     this.activeBoat.coverage = {
       [BoatCoverMode.Flags]: [...boat.coverage[BoatCoverMode.Flags]],
       [BoatCoverMode.Tiles]: [...boat.coverage[BoatCoverMode.Tiles]],
     };
     this.activeBoat.coverMode = boat.coverMode;
+
+    if (!this.activeBoat.isCoveragePossible()) {
+      this.activeBoat.coverage = originalCoverage;
+      this.activeBoat.coverMode = originalCoverMode;
+      this.notifyError('Copy from');
+      return;
+    }
+
     this.update();
   }
 
@@ -203,5 +240,12 @@ export class HudComponent extends CadeHudComponent {
 
   toggleSink() {
     void this.ws.send(OutCmd.BAToggleSink, this.activeBoat?.boat.id || 0);
+  }
+
+  private notifyError(command: 'Swap with' | 'Copy to' | 'Copy from'): void {
+    void this.ws.dispatchMessage({
+      cmd: InCmd.ChatMessage,
+      data: { type: 0, message: `'${command.toLowerCase()}' failed. New coverage not possible.`, from: '' },
+    });
   }
 }

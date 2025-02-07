@@ -63,9 +63,10 @@ export class BABoatSettings {
     [0, 2, 3, 4, 4, 5, 4, 4, 3, 2, 0],
   ];
 
-  isCoveragePossible(withAdded: { x: number, y: number }): boolean {
+  isCoveragePossible(withAdded?: { x: number, y: number }): boolean {
     if (this.coverMode === BoatCoverMode.Tiles) return true;
-    const flags = [...this.coverage[BoatCoverMode.Flags], withAdded];
+    const flags = [...this.coverage[BoatCoverMode.Flags]];
+    if (withAdded) flags.push(withAdded);
     return this.hasIntersection(flags, this.boat.influence);
   }
 
