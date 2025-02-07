@@ -1,27 +1,11 @@
 move slow stat save and AI out of lobby lock
-fix 1v1 missed shots
-fix move history to prevent looping
+Fix boat change check to not rely on ship name
+<!-- fix 1v1 missed shots -->
+<!-- fix move history to prevent looping -->
 make teambump consider friendly fire in move choice
 update old teams and 1v1 ai to use new structure
-<!-- show BA data in replays - half done. stats show, but break on jumping turns or switching teams -->
-<!-- include non zero moves in turn sync -->
-<!-- include BA settings in turn sync -->
-<!-- last turn animation skipped for watcher sometimes -->
-<!-- moves clear when someone leaves lobby -->
 
-<!-- discourage moves that are wrecked by sitting -->
-<!-- team damage sum before divide -->
-<!-- fix map generate check for BA -->
-<!-- block impossible flag coverage -->
-<!-- key bindings for BA -->
-
-<!-- ready button regardless of timer setting -->
-<!-- add BA specific lobby settings like team ships -->
-<!-- icon for ship marked to sink -->
-<!-- show ship type in side menu -->
-<!-- single tile coverage should not move if already on the tile -->
-<!-- optimize turn simulation / reduce memory allocations -->
-<!-- add dynamic vs static ships to BA match queue -->
 BA statistics
-Fix boat change check to not rely on ship name
-<!-- bot BA choose ships -->
+<!-- show alert for ships with no coverage -->
+<!-- hide locked spawn ships -->
+<!-- block invalid swaps and copies -->
