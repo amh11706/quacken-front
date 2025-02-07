@@ -11,6 +11,8 @@
       </ng-template>
       <q-boat-button *ngFor="let boat of filteredBoats"
                      [class.highlight]="boat.showInfluence || highlightedBoats.has(boat.id)"
+                     [class.noCoverage]="!hasCoverage(boat)"
+                     [matTooltip]="hasCoverage(boat) ? '' : 'This boat has no coverage assigned!'"
                      (mouseover)="boat.showInfluence = true"
                      (mouseout)="boat.showInfluence = false"
                      [boat]="boat"

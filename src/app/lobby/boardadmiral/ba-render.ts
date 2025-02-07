@@ -131,6 +131,10 @@ export class BaRender {
     if (!boat) return;
     const coverage = boat.coverage[boat.coverMode];
     const color = Colors[boat.coverMode];
+    if (boat.boat.attr) {
+      // attr 51 is a flag that the boat has no coverage
+      boat.boat.attr[51] = coverage.length ? 0 : 1;
+    }
 
     for (const { x, y, a } of coverage) {
       ctx.fillStyle = color.replace('%d', String(a || alpha));

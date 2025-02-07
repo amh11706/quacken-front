@@ -116,6 +116,10 @@ export class BoatListComponent implements OnInit, OnDestroy {
     }));
   }
 
+  hasCoverage(boat: Boat): boolean {
+    return boat.attr?.[51] !== 1;
+  }
+
   selectBoat(boat: Boat): void {
     DefaultBoat.pos = { ...boat.pos };
     this.activeBoatChange.emit(boat);
