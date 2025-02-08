@@ -102,6 +102,9 @@ export const enum OutCmd {
   BAToggleSink,
   BAAddBoat,
   BARemoveBoat,
+  BASwapBoat,
+  BACopyBoatTo,
+  BACopyBoatFrom,
 }
 
 export const enum InCmd {

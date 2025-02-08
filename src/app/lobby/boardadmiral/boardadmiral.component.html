@@ -14,13 +14,13 @@
 </div>
 
 <q-cade-entry-status (hoveredTeam)="hoveredTeam = $event"
-                     (click)="showExtraStats = !showExtraStats"
                      [myTeam]="myBoat.team"></q-cade-entry-status>
 
 <q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
          [hoveredTeam]="hoveredTeam"
+         [columns]="statColumns"
+         [extraColumns]="[]"
          [statOpacity]="statOpacity"
-         [showExtra]="showExtraStats"
          [stats]="lobby?.stats"
          [myTeam]="myBoat.team"></q-stats>
 

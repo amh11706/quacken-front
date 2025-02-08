@@ -52,6 +52,9 @@ export type SendCmdInputs = {
   [OutCmd.BAToggleSink]: number;
   [OutCmd.BAAddBoat]: number;
   [OutCmd.BARemoveBoat]: number;
+  [OutCmd.BASwapBoat]: { from: number, to: number };
+  [OutCmd.BACopyBoatFrom]: { from: number, to: number };
+  [OutCmd.BACopyBoatTo]: { from: number, to: number };
 }
 
 export type SendCmdInputless =

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { WsService } from '../../../ws/ws.service';
 import { TeamColorsCss } from '../cade-entry-status/cade-entry-status.component';
-import { extraColumns } from '../stats/stats.component';
 import { StatRow, Stat } from '../stats/types';
+import { DefaultExtraColumns, DefaultStatColumns } from '../main-menu/main-menu.service';
 
 @Component({
   selector: 'q-stat-end',
@@ -21,18 +21,9 @@ export class StatEndComponent implements OnChanges {
   myScore?: StatRow;
   pointValues = [50, 25, 0, 10, 0, 0, 10, 20];
 
-  @Input() columns = [
-    { stat: Stat.PointsScored, title: 'Points Scored' },
-    { stat: Stat.PointsContested, title: 'Contested' },
-    { stat: Stat.Kills, title: 'Enemies Sank' },
-    { stat: Stat.Assists, title: 'Assists' },
-    { stat: Stat.Deaths, title: 'Times Sank' },
-    { stat: Stat.ShotsHit, title: 'Shots Hit' },
-    { stat: Stat.ShotsFired, title: 'Fired' },
-    { stat: Stat.ShotsTaken, title: 'Taken' },
-  ];
+  @Input() columns = DefaultStatColumns;
+  @Input() extraColumns = DefaultExtraColumns;
 
-  extraColumns = extraColumns;
   showExtra = 0;
 
   constructor(private ws: WsService) { }

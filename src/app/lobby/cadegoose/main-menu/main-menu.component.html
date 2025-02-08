@@ -1,6 +1,8 @@
 <mat-card id="menu">
   <div *ngIf="ms.statsOpen; else teams">
     <q-stat-end [stats]="ms.lobby?.stats"
+                [columns]="ms.statColumns"
+                [extraColumns]="ms.extraStatColumns"
                 (closeStats)="ms.statsOpen = false"
                 [rating]="ms.lastMapId > 2"
                 (rateMap)="ms.submitRating($event)"></q-stat-end>

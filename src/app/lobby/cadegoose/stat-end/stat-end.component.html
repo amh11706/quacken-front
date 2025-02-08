@@ -4,7 +4,8 @@
 
 <h2 class="title">Round Summary</h2>
 
-<mat-button-toggle-group [(ngModel)]="showExtra"
+<mat-button-toggle-group *ngIf="extraColumns.length"
+                         [(ngModel)]="showExtra"
                          name="statGroup"
                          aria-label="Stat group">
   <mat-button-toggle [value]="0">Normal Stats</mat-button-toggle>

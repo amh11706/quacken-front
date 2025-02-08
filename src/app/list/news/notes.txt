@@ -5,7 +5,7 @@ Fix boat change check to not rely on ship name
 make teambump consider friendly fire in move choice
 update old teams and 1v1 ai to use new structure
 
-BA statistics
+<!-- BA statistics -->
 <!-- show alert for ships with no coverage -->
-<!-- hide locked spawn ships -->
+<!-- hide locked spawn ships --> 
 <!-- block invalid swaps and copies -->

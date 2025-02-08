@@ -26,4 +26,13 @@ export const enum Stat {
   TurnInSpotUsed,
   ChainshotUsed,
   FlotsamUsed,
+
+  // BA specific stats
+  CoverageCommands,
+  Swaps,
+  Copies,
+  DamageReports,
+  ShipsSpawned,
+  ShipsLost,
+  UnusedBudget,
 }

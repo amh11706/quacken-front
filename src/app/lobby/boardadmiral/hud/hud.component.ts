@@ -156,8 +156,7 @@ export class HudComponent extends CadeHudComponent {
       return;
     }
 
-    boat.save();
-    this.update();
+    this.ws.send(OutCmd.BASwapBoat, { from: this.activeBoat.boat.id, to: boat.boat.id });
   }
 
   copyCoverageTo(boat: BABoatSettings): void {
@@ -179,8 +178,7 @@ export class HudComponent extends CadeHudComponent {
       return;
     }
 
-    boat.save();
-    this.update();
+    this.ws.send(OutCmd.BACopyBoatTo, { from: this.activeBoat.boat.id, to: boat.boat.id });
   }
 
   copyCoverageFrom(boat: BABoatSettings): void {
@@ -202,7 +200,7 @@ export class HudComponent extends CadeHudComponent {
       return;
     }
 
-    this.update();
+    this.ws.send(OutCmd.BACopyBoatFrom, { from: boat.boat.id, to: this.activeBoat.boat.id });
   }
 
   syncToOtherBoats(key: 'Aggro' | 'Defense' | 'Flag'): void {
