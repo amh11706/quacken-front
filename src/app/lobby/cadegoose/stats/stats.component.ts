@@ -53,7 +53,7 @@ export class StatsComponent implements OnChanges {
     if (!this.stats) return;
 
     for (const row of Object.values(this.stats)) {
-      const s = [...row.stats];
+      const s = { ...row.stats };
       const shotsFired = s[Stat.ShotsFired];
       if (shotsFired) s[Stat.ShotsHit] += ` (${Math.round(+(s[Stat.ShotsHit] || 0) / +shotsFired * 100)}%)`;
       while (this.teams.length <= row.team) this.teams.push([]);

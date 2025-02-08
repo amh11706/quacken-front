@@ -12,7 +12,7 @@
       </tr>
       <tr *ngFor="let r of team">
         <td>{{r.user}}</td>
-        <td *ngFor="let c of (showExtra ? extraColumns : columns)">{{r.stats[c.stat]}}</td>
+        <td *ngFor="let c of (showExtra ? extraColumns : columns)">{{r.stats[c.stat] || 0}}</td>
       </tr>
     </table>
   </div>

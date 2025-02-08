@@ -42,7 +42,7 @@ export class StatEndComponent implements OnChanges {
     if (this.ws.sId) {
       this.myScore = this.stats[this.ws.sId];
       if (this.myScore) {
-        this.myScore = { ...this.myScore, stats: [...this.myScore.stats] };
+        this.myScore = { ...this.myScore, stats: { ...this.myScore.stats } };
       }
     }
 
@@ -50,7 +50,7 @@ export class StatEndComponent implements OnChanges {
       return { ...el };
     });
     for (const row of this.scores) {
-      row.stats = [...row.stats];
+      row.stats = { ...row.stats };
       const s = row.stats;
       const shotsFired = s[Stat.ShotsFired];
       if (shotsFired) s[Stat.ShotsHit] += ` (${Math.round(+(s[Stat.ShotsHit] || 0) / +shotsFired * 100)}%)`;

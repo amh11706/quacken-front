@@ -1,5 +1,5 @@
 export interface StatRow {
-  user: string; team: number; stats: (string | number)[]; score: number;
+  user: string; team: number; stats: Record<number, (string | number)>; score: number;
 }
 
 export const enum Stat {
