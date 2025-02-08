@@ -29,7 +29,8 @@
           (activeBoatChange)="redrawOverlay()"
           [boatSettings]="boatSettings"></q-ba-hud>
 
-<q-boat-list (boatsChange)="gotBoats($event)"
+<q-boat-list [hidden]="myBoat.team === undefined || myBoat.team > 3"
+             (boatsChange)="gotBoats($event)"
              [fishNames]="!!lobbySettings.fishBoats.value"
              [activeBoat]="activeBoat"
              [highlightedBoats]="highlightedBoats"

@@ -30,6 +30,11 @@ export class BABoatSettings {
   Defense = 50;
   selectedTile?: { x: number, y: number };
 
+  getCoverage() {
+    this.coverage[this.coverMode] ||= [];
+    return this.coverage[this.coverMode];
+  }
+
   save(): void {
     this.ws.send(OutCmd.BASettings, this.toJSON());
   }
@@ -130,7 +135,7 @@ export class BaRender {
     const ctx = this.ctx;
     ctx.lineWidth = 4;
     if (!boat) return;
-    const coverage = boat.coverage[boat.coverMode];
+    const coverage = boat.getCoverage();
     const color = Colors[boat.coverMode];
     if (boat.boat.attr) {
       // attr 51 is a flag that the boat has no coverage

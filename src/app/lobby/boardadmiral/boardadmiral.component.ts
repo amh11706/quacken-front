@@ -248,14 +248,14 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
 
   private tileIsSet(x: number, y: number): boolean {
     if (!this.activeBoatSettings) return false;
-    return this.activeBoatSettings.coverage[this.activeBoatSettings.coverMode]
+    return this.activeBoatSettings.getCoverage()
       .some(tile => tile.x === x && tile.y === y);
   }
 
   private removeTile(x: number, y: number): BaAction | undefined {
     if (!this.activeBoatSettings) return;
     const coverMode = this.activeBoatSettings.coverMode;
-    const coverage = this.activeBoatSettings.coverage[coverMode];
+    const coverage = this.activeBoatSettings.getCoverage();
     const index = coverage.findIndex(tile => tile.x === x && tile.y === y);
     if (index !== -1) coverage.splice(index, 1);
     return { cmd: 'addTile', data: { x, y }, coverMode, id: this.activeBoat.id };
@@ -280,7 +280,7 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
     }
 
     const coverMode = this.activeBoatSettings.coverMode;
-    this.activeBoatSettings.coverage[coverMode].push({ x, y, a });
+    this.activeBoatSettings.getCoverage().push({ x, y, a });
     return { cmd: 'removeTile', data: { x, y }, coverMode, id: this.activeBoat.id };
   }
 
@@ -352,7 +352,7 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
     this.highlightedBoats.clear();
     if (!tile) return;
     this.boatSettings.forEach(settings => {
-      const coverage = settings.coverage[settings.coverMode];
+      const coverage = settings.getCoverage();
       const boat = settings.boat;
       if (tile.x !== boat.pos.x || tile.y !== boat.pos.y) settings.boat.showInfluence = false;
       if (coverage.some(t => t.x === tile.x && t.y === tile.y)) {
