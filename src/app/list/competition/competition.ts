@@ -17,7 +17,7 @@ const BaseSettings = {
       label: 'Sail: 80, Carp: 80, Bilge: 80, Cannon: 100, Maneuver: 20',
     },
   },
-  turnTime: { id: 30, value: 20 },
+  turnTime: { id: 30, value: 30 },
   turns: { id: 34, value: 60 },
   bots: { id: 35, value: 1 },
   botDifficulty: { id: 36, value: 100 },
