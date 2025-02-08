@@ -103,15 +103,19 @@ export const Competitions: Competition[] = [
         ],
       },
       {
-        description: 'Tie Breaker',
+        description: '3/4 Playoff',
         games: [
           {
             ...BaseSettings,
-            name: { data: 'Tie Breaker 1', value: 0 },
+            name: { data: '3/4 Playoff 1', value: 0 },
           },
           {
             ...BaseSettings,
-            name: { data: 'Tie Breaker 2', value: 0 },
+            name: { data: '3/4 Playoff 2', value: 0 },
+          },
+          {
+            ...BaseSettings,
+            name: { data: '3/4 Playoff 3', value: 0 },
           },
         ],
       },
