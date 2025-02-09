@@ -228,7 +228,7 @@ export class HudComponent extends CadeHudComponent {
 
   resetCoverage(): void {
     if (!this.activeBoat) return;
-    for (const i in this.activeBoat.coverage) this.activeBoat.coverage[+i as BoatCoverMode] = [];
+    this.activeBoat.clearCoverage();
     this.update();
   }
 

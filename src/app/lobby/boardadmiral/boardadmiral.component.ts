@@ -335,9 +335,9 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
       else this.activeBoatChange(nearest);
       return;
     }
-    // shift click to clear all tiles
+    // shift click or middle click to clear all tiles
     if ((e.shiftKey || e.button === 1) && this.activeBoatSettings) {
-      this.activeBoatSettings.coverage = { 0: [], 1: [] };
+      this.activeBoatSettings.clearCoverage();
     }
     this.defaultBoat.selectedTile = e.tile;
     // redraw to update the highlight regardless of if a tile was toggled

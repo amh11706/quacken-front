@@ -35,6 +35,10 @@ export class BABoatSettings {
     return this.coverage[this.coverMode];
   }
 
+  clearCoverage(): void {
+    this.coverage[this.coverMode] = [];
+  }
+
   save(): void {
     this.ws.send(OutCmd.BASettings, this.toJSON());
   }
