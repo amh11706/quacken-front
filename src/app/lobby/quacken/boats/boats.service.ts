@@ -58,6 +58,7 @@ export class BoatsService implements OnDestroy {
     this.boatMap.clear();
     this.myBoat.next(new Boat(''));
     this._boats.next([]);
+    this.myLastBoat = '';
   }
 
   resetMymoves() {
