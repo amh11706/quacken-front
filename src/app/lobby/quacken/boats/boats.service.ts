@@ -54,6 +54,12 @@ export class BoatsService implements OnDestroy {
     this.subs.unsubscribe();
   }
 
+  reset() {
+    this.boatMap.clear();
+    this.myBoat.next(new Boat(''));
+    this._boats.next([]);
+  }
+
   resetMymoves() {
     setTimeout(() => this.ws.dispatchMessage({ cmd: Internal.ResetMoves, data: undefined }));
   }
