@@ -2,10 +2,12 @@ move slow stat save and AI out of lobby lock
 Fix boat change check to not rely on ship name
 <!-- fix 1v1 missed shots -->
 <!-- fix move history to prevent looping -->
-make teambump consider friendly fire in move choice
 update old teams and 1v1 ai to use new structure
+1v1 ai scale shots taken non linearly
+prevent same bot from being on both teams
 
-<!-- BA statistics -->
-<!-- show alert for ships with no coverage -->
-<!-- hide locked spawn ships --> 
-<!-- block invalid swaps and copies -->
+make teambump consider friendly fire in move choice
+BA+nav mode
+<!-- respawn if x too far off as well -->
+<!-- fix damage showing between lobbies -->
+<!-- clear coverage only clear selected mode -->

@@ -40,85 +40,85 @@ interface Competition {
 }
 
 export const Competitions: Competition[] = [
-  {
-    description: '1v1 BA Tournament February 2025',
-    rounds: [
-      {
-        description: 'Group Stage',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'Round 1', value: 0 },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Round 2', value: 0 },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Round 3', value: 0 },
-          },
-          // {
-          //   ...BaseSettings,
-          //   name: { data: 'Round 4', value: 0 },
-          // },
-          // {
-          //   ...BaseSettings,
-          //   name: { data: 'Round 5', value: 0 },
-          // },
-        ],
-      },
-      {
-        description: 'Knockout Stage',
-        games: [
-          // {
-          //   ...BaseSettings,
-          //   name: { data: 'Round of 16', value: 0 },
-          // },
-          // {
-          //   ...BaseSettings,
-          //   name: { data: 'Quarter Finals', value: 0 },
-          // },
-          {
-            ...BaseSettings,
-            name: { data: 'Semi Finals', value: 0 },
-          },
-        ],
-      },
-      {
-        description: 'Finals',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: 'Grand Finals 1', value: 0 },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Grand Finals 2', value: 0 },
-          },
-          {
-            ...BaseSettings,
-            name: { data: 'Grand finals 3', value: 0 },
-          },
-        ],
-      },
-      {
-        description: '3/4 Playoff',
-        games: [
-          {
-            ...BaseSettings,
-            name: { data: '3/4 Playoff 1', value: 0 },
-          },
-          {
-            ...BaseSettings,
-            name: { data: '3/4 Playoff 2', value: 0 },
-          },
-          {
-            ...BaseSettings,
-            name: { data: '3/4 Playoff 3', value: 0 },
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   description: '1v1 BA Tournament February 2025',
+  //   rounds: [
+  //     {
+  //       description: 'Group Stage',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round 1', value: 0 },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round 2', value: 0 },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Round 3', value: 0 },
+  //         },
+  //         // {
+  //         //   ...BaseSettings,
+  //         //   name: { data: 'Round 4', value: 0 },
+  //         // },
+  //         // {
+  //         //   ...BaseSettings,
+  //         //   name: { data: 'Round 5', value: 0 },
+  //         // },
+  //       ],
+  //     },
+  //     {
+  //       description: 'Knockout Stage',
+  //       games: [
+  //         // {
+  //         //   ...BaseSettings,
+  //         //   name: { data: 'Round of 16', value: 0 },
+  //         // },
+  //         // {
+  //         //   ...BaseSettings,
+  //         //   name: { data: 'Quarter Finals', value: 0 },
+  //         // },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Semi Finals', value: 0 },
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       description: 'Finals',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Grand Finals 1', value: 0 },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Grand Finals 2', value: 0 },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: 'Grand finals 3', value: 0 },
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       description: '3/4 Playoff',
+  //       games: [
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: '3/4 Playoff 1', value: 0 },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: '3/4 Playoff 2', value: 0 },
+  //         },
+  //         {
+  //           ...BaseSettings,
+  //           name: { data: '3/4 Playoff 3', value: 0 },
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
 ];
