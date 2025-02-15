@@ -120,7 +120,7 @@ export class HudComponent implements OnInit, OnDestroy {
     void this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
     this.bindKeys();
     this.subs.add(this.boats.myBoat$.subscribe(b => {
-      if (b === this.myBoat) return;
+      if (b === this.myBoat || !b.isMe) return;
       this.myBoat = b;
     }));
     this.subs.add(this.ws.subscribe(Internal.ResetMoves, this.resetMoves.bind(this)));

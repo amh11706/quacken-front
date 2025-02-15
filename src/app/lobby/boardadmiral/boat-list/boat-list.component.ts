@@ -19,6 +19,7 @@ import { SettingsService } from '../../../settings/settings.service';
 import { ShipListComponent, ShipTypeMap } from '../../../settings/ship-list/ship-list.component';
 
 export const DefaultBoat = new Boat('Boat Defaults');
+DefaultBoat.team = 99;
 
 @Component({
   selector: 'q-boat-list',

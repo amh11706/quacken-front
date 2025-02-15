@@ -121,7 +121,6 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
     // prevent map jumping when switching boats
     this.sub.add(this.boats.myBoat$.subscribe(b => {
       DefaultBoat.pos = { ...b.pos };
-      DefaultBoat.team = b.team;
       if (b.team !== undefined) this.updateMyTeam(b.team);
     }));
     this.sub.add(this.lobbyService.status.subscribe(s => {
