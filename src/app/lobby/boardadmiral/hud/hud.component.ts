@@ -26,6 +26,11 @@ export class HudComponent extends CadeHudComponent {
   @Input() boatSettings = new Map<number, BABoatSettings>();
   private _activeBoat?: BABoatSettings;
   @Input() set activeBoat(value: BABoatSettings | undefined) {
+    if (this.waitingForBoat) {
+      this.waitingForBoat = false;
+      if (value) this.activeCommand.boatTrigger?.(value);
+    }
+
     this._activeBoat = value;
     this.buildBoatList();
   };
@@ -38,39 +43,29 @@ export class HudComponent extends CadeHudComponent {
 
   readonly BoatCommands = [
     {
-      name: 'Swap with',
-      tooltip: 'Swap coverage with a selected boat',
-      type: 'boat',
-      text: 'Select',
-      trigger: this.swapCoverageWith.bind(this),
-    },
-    {
-      name: 'Copy to',
-      tooltip: 'Copy coverage to a selected boat',
-      type: 'boat',
-      text: 'Select',
-      trigger: this.copyCoverageTo.bind(this),
-    },
-    {
-      name: 'Copy from',
-      tooltip: 'Copy coverage from a selected boat',
-      type: 'boat',
-      text: 'Select',
-      trigger: this.copyCoverageFrom.bind(this),
-    },
-    {
-      name: 'Damage Report',
+      name: 'damage Report',
       tooltip: 'Get estimated damage for nearby boats',
       type: 'button',
       text: 'Request',
       trigger: this.getDamageReport.bind(this),
+      icon: 'report_problem',
     },
     {
-      name: 'Toggle Sink',
+      name: 'toggle Sink',
       tooltip: 'Mark this boat to be sunk by your team',
       type: 'button',
       text: 'Request',
       trigger: this.toggleSink.bind(this),
+      icon: 'sailing',
+    },
+    {
+      name: 'swap with',
+      tooltip: 'Swap coverage with a selected boat',
+      type: 'boat',
+      text: 'Select',
+      trigger: this.startSwap.bind(this),
+      boatTrigger: this.swapCoverageWith.bind(this),
+      icon: 'swap_horiz',
     },
   ];
 
@@ -159,50 +154,6 @@ export class HudComponent extends CadeHudComponent {
     this.ws.send(OutCmd.BASwapBoat, { from: this.activeBoat.boat.id, to: boat.boat.id });
   }
 
-  copyCoverageTo(boat: BABoatSettings): void {
-    if (!this.activeBoat) return;
-
-    const originalCoverage = boat.coverage;
-    const originalCoverMode = boat.coverMode;
-
-    boat.coverage = {
-      [BoatCoverMode.Flags]: [...this.activeBoat.coverage[BoatCoverMode.Flags]],
-      [BoatCoverMode.Tiles]: [...this.activeBoat.coverage[BoatCoverMode.Tiles]],
-    };
-    boat.coverMode = this.activeBoat.coverMode;
-
-    if (!boat.isCoveragePossible()) {
-      boat.coverage = originalCoverage;
-      boat.coverMode = originalCoverMode;
-      this.notifyError('Copy to');
-      return;
-    }
-
-    this.ws.send(OutCmd.BACopyBoatTo, { from: this.activeBoat.boat.id, to: boat.boat.id });
-  }
-
-  copyCoverageFrom(boat: BABoatSettings): void {
-    if (!this.activeBoat) return;
-
-    const originalCoverage = this.activeBoat.coverage;
-    const originalCoverMode = this.activeBoat.coverMode;
-
-    this.activeBoat.coverage = {
-      [BoatCoverMode.Flags]: [...boat.coverage[BoatCoverMode.Flags]],
-      [BoatCoverMode.Tiles]: [...boat.coverage[BoatCoverMode.Tiles]],
-    };
-    this.activeBoat.coverMode = boat.coverMode;
-
-    if (!this.activeBoat.isCoveragePossible()) {
-      this.activeBoat.coverage = originalCoverage;
-      this.activeBoat.coverMode = originalCoverMode;
-      this.notifyError('Copy from');
-      return;
-    }
-
-    this.ws.send(OutCmd.BACopyBoatFrom, { from: boat.boat.id, to: this.activeBoat.boat.id });
-  }
-
   syncToOtherBoats(key: 'Aggro' | 'Defense' | 'Flag'): void {
     if (!this.activeBoat) return;
     this.boatSettings.forEach(boat => {
@@ -238,6 +189,12 @@ export class HudComponent extends CadeHudComponent {
 
   toggleSink() {
     void this.ws.send(OutCmd.BAToggleSink, this.activeBoat?.boat.id || 0);
+  }
+
+  waitingForBoat = false;
+  startSwap(): void {
+    this.activeCommand = this.BoatCommands[2]!;
+    this.waitingForBoat = true;
   }
 
   private notifyError(command: 'Swap with' | 'Copy to' | 'Copy from'): void {

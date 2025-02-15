@@ -51,35 +51,19 @@
                     (click)="resetCoverage()">Clear</button></td>
       </table>
 
-      <div id="coverage">
-        <mat-select #swap
-                    [disabled]="disabled"
-                    [(value)]="activeCommand"
-                    [matTooltip]="activeCommand.tooltip">
-          <mat-option *ngFor="let c of BoatCommands"
-                      [matTooltip]="c.tooltip"
-                      [matTooltipShowDelay]="100"
-                      [value]="c">
-            {{c.name}}
-          </mat-option>
-        </mat-select>
-        <ng-container [ngSwitch]="activeCommand.type">
-          <button *ngSwitchCase="'button'"
-                  mat-raised-button
-                  [disabled]="disabled"
-                  (click)="activeCommand.trigger(activeBoat)">{{activeCommand.text}}</button>
-
-          <mat-select *ngSwitchCase="'boat'"
-                      #select
-                      [disabled]="disabled"
-                      [placeholder]="activeCommand.text"
-                      (selectionChange)="activeCommand.trigger($event.value); select.value = null">
-            <mat-option *ngFor="let boat of boatList"
-                        [value]="boat">
-              {{boatName(boat)}}
-            </mat-option>
-          </mat-select>
-        </ng-container>
+      <ng-template #waiting>
+        <p id="commands">Select a boat to {{activeCommand.name}} or <button mat-raised-button
+                  (click)="waitingForBoat = false">Cancel</button></p>
+      </ng-template>
+      <div id="commands"
+           *ngIf="!waitingForBoat; else waiting">
+        <button mat-icon-button
+                *ngFor="let command of BoatCommands"
+                [disabled]="disabled"
+                [matTooltip]="command.tooltip"
+                (click)="command.trigger()">
+          <mat-icon>{{command.icon}}</mat-icon>
+        </button>
       </div>
     </div>
 
