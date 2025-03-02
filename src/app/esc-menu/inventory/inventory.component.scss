@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import "../../../styles/colors.scss";
+@use "../../../styles/colors.scss" as colors;
 
 #inventory {
   color: #eee;
@@ -68,7 +68,7 @@ mat-form-field {
 }
 
 .new {
-  border-color: mat.m2-get-color-from-palette($primary);
+  border-color: mat.m2-get-color-from-palette(colors.$primary);
 }
 
 .dropable {

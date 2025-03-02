@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import "../../../styles/colors.scss";
+@use "../../../styles/colors.scss" as colors;
 
 #shade {
   position: absolute;
@@ -33,7 +33,7 @@
 #success {
   float: left;
   width: 100%;
-  color: mat.m2-get-color-from-palette($primary);
+  color: mat.m2-get-color-from-palette(colors.$primary);
   text-align: center;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .center {
-  display:grid;
+  display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 20px;
   width: 100%;

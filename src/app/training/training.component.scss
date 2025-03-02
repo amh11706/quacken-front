@@ -1,4 +1,4 @@
-@import '../replay/cadegoose/cadegoose.component.scss';
+@use '../replay/cadegoose/cadegoose.component.scss';
 
 :host ::ng-deep q-gu-boats {
   pointer-events: unset !important;

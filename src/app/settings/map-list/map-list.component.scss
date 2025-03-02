@@ -1,5 +1,5 @@
 @use "@angular/material" as mat;
-@import "../../../styles/colors.scss";
+@use "../../../styles/colors.scss" as colors;
 
 :host {
   position: relative;
@@ -16,7 +16,7 @@ q-map-card {
 }
 
 ::ng-deep .selected mat-card {
-  border: 2px solid mat.m2-get-color-from-palette($accent);
+  border: 2px solid mat.m2-get-color-from-palette(colors.$accent);
 }
 
 #mapSearch {

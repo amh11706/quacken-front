@@ -1,5 +1,5 @@
 @use "@angular/material" as mat;
-@import "../../../styles/colors.scss";
+@use "../../../styles/colors.scss" as colors;
 
 .moverow {
   position: relative;
@@ -79,7 +79,7 @@
 }
 
 .selected {
-  border: 2px solid mat.m2-get-color-from-palette($primary);
+  border: 2px solid mat.m2-get-color-from-palette(colors.$primary);
 }
 
 .unconfirmed::after {
@@ -93,16 +93,26 @@
   pointer-events: none;
 }
 
-.token1, .token2 {
+.token1,
+.token2 {
   background: url("/assets/images/cannon1.png") center/cover;
   background-position-x: 1px;
 }
 
-.token4, .token6, .token24, .token28, .token32, .token36 {
+.token4,
+.token6,
+.token24,
+.token28,
+.token32,
+.token36 {
   background: url("/assets/images/arrow4.png") center/cover;
 }
 
-.token5, .token7, .token25, .token29, .token33, .token37 {
+.token5,
+.token7,
+.token25,
+.token29,
+.token33,
+.token37 {
   background: url("/assets/images/arrow5.png") center/cover;
 }
-

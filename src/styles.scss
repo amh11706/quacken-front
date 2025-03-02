@@ -1,5 +1,5 @@
-@import "./styles/theme.scss";
-@import '@ctrl/ngx-emoji-mart/picker';
+@use "./styles/theme.scss";
+@use '@ctrl/ngx-emoji-mart/picker';
 
 * {
   box-sizing: border-box;

@@ -1,7 +1,7 @@
-@import "../login-form/login-form.component.scss";
+@use "../login-form/login-form.component.scss";
 
 h3 {
-    color: silver;
-    margin-bottom: 12px !important;
-    text-align: center;
+  color: silver;
+  margin-bottom: 12px !important;
+  text-align: center;
 }

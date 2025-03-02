@@ -1,4 +1,4 @@
-@import '../../cadegoose/hud/hud.component.scss';
+@use '../../cadegoose/hud/hud.component.scss';
 
 #hud {
   grid-template-columns: [left]400px [middle]0.01fr [right]1fr;

@@ -1,4 +1,4 @@
-@import "../../styles/colors.scss";
+@use "../../styles/colors.scss";
 
 #backgroundframe {
   position: absolute;
@@ -38,6 +38,7 @@
 }
 
 @media screen and (max-height: 350px) {
+
   //temporary fix for mobile screens
   #side-menu {
     grid-template-rows: calc(100% - 115px) 1fr;

@@ -1,10 +1,10 @@
-@import '../cadegoose/cadegoose.component.scss';
+@use '../cadegoose/cadegoose.component.scss';
 
 q-sb-stats {
-    position: absolute;
-    top: 67px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: 0.3s;
-    pointer-events: none;
-  }
+  position: absolute;
+  top: 67px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: 0.3s;
+  pointer-events: none;
+}

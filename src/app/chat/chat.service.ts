@@ -10,7 +10,7 @@ import { KeyActions } from '../settings/key-binding/key-actions';
 import { Sounds, SoundService } from '../sound.service';
 import { ChatMessage, Command } from './types';
 
-dayjs.extend(relativeTime);
+dayjs.extend(relativeTime.default);
 
 @Injectable()
 export class ChatService implements OnDestroy {
@@ -75,7 +75,7 @@ export class ChatService implements OnDestroy {
         message.time = time.format('D MMM YYYY HH:mm');
         message.ago = time.fromNow();
       }
-      message.receivedTime = dayjs().format('HH:mm:ss');
+      message.receivedTime = dayjs.default().format('HH:mm:ss');
       this.messages$.next(this.messages);
     }));
   }

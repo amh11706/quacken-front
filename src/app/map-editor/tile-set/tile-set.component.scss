@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import "../../../styles/colors.scss";
+@use "../../../styles/colors.scss" as colors;
 
 #tileset {
   position: absolute;
@@ -69,7 +69,7 @@ h4 {
 }
 
 .unsaved {
-  color: mat.m2-get-color-from-palette($primary, 400);
+  color: mat.m2-get-color-from-palette(colors.$primary, 400);
 }
 
 .delete {
