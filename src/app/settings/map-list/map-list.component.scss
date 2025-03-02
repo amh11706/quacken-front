@@ -16,7 +16,7 @@ q-map-card {
 }
 
 ::ng-deep .selected mat-card {
-  border: 2px solid mat.get-color-from-palette($accent);
+  border: 2px solid mat.m2-get-color-from-palette($accent);
 }
 
 #mapSearch {

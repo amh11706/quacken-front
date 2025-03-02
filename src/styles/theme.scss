@@ -9,16 +9,16 @@
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as `color` or `typography`.
-$theme: mat.define-dark-theme(
+$theme: mat.m2-define-dark-theme(
   (
     color: (
       primary: $primary,
       accent: $accent
     ),
     typography:
-      mat.define-typography-config(
+      mat.m2-define-typography-config(
         $button:
-          mat.define-typography-level(
+          mat.m2-define-typography-level(
             $font-size: 0.875rem,
             $letter-spacing: normal
           )

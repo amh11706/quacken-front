@@ -45,7 +45,7 @@ button {
 .title {
   font-weight: bold;
   font-size: 18px;
-  color: mat.get-color-from-palette($accent);
+  color: mat.m2-get-color-from-palette($accent);
   margin-top: 5px;
 }
 

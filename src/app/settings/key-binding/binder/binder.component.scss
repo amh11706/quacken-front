@@ -10,7 +10,7 @@ button:not(.changed) {
 }
 
 .changed {
-    color: mat.get-color-from-palette($primary) !important;
+    color: mat.m2-get-color-from-palette($primary) !important;
 }
 
 .notdefault {
@@ -29,5 +29,5 @@ button:not(.changed) {
 }
 
 .warning {
-    color: mat.get-color-from-palette($primary);
+    color: mat.m2-get-color-from-palette($primary);
 }

@@ -3,5 +3,5 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$primary: mat.define-palette(mat.$amber-palette);
-$accent: mat.define-palette(mat.$red-palette, 900);
+$primary: mat.m2-define-palette(mat.$m2-amber-palette);
+$accent: mat.m2-define-palette(mat.$m2-red-palette, 900);
