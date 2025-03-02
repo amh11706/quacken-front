@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@use "../../../../styles/colors.scss";
+@use "../../../../styles/colors.scss" as colors;
 
 button.full {
   width: 100%;
@@ -10,7 +10,7 @@ button:not(.changed) {
 }
 
 .changed {
-  color: mat.m2-get-color-from-palette($primary) !important;
+  color: mat.m2-get-color-from-palette(colors.$primary) !important;
 }
 
 .notdefault {
@@ -29,5 +29,5 @@ button:not(.changed) {
 }
 
 .warning {
-  color: mat.m2-get-color-from-palette($primary);
+  color: mat.m2-get-color-from-palette(colors.$primary);
 }

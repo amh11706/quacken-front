@@ -1,5 +1,5 @@
 @use "@angular/material" as mat;
-@use "../../../../styles/colors.scss";
+@use "../../../../styles/colors.scss" as colors;
 
 mat-card {
   margin: auto;
@@ -45,7 +45,7 @@ button {
 .title {
   font-weight: bold;
   font-size: 18px;
-  color: mat.m2-get-color-from-palette($accent);
+  color: mat.m2-get-color-from-palette(colors.$accent);
   margin-top: 5px;
 }
 
