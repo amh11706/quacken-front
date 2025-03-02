@@ -14,14 +14,9 @@ import { SettingsModule } from '../../settings/settings.module';
 import { MatchmakingService } from './matchmaking.service';
 import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { NotificationService } from './notification.service';
-import { LobbyType, LobbyTypes, RankArea } from '../../lobby/cadegoose/lobby-type';
+import { RankArea } from '../../lobby/cadegoose/lobby-type';
 import { OutCmdInputTypes } from '../../ws/ws-request-types';
 import { Setting } from '../../settings/types';
-
-const QueueTypes = [
-  LobbyTypes[LobbyType.CadeGoose],
-  LobbyTypes[LobbyType.BA],
-];
 
 @Component({
   selector: 'q-match-queue',
@@ -45,7 +40,6 @@ export class MatchQueueComponent implements OnInit {
   isGuest = this.ws.user.id === 0;
   private subs: Subscription[] = [];
   matchSettings = this.ss.prefetch('matchmaking');
-  queueTypes = QueueTypes;
 
   constructor(
     public ws: WsService,

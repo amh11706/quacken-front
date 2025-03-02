@@ -3,11 +3,15 @@ Fix boat change check to not rely on ship name
 <!-- fix 1v1 missed shots -->
 <!-- fix move history to prevent looping -->
 update old teams and 1v1 ai to use new structure
+make sure bot teammates don't block real player moves
 1v1 ai scale shots taken non linearly
 prevent same bot from being on both teams
+BA+nav mode - still deciding if this is a good idea
 
-make teambump consider friendly fire in move choice
-BA+nav mode
+<!-- make teambump consider friendly fire in move choice -->
 <!-- respawn if x too far off as well -->
 <!-- fix damage showing between lobbies -->
 <!-- clear coverage only clear selected mode -->
+ 
+split bot matches from queue UI
+add difficulty setting to bot matches
