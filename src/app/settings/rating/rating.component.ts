@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'q-rating',
-  templateUrl: './rating.component.html',
-  styleUrls: ['./rating.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-rating',
+    templateUrl: './rating.component.html',
+    styleUrls: ['./rating.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class RatingComponent implements OnInit {
   @Output() ratingUpdated = new EventEmitter<number>();

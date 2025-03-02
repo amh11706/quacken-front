@@ -1,10 +1,11 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'q-advanced-map',
-  templateUrl: './advanced-map.component.html',
-  styleUrls: ['./advanced-map.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-advanced-map',
+    templateUrl: './advanced-map.component.html',
+    styleUrls: ['./advanced-map.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AdvancedMapComponent {
   private _seed = '';

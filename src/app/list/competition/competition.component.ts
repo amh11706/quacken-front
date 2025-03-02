@@ -8,10 +8,11 @@ import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { DBSetting, ServerSettingMap } from '../../settings/types';
 
 @Component({
-  selector: 'q-competition',
-  templateUrl: './competition.component.html',
-  styleUrls: ['./competition.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-competition',
+    templateUrl: './competition.component.html',
+    styleUrls: ['./competition.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CompetitionComponent implements OnInit, OnDestroy {
   created = false;

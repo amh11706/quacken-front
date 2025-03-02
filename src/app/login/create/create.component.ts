@@ -8,9 +8,10 @@ import { TermsComponent } from '../terms/terms.component';
 import { PrivacyComponent } from '../privacy/privacy.component';
 
 @Component({
-  selector: 'q-create',
-  templateUrl: './create.component.html',
-  styleUrls: ['./create.component.scss'],
+    selector: 'q-create',
+    templateUrl: './create.component.html',
+    styleUrls: ['./create.component.scss'],
+    standalone: false
 })
 export class CreateComponent {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;

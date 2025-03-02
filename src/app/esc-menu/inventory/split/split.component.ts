@@ -3,10 +3,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Item } from '../../profile/types';
 
 @Component({
-  selector: 'q-split',
-  templateUrl: './split.component.html',
-  styleUrls: ['./split.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-split',
+    templateUrl: './split.component.html',
+    styleUrls: ['./split.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SplitComponent {
   quantity = 0;

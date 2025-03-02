@@ -7,9 +7,10 @@ import { LobbyService } from '../../lobby.service';
 import { CadeLobby } from '../../cadegoose/types';
 
 @Component({
-  selector: 'q-entry-status',
-  templateUrl: './entry-status.component.html',
-  styleUrls: ['./entry-status.component.css'],
+    selector: 'q-entry-status',
+    templateUrl: './entry-status.component.html',
+    styleUrls: ['./entry-status.component.css'],
+    standalone: false
 })
 export class EntryStatusComponent implements OnInit, OnDestroy {
   treasure = [0, 0, 0, 0];

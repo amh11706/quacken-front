@@ -19,20 +19,19 @@ import { OutCmdInputTypes } from '../../ws/ws-request-types';
 import { Setting } from '../../settings/types';
 
 @Component({
-  selector: 'q-match-queue',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    MatButtonModule,
-    CommonModule,
-    SettingsModule,
-    MatCardModule,
-    MatTooltipModule,
-    MatExpansionModule,
-    LetDirective,
-  ],
-  templateUrl: './match-queue.component.html',
-  styleUrls: ['./match-queue.component.scss'],
+    selector: 'q-match-queue',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatButtonModule,
+        CommonModule,
+        SettingsModule,
+        MatCardModule,
+        MatTooltipModule,
+        MatExpansionModule,
+        LetDirective,
+    ],
+    templateUrl: './match-queue.component.html',
+    styleUrls: ['./match-queue.component.scss']
 })
 export class MatchQueueComponent implements OnInit {
   queueLength = new Subject<number>();

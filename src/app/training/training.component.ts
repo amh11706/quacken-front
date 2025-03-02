@@ -33,9 +33,10 @@ const shotNames = [
 ];
 
 @Component({
-  selector: 'q-training',
-  templateUrl: './training.component.html',
-  styleUrls: ['./training.component.scss'],
+    selector: 'q-training',
+    templateUrl: './training.component.html',
+    styleUrls: ['./training.component.scss'],
+    standalone: false
 })
 export class TrainingComponent implements OnInit, OnDestroy {
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;

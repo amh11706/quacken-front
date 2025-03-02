@@ -18,9 +18,10 @@ export class Pos {
 }
 
 @Component({
-  selector: 'q-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css'],
+    selector: 'q-map',
+    templateUrl: './map.component.html',
+    styleUrls: ['./map.component.css'],
+    standalone: false
 })
 export class MapComponent {
   @Input() map?: MapEditor;

@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'q-timer',
-  templateUrl: './timer.component.html',
-  styleUrls: ['./timer.component.css'],
+    selector: 'q-timer',
+    templateUrl: './timer.component.html',
+    styleUrls: ['./timer.component.css'],
+    standalone: false
 })
 export class TimerComponent {
   @Output() expire = new EventEmitter();

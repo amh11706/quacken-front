@@ -22,19 +22,18 @@ export const DefaultBoat = new Boat('Boat Defaults');
 DefaultBoat.team = 99;
 
 @Component({
-  selector: 'q-boat-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    QdragModule,
-    BoatButtonComponent,
-    SettingsModule,
-    MatTabsModule,
-    MatIconModule,
-    MatTooltipModule,
-  ],
-  templateUrl: './boat-list.component.html',
-  styleUrl: './boat-list.component.scss',
+    selector: 'q-boat-list',
+    imports: [
+        CommonModule,
+        QdragModule,
+        BoatButtonComponent,
+        SettingsModule,
+        MatTabsModule,
+        MatIconModule,
+        MatTooltipModule,
+    ],
+    templateUrl: './boat-list.component.html',
+    styleUrl: './boat-list.component.scss'
 })
 export class BoatListComponent implements OnInit, OnDestroy {
   boats: Boat[] = [];

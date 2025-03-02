@@ -4,10 +4,11 @@ import { SettingsService } from '../settings.service';
 import { DBSetting } from '../types';
 
 @Component({
-  selector: 'q-advanced',
-  templateUrl: './advanced.component.html',
-  styleUrls: ['./advanced.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-advanced',
+    templateUrl: './advanced.component.html',
+    styleUrls: ['./advanced.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AdvancedComponent {
   @Input() component: any;

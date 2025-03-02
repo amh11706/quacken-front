@@ -25,11 +25,10 @@ interface MapInfoLobby extends Lobby {
 }
 
 @Component({
-  selector: 'q-mapinfo',
-  standalone: true,
-  imports: [CommonModule, MapEditorModule, TwodRenderModule, CadegooseModule, MapinfoHudComponent, QdragModule],
-  templateUrl: './mapinfo.component.html',
-  styleUrl: './mapinfo.component.scss',
+    selector: 'q-mapinfo',
+    imports: [CommonModule, MapEditorModule, TwodRenderModule, CadegooseModule, MapinfoHudComponent, QdragModule],
+    templateUrl: './mapinfo.component.html',
+    styleUrl: './mapinfo.component.scss'
 })
 export class MapinfoComponent implements OnInit, OnDestroy {
   @ViewChild('renderer', { static: true }) renderer?: TwodRenderComponent;

@@ -13,10 +13,11 @@ interface BaShipSetting extends DBSetting {
 }
 
 @Component({
-  selector: 'q-ba-ship-setting',
-  templateUrl: './ba-ship-setting.html',
-  styleUrls: ['./ba-ship-setting.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-ba-ship-setting',
+    templateUrl: './ba-ship-setting.html',
+    styleUrls: ['./ba-ship-setting.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class BaShipSettingComponent {
   ShipSetting = Settings.baships as OptionSetting;

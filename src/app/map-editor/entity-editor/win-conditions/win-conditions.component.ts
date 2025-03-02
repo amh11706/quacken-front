@@ -2,9 +2,10 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { DBTile } from '../../types';
 
 @Component({
-  selector: 'q-win-conditions',
-  templateUrl: './win-conditions.component.html',
-  styleUrls: ['./win-conditions.component.scss'],
+    selector: 'q-win-conditions',
+    templateUrl: './win-conditions.component.html',
+    styleUrls: ['./win-conditions.component.scss'],
+    standalone: false
 })
 export class WinConditionsComponent implements OnChanges {
   @Input() tile?: DBTile;

@@ -36,10 +36,11 @@ export const CadeSettings: SettingList = [
 ];
 
 @Component({
-  selector: 'q-cadegoose',
-  templateUrl: './cadegoose.component.html',
-  styleUrls: ['./cadegoose.component.scss'],
-  providers: [MainMenuService],
+    selector: 'q-cadegoose',
+    templateUrl: './cadegoose.component.html',
+    styleUrls: ['./cadegoose.component.scss'],
+    providers: [MainMenuService],
+    standalone: false
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('renderer', { static: false }) renderer?: TwodRenderComponent;

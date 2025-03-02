@@ -33,16 +33,15 @@ const I18N: any = {
 };
 
 @Component({
-  selector: 'q-emoji-search-results',
-  standalone: true,
-  imports: [
-    CommonModule,
-    EmojiComponent,
-    MatCardModule,
-    PreviewComponent,
-  ],
-  templateUrl: './emoji-search-results.component.html',
-  styleUrl: './emoji-search-results.component.scss',
+    selector: 'q-emoji-search-results',
+    imports: [
+        CommonModule,
+        EmojiComponent,
+        MatCardModule,
+        PreviewComponent,
+    ],
+    templateUrl: './emoji-search-results.component.html',
+    styleUrl: './emoji-search-results.component.scss'
 })
 export class EmojiSearchResultsComponent implements OnInit {
   hoveredEmoji: EmojiData | null = null;

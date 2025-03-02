@@ -6,9 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'q-reset',
-  templateUrl: './reset.component.html',
-  styleUrls: ['./reset.component.scss'],
+    selector: 'q-reset',
+    templateUrl: './reset.component.html',
+    styleUrls: ['./reset.component.scss'],
+    standalone: false
 })
 export class ResetComponent implements OnInit, OnDestroy {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;

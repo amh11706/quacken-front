@@ -6,10 +6,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { WsService } from '../../ws/ws.service';
 
 @Component({
-  selector: 'q-logout-confirm',
-  templateUrl: './logout-confirm.component.html',
-  styleUrls: ['./logout-confirm.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-logout-confirm',
+    templateUrl: './logout-confirm.component.html',
+    styleUrls: ['./logout-confirm.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class LogoutConfirmComponent implements OnInit, OnDestroy {
   seconds$ = new BehaviorSubject<number>(10);

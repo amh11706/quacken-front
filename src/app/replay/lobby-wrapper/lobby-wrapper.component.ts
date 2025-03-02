@@ -7,10 +7,11 @@ import { LobbyWrapperService } from './lobby-wrapper.service';
 import { TurnService } from '../../lobby/quacken/boats/turn.service';
 
 @Component({
-  selector: 'q-lobby-wrapper',
-  templateUrl: './lobby-wrapper.component.html',
-  styleUrls: ['./lobby-wrapper.component.scss'],
-  providers: [WsService, ChatService, FriendsService, BoatsService, TurnService],
+    selector: 'q-lobby-wrapper',
+    templateUrl: './lobby-wrapper.component.html',
+    styleUrls: ['./lobby-wrapper.component.scss'],
+    providers: [WsService, ChatService, FriendsService, BoatsService, TurnService],
+    standalone: false
 })
 export class ReplayWrapperComponent implements OnDestroy {
   constructor(

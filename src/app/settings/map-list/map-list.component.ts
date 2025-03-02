@@ -86,10 +86,11 @@ const MapSizes = {
 };
 
 @Component({
-  selector: 'q-map-list',
-  templateUrl: './map-list.component.html',
-  styleUrls: ['./map-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-map-list',
+    templateUrl: './map-list.component.html',
+    styleUrls: ['./map-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MapListComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport, { static: false }) mapViewport?: CdkVirtualScrollViewport;

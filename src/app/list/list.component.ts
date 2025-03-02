@@ -13,23 +13,24 @@ import { TurnService } from '../lobby/quacken/boats/turn.service';
 import { LobbyService } from '../lobby/lobby.service';
 
 @Component({
-  selector: 'q-lobby-list',
-  providers: [
-    WsService,
-    ChatService,
-    StatService,
-    SettingsService,
-    SoundService,
-    FriendsService,
-    EscMenuService,
-    KeyBindingService,
-    MatchmakingService,
-    BoatsService,
-    TurnService,
-    LobbyService,
-  ],
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss'],
+    selector: 'q-lobby-list',
+    providers: [
+        WsService,
+        ChatService,
+        StatService,
+        SettingsService,
+        SoundService,
+        FriendsService,
+        EscMenuService,
+        KeyBindingService,
+        MatchmakingService,
+        BoatsService,
+        TurnService,
+        LobbyService,
+    ],
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.scss'],
+    standalone: false
 })
 export class ListComponent {
   constructor(

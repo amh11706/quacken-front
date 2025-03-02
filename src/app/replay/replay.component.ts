@@ -21,9 +21,10 @@ import { LobbyWrapperService } from './lobby-wrapper/lobby-wrapper.service';
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
 @Component({
-  selector: 'q-replay',
-  templateUrl: './replay.component.html',
-  styleUrls: ['./replay.component.scss'],
+    selector: 'q-replay',
+    templateUrl: './replay.component.html',
+    styleUrls: ['./replay.component.scss'],
+    standalone: false
 })
 export class ReplayComponent implements OnInit, OnDestroy {
   set animationPlayState(v: string) {

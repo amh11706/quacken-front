@@ -8,11 +8,10 @@ import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entr
 import { ShipTypeMap } from '../../settings/ship-list/ship-list.component';
 
 @Component({
-  selector: 'q-boat-button',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, MatTooltipModule, MatIconModule],
-  templateUrl: './boat-button.component.html',
-  styleUrls: ['./boat-button.component.scss'],
+    selector: 'q-boat-button',
+    imports: [CommonModule, MatButtonModule, MatTooltipModule, MatIconModule],
+    templateUrl: './boat-button.component.html',
+    styleUrls: ['./boat-button.component.scss']
 })
 export class BoatButtonComponent {
   @Input() boat = new Boat('');

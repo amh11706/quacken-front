@@ -34,10 +34,11 @@ function searchMatch(match: Match, term: string): boolean {
 }
 
 @Component({
-  selector: 'q-matches',
-  templateUrl: './matches.component.html',
-  styleUrls: ['./matches.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-matches',
+    templateUrl: './matches.component.html',
+    styleUrls: ['./matches.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MatchesComponent implements OnInit, OnDestroy {
   tierTitles = TierTitles;

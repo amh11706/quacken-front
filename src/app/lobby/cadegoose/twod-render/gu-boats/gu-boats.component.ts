@@ -27,9 +27,10 @@ const CannonSounds: Record<number, Sounds> = {
 };
 
 @Component({
-  selector: 'q-gu-boats',
-  templateUrl: './gu-boats.component.html',
-  styleUrls: ['./gu-boats.component.scss'],
+    selector: 'q-gu-boats',
+    templateUrl: './gu-boats.component.html',
+    styleUrls: ['./gu-boats.component.scss'],
+    standalone: false
 })
 export class GuBoatsComponent implements OnInit, OnDestroy {
   @Input() showIsland = false;

@@ -35,9 +35,10 @@ export interface MoveMessage {
 }
 
 @Component({
-  selector: 'q-cade-hud',
-  templateUrl: './hud.component.html',
-  styleUrls: ['./hud.component.scss'],
+    selector: 'q-cade-hud',
+    templateUrl: './hud.component.html',
+    styleUrls: ['./hud.component.scss'],
+    standalone: false
 })
 export class CadeHudComponent extends HudComponent implements OnInit {
   moveKeys = CadeMoveKeys;

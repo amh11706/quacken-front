@@ -3,9 +3,10 @@ import { Subject, Subscription } from 'rxjs';
 import { Tokens } from '../move-input/move-input.component';
 
 @Component({
-  selector: 'q-move-source',
-  templateUrl: './move-source.component.html',
-  styleUrls: ['./move-source.component.scss'],
+    selector: 'q-move-source',
+    templateUrl: './move-source.component.html',
+    styleUrls: ['./move-source.component.scss'],
+    standalone: false
 })
 export class MoveSourceComponent implements OnDestroy {
   @Input() tokenStrings = ['', '', ''];

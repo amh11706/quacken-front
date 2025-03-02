@@ -19,10 +19,11 @@ export interface KeyBindingEditMode extends KeyBinding {
 type KeyBindingsEditMode = Record<keyof KeyBindings, KeyBindingEditMode[]>;
 
 @Component({
-  selector: 'q-key-binding',
-  templateUrl: './key-binding.component.html',
-  styleUrls: ['./key-binding.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-key-binding',
+    templateUrl: './key-binding.component.html',
+    styleUrls: ['./key-binding.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class KeyBindingComponent implements OnInit, OnDestroy {
   actions = new KeyBindings() as KeyBindingsEditMode;

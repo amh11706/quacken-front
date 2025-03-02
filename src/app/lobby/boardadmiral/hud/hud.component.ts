@@ -14,12 +14,11 @@ import { InCmd, OutCmd } from '../../../ws/ws-messages';
 import { KeyActions } from '../../../settings/key-binding/key-actions';
 
 @Component({
-  selector: 'q-ba-hud',
-  standalone: true,
-  imports: [CommonModule, LetDirective,
-    ChatModule, MatTooltipModule, MatIconModule, MatButtonModule, MatSliderModule, MatSelectModule],
-  templateUrl: './hud.component.html',
-  styleUrl: './hud.component.scss',
+    selector: 'q-ba-hud',
+    imports: [CommonModule, LetDirective,
+        ChatModule, MatTooltipModule, MatIconModule, MatButtonModule, MatSliderModule, MatSelectModule],
+    templateUrl: './hud.component.html',
+    styleUrl: './hud.component.scss'
 })
 export class HudComponent extends CadeHudComponent {
   @Input() fishnames = false;

@@ -11,10 +11,9 @@ import { InCmd } from '../../ws/ws-messages';
 const TimeLimit = 20;
 
 @Component({
-  standalone: true,
-  selector: 'q-match-found-dialog',
-  imports: [MatButtonModule, MatDialogModule, CommonModule],
-  template: `
+    selector: 'q-match-found-dialog',
+    imports: [MatButtonModule, MatDialogModule, CommonModule],
+    template: `
     <h1 mat-dialog-title>{{data.rated ? 'Rated' : 'Unrated'}} {{areaName}} Match Found</h1>
     <div mat-dialog-content>
       <p *ngIf="!expired; else expiredMessage">Time left to accept: {{ timeLeft | async }} seconds</p>
@@ -30,7 +29,7 @@ const TimeLimit = 20;
         <button mat-raised-button [color]="'warn'" (click)="decline()">Decline</button>
       </ng-template>
     </div>
-  `,
+  `
 })
 export class MatchFoundDialogComponent implements OnInit {
   openTime = Date.now();

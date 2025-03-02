@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'q-record',
-  templateUrl: './record.component.html',
-  styleUrls: ['./record.component.scss'],
+    selector: 'q-record',
+    templateUrl: './record.component.html',
+    styleUrls: ['./record.component.scss'],
+    standalone: false
 })
 export class RecordComponent implements OnInit {
   isRecording = false;

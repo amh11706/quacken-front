@@ -1,8 +1,9 @@
 import { Directive, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 @Directive({
-  selector: '[qDrag]',
-  exportAs: 'qDrag',
+    selector: '[qDrag]',
+    exportAs: 'qDrag',
+    standalone: false
 })
 export class QdragDirective implements OnInit, OnDestroy {
   @Input() qDrag?: HTMLElement;

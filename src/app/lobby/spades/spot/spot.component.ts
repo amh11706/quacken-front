@@ -19,9 +19,10 @@ export type SpadeLobby = Lobby & {
 };
 
 @Component({
-  selector: 'q-spot',
-  templateUrl: './spot.component.html',
-  styleUrls: ['./spot.component.css'],
+    selector: 'q-spot',
+    templateUrl: './spot.component.html',
+    styleUrls: ['./spot.component.css'],
+    standalone: false
 })
 export class SpotComponent implements OnInit, OnDestroy {
   private _lobby = {} as SpadeLobby;

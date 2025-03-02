@@ -17,9 +17,10 @@ export const CadeTitles = [
 ];
 
 @Component({
-  selector: 'q-obstacles',
-  templateUrl: './obstacles.component.html',
-  styleUrls: ['./obstacles.component.css'],
+    selector: 'q-obstacles',
+    templateUrl: './obstacles.component.html',
+    styleUrls: ['./obstacles.component.css'],
+    standalone: false
 })
 export class ObstaclesComponent implements OnInit, OnDestroy {
   @Input() map?: MapEditor;

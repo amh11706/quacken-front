@@ -17,10 +17,11 @@ const ownerSettings: SettingList = [
 ];
 
 @Component({
-  selector: 'q-flaggames',
-  templateUrl: './flaggames.component.html',
-  styleUrls: ['./flaggames.component.scss'],
-  providers: [MainMenuService],
+    selector: 'q-flaggames',
+    templateUrl: './flaggames.component.html',
+    styleUrls: ['./flaggames.component.scss'],
+    providers: [MainMenuService],
+    standalone: false
 })
 export class FlaggamesComponent extends CadegooseComponent {
   columns = FgColumns;

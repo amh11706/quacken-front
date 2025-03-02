@@ -7,9 +7,10 @@ export const TeamColorsCss: Readonly<string[]> = TeamColors.map(c => `rgb(${c.jo
 export const TeamNames: Readonly<string[]> = ['Defenders', 'Attackers', '2nd Attackers', '3rd Attackers'];
 
 @Component({
-  selector: 'q-cade-entry-status',
-  templateUrl: './cade-entry-status.component.html',
-  styleUrls: ['./cade-entry-status.component.scss'],
+    selector: 'q-cade-entry-status',
+    templateUrl: './cade-entry-status.component.html',
+    styleUrls: ['./cade-entry-status.component.scss'],
+    standalone: false
 })
 export class CadeEntryStatusComponent extends EntryStatusComponent implements OnInit {
   points = [0, 0];

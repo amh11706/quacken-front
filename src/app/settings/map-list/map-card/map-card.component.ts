@@ -6,10 +6,11 @@ import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { MapOption } from './types';
 
 @Component({
-  selector: 'q-map-card',
-  templateUrl: './map-card.component.html',
-  styleUrls: ['./map-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-map-card',
+    templateUrl: './map-card.component.html',
+    styleUrls: ['./map-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MapCardComponent {
   @Input() map?: MapOption;

@@ -3,9 +3,10 @@ import { Component, Input } from '@angular/core';
 import { Card } from '../card/card.component';
 
 @Component({
-  selector: 'q-last-trick',
-  templateUrl: './last-trick.component.html',
-  styleUrls: ['./last-trick.component.css'],
+    selector: 'q-last-trick',
+    templateUrl: './last-trick.component.html',
+    styleUrls: ['./last-trick.component.css'],
+    standalone: false
 })
 export class LastTrickComponent {
   @Input() cards: Card[] = [];

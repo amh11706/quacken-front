@@ -72,9 +72,10 @@ export function getManeuverIcon(id: number): string {
 }
 
 @Component({
-  selector: 'q-maneuver-source',
-  templateUrl: './maneuver-source.component.html',
-  styleUrls: ['./maneuver-source.component.scss'],
+    selector: 'q-maneuver-source',
+    templateUrl: './maneuver-source.component.html',
+    styleUrls: ['./maneuver-source.component.scss'],
+    standalone: false
 })
 export class ManeuverSourceComponent {
   @Input() dragContext = { source: 8, move: 0, type: 'move' };

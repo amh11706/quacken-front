@@ -9,9 +9,10 @@ import { TermsComponent } from '../terms/terms.component';
 import { WsService } from '../../ws/ws.service';
 
 @Component({
-  selector: 'q-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss'],
+    selector: 'q-login-form',
+    templateUrl: './login-form.component.html',
+    styleUrls: ['./login-form.component.scss'],
+    standalone: false
 })
 export class LoginFormComponent implements AfterViewInit {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;

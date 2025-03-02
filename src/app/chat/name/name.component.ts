@@ -22,10 +22,11 @@ interface MenuOption {
 const BotRegex = /Bot\d{1,4}/;
 
 @Component({
-  selector: 'q-name',
-  templateUrl: './name.component.html',
-  styleUrls: ['./name.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-name',
+    templateUrl: './name.component.html',
+    styleUrls: ['./name.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NameComponent implements OnChanges {
   @Input() message = { from: '' } as Partial<TeamMessage> & { from: string };

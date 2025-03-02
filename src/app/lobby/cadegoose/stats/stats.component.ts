@@ -5,9 +5,10 @@ import { Stat, StatRow } from './types';
 import { DefaultExtraColumns, DefaultStatColumns } from '../main-menu/main-menu.service';
 
 @Component({
-  selector: 'q-stats',
-  templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.scss'],
+    selector: 'q-stats',
+    templateUrl: './stats.component.html',
+    styleUrls: ['./stats.component.scss'],
+    standalone: false
 })
 export class StatsComponent implements OnChanges {
   @Input() stats?: Record<number, StatRow>;

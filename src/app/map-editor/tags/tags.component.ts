@@ -8,9 +8,10 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 @Component({
-  selector: 'q-tags',
-  templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.scss'],
+    selector: 'q-tags',
+    templateUrl: './tags.component.html',
+    styleUrls: ['./tags.component.scss'],
+    standalone: false
 })
 export class TagsComponent {
   visible = true;

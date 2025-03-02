@@ -21,11 +21,10 @@ export interface MapInfo {
 }
 
 @Component({
-  selector: 'q-mapinfo-hud',
-  standalone: true,
-  imports: [CommonModule, ChatModule, MatButtonToggleModule],
-  templateUrl: './mapinfo-hud.component.html',
-  styleUrl: './mapinfo-hud.component.scss',
+    selector: 'q-mapinfo-hud',
+    imports: [CommonModule, ChatModule, MatButtonToggleModule],
+    templateUrl: './mapinfo-hud.component.html',
+    styleUrl: './mapinfo-hud.component.scss'
 })
 export class MapinfoHudComponent implements OnChanges {
   @Input() mapInfo = {} as MapInfo;

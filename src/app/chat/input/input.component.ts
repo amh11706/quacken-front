@@ -6,10 +6,11 @@ import { ChatService } from '../chat.service';
 import { CustomEmojis, FindCustomEmoji } from '../../settings/account/account.component';
 
 @Component({
-  selector: 'q-input',
-  templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-input',
+    templateUrl: './input.component.html',
+    styleUrls: ['./input.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class InputComponent implements OnInit, OnDestroy {
   customEmojis = CustomEmojis;

@@ -7,10 +7,11 @@ import { WsService } from '../../ws/ws.service';
 import { FriendsService } from '../friends/friends.service';
 
 @Component({
-  selector: 'q-name-search',
-  templateUrl: './name-search.component.html',
-  styleUrls: ['./name-search.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-name-search',
+    templateUrl: './name-search.component.html',
+    styleUrls: ['./name-search.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class NameSearchComponent implements OnInit {
   private _value = '';

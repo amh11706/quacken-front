@@ -46,22 +46,20 @@ interface BaAction {
 }
 
 @Component({
-  selector: 'q-boardadmiral',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CadegooseModule,
-    TwodRenderModule,
-    HudComponent,
-    BoatListComponent,
-    QdragModule,
-    MatButtonModule,
-    MapEditorModule,
-  ],
-  templateUrl: './boardadmiral.component.html',
-  styleUrl: './boardadmiral.component.scss',
-  providers: [MainMenuService],
-
+    selector: 'q-boardadmiral',
+    imports: [
+        CommonModule,
+        CadegooseModule,
+        TwodRenderModule,
+        HudComponent,
+        BoatListComponent,
+        QdragModule,
+        MatButtonModule,
+        MapEditorModule,
+    ],
+    templateUrl: './boardadmiral.component.html',
+    styleUrl: './boardadmiral.component.scss',
+    providers: [MainMenuService]
 })
 export class BoardadmiralComponent extends CadegooseComponent implements OnInit, OnDestroy {
   statColumns = [

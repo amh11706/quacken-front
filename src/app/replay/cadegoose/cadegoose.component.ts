@@ -23,9 +23,10 @@ import { LobbyWrapperService } from '../lobby-wrapper/lobby-wrapper.service';
 import { LobbyService } from '../../lobby/lobby.service';
 
 @Component({
-  selector: 'q-replay-cadegoose',
-  templateUrl: './cadegoose.component.html',
-  styleUrls: ['./cadegoose.component.scss'],
+    selector: 'q-replay-cadegoose',
+    templateUrl: './cadegoose.component.html',
+    styleUrls: ['./cadegoose.component.scss'],
+    standalone: false
 })
 export class CadegooseComponent implements OnInit, OnDestroy {
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;

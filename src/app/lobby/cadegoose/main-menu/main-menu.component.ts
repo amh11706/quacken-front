@@ -10,10 +10,11 @@ import { TeamMessage } from '../types';
 import { MainMenuService } from './main-menu.service';
 
 @Component({
-  selector: 'q-main-menu',
-  templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-main-menu',
+    templateUrl: './main-menu.component.html',
+    styleUrls: ['./main-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MainMenuComponent {
   teamColors = TeamColorsCss;

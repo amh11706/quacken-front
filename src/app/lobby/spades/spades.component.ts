@@ -17,9 +17,10 @@ const ownerSettings: SettingName[] = [
 ];
 
 @Component({
-  selector: 'q-spades',
-  templateUrl: './spades.component.html',
-  styleUrls: ['./spades.component.css'],
+    selector: 'q-spades',
+    templateUrl: './spades.component.html',
+    styleUrls: ['./spades.component.css'],
+    standalone: false
 })
 export class SpadesComponent implements OnInit, OnDestroy {
   @ViewChild(TimerComponent, { static: false }) timer?: TimerComponent;

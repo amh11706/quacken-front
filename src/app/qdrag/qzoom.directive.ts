@@ -1,8 +1,9 @@
 import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 @Directive({
-  selector: '[qZoom]',
-  exportAs: 'qZoom',
+    selector: '[qZoom]',
+    exportAs: 'qZoom',
+    standalone: false
 })
 export class QzoomDirective implements OnInit, OnDestroy {
   @Input() qZoom?: HTMLElement | '';

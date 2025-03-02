@@ -8,9 +8,10 @@ import { TagsComponent } from '../tags/tags.component';
 import { MapEditor, DBTile, MapGroups } from '../types';
 
 @Component({
-  selector: 'q-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
+    selector: 'q-settings',
+    templateUrl: './settings.component.html',
+    styleUrls: ['./settings.component.scss'],
+    standalone: false
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   @ViewChild(TagsComponent) tags!: TagsComponent;

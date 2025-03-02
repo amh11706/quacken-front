@@ -9,9 +9,10 @@ interface Sprite{
 }
 
 @Component({
-  selector: 'q-sprite-img',
-  templateUrl: './sprite-img.component.html',
-  styleUrls: ['./sprite-img.component.scss'],
+    selector: 'q-sprite-img',
+    templateUrl: './sprite-img.component.html',
+    styleUrls: ['./sprite-img.component.scss'],
+    standalone: false
 })
 export class SpriteImgComponent {
   @Input() render = {} as Sprite;

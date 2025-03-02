@@ -11,9 +11,10 @@ export interface Card {
 }
 
 @Component({
-  selector: 'q-card',
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.css'],
+    selector: 'q-card',
+    templateUrl: './card.component.html',
+    styleUrls: ['./card.component.css'],
+    standalone: false
 })
 export class CardComponent {
   @Input() card: Card = {} as Card;

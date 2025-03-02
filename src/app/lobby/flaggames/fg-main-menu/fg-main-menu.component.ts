@@ -22,9 +22,10 @@ export const FgColumns = [
 ];
 
 @Component({
-  selector: 'q-fg-main-menu',
-  templateUrl: './fg-main-menu.component.html',
-  styleUrls: ['./fg-main-menu.component.scss'],
+    selector: 'q-fg-main-menu',
+    templateUrl: './fg-main-menu.component.html',
+    styleUrls: ['./fg-main-menu.component.scss'],
+    standalone: false
 })
 export class FgMainMenuComponent extends MainMenuComponent {
   columns = FgColumns;

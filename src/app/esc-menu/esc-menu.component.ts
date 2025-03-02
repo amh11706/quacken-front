@@ -7,10 +7,11 @@ import { SettingsService } from '../settings/settings.service';
 import { FriendsService } from '../chat/friends/friends.service';
 
 @Component({
-  selector: 'q-esc-menu',
-  templateUrl: './esc-menu.component.html',
-  styleUrls: ['./esc-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'q-esc-menu',
+    templateUrl: './esc-menu.component.html',
+    styleUrls: ['./esc-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class EscMenuComponent {
   constructor(
