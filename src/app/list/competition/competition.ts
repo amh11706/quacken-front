@@ -1,5 +1,6 @@
 import { DBSetting } from '../../settings/types';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BaseSettings = {
   createType: { value: 5 },
   maxPlayers: { id: 24, value: 40 },

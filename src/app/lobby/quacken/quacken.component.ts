@@ -18,10 +18,10 @@ const ownerSettings: SettingName[] = [
 ];
 
 @Component({
-    selector: 'q-quacken',
-    templateUrl: './quacken.component.html',
-    styleUrls: ['./quacken.component.css'],
-    standalone: false
+  selector: 'q-quacken',
+  templateUrl: './quacken.component.html',
+  styleUrls: ['./quacken.component.css'],
+  standalone: false,
 })
 export class QuackenComponent implements OnInit, OnDestroy {
   protected get lobby() { return this.lobbyService.get().value; }

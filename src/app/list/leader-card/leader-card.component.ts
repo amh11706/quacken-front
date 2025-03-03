@@ -15,10 +15,10 @@ export interface Top3Area {
 }
 
 @Component({
-    selector: 'q-leader-card',
-    imports: [NameModule, CommonModule],
-    templateUrl: './leader-card.component.html',
-    styleUrl: './leader-card.component.scss'
+  selector: 'q-leader-card',
+  imports: [NameModule, CommonModule],
+  templateUrl: './leader-card.component.html',
+  styleUrl: './leader-card.component.scss',
 })
 export class LeaderCardComponent implements OnInit, OnDestroy {
   private timer = 0;

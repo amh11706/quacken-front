@@ -13,6 +13,4 @@ export class LobbyWrapperService {
   fs?: FriendsService;
   boats?: BoatsService;
   chat?: ChatService;
-
-  constructor() { }
 }

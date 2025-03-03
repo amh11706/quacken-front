@@ -3,10 +3,10 @@ import { TileSetComponent } from '../tile-set/tile-set.component';
 import { DBTile } from '../types';
 
 @Component({
-    selector: 'q-tmap-set',
-    templateUrl: './tmap-set.component.html',
-    styleUrls: ['./tmap-set.component.scss'],
-    standalone: false
+  selector: 'q-tmap-set',
+  templateUrl: './tmap-set.component.html',
+  styleUrls: ['./tmap-set.component.scss'],
+  standalone: false,
 })
 export class TmapSetComponent extends TileSetComponent {
   protected group: 'tile' | 'structure' | 'tmap' = 'tmap';

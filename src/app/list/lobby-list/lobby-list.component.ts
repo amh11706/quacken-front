@@ -14,10 +14,10 @@ import { Message } from '../../chat/types';
 import { ListLobby } from '../../lobby/cadegoose/types';
 
 @Component({
-    selector: 'q-lobby-list',
-    templateUrl: './lobby-list.component.html',
-    styleUrls: ['./lobby-list.component.scss'],
-    standalone: false
+  selector: 'q-lobby-list',
+  templateUrl: './lobby-list.component.html',
+  styleUrls: ['./lobby-list.component.scss'],
+  standalone: false,
 })
 export class LobbyListComponent implements OnInit, OnDestroy {
   lobbies = new BehaviorSubject<ListLobby[]>([]);

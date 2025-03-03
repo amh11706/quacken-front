@@ -13,11 +13,11 @@ interface BaShipSetting extends DBSetting {
 }
 
 @Component({
-    selector: 'q-ba-ship-setting',
-    templateUrl: './ba-ship-setting.html',
-    styleUrls: ['./ba-ship-setting.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-ba-ship-setting',
+  templateUrl: './ba-ship-setting.html',
+  styleUrls: ['./ba-ship-setting.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BaShipSettingComponent {
   ShipSetting = Settings.baships as OptionSetting;
@@ -34,10 +34,10 @@ export class BaShipSettingComponent {
   static setLabel(s: Setting): BaShipSetting['data'] | undefined {
     if (s.value === 0) return;
 
-    const data: BaShipSetting['data'] = s.data ?? { custom: [], budget: 200 };
+    const data = s.data as BaShipSetting['data'] ?? { custom: [], budget: 200 };
     if (s.value === 2) {
-      if (s.data.budget === 1010) data.label = 'Influence cap: ∞';
-      else data.label = 'Influence cap: ' + s.data.budget;
+      if (s.data?.budget === 1010) data.label = 'Influence cap: ∞';
+      else data.label = 'Influence cap: ' + s.data?.budget;
       return data;
     }
 

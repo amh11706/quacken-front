@@ -6,11 +6,11 @@ import { KeyBindingService } from './key-binding/key-binding.service';
 import { Sounds, SoundService } from '../sound.service';
 
 @Component({
-    selector: 'q-settings',
-    templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-settings',
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SettingsComponent {
   links = [

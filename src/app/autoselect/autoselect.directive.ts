@@ -1,8 +1,8 @@
 import { Directive, ElementRef, OnInit } from '@angular/core';
 
 @Directive({
-    selector: '[qAutoSelect]',
-    standalone: false
+  selector: '[qAutoSelect]',
+  standalone: false,
 })
 export class AutoSelectDirective implements OnInit {
   constructor(

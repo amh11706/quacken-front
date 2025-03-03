@@ -23,7 +23,7 @@
                       (click)="ms.joinTeam(i)">{{ms.myTeam === i ? 'Leave' : 'Join'}}</button>
               <br>
               <p class="teamcount">{{teamNames[i]}}: {{team.length}}, Rank avg: {{ms.teamRanks[i] || 0}}<br>
-                Rank on win: +{{ms.settings.rated.data?.teamAward?.[i] || 0}}</p>
+                Rank on win: +{{$any(ms.settings.rated.data)?.teamAward?.[i] || 0}}</p>
               <div class="team"
                    [style.borderColor]="teamColors[i]">
                 <div *ngFor="let m of team; trackBy: trackPlayerBy"

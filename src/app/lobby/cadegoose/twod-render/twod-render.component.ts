@@ -33,12 +33,12 @@ export const FlagColorOffsets: Readonly<Record<number, number>> = {
   100: 12,
 };
 
-type FlagMap = Map<string, Turn['flags'][0]>
+type FlagMap = Map<string, Turn['flags'][0]>;
 @Component({
-    selector: 'q-twod-render',
-    templateUrl: './twod-render.component.html',
-    styleUrls: ['./twod-render.component.scss'],
-    standalone: false
+  selector: 'q-twod-render',
+  templateUrl: './twod-render.component.html',
+  styleUrls: ['./twod-render.component.scss'],
+  standalone: false,
 })
 export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   readonly rotationSeed = Math.random() * (Number.MAX_SAFE_INTEGER / 2) + 99999999;

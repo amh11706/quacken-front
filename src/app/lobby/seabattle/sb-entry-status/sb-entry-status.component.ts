@@ -4,10 +4,10 @@ import { CadeEntryStatusComponent } from '../../cadegoose/cade-entry-status/cade
 import { StatRow, Stat } from '../../cadegoose/stats/types';
 
 @Component({
-    selector: 'q-sb-entry-status',
-    templateUrl: './sb-entry-status.component.html',
-    styleUrls: ['./sb-entry-status.component.scss'],
-    standalone: false
+  selector: 'q-sb-entry-status',
+  templateUrl: './sb-entry-status.component.html',
+  styleUrls: ['./sb-entry-status.component.scss'],
+  standalone: false,
 })
 export class SbEntryStatusComponent extends CadeEntryStatusComponent implements OnInit {
   ngOnInit(): void {

@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { debounceTime, mergeMap, startWith } from 'rxjs/operators';
+import { Observable, debounceTime, mergeMap, startWith } from 'rxjs';
+
 import { OutCmd } from '../../ws/ws-messages';
 import { WsService } from '../../ws/ws.service';
 import { FriendsService } from '../friends/friends.service';
 
 @Component({
-    selector: 'q-name-search',
-    templateUrl: './name-search.component.html',
-    styleUrls: ['./name-search.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-name-search',
+  templateUrl: './name-search.component.html',
+  styleUrls: ['./name-search.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NameSearchComponent implements OnInit {
   private _value = '';

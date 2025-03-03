@@ -18,7 +18,10 @@ export class Sprite {
     private height: number,
     private positions: [number, number][],
   ) {
-    this.prom = getTileImage(name).then(img => this.img = img);
+    this.prom = getTileImage(name).then(img => {
+      this.img = img;
+      return img;
+    });
   }
 
   then<T>(cb: (i: HTMLImageElement) => T): Promise<T> {
@@ -73,7 +76,10 @@ export class JsonSprite {
   private prom: Promise<HTMLImageElement>;
 
   constructor(public data: SpriteData) {
-    this.prom = getTileImage(data.name).then(img => this.img = img);
+    this.prom = getTileImage(data.name).then(img => {
+      this.img = img;
+      return img;
+    });
   }
 
   then<T>(cb: (i: HTMLImageElement) => T): Promise<T> {

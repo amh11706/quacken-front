@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, startWith, map } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { startWith, map } from 'rxjs/operators';
 
 import { MatDialog } from '@angular/material/dialog';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -23,10 +22,10 @@ import { LobbyWrapperService } from '../lobby-wrapper/lobby-wrapper.service';
 import { LobbyService } from '../../lobby/lobby.service';
 
 @Component({
-    selector: 'q-replay-cadegoose',
-    templateUrl: './cadegoose.component.html',
-    styleUrls: ['./cadegoose.component.scss'],
-    standalone: false
+  selector: 'q-replay-cadegoose',
+  templateUrl: './cadegoose.component.html',
+  styleUrls: ['./cadegoose.component.scss'],
+  standalone: false,
 })
 export class CadegooseComponent implements OnInit, OnDestroy {
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;
@@ -122,7 +121,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   ];
 
   selectedShips: { value: number, label: string }[] =
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     [this.ships[1]!, { ...this.ships[1]! }, { ...this.ships[1]! }, { ...this.ships[1]! }];
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -273,7 +272,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     if (!this.scores) return;
     const map = await this.ss.get('l/cade', 'map');
     for (const t of this.scores.totals) {
-      t.map = map?.data;
+      t.map = map?.data as unknown as string;
       t.total = 0;
       t.turns = [[], [], [], [], [], [], [], [], [], [], []];
     }

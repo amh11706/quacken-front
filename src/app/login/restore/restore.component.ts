@@ -6,10 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from '../../../environments/environment';
 
 @Component({
-    selector: 'q-restore',
-    templateUrl: './restore.component.html',
-    styleUrls: ['./restore.component.scss'],
-    standalone: false
+  selector: 'q-restore',
+  templateUrl: './restore.component.html',
+  styleUrls: ['./restore.component.scss'],
+  standalone: false,
 })
 export class RestoreComponent implements OnInit, OnDestroy {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -44,17 +44,19 @@ export class RestoreComponent implements OnInit, OnDestroy {
 
   reset(): void {
     this.pending = true;
-    this.http.post<any>(this.path + 'restore', JSON.stringify(this.user)).subscribe(
-      () => {
-        this.back();
-        this.err = 'Account restored. You can now log in with the email address you provided.';
-        if (this.errComponent) this.dialog.open(this.errComponent);
-      },
-      (err: unknown) => {
-        this.pending = false;
-        if (!(err instanceof HttpErrorResponse)) return;
-        this.err = typeof err.error === 'string' ? err.error : 'Server error. Try again later.';
-        if (this.errComponent) this.dialog.open(this.errComponent);
+    this.http.post(this.path + 'restore', JSON.stringify(this.user)).subscribe(
+      {
+        next: () => {
+          this.back();
+          this.err = 'Account restored. You can now log in with the email address you provided.';
+          if (this.errComponent) this.dialog.open(this.errComponent);
+        },
+        error: (err: unknown) => {
+          this.pending = false;
+          if (!(err instanceof HttpErrorResponse)) return;
+          this.err = typeof err.error === 'string' ? err.error : 'Server error. Try again later.';
+          if (this.errComponent) this.dialog.open(this.errComponent);
+        },
       },
     );
   }

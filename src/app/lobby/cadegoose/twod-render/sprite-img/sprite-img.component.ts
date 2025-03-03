@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Orientation } from '../sprite';
 
-interface Sprite{
+interface Sprite {
   img?: string;
   imgPosition?: string;
   orientation?: Orientation;
@@ -9,10 +9,10 @@ interface Sprite{
 }
 
 @Component({
-    selector: 'q-sprite-img',
-    templateUrl: './sprite-img.component.html',
-    styleUrls: ['./sprite-img.component.scss'],
-    standalone: false
+  selector: 'q-sprite-img',
+  templateUrl: './sprite-img.component.html',
+  styleUrls: ['./sprite-img.component.scss'],
+  standalone: false,
 })
 export class SpriteImgComponent {
   @Input() render = {} as Sprite;

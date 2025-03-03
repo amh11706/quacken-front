@@ -31,9 +31,9 @@
 
       <ng-container *ngIf="settings.baships.value === 2; else fixedShips">
         <div class="half">
-          <p>Cost: {{cost}} / {{settings.baships.data.budget < 1010
+          <p>Cost: {{cost}} / {{$any(settings.baships.data)?.budget < 1010
               ?
-              settings.baships.data.budget
+              $any(settings.baships.data).budget
               : '∞'
               }}</p>
               <p *ngIf="spawnBoats.length === 0"
@@ -50,7 +50,7 @@
         <div class="half">
           <q-ship-list [showList]="false"
                        [ships]="boatTypes"
-                       [budget]="settings.baships.data.budget"
+                       [budget]="$any(settings.baships.data)?.budget"
                        (shipAdd)="addBoat($event)"></q-ship-list>
         </div>
       </ng-container>

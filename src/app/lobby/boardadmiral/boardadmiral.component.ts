@@ -42,24 +42,24 @@ interface BaAction {
   cmd: 'addTile' | 'removeTile';
   id: number;
   coverMode: BoatCoverMode;
-  data: any;
+  data: { x: number, y: number, a?: number };
 }
 
 @Component({
-    selector: 'q-boardadmiral',
-    imports: [
-        CommonModule,
-        CadegooseModule,
-        TwodRenderModule,
-        HudComponent,
-        BoatListComponent,
-        QdragModule,
-        MatButtonModule,
-        MapEditorModule,
-    ],
-    templateUrl: './boardadmiral.component.html',
-    styleUrl: './boardadmiral.component.scss',
-    providers: [MainMenuService]
+  selector: 'q-boardadmiral',
+  imports: [
+    CommonModule,
+    CadegooseModule,
+    TwodRenderModule,
+    HudComponent,
+    BoatListComponent,
+    QdragModule,
+    MatButtonModule,
+    MapEditorModule,
+  ],
+  templateUrl: './boardadmiral.component.html',
+  styleUrl: './boardadmiral.component.scss',
+  providers: [MainMenuService],
 })
 export class BoardadmiralComponent extends CadegooseComponent implements OnInit, OnDestroy {
   statColumns = [

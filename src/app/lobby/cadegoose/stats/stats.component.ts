@@ -1,14 +1,13 @@
-/* eslint-disable no-unused-vars */
 import { Component, Input, OnChanges } from '@angular/core';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 import { Stat, StatRow } from './types';
 import { DefaultExtraColumns, DefaultStatColumns } from '../main-menu/main-menu.service';
 
 @Component({
-    selector: 'q-stats',
-    templateUrl: './stats.component.html',
-    styleUrls: ['./stats.component.scss'],
-    standalone: false
+  selector: 'q-stats',
+  templateUrl: './stats.component.html',
+  styleUrls: ['./stats.component.scss'],
+  standalone: false,
 })
 export class StatsComponent implements OnChanges {
   @Input() stats?: Record<number, StatRow>;

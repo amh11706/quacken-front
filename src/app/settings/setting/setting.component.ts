@@ -32,11 +32,11 @@ export function getShipLink(id: number): string {
 }
 
 @Component({
-    selector: 'q-setting',
-    templateUrl: './setting.component.html',
-    styleUrls: ['./setting.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-setting',
+  templateUrl: './setting.component.html',
+  styleUrls: ['./setting.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class SettingComponent implements OnDestroy {
   @Input() disabled = false;

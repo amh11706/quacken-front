@@ -8,10 +8,10 @@ import { TermsComponent } from '../terms/terms.component';
 import { PrivacyComponent } from '../privacy/privacy.component';
 
 @Component({
-    selector: 'q-create',
-    templateUrl: './create.component.html',
-    styleUrls: ['./create.component.scss'],
-    standalone: false
+  selector: 'q-create',
+  templateUrl: './create.component.html',
+  styleUrls: ['./create.component.scss'],
+  standalone: false,
 })
 export class CreateComponent {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -40,17 +40,19 @@ export class CreateComponent {
 
   create(): void {
     this.pending = true;
-    this.http.post<any>(this.path + 'create', JSON.stringify(this.user))
+    this.http.post<string>(this.path + 'create', JSON.stringify(this.user))
       .subscribe(
-        resp => {
-          window.localStorage.setItem('token', resp);
-          void this.router.navigate(['list']);
-        },
-        (err: unknown) => {
-          this.pending = false;
-          if (!(err instanceof HttpErrorResponse)) return;
-          this.err = typeof err.error === 'string' ? err.error : 'Server error. Please try again later.';
-          if (this.errComponent) this.dialog.open(this.errComponent);
+        {
+          next: resp => {
+            window.localStorage.setItem('token', resp);
+            void this.router.navigate(['list']);
+          },
+          error: (err: unknown) => {
+            this.pending = false;
+            if (!(err instanceof HttpErrorResponse)) return;
+            this.err = typeof err.error === 'string' ? err.error : 'Server error. Please try again later.';
+            if (this.errComponent) this.dialog.open(this.errComponent);
+          },
         },
       );
   }

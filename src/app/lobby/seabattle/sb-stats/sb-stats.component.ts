@@ -9,10 +9,10 @@ export const SB_STATS = [
 ];
 
 @Component({
-    selector: 'q-sb-stats',
-    templateUrl: './sb-stats.component.html',
-    styleUrls: ['./sb-stats.component.scss'],
-    standalone: false
+  selector: 'q-sb-stats',
+  templateUrl: './sb-stats.component.html',
+  styleUrls: ['./sb-stats.component.scss'],
+  standalone: false,
 })
 export class SbStatsComponent extends StatsComponent {
   columns = SB_STATS;

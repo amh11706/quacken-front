@@ -162,7 +162,7 @@ export class EmojiInputDirective implements OnInit {
     this.onSelect(this.emojiService.getSanitizedData(first, this.overlayContext.skin, 'apple'));
   }
 
-  private createInjector(data: any): Injector {
+  private createInjector(data: unknown): Injector {
     return Injector.create({
       parent: this.injector,
       providers: [

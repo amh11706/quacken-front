@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { Observable, ReplaySubject, Subscription, debounceTime, map, startWith } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-import { debounceTime, map, startWith } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { COMMA, SPACE } from '@angular/cdk/keycodes';
 import { OutCmd } from '../../ws/ws-messages';
@@ -86,11 +85,11 @@ const MapSizes = {
 };
 
 @Component({
-    selector: 'q-map-list',
-    templateUrl: './map-list.component.html',
-    styleUrls: ['./map-list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-map-list',
+  templateUrl: './map-list.component.html',
+  styleUrls: ['./map-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MapListComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport, { static: false }) mapViewport?: CdkVirtualScrollViewport;
@@ -283,7 +282,7 @@ export class MapListComponent implements OnInit, OnDestroy {
       title: this.setting.label || this.setting.name,
       value: map.id || 0,
       group: this.setting.group,
-      data: map.username ? `${map.name} (${map.username})` : 'Generated',
+      data: { label: map.username ? `${map.name} (${map.username})` : 'Generated' },
     });
     this.selectedMap.setServerValue(map.id);
     if (id < 0) this.scrollToSelected();

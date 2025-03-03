@@ -28,8 +28,8 @@ export class WsService implements OnDestroy {
   private socket?: WebSocket;
   private token = '';
   private timeOut?: number;
-  private messages = new Map<InCmd | Internal, Subject<any>>();
-  private requests = new Map<number, (value: any) => void>();
+  private messages = new Map<InCmd | Internal, Subject<unknown>>();
+  private requests = new Map<number, (value: unknown) => void>();
   private nextId = 1;
   private tokenParser = new JwtHelperService();
   user: TokenUser = { id: 0, name: 'Guest', admin: 0 };
@@ -122,14 +122,14 @@ export class WsService implements OnDestroy {
   }
 
   subscribe<T extends keyof SubscribeData>(
-    cmd: T, next?: (value: SubscribeData[T]) => void, error?: (e: any) => void, complete?: () => void,
+    cmd: T, next?: (value: SubscribeData[T]) => void, error?: (e: unknown) => void, complete?: () => void,
   ): Subscription {
-    const sub = this.messages.get(cmd);
-    if (sub && sub.observers.length) return sub.subscribe(next, error, complete);
+    const sub = this.messages.get(cmd) as Subject<SubscribeData[T]> | undefined;
+    if (sub && sub.observers.length) return sub.subscribe({ next, error, complete });
 
-    const newSub = new Subject<any>();
-    this.messages.set(cmd, newSub);
-    return newSub.subscribe(next, error, complete);
+    const newSub = new Subject<SubscribeData[T]>();
+    this.messages.set(cmd, newSub as Subject<unknown>);
+    return newSub.subscribe({ next, error, complete });
   }
 
   async dispatchMessage(message: InMessage & { httpid?: string }): Promise<void> {
@@ -173,7 +173,7 @@ export class WsService implements OnDestroy {
     const message = { cmd, id: this.nextId, data };
     this.sendRaw(JSON.stringify(message));
     const p = new Promise<OutCmdReturnTypes[T]>((resolve) => {
-      this.requests.set(this.nextId, resolve);
+      this.requests.set(this.nextId, resolve as (value: unknown) => void);
       this.nextId++;
     });
     this.outMessages$.next(message as OutRequest);

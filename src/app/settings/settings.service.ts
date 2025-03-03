@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { BehaviorSubject, Subscription, debounceTime } from 'rxjs';
+
 import { InCmd, OutCmd } from '../ws/ws-messages';
 
 import { WsService } from '../ws/ws.service';
@@ -74,7 +74,7 @@ export class SettingsService implements OnDestroy {
       const key = s.name as ServerSettingGroup[T];
       const oldSetting = newSettings[key];
       if (oldSetting) {
-        oldSetting.data = null;
+        delete oldSetting.data;
         oldSetting.setServerValue(0);
         continue;
       }

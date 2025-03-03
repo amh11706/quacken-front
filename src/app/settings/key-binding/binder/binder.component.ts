@@ -6,11 +6,11 @@ import { KeyBindingEditMode } from '../key-binding.component';
 import { KeyBindingService } from '../key-binding.service';
 
 @Component({
-    selector: 'q-binder',
-    templateUrl: './binder.component.html',
-    styleUrls: ['./binder.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-binder',
+  templateUrl: './binder.component.html',
+  styleUrls: ['./binder.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BinderComponent implements OnDestroy {
   private _binding?: KeyBindingEditMode;
@@ -50,7 +50,7 @@ export class BinderComponent implements OnDestroy {
     this.sub?.unsubscribe();
   }
 
-  openDialog(ref: TemplateRef<any>): void {
+  openDialog(ref: TemplateRef<unknown>): void {
     this.newKey = this.key;
     const sub = this.kbs.bindSubscribe(e => {
       this.newKey = e;

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'q-record',
-    templateUrl: './record.component.html',
-    styleUrls: ['./record.component.scss'],
-    standalone: false
+  selector: 'q-record',
+  templateUrl: './record.component.html',
+  styleUrls: ['./record.component.scss'],
+  standalone: false,
 })
 export class RecordComponent implements OnInit {
   isRecording = false;
-  private stream?: MediaStream;
+  private stream?: MediaStream | void;
   private canvas?: HTMLCanvasElement;
   private context?: CanvasRenderingContext2D;
   private video = document.createElement('video');
@@ -27,16 +27,16 @@ export class RecordComponent implements OnInit {
 
   private async startRecording() {
     this.isRecording = true;
-    this.stream = await (navigator.mediaDevices as any).getDisplayMedia({
-      video: { frameRate: 2, displaySurface: 'window', cursor: 'never' },
-    }).catch(() => this.isRecording = false);
+    this.stream = await navigator.mediaDevices.getDisplayMedia({
+      video: { frameRate: 2, displaySurface: 'window' },
+    }).catch(() => { this.isRecording = false; });
     if (!this.stream) return;
 
     const tracks = this.stream.getTracks();
     if (tracks.length) {
       const firstTrack = tracks[0];
       if (!firstTrack) return;
-      firstTrack.onended = () => this.isRecording = false;
+      firstTrack.onended = () => { this.isRecording = false; };
     }
 
     this.video.srcObject = this.stream;

@@ -18,10 +18,10 @@ export const Penalties = [
 ];
 
 @Component({
-    selector: 'q-penalty',
-    templateUrl: './penalty.component.html',
-    styleUrls: ['./penalty.component.scss'],
-    standalone: false
+  selector: 'q-penalty',
+  templateUrl: './penalty.component.html',
+  styleUrls: ['./penalty.component.scss'],
+  standalone: false,
 })
 export class PenaltyComponent {
   Penalties = Penalties;
@@ -43,8 +43,9 @@ export class PenaltyComponent {
         overflow: 'visible',
       },
     });
-    (navigator.clipboard as any).write([
-      new (window as any).ClipboardItem({
+    if (!blob) return;
+    void navigator.clipboard.write([
+      new window.ClipboardItem({
         'image/png': blob,
       }),
     ]);

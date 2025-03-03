@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { EmojiSearch, PreviewComponent } from '@ctrl/ngx-emoji-mart';
 import { Emoji, EmojiComponent, EmojiData, EmojiService } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
-const I18N: any = {
+const I18N = {
   search: 'Search',
   emojilist: 'List of emoji',
   notfound: 'No Emoji Found',
@@ -33,15 +33,15 @@ const I18N: any = {
 };
 
 @Component({
-    selector: 'q-emoji-search-results',
-    imports: [
-        CommonModule,
-        EmojiComponent,
-        MatCardModule,
-        PreviewComponent,
-    ],
-    templateUrl: './emoji-search-results.component.html',
-    styleUrl: './emoji-search-results.component.scss'
+  selector: 'q-emoji-search-results',
+  imports: [
+    CommonModule,
+    EmojiComponent,
+    MatCardModule,
+    PreviewComponent,
+  ],
+  templateUrl: './emoji-search-results.component.html',
+  styleUrl: './emoji-search-results.component.scss',
 })
 export class EmojiSearchResultsComponent implements OnInit {
   hoveredEmoji: EmojiData | null = null;

@@ -2,7 +2,6 @@ import { BoatSync, BoatTick, MoveMessage, MoveMessageIncoming, Sync, Turn } from
 import { InCmd, Internal } from './ws-messages';
 import { DBSetting } from '../settings/types';
 import { ListLobby, Lobby, TeamMessage } from '../lobby/cadegoose/types';
-import { Player } from '../lobby/spades/types';
 import { Command, Invite, Message } from '../chat/types';
 import { InvUpdate, Inventory } from '../esc-menu/profile/types';
 import { TokenUser } from './ws.service';
@@ -21,7 +20,7 @@ type InternalData = {
 
   [Internal.ResetMoves]: undefined;
   [Internal.OpenAdvanced]: undefined;
-}
+};
 
 export type SubscribeData = {
   [InCmd.NavigateTo]: string;
@@ -76,7 +75,6 @@ export type SubscribeData = {
   [InCmd.PlayTo]: number;
   [InCmd.Cards]: number[];
   [InCmd.Scores]: number[];
-  [InCmd.Sit]: Player;
   [InCmd.Card]: { id: number, position: number };
   [InCmd.Playing]: { id: number, quantity: number };
   [InCmd.QueueLength]: number;

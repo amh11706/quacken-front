@@ -59,7 +59,7 @@ export class AiRender {
     const range = { min: 0, max: 1 };
     if (!this.boat) return range;
     for (const coordString in this.boat.pm) {
-      if (!this.boat.pm.hasOwnProperty(coordString)) continue;
+      if (!Object.prototype.hasOwnProperty.call(this.boat.pm, coordString)) continue;
       const points = this.boat.pm[coordString];
       if (!points) continue;
       const value = this.getValue(points, metric);
@@ -123,7 +123,7 @@ export class AiRender {
       const { min, max } = this.findRange(metric);
 
       for (const coordString in this.boat.pm) {
-        if (!this.boat.pm.hasOwnProperty(coordString)) continue;
+        if (!Object.prototype.hasOwnProperty.call(this.boat.pm, coordString)) continue;
         const coords = coordString.split(',');
         const x = +(coords[0] || 0) * 50;
         const y = +(coords[1] || 0) * 50;

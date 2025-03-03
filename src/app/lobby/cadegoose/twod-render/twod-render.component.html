@@ -55,7 +55,7 @@
      id="fps"
      [qDrag]="fps"
      [bindToWindow]="true"
-     [offset]="graphicSettings.showFps.data"
+     [offset]="$any(graphicSettings.showFps.data)"
      (offsetChange)="fpsOffsetChange($event)"
      [hidden]="!graphicSettings.showFps.value">
 </div>

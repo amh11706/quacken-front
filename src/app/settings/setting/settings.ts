@@ -13,7 +13,7 @@ interface BaseSetting {
   readonly id: number;
   readonly group: SettingGroup;
   readonly name: ServerSettingGroup[SettingGroup];
-  readonly advancedComponent?: any;
+  readonly advancedComponent?: unknown;
   readonly trigger?: OutCmd.NextBoat | OutCmd.SpawnSide | OutCmd.ChatCommand;
   readonly cmd?: OutCmd;
   readonly setLabel?: (s: Setting) => string | Setting['data'] | undefined;
@@ -64,7 +64,7 @@ type ClientSettingGroup = {
   'cadeRated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'queueRated' | 'showAdvanced' | 'lobbyType' | 'variation',
+  matchmaking: 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'queueRated' | 'showAdvanced' | 'lobbyType' | 'variation',
   'l/flaggames': 'flagMap' | 'flagMaxPlayers' | 'flagPublicMode' | 'flagHotEntry' | 'flagJobberQuality' | 'flagTurnTime' |
   'flagTurns' | 'flagSpawnDelay' | 'flagFishBoats' | 'flagAllowGuests' | 'flagRespawn' | 'flagSteal',
 };
@@ -80,10 +80,10 @@ export type ServerSettingGroup = {
   'hotEntry' | 'showStats' | 'map' | 'teams' | 'showMoves' | 'showDamage' | 'rated' | 'fishBoats' | 'allowGuests' | 'overtime',
   'l/create': 'createType',
   'l/spades': 'turnTime' | 'playTo' | 'watchers',
-  'matchmaking': 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated' | 'showAdvanced' | 'lobbyType' | 'variation',
+  matchmaking: 'minTurnTime' | 'maxTurnTime' | 'deltaRank' | 'gameMode' | 'rated' | 'showAdvanced' | 'lobbyType' | 'variation',
   'l/flaggames': 'map' | 'maxPlayers' | 'publicMode' | 'hotEntry' | 'jobberQuality' | 'turnTime' | 'turns' | 'spawnDelay' |
   'fishBoats' | 'allowGuests' | 'flagRespawn' | 'flagSteal',
-}
+};
 
 export type SettingName = ClientSettingGroup[SettingGroup];
 
@@ -93,7 +93,7 @@ export type SettingGroupFromClientName<T extends SettingName> = {
 
 type SettingList = {
   [K in SettingName]: SettingInput & { group: SettingGroupFromClientName<K> }
-}
+};
 
 export const Settings: SettingList = {
   startNew: { id: 0, name: '', admin: true, type: 'button', group: 'internal', label: 'Force Start', trigger: OutCmd.ChatCommand, data: '/start new' },

@@ -7,7 +7,7 @@ import { StatRow } from './stats/types';
 export interface Lobby {
   id: number;
   owner: boolean;
-  players: any[];
+  players: TeamMessage[];
   playing?: boolean;
   scores?: number[];
   treasure?: number[];
@@ -31,6 +31,8 @@ export interface CadeLobby extends Lobby {
   flags: Turn['flags'];
   points: number[];
   sync: Sync;
+  clutter?: Clutter[];
+  boats?: BoatStatus[];
 }
 
 export interface TeamMessage extends ChatMessage {

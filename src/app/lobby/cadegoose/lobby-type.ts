@@ -6,6 +6,16 @@ export const BoardadmiralDesc = 'Board Admiral: Command your fleet to victory in
 export const FgDesc = 'Flag games: Plant flags in the enemy base to score points!';
 export const CadeDesc = 'Blockade: Use your ship to contest flags and sink enemy ships in a battle for points.';
 
+export const enum LobbyType {
+  Quacken = 'Quacken',
+  Spades = 'Spades',
+  CadeGoose = 'CadeGoose',
+  FlagGames = 'FlagGames',
+  SeaBattle = 'SeaBattle',
+  BA = 'BA',
+  mapinfo = 'mapinfo',
+}
+
 export const enum LobbyStatus {
   PreMatch,
   MidMatch,
@@ -46,13 +56,3 @@ export const ActiveLobbyTypes = [
   LobbyTypes[LobbyType.FlagGames],
   LobbyTypes[LobbyType.BA],
 ];
-
-export const enum LobbyType {
-  Quacken = 'Quacken',
-  Spades = 'Spades',
-  CadeGoose = 'CadeGoose',
-  FlagGames = 'FlagGames',
-  SeaBattle = 'SeaBattle',
-  BA = 'BA',
-  mapinfo = 'mapinfo',
-}

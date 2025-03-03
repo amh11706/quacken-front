@@ -43,9 +43,14 @@ const sunSettings = {
 export const GRID_DEPTH = -0.05;
 
 export interface ObstacleConfig {
-  path: string; ext?: string;
-  offsetX: number; offsetZ: number; offsetY?: number;
-  scalar?: number; scaleY?: number; rotate?: number;
+  path: string;
+  ext?: string;
+  offsetX: number;
+  offsetZ: number;
+  offsetY?: number;
+  scalar?: number;
+  scaleY?: number;
+  rotate?: number;
 }
 
 const obstacleModels: Record<number, ObstacleConfig> = {
@@ -128,7 +133,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sub.add(this.bs.myBoat$.subscribe(b => this.myBoat = b));
+    this.sub.add(this.bs.myBoat$.subscribe(b => { this.myBoat = b; }));
     this.sub.add(this.bs.focusMyBoat$.subscribe(this.centerOnBoat.bind(this)));
 
     this.sub.add(this.ws.subscribe(Internal.Canvas, c => {
@@ -352,7 +357,7 @@ export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {
 
     uniforms.sunPosition?.value.copy(sun);
 
-    this.scene.environment = pmremGenerator.fromScene(sky as any).texture;
+    this.scene.environment = pmremGenerator.fromScene(sky as unknown as Scene).texture;
   }
 
   private loadObj(obj?: ObstacleConfig): Promise<GLTF> {

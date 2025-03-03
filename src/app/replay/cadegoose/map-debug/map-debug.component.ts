@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-    selector: 'q-map-debug',
-    templateUrl: './map-debug.component.html',
-    styleUrls: ['./map-debug.component.scss'],
-    standalone: false
+  selector: 'q-map-debug',
+  templateUrl: './map-debug.component.html',
+  styleUrls: ['./map-debug.component.scss'],
+  standalone: false,
 })
 export class MapDebugComponent {
   private _seed = '';

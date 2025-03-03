@@ -32,11 +32,11 @@ export function FindCustomEmoji(name: string): EmojiData | string {
 }
 
 @Component({
-    selector: 'q-account',
-    templateUrl: './account.component.html',
-    styleUrls: ['./account.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-account',
+  templateUrl: './account.component.html',
+  styleUrls: ['./account.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AccountComponent {
   pending = false;

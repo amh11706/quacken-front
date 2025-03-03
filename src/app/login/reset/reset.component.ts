@@ -6,10 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { environment } from '../../../environments/environment';
 
 @Component({
-    selector: 'q-reset',
-    templateUrl: './reset.component.html',
-    styleUrls: ['./reset.component.scss'],
-    standalone: false
+  selector: 'q-reset',
+  templateUrl: './reset.component.html',
+  styleUrls: ['./reset.component.scss'],
+  standalone: false,
 })
 export class ResetComponent implements OnInit, OnDestroy {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -45,17 +45,19 @@ export class ResetComponent implements OnInit, OnDestroy {
 
   reset(): void {
     this.pending = true;
-    this.http.post<any>(this.path + 'reset', JSON.stringify({
+    this.http.post(this.path + 'reset', JSON.stringify({
       password: this.password, token: this.token,
     })).subscribe(
-      () => {
-        this.back();
-      },
-      (err: unknown) => {
-        this.pending = false;
-        if (!(err instanceof HttpErrorResponse)) return;
-        this.err = typeof err.error === 'string' ? err.error : 'Server error. Try again later.';
-        if (this.errComponent) this.dialog.open(this.errComponent);
+      {
+        next: () => {
+          this.back();
+        },
+        error: (err: unknown) => {
+          this.pending = false;
+          if (!(err instanceof HttpErrorResponse)) return;
+          this.err = typeof err.error === 'string' ? err.error : 'Server error. Try again later.';
+          if (this.errComponent) this.dialog.open(this.errComponent);
+        },
       },
     );
   }

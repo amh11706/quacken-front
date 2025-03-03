@@ -7,13 +7,11 @@
      id="lobby"
      [ngSwitch]="lobby.type">
   <q-quacken *ngSwitchCase="'Quacken'"></q-quacken>
-  <q-spades *ngSwitchCase="'Spades'"
-            [lobby]="lobby"></q-spades>
   <q-cadegoose *ngSwitchCase="'CadeGoose'"></q-cadegoose>
   <q-seabattle *ngSwitchCase="'SeaBattle'"></q-seabattle>
   <q-flaggames *ngSwitchCase="'FlagGames'"></q-flaggames>
   <q-mapinfo *ngSwitchCase="'mapinfo'"
-             [lobby]="lobby"></q-mapinfo>
+             [lobby]="$any(lobby)"></q-mapinfo>
   <q-boardadmiral *ngSwitchCase="'BA'"></q-boardadmiral>
 
 </div>

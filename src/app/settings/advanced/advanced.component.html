@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  <ng-container *ngComponentOutlet="component; injector: customInjector"></ng-container>
+  <ng-container *ngComponentOutlet="$any(component); injector: customInjector"></ng-container>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button

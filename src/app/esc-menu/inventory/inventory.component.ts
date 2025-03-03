@@ -8,11 +8,11 @@ import { InCmd, OutCmd } from '../../ws/ws-messages';
 import { Item, Inventory } from '../profile/types';
 
 @Component({
-    selector: 'q-inventory',
-    templateUrl: './inventory.component.html',
-    styleUrls: ['./inventory.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-inventory',
+  templateUrl: './inventory.component.html',
+  styleUrls: ['./inventory.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class InventoryComponent implements OnDestroy {
   private _id?: number;

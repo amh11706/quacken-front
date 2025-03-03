@@ -20,7 +20,7 @@ export class ChatService implements OnDestroy {
   saveText = '';
   historyIndex = -1;
   commands$ = new BehaviorSubject<Command[]>([]);
-  selectedCommand$ = new BehaviorSubject<Command>({ params: [] } as any);
+  selectedCommand$ = new BehaviorSubject<Command>({ params: [] } as unknown as Command);
   nameCommands: Command[] = [];
   commandParams = new Map<string, { name: string, value: string }>();
   private subs = new Subscription();
@@ -46,7 +46,7 @@ export class ChatService implements OnDestroy {
           continue;
         }
         cmd.title = cmd.base.substring(1);
-        const params = cmd.params as any as string;
+        const params = cmd.params as unknown as string;
         cmd.params = params.replace(/[[\]<>]/g, '').split(' ').map(p => {
           if (!this.commandParams.has(p)) this.commandParams.set(p, { name: p, value: p === 'new' ? p : '' });
           return this.commandParams.get(p)!;

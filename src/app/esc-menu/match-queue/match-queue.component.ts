@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/use-lifecycle-interface */
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
@@ -17,21 +16,22 @@ import { NotificationService } from './notification.service';
 import { RankArea } from '../../lobby/cadegoose/lobby-type';
 import { OutCmdInputTypes } from '../../ws/ws-request-types';
 import { Setting } from '../../settings/types';
+import { InMessage } from '../../ws/ws-subscribe-types';
 
 @Component({
-    selector: 'q-match-queue',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [
-        MatButtonModule,
-        CommonModule,
-        SettingsModule,
-        MatCardModule,
-        MatTooltipModule,
-        MatExpansionModule,
-        LetDirective,
-    ],
-    templateUrl: './match-queue.component.html',
-    styleUrls: ['./match-queue.component.scss']
+  selector: 'q-match-queue',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    MatButtonModule,
+    CommonModule,
+    SettingsModule,
+    MatCardModule,
+    MatTooltipModule,
+    MatExpansionModule,
+    LetDirective,
+  ],
+  templateUrl: './match-queue.component.html',
+  styleUrls: ['./match-queue.component.scss'],
 })
 export class MatchQueueComponent implements OnInit {
   queueLength = new Subject<number>();
@@ -133,7 +133,7 @@ export class MatchQueueComponent implements OnInit {
     const res = await this.ws.request(OutCmd.JoinQueue, await this.formatSettings());
     this.pending.next(false);
     if (res) {
-      void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: res } as any });
+      void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: res } } as InMessage);
       return;
     }
     this.ms.inQueue = true;

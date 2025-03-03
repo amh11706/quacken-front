@@ -57,7 +57,7 @@
                   <q-player-list [players]="(fs.lobby$ | async) || []"></q-player-list>
                 </mat-card-content>
               </mat-card>
-              <ng-container *ngComponentOutlet="es.lobbyComponent; injector: es.lobbyInjector"></ng-container>
+              <ng-container *ngComponentOutlet="$any(es.lobbyComponent); injector: es.lobbyInjector"></ng-container>
             </mat-tab>
             <mat-tab label="Settings"
                      *ngIf="ss.lAdminSettings.length">

@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -18,10 +17,10 @@ interface RenderSetting {
 }
 
 @Component({
-    selector: 'q-map-editor',
-    templateUrl: './map-editor.component.html',
-    styleUrls: ['./map-editor.component.css'],
-    standalone: false
+  selector: 'q-map-editor',
+  templateUrl: './map-editor.component.html',
+  styleUrls: ['./map-editor.component.css'],
+  standalone: false,
 })
 export class MapEditorComponent implements OnInit, OnDestroy {
   @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;

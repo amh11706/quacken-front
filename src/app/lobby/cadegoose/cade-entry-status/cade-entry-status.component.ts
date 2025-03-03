@@ -7,10 +7,10 @@ export const TeamColorsCss: Readonly<string[]> = TeamColors.map(c => `rgb(${c.jo
 export const TeamNames: Readonly<string[]> = ['Defenders', 'Attackers', '2nd Attackers', '3rd Attackers'];
 
 @Component({
-    selector: 'q-cade-entry-status',
-    templateUrl: './cade-entry-status.component.html',
-    styleUrls: ['./cade-entry-status.component.scss'],
-    standalone: false
+  selector: 'q-cade-entry-status',
+  templateUrl: './cade-entry-status.component.html',
+  styleUrls: ['./cade-entry-status.component.scss'],
+  standalone: false,
 })
 export class CadeEntryStatusComponent extends EntryStatusComponent implements OnInit {
   points = [0, 0];
@@ -21,7 +21,7 @@ export class CadeEntryStatusComponent extends EntryStatusComponent implements On
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.subs.add(this.ws.subscribe(InCmd.Turn, t => this.points = t.points));
+    this.subs.add(this.ws.subscribe(InCmd.Turn, t => { this.points = t.points; }));
     this.subs.add(this.lobbyService.get().subscribe(l => {
       l?.points && (this.points = l.points);
     }));

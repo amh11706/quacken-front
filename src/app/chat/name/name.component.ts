@@ -22,11 +22,11 @@ interface MenuOption {
 const BotRegex = /Bot\d{1,4}/;
 
 @Component({
-    selector: 'q-name',
-    templateUrl: './name.component.html',
-    styleUrls: ['./name.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-name',
+  templateUrl: './name.component.html',
+  styleUrls: ['./name.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class NameComponent implements OnChanges {
   @Input() message = { from: '' } as Partial<TeamMessage> & { from: string };
@@ -116,7 +116,7 @@ export class NameComponent implements OnChanges {
     if (cmd.params.length <= 1) {
       return this.ws.send(OutCmd.ChatCommand, `${cmd.base} ${this.getName()}`);
     }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     cmd.params[0]!.value = this.getName();
     this.kbs.emitAction(KeyActions.FocusChat);
     this.chat.selectedCommand$.next(cmd);

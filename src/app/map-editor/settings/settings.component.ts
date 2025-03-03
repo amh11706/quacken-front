@@ -8,10 +8,10 @@ import { TagsComponent } from '../tags/tags.component';
 import { MapEditor, DBTile, MapGroups } from '../types';
 
 @Component({
-    selector: 'q-settings',
-    templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss'],
-    standalone: false
+  selector: 'q-settings',
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss'],
+  standalone: false,
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   @ViewChild(TagsComponent) tags!: TagsComponent;
@@ -245,7 +245,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         const oldStructure = structures.find(el => el.id === tile.id);
         if (oldStructure) Object.assign(oldStructure, tile);
-        else this.map.structures.push(tile as any);
+        else this.map.structures.push(tile);
         this.map.selectedTile = oldStructure || tile;
         this.map.settingsOpen = false;
         return;
@@ -255,7 +255,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
         const oldMap = maps.find(el => el.id === tile.id);
         if (oldMap) Object.assign(oldMap, tile);
-        else this.map.tmaps.push(tile as any);
+        else this.map.tmaps.push(tile);
         this.map.selectedTile = oldMap || tile;
         this.map.settingsOpen = false;
         return;

@@ -26,8 +26,8 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
         case InCmd.LobbyJoin:
           // .sync is the new format, but keep .boats for backwards compatibility
           lastSync = (m.data as CadeLobby).sync || {
-            sync: Object.values((m.data as any).boats || {}),
-            cSync: (m.data as any).clutter || [],
+            sync: Object.values((m.data as CadeLobby).boats || {}),
+            cSync: (m.data as CadeLobby).clutter || [],
             moves: [],
             turn: lastTurn.turn,
           };
@@ -40,7 +40,7 @@ export function ParseTurns(messages: InMessage[][]): [ParsedTurn[], string, numb
           break;
         case InCmd.Moves:
           Array.isArray(m.data)
-            ? m.data.forEach(m => moves[m.t] = { shots: m.s || [], moves: m.m })
+            ? m.data.forEach(m => { moves[m.t] = { shots: m.s || [], moves: m.m }; })
             : moves[m.data.t] = { shots: m.data.s || [], moves: m.data.m };
           break;
         case InCmd.DelBoat:

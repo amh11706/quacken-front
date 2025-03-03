@@ -21,10 +21,10 @@ import { LobbyWrapperService } from './lobby-wrapper/lobby-wrapper.service';
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
 @Component({
-    selector: 'q-replay',
-    templateUrl: './replay.component.html',
-    styleUrls: ['./replay.component.scss'],
-    standalone: false
+  selector: 'q-replay',
+  templateUrl: './replay.component.html',
+  styleUrls: ['./replay.component.scss'],
+  standalone: false,
 })
 export class ReplayComponent implements OnInit, OnDestroy {
   set animationPlayState(v: string) {
@@ -34,8 +34,8 @@ export class ReplayComponent implements OnInit, OnDestroy {
   tickInterval = 0;
   messages: InMessage[][] = [];
   private sub = new Subscription();
-  private fakeWs: WsService = {} as any;
-  private fakeChat: ChatService = {} as any;
+  private fakeWs = {} as WsService;
+  private fakeChat = {} as ChatService;
   graphicSettings?: ServerSettingMap<'l/cade'>;
   private boats: BoatSync[] = [];
   private id = 0;
@@ -100,7 +100,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
     const settings = match.data.settings;
     for (const [group, setting] of Object.entries(settings)) {
-      if (!settings.hasOwnProperty(group)) continue;
+      if (!Object.prototype.hasOwnProperty.call(settings, group)) continue;
       if (!this.graphicSettings) {
         this.graphicSettings = setting as ServerSettingMap<'l/cade'>;
       }
@@ -110,15 +110,15 @@ export class ReplayComponent implements OnInit, OnDestroy {
 
     // setTimeout(() => {
     const m = this.messages[0]?.[0];
-    if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m as any;
+    if (m?.cmd === InCmd.LobbyJoin) this.lobbyMessage = m as { cmd: InCmd.LobbyJoin, data: CadeLobby };
     if (!this.lobbyMessage) return;
     const lobby = this.lobbyMessage.data;
     this.lastSync = {
       cmd: InCmd.Sync,
       // .sync is the new format, but keep .boats for backwards compatibility
       data: lobby.sync || {
-        sync: Object.values((lobby as any).boats || {}),
-        cSync: (lobby as any).clutter || [],
+        sync: Object.values(lobby.boats || {}),
+        cSync: lobby.clutter || [],
         moves: [],
         turn: 0,
       },

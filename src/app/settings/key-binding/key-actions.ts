@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 export const enum KeyActions {
   Noop = -1,
   // Global

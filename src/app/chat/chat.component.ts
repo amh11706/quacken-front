@@ -8,11 +8,11 @@ import { FriendsService } from './friends/friends.service';
 import { Invite, Message } from './types';
 
 @Component({
-    selector: 'q-chat',
-    templateUrl: './chat.component.html',
-    styleUrls: ['./chat.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-chat',
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ChatComponent implements OnInit, OnDestroy {
   @ViewChild(CdkVirtualScrollViewport, { static: true }) output?: CdkVirtualScrollViewport;

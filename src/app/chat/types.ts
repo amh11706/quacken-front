@@ -4,6 +4,7 @@ export interface Command {
 
 export interface Message {
   type: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   message?: any;
   from: string;
   copy?: number;

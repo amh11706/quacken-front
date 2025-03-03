@@ -21,13 +21,13 @@ const LobbySettingGroups: Record<LobbyType, keyof ServerSettingGroup> = {
 };
 
 @Component({
-    selector: 'q-lobby',
-    templateUrl: './lobby.component.html',
-    styleUrls: ['./lobby.component.css'],
-    standalone: false
+  selector: 'q-lobby',
+  templateUrl: './lobby.component.html',
+  styleUrls: ['./lobby.component.css'],
+  standalone: false,
 })
 export class LobbyComponent implements OnInit, OnDestroy {
-  lobby = new BehaviorSubject<any | undefined>(undefined);
+  lobby = new BehaviorSubject<Lobby | undefined>(undefined);
   id?: number;
   private sub = new Subscription();
   private sent = false;

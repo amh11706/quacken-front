@@ -83,9 +83,9 @@ export class GuBoat {
     }
   }
 
-  protected _update(animate: boolean, boat: Boat): Promise<any> {
+  protected _update(animate: boolean, boat: Boat): Promise<unknown> {
     const startTime = animate ? new Date().valueOf() : 0;
-    const promises: Promise<any>[] = [];
+    const promises: Promise<unknown>[] = [];
 
     if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y ||
       (boat.crunchDir !== -1 && boat.crunchDir < 4)
@@ -122,7 +122,7 @@ export class GuBoat {
 
     prom = new Promise(resolve => {
       sail.onload = () => {
-        const canvas = (document as any).createElement('canvas') as HTMLCanvasElement;
+        const canvas = document.createElement('canvas') as HTMLCanvasElement;
         canvas.width = sail.width;
         canvas.height = sail.height;
         const ctx = canvas.getContext('2d');
@@ -182,7 +182,7 @@ export class GuBoat {
             .onComplete(resolve);
         } else if (startTime && transitions[0]) {
           new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
-            .easing(moveEase[transitions[0]])
+            .easing(moveEase[transitions[0]]!)
             .to({ x }, 10000 / BoatRender3d.speed)
             .delay(3000 / BoatRender3d.speed)
             .start(startTime)
@@ -209,7 +209,7 @@ export class GuBoat {
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
           new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
-            .easing(moveEase[transitions[1]])
+            .easing(moveEase[transitions[1]]!)
             .to({ y }, 10000 / BoatRender3d.speed)
             .delay(3000 / BoatRender3d.speed)
             .start(startTime)
@@ -248,8 +248,8 @@ export class GuBoat {
 
   protected normalizeDegrees(deg: number) { return ((deg % 360) + 360) % 360; }
 
-  protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number): Promise<any>[] {
-    const promises: Promise<any>[] = [];
+  protected updateBoatRot(startTime: number, face: number, transition: number, opacity: number): Promise<unknown>[] {
+    const promises: Promise<unknown>[] = [];
     if (!startTime) {
       this.rotateDeg = face;
       this.updateImage();

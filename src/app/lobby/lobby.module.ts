@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { LobbyComponent } from './lobby.component';
 import { QuackenModule } from './quacken/quacken.module';
-import { SpadesModule } from './spades/spades.module';
 import { CadegooseModule } from './cadegoose/cadegoose.module';
 import { SeabattleModule } from './seabattle/seabattle.module';
 import { LobbyRoutingModule } from './lobby-routing.module';
@@ -19,7 +18,6 @@ import { BoardadmiralComponent } from './boardadmiral/boardadmiral.component';
     CommonModule,
     LobbyRoutingModule,
     QuackenModule,
-    SpadesModule,
     CadegooseModule,
     SeabattleModule,
     FlaggamesModule,

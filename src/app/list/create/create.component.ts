@@ -9,11 +9,11 @@ import { ServerSettingMap } from '../../settings/types';
 import { LobbyTypes, RankArea, LobbyTypeInfo, ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
 
 @Component({
-    selector: 'q-create',
-    templateUrl: './create.component.html',
-    styleUrls: ['./create.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-create',
+  templateUrl: './create.component.html',
+  styleUrls: ['./create.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class CreateComponent implements OnInit, OnDestroy {
   created = false;

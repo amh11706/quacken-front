@@ -5,11 +5,11 @@ import { TurnService } from '../../lobby/quacken/boats/turn.service';
 import { ReplayWrapperComponent } from '../../replay/lobby-wrapper/lobby-wrapper.component';
 
 @Component({
-    selector: 'q-lobby-wrapper',
-    templateUrl: './lobby-wrapper.component.html',
-    styleUrls: ['./lobby-wrapper.component.scss'],
-    providers: [WsService, BoatsService, TurnService],
-    standalone: false
+  selector: 'q-lobby-wrapper',
+  templateUrl: './lobby-wrapper.component.html',
+  styleUrls: ['./lobby-wrapper.component.scss'],
+  providers: [WsService, BoatsService, TurnService],
+  standalone: false,
 })
 export class TrainingWrapperComponent extends ReplayWrapperComponent {
   // only used to change the providers from the replay wrapper

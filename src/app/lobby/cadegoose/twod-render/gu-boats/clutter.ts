@@ -42,7 +42,7 @@ export class MovableClutter implements Clutter {
       new Promise<void | { x: number, y: number }>(resolve => {
         if (startTime && this.transitions[0]) {
           new TWEEN.Tween(this.pos, BoatRender3d.tweens)
-            .easing(moveEase[this.transitions[0]])
+            .easing(moveEase[this.transitions[0]]!)
             .to({ x }, 10000 / BoatRender3d.speed)
             .delay(3000 / BoatRender3d.speed)
             .start(startTime)
@@ -59,7 +59,7 @@ export class MovableClutter implements Clutter {
       new Promise<void | { x: number, y: number }>(resolve => {
         if (startTime && this.transitions[1]) {
           new TWEEN.Tween(this.pos, BoatRender3d.tweens)
-            .easing(moveEase[this.transitions[1]])
+            .easing(moveEase[this.transitions[1]]!)
             .to({ y }, 10000 / BoatRender3d.speed)
             .delay(3000 / BoatRender3d.speed)
             .start(startTime)

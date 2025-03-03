@@ -23,10 +23,10 @@ export const weapons = [
 ];
 
 @Component({
-    selector: 'q-hud',
-    templateUrl: './hud.component.html',
-    styleUrls: ['./hud.component.scss'],
-    standalone: false
+  selector: 'q-hud',
+  templateUrl: './hud.component.html',
+  styleUrls: ['./hud.component.scss'],
+  standalone: false,
 })
 export class HudComponent implements OnInit, OnDestroy {
   @Input() group = 'l/quacken' as SettingGroup;
@@ -118,7 +118,7 @@ export class HudComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    void this.ss.getGroup(this.group).then(settings => this.lobbySettings = settings);
+    void this.ss.getGroup(this.group).then(settings => { this.lobbySettings = settings; });
     this.bindKeys();
     this.subs.add(this.boats.myBoat$.subscribe(b => {
       if (b === this.myBoat || !b.isMe) return;
@@ -130,7 +130,7 @@ export class HudComponent implements OnInit, OnDestroy {
       this.totalTokens.shots = t.tp >= 2 ? 1 : 0;
     }));
 
-    // eslint-disable-next-line rxjs/no-async-subscribe
+    // eslint-disable-next-line rxjs-x/no-async-subscribe
     this.subs.add(this.lobbyService.get().subscribe(async m => {
       if (!m) return;
       if (m.inProgress) this.turn = 1;
@@ -148,7 +148,7 @@ export class HudComponent implements OnInit, OnDestroy {
       else this.stopTimer();
       // m.turn for backwards compatibility with replays
       const turnsLeft = m.turnsLeft === undefined
-        ? this.maxTurn - (m as any).turn || 0
+        ? this.maxTurn - (m as unknown as { turn: number }).turn || 0
         : m.turnsLeft - 1;
       this.setTurn(turnsLeft, this.secondsPerTurn - (m.seconds ?? -1) - 2);
     }));

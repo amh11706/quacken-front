@@ -4,14 +4,13 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { Observable, map, startWith } from 'rxjs';
 
 @Component({
-    selector: 'q-tags',
-    templateUrl: './tags.component.html',
-    styleUrls: ['./tags.component.scss'],
-    standalone: false
+  selector: 'q-tags',
+  templateUrl: './tags.component.html',
+  styleUrls: ['./tags.component.scss'],
+  standalone: false,
 })
 export class TagsComponent {
   visible = true;

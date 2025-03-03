@@ -1,5 +1,0 @@
-<span>Last Trick</span>
-
-<div *ngFor="let card of cards" [id]="'played'+card.position"
-  class="played suit{{card.suit}}" [class.won]="card.won">
-  {{cardValues[card.value]}}<br>{{cardSuits[card.suit]}}</div>

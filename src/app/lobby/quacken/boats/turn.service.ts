@@ -158,7 +158,7 @@ export class TurnService implements OnDestroy {
     BoatRender3d.tweenProgress = startTime;
 
     if (step === 4) this.boatsService.resetMymoves();
-    const promises: Promise<any>[] = [];
+    const promises: Promise<unknown>[] = [];
     if (step % 2 === 0) promises.push(this.handleUpdate(this.turn?.cSteps[step] || [], step));
     else promises.push(this.handleUpdate(this.turn?.cSteps[step]?.filter(c => c.id) || [], step));
     const turnPart = this.turn.steps[step] || [];
@@ -171,7 +171,7 @@ export class TurnService implements OnDestroy {
       boat.boat.crunchDir = -1;
       if (!u) {
         continue;
-      };
+      }
       if (u.c) {
         boat.boat.addDamage(u.c - 1, u.cd);
         if (u.cd === 100) void this.sound.play(Sounds.Sink, 10000 / this.speed);

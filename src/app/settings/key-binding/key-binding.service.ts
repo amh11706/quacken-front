@@ -11,7 +11,7 @@ const IgnoreTags = ['INPUT', 'MAT-SLIDER'];
 function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBindings {
   const merged = new KeyBindings();
   for (const k in DefaultBindings) {
-    if (!DefaultBindings.hasOwnProperty(k)) continue;
+    if (!Object.prototype.hasOwnProperty.call(DefaultBindings, k)) continue;
     for (const binding of DefaultBindings[k as keyof KeyBindings]) {
       const newBinding = { ...binding, bindings: input[binding.action] };
       merged[k as keyof KeyBindings].push(newBinding);
@@ -20,7 +20,7 @@ function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBi
 
   const keyMap = new Map<string, true>();
   for (const k in merged) {
-    if (!merged.hasOwnProperty(k)) continue;
+    if (!Object.prototype.hasOwnProperty.call(merged, k)) continue;
     keyMap.clear();
     for (const binding of merged.Global) {
       if (!binding.bindings) continue;
@@ -65,7 +65,7 @@ export class KeyBindingService {
     ws.connected$.subscribe(v => {
       if (!v) return;
       void ss.get('controls', 'bindings').then(setting => {
-        this.setBindings(mergeBindings(setting?.data || {}));
+        this.setBindings(mergeBindings((setting?.data || {}) as Record<KeyActions, [string, string]>));
       });
     });
   }
@@ -131,7 +131,7 @@ export class KeyBindingService {
   setBindings(bindings: StaticKeyBindings): void {
     this.bindings.clear();
     for (const k in bindings) {
-      if (!bindings.hasOwnProperty(k)) continue;
+      if (!Object.prototype.hasOwnProperty.call(bindings, k)) continue;
       for (const binding of bindings[k as keyof KeyBindings]) {
         const bs = binding.bindings;
         if (bs[0] !== NotActive) this.addAction(bs[0], binding.action);

@@ -8,7 +8,7 @@ export interface DBSetting<T extends SettingGroup = SettingGroup> {
   title?: string;
   group: T;
   value: number;
-  data?: any;
+  data?: Record<string, unknown>;
   stream?: never;
 }
 
@@ -19,7 +19,7 @@ export class Setting {
   private _stream: BehaviorSubject<number>;
   readonly stream: Observable<number>;
 
-  constructor(private ss: SettingsService, setting: SettingName | SettingInput, value?: number, public data?: any) {
+  constructor(private ss: SettingsService, setting: SettingName | SettingInput, value?: number, public data?: Record<string, unknown>) {
     if (typeof setting === 'string') {
       setting = Settings[setting];
     }
@@ -42,7 +42,7 @@ export class Setting {
     this._stream.next(value);
   }
 
-  cloneData(): any {
+  cloneData(): Record<string, unknown> | undefined {
     return typeof this.data === 'object' ? { ...this.data } : this.data;
   }
 
@@ -51,7 +51,7 @@ export class Setting {
   }
 
   clone(): Setting {
-    return new Setting(this.ss, this.inputConfig, this.value, { ...this.data });
+    return new Setting(this.ss, this.inputConfig, this.value, this.cloneData());
   }
 
   toDBSetting<T extends keyof ServerSettingGroup>(): DBSetting<T> {
@@ -84,9 +84,10 @@ export class Setting {
     }
 
     if (this.inputConfig.advancedComponent || typeof data === 'object') {
-      if (typeof data !== 'object' || !data) data = {};
-      (data as any).label = label ? '"' + label + '"' : undefined;
-      return data;
+      let dataObject = data as Record<string, unknown>;
+      if (typeof dataObject !== 'object' || !dataObject) dataObject = {};
+      dataObject.label = label ? '"' + label + '"' : undefined;
+      return dataObject;
     }
     return label;
   }
@@ -106,4 +107,4 @@ export type SettingMap<T extends SettingGroup> = {
 
 export type ServerSettingMap<T extends SettingGroup = SettingGroup> = {
   [K in ServerSettingGroup[T]]: DBSetting<T>;
-}
+};

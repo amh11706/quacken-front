@@ -9,10 +9,10 @@ import { TermsComponent } from '../terms/terms.component';
 import { WsService } from '../../ws/ws.service';
 
 @Component({
-    selector: 'q-login-form',
-    templateUrl: './login-form.component.html',
-    styleUrls: ['./login-form.component.scss'],
-    standalone: false
+  selector: 'q-login-form',
+  templateUrl: './login-form.component.html',
+  styleUrls: ['./login-form.component.scss'],
+  standalone: false,
 })
 export class LoginFormComponent implements AfterViewInit {
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
@@ -51,29 +51,31 @@ export class LoginFormComponent implements AfterViewInit {
     this.pending = true;
     this.http.post<string>(this.path + 'login', JSON.stringify(this.user))
       .subscribe(
-        resp => {
-          window.localStorage.setItem('token', resp);
-          if (!AuthGuard.triedPath) {
-            void this.router.navigate(['list']);
-            return;
-          }
+        {
+          next: resp => {
+            window.localStorage.setItem('token', resp);
+            if (!AuthGuard.triedPath) {
+              void this.router.navigate(['list']);
+              return;
+            }
 
-          const [path, query] = AuthGuard.triedPath.split('?');
-          if (query) {
-            const parsed = {} as Record<string, string>;
-            new URLSearchParams(query).forEach((value, key) => {
-              parsed[key] = value;
-            });
-            void this.router.navigate([path], { queryParams: parsed });
-          } else {
-            void this.router.navigate([AuthGuard.triedPath]);
-          }
-          AuthGuard.triedPath = '';
-        },
-        (err: unknown) => {
-          this.pending = false;
-          this.errMessage = this.getErrorMessage(err);
-          if (this.errComponent) this.dialog.open(this.errComponent);
+            const [path, query] = AuthGuard.triedPath.split('?');
+            if (query) {
+              const parsed = {} as Record<string, string>;
+              new URLSearchParams(query).forEach((value, key) => {
+                parsed[key] = value;
+              });
+              void this.router.navigate([path], { queryParams: parsed });
+            } else {
+              void this.router.navigate([AuthGuard.triedPath]);
+            }
+            AuthGuard.triedPath = '';
+          },
+          error: (err: unknown) => {
+            this.pending = false;
+            this.errMessage = this.getErrorMessage(err);
+            if (this.errComponent) this.dialog.open(this.errComponent);
+          },
         },
       );
   }
@@ -106,15 +108,17 @@ export class LoginFormComponent implements AfterViewInit {
   sendReset(): void {
     this.pending = true;
     this.errMessage = 'Sending reset link...';
-    this.http.post<any>(this.path + 'forgot', JSON.stringify(this.user.email))
+    this.http.post(this.path + 'forgot', JSON.stringify(this.user.email))
       .subscribe(
-        () => {
-          this.pending = false;
-          this.errMessage = 'Reset link sent! Check your email.';
-        },
-        (err: unknown) => {
-          this.pending = false;
-          if (err instanceof HttpErrorResponse) this.errMessage = err.error;
+        {
+          next: () => {
+            this.pending = false;
+            this.errMessage = 'Reset link sent! Check your email.';
+          },
+          error: (err: unknown) => {
+            this.pending = false;
+            if (err instanceof HttpErrorResponse) this.errMessage = err.error;
+          },
         },
       );
   }

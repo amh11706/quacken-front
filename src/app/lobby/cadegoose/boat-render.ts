@@ -41,8 +41,8 @@ const teamMaterials = [
   new THREE.LineBasicMaterial({ color: 'magenta', transparent: true, opacity: 0 }),
 ];
 
-export const moveEase: any[] = [
-  null,
+export const moveEase: ((amount: number) => number)[] = [
+  () => 0,
   TWEEN.Easing.Linear.None,
   TWEEN.Easing.Quadratic.In,
   TWEEN.Easing.Quadratic.Out,
@@ -73,7 +73,7 @@ export class BoatRender3d {
   protected rotateDeg: number;
   private name: string;
   private moves: number[];
-  private influenceTween: any;
+  private influenceTween: TWEEN.Tween<THREE.LineBasicMaterial> | null = null;
   private tweenTarget = 0;
   private nameTimeout = 0;
   protected worker = new JobQueue();
@@ -122,7 +122,7 @@ export class BoatRender3d {
     this.title.scale.y = 0.06;
     this.makeHeader();
 
-    this.hitbox = this.obj.getObjectByName('hitbox') as any;
+    this.hitbox = this.obj.getObjectByName('hitbox') as THREE.LineSegments<THREE.BufferGeometry, THREE.MeshBasicMaterial>;
   }
 
   dispose(): Promise<void> {
@@ -189,9 +189,9 @@ export class BoatRender3d {
     return job;
   }
 
-  protected _update(animate: boolean, boat: Boat): Promise<void[]> {
+  protected _update(animate: boolean, boat: Boat): Promise<unknown> {
     const startTime = animate ? new Date().valueOf() : 0;
-    const promises: Promise<any>[] = [];
+    const promises: Promise<unknown>[] = [];
 
     if (!startTime || boat.pos.x !== this.pos.x || boat.pos.y !== this.pos.y || boat.crunchDir !== -1) {
       promises.push(...this.updateBoatPos(startTime, boat.pos.x, boat.pos.y, boat.crunchDir, boat.moveTransition));
@@ -292,7 +292,6 @@ export class BoatRender3d {
     startTime: number, x: number, y: number, crunchDir: number, transitions: number[],
   ): Promise<void>[] {
     if (!this.obj.position.x || !this.obj.position.z) console.log(x, y, this.obj.position, this.boat.name);
-    let t: any;
     const decodeX = [0, 0.4, 0, -0.4];
     const decodeY = [-0.4, 0, 0.4, 0];
 
@@ -308,8 +307,8 @@ export class BoatRender3d {
             .start(startTime)
             .onComplete(resolve);
         } else if (startTime && transitions[0]) {
-          t = new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
-            .easing(moveEase[transitions[0]])
+          new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
+            .easing(moveEase[transitions[0]]!)
             .to({ x: x + 0.5 }, 10000 / BoatRender3d.speed)
             .delay(5000 / BoatRender3d.speed)
             .start(startTime)
@@ -333,8 +332,8 @@ export class BoatRender3d {
             .start(startTime)
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
-          t = new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
-            .easing(moveEase[transitions[1]])
+          new TWEEN.Tween(this.obj.position, BoatRender3d.tweens)
+            .easing(moveEase[transitions[1]]!)
             .to({ z: y + 0.5 }, 10000 / BoatRender3d.speed)
             .delay(5000 / BoatRender3d.speed)
             .start(startTime)
@@ -348,10 +347,10 @@ export class BoatRender3d {
       }),
     ];
 
-    if (this.boat.isMe && t) {
-      BoatRender3d.myLastPos = { ...this.obj.position };
-      t.onUpdate(() => BoatRender3d.updateCam(this));
-    }
+    // if (this.boat.isMe && t) {
+    //   BoatRender3d.myLastPos = { ...this.obj.position };
+    //   t.onUpdate(() => BoatRender3d.updateCam(this));
+    // }
 
     return p;
   }

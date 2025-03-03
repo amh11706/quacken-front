@@ -40,7 +40,7 @@ export type SendCmdInputs = {
   [OutCmd.SetUserEmoji]: string;
 
   // TODO: use more complete types
-  [OutCmd.InventoryCmd]: { cmd: 'c' | 'o' | 'cb' | 'sort' | 's', id: number, data?: any };
+  [OutCmd.InventoryCmd]: { cmd: 'c' | 'o' | 'cb' | 'sort' | 's', id: number, data?: unknown };
 
   [OutCmd.Sit]: number;
   [OutCmd.Bid]: number;
@@ -55,7 +55,7 @@ export type SendCmdInputs = {
   [OutCmd.BASwapBoat]: { from: number, to: number };
   [OutCmd.BACopyBoatFrom]: { from: number, to: number };
   [OutCmd.BACopyBoatTo]: { from: number, to: number };
-}
+};
 
 export type SendCmdInputless =
   OutCmd.Sync |

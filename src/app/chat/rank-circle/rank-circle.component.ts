@@ -8,11 +8,11 @@ export const Variations: Record<number, string[]> = {
 };
 
 @Component({
-    selector: 'q-rank-circle',
-    imports: [MatTooltipModule, CommonModule],
-    templateUrl: './rank-circle.component.html',
-    styleUrl: './rank-circle.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'q-rank-circle',
+  imports: [MatTooltipModule, CommonModule],
+  templateUrl: './rank-circle.component.html',
+  styleUrl: './rank-circle.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RankCircleComponent implements OnChanges {
   @Input() score: number | number[] = 0;

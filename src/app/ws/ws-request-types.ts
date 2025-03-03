@@ -17,7 +17,7 @@ export type OutRequest = {
 
 type EmptyCmdBody = {
   [cmd: string]: undefined;
-}
+};
 
 type OutCmdInputs = {
   [OutCmd.StatsTop]: number;
@@ -58,7 +58,7 @@ type OutCmdInputs = {
   [OutCmd.JoinQueue]: Record<ServerSettingGroup['matchmaking'], number>;
   [OutCmd.GetBotMatch]: OutCmdInputs[OutCmd.JoinQueue];
   [OutCmd.BAAddBoat]: number;
-}
+};
 
 export type OutCmdInputTypes = OutCmdInputs & EmptyCmdBody;
 export type InputCmds = keyof OutCmdInputs;
@@ -107,7 +107,7 @@ type OutCmdReturns = {
   [OutCmd.GetBotMatch]: number;
   [OutCmd.BASettingsGet]: ServerBASettings[];
   [OutCmd.BAAddBoat]: number;
-}
+};
 
 // we will get undefined if the request crashes on the backend.
 export type OutCmdReturnTypes = {

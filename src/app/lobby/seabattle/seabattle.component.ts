@@ -6,11 +6,11 @@ import { MainMenuService } from '../cadegoose/main-menu/main-menu.service';
 import { SbDesc } from '../cadegoose/lobby-type';
 
 @Component({
-    selector: 'q-seabattle',
-    templateUrl: './seabattle.component.html',
-    styleUrls: ['./seabattle.component.scss'],
-    providers: [MainMenuService],
-    standalone: false
+  selector: 'q-seabattle',
+  templateUrl: './seabattle.component.html',
+  styleUrls: ['./seabattle.component.scss'],
+  providers: [MainMenuService],
+  standalone: false,
 })
 export class SeabattleComponent extends CadegooseComponent {
   protected menuComponent = SbMainMenuComponent;

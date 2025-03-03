@@ -13,11 +13,11 @@ interface BotSetting extends DBSetting {
 }
 
 @Component({
-    selector: 'q-bot-setting',
-    templateUrl: './bot-setting.component.html',
-    styleUrls: ['./bot-setting.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-bot-setting',
+  templateUrl: './bot-setting.component.html',
+  styleUrls: ['./bot-setting.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class BotSettingComponent {
   BotSetting = Settings.enableBots as OptionSetting;

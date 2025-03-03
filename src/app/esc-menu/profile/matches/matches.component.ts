@@ -4,8 +4,8 @@ import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { MatSort } from '@angular/material/sort';
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Subject, debounceTime } from 'rxjs';
+
 import { MatChipInputEvent } from '@angular/material/chips';
 import { OutCmd } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
@@ -34,11 +34,11 @@ function searchMatch(match: Match, term: string): boolean {
 }
 
 @Component({
-    selector: 'q-matches',
-    templateUrl: './matches.component.html',
-    styleUrls: ['./matches.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-matches',
+  templateUrl: './matches.component.html',
+  styleUrls: ['./matches.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class MatchesComponent implements OnInit, OnDestroy {
   tierTitles = TierTitles;

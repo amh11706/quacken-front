@@ -27,10 +27,10 @@ const CannonSounds: Record<number, Sounds> = {
 };
 
 @Component({
-    selector: 'q-gu-boats',
-    templateUrl: './gu-boats.component.html',
-    styleUrls: ['./gu-boats.component.scss'],
-    standalone: false
+  selector: 'q-gu-boats',
+  templateUrl: './gu-boats.component.html',
+  styleUrls: ['./gu-boats.component.scss'],
+  standalone: false,
 })
 export class GuBoatsComponent implements OnInit, OnDestroy {
   @Input() showIsland = false;
@@ -157,7 +157,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
       const oldClutter = u.id && this.clutter.find(c => c.id === u.id);
       if (oldClutter) {
         Object.assign(oldClutter, u, { p: oldClutter.p });
-        void oldClutter.updatePos(startTime, u.x, u.y).then(() => oldClutter.p = u.p);
+        void oldClutter.updatePos(startTime, u.x, u.y).then(() => { oldClutter.p = u.p; });
       } else {
         this.clutter.push(new MovableClutter(u));
       }
@@ -176,7 +176,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
   }
 
   protected setHeaderFlags(flags: Turn['flags']): void {
-    this.boatRenders.forEach(r => r.flags = []);
+    this.boatRenders.forEach(r => { r.flags = []; });
     if (!flags) return;
     for (const f of flags) {
       if (f.cs) {

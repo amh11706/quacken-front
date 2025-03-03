@@ -19,11 +19,11 @@ export interface KeyBindingEditMode extends KeyBinding {
 type KeyBindingsEditMode = Record<keyof KeyBindings, KeyBindingEditMode[]>;
 
 @Component({
-    selector: 'q-key-binding',
-    templateUrl: './key-binding.component.html',
-    styleUrls: ['./key-binding.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-key-binding',
+  templateUrl: './key-binding.component.html',
+  styleUrls: ['./key-binding.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class KeyBindingComponent implements OnInit, OnDestroy {
   actions = new KeyBindings() as KeyBindingsEditMode;
@@ -49,7 +49,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     if (!this.kbs.activeBindings) return;
     const groupMap = new Map<LinkGroups, KeyBinding[]>();
     for (const key in this.actions) {
-      if (!this.actions.hasOwnProperty(key)) continue;
+      if (!Object.prototype.hasOwnProperty.call(this.actions, key)) continue;
       const k = key as keyof KeyBindings;
       const activeGroup = this.kbs.activeBindings[k];
       const defaultGroup = DefaultBindings[k];
@@ -127,7 +127,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
 
   async save(): Promise<void> {
     const toActivate = new KeyBindings();
-    const toSave: Record<KeyActions, [string, string]> = {} as any;
+    const toSave = {} as Record<KeyActions, [string, string]>;
 
     const updateLinked = await this.ss.get('controls', 'updateLinked');
     if (updateLinked?.value) {
@@ -138,7 +138,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
     }
 
     for (const key in this.actions) {
-      if (!this.actions.hasOwnProperty(key)) continue;
+      if (!Object.prototype.hasOwnProperty.call(this.actions, key)) continue;
       const k = key as keyof KeyBindings;
       const set = this.actions[k];
       this.actions[k] = set.map(b => {
@@ -172,7 +172,7 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
 
   cancel(): void {
     for (const k in this.actions) {
-      if (!this.actions.hasOwnProperty(k)) continue;
+      if (!Object.prototype.hasOwnProperty.call(this.actions, k)) continue;
       const bindings = this.actions[k as keyof KeyBindings];
       this.actions[k as keyof KeyBindings] = bindings.map(b => {
         b.update.next();

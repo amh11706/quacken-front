@@ -5,7 +5,7 @@ import { ChatModule } from '../../../chat/chat.module';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { AiRender } from '../../../replay/cadegoose/ai-render';
 import { WsService } from '../../../ws/ws.service';
-import { Points } from '../../../replay/cadegoose/types';
+import { AiBoatData, Points } from '../../../replay/cadegoose/types';
 
 interface TileInfo {
   spawn: number;
@@ -21,10 +21,10 @@ export interface MapInfo {
 }
 
 @Component({
-    selector: 'q-mapinfo-hud',
-    imports: [CommonModule, ChatModule, MatButtonToggleModule],
-    templateUrl: './mapinfo-hud.component.html',
-    styleUrl: './mapinfo-hud.component.scss'
+  selector: 'q-mapinfo-hud',
+  imports: [CommonModule, ChatModule, MatButtonToggleModule],
+  templateUrl: './mapinfo-hud.component.html',
+  styleUrl: './mapinfo-hud.component.scss',
 })
 export class MapinfoHudComponent implements OnChanges {
   @Input() mapInfo = {} as MapInfo;
@@ -35,12 +35,12 @@ export class MapinfoHudComponent implements OnChanges {
   constructor(
     public es: EscMenuService,
     private ws: WsService,
-  ) {}
+  ) { }
 
   ngOnChanges() {
     setTimeout(() => {
       this.setOverlay(this.selectedOverlay);
-      this.aiRender.setBoat({ pm: this.mapInfo.tiles } as any);
+      this.aiRender.setBoat({ pm: this.mapInfo.tiles } as unknown as AiBoatData);
     });
   }
 

@@ -45,7 +45,7 @@ export interface AiData {
   boats: AiBoatData[];
   claims: { x: number, y: number, size: number }[];
   map?: string;
-  flags?: any[];
+  flags?: unknown[];
 }
 
 export interface PenaltySummary {

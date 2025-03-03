@@ -16,7 +16,7 @@ export class EscMenuService {
   activeTab$ = this._activeTab$.asObservable();
   lobbyTab$ = this._lobbyTab$.asObservable();
 
-  lobbyComponent: any;
+  lobbyComponent: unknown;
   lobbyInjector?: Injector;
 
   constructor(
@@ -89,7 +89,7 @@ export class EscMenuService {
     return this.openTab(index, toggle, queryExtra);
   }
 
-  openTab(tab: number, toggle = false, queryExtra: Record<string, number> = {}): Promise<any> {
+  openTab(tab: number, toggle = false, queryExtra: Record<string, number> = {}): Promise<boolean> {
     if (toggle && tab === this._activeTab$.value && this._open$.value) return this.openMenu(false);
     return this.router.navigate([], {
       relativeTo: this.route,

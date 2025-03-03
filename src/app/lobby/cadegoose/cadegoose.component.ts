@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Subject, debounceTime } from 'rxjs';
 
 import { ComponentType } from '@angular/cdk/portal';
 import { SettingList, SettingsService } from '../../settings/settings.service';
@@ -36,15 +35,15 @@ export const CadeSettings: SettingList = [
 ];
 
 @Component({
-    selector: 'q-cadegoose',
-    templateUrl: './cadegoose.component.html',
-    styleUrls: ['./cadegoose.component.scss'],
-    providers: [MainMenuService],
-    standalone: false
+  selector: 'q-cadegoose',
+  templateUrl: './cadegoose.component.html',
+  styleUrls: ['./cadegoose.component.scss'],
+  providers: [MainMenuService],
+  standalone: false,
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('renderer', { static: false }) renderer?: TwodRenderComponent;
-  protected menuComponent = MainMenuComponent as ComponentType<any>;
+  protected menuComponent = MainMenuComponent as ComponentType<unknown>;
   private pendingChanges: MapTile[] = [];
   editor: MapEditor = {
     selected: 50,

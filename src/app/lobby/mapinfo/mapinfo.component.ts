@@ -25,17 +25,17 @@ interface MapInfoLobby extends Lobby {
 }
 
 @Component({
-    selector: 'q-mapinfo',
-    imports: [CommonModule, MapEditorModule, TwodRenderModule, CadegooseModule, MapinfoHudComponent, QdragModule],
-    templateUrl: './mapinfo.component.html',
-    styleUrl: './mapinfo.component.scss'
+  selector: 'q-mapinfo',
+  imports: [CommonModule, MapEditorModule, TwodRenderModule, CadegooseModule, MapinfoHudComponent, QdragModule],
+  templateUrl: './mapinfo.component.html',
+  styleUrl: './mapinfo.component.scss',
 })
 export class MapinfoComponent implements OnInit, OnDestroy {
   @ViewChild('renderer', { static: true }) renderer?: TwodRenderComponent;
   @Input() set lobby(lobby: MapInfoLobby) {
     this.setMapB64(lobby.map);
     this.mapInfo = lobby.mapInfo;
-  };
+  }
 
   graphicSettings = this.ss.prefetch('graphics');
   advancedMapOpen = true;
@@ -76,7 +76,7 @@ export class MapinfoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subs.add(this.ws.subscribe(Internal.OpenAdvanced, () => this.advancedMapOpen = true));
+    this.subs.add(this.ws.subscribe(Internal.OpenAdvanced, () => { this.advancedMapOpen = true; }));
     this.subs.add(this.mapDataDebounce.pipe(debounceTime(100)).subscribe(() => {
       for (const change of this.pendingChanges) {
         const row = this.map[change.y];

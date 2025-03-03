@@ -14,11 +14,11 @@ export const TierTitles = [
 ];
 
 @Component({
-    selector: 'q-leaders',
-    templateUrl: './leaders.component.html',
-    styleUrls: ['./leaders.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-leaders',
+  templateUrl: './leaders.component.html',
+  styleUrls: ['./leaders.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class LeadersComponent implements OnInit, OnDestroy {
   @Input() name?: string;

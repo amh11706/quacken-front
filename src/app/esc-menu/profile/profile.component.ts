@@ -11,17 +11,17 @@ import { Stat, UserRank } from './types';
 import { ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
 
 @Component({
-    selector: 'q-profile',
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+  selector: 'q-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
 
   tierTitles = TierTitles;
-  titles = { Cadegoose: 'Blockade' } as any;
+  titles = { Cadegoose: 'Blockade' } as Record<string, string>;
   lobbyTypes = ActiveLobbyTypes;
 
   constructor(
