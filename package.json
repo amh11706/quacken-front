@@ -59,9 +59,13 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.5.0",
     "neostandard": "^0.12.1",
-    "protractor": "~7.0.0",
     "ts-node": "~8.3.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "8.23.0"
+  },
+  "overrides": {
+    "@angular-devkit/build-angular": {
+      "vite": "6.2.0"
+    }
   }
 }
