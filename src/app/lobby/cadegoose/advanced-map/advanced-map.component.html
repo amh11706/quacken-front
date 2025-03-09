@@ -12,9 +12,9 @@
 <ng-container *ngFor="let name of seedPartEdit; let i=index">
   <p>{{name}} ({{seedParts[i]}})</p>
   <mat-slider max="255">
-    <input matSliderThumb
+    <input #slider
+           matSliderThumb
            [(ngModel)]="seedParts[i]"
-           (input)="seedParts[i]=slider.valueAsNumber; setStringSeed()"
-           #slider>
+           (input)="seedParts[i]=slider.valueAsNumber; setStringSeed()">
   </mat-slider>
 </ng-container>

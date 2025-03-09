@@ -1,8 +1,8 @@
 <div id="leaders">
   <mat-form-field>
-    <mat-select [(value)]="stat.group"
-                (valueChange)="stat.changeGroup()"
-                placeholder="Category">
+    <mat-select placeholder="Category"
+                [(value)]="stat.group"
+                (valueChange)="stat.changeGroup()">
       <mat-option *ngFor="let t of lobbyTypes"
                   [value]="t.id">
         {{t.name}}
@@ -10,9 +10,9 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field *ngIf="stat.groupStats$ | async as groupStats">
-    <mat-select [(value)]="stat.id"
-                (valueChange)="stat.openLeaders($event)"
-                placeholder="Statistic">
+    <mat-select placeholder="Statistic"
+                [(value)]="stat.id"
+                (valueChange)="stat.openLeaders($event)">
       <mat-option [value]="stat.group*100 - 1">Rank Leaders</mat-option>
       <mat-option *ngFor="let s of groupStats[stat.group]"
                   [value]="s.id">{{s.name}}</mat-option>
@@ -23,42 +23,42 @@
     <table *ngIf="stat.leaders$ | async as leaders"
            mat-table
            [dataSource]="leaders">
-      <tr mat-header-row
-          *matHeaderRowDef="stat.columns; sticky: true"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: stat.columns;"></tr>
+      <tr *matHeaderRowDef="stat.columns; sticky: true"
+          mat-header-row></tr>
+      <tr *matRowDef="let row; columns: stat.columns;"
+          mat-row></tr>
 
       <ng-container matColumnDef="position">
-        <th mat-header-cell
-            *matHeaderCellDef>Position</th>
-        <td mat-cell
-            *matCellDef="let i = index">{{i+1}}</td>
+        <th *matHeaderCellDef
+            mat-header-cell>Position</th>
+        <td *matCellDef="let i = index"
+            mat-cell>{{i+1}}</td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell
-            *matHeaderCellDef>Name</th>
-        <td mat-cell
-            *matCellDef="let element">
+        <th *matHeaderCellDef
+            mat-header-cell>Name</th>
+        <td *matCellDef="let element"
+            mat-cell>
           <q-name [message]="element"></q-name>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="value">
-        <th mat-header-cell
-            *matHeaderCellDef>Value</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.value}}</td>
+        <th *matHeaderCellDef
+            mat-header-cell>Value</th>
+        <td *matCellDef="let element"
+            mat-cell>{{element.value}}</td>
       </ng-container>
 
       <ng-container matColumnDef="replay">
-        <th mat-header-cell
-            *matHeaderCellDef>Replay</th>
-        <td mat-cell
-            *matCellDef="let element">
+        <th *matHeaderCellDef
+            mat-header-cell>Replay</th>
+        <td *matCellDef="let element"
+            mat-cell>
           <a mat-icon-button
-             [href]="'/#/replay/' + element.matchId"
-             target="_blank">
+             target="_blank"
+             [href]="'/#/replay/' + element.matchId">
             <mat-icon>play_arrow</mat-icon>
           </a>
         </td>
@@ -72,32 +72,32 @@
           <p>{{variations[stat.group]?.[i]}}</p>
           <table mat-table
                  [dataSource]="l">
-            <tr mat-header-row
-                *matHeaderRowDef="['position', 'name', 'level']; sticky: true"></tr>
-            <tr mat-row
-                *matRowDef="let row; columns: ['position', 'name', 'level'];"></tr>
+            <tr *matHeaderRowDef="['position', 'name', 'level']; sticky: true"
+                mat-header-row></tr>
+            <tr *matRowDef="let row; columns: ['position', 'name', 'level'];"
+                mat-row></tr>
 
             <ng-container matColumnDef="position">
-              <th mat-header-cell
-                  *matHeaderCellDef>Position</th>
-              <td mat-cell
-                  *matCellDef="let i = index">{{i+1}}</td>
+              <th *matHeaderCellDef
+                  mat-header-cell>Position</th>
+              <td *matCellDef="let i = index"
+                  mat-cell>{{i+1}}</td>
             </ng-container>
 
             <ng-container matColumnDef="name">
-              <th mat-header-cell
-                  *matHeaderCellDef>Name</th>
-              <td mat-cell
-                  *matCellDef="let element">
+              <th *matHeaderCellDef
+                  mat-header-cell>Name</th>
+              <td *matCellDef="let element"
+                  mat-cell>
                 <q-name [message]="element"></q-name>
               </td>
             </ng-container>
 
             <ng-container matColumnDef="level">
-              <th mat-header-cell
-                  *matHeaderCellDef>Score</th>
-              <td mat-cell
-                  *matCellDef="let element">{{element.score}}</td>
+              <th *matHeaderCellDef
+                  mat-header-cell>Score</th>
+              <td *matCellDef="let element"
+                  mat-cell>{{element.score}}</td>
             </ng-container>
           </table>
         </div>
@@ -109,32 +109,32 @@
           <p>{{variations[stat.group]?.[i]}}</p>
           <table mat-table
                  [dataSource]="l">
-            <tr mat-header-row
-                *matHeaderRowDef="['position', 'name', 'level']; sticky: true"></tr>
-            <tr mat-row
-                *matRowDef="let row; columns: ['position', 'name', 'level'];"></tr>
+            <tr *matHeaderRowDef="['position', 'name', 'level']; sticky: true"
+                mat-header-row></tr>
+            <tr *matRowDef="let row; columns: ['position', 'name', 'level'];"
+                mat-row></tr>
 
             <ng-container matColumnDef="position">
-              <th mat-header-cell
-                  *matHeaderCellDef>Position</th>
-              <td mat-cell
-                  *matCellDef="let i = index">{{i+1}}</td>
+              <th *matHeaderCellDef
+                  mat-header-cell>Position</th>
+              <td *matCellDef="let i = index"
+                  mat-cell>{{i+1}}</td>
             </ng-container>
 
             <ng-container matColumnDef="name">
-              <th mat-header-cell
-                  *matHeaderCellDef>Name</th>
-              <td mat-cell
-                  *matCellDef="let element">
+              <th *matHeaderCellDef
+                  mat-header-cell>Name</th>
+              <td *matCellDef="let element"
+                  mat-cell>
                 <q-name [message]="element"></q-name>
               </td>
             </ng-container>
 
             <ng-container matColumnDef="level">
-              <th mat-header-cell
-                  *matHeaderCellDef>Level</th>
-              <td mat-cell
-                  *matCellDef="let element">{{element.level}}</td>
+              <th *matHeaderCellDef
+                  mat-header-cell>Level</th>
+              <td *matCellDef="let element"
+                  mat-cell>{{element.level}}</td>
             </ng-container>
           </table>
         </div>

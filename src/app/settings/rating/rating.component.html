@@ -3,7 +3,7 @@
     <div class="background">
       <div class="stars">
         <span class="star-i"
-              [ngStyle]="{ 'width': getStars(rating || 0) }"></span>
+              [style.width]="getStars(rating || 0)"></span>
       </div>
     </div>&nbsp;
     <span class="percent-rating">{{rating?.toFixed(1) || 0}} ({{count || 0}})</span>
@@ -12,12 +12,12 @@
   <ng-container *ngIf="!forTags else tag">
     <div class="map-rating background"
          [class.visible]="!isPecentage">
-      <button class="star"
+      <button *ngFor="let ratingId of ratingArr; index as i"
+              class="star"
               mat-icon-button
-              *ngFor="let ratingId of ratingArr; index as i"
-              (click)="onClick(i+1)"
+              matTooltipPosition="above"
               [matTooltip]="ratingId+1 + ' star'"
-              matTooltipPosition="above">
+              (click)="onClick(i+1)">
         <mat-icon>
           {{showIcon(i)}}
         </mat-icon>

@@ -1,21 +1,21 @@
 <div *ngIf="map && map.selectedTile && map.structures && map.structureSet"
-     [qDrag]="handle2"
-     [bindToWindow]="true"
      id="structureset"
-     class="container">
+     class="container"
+     [qDrag]="handle2"
+     [bindToWindow]="true">
   <div #handle2
        id="handle2"></div>
   <span>{{map.structureSet.name}}</span>
   <div id="structurebox">
-    <div class="structuretype"
-         *ngIf="map.structures">
+    <div *ngIf="map.structures"
+         class="structuretype">
       <div *ngFor="let structure of map.structures"
            class="structure"
            [class.unsaved]="structure.unsaved"
            [class.selected]="structure === map.selectedTile"
            (click)="select(structure)">
-        <div (dblclick)="editTile()"
-             [matTooltip]="structure.description || ''">
+        <div [matTooltip]="structure.description || ''"
+             (dblclick)="editTile()">
           {{structure.name}}</div>
         <span *ngIf="structure.weight === 0"
               class="delete"
@@ -46,10 +46,10 @@
 </div>
 
 <div *ngIf="map && map.selectedTile && map.structures"
-     [qDrag]="handle3"
-     [bindToWindow]="true"
      id="structure"
      class="container"
+     [qDrag]="handle3"
+     [bindToWindow]="true"
      [hidden]="!map.selectedTile.name">
   <div #handle3
        id="handle3"></div>
@@ -72,33 +72,33 @@
       </mat-form-field>
 
       <p>x: <input matInput
-               [value]="map.selectedTile.activeFeature.x1"
-               (change)="updatePosition($event, 'x1')"
                type="number"
                min="0"
-               max="24">
+               max="24"
+               [value]="map.selectedTile.activeFeature.x1"
+               (change)="updatePosition($event, 'x1')">
         -
         <input matInput
-               [value]="map.selectedTile.activeFeature.x2"
-               (change)="updatePosition($event, 'x2')"
                type="number"
                min="0"
-               max="24">
+               max="24"
+               [value]="map.selectedTile.activeFeature.x2"
+               (change)="updatePosition($event, 'x2')">
       </p>
 
       <p>y: <input matInput
-               [value]="map.selectedTile.activeFeature.y1"
-               (change)="updatePosition($event, 'y1')"
                type="number"
                min="0"
-               max="45">
+               max="45"
+               [value]="map.selectedTile.activeFeature.y1"
+               (change)="updatePosition($event, 'y1')">
         -
         <input matInput
-               [value]="map.selectedTile.activeFeature.y2"
-               (change)="updatePosition($event, 'y2')"
                type="number"
                min="0"
-               max="45">
+               max="45"
+               [value]="map.selectedTile.activeFeature.y2"
+               (change)="updatePosition($event, 'y2')">
       </p>
 
       <ng-container *ngIf="map.selectedTile.activeFeature.group === 0">
@@ -117,10 +117,10 @@
         <mat-form-field>
           <input matInput
                  placeholder="Density"
-                 [(ngModel)]="map.selectedTile.activeFeature.density"
                  type="number"
                  min="1"
-                 max="8">
+                 max="8"
+                 [(ngModel)]="map.selectedTile.activeFeature.density">
         </mat-form-field>
       </ng-container>
       <button mat-raised-button

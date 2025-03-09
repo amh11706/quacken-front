@@ -11,6 +11,14 @@
   z-index: 10;
 }
 
+#esc-icon {
+  border: '1px solid black';
+  border-radius: '4px';
+  color: 'white';
+  background-color: 'rgb(67, 67, 67)';
+  width: '30px';
+}
+
 #toggleesc {
   position: absolute;
   color: #eee;

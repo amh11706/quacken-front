@@ -14,8 +14,8 @@
   </q-twod-render>
 
   <ng-template #oldRender>
-    <div [qDrag]="background"
-         id="mapframe">
+    <div id="mapframe"
+         [qDrag]="background">
       <q-map *ngIf="editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length"
              [map]="editor"
              [undo]="undo"
@@ -50,33 +50,33 @@
   <div id="buttons">
     <ng-container *ngIf="editor.selectedTile.data">
       <button mat-icon-button
+              matTooltip="Undo - ctrl + z"
               [disabled]="editor.settingsOpen || !editor.selectedTile.undos.length"
-              (click)="undo(editor.selectedTile.undos, editor.selectedTile.redos)"
-              matTooltip="Undo - ctrl + z">
+              (click)="undo(editor.selectedTile.undos, editor.selectedTile.redos)">
         <mat-icon>undo</mat-icon>
       </button>
       <button mat-icon-button
+              matTooltip="Redo - ctrl + y"
               [disabled]="editor.settingsOpen || !editor.selectedTile.redos.length"
-              (click)="undo(editor.selectedTile.redos, editor.selectedTile.undos)"
-              matTooltip="Redo - ctrl + y">
+              (click)="undo(editor.selectedTile.redos, editor.selectedTile.undos)">
         <mat-icon>redo</mat-icon>
       </button>
     </ng-container>
     <button mat-icon-button
+            matTooltip="Save - ctrl + s"
             [disabled]="editor.settingsOpen"
-            (click)="save()"
-            matTooltip="Save - ctrl + s">
+            (click)="save()">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-icon-button
-            (click)="openGuide()"
-            matTooltip="Open Guide">
+            matTooltip="Open Guide"
+            (click)="openGuide()">
       <mat-icon>help_outline</mat-icon>
     </button>
     <button mat-raised-button
-            [disabled]="editor.settingsOpen"
             id="editorSettings"
-            (click)="openSettings()"
-            matTooltip="Settings - ctrl + e">Editor Settings</button>
+            matTooltip="Settings - ctrl + e"
+            [disabled]="editor.settingsOpen"
+            (click)="openSettings()">Editor Settings</button>
   </div>
 </div>

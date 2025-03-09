@@ -24,8 +24,8 @@
              [background]="background">
 </q-obstacles>
 
-<q-sb-entry-status (hoveredTeam)="hoveredTeam = $event"
-                   [myTeam]="myBoat.team"></q-sb-entry-status>
+<q-sb-entry-status [myTeam]="myBoat.team"
+                   (hoveredTeam)="hoveredTeam = $event"></q-sb-entry-status>
 
 <q-sb-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
             [hoveredTeam]="hoveredTeam"
@@ -38,9 +38,9 @@
             [kbControls]="controlSettings.kbControls.value || 0"
             [shiftSpecials]="controlSettings.shiftSpecials.value || 0"></q-cade-hud>
 
-<div [hidden]="!advancedMapOpen"
-     id="advancedMap"
+<div id="advancedMap"
      class="container"
+     [hidden]="!advancedMapOpen"
      [qDrag]="handle"
      [bindToWindow]="true">
   <div #handle

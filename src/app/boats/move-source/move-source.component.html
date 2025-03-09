@@ -1,14 +1,14 @@
 <div class="cannons">
   <mat-checkbox class="moveCheck"
-                [(ngModel)]="auto"
                 matTooltip="Auto"
                 [matTooltipShowDelay]="750"
+                [(ngModel)]="auto"
                 (change)="changeWantMove()">
   </mat-checkbox>
   <div class="bombempty"
        [draggable]="unusedTokens.shots > 0"
-       (dragstart)="drag(6)"
-       [class.bombmove]="unusedTokens.shots > 0"></div>
+       [class.bombmove]="unusedTokens.shots > 0"
+       (dragstart)="drag(6)"></div>
   <span class="cannontext">{{unusedTokens.shots}}X</span>
 </div>
 <mat-radio-group [(ngModel)]="wantMove"
@@ -20,10 +20,10 @@
     <div class="move move1"
          [matTooltipShowDelay]="750"
          [matTooltip]="tokenStrings[0] || ''">
-      <img [style.opacity]="unusedTokens.moves[0] ? 1 : 0"
-           name="left"
+      <img name="left"
            draggable="true"
            src="./assets/images/arrow1.png"
+           [style.opacity]="unusedTokens.moves[0] ? 1 : 0"
            (dragstart)="drag(1)">
     </div>
     {{unusedTokens.moves[0]}}X
@@ -35,10 +35,10 @@
     <div class="move move2"
          [matTooltipShowDelay]="750"
          [matTooltip]="tokenStrings[1] || ''">
-      <img [style.opacity]="unusedTokens.moves[1] ? 1 : 0"
-           name="forward"
+      <img name="forward"
            draggable="true"
            src="./assets/images/arrow2.png"
+           [style.opacity]="unusedTokens.moves[1] ? 1 : 0"
            (dragstart)="drag(2)">
     </div>
     {{unusedTokens.moves[1]}}X
@@ -50,10 +50,10 @@
     <div class="move move3"
          [matTooltipShowDelay]="750"
          [matTooltip]="tokenStrings[2] || ''">
-      <img [style.opacity]="unusedTokens.moves[2] ? 1 : 0"
-           name="right"
+      <img name="right"
            draggable="true"
            src="./assets/images/arrow3.png"
+           [style.opacity]="unusedTokens.moves[2] ? 1 : 0"
            (dragstart)="drag(3)">
     </div>
     {{unusedTokens.moves[2]}}X

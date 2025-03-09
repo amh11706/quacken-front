@@ -11,8 +11,8 @@
     <div class="shot"
          class="dir{{obj.dir}} dis{{obj.dis}}"></div>
     <div *ngIf="obj.dbl"
-         class="dir{{obj.dir}} dis{{obj.dis}}"
-         class="shot double"></div>
+         class="shot double"
+         class="dir{{obj.dir}} dis{{obj.dis}}"></div>
     <div class="smoke"></div>
   </div>
 </div>
@@ -28,8 +28,8 @@
      [style.zIndex]="render.coords.y"
      [style.opacity]="render.opacity"
      [style.transform]="'translate(' + render.coords.x + 'px, ' + render.coords.y  + 'px)'">
-  <div class="boatheader"
-       *ngIf="render.boat.name || render.boat.isMe">
+  <div *ngIf="render.boat.name || render.boat.isMe"
+       class="boatheader">
     <span class="boattitle"
           [class.isme]="render.boat.isMe">
       {{!fishBoats || hoveredTeam === render.boat.team ? render.boat.title : render.boat.name}}
@@ -59,15 +59,15 @@
     </div>
   </div>
 
-  <div [style.opacity]="render.boat.team === hoveredTeam || render.boat.showInfluence ? 1 : 0"
+  <div class="influence"
+       [style.opacity]="render.boat.team === hoveredTeam || render.boat.showInfluence ? 1 : 0"
        [style.borderColor]="teamColors[render.boat.team || 0]"
        [style.width]="render.boat.influence*92 + 'px'"
-       [style.height]="render.boat.influence*92 + 'px'"
-       class="influence"></div>
+       [style.height]="render.boat.influence*92 + 'px'"></div>
 
   <div [style.transform]="'rotate(' + render.rotateAdjust + 'deg)'">
     <q-sprite-img [class.ghostly]="render.boat.type === 28"
-                  (click)="clickBoat(render.boat)"
-                  [render]="render"></q-sprite-img>
+                  [render]="render"
+                  (click)="clickBoat(render.boat)"></q-sprite-img>
   </div>
 </div>

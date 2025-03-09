@@ -2,27 +2,27 @@
   <div id="logo"><img src="/assets/gclogo.png"></div>
   <p>Powered by superquacken.com</p>
   <div id="loginWrapper">
-    <form id="loginform"
+    <form #loginForm="ngForm"
+          id="loginform"
           ngNativeValidate
-          (ngSubmit)="reset()"
-          #loginForm="ngForm">
+          (ngSubmit)="reset()">
       <mat-form-field>
         <mat-label>New Password</mat-label>
-        <input [(ngModel)]="password"
-               name="password"
+        <input name="password"
                matInput
                qAutoSelect
                type="password"
                minlength="6"
                autocomplete="new-password"
-               required>
+               required
+               [(ngModel)]="password">
       </mat-form-field>
 
-      <button [disabled]="pending"
-              type="submit"
+      <button type="submit"
               class="login"
               mat-stroked-button
-              color="accent">Reset Password</button>
+              color="accent"
+              [disabled]="pending">Reset Password</button>
       <p>
         <span class="link"
               (click)="back()">Back to login</span>.

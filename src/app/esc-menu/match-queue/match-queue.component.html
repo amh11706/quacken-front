@@ -15,8 +15,8 @@
                  [name]="'queueRated'"></q-setting>
       <q-setting *ngIf="matchSettings.lobbyType.value === 5"
                  class="dropdown"
-                 [disabled]="disabled || ms.inQueue"
-                 name="variation"></q-setting>
+                 name="variation"
+                 [disabled]="disabled || ms.inQueue"></q-setting>
     </div>
     <div class="queue-buttons">
       <button mat-raised-button

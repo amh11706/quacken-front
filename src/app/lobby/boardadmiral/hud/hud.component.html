@@ -1,5 +1,5 @@
-<div class="container noselect"
-     *ngrxLet="(ws.connected$ | async) === false as disabled"
+<div *ngrxLet="(ws.connected$ | async) === false as disabled"
+     class="container noselect"
      id="hud">
   <div id="boatcontrol"
        (contextmenu)="$event.preventDefault()">
@@ -16,8 +16,8 @@
       </div>
     </ng-template>
 
-    <div id="boatsettings"
-         *ngIf="activeBoat; else noboat">
+    <div *ngIf="activeBoat; else noboat"
+         id="boatsettings">
       <p>{{boatName(activeBoat)}}</p>
       <table>
         <tr>
@@ -33,19 +33,19 @@
             </mat-slider>
           </td>
           <td><button mat-raised-button
-                    [disabled]="disabled"
                     matTooltip="Sync aggro to all boats"
+                    [disabled]="disabled"
                     (click)="syncToOtherBoats('Aggro')">Sync</button></td>
         </tr>
         <tr>
           <td><button mat-raised-button
                     matTooltip="Cover specific flags"
-                    (click)="activeBoat.coverMode = 0; update()"
-                    [color]="activeBoat.coverMode === 0 ? 'primary' : ''">Cover Flags</button></td>
+                    [color]="activeBoat.coverMode === 0 ? 'primary' : ''"
+                    (click)="activeBoat.coverMode = 0; update()">Cover Flags</button></td>
           <td><button mat-raised-button
                     matTooltip="Only end on specific tiles"
-                    (click)="activeBoat.coverMode = 1; update()"
-                    [color]="activeBoat.coverMode === 1 ? 'primary' : ''">Cover Tiles</button></td>
+                    [color]="activeBoat.coverMode === 1 ? 'primary' : ''"
+                    (click)="activeBoat.coverMode = 1; update()">Cover Tiles</button></td>
           <td><button mat-raised-button
                     matTooltip="Clear coverage for this boat"
                     (click)="resetCoverage()">Clear</button></td>
@@ -55,10 +55,10 @@
         <p id="commands">Select a boat to {{activeCommand.name}} or <button mat-raised-button
                   (click)="waitingForBoat = false">Cancel</button></p>
       </ng-template>
-      <div id="commands"
-           *ngIf="!waitingForBoat; else waiting">
-        <button mat-icon-button
-                *ngFor="let command of BoatCommands"
+      <div *ngIf="!waitingForBoat; else waiting"
+           id="commands">
+        <button *ngFor="let command of BoatCommands"
+                mat-icon-button
                 [disabled]="disabled"
                 [matTooltip]="command.tooltip"
                 (click)="command.trigger()">
@@ -67,13 +67,13 @@
       </div>
     </div>
 
-    <button mat-icon-button
-            *ngrxLet="!myBoat.isMe || (turnService.animating$ | async) as disabled"
+    <button *ngrxLet="!myBoat.isMe || (turnService.animating$ | async) as disabled"
+            mat-icon-button
             matTooltip="Ready"
+            id="hudReady"
             [color]="'accent'"
             [disabled]="disabled"
             [class.ready]="!myBoat.ready && !disabled"
-            id="hudReady"
             (click)="toggleReady()">
       <mat-icon>play_arrow</mat-icon>
     </button>

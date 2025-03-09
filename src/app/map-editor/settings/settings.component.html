@@ -1,5 +1,5 @@
-<div id="shade"
-     *ngIf="shown">
+<div *ngIf="shown"
+     id="shade">
   <div id="settings"
        class="container noselect">
     <h2>Editor Settings</h2>
@@ -34,17 +34,17 @@
 
       <mat-form-field class="setting">
         <input matInput
-               [disabled]="pending"
-               [(ngModel)]="shown.name"
                maxlength="15"
                placeholder="name"
+               [disabled]="pending"
+               [(ngModel)]="shown.name"
                (change)="shown.unsaved = true">
       </mat-form-field>
 
-      <div class="setting"
-           *ngIf="!map?.tileSettings">
-        <mat-checkbox [(ngModel)]="shown.released"
-                      [disabled]="pending"
+      <div *ngIf="!map?.tileSettings"
+           class="setting">
+        <mat-checkbox [disabled]="pending"
+                      [(ngModel)]="shown.released"
                       (change)="shown.unsaved = true">
           Publicly Usable
         </mat-checkbox>
@@ -66,11 +66,11 @@
       <mat-form-field class="setting full">
         <input *ngIf="shown"
                matInput
-               [disabled]="pending"
-               [(ngModel)]="shown.description"
                height="4"
                maxlength="255"
                placeholder="description"
+               [disabled]="pending"
+               [(ngModel)]="shown.description"
                (change)="shown.unsaved = true">
       </mat-form-field>
 

@@ -3,15 +3,15 @@
   <p>New stack size: {{slider.value}}</p>
   <mat-slider cdkFocusInitial
               [max]="data.q-1">
-    <input matSliderThumb
-           [(ngModel)]="quantity"
-           #slider>
+    <input #slider
+           matSliderThumb
+           [(ngModel)]="quantity">
   </mat-slider>
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button
           [mat-dialog-close]>Cancel</button>
-  <button [disabled]="!quantity"
-          mat-raised-button
+  <button mat-raised-button
+          [disabled]="!quantity"
           [mat-dialog-close]="quantity">Ok</button>
 </div>

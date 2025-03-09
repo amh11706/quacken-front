@@ -3,8 +3,8 @@
      (mouseleave)="showTeams = false">
   {{playerLength}}
   <div class="teamList"
-       (click)="$event.stopPropagation()"
-       [class.visible]="showTeams && teams.length">
+       [class.visible]="showTeams && teams.length"
+       (click)="$event.stopPropagation()">
     <table>
       <tr>
         <ng-container *ngFor="let team of teamImages; let i = index">

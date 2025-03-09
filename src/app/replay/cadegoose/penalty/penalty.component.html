@@ -14,8 +14,8 @@
       <td>
         <span *ngFor="let t of data.rows.turns[i]; let first = first"
               class="turnlink"
-              (click)="data.setTurn(t.turn)"
-              [matTooltip]="'' + t.quantity"><span *ngIf="!first">, </span>{{t.turn}}</span>
+              [matTooltip]="'' + t.quantity"
+              (click)="data.setTurn(t.turn)"><span *ngIf="!first">, </span>{{t.turn}}</span>
       </td>
     </tr>
     <tr>

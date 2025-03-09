@@ -12,11 +12,11 @@
                    [emoji]="findCustomEmoji(ws.user.d)"></ngx-emoji>
         <mat-menu #emojimenu>
           <ng-template matMenuContent>
-            <emoji-mart (click)="$event.preventDefault(); $event.stopPropagation();"
-                        [darkMode]="true"
+            <emoji-mart [darkMode]="true"
                         [autoFocus]="true"
                         [showSingleCategory]="true"
                         [custom]="customEmojis"
+                        (click)="$event.preventDefault(); $event.stopPropagation();"
                         (emojiSelect)="emojiPicked($event); emojimenu.close.emit()"></emoji-mart>
           </ng-template>
         </mat-menu>
@@ -37,8 +37,8 @@
             (ngSubmit)="changePass(newPass.value, pass.value)">
         <mat-form-field>
           <mat-label>New Password</mat-label>
-          <input matInput
-                 #newPass
+          <input #newPass
+                 matInput
                  name="newPassword"
                  type="password"
                  required
@@ -47,8 +47,8 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Current Password</mat-label>
-          <input matInput
-                 #pass
+          <input #pass
+                 matInput
                  name="password"
                  type="password"
                  required
@@ -76,8 +76,8 @@
           can be reclaimed at any time.</p>
         <mat-form-field>
           <mat-label>New Username</mat-label>
-          <input matInput
-                 #username
+          <input #username
+                 matInput
                  required
                  minlength="2"
                  maxlength="16"
@@ -85,8 +85,8 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Current Password</mat-label>
-          <input matInput
-                 #namePass
+          <input #namePass
+                 matInput
                  name="password"
                  type="password"
                  required
@@ -112,8 +112,8 @@
             (ngSubmit)="changeEmail(email.value, emailPass.value)">
         <mat-form-field>
           <mat-label>New Email</mat-label>
-          <input matInput
-                 #email
+          <input #email
+                 matInput
                  name="email"
                  type="email"
                  required
@@ -121,8 +121,8 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Current Password</mat-label>
-          <input matInput
-                 #emailPass
+          <input #emailPass
+                 matInput
                  name="password"
                  type="password"
                  required
@@ -151,8 +151,8 @@
           information will then be removed from our database.</p>
         <mat-form-field>
           <mat-label>Current Password</mat-label>
-          <input matInput
-                 #deletePass
+          <input #deletePass
+                 matInput
                  name="password"
                  type="password"
                  required

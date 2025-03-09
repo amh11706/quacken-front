@@ -19,13 +19,13 @@
                      [onlineOnly]="true"
                      [matInput]="false"
                      [clearOnFocus]="false"
-                     (keyup)="handleKey($event)"
-                     [(value)]="param.value"></q-name-search>
+                     [(value)]="param.value"
+                     (keyup)="handleKey($event)"></q-name-search>
       <q-name-search *ngSwitchCase="'nameany'"
                      [matInput]="false"
                      [clearOnFocus]="false"
-                     (keyup)="handleKey($event)"
-                     [(value)]="param.value"></q-name-search>
+                     [(value)]="param.value"
+                     (keyup)="handleKey($event)"></q-name-search>
 
       <span *ngSwitchCase="'new'">new</span>
 
@@ -35,25 +35,25 @@
                  [emoji]="findCustomEmoji(param.value || ':+1:')"></ngx-emoji>
       <mat-menu #emojimenu>
         <ng-template matMenuContent>
-          <emoji-mart (click)="$event.preventDefault(); $event.stopPropagation();"
-                      [darkMode]="true"
+          <emoji-mart [darkMode]="true"
                       [autoFocus]="true"
                       [showSingleCategory]="true"
                       [custom]="customEmojis"
+                      (click)="$event.preventDefault(); $event.stopPropagation();"
                       (emojiSelect)="param.value = $event.emoji.colons; emojimenu.close.emit()"></emoji-mart>
         </ng-template>
       </mat-menu>
 
       <input *ngSwitchDefault
              qEmojiInput
-             [id]="param.name || 'message'"
              class="textinput"
              autocomplete="off"
              maxlength="200"
              name="value"
+             [id]="param.name || 'message'"
              [placeholder]="param.name"
-             (keyup)="handleKey($event)"
-             [(ngModel)]="param.value">
+             [(ngModel)]="param.value"
+             (keyup)="handleKey($event)">
     </ng-container>
   </ng-container>
   <button mat-button

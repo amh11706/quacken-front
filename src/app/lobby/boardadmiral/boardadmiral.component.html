@@ -1,8 +1,5 @@
 <div #background>
   <q-twod-render #renderer
-                 (hoverTile)="hoverTile($event)"
-                 (mouseDownTile)="mouseDownTile($event)"
-                 (clickTile)="clickTile($event)"
                  [hoveredTeam]="hoveredTeam"
                  [speed]="graphicSettings.speed.value"
                  [fishBoats]="lobbySettings.fishBoats.value"
@@ -10,11 +7,14 @@
                  [setTile]="advancedMapOpen ? setTile.bind(this) : 0"
                  [undo]="undo"
                  [editor]="editor"
-                 [graphicSettings]="graphicSettings"></q-twod-render>
+                 [graphicSettings]="graphicSettings"
+                 (hoverTile)="hoverTile($event)"
+                 (mouseDownTile)="mouseDownTile($event)"
+                 (clickTile)="clickTile($event)"></q-twod-render>
 </div>
 
-<q-cade-entry-status (hoveredTeam)="hoveredTeam = $event"
-                     [myTeam]="myBoat.team"></q-cade-entry-status>
+<q-cade-entry-status [myTeam]="myBoat.team"
+                     (hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>
 
 <q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
          [hoveredTeam]="hoveredTeam"
@@ -26,23 +26,23 @@
 
 <q-ba-hud [activeBoat]="activeBoatSettings"
           [fishnames]="!!lobbySettings.fishBoats.value"
-          (activeBoatChange)="redrawOverlay()"
-          [boatSettings]="boatSettings"></q-ba-hud>
+          [boatSettings]="boatSettings"
+          (activeBoatChange)="redrawOverlay()"></q-ba-hud>
 
 <q-boat-list [hidden]="myBoat.team === undefined || myBoat.team > 3"
-             (boatsChange)="gotBoats($event)"
              [fishNames]="!!lobbySettings.fishBoats.value"
              [activeBoat]="activeBoat"
              [highlightedBoats]="highlightedBoats"
+             (boatsChange)="gotBoats($event)"
              (activeBoatChange)="activeBoatChange($event)"></q-boat-list>
 
 <q-obstacles *ngIf="advancedMapOpen"
              [map]="editor"
              [background]="background">
 </q-obstacles>
-<div [hidden]="!advancedMapOpen"
-     id="advancedMap"
+<div id="advancedMap"
      class="container"
+     [hidden]="!advancedMapOpen"
      [qDrag]="handle"
      [bindToWindow]="true">
   <div #handle

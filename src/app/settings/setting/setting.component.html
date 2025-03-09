@@ -13,10 +13,10 @@
                   [label]="g.name">
       <mat-option *ngFor="let o of g.options"
                   [value]="o">
-        <img [src]="getShipLink(o)"
-             class="boatoption"
+        <img class="boatoption"
              height="25px"
-             width="25px">{{setting.titles[o]}}
+             width="25px"
+             [src]="getShipLink(o)">{{setting.titles[o]}}
       </mat-option>
     </mat-optgroup>
   </mat-select>
@@ -27,8 +27,8 @@
   <mat-form-field [appearance]="'outline'">
     <mat-label>{{setting.label}}</mat-label>
     <mat-select [value]="settingValue.stream | async"
-                (selectionChange)="save($event.value)"
-                [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false">
+                [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
+                (selectionChange)="save($event.value)">
       <ng-container *ngFor="let option of setting.options; let i = index">
         <mat-option *ngIf="option"
                     [value]="i">{{option}}</mat-option>
@@ -59,11 +59,11 @@
               [step]="setting.step"
               [color]="'accent'"
               [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false">
-    <input matSliderThumb
+    <input #slider
+           matSliderThumb
            [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
            [value]="settingValue.stream | async"
-           (valueChange)="save($event)"
-           #slider>
+           (valueChange)="save($event)">
   </mat-slider>
   <mat-icon *ngIf="setting.advancedComponent"
             matTooltip="Advanced"
@@ -72,13 +72,13 @@
 </div>
 
 <div *ngIf="setting.type === 'checkbox'"
+     class="setting"
      [matTooltip]="$any(settingValue.data?.icon)?.text"
-     [matTooltipPosition]="'above'"
-     class="setting">
+     [matTooltipPosition]="'above'">
   <mat-checkbox [checked]="!!(settingValue.stream | async)"
-                (change)="save(+$event.checked)"
                 [class.nowrap]="settingValue.data?.icon"
-                [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false">
+                [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
+                (change)="save(+$event.checked)">
     <span class="checkbox-text">{{setting.label}}</span>&nbsp;
     <mat-icon *ngIf="settingValue.data?.icon as icon"
               [color]="$any(icon).color">{{$any(icon).name}}</mat-icon>

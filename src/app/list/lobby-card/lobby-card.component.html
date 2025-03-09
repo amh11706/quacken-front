@@ -53,8 +53,8 @@
      (mouseleave)="showPlayers = false">
   {{lobby.players.length}} / {{lobby.group.maxPlayers?.value || '∞'}}
   <div class="playerList"
-       (click)="$event.stopPropagation(); $event.preventDefault()"
-       [class.visible]="showPlayers">
+       [class.visible]="showPlayers"
+       (click)="$event.stopPropagation(); $event.preventDefault()">
     <q-player-list [players]="lobby.players"
                    [showCount]="false"></q-player-list>
   </div>

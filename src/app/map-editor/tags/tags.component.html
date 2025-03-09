@@ -8,8 +8,8 @@
               [removable]="removable"
               (removed)="remove(tag)">
       {{tag}}
-      <mat-icon matChipRemove
-                *ngIf="removable">cancel</mat-icon>
+      <mat-icon *ngIf="removable"
+                matChipRemove>cancel</mat-icon>
     </mat-chip>
     <input [formControl]="tagCtrl"
            [matAutocomplete]="auto"

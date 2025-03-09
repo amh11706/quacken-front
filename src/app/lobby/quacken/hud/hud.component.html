@@ -7,8 +7,6 @@
            [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
     </div>
     <q-move-input id="moves"
-                  (inputChange)="sendMoves()"
-                  (unusedTokensChange)="unusedTokens = $event"
                   [singleShot]="true"
                   [input]="localBoat"
                   [kbControls]="kbControls"
@@ -20,7 +18,9 @@
                   [maxShots]="myBoat.maxShots"
                   [actions]="actions"
                   [moveKeys]="moveKeys"
-                  [locked]="!myBoat.isMe || myBoat.moveLock >= turn || (ws.connected$ | async) !== true"></q-move-input>
+                  [locked]="!myBoat.isMe || myBoat.moveLock >= turn || (ws.connected$ | async) !== true"
+                  (inputChange)="sendMoves()"
+                  (unusedTokensChange)="unusedTokens = $event"></q-move-input>
     <div id="damage">
       <div id="damagebar"
            [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
@@ -47,8 +47,8 @@
 
     <div id="tokens">
       <ng-container *ngIf="myBoat.type < 10">
-        <div id="treasurebox"
-             *ngIf="!weapons[myBoat.type]">
+        <div *ngIf="!weapons[myBoat.type]"
+             id="treasurebox">
           <img *ngIf="myBoat.getTreasure()"
                src="./assets/images/obstacle{{myBoat.getTreasure()}}.png">
         </div>
@@ -57,8 +57,8 @@
       <div *ngIf="weapons[myBoat.type]"
            class="token">
         <img *ngIf="unusedTokens.shots"
-             (dragstart)="drag(6)"
-             [src]="'/assets/images/'+weapons[myBoat.type]+'.png'">
+             [src]="'/assets/images/'+weapons[myBoat.type]+'.png'"
+             (dragstart)="drag(6)">
       </div>
       <div *ngIf="tokens[myBoat.type]"
            class="token">
@@ -73,8 +73,8 @@
               mat-raised-button
               color="accent"
               id="ready"
-              (click)="imReady()"
-              [disabled]="myBoat.ready">Ready</button>
+              [disabled]="myBoat.ready"
+              (click)="imReady()">Ready</button>
       <ng-template #fstart>
         <button mat-raised-button
                 id="start"

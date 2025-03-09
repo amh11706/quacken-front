@@ -1,17 +1,17 @@
 <button mat-button
-        [color]="active ? 'primary' : undefined"
         class="boat"
+        [color]="active ? 'primary' : undefined"
         [matTooltip]="boat.attr?.[50] ? 'This boat will be targetted by teammates' : ''"
         [style.borderColor]="boat.attr?.[50] ? 'orange' : teamColors[boat.team || 0]">
   {{ShipTypeMap.get(boat.type)?.title}} - {{fishNames ? boat.name : boat.title}}
   <br>
   <div class="damage"
-       matTooltip="{{boat.getDamage()}}%">
+       [matTooltip]="boat.getDamage() + '%'">
     <div class="damagebar"
          [style.transform]="'translateX(' + boat.getDamage() / 2 + 'px)'"></div>
   </div>
   <div class="bilge"
-       matTooltip="{{boat.bilge || 0}}%">
+       [matTooltip]="(boat.bilge || 0) + '%'">
     <div class="bilgebar"
          [style.transform]="'translateX(' + boat.bilge / 2 + 'px)'"></div>
   </div>

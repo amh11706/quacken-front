@@ -1,19 +1,19 @@
 <mat-card id="menu">
   <div *ngIf="ms.statsOpen; else teams">
     <q-stat-end [stats]="ms.lobby?.stats"
-                (closeStats)="ms.statsOpen = false"
                 [columns]="columns"
-                (rateMap)="ms.submitRating($event)"
-                [rating]=true></q-stat-end>
+                [rating]=true
+                (closeStats)="ms.statsOpen = false"
+                (rateMap)="ms.submitRating($event)"></q-stat-end>
   </div>
   <ng-template #teams>
     <h2>Match Settings</h2>
-    <div id="flexmenu"
-         *ngrxLet="es.open$ as open">
-      <div class="teamwrap"
-           *ngFor="let team of ms.teamPlayers$ | async; let i = index">
-        <button mat-raised-button
-                *ngIf="(ms.status | async) === 0 || (ms.settings.hotEntry.stream | async) === 1"
+    <div *ngrxLet="es.open$ as open"
+         id="flexmenu">
+      <div *ngFor="let team of ms.teamPlayers$ | async; let i = index"
+           class="teamwrap">
+        <button *ngIf="(ms.status | async) === 0 || (ms.settings.hotEntry.stream | async) === 1"
+                mat-raised-button
                 [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="ms.joinTeam(i)">{{ms.myTeam === i ? 'Leave' : 'Join'}}</button>
         <br>
@@ -36,10 +36,10 @@
                   <span>Your Jobber Quality ({{slider.value}}%)</span><br>
                   <mat-slider max="100"
                               step="5">
-                    <input matSliderThumb
+                    <input #slider
+                           matSliderThumb
                            [(value)]="ms.myJobbers"
-                           (valueChange)="ms.updateJobbers($event)"
-                           #slider>
+                           (valueChange)="ms.updateJobbers($event)">
                   </mat-slider>
                 </mat-card-content>
               </mat-card>
@@ -56,9 +56,9 @@
       <div class="settings">
         <div class="settingRow">
           <button mat-raised-button
-                  [disabled]="!open || ((ms.teamPlayers$ | async)?.length || 0) < 2"
                   color="accent"
                   class="readyButton"
+                  [disabled]="!open || ((ms.teamPlayers$ | async)?.length || 0) < 2"
                   [class.cancel]="ms.ready"
                   (click)="ms.toggleReady()">{{readyText()}}</button>
           <button *ngIf="(ss.admin$ | async) && (ms.status | async) === 0"

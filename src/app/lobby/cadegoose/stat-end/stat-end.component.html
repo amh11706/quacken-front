@@ -5,9 +5,9 @@
 <h2 class="title">Round Summary</h2>
 
 <mat-button-toggle-group *ngIf="extraColumns.length"
-                         [(ngModel)]="showExtra"
                          name="statGroup"
-                         aria-label="Stat group">
+                         aria-label="Stat group"
+                         [(ngModel)]="showExtra">
   <mat-button-toggle [value]="0">Normal Stats</mat-button-toggle>
   <mat-button-toggle [value]="1">Extra</mat-button-toggle>
 </mat-button-toggle-group>

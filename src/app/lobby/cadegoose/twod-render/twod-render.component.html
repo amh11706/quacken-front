@@ -1,28 +1,28 @@
 <div #frame
      class="noselect"
      id="background"
-     (contextmenu)="$event.preventDefault()"
      [style.backgroundSize]="mapScale*64 + 'px'"
-     [style.backgroundPosition]="'calc(50vw + ' + (drag.offset.x - getXOff(myBoat))*mapScale + 'px) calc(50vh + ' + (drag.offset.y - getYOff(myBoat))*mapScale + 'px)'">
+     [style.backgroundPosition]="'calc(50vw + ' + (drag.offset.x - getXOff(myBoat))*mapScale + 'px) calc(50vh + ' + (drag.offset.y - getYOff(myBoat))*mapScale + 'px)'"
+     (contextmenu)="$event.preventDefault()">
   <!-- mapframe receives the offset transform, map receives the rotate transform.
  	This allows them to be altered independent of each other -->
   <div id="mapcenter">
     <div [qZoom]="frame"
          [zoom]="mapScale"
          [ctrlZoom]="ctrlZoom"
-         (zoomChange)="zoomChange($event)"
          [maxZoom]="2"
-         [minZoom]="0.3">
+         [minZoom]="0.3"
+         (zoomChange)="zoomChange($event)">
       <div #drag="qDrag"
            [qDrag]="frame"
            [scale]="mapScale">
         <div
              [style.transform]="'translate(50%, 50%) translate(' + -getXOff(myBoat) + 'px, ' + -getYOff(myBoat) + 'px)'">
-          <canvas id="mapCanvas"
+          <canvas #canvas
+                  id="mapCanvas"
                   (mousedown)="mouseDown($event)"
                   (mouseup)="mouseUp($event)"
-                  (mousemove)="mouseMove($event)"
-                  #canvas></canvas>
+                  (mousemove)="mouseMove($event)"></canvas>
 
           <ng-container *ngFor="let obstacle of obstacles;">
             <q-sprite-img class="obstacle"
@@ -56,6 +56,6 @@
      [qDrag]="fps"
      [bindToWindow]="true"
      [offset]="$any(graphicSettings.showFps.data)"
-     (offsetChange)="fpsOffsetChange($event)"
-     [hidden]="!graphicSettings.showFps.value">
+     [hidden]="!graphicSettings.showFps.value"
+     (offsetChange)="fpsOffsetChange($event)">
 </div>

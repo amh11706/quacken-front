@@ -1,9 +1,9 @@
 <div class="container noselect"
      id="hud">
   <div>
-    <mat-button-toggle-group [(value)]="selectedOverlay"
-                             (change)="setOverlay($event.value)"
-                             multiple>
+    <mat-button-toggle-group multiple
+                             [(value)]="selectedOverlay"
+                             (change)="setOverlay($event.value)">
       <mat-button-toggle value="spawn">Spawns {{mapInfo.spawnRating}}</mat-button-toggle>
       <mat-button-toggle value="flags">Hotspots {{mapInfo.hotspotRating}}</mat-button-toggle>
       <mat-button-toggle value="coverMoves">Moves {{mapInfo.maneuverabilityRating.toFixed(2)}}</mat-button-toggle>

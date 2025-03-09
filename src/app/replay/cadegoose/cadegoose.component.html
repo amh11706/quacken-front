@@ -1,6 +1,6 @@
-<mat-tab-group [(selectedIndex)]="tabIndex"
+<mat-tab-group mat-align-tabs="center"
                [mat-stretch-tabs]="false"
-               mat-align-tabs="center"
+               [(selectedIndex)]="tabIndex"
                (selectedIndexChange)="centerButtons()">
   <mat-tab>
     <ng-template mat-tab-label>
@@ -10,8 +10,8 @@
     <div #turnTab>
       <button *ngFor="let turn of turns"
               mat-button
-              [color]="turn === activeTurn ? 'primary' : undefined"
               class="turn"
+              [color]="turn === activeTurn ? 'primary' : undefined"
               (click)="clickTurn(turn)">
         Turn {{turn.turn}}<br>
 

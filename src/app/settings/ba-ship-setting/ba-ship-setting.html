@@ -1,7 +1,7 @@
 <mat-form-field class="setting">
   <mat-label>{{ShipSetting.label}}</mat-label>
-  <mat-select [(value)]="setting.value"
-              [disabled]="ShipSetting.admin && (ss.admin$ | async) === false">
+  <mat-select [disabled]="ShipSetting.admin && (ss.admin$ | async) === false"
+              [(value)]="setting.value">
     <mat-option *ngFor="let option of ShipSetting.options; let i = index"
                 [value]="i">{{option}}</mat-option>
   </mat-select>
@@ -23,9 +23,9 @@
                   [step]="10"
                   [color]="'accent'"
                   [disabled]="ShipSetting.admin && (ss.admin$ | async) === false">
-        <input matSliderThumb
+        <input #slider
+               matSliderThumb
                [disabled]="ShipSetting.admin && (ss.admin$ | async) === false"
-               [(value)]="setting.data.budget"
-               #slider>
+               [(value)]="setting.data.budget">
       </mat-slider>
 </div>

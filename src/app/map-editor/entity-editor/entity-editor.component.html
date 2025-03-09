@@ -1,8 +1,8 @@
 <div *ngIf="map && map.selectedTile && map.tmaps && map.tmapSet"
-     [qDrag]="handle3"
-     [bindToWindow]="true"
      id="entityedit"
-     class="container">
+     class="container"
+     [qDrag]="handle3"
+     [bindToWindow]="true">
     <div #handle3
          id="handle3"></div>
     <mat-accordion>

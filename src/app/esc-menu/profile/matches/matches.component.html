@@ -4,9 +4,9 @@
   <div>
     <mat-form-field class="gamemode">
       <mat-label>Mode</mat-label>
-      <mat-select [(value)]="stat.group"
-                  (valueChange)="stat.changeGroup(); updateDataSource()"
-                  placeholder="Category">
+      <mat-select placeholder="Category"
+                  [(value)]="stat.group"
+                  (valueChange)="stat.changeGroup(); updateDataSource()">
         <mat-option *ngFor="let t of lobbyTypes; let i = index"
                     [value]="t.id">
           {{t.name}} ({{matches[t.id]?.length}})
@@ -18,8 +18,8 @@
       <mat-label>Filter ({{dataSource.filteredData.length}})</mat-label>
       <mat-chip-grid #chipList>
         <mat-chip *ngFor="let term of searchTerms; let i = index"
-                  (removed)="removeSearchTerm(i)"
-                  [removable]="true">
+                  [removable]="true"
+                  (removed)="removeSearchTerm(i)">
           {{term}}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
@@ -45,79 +45,79 @@
            matSortStart="desc"
            matSortDisableClear="true"
            [dataSource]="dataSource">
-      <tr mat-header-row
-          *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr *matHeaderRowDef="displayedColumns; sticky: true"
+          mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;"
+          mat-row></tr>
 
       <ng-container matColumnDef="lobby">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef>Lobby</th>
-        <td mat-cell
-            class="lobby-cell"
-            *matCellDef="let element">{{element.lobby}}</td>
+        <th *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header>Lobby</th>
+        <td *matCellDef="let element"
+            mat-cell
+            class="lobby-cell">{{element.lobby}}</td>
       </ng-container>
 
       <ng-container matColumnDef="createdAt">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef>Date</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.createdAtString}}</td>
+        <th *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header>Date</th>
+        <td *matCellDef="let element"
+            mat-cell>{{element.createdAtString}}</td>
       </ng-container>
 
       <ng-container matColumnDef="score">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef>Rank</th>
-        <td mat-cell
-            *matCellDef="let element">{{element.rank || '-'}}<q-rank-circle *ngIf="element.rank"
+        <th *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header>Rank</th>
+        <td *matCellDef="let element"
+            mat-cell>{{element.rank || '-'}}<q-rank-circle *ngIf="element.rank"
                          [tier]="element.tier"
                          [score]="element.rank"></q-rank-circle></td>
       </ng-container>
 
       <ng-container matColumnDef="result">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef>Result</th>
-        <td mat-cell
-            *matCellDef="let element"
+        <th *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header>Result</th>
+        <td *matCellDef="let element"
+            mat-cell
             class="result{{element.result}}">
           {{results[element.result]}}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="team">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef>Team</th>
-        <td mat-cell
-            *matCellDef="let element">
+        <th *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header>Team</th>
+        <td *matCellDef="let element"
+            mat-cell>
           <img [src]="imgSrc(element.team)"
                [matTooltip]="imgTitle(element.team)">
         </td>
       </ng-container>
 
       <ng-container matColumnDef="players">
-        <th mat-header-cell
-            mat-sort-header
-            *matHeaderCellDef>Players</th>
-        <td mat-cell
-            *matCellDef="let element">
+        <th *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header>Players</th>
+        <td *matCellDef="let element"
+            mat-cell>
           <q-team-view [teams]="element.teams"
                        [playerLength]="element.players.length"></q-team-view>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="view">
-        <th mat-header-cell
-            *matHeaderCellDef>View</th>
-        <td mat-cell
-            *matCellDef="let element">
+        <th *matHeaderCellDef
+            mat-header-cell>View</th>
+        <td *matCellDef="let element"
+            mat-cell>
           <a mat-raised-button
-             [href]="'/#/replay/' + element.matchId"
-             target="_blank">Open</a>
+             target="_blank"
+             [href]="'/#/replay/' + element.matchId">Open</a>
         </td>
       </ng-container>
     </table>

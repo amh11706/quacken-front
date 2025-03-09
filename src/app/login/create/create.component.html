@@ -2,41 +2,41 @@
   <div id="logo"><img src="/assets/gclogo.png"></div>
   <p>Powered by superquacken.com</p>
   <div id="loginWrapper">
-    <form id="loginform"
+    <form #loginForm="ngForm"
+          id="loginform"
           ngNativeValidate
-          (ngSubmit)="create()"
-          #loginForm="ngForm">
+          (ngSubmit)="create()">
       <mat-form-field>
         <mat-label>Email</mat-label>
-        <input [(ngModel)]="user.email"
-               name="email"
+        <input name="email"
                type="email"
                matInput
                qAutoSelect
                autocomplete="username"
-               required>
+               required
+               [(ngModel)]="user.email">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
-        <input [(ngModel)]="user.password"
-               name="password"
+        <input name="password"
                matInput
                qAutoSelect
                type="password"
                minlength="6"
                autocomplete="new-password"
-               required>
+               required
+               [(ngModel)]="user.password">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Username</mat-label>
-        <input [(ngModel)]="user.name"
-               name="name"
+        <input name="name"
                matInput
                qAutoSelect
                minlength="2"
                maxlength="16"
                autocomplete="nickname"
-               required>
+               required
+               [(ngModel)]="user.name">
       </mat-form-field>
       <p id="terms">By creating an account, you agree to our
         <span class="link"
@@ -45,10 +45,10 @@
         <span class="link"
               (click)="showPrivacy()">privacy policy</span>.
       </p>
-      <button [disabled]="pending"
-              type="submit"
+      <button type="submit"
               mat-stroked-button
-              color="accent">Create Account</button>
+              color="accent"
+              [disabled]="pending">Create Account</button>
       <p>
         <span class="link"
               (click)="back()">Back to login</span>.

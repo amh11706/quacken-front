@@ -4,11 +4,11 @@
                    [emoji]="hoveredEmoji"
                    [idleEmoji]="'duck'"
                    [emojiSkin]="data.skin"
-                   (skinChange)="handleSkinChange($event)"
                    [emojiIsNative]="true"
                    [emojiSet]="'apple'"
                    [emojiSize]="32"
-                   [i18n]="i18n">
+                   [i18n]="i18n"
+                   (skinChange)="handleSkinChange($event)">
     </emoji-preview>
   </mat-card-title>
   <mat-card-content (mouseleave)="hoveredEmoji = null">

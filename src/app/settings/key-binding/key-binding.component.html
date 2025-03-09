@@ -2,23 +2,23 @@
 <mat-card-actions>
   <button mat-raised-button
           color="accent"
-          (click)="save()"
-          [disabled]="!changed">Save changes</button>
+          [disabled]="!changed"
+          (click)="save()">Save changes</button>
   <button mat-raised-button
-          (click)="cancel()"
-          [disabled]="!changed">Cancel</button>
+          [disabled]="!changed"
+          (click)="cancel()">Cancel</button>
   <button mat-raised-button
           id="defaults"
-          (click)="setDefaults()"
-          [disabled]="!notDefault">Set defaults</button>
+          [disabled]="!notDefault"
+          (click)="setDefaults()">Set defaults</button>
 </mat-card-actions>
 
 <div>
   <q-setting name="updateLinked"></q-setting>
   <mat-form-field id="bindingGroup">
-    <mat-select [(value)]="group"
-                (valueChange)="changeGroup()"
-                placeholder="Setting group">
+    <mat-select placeholder="Setting group"
+                [(value)]="group"
+                (valueChange)="changeGroup()">
       <mat-option value="Global">Global</mat-option>
       <mat-option value="Cadegoose">Blockade</mat-option>
       <mat-option value="Board Admiral">Board Admiral</mat-option>
@@ -31,8 +31,8 @@
 </div>
 
 <mat-menu #appMenu="matMenu">
-  <ng-template matMenuContent
-               let-links="links">
+  <ng-template let-links="links"
+               matMenuContent>
     <table class="popup">
       <tr>
         <th>Group</th>

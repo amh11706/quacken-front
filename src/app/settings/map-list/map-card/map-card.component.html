@@ -20,13 +20,13 @@
           <q-rating [isPecentage]="true"
                     [rating]="map.ratingAverage"
                     [myRating]="map.ratingMine"
-                    (ratingUpdated)="updateRating($event)"
-                    [count]="map.ratingCount"></q-rating>
+                    [count]="map.ratingCount"
+                    (ratingUpdated)="updateRating($event)"></q-rating>
         </div>
         <div class="subitem">
           <mat-chip-listbox>
-            <mat-chip #chipList
-                      *ngFor="let option of map.tags"
+            <mat-chip *ngFor="let option of map.tags"
+                      #chipList
                       [removable]="false">{{option}}</mat-chip>
           </mat-chip-listbox>
         </div>
@@ -34,8 +34,8 @@
       <mat-card-actions class="flex-subitem2">
         <button mat-raised-button
                 color="accent"
-                [disabled]="(ss.admin$ | async) === false"
                 color="accent"
+                [disabled]="(ss.admin$ | async) === false"
                 (click)="selectMap(map.id)">Select</button>
       </mat-card-actions>
     </div>
@@ -43,21 +43,21 @@
 </mat-card>
 
 <ng-template #generatedTemp>
-  <div class="flex-item2"
-       *ngIf="map">
+  <div *ngIf="map"
+       class="flex-item2">
     <mat-card-title class="title">{{generated}}</mat-card-title>
     <mat-card-content>
       <mat-form-field>
         <mat-label class="subtitle">Seed:</mat-label>
         <input matInput
                class="seed"
-               (change)="updateSeed($any($event.target).value)"
-               [value]="map.description">
+               [value]="map.description"
+               (change)="updateSeed($any($event.target).value)">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Previous seeds:</mat-label>
-        <mat-select (selectionChange)="updateSeed($event.value)"
-                    [disabled]="(ss.admin$ | async) === false">
+        <mat-select [disabled]="(ss.admin$ | async) === false"
+                    (selectionChange)="updateSeed($event.value)">
           <mat-option *ngFor="let seed of seeds"
                       [value]="seed">{{seed}}</mat-option>
         </mat-select>

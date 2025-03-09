@@ -1,11 +1,11 @@
 <div class="chatbox">
   <div class="output">
-    <cdk-virtual-scroll-viewport (wheel)="scrolled($event)"
-                                 (scroll)="scrolledAny($event)"
+    <cdk-virtual-scroll-viewport class="textbox"
                                  [itemSize]="27"
                                  [minBufferPx]="100"
                                  [maxBufferPx]="200"
-                                 class="textbox">
+                                 (wheel)="scrolled($event)"
+                                 (scroll)="scrolledAny($event)">
       <div *cdkVirtualFor="let m of chat.messages$"
            class="message">
         <p [style.backgroundColor]="colors[m.type]"
@@ -60,11 +60,11 @@
                 </span>
               </ng-template>
               <ng-container *ngIf="!m.message.resolved">
-                <a mat-raised-button
-                   *ngIf="m.message.ty !== 0; else acceptButton"
-                   [href]="'/#/lobby/' + m.message.tg"
+                <a *ngIf="m.message.ty !== 0; else acceptButton"
+                   mat-raised-button
                    color="accent"
                    class="accept"
+                   [href]="'/#/lobby/' + m.message.tg"
                    (click)="accept(m.message)">Accept</a>
                 <ng-template #acceptButton>
                   <button mat-raised-button

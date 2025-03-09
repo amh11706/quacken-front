@@ -1,21 +1,21 @@
 <div *ngIf="map && map.selectedTile && map.tmaps && map.tmapSet"
-     [qDrag]="handle2"
-     [bindToWindow]="true"
      id="structureset"
-     class="container">
+     class="container"
+     [qDrag]="handle2"
+     [bindToWindow]="true">
     <div #handle2
          id="handle2"></div>
     <span>{{map.tmapSet.name}}</span>
     <div id="structurebox">
-        <div class="structuretype"
-             *ngIf="map.tmaps">
+        <div *ngIf="map.tmaps"
+             class="structuretype">
             <div *ngFor="let structure of map.tmaps"
                  class="structure"
                  [class.unsaved]="structure.unsaved"
                  [class.selected]="structure === map.selectedTile"
                  (click)="select(structure)">
-                <div (dblclick)="editTile()"
-                     [matTooltip]="structure.description || ''">
+                <div [matTooltip]="structure.description || ''"
+                     (dblclick)="editTile()">
                     {{structure.name}}</div>
                 <span class="delete"
                       (click)="deleteTile(structure)">

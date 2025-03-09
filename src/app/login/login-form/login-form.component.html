@@ -2,29 +2,29 @@
   <div id="logo"><img src="/assets/gclogo.png"></div>
   <p>Powered by superquacken.com</p>
   <div id="loginWrapper">
-    <form id="loginform"
+    <form #loginForm="ngForm"
+          id="loginform"
           ngNativeValidate
-          (ngSubmit)="login()"
-          #loginForm="ngForm">
+          (ngSubmit)="login()">
       <mat-form-field>
         <mat-label>Email</mat-label>
-        <input [(ngModel)]="user.email"
-               name="email"
+        <input name="email"
                matInput
                qAutoSelect
                autocomplete="username"
-               required>
+               required
+               [(ngModel)]="user.email">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
-        <input [(ngModel)]="user.password"
-               name="password"
+        <input name="password"
                matInput
                qAutoSelect
                type="password"
                minlength="6"
                autocomplete="current-password"
-               required>
+               required
+               [(ngModel)]="user.password">
       </mat-form-field>
       <p id="terms">By logging in, you agree to our
         <span class="link"
@@ -33,11 +33,11 @@
         <span class="link"
               (click)="showPrivacy()">privacy policy</span>.
       </p>
-      <button [disabled]="pending"
-              class="login"
+      <button class="login"
               type="submit"
               mat-stroked-button
-              color="accent">Log in</button>
+              color="accent"
+              [disabled]="pending">Log in</button>
       <p>
         No account?
         <span class="link"
@@ -69,7 +69,7 @@
     <button mat-raised-button
             color="accent"
             mat-dialog-close
-            [disabled]="pending"
-            cdkFocusInitial>Close</button>
+            cdkFocusInitial
+            [disabled]="pending">Close</button>
   </mat-dialog-actions>
 </ng-template>

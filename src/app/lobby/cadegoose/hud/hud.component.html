@@ -7,8 +7,6 @@
            [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
     </div>
     <q-move-input id="moves"
-                  (inputChange)="sendMoves()"
-                  (unusedTokensChange)="unusedTokens = $event"
                   [input]="localBoat"
                   [maneuvers]="myBoat.maneuvers"
                   [kbControls]="kbControls"
@@ -20,7 +18,9 @@
                   [moveKeys]="moveKeys"
                   [maxMoves]="maxMoves"
                   [maxShots]="myBoat.maxShots"
-                  [locked]="!myBoat.isMe || myBoat.moveLock >= turn || !ws.connected"></q-move-input>
+                  [locked]="!myBoat.isMe || myBoat.moveLock >= turn || !ws.connected"
+                  (inputChange)="sendMoves()"
+                  (unusedTokensChange)="unusedTokens = $event"></q-move-input>
     <div id="boatStats">
       <div id="damage"
            matTooltip="Damage: {{myBoat.getDamage()}}%">
@@ -42,36 +42,36 @@
                    [updateWantToken]="updateWantMove$"
                    [wantMove]="lastTick.wt"
                    (wantMoveChange)="setWantMove($event)"></q-move-source>
-    <button mat-icon-button
-            *ngrxLet="!myBoat.isMe || (turnService.animating$ | async) as disabled"
+    <button *ngrxLet="!myBoat.isMe || (turnService.animating$ | async) as disabled"
+            mat-icon-button
             matTooltip="Ready"
+            id="hudReady"
             [color]="'accent'"
             [disabled]="disabled"
             [class.ready]="!myBoat.ready && !disabled"
-            id="hudReady"
             (click)="toggleReady()">
       <mat-icon>play_arrow</mat-icon>
     </button>
 
     <q-maneuver-source id="maneuvers"
-                       (wantManeuverChange)="setWantToken($event)"
                        [maneuvers]="myBoat.maneuvers"
                        [wantManeuver]="lastTick.wm"
                        [unusedTokens]="unusedTokens"
-                       [dragContext]="dragContext"></q-maneuver-source>
+                       [dragContext]="dragContext"
+                       (wantManeuverChange)="setWantToken($event)"></q-maneuver-source>
   </div>
 
   <div *ngIf="myBoat.inSZ"
        id="disengage">
     <button mat-icon-button
-            [style.color]="'rgb(125, 236, 80)'"
             matTooltip="Respawn Island"
+            [style.color]="'rgb(125, 236, 80)'"
             (click)="disengage(0)">
       <mat-icon>rowing</mat-icon>
     </button>
     <button mat-icon-button
-            [style.color]="'red'"
             matTooltip="Respawn Ocean"
+            [style.color]="'red'"
             (click)="disengage(1)">
       <mat-icon>rowing</mat-icon>
     </button>

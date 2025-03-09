@@ -3,8 +3,8 @@
   <mat-label>Search ({{(maplist | async)?.length}})</mat-label>
   <mat-autocomplete #auto="matAutocomplete"
                     [autoSelectActiveOption]="true"
-                    (optionSelected)="toggleTag($event.option.value); search.value = ''"
-                    [autoActiveFirstOption]="true">
+                    [autoActiveFirstOption]="true"
+                    (optionSelected)="toggleTag($event.option.value); search.value = ''">
     <mat-option *ngFor="let option of searchResults | async"
                 [value]="option">
       {{option}}
@@ -23,14 +23,14 @@
     </mat-chip>
     <input #search
            matInput
+           placeholder="1v1, practice, etc."
            [matChipInputFor]="chipList"
            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-           (matChipInputTokenEnd)="toggleTag($event.value); search.value = ''"
            [matAutocomplete]="auto"
+           [formControl]="searchCtrl"
+           (matChipInputTokenEnd)="toggleTag($event.value); search.value = ''"
            (keydown.backspace)="search.value ? undefined : removeLastTag()"
-           (blur)="search.value = ''; searchCtrl.setValue('');"
-           placeholder="1v1, practice, etc."
-           [formControl]="searchCtrl">
+           (blur)="search.value = ''; searchCtrl.setValue('');">
   </mat-chip-grid>
   <mat-icon matSuffix>search</mat-icon>
 </mat-form-field>
@@ -38,9 +38,9 @@
 <div class="flex">
   <button mat-raised-button
           color="accent"
+          matTooltip="Random User Map"
           [disabled]="(ss.admin$ | async) === false"
-          (click)="selectMap(-1)"
-          matTooltip="Random User Map">Random</button>
+          (click)="selectMap(-1)">Random</button>
   <button mat-raised-button
           color="accent"
           (click)="openFilterWindow()">Filter</button>
@@ -54,8 +54,8 @@
   </mat-form-field>
 </div>
 
-<cdk-virtual-scroll-viewport id="maps"
-                             *ngrxLet="selectedMap.stream as selectedMap"
+<cdk-virtual-scroll-viewport *ngrxLet="selectedMap.stream as selectedMap"
+                             id="maps"
                              [itemSize]="250"
                              [minBufferPx]="600"
                              [maxBufferPx]="900">

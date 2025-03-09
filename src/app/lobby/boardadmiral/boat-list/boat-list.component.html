@@ -13,11 +13,11 @@
                      [class.highlight]="boat.showInfluence || highlightedBoats.has(boat.id)"
                      [class.noCoverage]="!hasCoverage(boat)"
                      [matTooltip]="hasCoverage(boat) ? '' : 'This boat has no coverage assigned!'"
-                     (mouseover)="boat.showInfluence = true"
-                     (mouseout)="boat.showInfluence = false"
                      [boat]="boat"
                      [fishNames]="fishNames"
                      [active]="activeBoat === boat"
+                     (mouseover)="boat.showInfluence = true"
+                     (mouseout)="boat.showInfluence = false"
                      (click)="selectBoat(boat)"></q-boat-button>
     </mat-tab>
 

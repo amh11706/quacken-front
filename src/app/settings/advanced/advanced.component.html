@@ -5,6 +5,6 @@
   <button mat-raised-button
           matDialogClose="false">Cancel</button>
   <button mat-raised-button
-          [disabled]="admin && (ss.admin$ | async) === false"
-          matDialogClose="true">Save</button>
+          matDialogClose="true"
+          [disabled]="admin && (ss.admin$ | async) === false">Save</button>
 </mat-dialog-actions>

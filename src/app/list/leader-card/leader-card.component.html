@@ -6,7 +6,7 @@
   <div *ngFor="let p of l.top3; let i = index"
        class="lobbyPlayer">
     <span>{{i + 1}}. </span>
-    <q-name (click)="$event.stopPropagation()"
-            [message]="p"></q-name>
+    <q-name [message]="p"
+            (click)="$event.stopPropagation()"></q-name>
   </div>
 </div>

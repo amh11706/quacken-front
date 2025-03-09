@@ -12,9 +12,9 @@
              [background]="background">
 </q-obstacles>
 
-<div [hidden]="!advancedMapOpen"
-     id="advancedMap"
+<div id="advancedMap"
      class="container"
+     [hidden]="!advancedMapOpen"
      [qDrag]="handle"
      [bindToWindow]="true">
   <div #handle

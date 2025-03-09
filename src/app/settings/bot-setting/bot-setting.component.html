@@ -1,7 +1,7 @@
 <mat-form-field class="setting">
   <mat-label>{{BotSetting.label}}</mat-label>
-  <mat-select [(value)]="setting.value"
-              [disabled]="BotSetting.admin && (ss.admin$ | async) === false">
+  <mat-select [disabled]="BotSetting.admin && (ss.admin$ | async) === false"
+              [(value)]="setting.value">
     <mat-option *ngFor="let option of BotSetting.options; let i = index"
                 [value]="i">{{option}}</mat-option>
   </mat-select>
@@ -21,10 +21,10 @@
         </mat-select-trigger>
         <mat-option *ngFor="let o of Ships.groups[0]?.options"
                     [value]="o">
-          <img [src]="getShipLink(o)"
-               class="boatoption"
+          <img class="boatoption"
                height="25px"
-               width="25px">{{Ships.titles[o]}}
+               width="25px"
+               [src]="getShipLink(o)">{{Ships.titles[o]}}
         </mat-option>
       </mat-select>
       <mat-icon (click)="removePadExtra(i)">cancel</mat-icon>
@@ -50,10 +50,10 @@
         </mat-select-trigger>
         <mat-option *ngFor="let o of Ships.groups[0]?.options"
                     [value]="o">
-          <img [src]="getShipLink(o)"
-               class="boatoption"
+          <img class="boatoption"
                height="25px"
-               width="25px">{{Ships.titles[o]}}
+               width="25px"
+               [src]="getShipLink(o)">{{Ships.titles[o]}}
         </mat-option>
       </mat-select>
       <mat-icon (click)="removeCustom(team, i)">cancel</mat-icon>

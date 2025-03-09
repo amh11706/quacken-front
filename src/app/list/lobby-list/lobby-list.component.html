@@ -17,8 +17,8 @@
       </a>
 
       <button mat-button
-              (click)="leaderCard.openLeaders()"
-              class="card">
+              class="card"
+              (click)="leaderCard.openLeaders()">
         <q-leader-card #leaderCard></q-leader-card>
       </button>
 
@@ -52,11 +52,11 @@
         <span id="competition">👑</span>
       </button>
 
-      <a mat-button
-         *ngFor="let l of lobbies | async; trackBy: trackByLobbyId"
-         (click)="join(l, $event)"
+      <a *ngFor="let l of lobbies | async; trackBy: trackByLobbyId"
+         mat-button
+         class="card"
          [href]="'/#/lobby/' + l.id"
-         class="card">
+         (click)="join(l, $event)">
         <q-lobby-card [lobby]="l"></q-lobby-card>
       </a>
     </div>

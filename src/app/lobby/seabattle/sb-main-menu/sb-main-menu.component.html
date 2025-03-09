@@ -2,15 +2,15 @@
   <div *ngIf="ms.statsOpen; else teams">
     <q-stat-end [stats]="ms.lobby?.stats"
                 [columns]="SB_STATS"
-                (closeStats)="ms.statsOpen = false"
-                [rating]=false></q-stat-end>
+                [rating]=false
+                (closeStats)="ms.statsOpen = false"></q-stat-end>
   </div>
   <ng-template #teams>
     <h2>Team Selection</h2>
-    <div id="flexmenu"
-         *ngrxLet="es.open$ as open">
-      <div class="teamwrap"
-           *ngFor="let team of ms.teamPlayers$ | async; let i = index">
+    <div *ngrxLet="es.open$ as open"
+         id="flexmenu">
+      <div *ngFor="let team of ms.teamPlayers$ | async; let i = index"
+           class="teamwrap">
         <div class="team"
              [style.borderColor]="teamColors[i]">
           <div *ngFor="let m of team"
@@ -22,8 +22,8 @@
           </div>
         </div>
         <br>
-        <button mat-raised-button
-                *ngIf="(ms.status | async) === 0"
+        <button *ngIf="(ms.status | async) === 0"
+                mat-raised-button
                 [disabled]="!open || (ws.connected$ | async) === false"
                 (click)="ms.joinTeam(i)">{{ms.myTeam === i ? 'Leave' : 'Join'}}</button>
       </div>
@@ -31,9 +31,9 @@
       <div class="settings">
         <div class="settingRow">
           <button mat-raised-button
-                  [disabled]="!open || ((ms.teamPlayers$ | async)?.length || 0) < 2"
                   color="accent"
                   class="readyButton"
+                  [disabled]="!open || ((ms.teamPlayers$ | async)?.length || 0) < 2"
                   [class.cancel]="ms.ready"
                   (click)="ms.toggleReady()">{{readyText()}}</button>
           <q-setting *ngIf="ss.admin$ | async"

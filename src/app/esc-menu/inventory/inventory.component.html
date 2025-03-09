@@ -9,8 +9,8 @@
   </div>
   <br>
   <mat-form-field *ngIf="inv">
-    <mat-select [(value)]="inv.sort"
-                placeholder="Sort By"
+    <mat-select placeholder="Sort By"
+                [(value)]="inv.sort"
                 (selectionChange)="sort($event.value)">
       <mat-option value="id">Item Id</mat-option>
       <mat-option value="t">Item Type</mat-option>
@@ -28,8 +28,9 @@
 
   <div *ngIf="inventory$ | async as inv; else loading"
        class="content">
-    <div class="item"
-         *ngFor="let i of inv"
+    <div *ngFor="let i of inv"
+         class="item"
+         draggable="true"
          [title]="i.n"
          [class.dropable]="i.q < 250 && i.s !== dragging?.s && dragging?.id === i.id"
          [class.new]="i.f"
@@ -38,7 +39,6 @@
          (dragstart)="dragging = i"
          (dragend)="dragging = undefined"
          (drop)="drop($event, i)"
-         draggable="true"
          (dragover)="i.q < 250 && dragging?.s !== i.s ? $event.preventDefault() : null">
       <img [src]="'/assets/items/'+i.id+'.png'">
       <span class="quantity">{{i.q}}</span>

@@ -1,7 +1,7 @@
-<div [qDrag]
-	 [bindToWindow]="true"
-	 class="container noselect"
-	 id="timer">
+<div class="container noselect"
+	 id="timer"
+	 [qDrag]
+	 [bindToWindow]="true">
 	<p id="turncount">{{time}}</p>
 	<ng-container *ngFor="let type of treasure; let i = index">
 		<p>

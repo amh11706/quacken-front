@@ -15,27 +15,27 @@
 <div id="replayControl"
      class="">
   <button mat-icon-button
-          (click)="prevTurn()"
-          matTooltip="Previous turn">
+          matTooltip="Previous turn"
+          (click)="prevTurn()">
     <mat-icon>skip_previous</mat-icon>
   </button>
   <button mat-icon-button
-          (click)="togglePlay()"
-          [matTooltip]="tickInterval ? 'Pause' : 'Play'">
+          [matTooltip]="tickInterval ? 'Pause' : 'Play'"
+          (click)="togglePlay()">
     <mat-icon>{{ tickInterval ? 'pause' : 'play_arrow'}}</mat-icon>
   </button>
   <button mat-icon-button
-          (click)="nextTurn()"
-          matTooltip="Next turn">
+          matTooltip="Next turn"
+          (click)="nextTurn()">
     <mat-icon>skip_next</mat-icon>
   </button>
 
   <mat-slider [min]="0"
               [color]="'accent'"
               [max]="messages.length-1">
-    <input matSliderThumb
+    <input #slider
+           matSliderThumb
            [value]="tick"
-           (input)="playTo(slider.valueAsNumber)"
-           #slider>
+           (input)="playTo(slider.valueAsNumber)">
   </mat-slider>
 </div>

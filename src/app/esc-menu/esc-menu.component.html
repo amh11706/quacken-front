@@ -1,56 +1,50 @@
 <button mat-icon-button
         id="toggleesc"
-        (click)="es.toggle()"
-        matTooltip="Menu (esc)">
-  <mat-icon [ngStyle]="{
-            'border':'1px solid black',
-            'border-radius':'4px',
-            'color':'white', 
-            'background-color':'rgb(67, 67, 67)',
-            'width':'30px'
-        }">menu</mat-icon>
+        matTooltip="Menu (esc)"
+        (click)="es.toggle()">
+  <mat-icon class="esc-icon">menu</mat-icon>
 </button>
-<div id="backgroundframe"
-     *ngIf="es.open$ | async as open">
+<div *ngIf="es.open$ | async as open"
+     id="backgroundframe">
   <div id="side-menu">
     <div id="menuButtons">
       <a mat-button
-         [disabled]="!open"
          class="discord"
          href="https://discord.gg/UVAPZFYrUW"
          target="_blank"
-         matTooltip="Open Discord Server"></a>
-      <a mat-button
+         matTooltip="Open Discord Server"
+         [disabled]="!open"></a>
+      <a *ngIf="es.lobbyComponent"
+         mat-button
          id="lobbyButton"
          href="/#/list"
          matTooltip="Return to Lobby"
-         [disabled]="!open"
-         *ngIf="es.lobbyComponent"
-         class="action">
+         class="action"
+         [disabled]="!open">
         <mat-icon>cancel</mat-icon>
       </a>
       <button mat-button
               id="logoutButton"
               matTooltip="Logout"
-              [disabled]="!open"
               class="action"
+              [disabled]="!open"
               (click)="logout()">
-        <mat-icon [ngStyle]="{'color':'red'}">power_settings_new</mat-icon>
+        <mat-icon [style.color]="'red'">power_settings_new</mat-icon>
       </button>
     </div>
 
     <mat-tab-group id="main-tab"
                    [mat-stretch-tabs]="false"
-                   (selectedIndexChange)="onTabChange($event)"
-                   [selectedIndex]="es.activeTab$ | async">
+                   [selectedIndex]="es.activeTab$ | async"
+                   (selectedIndexChange)="onTabChange($event)">
       <mat-tab label="LOBBY"
                [disabled]="!open">
         <ng-template matTabContent>
           <mat-tab-group id="sub-tab"
+                         mat-align-tabs="center"
                          [mat-stretch-tabs]="false"
                          [selectedIndex]="es.lobbyTab$ | async"
-                         (selectedIndexChange)="onLobbyTabChange($event)"
-                         mat-align-tabs="center">
+                         (selectedIndexChange)="onLobbyTabChange($event)">
             <mat-tab label="Lobby">
               <mat-card>
                 <mat-card-content>
@@ -59,11 +53,11 @@
               </mat-card>
               <ng-container *ngComponentOutlet="$any(es.lobbyComponent); injector: es.lobbyInjector"></ng-container>
             </mat-tab>
-            <mat-tab label="Settings"
-                     *ngIf="ss.lAdminSettings.length">
+            <mat-tab *ngIf="ss.lAdminSettings.length"
+                     label="Settings">
               <ng-template matTabContent>
-                <mat-card id="lobbySettings"
-                          *ngIf="es.open$ | async">
+                <mat-card *ngIf="es.open$ | async"
+                          id="lobbySettings">
                   <div class="settings">
                     <q-setting *ngFor="let s of ss.lAdminSettings"
                                [name]="s"></q-setting>
@@ -71,8 +65,8 @@
                 </mat-card>
               </ng-template>
             </mat-tab>
-            <mat-tab label="Map Selection"
-                     *ngIf="ss.showMapChoice">
+            <mat-tab *ngIf="ss.showMapChoice"
+                     label="Map Selection">
               <ng-template matTabContent>
                 <q-map-list [injector]="es.lobbyInjector"
                             [rankArea]="ss.rankArea"></q-map-list>
@@ -89,8 +83,8 @@
         </ng-template>
       </mat-tab>
 
-      <mat-tab label="INVENTORY"
-               *ngIf="ws.user?.id"
+      <mat-tab *ngIf="ws.user?.id"
+               label="INVENTORY"
                [disabled]="!open">
         <ng-template matTabContent>
           <q-inventory></q-inventory>
@@ -112,8 +106,8 @@
       </mat-tab>
     </mat-tab-group>
 
-    <div id="chatframe"
-         *ngIf="open">
+    <div *ngIf="open"
+         id="chatframe">
       <q-chat [disabled]="!open"></q-chat>
     </div>
   </div>
