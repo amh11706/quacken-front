@@ -4,7 +4,7 @@ import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bott
 @Component({
   selector: 'q-map-filter',
   templateUrl: './map-filter.component.html',
-  styleUrls: ['./map-filter.component.scss'],
+  styleUrl: './map-filter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

@@ -87,7 +87,7 @@ const MapSizes = {
 @Component({
   selector: 'q-map-list',
   templateUrl: './map-list.component.html',
-  styleUrls: ['./map-list.component.scss'],
+  styleUrl: './map-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

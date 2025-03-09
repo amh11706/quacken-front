@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'q-map-debug',
   templateUrl: './map-debug.component.html',
-  styleUrls: ['./map-debug.component.scss'],
+  styleUrl: './map-debug.component.scss',
   standalone: false,
 })
 export class MapDebugComponent {

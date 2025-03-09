@@ -8,7 +8,7 @@ import { MapOption } from './types';
 @Component({
   selector: 'q-map-card',
   templateUrl: './map-card.component.html',
-  styleUrls: ['./map-card.component.scss'],
+  styleUrl: './map-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

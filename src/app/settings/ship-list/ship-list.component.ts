@@ -30,7 +30,7 @@ export const ShipTypeMap = new Map(ShipTypes.map(s => [s.id, s]));
 @Component({
   selector: 'q-ship-list',
   templateUrl: './ship-list.component.html',
-  styleUrls: ['./ship-list.component.scss'],
+  styleUrl: './ship-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

@@ -9,7 +9,7 @@ export const TeamNames: Readonly<string[]> = ['Defenders', 'Attackers', '2nd Att
 @Component({
   selector: 'q-cade-entry-status',
   templateUrl: './cade-entry-status.component.html',
-  styleUrls: ['./cade-entry-status.component.scss'],
+  styleUrl: './cade-entry-status.component.scss',
   standalone: false,
 })
 export class CadeEntryStatusComponent extends EntryStatusComponent implements OnInit {

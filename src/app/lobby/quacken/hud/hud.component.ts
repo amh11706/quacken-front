@@ -25,7 +25,7 @@ export const weapons = [
 @Component({
   selector: 'q-hud',
   templateUrl: './hud.component.html',
-  styleUrls: ['./hud.component.scss'],
+  styleUrl: './hud.component.scss',
   standalone: false,
 })
 export class HudComponent implements OnInit, OnDestroy {

@@ -4,7 +4,7 @@ import { DBTile } from '../../types';
 @Component({
   selector: 'q-win-conditions',
   templateUrl: './win-conditions.component.html',
-  styleUrls: ['./win-conditions.component.scss'],
+  styleUrl: './win-conditions.component.scss',
   standalone: false,
 })
 export class WinConditionsComponent implements OnChanges {

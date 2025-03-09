@@ -8,7 +8,7 @@ import { CustomEmojis, FindCustomEmoji } from '../../settings/account/account.co
 @Component({
   selector: 'q-input',
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
+  styleUrl: './input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

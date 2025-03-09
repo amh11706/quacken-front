@@ -23,7 +23,7 @@ const LobbySettingGroups: Record<LobbyType, keyof ServerSettingGroup> = {
 @Component({
   selector: 'q-lobby',
   templateUrl: './lobby.component.html',
-  styleUrls: ['./lobby.component.css'],
+  styleUrl: './lobby.component.css',
   standalone: false,
 })
 export class LobbyComponent implements OnInit, OnDestroy {

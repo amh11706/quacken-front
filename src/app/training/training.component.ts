@@ -35,7 +35,7 @@ const shotNames = [
 @Component({
   selector: 'q-training',
   templateUrl: './training.component.html',
-  styleUrls: ['./training.component.scss'],
+  styleUrl: './training.component.scss',
   standalone: false,
 })
 export class TrainingComponent implements OnInit, OnDestroy {

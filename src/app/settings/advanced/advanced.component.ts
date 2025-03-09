@@ -6,7 +6,7 @@ import { DBSetting } from '../types';
 @Component({
   selector: 'q-advanced',
   templateUrl: './advanced.component.html',
-  styleUrls: ['./advanced.component.scss'],
+  styleUrl: './advanced.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

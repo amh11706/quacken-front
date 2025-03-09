@@ -16,7 +16,7 @@ interface JobberSetting extends DBSetting {
 @Component({
   selector: 'q-jobber-quality',
   templateUrl: './jobber-quality.component.html',
-  styleUrls: ['./jobber-quality.component.scss'],
+  styleUrl: './jobber-quality.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

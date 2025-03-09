@@ -11,7 +11,7 @@ import { WsService } from '../../ws/ws.service';
 @Component({
   selector: 'q-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss'],
+  styleUrl: './login-form.component.scss',
   standalone: false,
 })
 export class LoginFormComponent implements AfterViewInit {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
@@ -31,9 +31,9 @@ import { InMessage } from '../../ws/ws-subscribe-types';
     LetDirective,
   ],
   templateUrl: './match-queue.component.html',
-  styleUrls: ['./match-queue.component.scss'],
+  styleUrl: './match-queue.component.scss',
 })
-export class MatchQueueComponent implements OnInit {
+export class MatchQueueComponent implements OnInit, OnDestroy {
   queueLength = new Subject<number>();
   pending = new BehaviorSubject<boolean>(false);
   isGuest = this.ws.user.id === 0;

@@ -9,7 +9,7 @@ import { FriendsService } from '../friends/friends.service';
 @Component({
   selector: 'q-name-search',
   templateUrl: './name-search.component.html',
-  styleUrls: ['./name-search.component.scss'],
+  styleUrl: './name-search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

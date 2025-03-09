@@ -5,7 +5,7 @@ import { Item } from '../../profile/types';
 @Component({
   selector: 'q-split',
   templateUrl: './split.component.html',
-  styleUrls: ['./split.component.css'],
+  styleUrl: './split.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

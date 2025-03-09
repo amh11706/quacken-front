@@ -8,7 +8,7 @@ import { WsService } from '../../ws/ws.service';
 @Component({
   selector: 'q-logout-confirm',
   templateUrl: './logout-confirm.component.html',
-  styleUrls: ['./logout-confirm.component.css'],
+  styleUrl: './logout-confirm.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

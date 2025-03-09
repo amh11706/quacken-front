@@ -8,7 +8,7 @@ import { SbDesc } from '../cadegoose/lobby-type';
 @Component({
   selector: 'q-seabattle',
   templateUrl: './seabattle.component.html',
-  styleUrls: ['./seabattle.component.scss'],
+  styleUrl: './seabattle.component.scss',
   providers: [MainMenuService],
   standalone: false,
 })

@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'q-message',
   templateUrl: './message.component.html',
-  styleUrls: ['./message.component.scss'],
+  styleUrl: './message.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

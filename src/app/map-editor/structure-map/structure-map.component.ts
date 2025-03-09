@@ -6,7 +6,7 @@ import { MapEditor } from '../types';
 @Component({
   selector: 'q-structure-map',
   templateUrl: './structure-map.component.html',
-  styleUrls: ['./structure-map.component.css'],
+  styleUrl: './structure-map.component.css',
   standalone: false,
 })
 export class StructureMapComponent implements OnInit {

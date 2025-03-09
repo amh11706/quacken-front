@@ -9,7 +9,7 @@ import { FriendsService } from '../chat/friends/friends.service';
 @Component({
   selector: 'q-esc-menu',
   templateUrl: './esc-menu.component.html',
-  styleUrls: ['./esc-menu.component.scss'],
+  styleUrl: './esc-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

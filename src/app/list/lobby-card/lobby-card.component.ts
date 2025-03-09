@@ -5,7 +5,7 @@ import { LobbyTypes } from '../../lobby/cadegoose/lobby-type';
 @Component({
   selector: 'q-lobby-card',
   templateUrl: './lobby-card.component.html',
-  styleUrls: ['./lobby-card.component.scss'],
+  styleUrl: './lobby-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

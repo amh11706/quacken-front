@@ -11,7 +11,7 @@ import { ShipTypeMap } from '../../settings/ship-list/ship-list.component';
   selector: 'q-boat-button',
   imports: [CommonModule, MatButtonModule, MatTooltipModule, MatIconModule],
   templateUrl: './boat-button.component.html',
-  styleUrls: ['./boat-button.component.scss'],
+  styleUrl: './boat-button.component.scss',
 })
 export class BoatButtonComponent {
   @Input() boat = new Boat('');

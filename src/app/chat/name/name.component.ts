@@ -24,7 +24,7 @@ const BotRegex = /Bot\d{1,4}/;
 @Component({
   selector: 'q-name',
   templateUrl: './name.component.html',
-  styleUrls: ['./name.component.css'],
+  styleUrl: './name.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

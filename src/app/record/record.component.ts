@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'q-record',
   templateUrl: './record.component.html',
-  styleUrls: ['./record.component.scss'],
+  styleUrl: './record.component.scss',
   standalone: false,
 })
 export class RecordComponent implements OnInit {

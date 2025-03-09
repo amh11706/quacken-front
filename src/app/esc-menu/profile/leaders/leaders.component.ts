@@ -16,7 +16,7 @@ export const TierTitles = [
 @Component({
   selector: 'q-leaders',
   templateUrl: './leaders.component.html',
-  styleUrls: ['./leaders.component.css'],
+  styleUrl: './leaders.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

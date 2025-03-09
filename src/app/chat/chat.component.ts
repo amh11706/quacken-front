@@ -10,7 +10,7 @@ import { Invite, Message } from './types';
 @Component({
   selector: 'q-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css'],
+  styleUrl: './chat.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

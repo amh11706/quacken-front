@@ -8,7 +8,7 @@ import { KeyBindingService } from '../key-binding.service';
 @Component({
   selector: 'q-binder',
   templateUrl: './binder.component.html',
-  styleUrls: ['./binder.component.scss'],
+  styleUrl: './binder.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

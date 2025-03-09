@@ -17,7 +17,7 @@ export const TileTypes = [
 @Component({
   selector: 'q-tile-set',
   templateUrl: './tile-set.component.html',
-  styleUrls: ['./tile-set.component.scss'],
+  styleUrl: './tile-set.component.scss',
   standalone: false,
 })
 export class TileSetComponent implements OnInit, OnDestroy {

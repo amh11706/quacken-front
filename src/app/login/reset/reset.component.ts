@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'q-reset',
   templateUrl: './reset.component.html',
-  styleUrls: ['./reset.component.scss'],
+  styleUrl: './reset.component.scss',
   standalone: false,
 })
 export class ResetComponent implements OnInit, OnDestroy {

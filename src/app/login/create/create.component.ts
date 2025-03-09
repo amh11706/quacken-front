@@ -10,7 +10,7 @@ import { PrivacyComponent } from '../privacy/privacy.component';
 @Component({
   selector: 'q-create',
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.scss'],
+  styleUrl: './create.component.scss',
   standalone: false,
 })
 export class CreateComponent {

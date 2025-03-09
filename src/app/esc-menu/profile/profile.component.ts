@@ -13,7 +13,7 @@ import { ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
 @Component({
   selector: 'q-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
+  styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

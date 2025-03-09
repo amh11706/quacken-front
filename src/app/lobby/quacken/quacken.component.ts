@@ -20,7 +20,7 @@ const ownerSettings: SettingName[] = [
 @Component({
   selector: 'q-quacken',
   templateUrl: './quacken.component.html',
-  styleUrls: ['./quacken.component.css'],
+  styleUrl: './quacken.component.css',
   standalone: false,
 })
 export class QuackenComponent implements OnInit, OnDestroy {

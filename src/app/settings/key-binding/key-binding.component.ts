@@ -21,7 +21,7 @@ type KeyBindingsEditMode = Record<keyof KeyBindings, KeyBindingEditMode[]>;
 @Component({
   selector: 'q-key-binding',
   templateUrl: './key-binding.component.html',
-  styleUrls: ['./key-binding.component.scss'],
+  styleUrl: './key-binding.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

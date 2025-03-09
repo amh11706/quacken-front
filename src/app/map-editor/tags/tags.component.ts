@@ -9,7 +9,7 @@ import { Observable, map, startWith } from 'rxjs';
 @Component({
   selector: 'q-tags',
   templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.scss'],
+  styleUrl: './tags.component.scss',
   standalone: false,
 })
 export class TagsComponent {

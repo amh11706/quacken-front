@@ -19,7 +19,7 @@ const ownerSettings: SettingList = [
 @Component({
   selector: 'q-flaggames',
   templateUrl: './flaggames.component.html',
-  styleUrls: ['./flaggames.component.scss'],
+  styleUrl: './flaggames.component.scss',
   providers: [MainMenuService],
   standalone: false,
 })

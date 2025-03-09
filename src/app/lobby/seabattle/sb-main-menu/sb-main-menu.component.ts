@@ -5,7 +5,7 @@ import { SB_STATS } from '../sb-stats/sb-stats.component';
 @Component({
   selector: 'q-sb-main-menu',
   templateUrl: './sb-main-menu.component.html',
-  styleUrls: ['./sb-main-menu.component.scss'],
+  styleUrl: './sb-main-menu.component.scss',
   standalone: false,
 })
 export class SbMainMenuComponent extends MainMenuComponent {

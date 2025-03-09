@@ -5,7 +5,7 @@ import { TeamPlayer } from '../../types';
 @Component({
   selector: 'q-team-view',
   templateUrl: './teams.component.html',
-  styleUrls: ['./teams.component.scss'],
+  styleUrl: './teams.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

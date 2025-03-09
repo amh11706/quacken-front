@@ -8,7 +8,7 @@ import { Sounds, SoundService } from '../sound.service';
 @Component({
   selector: 'q-settings',
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css'],
+  styleUrl: './settings.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

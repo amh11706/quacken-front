@@ -37,7 +37,7 @@ type FlagMap = Map<string, Turn['flags'][0]>;
 @Component({
   selector: 'q-twod-render',
   templateUrl: './twod-render.component.html',
-  styleUrls: ['./twod-render.component.scss'],
+  styleUrl: './twod-render.component.scss',
   standalone: false,
 })
 export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {

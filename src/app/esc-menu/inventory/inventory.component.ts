@@ -10,7 +10,7 @@ import { Item, Inventory } from '../profile/types';
 @Component({
   selector: 'q-inventory',
   templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.scss'],
+  styleUrl: './inventory.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

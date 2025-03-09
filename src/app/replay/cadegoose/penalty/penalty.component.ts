@@ -20,7 +20,7 @@ export const Penalties = [
 @Component({
   selector: 'q-penalty',
   templateUrl: './penalty.component.html',
-  styleUrls: ['./penalty.component.scss'],
+  styleUrl: './penalty.component.scss',
   standalone: false,
 })
 export class PenaltyComponent {

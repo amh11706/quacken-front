@@ -23,7 +23,7 @@ const joinMessage = 'Match replay: Use the replay controls to see a previous mat
 @Component({
   selector: 'q-replay',
   templateUrl: './replay.component.html',
-  styleUrls: ['./replay.component.scss'],
+  styleUrl: './replay.component.scss',
   standalone: false,
 })
 export class ReplayComponent implements OnInit, OnDestroy {

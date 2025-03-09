@@ -19,7 +19,7 @@ interface RenderSetting {
 @Component({
   selector: 'q-map-editor',
   templateUrl: './map-editor.component.html',
-  styleUrls: ['./map-editor.component.css'],
+  styleUrl: './map-editor.component.css',
   standalone: false,
 })
 export class MapEditorComponent implements OnInit, OnDestroy {

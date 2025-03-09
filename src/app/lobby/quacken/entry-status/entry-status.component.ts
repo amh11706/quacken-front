@@ -9,7 +9,7 @@ import { CadeLobby } from '../../cadegoose/types';
 @Component({
   selector: 'q-entry-status',
   templateUrl: './entry-status.component.html',
-  styleUrls: ['./entry-status.component.css'],
+  styleUrl: './entry-status.component.css',
   standalone: false,
 })
 export class EntryStatusComponent implements OnInit, OnDestroy {

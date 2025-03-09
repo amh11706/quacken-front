@@ -37,7 +37,7 @@ export const CadeSettings: SettingList = [
 @Component({
   selector: 'q-cadegoose',
   templateUrl: './cadegoose.component.html',
-  styleUrls: ['./cadegoose.component.scss'],
+  styleUrl: './cadegoose.component.scss',
   providers: [MainMenuService],
   standalone: false,
 })

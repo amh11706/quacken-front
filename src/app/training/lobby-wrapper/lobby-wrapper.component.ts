@@ -7,7 +7,7 @@ import { ReplayWrapperComponent } from '../../replay/lobby-wrapper/lobby-wrapper
 @Component({
   selector: 'q-lobby-wrapper',
   templateUrl: './lobby-wrapper.component.html',
-  styleUrls: ['./lobby-wrapper.component.scss'],
+  styleUrl: './lobby-wrapper.component.scss',
   providers: [WsService, BoatsService, TurnService],
   standalone: false,
 })

@@ -6,7 +6,7 @@ import { StatRow, Stat } from '../../cadegoose/stats/types';
 @Component({
   selector: 'q-sb-entry-status',
   templateUrl: './sb-entry-status.component.html',
-  styleUrls: ['./sb-entry-status.component.scss'],
+  styleUrl: './sb-entry-status.component.scss',
   standalone: false,
 })
 export class SbEntryStatusComponent extends CadeEntryStatusComponent implements OnInit {

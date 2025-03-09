@@ -11,7 +11,7 @@ import { LobbyTypes, RankArea, LobbyTypeInfo, ActiveLobbyTypes } from '../../lob
 @Component({
   selector: 'q-create',
   templateUrl: './create.component.html',
-  styleUrls: ['./create.component.scss'],
+  styleUrl: './create.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

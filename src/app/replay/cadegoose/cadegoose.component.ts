@@ -24,7 +24,7 @@ import { LobbyService } from '../../lobby/lobby.service';
 @Component({
   selector: 'q-replay-cadegoose',
   templateUrl: './cadegoose.component.html',
-  styleUrls: ['./cadegoose.component.scss'],
+  styleUrl: './cadegoose.component.scss',
   standalone: false,
 })
 export class CadegooseComponent implements OnInit, OnDestroy {

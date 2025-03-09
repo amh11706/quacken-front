@@ -12,7 +12,7 @@ import { MainMenuService } from './main-menu.service';
 @Component({
   selector: 'q-main-menu',
   templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.scss'],
+  styleUrl: './main-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

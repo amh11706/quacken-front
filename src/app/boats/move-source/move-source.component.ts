@@ -5,7 +5,7 @@ import { Tokens } from '../move-input/move-input.component';
 @Component({
   selector: 'q-move-source',
   templateUrl: './move-source.component.html',
-  styleUrls: ['./move-source.component.scss'],
+  styleUrl: './move-source.component.scss',
   standalone: false,
 })
 export class MoveSourceComponent implements OnDestroy {

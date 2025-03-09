@@ -10,7 +10,7 @@ import { DBSetting, ServerSettingMap } from '../../settings/types';
 @Component({
   selector: 'q-competition',
   templateUrl: './competition.component.html',
-  styleUrls: ['./competition.component.scss'],
+  styleUrl: './competition.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

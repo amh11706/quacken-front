@@ -20,7 +20,7 @@ export class Pos {
 @Component({
   selector: 'q-map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css'],
+  styleUrl: './map.component.css',
   standalone: false,
 })
 export class MapComponent {

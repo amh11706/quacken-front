@@ -64,7 +64,7 @@ const obstacleModels: Record<number, ObstacleConfig> = {
 @Component({
   selector: 'q-threed-render',
   templateUrl: './threed-render.component.html',
-  styleUrls: ['./threed-render.component.scss'],
+  styleUrl: './threed-render.component.scss',
   providers: [BoatsService],
 })
 export class ThreedRenderComponent implements OnInit, AfterViewInit, OnDestroy {

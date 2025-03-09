@@ -74,7 +74,7 @@ export function getManeuverIcon(id: number): string {
 @Component({
   selector: 'q-maneuver-source',
   templateUrl: './maneuver-source.component.html',
-  styleUrls: ['./maneuver-source.component.scss'],
+  styleUrl: './maneuver-source.component.scss',
   standalone: false,
 })
 export class ManeuverSourceComponent {

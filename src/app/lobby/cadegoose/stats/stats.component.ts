@@ -6,7 +6,7 @@ import { DefaultExtraColumns, DefaultStatColumns } from '../main-menu/main-menu.
 @Component({
   selector: 'q-stats',
   templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.scss'],
+  styleUrl: './stats.component.scss',
   standalone: false,
 })
 export class StatsComponent implements OnChanges {

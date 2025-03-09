@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 @Component({
   selector: 'q-rating',
   templateUrl: './rating.component.html',
-  styleUrls: ['./rating.component.scss'],
+  styleUrl: './rating.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

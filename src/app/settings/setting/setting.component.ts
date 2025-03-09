@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnDestroy, Injector } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy, OnDestroy, Injector, input, effect } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,18 +34,15 @@ export function getShipLink(id: number): string {
 @Component({
   selector: 'q-setting',
   templateUrl: './setting.component.html',
-  styleUrls: ['./setting.component.css'],
+  styleUrl: './setting.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class SettingComponent implements OnDestroy {
-  @Input() disabled = false;
-  @Input() set name(value: SettingName) {
-    this.setting = Settings[value] || {};
-    void this.fetch();
-  }
+  readonly disabled = input(false);
+  readonly name = input.required<SettingName>();
 
-  @Output() valueChange = new EventEmitter<number>();
+  @Output() readonly valueChange = new EventEmitter<number>();
   private sub = new Subscription();
 
   setting = {} as SettingInput;
@@ -57,7 +54,12 @@ export class SettingComponent implements OnDestroy {
     private ws: WsService,
     private dialog: MatDialog,
     private injector: Injector,
-  ) { }
+  ) {
+    effect(() => {
+      this.setting = Settings[this.name()];
+      void this.fetch();
+    });
+  }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();

@@ -34,7 +34,7 @@ export function FindCustomEmoji(name: string): EmojiData | string {
 @Component({
   selector: 'q-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss'],
+  styleUrl: './account.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

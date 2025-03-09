@@ -28,7 +28,7 @@
     <mat-label>{{setting.label}}</mat-label>
     <mat-select [value]="settingValue.stream | async"
                 (selectionChange)="save($event.value)"
-                [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
+                [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false">
       <ng-container *ngFor="let option of setting.options; let i = index">
         <mat-option *ngIf="option"
                     [value]="i">{{option}}</mat-option>
@@ -58,9 +58,9 @@
               [max]="setting.max"
               [step]="setting.step"
               [color]="'accent'"
-              [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
+              [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false">
     <input matSliderThumb
-           [disabled]="disabled || setting.admin && (ss.admin$ | async) === false"
+           [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
            [value]="settingValue.stream | async"
            (valueChange)="save($event)"
            #slider>
@@ -78,7 +78,7 @@
   <mat-checkbox [checked]="!!(settingValue.stream | async)"
                 (change)="save(+$event.checked)"
                 [class.nowrap]="settingValue.data?.icon"
-                [disabled]="disabled || setting.admin && (ss.admin$ | async) === false">
+                [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false">
     <span class="checkbox-text">{{setting.label}}</span>&nbsp;
     <mat-icon *ngIf="settingValue.data?.icon as icon"
               [color]="$any(icon).color">{{$any(icon).name}}</mat-icon>

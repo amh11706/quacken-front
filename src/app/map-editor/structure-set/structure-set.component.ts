@@ -6,7 +6,7 @@ import { DBTile } from '../types';
 @Component({
   selector: 'q-structure-set',
   templateUrl: './structure-set.component.html',
-  styleUrls: ['./structure-set.component.scss'],
+  styleUrl: './structure-set.component.scss',
   standalone: false,
 })
 export class StructureSetComponent extends TileSetComponent implements OnInit, OnDestroy {

@@ -15,7 +15,7 @@ export interface Tokens {
 @Component({
   selector: 'q-move-input',
   templateUrl: './move-input.component.html',
-  styleUrls: ['./move-input.component.scss'],
+  styleUrl: './move-input.component.scss',
   standalone: false,
 })
 export class MoveInputComponent implements OnInit, OnDestroy {

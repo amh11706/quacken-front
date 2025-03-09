@@ -7,7 +7,7 @@ import { DefaultExtraColumns, DefaultStatColumns } from '../main-menu/main-menu.
 @Component({
   selector: 'q-stat-end',
   templateUrl: './stat-end.component.html',
-  styleUrls: ['./stat-end.component.scss'],
+  styleUrl: './stat-end.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
