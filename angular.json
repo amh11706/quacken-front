@@ -73,7 +73,7 @@
             },
             "dev": {
               "outputPath": {
-                "base": "C:/Users/Me/code/go/quackgo/dist/",
+                "base": "../../go/src/github.com/amh11706/quackgo/dist/",
                 "browser": ""
               },
               "fileReplacements": [
