@@ -1,7 +1,7 @@
 import * as TWEEN from '@tweenjs/tween.js';
-import { BoatRender3d, moveEase } from '../../boat-render';
-import { Point } from './gu-boat';
+import { moveEase, Point } from './gu-boat';
 import { Clutter } from '../../../quacken/boats/types';
+import { AnimationService } from '../animation.service';
 
 export class MovableClutter implements Clutter {
   id?: number;
@@ -20,7 +20,7 @@ export class MovableClutter implements Clutter {
   coords: Point;
   private activeMovement: Promise<void[]> | undefined;
 
-  constructor(c: Clutter) {
+  constructor(c: Clutter, private as: AnimationService) {
     Object.assign(this, c);
     this.coords = new Point().fromPosition(c);
     this.pos = { x: c.x, y: c.y };
@@ -41,10 +41,10 @@ export class MovableClutter implements Clutter {
     const p = [
       new Promise<void | { x: number, y: number }>(resolve => {
         if (startTime && this.transitions[0]) {
-          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
+          new TWEEN.Tween(this.pos, this.as.tweens)
             .easing(moveEase[this.transitions[0]]!)
-            .to({ x }, 10000 / BoatRender3d.speed)
-            .delay(3000 / BoatRender3d.speed)
+            .to({ x }, 10000 / this.as.speed.value)
+            .delay(3000 / this.as.speed.value)
             .start(startTime)
             .onUpdate(() => this.coords.fromPosition(this.pos))
             .onComplete(resolve);
@@ -58,10 +58,10 @@ export class MovableClutter implements Clutter {
 
       new Promise<void | { x: number, y: number }>(resolve => {
         if (startTime && this.transitions[1]) {
-          new TWEEN.Tween(this.pos, BoatRender3d.tweens)
+          new TWEEN.Tween(this.pos, this.as.tweens)
             .easing(moveEase[this.transitions[1]]!)
-            .to({ y }, 10000 / BoatRender3d.speed)
-            .delay(3000 / BoatRender3d.speed)
+            .to({ y }, 10000 / this.as.speed.value)
+            .delay(3000 / this.as.speed.value)
             .start(startTime)
             .onUpdate(() => this.coords.fromPosition(this.pos))
             .onComplete(resolve);

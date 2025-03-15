@@ -6,11 +6,11 @@ import { InCmd, OutCmd } from '../../../ws/ws-messages';
 import { WsService } from '../../../ws/ws.service';
 import { BoatStatus, Clutter, Turn } from './types';
 import { Sounds, SoundService } from '../../../sound.service';
-import { BoatRender3d } from '../../cadegoose/boat-render';
 import { JobQueue } from '../../cadegoose/job-queue';
 import { Boat } from './boat';
 import { SettingsService } from '../../../settings/settings.service';
 import { BoatsService } from './boats.service';
+import { AnimationService, PlayState } from '../../cadegoose/twod-render/animation.service';
 
 interface BoatRender {
   update(animate: boolean, trigger?: () => void): Promise<void>;
@@ -43,6 +43,7 @@ export class TurnService implements OnDestroy {
     private ss: SettingsService,
     private sound: SoundService,
     private boatsService: BoatsService,
+    private as: AnimationService,
   ) {
     this.initSubs();
     document.addEventListener('visibilitychange', this.visibilityChange);
@@ -73,8 +74,8 @@ export class TurnService implements OnDestroy {
 
   skipToEnd(requestSync = true) {
     this.worker.clearJobs();
-    BoatRender3d.tweens.update(Infinity);
-    BoatRender3d.tweens.removeAll();
+    this.as.tweens.update(Infinity);
+    this.as.tweens.removeAll();
     clearTimeout(this.animateTimeout);
     delete this.animateTimeout;
     this.boatsService.resetBoats();
@@ -83,7 +84,7 @@ export class TurnService implements OnDestroy {
   }
 
   protected handleTurn(turn: Turn): void {
-    if (BoatRender3d.paused) return;
+    if (this.as.playState() === PlayState.Paused) return;
     if (this.animating) return;
     if (this.animateTimeout) {
       clearTimeout(this.animateTimeout);
@@ -132,7 +133,7 @@ export class TurnService implements OnDestroy {
     void this.worker.addJob(async () => {
       await new Promise<void>(resolve => {
         const start = new Date().valueOf();
-        new Tween({}, BoatRender3d.tweens).to({}, 30000 / this.speed).onComplete(() => resolve()).start(start);
+        new Tween({}, this.as.tweens).to({}, 30000 / this.speed).onComplete(() => resolve()).start(start);
       });
     });
     void this.worker.addJob(() => {
@@ -148,14 +149,14 @@ export class TurnService implements OnDestroy {
     if (step % 2 !== 1) return Promise.resolve();
     return new Promise(resolve => {
       const start = new Date().valueOf();
-      new Tween({}, BoatRender3d.tweens).to({}, 7000 / this.speed).onComplete(() => resolve()).start(start);
+      new Tween({}, this.as.tweens).to({}, 7000 / this.speed).onComplete(() => resolve()).start(start);
     });
   }
 
   private _playTurn(step: number) {
     if (!this.turn) return;
     const startTime = new Date().valueOf();
-    BoatRender3d.tweenProgress = startTime;
+    this.as.tweenProgress = startTime;
 
     if (step === 4) this.boatsService.resetMymoves();
     const promises: Promise<unknown>[] = [];
@@ -196,8 +197,8 @@ export class TurnService implements OnDestroy {
     this.sortBoats();
     // set a minimum time for the step animation
     promises.push(new Promise(resolve => {
-      new Tween({}, BoatRender3d.tweens)
-        .to({}, 2000 / BoatRender3d.speed)
+      new Tween({}, this.as.tweens)
+        .to({}, 2000 / this.speed)
         .onComplete(resolve)
         .start(startTime);
     }));

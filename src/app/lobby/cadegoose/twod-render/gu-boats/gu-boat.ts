@@ -3,10 +3,26 @@ import * as TWEEN from '@tweenjs/tween.js';
 import { Boat } from '../../../../lobby/quacken/boats/boat';
 import { SpriteData, Orientation } from '../sprite';
 import { Boats } from './objects';
-import { BoatRender3d, TeamColors, moveEase } from '../../boat-render';
 import { Team } from '../../../quacken/boats/types';
 import { FlagColorOffsets } from './gu-boats.component';
 import { JobQueue } from '../../job-queue';
+import { AnimationService } from '../animation.service';
+
+export const moveEase: ((amount: number) => number)[] = [
+  () => 0,
+  TWEEN.Easing.Linear.None,
+  TWEEN.Easing.Quadratic.In,
+  TWEEN.Easing.Quadratic.Out,
+  TWEEN.Easing.Linear.None,
+];
+
+export const TeamColors: Readonly<[number, number, number][]> = [
+  [146, 236, 30], // green
+  [236, 30, 30], // red
+  [255, 165, 0], // orange
+  [255, 0, 255], // magenta
+  [184, 207, 225], // light blue
+];
 
 // pixel coordinates relative to top left of canvas
 export class Point {
@@ -56,7 +72,7 @@ export class GuBoat {
 
   private worker = new JobQueue();
 
-  constructor(public boat: Boat) {
+  constructor(public boat: Boat, private as: AnimationService) {
     this.pos = { ...boat.pos };
     this.rotateDeg = boat.face;
     this.coords = new Point().fromPosition(boat.pos);
@@ -172,19 +188,19 @@ export class GuBoat {
       new Promise<void | { x: number, y: number }>(resolve => {
         const offsetX = decodeX[crunchDir];
         if (startTime && offsetX) {
-          new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
-            .to({ x: x + offsetX }, 5000 / BoatRender3d.speed)
-            .delay(3500 / BoatRender3d.speed)
-            .repeatDelay(500 / BoatRender3d.speed)
+          new TWEEN.Tween(this.boat.pos, this.as.tweens)
+            .to({ x: x + offsetX }, 5000 / this.as.speed.value)
+            .delay(3500 / this.as.speed.value)
+            .repeatDelay(500 / this.as.speed.value)
             .repeat(1).yoyo(true)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else if (startTime && transitions[0]) {
-          new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
+          new TWEEN.Tween(this.boat.pos, this.as.tweens)
             .easing(moveEase[transitions[0]]!)
-            .to({ x }, 10000 / BoatRender3d.speed)
-            .delay(3000 / BoatRender3d.speed)
+            .to({ x }, 10000 / this.as.speed.value)
+            .delay(3000 / this.as.speed.value)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
@@ -199,19 +215,19 @@ export class GuBoat {
       new Promise<void | { x: number, y: number }>(resolve => {
         const offsetY = decodeY[crunchDir];
         if (startTime && offsetY) {
-          new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
-            .to({ y: y + offsetY }, 5000 / BoatRender3d.speed)
-            .delay(3500 / BoatRender3d.speed)
-            .repeatDelay(500 / BoatRender3d.speed)
+          new TWEEN.Tween(this.boat.pos, this.as.tweens)
+            .to({ y: y + offsetY }, 5000 / this.as.speed.value)
+            .delay(3500 / this.as.speed.value)
+            .repeatDelay(500 / this.as.speed.value)
             .repeat(1).yoyo(true)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
         } else if (startTime && transitions[1]) {
-          new TWEEN.Tween(this.boat.pos, BoatRender3d.tweens)
+          new TWEEN.Tween(this.boat.pos, this.as.tweens)
             .easing(moveEase[transitions[1]]!)
-            .to({ y }, 10000 / BoatRender3d.speed)
-            .delay(3000 / BoatRender3d.speed)
+            .to({ y }, 10000 / this.as.speed.value)
+            .delay(3000 / this.as.speed.value)
             .start(startTime)
             .onUpdate(() => this.coords?.fromPosition(this.boat.pos))
             .onComplete(resolve);
@@ -256,10 +272,10 @@ export class GuBoat {
       return promises;
     }
 
-    const normalRotate = new TWEEN.Tween(this, BoatRender3d.tweens)
+    const normalRotate = new TWEEN.Tween(this, this.as.tweens)
       .easing(TWEEN.Easing.Linear.None)
-      .to({ rotateDeg: face }, 8000 / BoatRender3d.speed)
-      .delay(3000 / BoatRender3d.speed)
+      .to({ rotateDeg: face }, 8000 / this.as.speed.value)
+      .delay(3000 / this.as.speed.value)
       .start(startTime)
       .onUpdate(() => this.updateImage());
 
@@ -275,12 +291,12 @@ export class GuBoat {
 
     // rotate counter clockwise to the nearest straight down position before sinking
     const targetRotation = face < 225 ? 225 - 360 : 225;
-    const timePerDegree = 8000 / BoatRender3d.speed / 90;
+    const timePerDegree = 8000 / this.as.speed.value / 90;
     const duration = Math.abs(this.rotateDeg - targetRotation) * timePerDegree;
-    const sinkLineup = new TWEEN.Tween(this, BoatRender3d.tweens)
+    const sinkLineup = new TWEEN.Tween(this, this.as.tweens)
       .easing(TWEEN.Easing.Linear.None)
       .to({ rotateDeg: targetRotation }, duration)
-      .delay(15000 / BoatRender3d.speed)
+      .delay(15000 / this.as.speed.value)
       .start(startTime)
       .onUpdate(() => this.updateImage())
       .onComplete(() => {
@@ -291,8 +307,8 @@ export class GuBoat {
 
     // sink animation
     const sinkFrame = { frame: 0 };
-    const frameTime = 1000 / BoatRender3d.speed;
-    sinkLineup.chain(new TWEEN.Tween(sinkFrame, BoatRender3d.tweens)
+    const frameTime = 1000 / this.as.speed.value;
+    sinkLineup.chain(new TWEEN.Tween(sinkFrame, this.as.tweens)
       .easing(TWEEN.Easing.Linear.None)
       .to({ frame: 49 }, frameTime * 50)
       .onUpdate(() => {

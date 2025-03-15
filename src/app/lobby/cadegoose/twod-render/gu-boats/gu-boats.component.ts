@@ -9,6 +9,7 @@ import { MovableClutter } from './clutter';
 import { Clutter, Turn } from '../../../quacken/boats/types';
 import { BoatsService } from '../../../quacken/boats/boats.service';
 import { TurnService } from '../../../quacken/boats/turn.service';
+import { AnimationService } from '../animation.service';
 
 export const FlagColorOffsets: Readonly<Record<number, number>> = {
   0: 3,
@@ -80,11 +81,12 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
     private el: ElementRef,
     private boats: BoatsService,
     private turn: TurnService,
+    private as: AnimationService,
   ) { }
 
   ngOnInit(): void {
     this.subs.add(this.boats.myBoat$.subscribe(b => {
-      if (b.isMe && !this.boatRenders.has(b.id)) this.boatRenders.set(b.id, new GuBoat(b));
+      if (b.isMe && !this.boatRenders.has(b.id)) this.boatRenders.set(b.id, new GuBoat(b, this.as));
       GuBoat.myTeam = b.team ?? 99;
       this.boatRenders.forEach(r => {
         void r.updateTeam();
@@ -159,7 +161,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
         Object.assign(oldClutter, u, { p: oldClutter.p });
         void oldClutter.updatePos(startTime, u.x, u.y).then(() => { oldClutter.p = u.p; });
       } else {
-        this.clutter.push(new MovableClutter(u));
+        this.clutter.push(new MovableClutter(u, this.as));
       }
       if (!u.dis) continue;
       const fireSound = CannonSounds[u.t - 2] || Sounds.CannonFireBig;
@@ -206,7 +208,7 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
 
     const newRenders = new Map<number, GuBoat>();
     for (const b of boats) {
-      const newBoat = new GuBoat(b);
+      const newBoat = new GuBoat(b, this.as);
       newRenders.set(b.id, newBoat);
       if (this.boatRenders.has(b.id)) {
         const old = this.boatRenders.get(b.id)!;

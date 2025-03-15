@@ -32,13 +32,13 @@
     "dayjs": "^1.11.10",
     "ng-table-virtual-scroll": "^1.6.0",
     "rxjs": "7.8.1",
-    "three": "^0.133.1"
+    "stats.js": "^0.17.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.0",
     "@angular/cli": "^19.2.0",
     "@angular/compiler-cli": "^19.2.0",
-    "@types/three": "^0.133.1",
+    "@types/stats.js": "^0.17.3",
     "angular-eslint": "^19.2.0",
     "eslint": "^9.20.0",
     "eslint-plugin-promise": "^7.2.1",

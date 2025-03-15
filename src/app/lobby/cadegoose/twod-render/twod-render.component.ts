@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, NgZone, AfterViewInit, ChangeDetectorRef, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit, ChangeDetectorRef, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter, effect } from '@angular/core';
 import { Subscription } from 'rxjs';
-import Stats from 'three/examples/jsm/libs/stats.module';
+import Stats from 'stats.js';
 
 import { SettingsService } from '../../../settings/settings.service';
 import { InCmd, Internal } from '../../../ws/ws-messages';
@@ -11,13 +11,13 @@ import { BigRockData } from './objects/big_rock';
 import { SmallRockData } from './objects/small_rock';
 import { FlagData } from './objects/flags';
 import { GuBoat, Point, Position } from './gu-boats/gu-boat';
-import { BoatRender3d } from '../boat-render';
 import { MapComponent } from '../../../map-editor/map/map.component';
 import { MapEditor, MapTile } from '../../../map-editor/types';
 import { Turn } from '../../quacken/boats/types';
 import { CadeLobby } from '../types';
 import { BoatsService } from '../../quacken/boats/boats.service';
 import { LobbyService } from '../../lobby.service';
+import { AnimationService } from './animation.service';
 
 export type TileEvent = MouseEvent & { tile: Position };
 type flagIndex = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14';
@@ -74,10 +74,6 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     return pos.y > 32 || pos.y < 3;
   };
 
-  private frameRequested = true;
-  private frameTarget = 0;
-  private lastFrame = 0;
-  private alive = true;
   private stats?: Stats;
 
   private static water = new Sprite('cell', 64, 48, [[0, 0], [64, 0], [128, 0], [192, 0], [256, 0]]);
@@ -123,11 +119,20 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   constructor(
     private ss: SettingsService,
     private ws: WsService,
-    private ngZone: NgZone,
     private cd: ChangeDetectorRef,
     private boats: BoatsService,
     private lobbyService: LobbyService<CadeLobby>,
-  ) { }
+    private as: AnimationService,
+  ) {
+    effect(() => {
+      this.as.updated();
+      this.cd.detectChanges();
+    });
+    effect(() => {
+      this.as.newFrame();
+      this.stats?.update();
+    });
+  }
 
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(Internal.Canvas, c => {
@@ -148,13 +153,10 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
     this.sub.add(this.boats.focusMyBoat$.subscribe(() => {
       this.frame?.nativeElement.dispatchEvent(new MouseEvent('dblclick', { button: 0 }));
     }));
-
-    this.frameRequested = false;
-    this.ngZone.runOutsideAngular(this.requestRender.bind(this));
   }
 
   ngAfterViewInit(): void {
-    this.stats = Stats();
+    this.stats = new Stats();
     this.fps?.nativeElement.appendChild(this.stats.dom);
     this.stats.dom.style.position = 'relative';
     this.resize();
@@ -176,37 +178,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
-    this.alive = false;
   }
-
-  private animate = () => {
-    const t = new Date().valueOf();
-    if (!this.lastFrame) this.lastFrame = t;
-    if (t < this.frameTarget) {
-      this.frameRequested = false;
-      this.requestRender();
-      return;
-    }
-    this.frameTarget = Math.max(t, this.frameTarget + 1000 / this.graphicSettings.maxFps.value);
-
-    BoatRender3d.speed = this.speed;
-    if (!BoatRender3d.paused) {
-      BoatRender3d.tweenProgress += (t - this.lastFrame);
-      if (BoatRender3d.tweens.update(BoatRender3d.tweenProgress)) {
-        this.cd.detectChanges();
-      }
-    }
-    this.stats?.update();
-    this.frameRequested = false;
-    this.lastFrame = t;
-    this.requestRender();
-  };
-
-  private requestRender = () => {
-    if (!this.alive || this.frameRequested) return;
-    this.frameRequested = true;
-    window.requestAnimationFrame(this.animate);
-  };
 
   getHeight(): number {
     return (this.mapWidth + this.mapHeight) * 24;

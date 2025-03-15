@@ -11,6 +11,7 @@ import { SoundService } from '../sound.service';
 import { BoatsService } from '../lobby/quacken/boats/boats.service';
 import { TurnService } from '../lobby/quacken/boats/turn.service';
 import { LobbyService } from '../lobby/lobby.service';
+import { AnimationService } from '../lobby/cadegoose/twod-render/animation.service';
 
 @Component({
   selector: 'q-lobby-list',
@@ -27,6 +28,7 @@ import { LobbyService } from '../lobby/lobby.service';
     BoatsService,
     TurnService,
     LobbyService,
+    AnimationService,
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { InCmd } from '../../../ws/ws-messages';
 import { EntryStatusComponent } from '../../quacken/entry-status/entry-status.component';
-import { TeamColors } from '../boat-render';
+import { TeamColors } from '../twod-render/gu-boats/gu-boat';
 
 export const TeamColorsCss: Readonly<string[]> = TeamColors.map(c => `rgb(${c.join(', ')})`);
 export const TeamNames: Readonly<string[]> = ['Defenders', 'Attackers', '2nd Attackers', '3rd Attackers'];

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, effect } from '@angular/core';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -15,8 +15,8 @@ import { ServerSettingMap } from '../settings/types';
 import { InMessage } from '../ws/ws-subscribe-types';
 import { CadeLobby } from '../lobby/cadegoose/types';
 import { SettingGroup } from '../settings/setting/settings';
-import { BoatRender3d } from '../lobby/cadegoose/boat-render';
 import { LobbyWrapperService } from './lobby-wrapper/lobby-wrapper.service';
+import { AnimationService, PlayState } from '../lobby/cadegoose/twod-render/animation.service';
 
 const joinMessage = 'Match replay: Use the replay controls to see a previous match from any angle.';
 
@@ -27,10 +27,6 @@ const joinMessage = 'Match replay: Use the replay controls to see a previous mat
   standalone: false,
 })
 export class ReplayComponent implements OnInit, OnDestroy {
-  set animationPlayState(v: string) {
-    this.el.nativeElement.style.setProperty('--playState', v);
-  }
-
   tickInterval = 0;
   messages: InMessage[][] = [];
   private sub = new Subscription();
@@ -54,7 +50,13 @@ export class ReplayComponent implements OnInit, OnDestroy {
     private kbs: KeyBindingService,
     private el: ElementRef,
     private wrapper: LobbyWrapperService,
-  ) { }
+    private as: AnimationService,
+  ) {
+    effect(() => {
+      const v = this.as.playState() === PlayState.Playing ? 'running' : 'paused';
+      this.el.nativeElement.style.setProperty('--playState', v);
+    });
+  }
 
   ngOnInit(): void {
     void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: joinMessage, from: '' } });
@@ -175,8 +177,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   }
 
   pause(): void {
-    this.animationPlayState = 'paused';
-    BoatRender3d.paused = true;
+    this.as.pause();
     clearInterval(this.tickInterval);
     this.tickInterval = 0;
   }
@@ -187,8 +188,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.animationPlayState = 'running';
-    BoatRender3d.paused = false;
+    this.as.play();
     this.tickInterval = window.setInterval(() => {
       if (this.tick + 1 === this.messages.length) return;
       if (this.tick % 30 === 28) this.location.replaceState('/replay/' + this.id + '?tick=' + this.tick);
