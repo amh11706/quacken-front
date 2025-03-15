@@ -21,11 +21,10 @@ import { LobbyModule } from '../lobby/lobby.module';
 import { ReplayRoutingModule } from './replay-routing.module';
 import { ReplayComponent } from './replay.component';
 import { MapDebugComponent } from './cadegoose/map-debug/map-debug.component';
-import { PenaltyComponent } from './cadegoose/penalty/penalty.component';
 import { BoatButtonComponent } from './boat-button/boat-button.component';
 
 @NgModule({
-  declarations: [ReplayComponent, ReplayWrapperComponent, CadegooseComponent, MapDebugComponent, PenaltyComponent],
+  declarations: [ReplayComponent, ReplayWrapperComponent, CadegooseComponent, MapDebugComponent],
   imports: [
     CommonModule,
     FormsModule,

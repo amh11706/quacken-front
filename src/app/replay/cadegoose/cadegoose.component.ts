@@ -11,7 +11,6 @@ import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
 import { Boat } from '../../lobby/quacken/boats/boat';
 import { AiRender } from './ai-render';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
-import { Penalties, PenaltyComponent } from './penalty/penalty.component';
 import { SettingsService } from '../../settings/settings.service';
 import { ParseTurns } from './parse-turns';
 import { CadeLobby, Lobby, ParsedTurn } from '../../lobby/cadegoose/types';
@@ -83,7 +82,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
   randomMap = '';
   scores?: ScoreResponse;
   maxPenalty = 0;
-  Penalties = Penalties;
 
   penaltyColors = [
     'white',
@@ -260,47 +258,6 @@ export class CadegooseComponent implements OnInit, OnDestroy {
     this.wrapper.boats?.setMyBoat(this.activeBoat);
     if (center) this.wrapper.boats?.focusMyBoat();
     if (this.boatTicks[boat.id]) this.updateBoat();
-  }
-
-  async getScores(): Promise<void> {
-    if (!this.map) return;
-    this.scores = await this.ws.request(OutCmd.MatchScore, {
-      turns: this.turns,
-      map: this.map,
-    });
-
-    if (!this.scores) return;
-    const map = await this.ss.get('l/cade', 'map');
-    for (const t of this.scores.totals) {
-      t.map = map?.data as unknown as string;
-      t.total = 0;
-      t.turns = [[], [], [], [], [], [], [], [], [], [], []];
-    }
-
-    this.scores.turns.forEach((t, turnIndex) => {
-      t.forEach((teamPenalties, team) => {
-        const totals = this.scores?.totals[team];
-        if (!totals) return;
-
-        let penalty = 0;
-        teamPenalties.forEach((quantity, i) => {
-          if (quantity === 0) return;
-          penalty += quantity * (this.Penalties[i]?.value ?? 0);
-          totals.turns[i]?.push({ turn: turnIndex + 1, quantity });
-        });
-        if (penalty > this.maxPenalty) this.maxPenalty = penalty;
-        totals.total += penalty;
-      });
-    });
-  }
-
-  showTotals(penalties?: ScoreResponse['totals'][0]): void {
-    this.dialog.open(PenaltyComponent, {
-      data: {
-        rows: penalties,
-        setTurn: (i: number) => this.clickTurn(this.turns[i - 1]),
-      },
-    });
   }
 
   async getMatchAi(claimsOnly = false, sendMap = true): Promise<void> {

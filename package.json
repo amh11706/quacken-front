@@ -30,37 +30,23 @@
     "@ngrx/component": "^19.0.1",
     "@tweenjs/tween.js": "18.6.4",
     "dayjs": "^1.11.10",
-    "html-to-image": "^1.9.0",
     "ng-table-virtual-scroll": "^1.6.0",
     "rxjs": "7.8.1",
-    "three": "^0.133.1",
-    "tslib": "~2.0.0",
-    "zone.js": "~0.15.0"
+    "three": "^0.133.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.0",
     "@angular/cli": "^19.2.0",
     "@angular/compiler-cli": "^19.2.0",
-    "@types/jasmine": "~3.6.0",
-    "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~12.11.1",
     "@types/three": "^0.133.1",
-    "angular-eslint": "19.1.0",
+    "angular-eslint": "^19.2.0",
     "eslint": "^9.20.0",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-rxjs-x": "^0.6.2",
     "eslint-plugin-unused-imports": "^4.1.0",
-    "jasmine-core": "~3.6.0",
-    "jasmine-spec-reporter": "~5.0.0",
-    "karma": "^6.4.2",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage-istanbul-reporter": "~3.0.2",
-    "karma-jasmine": "~4.0.0",
-    "karma-jasmine-html-reporter": "~1.5.0",
     "neostandard": "^0.12.1",
-    "ts-node": "~8.3.0",
-    "typescript": "^5.7.0",
-    "typescript-eslint": "8.23.0"
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.26.0"
   },
   "overrides": {
     "@angular-devkit/build-angular": {

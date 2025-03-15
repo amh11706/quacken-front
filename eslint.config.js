@@ -1,3 +1,4 @@
+import { defineConfig } from 'eslint/config';
 import angular from '@angular-eslint/eslint-plugin';
 import angularTemplate from '@angular-eslint/eslint-plugin-template';
 import angularTemplateParser from '@angular-eslint/template-parser';
@@ -6,7 +7,7 @@ import unusedImports from 'eslint-plugin-unused-imports';
 import tseslint from 'typescript-eslint';
 import rxjsX from 'eslint-plugin-rxjs-x';
 
-export default [
+export default defineConfig([
   // Angular template files
   {
     files: ['**/*.html'],
@@ -26,16 +27,17 @@ export default [
   },
 
   // TypeScript files
-  ...neostandard({
-    ts: true,
-    semi: true,
-    noJsx: true,
-  }).map((config) => {
-    // don't use neostandard's ignores because it sets it globally
-    config.ignores = ['**/*.html'];
-    return config;
-  }),
-  ...tseslint.config(
+  {
+    extends: [
+      neostandard({
+        ts: true,
+        semi: true,
+        noJsx: true,
+      }),
+    ],
+    ignores: ['**/*.html'],
+  },
+  tseslint.config(
     {
       files: ['**/*.ts'],
       languageOptions: {
@@ -63,4 +65,4 @@ export default [
       },
     }
   ),
-];
+]);

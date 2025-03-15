@@ -142,46 +142,6 @@
 
   <!-- <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon>account_balance</mat-icon>
-    </ng-template>
-
-    <button *ngIf="!scores"
-            mat-raised-button
-            class="scoreButton"
-            (click)="getScores()">Fetch</button>
-
-    <div *ngIf="scores">
-      <button mat-raised-button
-              class="scoreButton"
-              (click)="showTotals(scores.totals[0])">{{scores.totals[0]?.name}} Total</button><br>
-      <button mat-raised-button
-              class="scoreButton"
-              (click)="showTotals(scores.totals[1])">{{scores.totals[1]?.name}} Total</button>
-      <div #penaltyBox
-           id="penaltyBox">
-        <button *ngFor="let turn of scores.turns; let i = index"
-                mat-button
-                [color]="i+1 === activeTurn?.turn ? 'primary' : undefined"
-                class="turn"
-                (click)="clickTurn(turns[i])">
-          Turn {{i+1}}<br>
-          <div class="points">
-            <div *ngFor="let team of turn"
-                 [style.backgroundColor]="'transparent'">
-              <div *ngFor="let penalty of team; let i2 = index"
-                   class="penalty"
-                   [matTooltip]="Penalties[i2]?.title + ' - ' + penalty"
-                   [style.backgroundColor]="penaltyColors[i2]"
-                   [style.width]="50 * penalty*(Penalties[i2]?.value ?? 0) / maxPenalty + 'px'"></div>
-            </div>
-          </div>
-        </button>
-      </div>
-    </div>
-  </mat-tab> -->
-
-  <!-- <mat-tab>
-    <ng-template mat-tab-label>
       Map
     </ng-template>
 
