@@ -22,7 +22,7 @@ export interface TokenUser {
   inventory?: number;
 }
 
-@Injectable({ providedIn: 'any' })
+@Injectable({ providedIn: 'root' })
 export class WsService implements OnDestroy {
   static reason?: string;
   private socket?: WebSocket;
