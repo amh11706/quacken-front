@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ListLobby } from '../../lobby/cadegoose/types';
 import { LobbyTypes } from '../../lobby/cadegoose/lobby-type';
+import { DBSetting } from '../../settings/types';
 
 @Component({
   selector: 'q-lobby-card',
@@ -17,5 +18,11 @@ export class LobbyCardComponent {
 
   description(lobby: ListLobby): string {
     return LobbyTypes[lobby.type].desc;
+  }
+
+  label(s: DBSetting, fallback = ''): string {
+    if (typeof s.data === 'string') return s.data;
+    if (typeof s.data === 'object' && s.data) return s.data.label as string;
+    return fallback || String(s.value);
   }
 }

@@ -12,8 +12,8 @@
             [style.color]="settings.publicMode?.value ? 'orange' : 'green'">
     public
   </mat-icon>
-  <div matTooltip="Tile Set: {{settings.tileSet?.data || 'Default'}}">{{settings.tileSet?.value}}</div>
-  <div matTooltip="Structure Set: {{settings.structureSet?.data || 'Default'}}">{{settings.structureSet?.value}}</div>
+  <div matTooltip="Tile Set: {{label(settings.tileSet, 'Default')}}">{{settings.tileSet?.value}}</div>
+  <div matTooltip="Structure Set: {{label(settings.structureSet, 'Default')}}">{{settings.structureSet?.value}}</div>
 </ng-template>
 
 <ng-template #spadesView
@@ -28,7 +28,7 @@
 
 <ng-template #cadeView
              let-settings="settings">
-  <mat-icon matTooltip="Jobber Quality ({{settings.jobberQuality?.data?.label || settings.jobberQuality?.value}})"
+  <mat-icon matTooltip="Jobber Quality ({{label(settings.jobberQuality)}})"
             [style.color]="'rgb('+(255-settings.jobberQuality?.value*2)+','+(settings.jobberQuality?.value)*2+',0)'">
     show_chart
   </mat-icon>
@@ -40,7 +40,7 @@
             [style.color]="settings.publicMode?.value ? 'orange' : 'green'">
     public
   </mat-icon>
-  <div matTooltip="Map: {{settings.map?.data || 'Generated'}}">{{settings.map?.value}}</div>
+  <div matTooltip="Map: {{label(settings.map, 'Generated')}}">{{settings.map?.value}}</div>
   <div matTooltip="Timer (seconds)">{{settings.turnTime?.value}}</div>
 </ng-template>
 

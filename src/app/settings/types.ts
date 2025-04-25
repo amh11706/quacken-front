@@ -92,6 +92,12 @@ export class Setting {
     return label;
   }
 
+  get label(): string | undefined {
+    if (typeof this.data === 'string') return this.data;
+    if (typeof this.data === 'object') return this.data.label as string;
+    return String(this.value);
+  }
+
   private clampValue(value: number): number {
     if (this.inputConfig.type === 'slider') {
       if (value > this.inputConfig.max) return this.inputConfig.max;
