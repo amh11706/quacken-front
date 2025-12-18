@@ -113,10 +113,12 @@ export class MainMenuService implements OnDestroy {
       const myMoves = m.sync.myMoves;
       if (myMoves) {
         void this.ws.dispatchMessage({ cmd: Internal.MyMoves, data: { moves: myMoves.m, shots: myMoves.s || [] } });
+        delete m.sync.myMoves;
       }
       const moves = m.sync.moves;
       if (moves) {
         void this.ws.dispatchMessage({ cmd: InCmd.Moves, data: moves });
+        delete m.sync.moves;
       }
     }));
     this.subs.add(this.fs.lobby$.subscribe(r => {
