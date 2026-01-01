@@ -1,5 +1,5 @@
 <div class="container">
-  @for (team of teams; track team; let i = $index) {
+  @for (team of teams; track i; let i = $index) {
     <div
       class="team"
       [style.borderColor]="teamColors[i]"

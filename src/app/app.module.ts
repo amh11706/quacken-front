@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,13 +12,13 @@ const customTooltipDefaults: MatTooltipDefaultOptions = {
   hideDelay: 0,
   touchendHideDelay: 1500,
   position: 'above',
+  disableTooltipInteractivity: true,
 };
 
 @NgModule({
   declarations: [AppComponent, RecordComponent],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     AppRoutingModule,
   ],
   providers: [
