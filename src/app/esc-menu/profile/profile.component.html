@@ -1,94 +1,100 @@
 <mat-tab-group mat-align-tabs="center"
-               [selectedIndex]="stat.profileTab$ | async"
-               [mat-stretch-tabs]="false"
-               (selectedIndexChange)="stat.setTab($event)">
+  [selectedIndex]="stat.profileTab$ | async"
+  [mat-stretch-tabs]="false"
+  (selectedIndexChange)="stat.setTab($event)">
   <mat-tab label="Profile">
     <div id="stats">
       <button mat-icon-button
-              class="refresh"
-              (click)="reset()">
+        class="refresh"
+        (click)="reset()">
         <mat-icon>refresh</mat-icon>
       </button>
 
       <q-name-search [value]="stat.target"
-                     (valueChange)="showUser($event)"></q-name-search>
+      (valueChange)="showUser($event)"></q-name-search>
 
       <div id="selection">
         <div class="badges">
-          <div *ngFor="let rank of stat.userRanks"
-               (click)="showRankLeaders(rank)">
-            <div class="badge {{tierTitles[rank.tier]}}"
-                 matTooltip="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
-              {{rank.level}}
+          @for (rank of stat.userRanks; track rank) {
+            <div
+              (click)="showRankLeaders(rank)">
+              <div class="badge {{tierTitles[rank.tier]}}"
+                matTooltip="Lvl {{rank.level}} {{tierTitles[rank.tier]}} tier">
+                {{rank.level}}
+              </div>
+              <div [matTooltip]="rank.title || ''">
+                <div class="badgetitle">{{titles[rank.name] || rank.name}}</div>
+                <mat-progress-bar mode="determinate"
+                  color="accent"
+                  [value]="rank.progress">
+                </mat-progress-bar>
+              </div>
             </div>
-            <div [matTooltip]="rank.title || ''">
-              <div class="badgetitle">{{titles[rank.name] || rank.name}}</div>
-              <mat-progress-bar mode="determinate"
-                                color="accent"
-                                [value]="rank.progress">
-              </mat-progress-bar>
-            </div>
-          </div>
+          }
         </div>
 
         <mat-form-field>
           <mat-select placeholder="Category"
-                      [(value)]="stat.group"
-                      (valueChange)="stat.updateWinLoss()">
-            <mat-option *ngFor="let t of lobbyTypes"
-                        [value]="t.id">
-              {{t.name}}
-            </mat-option>
+            [(value)]="stat.group"
+            (valueChange)="stat.updateWinLoss()">
+            @for (t of lobbyTypes; track t) {
+              <mat-option
+                [value]="t.id">
+                {{t.name}}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
-        <ng-container *ngIf="stat.group >= 1">
+        @if (stat.group >= 1) {
           <h4>Win/Loss last 30 days:</h4>
           <p>{{stat.winLoss.wins}} - {{stat.winLoss.losses}}</p>
-
-          <ng-container *ngIf="stat.winLoss.winsVsMe || stat.winLoss.lossesVsMe">
+          @if (stat.winLoss.winsVsMe || stat.winLoss.lossesVsMe) {
             <h4>Win/Loss vs you:</h4>
             <p>{{stat.winLoss.winsVsMe}} - {{stat.winLoss.lossesVsMe}}</p>
-          </ng-container>
-        </ng-container>
+          }
+        }
 
-        <table *ngIf="stat.groupStats$ | async as groupStats"
-               mat-table
-               [dataSource]="groupStats[stat.group] || []">
-          <tr *matHeaderRowDef="['name', 'value', 'replay']; sticky: true"
-              mat-header-row></tr>
-          <tr *matRowDef="let row; columns: ['name', 'value', 'replay'];"
+        @if (stat.groupStats$ | async; as groupStats) {
+          <table
+            mat-table
+            [dataSource]="groupStats[stat.group] || []">
+            <tr *matHeaderRowDef="['name', 'value', 'replay']; sticky: true"
+            mat-header-row></tr>
+            <tr *matRowDef="let row; columns: ['name', 'value', 'replay'];"
               mat-row
-              (click)="showLeaders(row)"></tr>
-
-          <ng-container matColumnDef="name">
-            <th *matHeaderCellDef
-                mat-header-cell>Name</th>
-            <td *matCellDef="let s"
-                mat-cell>{{s.name}}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="value">
-            <th *matHeaderCellDef
-                mat-header-cell>Value</th>
-            <td *matCellDef="let s"
-                mat-cell>{{s.value || '-'}}<span *ngIf="s.suffix && s.value"> {{s.suffix}}</span></td>
-          </ng-container>
-
-          <ng-container matColumnDef="replay">
-            <th *matHeaderCellDef
-                mat-header-cell>Replay</th>
-            <td *matCellDef="let s"
+            (click)="showLeaders(row)"></tr>
+            <ng-container matColumnDef="name">
+              <th *matHeaderCellDef
+              mat-header-cell>Name</th>
+              <td *matCellDef="let s"
+              mat-cell>{{s.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="value">
+              <th *matHeaderCellDef
+              mat-header-cell>Value</th>
+              <td *matCellDef="let s"
+                mat-cell>{{s.value || '-'}}@if (s.suffix && s.value) {
+                <span> {{s.suffix}}</span>
+              }</td>
+            </ng-container>
+            <ng-container matColumnDef="replay">
+              <th *matHeaderCellDef
+              mat-header-cell>Replay</th>
+              <td *matCellDef="let s"
                 mat-cell>
-              <a *ngIf="s.matchId"
-                 mat-icon-button
-                 target="_blank"
-                 [href]="'/#/replay/' + s.matchId">
-                <mat-icon>play_arrow</mat-icon>
-              </a>
-            </td>
-          </ng-container>
-        </table>
+                @if (s.matchId) {
+                  <a
+                    mat-icon-button
+                    target="_blank"
+                    [href]="'/#/replay/' + s.matchId">
+                    <mat-icon>play_arrow</mat-icon>
+                  </a>
+                }
+              </td>
+            </ng-container>
+          </table>
+        }
       </div>
     </div>
   </mat-tab>
@@ -105,12 +111,14 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <ng-template matExpansionPanelContent>
-          <div *ngFor="let friend of fs.friends"
-               class="online"
-               [matMenuTriggerFor]="onlineMenu"
-               [matMenuTriggerData]="{friend: friend}">
-            {{friend}}
-          </div>
+          @for (friend of fs.friends; track friend) {
+            <div
+              class="online"
+              [matMenuTriggerFor]="onlineMenu"
+              [matMenuTriggerData]="{friend: friend}">
+              {{friend}}
+            </div>
+          }
         </ng-template>
       </mat-expansion-panel>
       <mat-expansion-panel>
@@ -123,12 +131,14 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <ng-template matExpansionPanelContent>
-          <div *ngFor="let friend of fs.offline"
-               class="offline"
-               [matMenuTriggerFor]="offlineMenu"
-               [matMenuTriggerData]="{friend: friend}">
-            {{friend}}
-          </div>
+          @for (friend of fs.offline; track friend) {
+            <div
+              class="offline"
+              [matMenuTriggerFor]="offlineMenu"
+              [matMenuTriggerData]="{friend: friend}">
+              {{friend}}
+            </div>
+          }
         </ng-template>
       </mat-expansion-panel>
     </div>
@@ -136,21 +146,26 @@
 
   <mat-tab label="Blocked">
     <div id="blocked">
-      <p *ngIf="!fs.blocked.length; else blockCount"
-         class="empty">
-        No blocked players. Hooray!
-      </p>
-      <ng-template #blockCount>
-        <p class="empty">
-          {{fs.blocked.length}} blocked player<span *ngIf="fs.blocked.length > 1">s</span>.
+      @if (!fs.blocked.length) {
+        <p
+          class="empty">
+          No blocked players. Hooray!
         </p>
-      </ng-template>
-      <div *ngFor="let blocked of fs.blocked"
-           class="lobbyPlayer offline"
-           [matMenuTriggerFor]="blockedMenu"
-           [matMenuTriggerData]="{blocked: blocked}">
-        {{blocked}}
-      </div>
+      } @else {
+        <p class="empty">
+          {{fs.blocked.length}} blocked player@if (fs.blocked.length > 1) {
+          <span>s</span>
+          }.
+        </p>
+      }
+      @for (blocked of fs.blocked; track blocked) {
+        <div
+          class="lobbyPlayer offline"
+          [matMenuTriggerFor]="blockedMenu"
+          [matMenuTriggerData]="{blocked: blocked}">
+          {{blocked}}
+        </div>
+      }
     </div>
   </mat-tab>
 
@@ -170,22 +185,24 @@
 
 <mat-menu #onlineMenu="matMenu">
   <ng-template let-friend="friend"
-               matMenuContent>
+    matMenuContent>
     <button mat-menu-item
-            (click)="stat.openUser(friend)">
+      (click)="stat.openUser(friend)">
       Profile
     </button>
     <button mat-menu-item
-            (click)="sendTell(friend)">
+      (click)="sendTell(friend)">
       Send Tell
     </button>
-    <button *ngIf="fs.allowInvite"
-            mat-menu-item
-            (click)="invite(friend)">
-      Invite to Lobby
-    </button>
+    @if (fs.allowInvite) {
+      <button
+        mat-menu-item
+        (click)="invite(friend)">
+        Invite to Lobby
+      </button>
+    }
     <button mat-menu-item
-            (click)="remove(friend)">
+      (click)="remove(friend)">
       Remove
     </button>
   </ng-template>
@@ -193,13 +210,13 @@
 
 <mat-menu #offlineMenu="matMenu">
   <ng-template let-friend="friend"
-               matMenuContent>
+    matMenuContent>
     <button mat-menu-item
-            (click)="stat.openUser(friend)">
+      (click)="stat.openUser(friend)">
       Profile
     </button>
     <button mat-menu-item
-            (click)="remove(friend)">
+      (click)="remove(friend)">
       Remove
     </button>
   </ng-template>
@@ -207,13 +224,13 @@
 
 <mat-menu #blockedMenu="matMenu">
   <ng-template let-blocked="blocked"
-               matMenuContent>
+    matMenuContent>
     <button mat-menu-item
-            (click)="stat.openUser(blocked)">
+      (click)="stat.openUser(blocked)">
       Profile
     </button>
     <button mat-menu-item
-            (click)="unblock(blocked)">
+      (click)="unblock(blocked)">
       Unblock
     </button>
   </ng-template>

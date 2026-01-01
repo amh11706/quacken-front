@@ -1,83 +1,94 @@
 <mat-card id="menu">
-  <div *ngIf="ms.statsOpen; else teams">
-    <q-stat-end [stats]="ms.lobby?.stats"
-                [columns]="columns"
-                [rating]=true
-                (closeStats)="ms.statsOpen = false"
-                (rateMap)="ms.submitRating($event)"></q-stat-end>
-  </div>
-  <ng-template #teams>
+  @if (ms.statsOpen) {
+    <div>
+      <q-stat-end [stats]="ms.lobby?.stats"
+        [columns]="columns"
+        [rating]=true
+        (closeStats)="ms.statsOpen = false"
+      (rateMap)="ms.submitRating($event)"></q-stat-end>
+    </div>
+  } @else {
     <h2>Match Settings</h2>
     <div *ngrxLet="es.open$ as open"
-         id="flexmenu">
-      <div *ngFor="let team of ms.teamPlayers$ | async; let i = index"
-           class="teamwrap">
-        <button *ngIf="(ms.status | async) === 0 || (ms.settings.hotEntry.stream | async) === 1"
+      id="flexmenu">
+      @for (team of ms.teamPlayers$ | async; track team; let i = $index) {
+        <div
+          class="teamwrap">
+          @if ((ms.status | async) === 0 || (ms.settings.hotEntry.stream | async) === 1) {
+            <button
+              mat-raised-button
+              [disabled]="!open || (ws.connected$ | async) === false"
+            (click)="ms.joinTeam(i)">{{ms.myTeam === i ? 'Leave' : 'Join'}}</button>
+          }
+          <br>
+            <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
+            <div class="team"
+              [style.borderColor]="teamColors[i]">
+              @for (m of team; track m) {
+                <div
+                  class="lobbyPlayer"
+                  [class.ready]="m.r">
+                  <q-name [message]="m"></q-name>
+                  @if (m.sId === ws.sId && ws.connected) {
+                    <img
+                      [matMenuTriggerFor]="jobbers"
+                      src="./assets/boats/{{links[m.b]}}.png"
+                      [class.lowjobbers]="m.jq < 100"
+                      [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
+                  } @else {
+                    <img src="./assets/boats/{{links[m.b]}}.png"
+                      [class.lowjobbers]="m.jq < 100"
+                      [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
+                  }
+                  <mat-menu #jobbers="matMenu">
+                    <mat-card class="jobberSelect"
+                      (click)="$event.stopPropagation()">
+                      <mat-card-content>
+                        <span>Your Jobber Quality ({{slider.value}}%)</span><br>
+                        <mat-slider max="100"
+                          step="5">
+                          <input #slider
+                            matSliderThumb
+                            [(value)]="ms.myJobbers"
+                            (valueChange)="ms.updateJobbers($event)">
+                        </mat-slider>
+                      </mat-card-content>
+                    </mat-card>
+                  </mat-menu>
+                </div>
+              }
+            </div>
+          </div>
+        }
+        <div class="settings">
+          <div class="settingRow">
+            <button mat-raised-button
+              color="accent"
+              class="readyButton"
+              [disabled]="!open || ((ms.teamPlayers$ | async)?.length || 0) < 2"
+              [class.cancel]="ms.ready"
+            (click)="ms.toggleReady()">{{readyText()}}</button>
+            @if ((ss.admin$ | async) && (ms.status | async) === 0) {
+              <button
                 mat-raised-button
-                [disabled]="!open || (ws.connected$ | async) === false"
-                (click)="ms.joinTeam(i)">{{ms.myTeam === i ? 'Leave' : 'Join'}}</button>
-        <br>
-        <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
-        <div class="team"
-             [style.borderColor]="teamColors[i]">
-          <div *ngFor="let m of team"
-               class="lobbyPlayer"
-               [class.ready]="m.r">
-            <q-name [message]="m"></q-name>
-            <img *ngIf="m.sId === ws.sId && ws.connected; else boatImage"
-                 [matMenuTriggerFor]="jobbers"
-                 src="./assets/boats/{{links[m.b]}}.png"
-                 [class.lowjobbers]="m.jq < 100"
-                 [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
-            <mat-menu #jobbers="matMenu">
-              <mat-card class="jobberSelect"
-                        (click)="$event.stopPropagation()">
-                <mat-card-content>
-                  <span>Your Jobber Quality ({{slider.value}}%)</span><br>
-                  <mat-slider max="100"
-                              step="5">
-                    <input #slider
-                           matSliderThumb
-                           [(value)]="ms.myJobbers"
-                           (valueChange)="ms.updateJobbers($event)">
-                  </mat-slider>
-                </mat-card-content>
-              </mat-card>
-            </mat-menu>
-            <ng-template #boatImage>
-              <img src="./assets/boats/{{links[m.b]}}.png"
-                   [class.lowjobbers]="m.jq < 100"
-                   [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
-            </ng-template>
+              (click)="ms.shuffleTeams()">Shuffle Teams</button>
+            }
+            @if ((ss.admin$ | async) && (ms.settings.rated.stream | async) === 0) {
+              <q-setting
+              name="startNew"></q-setting>
+            }
+          </div>
+          <div class="settingRow">
+            <q-setting id="flagNextBoat"
+            name="flagNextBoat"></q-setting>
+            <button mat-icon-button
+              [matTooltip]="'About this game mode'"
+              [matTooltipPosition]="'above'"
+              (click)="openHelp()">
+              <mat-icon>info</mat-icon>
+            </button>
           </div>
         </div>
       </div>
-
-      <div class="settings">
-        <div class="settingRow">
-          <button mat-raised-button
-                  color="accent"
-                  class="readyButton"
-                  [disabled]="!open || ((ms.teamPlayers$ | async)?.length || 0) < 2"
-                  [class.cancel]="ms.ready"
-                  (click)="ms.toggleReady()">{{readyText()}}</button>
-          <button *ngIf="(ss.admin$ | async) && (ms.status | async) === 0"
-                  mat-raised-button
-                  (click)="ms.shuffleTeams()">Shuffle Teams</button>
-          <q-setting *ngIf="(ss.admin$ | async) && (ms.settings.rated.stream | async) === 0"
-                     name="startNew"></q-setting>
-        </div>
-        <div class="settingRow">
-          <q-setting id="flagNextBoat"
-                     name="flagNextBoat"></q-setting>
-          <button mat-icon-button
-                  [matTooltip]="'About this game mode'"
-                  [matTooltipPosition]="'above'"
-                  (click)="openHelp()">
-            <mat-icon>info</mat-icon>
-          </button>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-</mat-card>
+    }
+  </mat-card>

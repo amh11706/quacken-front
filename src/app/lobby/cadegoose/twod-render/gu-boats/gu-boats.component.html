@@ -1,73 +1,86 @@
-<div *ngFor="let obj of clutter"
-     class="clutter clutter{{obj.t}}"
-     [style.transform]="'translate(' + obj.coords.x + 'px, ' + obj.coords.y  + 'px)'">
-
-  <div *ngIf="!obj.dis || obj.t >= 20 && obj.t <= 23"
-       class="clutterimg dir{{obj.dir}}"
-       [class.popped]="obj.p"></div>
-
-  <div *ngIf="obj.dis"
-       class="size{{obj.t}}">
-    <div class="shot"
-         class="dir{{obj.dir}} dis{{obj.dis}}"></div>
-    <div *ngIf="obj.dbl"
-         class="shot double"
-         class="dir{{obj.dir}} dis{{obj.dis}}"></div>
-    <div class="smoke"></div>
+@for (obj of clutter; track obj) {
+  <div
+    class="clutter clutter{{obj.t}}"
+    [style.transform]="'translate(' + obj.coords.x + 'px, ' + obj.coords.y  + 'px)'">
+    @if (!obj.dis || obj.t >= 20 && obj.t <= 23) {
+      <div
+        class="clutterimg dir{{obj.dir}}"
+      [class.popped]="obj.p"></div>
+    }
+    @if (obj.dis) {
+      <div
+        class="size{{obj.t}}">
+        <div class="shot"
+        class="dir{{obj.dir}} dis{{obj.dis}}"></div>
+        @if (obj.dbl) {
+          <div
+            class="shot double"
+          class="dir{{obj.dir}} dis{{obj.dis}}"></div>
+        }
+        <div class="smoke"></div>
+      </div>
+    }
   </div>
-</div>
+}
 
-<img *ngIf="showIsland"
-     id="island"
-     src="/assets/images/alkaid_island.png">
+@if (showIsland) {
+  <img
+    id="island"
+    src="/assets/images/alkaid_island.png">
+  }
 
-<div *ngFor="let render of boatRenders$ | async; trackBy: trackBoat"
-     class="boat"
-     [style.color]="teamColors[render.boat.team || 0]"
-     [class.sameteam]="render.boat.team === myBoat.team"
-     [style.zIndex]="render.coords.y"
-     [style.opacity]="render.opacity"
-     [style.transform]="'translate(' + render.coords.x + 'px, ' + render.coords.y  + 'px)'">
-  <div *ngIf="render.boat.name || render.boat.isMe"
-       class="boatheader">
-    <span class="boattitle"
+  @for (render of boatRenders$ | async; track trackBoat($index, render)) {
+    <div
+      class="boat"
+      [style.color]="teamColors[render.boat.team || 0]"
+      [class.sameteam]="render.boat.team === myBoat.team"
+      [style.zIndex]="render.coords.y"
+      [style.opacity]="render.opacity"
+      [style.transform]="'translate(' + render.coords.x + 'px, ' + render.coords.y  + 'px)'">
+    @if (render.boat.name || render.boat.isMe) {
+      <div
+        class="boatheader">
+        <span class="boattitle"
           [class.isme]="render.boat.isMe">
-      {{!fishBoats || hoveredTeam === render.boat.team ? render.boat.title : render.boat.name}}
-    </span>
-
-    <div *ngIf="render.boat.damage">
-      <div class="damage">
-        <div [style.transform]="'translateX(' + render.boat.getDamage()/2 + 'px)'"></div>
+          {{!fishBoats || hoveredTeam === render.boat.team ? render.boat.title : render.boat.name}}
+        </span>
+        @if (render.boat.damage) {
+          <div>
+            <div class="damage">
+              <div [style.transform]="'translateX(' + render.boat.getDamage()/2 + 'px)'"></div>
+            </div>
+            <div class="bilge">
+              <div [style.transform]="'translateX(' + render.boat.bilge/2 + 'px)'"></div>
+            </div>
+          </div>
+        }
+        <div class="movebar"
+          [class.ready]="render.boat.ready">
+          @for (move of render.boat.moves; track move; let i = $index) {
+            <div
+              [class.moveLeftShot]="render.boat.shots[i*2]"
+              [class.moveRightShot]="render.boat.shots[i*2+1]"
+              class="movebarslice move{{move}}">
+            </div>
+          }
+        </div>
+        <div class="flags">
+          @for (flag of render.flags; track flag) {
+            <div
+            [style.backgroundPositionX]="flag.offset"></div>
+          }
+        </div>
       </div>
-      <div class="bilge">
-        <div [style.transform]="'translateX(' + render.boat.bilge/2 + 'px)'"></div>
-      </div>
-    </div>
-
-    <div class="movebar"
-         [class.ready]="render.boat.ready">
-      <div *ngFor="let move of render.boat.moves; let i = index"
-           [class.moveLeftShot]="render.boat.shots[i*2]"
-           [class.moveRightShot]="render.boat.shots[i*2+1]"
-           class="movebarslice move{{move}}">
-      </div>
-    </div>
-
-    <div class="flags">
-      <div *ngFor="let flag of render.flags"
-           [style.backgroundPositionX]="flag.offset"></div>
+    }
+    <div class="influence"
+      [style.opacity]="render.boat.team === hoveredTeam || render.boat.showInfluence ? 1 : 0"
+      [style.borderColor]="teamColors[render.boat.team || 0]"
+      [style.width]="render.boat.influence*92 + 'px'"
+    [style.height]="render.boat.influence*92 + 'px'"></div>
+    <div [style.transform]="'rotate(' + render.rotateAdjust + 'deg)'">
+      <q-sprite-img [class.ghostly]="render.boat.type === 28"
+        [render]="render"
+      (click)="clickBoat(render.boat)"></q-sprite-img>
     </div>
   </div>
-
-  <div class="influence"
-       [style.opacity]="render.boat.team === hoveredTeam || render.boat.showInfluence ? 1 : 0"
-       [style.borderColor]="teamColors[render.boat.team || 0]"
-       [style.width]="render.boat.influence*92 + 'px'"
-       [style.height]="render.boat.influence*92 + 'px'"></div>
-
-  <div [style.transform]="'rotate(' + render.rotateAdjust + 'deg)'">
-    <q-sprite-img [class.ghostly]="render.boat.type === 28"
-                  [render]="render"
-                  (click)="clickBoat(render.boat)"></q-sprite-img>
-  </div>
-</div>
+}

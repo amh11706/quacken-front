@@ -1,125 +1,126 @@
 <div id="matches">
   <q-name-search [value]="stat.target"
-                 (valueChange)="fetchMatches($event)"></q-name-search>
+  (valueChange)="fetchMatches($event)"></q-name-search>
   <div>
     <mat-form-field class="gamemode">
       <mat-label>Mode</mat-label>
       <mat-select placeholder="Category"
-                  [(value)]="stat.group"
-                  (valueChange)="stat.changeGroup(); updateDataSource()">
-        <mat-option *ngFor="let t of lobbyTypes; let i = index"
-                    [value]="t.id">
-          {{t.name}} ({{matches[t.id]?.length}})
-        </mat-option>
+        [(value)]="stat.group"
+        (valueChange)="stat.changeGroup(); updateDataSource()">
+        @for (t of lobbyTypes; track t; let i = $index) {
+          <mat-option
+            [value]="t.id">
+            {{t.name}} ({{matches[t.id]?.length}})
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
     <mat-form-field class="tag-list">
       <mat-label>Filter ({{dataSource.filteredData.length}})</mat-label>
       <mat-chip-grid #chipList>
-        <mat-chip *ngFor="let term of searchTerms; let i = index"
-                  [removable]="true"
-                  (removed)="removeSearchTerm(i)">
-          {{term}}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
+        @for (term of searchTerms; track term; let i = $index) {
+          <mat-chip
+            [removable]="true"
+            (removed)="removeSearchTerm(i)">
+            {{term}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        }
         <input #filter
-               matInput
-               [matChipInputFor]="chipList"
-               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-               [matChipInputAddOnBlur]="true"
-               (matChipInputTokenEnd)="addSearchTerm($event)"
-               (keydown.backspace)="filter.value ? undefined : removeLastTag()"
-               (keyup)="applyFilter(filter.value)">
+          matInput
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="true"
+          (matChipInputTokenEnd)="addSearchTerm($event)"
+          (keydown.backspace)="filter.value ? undefined : removeLastTag()"
+          (keyup)="applyFilter(filter.value)">
       </mat-chip-grid>
     </mat-form-field>
   </div>
 
-  <cdk-virtual-scroll-viewport *ngIf="matches[stat.group]?.length"
-                               id="matchesTable"
-                               [footerHeight]="200"
-                               [footerEnabled]="true"
-                               [tvsItemSize]="52">
-    <table mat-table
-           matSort
-           matSortStart="desc"
-           matSortDisableClear="true"
-           [dataSource]="dataSource">
-      <tr *matHeaderRowDef="displayedColumns; sticky: true"
-          mat-header-row></tr>
-      <tr *matRowDef="let row; columns: displayedColumns;"
-          mat-row></tr>
-
-      <ng-container matColumnDef="lobby">
-        <th *matHeaderCellDef
+  @if (matches[stat.group]?.length) {
+    <cdk-virtual-scroll-viewport
+      id="matchesTable"
+      [footerHeight]="200"
+      [footerEnabled]="true"
+      [tvsItemSize]="52">
+      <table mat-table
+        matSort
+        matSortStart="desc"
+        matSortDisableClear="true"
+        [dataSource]="dataSource">
+        <tr *matHeaderRowDef="displayedColumns; sticky: true"
+        mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns;"
+        mat-row></tr>
+        <ng-container matColumnDef="lobby">
+          <th *matHeaderCellDef
             mat-header-cell
-            mat-sort-header>Lobby</th>
-        <td *matCellDef="let element"
+          mat-sort-header>Lobby</th>
+          <td *matCellDef="let element"
             mat-cell
-            class="lobby-cell">{{element.lobby}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="createdAt">
-        <th *matHeaderCellDef
+          class="lobby-cell">{{element.lobby}}</td>
+        </ng-container>
+        <ng-container matColumnDef="createdAt">
+          <th *matHeaderCellDef
             mat-header-cell
-            mat-sort-header>Date</th>
-        <td *matCellDef="let element"
-            mat-cell>{{element.createdAtString}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="score">
-        <th *matHeaderCellDef
+          mat-sort-header>Date</th>
+          <td *matCellDef="let element"
+          mat-cell>{{element.createdAtString}}</td>
+        </ng-container>
+        <ng-container matColumnDef="score">
+          <th *matHeaderCellDef
             mat-header-cell
-            mat-sort-header>Rank</th>
-        <td *matCellDef="let element"
-            mat-cell>{{element.rank || '-'}}<q-rank-circle *ngIf="element.rank"
-                         [tier]="element.tier"
-                         [score]="element.rank"></q-rank-circle></td>
-      </ng-container>
-
-      <ng-container matColumnDef="result">
-        <th *matHeaderCellDef
+          mat-sort-header>Rank</th>
+          <td *matCellDef="let element"
+            mat-cell>{{element.rank || '-'}}@if (element.rank) {
+            <q-rank-circle
+              [tier]="element.tier"
+            [score]="element.rank"></q-rank-circle>
+          }</td>
+        </ng-container>
+        <ng-container matColumnDef="result">
+          <th *matHeaderCellDef
             mat-header-cell
-            mat-sort-header>Result</th>
-        <td *matCellDef="let element"
+          mat-sort-header>Result</th>
+          <td *matCellDef="let element"
             mat-cell
             class="result{{element.result}}">
-          {{results[element.result]}}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="team">
-        <th *matHeaderCellDef
+            {{results[element.result]}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="team">
+          <th *matHeaderCellDef
             mat-header-cell
-            mat-sort-header>Team</th>
-        <td *matCellDef="let element"
+          mat-sort-header>Team</th>
+          <td *matCellDef="let element"
             mat-cell>
-          <img [src]="imgSrc(element.team)"
-               [matTooltip]="imgTitle(element.team)">
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="players">
-        <th *matHeaderCellDef
+            <img [src]="imgSrc(element.team)"
+              [matTooltip]="imgTitle(element.team)">
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="players">
+          <th *matHeaderCellDef
             mat-header-cell
-            mat-sort-header>Players</th>
-        <td *matCellDef="let element"
+          mat-sort-header>Players</th>
+          <td *matCellDef="let element"
             mat-cell>
-          <q-team-view [teams]="element.teams"
-                       [playerLength]="element.players.length"></q-team-view>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="view">
-        <th *matHeaderCellDef
-            mat-header-cell>View</th>
-        <td *matCellDef="let element"
+            <q-team-view [teams]="element.teams"
+            [playerLength]="element.players.length"></q-team-view>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="view">
+          <th *matHeaderCellDef
+          mat-header-cell>View</th>
+          <td *matCellDef="let element"
             mat-cell>
-          <a mat-raised-button
-             target="_blank"
-             [href]="'/#/replay/' + element.matchId">Open</a>
-        </td>
-      </ng-container>
-    </table>
-  </cdk-virtual-scroll-viewport>
+            <a mat-raised-button
+              target="_blank"
+            [href]="'/#/replay/' + element.matchId">Open</a>
+          </td>
+        </ng-container>
+      </table>
+    </cdk-virtual-scroll-viewport>
+  }
 </div>

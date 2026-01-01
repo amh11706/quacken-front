@@ -1,133 +1,150 @@
-<div *ngIf="map && map.selectedTile && map.structures && map.structureSet"
-     id="structureset"
-     class="container"
-     [qDrag]="handle2"
-     [bindToWindow]="true">
-  <div #handle2
-       id="handle2"></div>
-  <span>{{map.structureSet.name}}</span>
-  <div id="structurebox">
-    <div *ngIf="map.structures"
-         class="structuretype">
-      <div *ngFor="let structure of map.structures"
-           class="structure"
-           [class.unsaved]="structure.unsaved"
-           [class.selected]="structure === map.selectedTile"
-           (click)="select(structure)">
-        <div [matTooltip]="structure.description || ''"
-             (dblclick)="editTile()">
-          {{structure.name}}</div>
-        <span *ngIf="structure.weight === 0"
-              class="delete"
-              (click)="deleteTile(structure)">
-          X
-        </span>
-
-        <div class="weight"
-             matTooltip="How common this structure should be relative to the rest in this set.">
-          <mat-form-field>
-            <input matInput
-                   placeholder="Weight"
-                   type="number"
-                   max="100"
-                   min="0"
-                   [disabled]="pending"
-                   [(ngModel)]="structure.weight"
-                   (change)="saveWeight(structure)">
-          </mat-form-field>
+@if (map && map.selectedTile && map.structures && map.structureSet) {
+  <div
+    id="structureset"
+    class="container"
+    [qDrag]="handle2"
+    [bindToWindow]="true">
+    <div #handle2
+    id="handle2"></div>
+    <span>{{map.structureSet.name}}</span>
+    <div id="structurebox">
+      @if (map.structures) {
+        <div
+          class="structuretype">
+          @for (structure of map.structures; track structure) {
+            <div
+              class="structure"
+              [class.unsaved]="structure.unsaved"
+              [class.selected]="structure === map.selectedTile"
+              (click)="select(structure)">
+              <div [matTooltip]="structure.description || ''"
+                (dblclick)="editTile()">
+              {{structure.name}}</div>
+              @if (structure.weight === 0) {
+                <span
+                  class="delete"
+                  (click)="deleteTile(structure)">
+                  X
+                </span>
+              }
+              <div class="weight"
+                matTooltip="How common this structure should be relative to the rest in this set.">
+                <mat-form-field>
+                  <input matInput
+                    placeholder="Weight"
+                    type="number"
+                    max="100"
+                    min="0"
+                    [disabled]="pending"
+                    [(ngModel)]="structure.weight"
+                    (change)="saveWeight(structure)">
+                </mat-form-field>
+              </div>
+            </div>
+          }
         </div>
-      </div>
+      }
+      @if (!map.structures.length) {
+        <p>This structure set is empty. Create a
+        structure to get started!</p>
+      }
     </div>
-    <p *ngIf="!map.structures.length">This structure set is empty. Create a
-      structure to get started!</p>
+    <button mat-raised-button
+    (click)="newTile()">New Structure</button>
   </div>
-  <button mat-raised-button
-          (click)="newTile()">New Structure</button>
-</div>
+}
 
-<div *ngIf="map && map.selectedTile && map.structures"
-     id="structure"
-     class="container"
-     [qDrag]="handle3"
-     [bindToWindow]="true"
-     [hidden]="!map.selectedTile.name">
-  <div #handle3
-       id="handle3"></div>
-  <div id="structuredetail">
-    <p *ngIf="!map.selectedTile.activeFeature">
-      Select a feature on the map or add one with the button below.
-    </p>
-    <p *ngIf="!map.structures.length">No structure selected.</p>
-
-    <div *ngIf="map.selectedTile.activeFeature">
-      <mat-form-field>
-        <mat-label>Feature Type</mat-label>
-        <mat-select [(ngModel)]="map.selectedTile.activeFeature.group"
-                    (selectionChange)="map.selectedTile.unsaved = true">
-          <mat-option *ngFor="let group of groups; let i = index"
-                      [value]="i">
-            {{group}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <p>x: <input matInput
-               type="number"
-               min="0"
-               max="24"
-               [value]="map.selectedTile.activeFeature.x1"
-               (change)="updatePosition($event, 'x1')">
-        -
-        <input matInput
-               type="number"
-               min="0"
-               max="24"
-               [value]="map.selectedTile.activeFeature.x2"
-               (change)="updatePosition($event, 'x2')">
-      </p>
-
-      <p>y: <input matInput
-               type="number"
-               min="0"
-               max="45"
-               [value]="map.selectedTile.activeFeature.y1"
-               (change)="updatePosition($event, 'y1')">
-        -
-        <input matInput
-               type="number"
-               min="0"
-               max="45"
-               [value]="map.selectedTile.activeFeature.y2"
-               (change)="updatePosition($event, 'y2')">
-      </p>
-
-      <ng-container *ngIf="map.selectedTile.activeFeature.group === 0">
-        <mat-form-field>
-          <mat-label>Tile Type</mat-label>
-          <mat-select [(ngModel)]="map.selectedTile.activeFeature.type"
-                      (selectionChange)="map.selectedTile.unsaved = true">
-            <mat-option *ngFor="let type of types; let i = index"
-                        [value]="i">
-              {{type}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </ng-container>
-      <ng-container *ngIf="map.selectedTile.activeFeature.group !== 0">
-        <mat-form-field>
-          <input matInput
-                 placeholder="Density"
-                 type="number"
-                 min="1"
-                 max="8"
-                 [(ngModel)]="map.selectedTile.activeFeature.density">
-        </mat-form-field>
-      </ng-container>
-      <button mat-raised-button
-              id="deletebutton"
-              (click)="deleteFeature()">Delete</button>
+@if (map && map.selectedTile && map.structures) {
+  <div
+    id="structure"
+    class="container"
+    [qDrag]="handle3"
+    [bindToWindow]="true"
+    [hidden]="!map.selectedTile.name">
+    <div #handle3
+    id="handle3"></div>
+    <div id="structuredetail">
+      @if (!map.selectedTile.activeFeature) {
+        <p>
+          Select a feature on the map or add one with the button below.
+        </p>
+      }
+      @if (!map.structures.length) {
+        <p>No structure selected.</p>
+      }
+      @if (map.selectedTile.activeFeature) {
+        <div>
+          <mat-form-field>
+            <mat-label>Feature Type</mat-label>
+            <mat-select [(ngModel)]="map.selectedTile.activeFeature.group"
+              (selectionChange)="map.selectedTile.unsaved = true">
+              @for (group of groups; track group; let i = $index) {
+                <mat-option
+                  [value]="i">
+                  {{group}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <p>x: <input matInput
+            type="number"
+            min="0"
+            max="24"
+            [value]="map.selectedTile.activeFeature.x1"
+            (change)="updatePosition($event, 'x1')">
+            -
+            <input matInput
+              type="number"
+              min="0"
+              max="24"
+              [value]="map.selectedTile.activeFeature.x2"
+              (change)="updatePosition($event, 'x2')">
+          </p>
+          <p>y: <input matInput
+            type="number"
+            min="0"
+            max="45"
+            [value]="map.selectedTile.activeFeature.y1"
+            (change)="updatePosition($event, 'y1')">
+            -
+            <input matInput
+              type="number"
+              min="0"
+              max="45"
+              [value]="map.selectedTile.activeFeature.y2"
+              (change)="updatePosition($event, 'y2')">
+          </p>
+          @if (map.selectedTile.activeFeature.group === 0) {
+            <mat-form-field>
+              <mat-label>Tile Type</mat-label>
+              <mat-select [(ngModel)]="map.selectedTile.activeFeature.type"
+                (selectionChange)="map.selectedTile.unsaved = true">
+                @for (type of types; track type; let i = $index) {
+                  <mat-option
+                    [value]="i">
+                    {{type}}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+          @if (map.selectedTile.activeFeature.group !== 0) {
+            <mat-form-field>
+              <input matInput
+                placeholder="Density"
+                type="number"
+                min="1"
+                max="8"
+                [(ngModel)]="map.selectedTile.activeFeature.density">
+            </mat-form-field>
+          }
+          <button mat-raised-button
+            id="deletebutton"
+          (click)="deleteFeature()">Delete</button>
+        </div>
+      }
     </div>
+    <button mat-raised-button
+    (click)="newFeature()">Add Feature</button>
   </div>
-  <button mat-raised-button
-          (click)="newFeature()">Add Feature</button>
-</div>
+}

@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { debounceTime, Subject, Subscription } from 'rxjs';
-import { CommonModule } from '@angular/common';
+
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Lobby } from '../cadegoose/types';
@@ -26,7 +26,7 @@ interface MapInfoLobby extends Lobby {
 
 @Component({
   selector: 'q-mapinfo',
-  imports: [CommonModule, MapEditorModule, TwodRenderModule, CadegooseModule, MapinfoHudComponent, QdragModule],
+  imports: [MapEditorModule, TwodRenderModule, CadegooseModule, MapinfoHudComponent, QdragModule],
   templateUrl: './mapinfo.component.html',
   styleUrl: './mapinfo.component.scss',
 })

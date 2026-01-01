@@ -1,31 +1,40 @@
-<ng-container *ngIf="ws.user?.id"
-              class="buttons">
-  <mat-card *ngFor="let c of competitions"
-            mat-dialog-content>
-    <h3>{{c.description}}</h3>
-    <mat-form-field [appearance]="'outline'">
-      <mat-select [(ngModel)]="selectedRound"
-                  (selectionChange)="selectedRound = $any($event).value">
-        <mat-option *ngFor="let r of c.rounds"
-                    [value]="r">
-          {{r.description}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <div class="buttons">
-      <button *ngFor="let game of selectedRound?.games; let i = index"
+@if (ws.user?.id) {
+  <ng-container
+    class="buttons">
+    @for (c of competitions; track c) {
+      <mat-card
+        mat-dialog-content>
+        <h3>{{c.description}}</h3>
+        <mat-form-field [appearance]="'outline'">
+          <mat-select [(ngModel)]="selectedRound"
+            (selectionChange)="selectedRound = $any($event).value">
+            @for (r of c.rounds; track r) {
+              <mat-option
+                [value]="r">
+                {{r.description}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <div class="buttons">
+          @for (game of selectedRound?.games; track game; let i = $index) {
+            <button
               mat-raised-button
               [disabled]="created"
               (click)="createLobby(game)">
-        {{$any(game).name?.data || 'Game ' + i}}
-      </button>
-    </div>
-  </mat-card>
-</ng-container>
+              {{$any(game).name?.data || 'Game ' + i}}
+            </button>
+          }
+        </div>
+      </mat-card>
+    }
+  </ng-container>
+}
 
-<p *ngIf="!ws.user?.id"
-   class="error">
-  Guests cannot make lobbies. Join an existing lobby or create an account
-  to make your own.
-</p>
+@if (!ws.user?.id) {
+  <p
+    class="error">
+    Guests cannot make lobbies. Join an existing lobby or create an account
+    to make your own.
+  </p>
+}

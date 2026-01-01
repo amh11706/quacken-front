@@ -1,77 +1,86 @@
-<mat-card *ngIf="map && map.data"
-          class="flex-container">
-  <div class="flex-item1">
-    <q-canvas [map]="map.data"
-              [safeZone]="safeZone"
-              [mapWidth]="width"
-              [mapHeight]="height"></q-canvas>
-  </div>
-  <ng-container *ngIf="map.id > 1 else generatedTemp">
-    <div *ngIf="map.ratingMine"
-         class="youRated">You've rated: {{map.ratingMine}}/5 stars</div>
-    <div class="flex-item2">
-      <mat-card-title class="title">{{map.name}}</mat-card-title>
-      <mat-card-subtitle class="subtitle">
-        By: {{map.username}}
-      </mat-card-subtitle>
-      <mat-card-content class="description">
-        <p>{{map.description || "N/A"}}</p>
-        <div class="flex-subitem1">
-          <q-rating [isPecentage]="true"
-                    [rating]="map.ratingAverage"
-                    [myRating]="map.ratingMine"
-                    [count]="map.ratingCount"
-                    (ratingUpdated)="updateRating($event)"></q-rating>
-        </div>
-        <div class="subitem">
-          <mat-chip-listbox>
-            <mat-chip *ngFor="let option of map.tags"
-                      #chipList
-                      [removable]="false">{{option}}</mat-chip>
-          </mat-chip-listbox>
-        </div>
-      </mat-card-content>
-      <mat-card-actions class="flex-subitem2">
-        <button mat-raised-button
-                color="accent"
-                color="accent"
-                [disabled]="(ss.admin$ | async) === false"
-                (click)="selectMap(map.id)">Select</button>
-      </mat-card-actions>
+@if (map && map.data) {
+  <mat-card
+    class="flex-container">
+    <div class="flex-item1">
+      <q-canvas [map]="map.data"
+        [safeZone]="safeZone"
+        [mapWidth]="width"
+      [mapHeight]="height"></q-canvas>
     </div>
-  </ng-container>
-</mat-card>
+    @if (map.id > 1) {
+      @if (map.ratingMine) {
+        <div
+        class="youRated">You've rated: {{map.ratingMine}}/5 stars</div>
+      }
+      <div class="flex-item2">
+        <mat-card-title class="title">{{map.name}}</mat-card-title>
+        <mat-card-subtitle class="subtitle">
+          By: {{map.username}}
+        </mat-card-subtitle>
+        <mat-card-content class="description">
+          <p>{{map.description || "N/A"}}</p>
+          <div class="flex-subitem1">
+            <q-rating [isPecentage]="true"
+              [rating]="map.ratingAverage"
+              [myRating]="map.ratingMine"
+              [count]="map.ratingCount"
+            (ratingUpdated)="updateRating($event)"></q-rating>
+          </div>
+          <div class="subitem">
+            <mat-chip-listbox>
+              @for (option of map.tags; track option) {
+                <mat-chip
+                  #chipList
+                [removable]="false">{{option}}</mat-chip>
+              }
+            </mat-chip-listbox>
+          </div>
+        </mat-card-content>
+        <mat-card-actions class="flex-subitem2">
+          <button mat-raised-button
+            color="accent"
+            color="accent"
+            [disabled]="(ss.admin$ | async) === false"
+          (click)="selectMap(map.id)">Select</button>
+        </mat-card-actions>
+      </div>
+    } @else {
+      @if (map) {
+        <div
+          class="flex-item2">
+          <mat-card-title class="title">{{generated}}</mat-card-title>
+          <mat-card-content>
+            <mat-form-field>
+              <mat-label class="subtitle">Seed:</mat-label>
+              <input matInput
+                class="seed"
+                [value]="map.description"
+                (change)="updateSeed($any($event.target).value)">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Previous seeds:</mat-label>
+              <mat-select [disabled]="(ss.admin$ | async) === false"
+                (selectionChange)="updateSeed($event.value)">
+                @for (seed of seeds; track seed) {
+                  <mat-option
+                  [value]="seed">{{seed}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </mat-card-content>
+          <mat-card-actions class="flex-subitem2">
+            <button mat-raised-button
+              color="accent"
+              [disabled]="(ss.admin$ | async) === false"
+            (click)="openAdvanced()">Advanced</button>
+            <button mat-raised-button
+              color="accent"
+              [disabled]="(ss.admin$ | async) === false"
+            (click)="selectMap(0)">Randomize</button>
+          </mat-card-actions>
+        </div>
+      }
+    }
+  </mat-card>
+}
 
-<ng-template #generatedTemp>
-  <div *ngIf="map"
-       class="flex-item2">
-    <mat-card-title class="title">{{generated}}</mat-card-title>
-    <mat-card-content>
-      <mat-form-field>
-        <mat-label class="subtitle">Seed:</mat-label>
-        <input matInput
-               class="seed"
-               [value]="map.description"
-               (change)="updateSeed($any($event.target).value)">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Previous seeds:</mat-label>
-        <mat-select [disabled]="(ss.admin$ | async) === false"
-                    (selectionChange)="updateSeed($event.value)">
-          <mat-option *ngFor="let seed of seeds"
-                      [value]="seed">{{seed}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </mat-card-content>
-    <mat-card-actions class="flex-subitem2">
-      <button mat-raised-button
-              color="accent"
-              [disabled]="(ss.admin$ | async) === false"
-              (click)="openAdvanced()">Advanced</button>
-      <button mat-raised-button
-              color="accent"
-              [disabled]="(ss.admin$ | async) === false"
-              (click)="selectMap(0)">Randomize</button>
-    </mat-card-actions>
-  </div>
-</ng-template>

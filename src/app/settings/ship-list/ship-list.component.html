@@ -1,21 +1,27 @@
-<ng-container *ngIf="showList">
-  <p>Total cost: {{cost}}<span *ngIf="budget"> / {{budget}}</span> </p>
+@if (showList) {
+  <p>Total cost: {{cost}}@if (budget) {
+    <span> / {{budget}}</span>
+  } </p>
   <div class="boatList">
-    <div *ngFor="let boatType of ships; let i = index"
-         class="boat">
-      <span>{{shipLabel(boatType)}}</span>
-      <img [src]="getShipLink(boatType)"
-           [matTooltip]="ShipTypeMap.get(boatType)?.name || ''">
-      <mat-icon (click)="removeShip(i)">cancel</mat-icon>
-    </div>
+    @for (boatType of ships; track boatType; let i = $index) {
+      <div
+        class="boat">
+        <span>{{shipLabel(boatType)}}</span>
+        <img [src]="getShipLink(boatType)"
+          [matTooltip]="ShipTypeMap.get(boatType)?.name || ''">
+        <mat-icon (click)="removeShip(i)">cancel</mat-icon>
+      </div>
+    }
   </div>
   <p>Add ship</p>
-</ng-container>
+}
 <mat-chip-listbox>
-  <mat-chip *ngFor="let boatType of ShipTypes"
-            [matTooltip]="boatType.name!"
-            [disabled]="budget > 0 && (cost + boatType.cost > budget)"
-            (click)="addShip(boatType.id)">
-    {{boatType.title}} ({{boatType.cost}})
-  </mat-chip>
+  @for (boatType of ShipTypes; track boatType) {
+    <mat-chip
+      [matTooltip]="boatType.name!"
+      [disabled]="budget > 0 && (cost + boatType.cost > budget)"
+      (click)="addShip(boatType.id)">
+      {{boatType.title}} ({{boatType.cost}})
+    </mat-chip>
+  }
 </mat-chip-listbox>

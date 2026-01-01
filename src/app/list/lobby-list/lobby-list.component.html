@@ -2,63 +2,67 @@
   <div id="frame">
     <div id="cards">
       <button mat-button
-              class="card"
-              (click)="openNews()">
+        class="card"
+        (click)="openNews()">
         <h3 class="cardTitle">{{note.title}}</h3>
         <p>{{note.points[0]}}</p>
         <p>...</p>
       </button>
 
       <a mat-button
-         class="card"
-         href="/#/editor">
+        class="card"
+        href="/#/editor">
         <h3 class="cardTitle">Enter Map Editor</h3>
         <p>Make maps for you and other players to use!</p>
       </a>
 
       <button mat-button
-              class="card"
-              (click)="leaderCard.openLeaders()">
+        class="card"
+        (click)="leaderCard.openLeaders()">
         <q-leader-card #leaderCard></q-leader-card>
       </button>
 
       <button mat-button
-              class="card"
-              (click)="openUserMatches()">
+        class="card"
+        (click)="openUserMatches()">
         <h3 class="cardTitle">Replays</h3>
         <p>Watch replays of previous matches!</p>
       </button>
 
       <button mat-button
-              class="card"
-              (click)="openQueue()">
+        class="card"
+        (click)="openQueue()">
         <h3 class="cardTitle">Play Now</h3>
         <p>Find opponents for 1v1 games!</p>
       </button>
 
       <button mat-button
-              class="card"
-              (click)="createLobby()">
+        class="card"
+        (click)="createLobby()">
         <div class="createCard">
           <h3 class="cardTitle">Create Lobby</h3>
           <mat-icon id="addLobby">add</mat-icon>
         </div>
       </button>
-      <button *ngIf="competitions.length"
-              mat-button
-              class="card"
-              (click)="openCompetitions()">
-        <h3 class="cardTitle">Competitions ({{competitions.length}})</h3>
-        <span id="competition">👑</span>
-      </button>
+      @if (competitions.length) {
+        <button
+          mat-button
+          class="card"
+          (click)="openCompetitions()">
+          <h3 class="cardTitle">Competitions ({{competitions.length}})</h3>
+          <span id="competition">👑</span>
+        </button>
+      }
 
-      <a *ngFor="let l of lobbies | async; trackBy: trackByLobbyId"
-         mat-button
-         class="card"
-         [href]="'/#/lobby/' + l.id"
-         (click)="join(l, $event)">
-        <q-lobby-card [lobby]="l"></q-lobby-card>
-      </a>
+      @for (l of lobbies | async; track trackByLobbyId($index, l)) {
+        <a
+          mat-button
+          class="card"
+          [href]="'/#/lobby/' + l.id"
+          (click)="join(l, $event)">
+          <q-lobby-card [lobby]="l"></q-lobby-card>
+        </a>
+      }
     </div>
 
     <q-chat [disabled]="(es.open$ | async) || false"></q-chat>

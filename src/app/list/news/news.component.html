@@ -1,9 +1,13 @@
 <mat-dialog-content>
-  <div *ngFor="let note of notes"
-       class="note">
+  @for (note of notes; track note) {
+    <div
+      class="note">
       <h2>{{note.title}}</h2>
       <ul>
-          <li *ngFor="let p of note.points">{{p}}</li>
+        @for (p of note.points; track p) {
+          <li>{{p}}</li>
+        }
       </ul>
-  </div>
+    </div>
+  }
 </mat-dialog-content>

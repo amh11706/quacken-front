@@ -1,20 +1,27 @@
-<ng-container *ngIf="showCount">
-  <p *ngIf="players.length > 1; else alone"
-     class="empty">
-    There are {{players.length}} players in this lobby:
-  </p>
-  <ng-template #alone>
+@if (showCount) {
+  @if (players.length > 1) {
+    <p
+      class="empty">
+      There are {{players.length}} players in this lobby:
+    </p>
+  } @else {
     <p class="empty">You are alone here.</p>
-  </ng-template>
-</ng-container>
-<div *ngFor="let m of players"
-     class="lobbyPlayer">
-  <img *ngIf="m.t !== undefined"
-       class="team"
-       [matTooltip]="teamImages[m.t].title"
-       [src]="teamImages[m.t].src">
-  <q-name [message]="m"></q-name>
-  <mat-icon *ngIf="m.a"
-            matTooltip="Opped"
-            [inline]="true">star</mat-icon>
-</div>
+  }
+}
+@for (m of players; track m) {
+  <div
+    class="lobbyPlayer">
+    @if (m.t !== undefined) {
+      <img
+        class="team"
+        [matTooltip]="teamImages[m.t].title"
+        [src]="teamImages[m.t].src">
+    }
+    <q-name [message]="m"></q-name>
+    @if (m.a) {
+      <mat-icon
+        matTooltip="Opped"
+      [inline]="true">star</mat-icon>
+    }
+  </div>
+}

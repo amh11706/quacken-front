@@ -7,34 +7,36 @@
     <span>Number of players in queue: {{ queueLength | async }}</span>
     <div class="basic">
       <q-setting class="dropdown"
-                 [disabled]="disabled || ms.inQueue"
-                 [name]="'lobbyType'"></q-setting>
+        [disabled]="disabled || ms.inQueue"
+      [name]="'lobbyType'"></q-setting>
       <q-setting class="dropdown"
-                 [disabled]="ms.inQueue || disabled || isGuest"
-                 [matTooltip]="isGuest ? 'Make an account to play rated matches.' : ''"
-                 [name]="'queueRated'"></q-setting>
-      <q-setting *ngIf="matchSettings.lobbyType.value === 5"
-                 class="dropdown"
-                 name="variation"
-                 [disabled]="disabled || ms.inQueue"></q-setting>
+        [disabled]="ms.inQueue || disabled || isGuest"
+        [matTooltip]="isGuest ? 'Make an account to play rated matches.' : ''"
+      [name]="'queueRated'"></q-setting>
+      @if (matchSettings.lobbyType.value === 5) {
+        <q-setting
+          class="dropdown"
+          name="variation"
+        [disabled]="disabled || ms.inQueue"></q-setting>
+      }
     </div>
     <div class="queue-buttons">
       <button mat-raised-button
-              [disabled]="disabled"
-              [color]="ms.inQueue ? 'warn' : 'primary'"
-              (click)="ms.inQueue ? leaveQueue() : joinQueue()">{{ms.inQueue ? 'Leave' : 'Join 1v1'}} Queue</button>
+        [disabled]="disabled"
+        [color]="ms.inQueue ? 'warn' : 'primary'"
+      (click)="ms.inQueue ? leaveQueue() : joinQueue()">{{ms.inQueue ? 'Leave' : 'Join 1v1'}} Queue</button>
       <button mat-raised-button
-              [disabled]="disabled"
-              [color]="'primary'"
-              (click)="getBotMatch()">Play vs Bot (unrated)</button>
+        [disabled]="disabled"
+        [color]="'primary'"
+      (click)="getBotMatch()">Play vs Bot (unrated)</button>
     </div>
     <span>You'll get a notification when a match is found. You can close this menu safely.</span>
 
     <button mat-raised-button
-            (click)="testNotification()">Test Notification</button>
+    (click)="testNotification()">Test Notification</button>
 
     <mat-expansion-panel [expanded]="!!matchSettings.showAdvanced.value"
-                         (expandedChange)="matchSettings.showAdvanced.value = +$event">
+      (expandedChange)="matchSettings.showAdvanced.value = +$event">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span>Advanced Settings</span>
@@ -42,11 +44,11 @@
       </mat-expansion-panel-header>
       <div class="advanced">
         <q-setting [disabled]="disabled || ms.inQueue"
-                   [name]="'minTurnTime'"></q-setting>
+        [name]="'minTurnTime'"></q-setting>
         <q-setting [disabled]="disabled || ms.inQueue"
-                   [name]="'maxTurnTime'"></q-setting>
+        [name]="'maxTurnTime'"></q-setting>
         <q-setting [disabled]="disabled || ms.inQueue"
-                   [name]="'deltaRank'"></q-setting>
+        [name]="'deltaRank'"></q-setting>
       </div>
     </mat-expansion-panel>
   </mat-card-content>

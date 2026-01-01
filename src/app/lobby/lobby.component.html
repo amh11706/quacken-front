@@ -1,17 +1,34 @@
-<div *ngIf="(lobby | async) === undefined"
-     id="background">
-  <p>Loading...</p>
-</div>
+@if ((lobby | async) === undefined) {
+  <div
+    id="background">
+    <p>Loading...</p>
+  </div>
+}
 
-<div *ngIf="lobby | async as lobby"
-     id="lobby"
-     [ngSwitch]="lobby.type">
-  <q-quacken *ngSwitchCase="'Quacken'"></q-quacken>
-  <q-cadegoose *ngSwitchCase="'CadeGoose'"></q-cadegoose>
-  <q-seabattle *ngSwitchCase="'SeaBattle'"></q-seabattle>
-  <q-flaggames *ngSwitchCase="'FlagGames'"></q-flaggames>
-  <q-mapinfo *ngSwitchCase="'mapinfo'"
-             [lobby]="$any(lobby)"></q-mapinfo>
-  <q-boardadmiral *ngSwitchCase="'BA'"></q-boardadmiral>
-
-</div>
+@if (lobby | async; as lobby) {
+  <div
+    id="lobby"
+    >
+    @switch (lobby.type) {
+      @case ('Quacken') {
+        <q-quacken></q-quacken>
+      }
+      @case ('CadeGoose') {
+        <q-cadegoose></q-cadegoose>
+      }
+      @case ('SeaBattle') {
+        <q-seabattle></q-seabattle>
+      }
+      @case ('FlagGames') {
+        <q-flaggames></q-flaggames>
+      }
+      @case ('mapinfo') {
+        <q-mapinfo
+        [lobby]="$any(lobby)"></q-mapinfo>
+      }
+      @case ('BA') {
+        <q-boardadmiral></q-boardadmiral>
+      }
+    }
+  </div>
+}

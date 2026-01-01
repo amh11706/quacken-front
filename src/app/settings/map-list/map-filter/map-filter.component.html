@@ -1,38 +1,44 @@
 <div class="flex">
   <div class="dismiss">
     <button mat-icon-button
-            color="accent"
-            (click)="filterRef.dismiss()">
+      color="accent"
+      (click)="filterRef.dismiss()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
   <div>
     Ratings:
     <mat-chip-listbox class="star">
-      <mat-chip *ngFor="let rating of [4,3,2,1]"
-                #chipList
-                [removable]="false"
-                (click)="onClick(rating.toString())">
-        <q-rating [myRating]="rating"
-                  [forTags]="true"></q-rating>
-      </mat-chip>
+      @for (rating of [4,3,2,1]; track rating) {
+        <mat-chip
+          #chipList
+          [removable]="false"
+          (click)="onClick(rating.toString())">
+          <q-rating [myRating]="rating"
+          [forTags]="true"></q-rating>
+        </mat-chip>
+      }
     </mat-chip-listbox>
     <mat-divider class="divider"></mat-divider>
     Tags:
     <mat-chip-listbox>
-      <mat-chip *ngFor="let tag of data.tagList"
-                #chipList
-                [removable]="false"
-                (click)="onClick(tag)">{{tag}}</mat-chip>
+      @for (tag of data.tagList; track tag) {
+        <mat-chip
+          #chipList
+          [removable]="false"
+        (click)="onClick(tag)">{{tag}}</mat-chip>
+      }
     </mat-chip-listbox>
     <mat-divider class="divider"></mat-divider>
 
     Creators:
     <mat-chip-listbox>
-      <mat-chip *ngFor="let name of data.userList"
-                #chipList
-                [removable]="false"
-                (click)="onClick(name)">{{name}}</mat-chip>
+      @for (name of data.userList; track name) {
+        <mat-chip
+          #chipList
+          [removable]="false"
+        (click)="onClick(name)">{{name}}</mat-chip>
+      }
     </mat-chip-listbox>
   </div>
 </div>

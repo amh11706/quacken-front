@@ -1,114 +1,124 @@
 <button mat-icon-button
-        id="toggleesc"
-        matTooltip="Menu (esc)"
-        (click)="es.toggle()">
+  id="toggleesc"
+  matTooltip="Menu (esc)"
+  (click)="es.toggle()">
   <mat-icon class="esc-icon">menu</mat-icon>
 </button>
-<div *ngIf="es.open$ | async as open"
-     id="backgroundframe">
-  <div id="side-menu">
-    <div id="menuButtons">
-      <a mat-button
-         class="discord"
-         href="https://discord.gg/UVAPZFYrUW"
-         target="_blank"
-         matTooltip="Open Discord Server"
-         [disabled]="!open"></a>
-      <a *ngIf="es.lobbyComponent"
-         mat-button
-         id="lobbyButton"
-         href="/#/list"
-         matTooltip="Return to Lobby"
-         class="action"
-         [disabled]="!open">
-        <mat-icon>cancel</mat-icon>
-      </a>
-      <button mat-button
-              id="logoutButton"
-              matTooltip="Logout"
-              class="action"
-              [disabled]="!open"
-              (click)="logout()">
-        <mat-icon [style.color]="'red'">power_settings_new</mat-icon>
-      </button>
-    </div>
-
-    <mat-tab-group id="main-tab"
-                   [mat-stretch-tabs]="false"
-                   [selectedIndex]="es.activeTab$ | async"
-                   (selectedIndexChange)="onTabChange($event)">
-      <mat-tab label="LOBBY"
-               [disabled]="!open">
-        <ng-template matTabContent>
-          <mat-tab-group id="sub-tab"
-                         mat-align-tabs="center"
-                         [mat-stretch-tabs]="false"
-                         [selectedIndex]="es.lobbyTab$ | async"
-                         (selectedIndexChange)="onLobbyTabChange($event)">
-            <mat-tab label="Lobby">
-              <mat-card>
-                <mat-card-content>
-                  <q-player-list [players]="(fs.lobby$ | async) || []"></q-player-list>
-                </mat-card-content>
-              </mat-card>
-              <ng-container *ngComponentOutlet="$any(es.lobbyComponent); injector: es.lobbyInjector"></ng-container>
-            </mat-tab>
-            <mat-tab *ngIf="ss.lAdminSettings.length"
-                     label="Settings">
-              <ng-template matTabContent>
-                <mat-card *ngIf="es.open$ | async"
-                          id="lobbySettings">
-                  <div class="settings">
-                    <q-setting *ngFor="let s of ss.lAdminSettings"
-                               [name]="s"></q-setting>
-                  </div>
+@if (es.open$ | async; as open) {
+  <div
+    id="backgroundframe">
+    <div id="side-menu">
+      <div id="menuButtons">
+        <a mat-button
+          class="discord"
+          href="https://discord.gg/UVAPZFYrUW"
+          target="_blank"
+          matTooltip="Open Discord Server"
+        [disabled]="!open"></a>
+        @if (es.lobbyComponent) {
+          <a
+            mat-button
+            id="lobbyButton"
+            href="/#/list"
+            matTooltip="Return to Lobby"
+            class="action"
+            [disabled]="!open">
+            <mat-icon>cancel</mat-icon>
+          </a>
+        }
+        <button mat-button
+          id="logoutButton"
+          matTooltip="Logout"
+          class="action"
+          [disabled]="!open"
+          (click)="logout()">
+          <mat-icon [style.color]="'red'">power_settings_new</mat-icon>
+        </button>
+      </div>
+      <mat-tab-group id="main-tab"
+        [mat-stretch-tabs]="false"
+        [selectedIndex]="es.activeTab$ | async"
+        (selectedIndexChange)="onTabChange($event)">
+        <mat-tab label="LOBBY"
+          [disabled]="!open">
+          <ng-template matTabContent>
+            <mat-tab-group id="sub-tab"
+              mat-align-tabs="center"
+              [mat-stretch-tabs]="false"
+              [selectedIndex]="es.lobbyTab$ | async"
+              (selectedIndexChange)="onLobbyTabChange($event)">
+              <mat-tab label="Lobby">
+                <mat-card>
+                  <mat-card-content>
+                    <q-player-list [players]="(fs.lobby$ | async) || []"></q-player-list>
+                  </mat-card-content>
                 </mat-card>
-              </ng-template>
-            </mat-tab>
-            <mat-tab *ngIf="ss.showMapChoice"
-                     label="Map Selection">
-              <ng-template matTabContent>
-                <q-map-list [injector]="es.lobbyInjector"
-                            [rankArea]="ss.rankArea"></q-map-list>
-              </ng-template>
-            </mat-tab>
-          </mat-tab-group>
-        </ng-template>
-      </mat-tab>
-
-      <mat-tab label="PROFILE"
-               [disabled]="!open">
-        <ng-template matTabContent>
-          <q-profile></q-profile>
-        </ng-template>
-      </mat-tab>
-
-      <mat-tab *ngIf="ws.user?.id"
-               label="INVENTORY"
-               [disabled]="!open">
-        <ng-template matTabContent>
-          <q-inventory></q-inventory>
-        </ng-template>
-      </mat-tab>
-
-      <mat-tab label="SETTINGS"
-               [disabled]="!open">
-        <ng-template matTabContent>
-          <q-settings></q-settings>
-        </ng-template>
-      </mat-tab>
-
-      <mat-tab label="MATCHMAKING"
-               [disabled]="!open">
-        <ng-template matTabContent>
-          <q-match-queue></q-match-queue>
-        </ng-template>
-      </mat-tab>
-    </mat-tab-group>
-
-    <div *ngIf="open"
-         id="chatframe">
-      <q-chat [disabled]="!open"></q-chat>
+                <ng-container *ngComponentOutlet="$any(es.lobbyComponent); injector: es.lobbyInjector"></ng-container>
+              </mat-tab>
+              @if (ss.lAdminSettings.length) {
+                <mat-tab
+                  label="Settings">
+                  <ng-template matTabContent>
+                    @if (es.open$ | async) {
+                      <mat-card
+                        id="lobbySettings">
+                        <div class="settings">
+                          @for (s of ss.lAdminSettings; track s) {
+                            <q-setting
+                            [name]="s"></q-setting>
+                          }
+                        </div>
+                      </mat-card>
+                    }
+                  </ng-template>
+                </mat-tab>
+              }
+              @if (ss.showMapChoice) {
+                <mat-tab
+                  label="Map Selection">
+                  <ng-template matTabContent>
+                    <q-map-list [injector]="es.lobbyInjector"
+                    [rankArea]="ss.rankArea"></q-map-list>
+                  </ng-template>
+                </mat-tab>
+              }
+            </mat-tab-group>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="PROFILE"
+          [disabled]="!open">
+          <ng-template matTabContent>
+            <q-profile></q-profile>
+          </ng-template>
+        </mat-tab>
+        @if (ws.user?.id) {
+          <mat-tab
+            label="INVENTORY"
+            [disabled]="!open">
+            <ng-template matTabContent>
+              <q-inventory></q-inventory>
+            </ng-template>
+          </mat-tab>
+        }
+        <mat-tab label="SETTINGS"
+          [disabled]="!open">
+          <ng-template matTabContent>
+            <q-settings></q-settings>
+          </ng-template>
+        </mat-tab>
+        <mat-tab label="MATCHMAKING"
+          [disabled]="!open">
+          <ng-template matTabContent>
+            <q-match-queue></q-match-queue>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
+      @if (open) {
+        <div
+          id="chatframe">
+          <q-chat [disabled]="!open"></q-chat>
+        </div>
+      }
     </div>
   </div>
-</div>
+}

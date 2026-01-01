@@ -1,3 +1,5 @@
-<div *ngIf="bestTier"
-     [matTooltip]="title"
-     class="tier {{tierTitles[bestTier]}}"></div>
+@if (bestTier) {
+  <div
+    [matTooltip]="title"
+  class="tier {{tierTitles[bestTier]}}"></div>
+}

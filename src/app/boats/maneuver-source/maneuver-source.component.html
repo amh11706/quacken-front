@@ -1,20 +1,26 @@
-<div *ngFor="let m of maneuvers; let i = index"
-     [matTooltip]="m.name + ' - ' + (unusedTokens.maneuvers[i] || 0) + '%'"
-     [class.want]="wantManeuver === i"
-     [class]="m.class"
-     (click)="setWantToken(i)">
-  <img *ngIf="(unusedTokens.maneuvers[i] || 0) > 0"
-       class="maneuver"
-       draggable="true"
-       [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 100"
-       [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) + '%'"
-       [src]="getManeuverIcon(m.id)"
-       (dragstart)="dragManeuver(m.id)">
-  <img *ngIf="(unusedTokens.maneuvers[i] || 0) > 100"
-       class="maneuver"
-       draggable="true"
-       [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 200"
-       [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) - 100 + '%'"
-       [src]="getManeuverIcon(m.id+1)"
-       (dragstart)="dragManeuver(m.id + 1)">
-</div>
+@for (m of maneuvers; track m; let i = $index) {
+  <div
+    [matTooltip]="m.name + ' - ' + (unusedTokens.maneuvers[i] || 0) + '%'"
+    [class.want]="wantManeuver === i"
+    [class]="m.class"
+    (click)="setWantToken(i)">
+    @if ((unusedTokens.maneuvers[i] || 0) > 0) {
+      <img
+        class="maneuver"
+        draggable="true"
+        [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 100"
+        [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) + '%'"
+        [src]="getManeuverIcon(m.id)"
+        (dragstart)="dragManeuver(m.id)">
+    }
+    @if ((unusedTokens.maneuvers[i] || 0) > 100) {
+      <img
+        class="maneuver"
+        draggable="true"
+        [class.usable]="(unusedTokens.maneuvers[i] || 0) >= 200"
+        [style.maxHeight]="(unusedTokens.maneuvers[i] || 0) - 100 + '%'"
+        [src]="getManeuverIcon(m.id+1)"
+        (dragstart)="dragManeuver(m.id + 1)">
+    }
+  </div>
+}

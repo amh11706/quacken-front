@@ -1,36 +1,42 @@
 <button class="full"
-        mat-button
-        [disabled]="disabled"
-        [class.changed]="changed"
-        [class.notdefault]="notDefault"
-        [matTooltip]="title"
-        (click)="openDialog(popup)">{{key}}</button>
+  mat-button
+  [disabled]="disabled"
+  [class.changed]="changed"
+  [class.notdefault]="notDefault"
+  [matTooltip]="title"
+(click)="openDialog(popup)">{{key}}</button>
 
 <ng-template #popup>
-    <h2 mat-dialog-title>Press any key to assign</h2>
-    <mat-dialog-content>
-        <div class="key-display">
-            <div>{{newKey}}</div>
-            <button mat-icon-button
-                    tabindex="-1"
-                    (click)="newKey=NotActive">
-                <mat-icon>clear</mat-icon>
-            </button>
-        </div>
+  <h2 mat-dialog-title>Press any key to assign</h2>
+  <mat-dialog-content>
+    <div class="key-display">
+      <div>{{newKey}}</div>
+      <button mat-icon-button
+        tabindex="-1"
+        (click)="newKey=NotActive">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
 
-        <p *ngIf="conflict"
-           class="warning">Warning! This will unset '{{conflict[0]?.title}}' from group '{{conflict[0]?.group}}'<span
-                  *ngIf="conflict.length === 2">
-                and '{{conflict[1]?.title}}' from group '{{conflict[1]?.group}}'</span><span *ngIf="conflict.length > 2">
-                and {{conflict.length -1}} other bindings</span>.
-        </p>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <button mat-raised-button
-                color="accent"
-                [mat-dialog-close]="newKey"
-                [disabled]="!newKey">Confirm</button>
-        <button mat-raised-button
-                mat-dialog-close>Cancel</button>
-    </mat-dialog-actions>
+    @if (conflict) {
+      <p
+        class="warning">Warning! This will unset '{{conflict[0]?.title}}' from group '{{conflict[0]?.group}}'@if (conflict.length === 2) {
+        <span
+          >
+        and '{{conflict[1]?.title}}' from group '{{conflict[1]?.group}}'</span>
+        }@if (conflict.length > 2) {
+        <span>
+        and {{conflict.length -1}} other bindings</span>
+        }.
+      </p>
+    }
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-raised-button
+      color="accent"
+      [mat-dialog-close]="newKey"
+    [disabled]="!newKey">Confirm</button>
+    <button mat-raised-button
+    mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
 </ng-template>

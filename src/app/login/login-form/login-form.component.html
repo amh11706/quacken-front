@@ -3,54 +3,56 @@
   <p>Powered by superquacken.com</p>
   <div id="loginWrapper">
     <form #loginForm="ngForm"
-          id="loginform"
-          ngNativeValidate
-          (ngSubmit)="login()">
+      id="loginform"
+      ngNativeValidate
+      (ngSubmit)="login()">
       <mat-form-field>
         <mat-label>Email</mat-label>
         <input name="email"
-               matInput
-               qAutoSelect
-               autocomplete="username"
-               required
-               [(ngModel)]="user.email">
+          matInput
+          qAutoSelect
+          autocomplete="username"
+          required
+          [(ngModel)]="user.email">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Password</mat-label>
         <input name="password"
-               matInput
-               qAutoSelect
-               type="password"
-               minlength="6"
-               autocomplete="current-password"
-               required
-               [(ngModel)]="user.password">
+          matInput
+          qAutoSelect
+          type="password"
+          minlength="6"
+          autocomplete="current-password"
+          required
+          [(ngModel)]="user.password">
       </mat-form-field>
       <p id="terms">By logging in, you agree to our
         <span class="link"
-              (click)="showTerms()">terms of use</span>
+        (click)="showTerms()">terms of use</span>
         and
         <span class="link"
-              (click)="showPrivacy()">privacy policy</span>.
+        (click)="showPrivacy()">privacy policy</span>.
       </p>
       <button class="login"
-              type="submit"
-              mat-stroked-button
-              color="accent"
-              [disabled]="pending">Log in</button>
+        type="submit"
+        mat-stroked-button
+        color="accent"
+      [disabled]="pending">Log in</button>
       <p>
         No account?
         <span class="link"
-              (click)="createAccount()">Create one</span>
+        (click)="createAccount()">Create one</span>
         or
         <span class="link"
-              (click)="guestLogin()">play as a guest</span>.
+        (click)="guestLogin()">play as a guest</span>.
       </p>
     </form>
-    <div *ngIf="pending"
-         class="spinner">
-      <mat-spinner></mat-spinner>
-    </div>
+    @if (pending) {
+      <div
+        class="spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
   </div>
 </div>
 
@@ -59,17 +61,19 @@
     <p>{{errMessage || 'Wrong email or password.'}}</p>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button *ngIf="errMessage !== defaultServerError"
-            mat-raised-button
-            color="accent"
-            [disabled]="pending"
-            (click)="sendReset()">
-      Forgot Password
-    </button>
+    @if (errMessage !== defaultServerError) {
+      <button
+        mat-raised-button
+        color="accent"
+        [disabled]="pending"
+        (click)="sendReset()">
+        Forgot Password
+      </button>
+    }
     <button mat-raised-button
-            color="accent"
-            mat-dialog-close
-            cdkFocusInitial
-            [disabled]="pending">Close</button>
+      color="accent"
+      mat-dialog-close
+      cdkFocusInitial
+    [disabled]="pending">Close</button>
   </mat-dialog-actions>
 </ng-template>

@@ -1,40 +1,42 @@
 <div #background>
   <q-twod-render #renderer
-                 [hoveredTeam]="hoveredTeam"
-                 [speed]="graphicSettings.speed.value"
-                 [fishBoats]="lobbySettings.fishBoats.value"
-                 [mapHeight]="mapHeight"
-                 [mapWidth]="mapWidth"
-                 [ctrlZoom]="advancedMapOpen"
-                 [setTile]="setTile.bind(this)"
-                 [checkSZ]="checkSZ"
-                 [undo]="undo"
-                 [editor]="editor"
-                 [showIsland]="false"
-                 [graphicSettings]="graphicSettings"></q-twod-render>
+    [hoveredTeam]="hoveredTeam"
+    [speed]="graphicSettings.speed.value"
+    [fishBoats]="lobbySettings.fishBoats.value"
+    [mapHeight]="mapHeight"
+    [mapWidth]="mapWidth"
+    [ctrlZoom]="advancedMapOpen"
+    [setTile]="setTile.bind(this)"
+    [checkSZ]="checkSZ"
+    [undo]="undo"
+    [editor]="editor"
+    [showIsland]="false"
+  [graphicSettings]="graphicSettings"></q-twod-render>
   <!-- <q-threed-render #renderer
-                   *ngIf="graphicSettings.renderMode?.value === 1"
-                   [hoveredTeam]="hoveredTeam"
-                   [mapHeight]="mapHeight"
-                   [mapWidth]="mapWidth"
-                   [graphicSettings]="graphicSettings"></q-threed-render> -->
+  *ngIf="graphicSettings.renderMode?.value === 1"
+  [hoveredTeam]="hoveredTeam"
+  [mapHeight]="mapHeight"
+  [mapWidth]="mapWidth"
+[graphicSettings]="graphicSettings"></q-threed-render> -->
 </div>
-<q-obstacles *ngIf="advancedMapOpen"
-             [map]="editor"
-             [background]="background">
-</q-obstacles>
+@if (advancedMapOpen) {
+  <q-obstacles
+    [map]="editor"
+    [background]="background">
+  </q-obstacles>
+}
 
 <q-cade-entry-status [myTeam]="myBoat.team"
-                     (hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>
+(hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>
 <q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
-         [hoveredTeam]="hoveredTeam"
-         [statOpacity]="statOpacity"
-         [stats]="lobby?.stats"
-         [columns]="columns"
-         [myTeam]="myBoat.team"></q-stats>
+  [hoveredTeam]="hoveredTeam"
+  [statOpacity]="statOpacity"
+  [stats]="lobby?.stats"
+  [columns]="columns"
+[myTeam]="myBoat.team"></q-stats>
 
 <q-cade-hud [moveKeys]="moveKeys"
-            [actions]="actions"
-            [group]="'l/flaggames'"
-            [kbControls]="controlSettings.kbControls.value"
-            [shiftSpecials]="controlSettings.shiftSpecials.value"></q-cade-hud>
+  [actions]="actions"
+  [group]="'l/flaggames'"
+  [kbControls]="controlSettings.kbControls.value"
+[shiftSpecials]="controlSettings.shiftSpecials.value"></q-cade-hud>

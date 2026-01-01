@@ -1,35 +1,38 @@
 <mat-checkbox [disabled]="(JobberSetting.admin === true) && (ss.admin$ | async) === false"
-              [(ngModel)]="advanced"
-              (change)="updateAdvanced()">
+  [(ngModel)]="advanced"
+  (change)="updateAdvanced()">
   <span>Advanced</span>
 </mat-checkbox>
 
-<div *ngIf="!advanced; else advancedSliders"
-     class="setting">
-  <span class="label">{{JobberSetting.label}} ({{slider.value}})</span>
-  <mat-slider [min]="JobberSetting.min"
-              [max]="100"
-              [color]="'accent'"
-              [step]="JobberSetting.step"
-              [disabled]="JobberSetting.admin && (ss.admin$ | async) === false">
-    <input #slider
-           matSliderThumb
-           [(ngModel)]="setting.value">
-  </mat-slider>
-</div>
-
-<ng-template #advancedSliders>
-  <div *ngFor="let slider of sliders"
-       class="setting">
-    <span class="label">{{slider}} ({{sliderInput.valueAsNumber > 100 ? 'Unlimited' : sliderInput.value}})</span>
-    <mat-slider [min]="0"
-                [max]="105"
-                [color]="'accent'"
-                [step]="5"
-                [disabled]="JobberSetting.admin && (ss.admin$ | async) === false">
-      <input #sliderInput
-             matSliderThumb
-             [(ngModel)]="setting.data[slider]">
+@if (!advanced) {
+  <div
+    class="setting">
+    <span class="label">{{JobberSetting.label}} ({{slider.value}})</span>
+    <mat-slider [min]="JobberSetting.min"
+      [max]="100"
+      [color]="'accent'"
+      [step]="JobberSetting.step"
+      [disabled]="JobberSetting.admin && (ss.admin$ | async) === false">
+      <input #slider
+        matSliderThumb
+        [(ngModel)]="setting.value">
     </mat-slider>
   </div>
-</ng-template>
+} @else {
+  @for (slider of sliders; track slider) {
+    <div
+      class="setting">
+      <span class="label">{{slider}} ({{sliderInput.valueAsNumber > 100 ? 'Unlimited' : sliderInput.value}})</span>
+      <mat-slider [min]="0"
+        [max]="105"
+        [color]="'accent'"
+        [step]="5"
+        [disabled]="JobberSetting.admin && (ss.admin$ | async) === false">
+        <input #sliderInput
+          matSliderThumb
+          [(ngModel)]="setting.data[slider]">
+      </mat-slider>
+    </div>
+  }
+}
+

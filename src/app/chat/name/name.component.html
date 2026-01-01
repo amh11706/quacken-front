@@ -1,24 +1,32 @@
 <span [matMenuTriggerFor]="nameMenu"
-      (menuOpened)="updateMenu()">
+  (menuOpened)="updateMenu()">
   <span [class.friend]="friend"
-        [class.bot]="bot"
-        [class.you]="message.from === ws.user.name"
-        [class.admin]="message.admin && message.admin >= 3"
-        [class.blocked]="blocked">{{message.from}}</span>
-  <span *ngIf="message.copy && message.copy > 1">({{message.copy}})</span>
-  <ngx-emoji *ngIf="emoji"
-             [size]="16"
-             [tooltip]="true"
-             [emoji]="emoji"></ngx-emoji>
-  <q-rank-circle *ngIf="message.ti"
-                 [tier]="message.ti"
-                 [score]="message.sc || [0]"></q-rank-circle>
+    [class.bot]="bot"
+    [class.you]="message.from === ws.user.name"
+    [class.admin]="message.admin && message.admin >= 3"
+  [class.blocked]="blocked">{{message.from}}</span>
+  @if (message.copy && message.copy > 1) {
+    <span>({{message.copy}})</span>
+  }
+  @if (emoji) {
+    <ngx-emoji
+      [size]="16"
+      [tooltip]="true"
+    [emoji]="emoji"></ngx-emoji>
+  }
+  @if (message.ti) {
+    <q-rank-circle
+      [tier]="message.ti"
+    [score]="message.sc || [0]"></q-rank-circle>
+  }
 </span>
 
 <mat-menu #nameMenu="matMenu">
   <ng-template matMenuContent>
-    <button *ngFor="let option of menuItems"
-            mat-menu-item
-            (click)="option.action()">{{ option.label | titlecase }}</button>
+    @for (option of menuItems; track option) {
+      <button
+        mat-menu-item
+      (click)="option.action()">{{ option.label | titlecase }}</button>
+    }
   </ng-template>
 </mat-menu>

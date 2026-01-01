@@ -1,82 +1,99 @@
 <div #background
-     class="noselect"
-     id="background"
-     (contextmenu)="$event.preventDefault()">
-  <q-twod-render *ngIf="settings() && editor.selectedTile.data; else oldRender"
-                 [map]="editor.selectedTile.data"
-                 [editor]="editor"
-                 [undo]="undo"
-                 [mapWidth]="settings()?.width ?? 20"
-                 [mapHeight]="settings()?.height ?? 36"
-                 [showIsland]="settings()?.showIsland ?? false"
-                 [ctrlZoom]="true"
-                 [setTile]="setTile">
-  </q-twod-render>
-
-  <ng-template #oldRender>
+  class="noselect"
+  id="background"
+  (contextmenu)="$event.preventDefault()">
+  @if (settings() && editor.selectedTile.data) {
+    <q-twod-render
+      [map]="editor.selectedTile.data"
+      [editor]="editor"
+      [undo]="undo"
+      [mapWidth]="settings()?.width ?? 20"
+      [mapHeight]="settings()?.height ?? 36"
+      [showIsland]="settings()?.showIsland ?? false"
+      [ctrlZoom]="true"
+      [setTile]="setTile">
+    </q-twod-render>
+  } @else {
     <div id="mapframe"
-         [qDrag]="background">
-      <q-map *ngIf="editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length"
-             [map]="editor"
-             [undo]="undo"
-             [setTile]="setTile">
-      </q-map>
-      <q-structure-map *ngIf="editor.structures"
-                       [map]="editor"></q-structure-map>
+      [qDrag]="background">
+      @if (editor.selectedTile.data && editor.selectedTile.data[0] && editor.selectedTile.data[0].length) {
+        <q-map
+          [map]="editor"
+          [undo]="undo"
+          [setTile]="setTile">
+        </q-map>
+      }
+      @if (editor.structures) {
+        <q-structure-map
+        [map]="editor"></q-structure-map>
+      }
     </div>
-  </ng-template>
+  }
+
 </div>
 
-<q-obstacles *ngIf="!editor.structures"
-             [map]="editor"
-             [background]="background">
-</q-obstacles>
-<q-tile-set *ngIf="editor.tiles"
-            [map]="editor"></q-tile-set>
-<q-structure-set *ngIf="editor.structures"
-                 [map]="editor"></q-structure-set>
-<q-tmap-set *ngIf="editor.tmaps"
-            [map]="editor"></q-tmap-set>
-<q-entity-editor *ngIf="editor.selectedTile.settings"
-                 [map]="editor"></q-entity-editor>
-<q-settings *ngIf="editor.settingsOpen"
-            [map]="editor"></q-settings>
+@if (!editor.structures) {
+  <q-obstacles
+    [map]="editor"
+    [background]="background">
+  </q-obstacles>
+}
+@if (editor.tiles) {
+  <q-tile-set
+  [map]="editor"></q-tile-set>
+}
+@if (editor.structures) {
+  <q-structure-set
+  [map]="editor"></q-structure-set>
+}
+@if (editor.tmaps) {
+  <q-tmap-set
+  [map]="editor"></q-tmap-set>
+}
+@if (editor.selectedTile.settings) {
+  <q-entity-editor
+  [map]="editor"></q-entity-editor>
+}
+@if (editor.settingsOpen) {
+  <q-settings
+  [map]="editor"></q-settings>
+}
 
 <div class="container noselect"
-     id="hud">
+  id="hud">
   <div id="chat">
     <q-chat [disabled]="(es.open$ | async) || false"></q-chat>
   </div>
   <div id="buttons">
-    <ng-container *ngIf="editor.selectedTile.data">
+    @if (editor.selectedTile.data) {
       <button mat-icon-button
-              matTooltip="Undo - ctrl + z"
-              [disabled]="editor.settingsOpen || !editor.selectedTile.undos.length"
-              (click)="undo(editor.selectedTile.undos, editor.selectedTile.redos)">
+        matTooltip="Undo - ctrl + z"
+        [disabled]="editor.settingsOpen || !editor.selectedTile.undos.length"
+        (click)="undo(editor.selectedTile.undos, editor.selectedTile.redos)">
         <mat-icon>undo</mat-icon>
       </button>
       <button mat-icon-button
-              matTooltip="Redo - ctrl + y"
-              [disabled]="editor.settingsOpen || !editor.selectedTile.redos.length"
-              (click)="undo(editor.selectedTile.redos, editor.selectedTile.undos)">
+        matTooltip="Redo - ctrl + y"
+        [disabled]="editor.settingsOpen || !editor.selectedTile.redos.length"
+        (click)="undo(editor.selectedTile.redos, editor.selectedTile.undos)">
         <mat-icon>redo</mat-icon>
       </button>
-    </ng-container>
+    }
     <button mat-icon-button
-            matTooltip="Save - ctrl + s"
-            [disabled]="editor.settingsOpen"
-            (click)="save()">
+      matTooltip="Save - ctrl + s"
+      [disabled]="editor.settingsOpen"
+      (click)="save()">
       <mat-icon>save</mat-icon>
     </button>
     <button mat-icon-button
-            matTooltip="Open Guide"
-            (click)="openGuide()">
+      matTooltip="Open Guide"
+      (click)="openGuide()">
       <mat-icon>help_outline</mat-icon>
     </button>
     <button mat-raised-button
-            id="editorSettings"
-            matTooltip="Settings - ctrl + e"
-            [disabled]="editor.settingsOpen"
-            (click)="openSettings()">Editor Settings</button>
+      id="editorSettings"
+      matTooltip="Settings - ctrl + e"
+      [disabled]="editor.settingsOpen"
+    (click)="openSettings()">Editor Settings</button>
   </div>
 </div>

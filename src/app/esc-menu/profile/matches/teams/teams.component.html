@@ -1,26 +1,32 @@
 <div class="playerCount"
-     (mouseover)="showTeams = true"
-     (mouseleave)="showTeams = false">
+  (mouseover)="showTeams = true"
+  (mouseleave)="showTeams = false">
   {{playerLength}}
   <div class="teamList"
-       [class.visible]="showTeams && teams.length"
-       (click)="$event.stopPropagation()">
+    [class.visible]="showTeams && teams.length"
+    (click)="$event.stopPropagation()">
     <table>
       <tr>
-        <ng-container *ngFor="let team of teamImages; let i = index">
-          <th *ngIf="teams[i]?.length">
-            <img [src]="team.src"
-                 [matTooltip]="team.title">
-          </th>
-        </ng-container>
+        @for (team of teamImages; track team; let i = $index) {
+          @if (teams[i]?.length) {
+            <th>
+              <img [src]="team.src"
+                [matTooltip]="team.title">
+            </th>
+          }
+        }
       </tr>
       <tr>
-        <ng-container *ngFor="let team of teams">
-          <td *ngIf="team?.length">
-            <q-name *ngFor="let p of team"
-                    [message]="p"></q-name>
-          </td>
-        </ng-container>
+        @for (team of teams; track team) {
+          @if (team?.length) {
+            <td>
+              @for (p of team; track p) {
+                <q-name
+                [message]="p"></q-name>
+              }
+            </td>
+          }
+        }
       </tr>
     </table>
   </div>

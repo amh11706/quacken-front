@@ -1,16 +1,18 @@
-<ng-container *ngIf="rating">
+@if (rating) {
   <h4 class="mapRating">Map Rating: <q-rating (ratingUpdated)="rateMap.emit($event)"></q-rating></h4>
-</ng-container>
+}
 
 <h2 class="title">Round Summary</h2>
 
-<mat-button-toggle-group *ngIf="extraColumns.length"
-                         name="statGroup"
-                         aria-label="Stat group"
-                         [(ngModel)]="showExtra">
-  <mat-button-toggle [value]="0">Normal Stats</mat-button-toggle>
-  <mat-button-toggle [value]="1">Extra</mat-button-toggle>
-</mat-button-toggle-group>
+@if (extraColumns.length) {
+  <mat-button-toggle-group
+    name="statGroup"
+    aria-label="Stat group"
+    [(ngModel)]="showExtra">
+    <mat-button-toggle [value]="0">Normal Stats</mat-button-toggle>
+    <mat-button-toggle [value]="1">Extra</mat-button-toggle>
+  </mat-button-toggle-group>
+}
 <br><br>
 
 <div id="statFrame">
@@ -18,34 +20,42 @@
     <tr>
       <th>Name</th>
       <th>Score</th>
-      <th *ngFor="let c of (showExtra ? extraColumns : columns)">{{c.title}}</th>
+      @for (c of (showExtra ? extraColumns : columns); track c) {
+        <th>{{c.title}}</th>
+      }
     </tr>
-    <tr *ngFor="let r of scores">
-      <td [style.color]="teamColors[r.team]">{{r.user}}</td>
-      <td>{{r.score}}</td>
-      <td *ngFor="let c of (showExtra ? extraColumns : columns)">{{r.stats[c.stat]}}</td>
-    </tr>
+    @for (r of scores; track r) {
+      <tr>
+        <td [style.color]="teamColors[r.team]">{{r.user}}</td>
+        <td>{{r.score}}</td>
+        @for (c of (showExtra ? extraColumns : columns); track c) {
+          <td>{{r.stats[c.stat]}}</td>
+        }
+      </tr>
+    }
   </table>
 
-  <ng-container *ngIf="myScore">
+  @if (myScore) {
     <h4 class="title">Your Score Breakdown</h4>
     <table>
       <tr>
         <th>Category</th>
         <th>Points</th>
       </tr>
-      <ng-container *ngFor="let c of columns">
-        <tr *ngIf="pointValues[c.stat] && myScore.stats[c.stat]">
-          <td>{{c.title}}</td>
-          <td>{{(pointValues[c.stat] || 0) * Number(myScore.stats[c.stat])}}</td>
-        </tr>
-      </ng-container>
+      @for (c of columns; track c) {
+        @if (pointValues[c.stat] && myScore.stats[c.stat]) {
+          <tr>
+            <td>{{c.title}}</td>
+            <td>{{(pointValues[c.stat] || 0) * Number(myScore.stats[c.stat])}}</td>
+          </tr>
+        }
+      }
     </table>
-  </ng-container>
+  }
 </div>
 
 <div class="buttons">
   <button mat-raised-button
-          id="ready"
-          (click)="close()">Continue</button>
+    id="ready"
+  (click)="close()">Continue</button>
 </div>

@@ -6,24 +6,23 @@
           Name Emoji
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <ng-container *ngIf="ws.user.d; else noEmoji">
+      @if (ws.user.d) {
         <ngx-emoji [matMenuTriggerFor]="emojimenu"
-                   [tooltip]="true"
-                   [emoji]="findCustomEmoji(ws.user.d)"></ngx-emoji>
+          [tooltip]="true"
+        [emoji]="findCustomEmoji(ws.user.d)"></ngx-emoji>
         <mat-menu #emojimenu>
           <ng-template matMenuContent>
             <emoji-mart [darkMode]="true"
-                        [autoFocus]="true"
-                        [showSingleCategory]="true"
-                        [custom]="customEmojis"
-                        (click)="$event.preventDefault(); $event.stopPropagation();"
-                        (emojiSelect)="emojiPicked($event); emojimenu.close.emit()"></emoji-mart>
+              [autoFocus]="true"
+              [showSingleCategory]="true"
+              [custom]="customEmojis"
+              (click)="$event.preventDefault(); $event.stopPropagation();"
+            (emojiSelect)="emojiPicked($event); emojimenu.close.emit()"></emoji-mart>
           </ng-template>
         </mat-menu>
-      </ng-container>
-      <ng-template #noEmoji>
+      } @else {
         You do not have a name emoji. Win a competition or donate to get one.
-      </ng-template>
+      }
     </mat-expansion-panel>
 
     <mat-expansion-panel>
@@ -33,138 +32,138 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <form id="newPassForm"
-            ngNativeValidate
-            (ngSubmit)="changePass(newPass.value, pass.value)">
+        ngNativeValidate
+        (ngSubmit)="changePass(newPass.value, pass.value)">
         <mat-form-field>
           <mat-label>New Password</mat-label>
           <input #newPass
-                 matInput
-                 name="newPassword"
-                 type="password"
-                 required
-                 minlength="6"
-                 autocomplete="new-password">
+            matInput
+            name="newPassword"
+            type="password"
+            required
+            minlength="6"
+            autocomplete="new-password">
         </mat-form-field>
         <mat-form-field>
           <mat-label>Current Password</mat-label>
           <input #pass
-                 matInput
-                 name="password"
-                 type="password"
-                 required
-                 minlength="6"
-                 autocomplete="password">
+            matInput
+            name="password"
+            type="password"
+            required
+            minlength="6"
+            autocomplete="password">
         </mat-form-field>
         <br>
-        <button mat-raised-button
-                color="accent"
-                type="submit"
-                [disabled]="pending">Submit</button>
-      </form>
-    </mat-expansion-panel>
+          <button mat-raised-button
+            color="accent"
+            type="submit"
+          [disabled]="pending">Submit</button>
+        </form>
+      </mat-expansion-panel>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Change Name
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <form id="nameForm"
-            ngNativeValidate
-            (ngSubmit)="changeName(username.value, namePass.value)">
-        <p>You may change to a new name at most once every 30 days. Your most recent name will be reserved and
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Change Name
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form id="nameForm"
+          ngNativeValidate
+          (ngSubmit)="changeName(username.value, namePass.value)">
+          <p>You may change to a new name at most once every 30 days. Your most recent name will be reserved and
           can be reclaimed at any time.</p>
-        <mat-form-field>
-          <mat-label>New Username</mat-label>
-          <input #username
-                 matInput
-                 required
-                 minlength="2"
-                 maxlength="16"
-                 autocomplete="nickname">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Current Password</mat-label>
-          <input #namePass
-                 matInput
-                 name="password"
-                 type="password"
-                 required
-                 minlength="6"
-                 autocomplete="password">
-        </mat-form-field>
-        <br>
-        <button mat-raised-button
-                color="accent"
-                type="submit"
-                [disabled]="pending">Submit</button>
-      </form>
-    </mat-expansion-panel>
+          <mat-form-field>
+            <mat-label>New Username</mat-label>
+            <input #username
+              matInput
+              required
+              minlength="2"
+              maxlength="16"
+              autocomplete="nickname">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Current Password</mat-label>
+            <input #namePass
+              matInput
+              name="password"
+              type="password"
+              required
+              minlength="6"
+              autocomplete="password">
+          </mat-form-field>
+          <br>
+            <button mat-raised-button
+              color="accent"
+              type="submit"
+            [disabled]="pending">Submit</button>
+          </form>
+        </mat-expansion-panel>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Change Email
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <form id="emailForm"
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Change Email
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form id="emailForm"
             ngNativeValidate
             (ngSubmit)="changeEmail(email.value, emailPass.value)">
-        <mat-form-field>
-          <mat-label>New Email</mat-label>
-          <input #email
-                 matInput
-                 name="email"
-                 type="email"
-                 required
-                 autocomplete="email">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Current Password</mat-label>
-          <input #emailPass
-                 matInput
-                 name="password"
-                 type="password"
-                 required
-                 minlength="6"
-                 autocomplete="password">
-        </mat-form-field>
-        <br>
-        <button mat-raised-button
+            <mat-form-field>
+              <mat-label>New Email</mat-label>
+              <input #email
+                matInput
+                name="email"
+                type="email"
+                required
+                autocomplete="email">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Current Password</mat-label>
+              <input #emailPass
+                matInput
+                name="password"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="password">
+            </mat-form-field>
+            <br>
+              <button mat-raised-button
                 color="accent"
                 type="submit"
-                [disabled]="pending">Submit</button>
-      </form>
-    </mat-expansion-panel>
+              [disabled]="pending">Submit</button>
+            </form>
+          </mat-expansion-panel>
 
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Delete Account
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <form id="deleteForm"
-            ngNativeValidate
-            (ngSubmit)="delete(deletePass.value)">
-        <p>You will receive an email with a link to recover your account in case you change your mind. All
-          personal
-          information will then be removed from our database.</p>
-        <mat-form-field>
-          <mat-label>Current Password</mat-label>
-          <input #deletePass
-                 matInput
-                 name="password"
-                 type="password"
-                 required
-                 minlength="6"
-                 autocomplete="password">
-        </mat-form-field>
-        <br>
-        <button mat-raised-button
-                color="accent"
-                type="submit"
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Delete Account
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form id="deleteForm"
+              ngNativeValidate
+              (ngSubmit)="delete(deletePass.value)">
+              <p>You will receive an email with a link to recover your account in case you change your mind. All
+                personal
+              information will then be removed from our database.</p>
+              <mat-form-field>
+                <mat-label>Current Password</mat-label>
+                <input #deletePass
+                  matInput
+                  name="password"
+                  type="password"
+                  required
+                  minlength="6"
+                  autocomplete="password">
+              </mat-form-field>
+              <br>
+                <button mat-raised-button
+                  color="accent"
+                  type="submit"
                 [disabled]="pending">Delete</button>
-      </form>
-    </mat-expansion-panel>
-  </mat-accordion>
-</div>
+              </form>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>

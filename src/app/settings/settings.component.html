@@ -1,17 +1,17 @@
 <mat-tab-group mat-align-tabs="center"
-               [mat-stretch-tabs]="false"
-               [(selectedIndex)]="ss.tabIndex">
+  [mat-stretch-tabs]="false"
+  [(selectedIndex)]="ss.tabIndex">
 
   <mat-tab label="Sounds">
     <mat-card>
       <div class="settings">
         <q-setting name="soundMaster"></q-setting>
         <q-setting name="soundNotify"
-                   (valueChange)="sound.play(Sounds.Notification)"></q-setting>
+        (valueChange)="sound.play(Sounds.Notification)"></q-setting>
         <q-setting name="soundShip"
-                   (valueChange)="sound.play(Sounds.CannonFireBig)"></q-setting>
+        (valueChange)="sound.play(Sounds.CannonFireBig)"></q-setting>
         <q-setting name="soundAlert"
-                   (valueChange)="sound.play(Sounds.BattleStart)"></q-setting>
+        (valueChange)="sound.play(Sounds.BattleStart)"></q-setting>
       </div>
     </mat-card>
   </mat-tab>
@@ -40,12 +40,16 @@
     </mat-card>
 
     <mat-card>
-      <q-key-binding *ngIf="kbs.activeBindings"></q-key-binding>
+      @if (kbs.activeBindings) {
+        <q-key-binding></q-key-binding>
+      }
     </mat-card>
   </mat-tab>
 
-  <mat-tab *ngIf="ws.user?.id"
-           label="Account">
-    <q-account></q-account>
-  </mat-tab>
+  @if (ws.user?.id) {
+    <mat-tab
+      label="Account">
+      <q-account></q-account>
+    </mat-tab>
+  }
 </mat-tab-group>

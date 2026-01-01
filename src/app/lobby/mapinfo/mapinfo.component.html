@@ -1,24 +1,26 @@
 <div #background>
   <q-twod-render #renderer
-                 [speed]="graphicSettings.speed.value"
-                 [ctrlZoom]="advancedMapOpen"
-                 [setTile]="advancedMapOpen ? setTile.bind(this) : 0"
-                 [undo]="undo"
-                 [editor]="editor"
-                 [graphicSettings]="graphicSettings"></q-twod-render>
+    [speed]="graphicSettings.speed.value"
+    [ctrlZoom]="advancedMapOpen"
+    [setTile]="advancedMapOpen ? setTile.bind(this) : 0"
+    [undo]="undo"
+    [editor]="editor"
+  [graphicSettings]="graphicSettings"></q-twod-render>
 </div>
-<q-obstacles *ngIf="advancedMapOpen"
-             [map]="editor"
-             [background]="background">
-</q-obstacles>
+@if (advancedMapOpen) {
+  <q-obstacles
+    [map]="editor"
+    [background]="background">
+  </q-obstacles>
+}
 
 <div id="advancedMap"
-     class="container"
-     [hidden]="!advancedMapOpen"
-     [qDrag]="handle"
-     [bindToWindow]="true">
+  class="container"
+  [hidden]="!advancedMapOpen"
+  [qDrag]="handle"
+  [bindToWindow]="true">
   <div #handle
-       class="handle"></div>
+  class="handle"></div>
   <q-advanced-map (seedChange)="updateSeed($event)"></q-advanced-map>
 </div>
 

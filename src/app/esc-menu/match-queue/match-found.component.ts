@@ -16,20 +16,22 @@ const TimeLimit = 20;
   template: `
     <h1 mat-dialog-title>{{data.rated ? 'Rated' : 'Unrated'}} {{areaName}} Match Found</h1>
     <div mat-dialog-content>
-      <p *ngIf="!expired; else expiredMessage">Time left to accept: {{ timeLeft | async }} seconds</p>
-      <ng-template #expiredMessage>
+      @if (!expired) {
+        <p>Time left to accept: {{ timeLeft | async }} seconds</p>
+      } @else {
         <p>You had a match, but it expired so you have been removed from the queue.</p>
-      </ng-template>
+      }
     </div>
     <div mat-dialog-actions>
-      <button *ngIf="expired; else options" mat-button (click)="decline()">Close</button>
-      <ng-template #options>
+      @if (expired) {
+        <button mat-button (click)="decline()">Close</button>
+      } @else {
         <a mat-raised-button [color]="'primary'"
-           target="_blank" [href]="'/#/lobby/' + data.lobbyId" (click)="accept()">Accept</a>
+        target="_blank" [href]="'/#/lobby/' + data.lobbyId" (click)="accept()">Accept</a>
         <button mat-raised-button [color]="'warn'" (click)="decline()">Decline</button>
-      </ng-template>
+      }
     </div>
-  `,
+    `,
 })
 export class MatchFoundDialogComponent implements OnInit {
   openTime = Date.now();

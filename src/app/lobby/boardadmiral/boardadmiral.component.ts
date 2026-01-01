@@ -1,6 +1,6 @@
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
+
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
 import { DefaultExtraColumns, DefaultStatColumns, MainMenuService } from '../cadegoose/main-menu/main-menu.service';
 import { CadegooseModule } from '../cadegoose/cadegoose.module';
@@ -48,15 +48,14 @@ interface BaAction {
 @Component({
   selector: 'q-boardadmiral',
   imports: [
-    CommonModule,
     CadegooseModule,
     TwodRenderModule,
     HudComponent,
     BoatListComponent,
     QdragModule,
     MatButtonModule,
-    MapEditorModule,
-  ],
+    MapEditorModule
+],
   templateUrl: './boardadmiral.component.html',
   styleUrl: './boardadmiral.component.scss',
   providers: [MainMenuService],

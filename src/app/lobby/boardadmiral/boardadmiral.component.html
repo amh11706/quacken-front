@@ -1,56 +1,58 @@
 <div #background>
   <q-twod-render #renderer
-                 [hoveredTeam]="hoveredTeam"
-                 [speed]="graphicSettings.speed.value"
-                 [fishBoats]="lobbySettings.fishBoats.value"
-                 [ctrlZoom]="advancedMapOpen"
-                 [setTile]="advancedMapOpen ? setTile.bind(this) : 0"
-                 [undo]="undo"
-                 [editor]="editor"
-                 [graphicSettings]="graphicSettings"
-                 (hoverTile)="hoverTile($event)"
-                 (mouseDownTile)="mouseDownTile($event)"
-                 (clickTile)="clickTile($event)"></q-twod-render>
+    [hoveredTeam]="hoveredTeam"
+    [speed]="graphicSettings.speed.value"
+    [fishBoats]="lobbySettings.fishBoats.value"
+    [ctrlZoom]="advancedMapOpen"
+    [setTile]="advancedMapOpen ? setTile.bind(this) : 0"
+    [undo]="undo"
+    [editor]="editor"
+    [graphicSettings]="graphicSettings"
+    (hoverTile)="hoverTile($event)"
+    (mouseDownTile)="mouseDownTile($event)"
+  (clickTile)="clickTile($event)"></q-twod-render>
 </div>
 
 <q-cade-entry-status [myTeam]="myBoat.team"
-                     (hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>
+(hoveredTeam)="hoveredTeam = $event"></q-cade-entry-status>
 
 <q-stats [style.Opacity]="hoveredTeam !== -1 || statOpacity ? 1 : 0"
-         [hoveredTeam]="hoveredTeam"
-         [columns]="statColumns"
-         [extraColumns]="[]"
-         [statOpacity]="statOpacity"
-         [stats]="lobby?.stats"
-         [myTeam]="myBoat.team"></q-stats>
+  [hoveredTeam]="hoveredTeam"
+  [columns]="statColumns"
+  [extraColumns]="[]"
+  [statOpacity]="statOpacity"
+  [stats]="lobby?.stats"
+[myTeam]="myBoat.team"></q-stats>
 
 <q-ba-hud [activeBoat]="activeBoatSettings"
-          [fishnames]="!!lobbySettings.fishBoats.value"
-          [boatSettings]="boatSettings"
-          (activeBoatChange)="redrawOverlay()"></q-ba-hud>
+  [fishnames]="!!lobbySettings.fishBoats.value"
+  [boatSettings]="boatSettings"
+(activeBoatChange)="redrawOverlay()"></q-ba-hud>
 
 <q-boat-list [hidden]="myBoat.team === undefined || myBoat.team > 3"
-             [fishNames]="!!lobbySettings.fishBoats.value"
-             [activeBoat]="activeBoat"
-             [highlightedBoats]="highlightedBoats"
-             (boatsChange)="gotBoats($event)"
-             (activeBoatChange)="activeBoatChange($event)"></q-boat-list>
+  [fishNames]="!!lobbySettings.fishBoats.value"
+  [activeBoat]="activeBoat"
+  [highlightedBoats]="highlightedBoats"
+  (boatsChange)="gotBoats($event)"
+(activeBoatChange)="activeBoatChange($event)"></q-boat-list>
 
-<q-obstacles *ngIf="advancedMapOpen"
-             [map]="editor"
-             [background]="background">
-</q-obstacles>
+@if (advancedMapOpen) {
+  <q-obstacles
+    [map]="editor"
+    [background]="background">
+  </q-obstacles>
+}
 <div id="advancedMap"
-     class="container"
-     [hidden]="!advancedMapOpen"
-     [qDrag]="handle"
-     [bindToWindow]="true">
+  class="container"
+  [hidden]="!advancedMapOpen"
+  [qDrag]="handle"
+  [bindToWindow]="true">
   <div #handle
-       class="handle"></div>
+  class="handle"></div>
   <q-advanced-map [seed]="mapSeed"
-                  (seedChange)="updateSeed($event)"></q-advanced-map>
+  (seedChange)="updateSeed($event)"></q-advanced-map>
 
   <button mat-raised-button
-          color="accent"
-          (click)="advancedMapOpen = false">Done</button>
+    color="accent"
+  (click)="advancedMapOpen = false">Done</button>
 </div>

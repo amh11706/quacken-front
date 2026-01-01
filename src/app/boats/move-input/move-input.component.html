@@ -1,58 +1,65 @@
-<div *ngFor="let move of input.moves; let i=index"
-     class="moverow">
-  <div class="leftbombs"
-       [draggable]="input.shots[i*2]"
-       (drop)="$event.preventDefault(); dropCannon(i*2)"
-       (touchstart)="touchStartCannon($event, i*2)"
-       (touchend)="touchEndCannon($event)"
-       (touchcancel)="touchEndCannon($event)"
-       (dragstart)="dragCannon(i*2)"
-       (dragend)="dragendCannon()"
-       (dragover)="this.dragContext.type !== 'shot'"
-       (mousedown)="touchStartCannon($event, i*2)"
-       (mouseup)="touchEndCannon($event)">
-    <div class="bombslot token{{input.shots[i*2]}}"
-         [class.unconfirmedShots]="!serverInput.shots[i*2] !== !input.shots[i*2]"
-         [class.blocked]="locked"></div>
-    <div *ngIf="maxShots === 2"
-         class="bombslot"
-         [class.token1]="input.shots[i*2] === 2 || (input.shots[i*2] || 0)%4 > 1"
-         [class.unconfirmedShots]="!(2-(serverInput.shots[i*2] || 0)) !== !(2-(input.shots[i*2]|| 0))"
-         [class.blocked]="locked"></div>
+@for (move of input.moves; track move; let i = $index) {
+  <div
+    class="moverow">
+    <div class="leftbombs"
+      [draggable]="input.shots[i*2]"
+      (drop)="$event.preventDefault(); dropCannon(i*2)"
+      (touchstart)="touchStartCannon($event, i*2)"
+      (touchend)="touchEndCannon($event)"
+      (touchcancel)="touchEndCannon($event)"
+      (dragstart)="dragCannon(i*2)"
+      (dragend)="dragendCannon()"
+      (dragover)="this.dragContext.type !== 'shot'"
+      (mousedown)="touchStartCannon($event, i*2)"
+      (mouseup)="touchEndCannon($event)">
+      <div class="bombslot token{{input.shots[i*2]}}"
+        [class.unconfirmedShots]="!serverInput.shots[i*2] !== !input.shots[i*2]"
+      [class.blocked]="locked"></div>
+      @if (maxShots === 2) {
+        <div
+          class="bombslot"
+          [class.token1]="input.shots[i*2] === 2 || (input.shots[i*2] || 0)%4 > 1"
+          [class.unconfirmedShots]="!(2-(serverInput.shots[i*2] || 0)) !== !(2-(input.shots[i*2]|| 0))"
+        [class.blocked]="locked"></div>
+      }
+    </div>
+    <div class="rightbombs"
+      [draggable]="input.shots[i*2+1]"
+      (drop)="$event.preventDefault(); dropCannon(i*2+1)"
+      (touchstart)="touchStartCannon($event, i*2+1)"
+      (touchend)="touchEndCannon($event)"
+      (touchcancel)="touchEndCannon($event)"
+      (dragstart)="dragCannon(i*2+1)"
+      (dragend)="dragendCannon()"
+      (dragover)="this.dragContext.type !== 'shot'"
+      (mousedown)="touchStartCannon($event, i*2+1)"
+      (mouseup)="touchEndCannon($event)">
+      <div class="bombslot token{{input.shots[i*2+1]}}"
+        [class.blocked]="locked"
+      [class.unconfirmedShots]="!serverInput.shots[i*2+1] !== !input.shots[i*2+1]"></div>
+      @if (maxShots === 2) {
+        <div
+          class="bombslot"
+          [class.token1]="input.shots[i*2+1] === 2 || (input.shots[i*2+1] || 0)%4 > 1"
+          [class.blocked]="locked"
+        [class.unconfirmedShots]="!(2-(serverInput.shots[i*2+1] || 0)) !== !(2-(input.shots[i*2+1] || 0))"></div>
+      }
+    </div>
+    <div class="move"
+      [class.blocked]="locked"
+      [class.selected]="kbControls && selected === i && !locked"
+      [class.unconfirmed]="input.moves[i] !== serverInput.moves[i]"
+      (drop)="drop($event, i)"
+      (mouseup)="clickTile($event, i)"
+      (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
+      (dragover)="this.dragContext.type !== 'move'">
+      @if (move || i === blockedPosition) {
+        <img
+          draggable="true"
+          [src]="getManeuverIcon(move)"
+          (dragstart)="drag(move, i)"
+          (dragend)="dragEnd()">
+      }
+    </div>
   </div>
-  <div class="rightbombs"
-       [draggable]="input.shots[i*2+1]"
-       (drop)="$event.preventDefault(); dropCannon(i*2+1)"
-       (touchstart)="touchStartCannon($event, i*2+1)"
-       (touchend)="touchEndCannon($event)"
-       (touchcancel)="touchEndCannon($event)"
-       (dragstart)="dragCannon(i*2+1)"
-       (dragend)="dragendCannon()"
-       (dragover)="this.dragContext.type !== 'shot'"
-       (mousedown)="touchStartCannon($event, i*2+1)"
-       (mouseup)="touchEndCannon($event)">
-    <div class="bombslot token{{input.shots[i*2+1]}}"
-         [class.blocked]="locked"
-         [class.unconfirmedShots]="!serverInput.shots[i*2+1] !== !input.shots[i*2+1]"></div>
-    <div *ngIf="maxShots === 2"
-         class="bombslot"
-         [class.token1]="input.shots[i*2+1] === 2 || (input.shots[i*2+1] || 0)%4 > 1"
-         [class.blocked]="locked"
-         [class.unconfirmedShots]="!(2-(serverInput.shots[i*2+1] || 0)) !== !(2-(input.shots[i*2+1] || 0))"></div>
-  </div>
-
-  <div class="move"
-       [class.blocked]="locked"
-       [class.selected]="kbControls && selected === i && !locked"
-       [class.unconfirmed]="input.moves[i] !== serverInput.moves[i]"
-       (drop)="drop($event, i)"
-       (mouseup)="clickTile($event, i)"
-       (mousedown)="$event.which === 2 ? $event.preventDefault() : null"
-       (dragover)="this.dragContext.type !== 'move'">
-    <img *ngIf="move || i === blockedPosition"
-         draggable="true"
-         [src]="getManeuverIcon(move)"
-         (dragstart)="drag(move, i)"
-         (dragend)="dragEnd()">
-  </div>
-</div>
+}

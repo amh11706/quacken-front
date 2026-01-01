@@ -1,86 +1,114 @@
-<div *ngIf="setting.type === 'boat'"
-     class="setting boat">
-  <mat-select *ngIf="settingValue"
-              [panelWidth]="240"
-              [value]="settingValue.stream | async"
-              (selectionChange)="save($event.value)">
-    <mat-select-trigger>
-      <img *ngIf="settingValue.value !== undefined"
-           [src]="getShipLink(settingValue.value)"
-           [matTooltip]="setting.titles[settingValue.value] || ''">
-    </mat-select-trigger>
-    <mat-optgroup *ngFor="let g of setting.groups"
-                  [label]="g.name">
-      <mat-option *ngFor="let o of g.options"
-                  [value]="o">
-        <img class="boatoption"
-             height="25px"
-             width="25px"
-             [src]="getShipLink(o)">{{setting.titles[o]}}
-      </mat-option>
-    </mat-optgroup>
-  </mat-select>
-</div>
+@if (setting.type === 'boat') {
+  <div
+    class="setting boat">
+    @if (settingValue) {
+      <mat-select
+        [panelWidth]="240"
+        [value]="settingValue.stream | async"
+        (selectionChange)="save($event.value)">
+        <mat-select-trigger>
+          @if (settingValue.value !== undefined) {
+            <img
+              [src]="getShipLink(settingValue.value)"
+              [matTooltip]="setting.titles[settingValue.value] || ''">
+          }
+        </mat-select-trigger>
+        @for (g of setting.groups; track g) {
+          <mat-optgroup
+            [label]="g.name">
+            @for (o of g.options; track o) {
+              <mat-option
+                [value]="o">
+                <img class="boatoption"
+                  height="25px"
+                  width="25px"
+                  [src]="getShipLink(o)">{{setting.titles[o]}}
+                </mat-option>
+              }
+            </mat-optgroup>
+          }
+        </mat-select>
+      }
+    </div>
+  }
 
-<div *ngIf="setting.type === 'option'"
-     class="setting select">
-  <mat-form-field [appearance]="'outline'">
-    <mat-label>{{setting.label}}</mat-label>
-    <mat-select [value]="settingValue.stream | async"
-                [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
-                (selectionChange)="save($event.value)">
-      <ng-container *ngFor="let option of setting.options; let i = index">
-        <mat-option *ngIf="option"
-                    [value]="i">{{option}}</mat-option>
-      </ng-container>
-    </mat-select>
-  </mat-form-field>
-  <mat-icon *ngIf="setting.advancedComponent"
-            matTooltip="Advanced"
-            class="advanced"
-            (click)="openAdvanced()">settings</mat-icon>
-</div>
+  @if (setting.type === 'option') {
+    <div
+      class="setting select">
+    <mat-form-field [appearance]="'outline'">
+      <mat-label>{{setting.label}}</mat-label>
+      <mat-select [value]="settingValue.stream | async"
+        [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
+        (selectionChange)="save($event.value)">
+        @for (option of setting.options; track option; let i = $index) {
+          @if (option) {
+            <mat-option
+            [value]="i">{{option}}</mat-option>
+          }
+        }
+      </mat-select>
+    </mat-form-field>
+    @if (setting.advancedComponent) {
+      <mat-icon
+        matTooltip="Advanced"
+        class="advanced"
+      (click)="openAdvanced()">settings</mat-icon>
+    }
+  </div>
+}
 
 
-<div *ngIf="setting.type === 'button'"
-     class="setting">
-  <button *ngIf="!(setting.admin && (ss.admin$ | async) === false)"
-          mat-raised-button
-          color="accent"
-          (click)="send()">{{setting.label}}</button>
-</div>
+@if (setting.type === 'button') {
+  <div
+    class="setting">
+    @if (!(setting.admin && (ss.admin$ | async) === false)) {
+      <button
+        mat-raised-button
+        color="accent"
+      (click)="send()">{{setting.label}}</button>
+    }
+  </div>
+}
 
-<div *ngIf="setting.type === 'slider'"
-     class="setting slider mat-mdc-form-field">
-  <span class="label">{{setting.label}} ({{setting.stepLabels?.[slider.valueAsNumber] ||
+@if (setting.type === 'slider') {
+  <div
+    class="setting slider mat-mdc-form-field">
+    <span class="label">{{setting.label}} ({{setting.stepLabels?.[slider.valueAsNumber] ||
     slider.value}})</span>
-  <mat-slider [min]="setting.min"
-              [max]="setting.max"
-              [step]="setting.step"
-              [color]="'accent'"
-              [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false">
-    <input #slider
-           matSliderThumb
-           [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
-           [value]="settingValue.stream | async"
-           (valueChange)="save($event)">
-  </mat-slider>
-  <mat-icon *ngIf="setting.advancedComponent"
-            matTooltip="Advanced"
-            class="advanced"
-            (click)="openAdvanced()">settings</mat-icon>
-</div>
+    <mat-slider [min]="setting.min"
+      [max]="setting.max"
+      [step]="setting.step"
+      [color]="'accent'"
+      [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false">
+      <input #slider
+        matSliderThumb
+        [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
+        [value]="settingValue.stream | async"
+        (valueChange)="save($event)">
+    </mat-slider>
+    @if (setting.advancedComponent) {
+      <mat-icon
+        matTooltip="Advanced"
+        class="advanced"
+      (click)="openAdvanced()">settings</mat-icon>
+    }
+  </div>
+}
 
-<div *ngIf="setting.type === 'checkbox'"
-     class="setting"
-     [matTooltip]="$any(settingValue.data?.icon)?.text"
-     [matTooltipPosition]="'above'">
-  <mat-checkbox [checked]="!!(settingValue.stream | async)"
-                [class.nowrap]="settingValue.data?.icon"
-                [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
-                (change)="save(+$event.checked)">
-    <span class="checkbox-text">{{setting.label}}</span>&nbsp;
-    <mat-icon *ngIf="settingValue.data?.icon as icon"
-              [color]="$any(icon).color">{{$any(icon).name}}</mat-icon>
-  </mat-checkbox>
-</div>
+@if (setting.type === 'checkbox') {
+  <div
+    class="setting"
+    [matTooltip]="$any(settingValue.data?.icon)?.text"
+    [matTooltipPosition]="'above'">
+    <mat-checkbox [checked]="!!(settingValue.stream | async)"
+      [class.nowrap]="settingValue.data?.icon"
+      [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
+      (change)="save(+$event.checked)">
+      <span class="checkbox-text">{{setting.label}}</span>&nbsp;
+      @if (settingValue.data?.icon; as icon) {
+        <mat-icon
+        [color]="$any(icon).color">{{$any(icon).name}}</mat-icon>
+      }
+    </mat-checkbox>
+  </div>
+}

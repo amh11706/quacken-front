@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { EmojiSearch, PreviewComponent } from '@ctrl/ngx-emoji-mart';
@@ -35,11 +35,10 @@ const I18N = {
 @Component({
   selector: 'q-emoji-search-results',
   imports: [
-    CommonModule,
     EmojiComponent,
     MatCardModule,
-    PreviewComponent,
-  ],
+    PreviewComponent
+],
   templateUrl: './emoji-search-results.component.html',
   styleUrl: './emoji-search-results.component.scss',
 })

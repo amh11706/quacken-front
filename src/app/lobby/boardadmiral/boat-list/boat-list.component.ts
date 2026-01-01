@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Subscription } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,14 +24,13 @@ DefaultBoat.team = 99;
 @Component({
   selector: 'q-boat-list',
   imports: [
-    CommonModule,
     QdragModule,
     BoatButtonComponent,
     SettingsModule,
     MatTabsModule,
     MatIconModule,
-    MatTooltipModule,
-  ],
+    MatTooltipModule
+],
   templateUrl: './boat-list.component.html',
   styleUrl: './boat-list.component.scss',
 })

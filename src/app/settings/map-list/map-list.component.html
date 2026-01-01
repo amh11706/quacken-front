@@ -1,71 +1,78 @@
 <mat-form-field id="mapSearch"
-                [floatLabel]="'always'">
+  [floatLabel]="'always'">
   <mat-label>Search ({{(maplist | async)?.length}})</mat-label>
   <mat-autocomplete #auto="matAutocomplete"
-                    [autoSelectActiveOption]="true"
-                    [autoActiveFirstOption]="true"
-                    (optionSelected)="toggleTag($event.option.value); search.value = ''">
-    <mat-option *ngFor="let option of searchResults | async"
-                [value]="option">
-      {{option}}
-    </mat-option>
+    [autoSelectActiveOption]="true"
+    [autoActiveFirstOption]="true"
+    (optionSelected)="toggleTag($event.option.value); search.value = ''">
+    @for (option of searchResults | async; track option) {
+      <mat-option
+        [value]="option">
+        {{option}}
+      </mat-option>
+    }
   </mat-autocomplete>
   <mat-chip-grid #chipList>
-    <mat-chip *ngFor="let tag of selectedFilters"
-              [removable]="true"
-              (removed)="toggleTag(tag)">
-      <ng-container *ngIf="+tag else string">
-        <q-rating [myRating]="+tag"
-                  [forTags]="true"></q-rating>
-      </ng-container>
-      <ng-template #string>{{tag}}</ng-template>
-      <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
+    @for (tag of selectedFilters; track tag) {
+      <mat-chip
+        [removable]="true"
+        (removed)="toggleTag(tag)">
+        @if (+tag) {
+          <q-rating [myRating]="+tag"
+          [forTags]="true"></q-rating>
+        } @else {
+          {{tag}}
+        }
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    }
     <input #search
-           matInput
-           placeholder="1v1, practice, etc."
-           [matChipInputFor]="chipList"
-           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-           [matAutocomplete]="auto"
-           [formControl]="searchCtrl"
-           (matChipInputTokenEnd)="toggleTag($event.value); search.value = ''"
-           (keydown.backspace)="search.value ? undefined : removeLastTag()"
-           (blur)="search.value = ''; searchCtrl.setValue('');">
+      matInput
+      placeholder="1v1, practice, etc."
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matAutocomplete]="auto"
+      [formControl]="searchCtrl"
+      (matChipInputTokenEnd)="toggleTag($event.value); search.value = ''"
+      (keydown.backspace)="search.value ? undefined : removeLastTag()"
+      (blur)="search.value = ''; searchCtrl.setValue('');">
   </mat-chip-grid>
   <mat-icon matSuffix>search</mat-icon>
 </mat-form-field>
 
 <div class="flex">
   <button mat-raised-button
-          color="accent"
-          matTooltip="Random User Map"
-          [disabled]="(ss.admin$ | async) === false"
-          (click)="selectMap(-1)">Random</button>
+    color="accent"
+    matTooltip="Random User Map"
+    [disabled]="(ss.admin$ | async) === false"
+  (click)="selectMap(-1)">Random</button>
   <button mat-raised-button
-          color="accent"
-          (click)="openFilterWindow()">Filter</button>
+    color="accent"
+  (click)="openFilterWindow()">Filter</button>
   <mat-form-field>
     <mat-label>Sort by</mat-label>
     <mat-select [(value)]="selectedSortOption"
-                (selectionChange)="sort($event.value)">
-      <mat-option *ngFor="let option of sortList"
-                  [value]="option">{{option}}</mat-option>
+      (selectionChange)="sort($event.value)">
+      @for (option of sortList; track option) {
+        <mat-option
+        [value]="option">{{option}}</mat-option>
+      }
     </mat-select>
   </mat-form-field>
 </div>
 
 <cdk-virtual-scroll-viewport *ngrxLet="selectedMap.stream as selectedMap"
-                             id="maps"
-                             [itemSize]="250"
-                             [minBufferPx]="600"
-                             [maxBufferPx]="900">
+  id="maps"
+  [itemSize]="250"
+  [minBufferPx]="600"
+  [maxBufferPx]="900">
   <q-map-card *cdkVirtualFor="let m of maplist"
-              [map]="m"
-              [width]="mapWidth"
-              [height]="mapHeight"
-              [safeZone]="safeZone"
-              [disabled]="(ss.admin$ | async) === false"
-              [seeds]="ms?.seeds || []"
-              [class.selected]="m.id === selectedMap"
-              (selectedMap)="selectMap($event)"></q-map-card>
+    [map]="m"
+    [width]="mapWidth"
+    [height]="mapHeight"
+    [safeZone]="safeZone"
+    [disabled]="(ss.admin$ | async) === false"
+    [seeds]="ms?.seeds || []"
+    [class.selected]="m.id === selectedMap"
+  (selectedMap)="selectMap($event)"></q-map-card>
 </cdk-virtual-scroll-viewport>

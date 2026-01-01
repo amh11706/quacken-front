@@ -3,45 +3,47 @@
   <p>Powered by superquacken.com</p>
   <div id="loginWrapper">
     <form #loginForm="ngForm"
-          id="loginform"
-          ngNativeValidate
-          (ngSubmit)="reset()">
+      id="loginform"
+      ngNativeValidate
+      (ngSubmit)="reset()">
       <h3>Enter your email address and a new password to continue.</h3>
       <mat-form-field>
         <mat-label>Email</mat-label>
         <input name="email"
-               matInput
-               qAutoSelect
-               autocomplete="username"
-               required
-               [(ngModel)]="user.email">
+          matInput
+          qAutoSelect
+          autocomplete="username"
+          required
+          [(ngModel)]="user.email">
       </mat-form-field>
       <mat-form-field>
         <mat-label>New Password</mat-label>
         <input name="password"
-               matInput
-               qAutoSelect
-               type="password"
-               minlength="6"
-               autocomplete="new-password"
-               required
-               [(ngModel)]="user.password">
+          matInput
+          qAutoSelect
+          type="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+          [(ngModel)]="user.password">
       </mat-form-field>
 
       <button type="submit"
-              class="login"
-              mat-stroked-button
-              color="accent"
-              [disabled]="pending">Restore Account</button>
+        class="login"
+        mat-stroked-button
+        color="accent"
+      [disabled]="pending">Restore Account</button>
       <p>
         <span class="link"
-              (click)="back()">Back to login</span>.
+        (click)="back()">Back to login</span>.
       </p>
     </form>
-    <div *ngIf="pending"
-         class="spinner">
-      <mat-spinner></mat-spinner>
-    </div>
+    @if (pending) {
+      <div
+        class="spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
   </div>
 </div>
 
@@ -51,8 +53,8 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-raised-button
-            color="accent"
-            mat-dialog-close
-            cdkFocusInitial>Close</button>
+      color="accent"
+      mat-dialog-close
+    cdkFocusInitial>Close</button>
   </mat-dialog-actions>
 </ng-template>

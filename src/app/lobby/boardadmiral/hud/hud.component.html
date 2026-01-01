@@ -1,85 +1,88 @@
 <div *ngrxLet="(ws.connected$ | async) === false as disabled"
-     class="container noselect"
-     id="hud">
+  class="container noselect"
+  id="hud">
   <div id="boatcontrol"
-       (contextmenu)="$event.preventDefault()">
+    (contextmenu)="$event.preventDefault()">
     <div id="time">
       <div id="timebar"
-           [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
+      [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
     </div>
 
-    <ng-template #noboat>
-      <div id="noboat">
-        <p>Right click a boat on the map to select it.</p>
-        <p>Click flags to assign them to the selected boat.</p>
-        <p>Click a tile to highlight boats assigned to it.</p>
-      </div>
-    </ng-template>
 
-    <div *ngIf="activeBoat; else noboat"
-         id="boatsettings">
-      <p>{{boatName(activeBoat)}}</p>
-      <table>
-        <tr>
-          <td class="label">Aggro: ({{activeBoat.Aggro}})</td>
-          <td>
-            <mat-slider [disabled]="disabled"
-                        [min]="0"
-                        [max]="100"
-                        [step]="10">
-              <input matSliderThumb
-                     [(value)]="activeBoat.Aggro"
-                     (valueChange)="update()">
-            </mat-slider>
-          </td>
-          <td><button mat-raised-button
-                    matTooltip="Sync aggro to all boats"
-                    [disabled]="disabled"
-                    (click)="syncToOtherBoats('Aggro')">Sync</button></td>
-        </tr>
-        <tr>
-          <td><button mat-raised-button
-                    matTooltip="Cover specific flags"
-                    [color]="activeBoat.coverMode === 0 ? 'primary' : ''"
-                    (click)="activeBoat.coverMode = 0; update()">Cover Flags</button></td>
-          <td><button mat-raised-button
-                    matTooltip="Only end on specific tiles"
-                    [color]="activeBoat.coverMode === 1 ? 'primary' : ''"
-                    (click)="activeBoat.coverMode = 1; update()">Cover Tiles</button></td>
-          <td><button mat-raised-button
-                    matTooltip="Clear coverage for this boat"
-                    (click)="resetCoverage()">Clear</button></td>
-      </table>
+    @if (activeBoat) {
+      <div
+        id="boatsettings">
+        <p>{{boatName(activeBoat)}}</p>
+        <table>
+          <tr>
+            <td class="label">Aggro: ({{activeBoat.Aggro}})</td>
+            <td>
+              <mat-slider [disabled]="disabled"
+                [min]="0"
+                [max]="100"
+                [step]="10">
+                <input matSliderThumb
+                  [(value)]="activeBoat.Aggro"
+                  (valueChange)="update()">
+              </mat-slider>
+            </td>
+            <td><button mat-raised-button
+              matTooltip="Sync aggro to all boats"
+              [disabled]="disabled"
+            (click)="syncToOtherBoats('Aggro')">Sync</button></td>
+          </tr>
+          <tr>
+            <td><button mat-raised-button
+              matTooltip="Cover specific flags"
+              [color]="activeBoat.coverMode === 0 ? 'primary' : ''"
+            (click)="activeBoat.coverMode = 0; update()">Cover Flags</button></td>
+            <td><button mat-raised-button
+              matTooltip="Only end on specific tiles"
+              [color]="activeBoat.coverMode === 1 ? 'primary' : ''"
+            (click)="activeBoat.coverMode = 1; update()">Cover Tiles</button></td>
+            <td><button mat-raised-button
+              matTooltip="Clear coverage for this boat"
+            (click)="resetCoverage()">Clear</button></td>
+          </table>
+          @if (!waitingForBoat) {
+            <div
+              id="commands">
+              @for (command of BoatCommands; track command) {
+                <button
+                  mat-icon-button
+                  [disabled]="disabled"
+                  [matTooltip]="command.tooltip"
+                  (click)="command.trigger()">
+                  <mat-icon>{{command.icon}}</mat-icon>
+                </button>
+              }
+            </div>
+          } @else {
+            <p id="commands">Select a boat to {{activeCommand.name}} or <button mat-raised-button
+            (click)="waitingForBoat = false">Cancel</button></p>
+          }
+        </div>
+      } @else {
+        <div id="noboat">
+          <p>Right click a boat on the map to select it.</p>
+          <p>Click flags to assign them to the selected boat.</p>
+          <p>Click a tile to highlight boats assigned to it.</p>
+        </div>
+      }
 
-      <ng-template #waiting>
-        <p id="commands">Select a boat to {{activeCommand.name}} or <button mat-raised-button
-                  (click)="waitingForBoat = false">Cancel</button></p>
-      </ng-template>
-      <div *ngIf="!waitingForBoat; else waiting"
-           id="commands">
-        <button *ngFor="let command of BoatCommands"
-                mat-icon-button
-                [disabled]="disabled"
-                [matTooltip]="command.tooltip"
-                (click)="command.trigger()">
-          <mat-icon>{{command.icon}}</mat-icon>
-        </button>
-      </div>
+      <button *ngrxLet="!myBoat.isMe || (turnService.animating$ | async) as disabled"
+        mat-icon-button
+        matTooltip="Ready"
+        id="hudReady"
+        [color]="'accent'"
+        [disabled]="disabled"
+        [class.ready]="!myBoat.ready && !disabled"
+        (click)="toggleReady()">
+        <mat-icon>play_arrow</mat-icon>
+      </button>
     </div>
 
-    <button *ngrxLet="!myBoat.isMe || (turnService.animating$ | async) as disabled"
-            mat-icon-button
-            matTooltip="Ready"
-            id="hudReady"
-            [color]="'accent'"
-            [disabled]="disabled"
-            [class.ready]="!myBoat.ready && !disabled"
-            (click)="toggleReady()">
-      <mat-icon>play_arrow</mat-icon>
-    </button>
+    <div id="chat">
+      <q-chat [disabled]="(es.open$ | async) || false"></q-chat>
+    </div>
   </div>
-
-  <div id="chat">
-    <q-chat [disabled]="(es.open$ | async) || false"></q-chat>
-  </div>
-</div>

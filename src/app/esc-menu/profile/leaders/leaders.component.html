@@ -1,144 +1,145 @@
 <div id="leaders">
   <mat-form-field>
     <mat-select placeholder="Category"
-                [(value)]="stat.group"
-                (valueChange)="stat.changeGroup()">
-      <mat-option *ngFor="let t of lobbyTypes"
-                  [value]="t.id">
-        {{t.name}}
-      </mat-option>
+      [(value)]="stat.group"
+      (valueChange)="stat.changeGroup()">
+      @for (t of lobbyTypes; track t) {
+        <mat-option
+          [value]="t.id">
+          {{t.name}}
+        </mat-option>
+      }
     </mat-select>
   </mat-form-field>
-  <mat-form-field *ngIf="stat.groupStats$ | async as groupStats">
-    <mat-select placeholder="Statistic"
-                [(value)]="stat.id"
-                (valueChange)="stat.openLeaders($event)">
-      <mat-option [value]="stat.group*100 - 1">Rank Leaders</mat-option>
-      <mat-option *ngFor="let s of groupStats[stat.group]"
-                  [value]="s.id">{{s.name}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  @if (stat.groupStats$ | async; as groupStats) {
+    <mat-form-field>
+      <mat-select placeholder="Statistic"
+        [(value)]="stat.id"
+        (valueChange)="stat.openLeaders($event)">
+        <mat-option [value]="stat.group*100 - 1">Rank Leaders</mat-option>
+        @for (s of groupStats[stat.group]; track s) {
+          <mat-option
+          [value]="s.id">{{s.name}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
 
   <div id="selection">
-    <table *ngIf="stat.leaders$ | async as leaders"
-           mat-table
-           [dataSource]="leaders">
-      <tr *matHeaderRowDef="stat.columns; sticky: true"
-          mat-header-row></tr>
-      <tr *matRowDef="let row; columns: stat.columns;"
-          mat-row></tr>
-
-      <ng-container matColumnDef="position">
-        <th *matHeaderCellDef
-            mat-header-cell>Position</th>
-        <td *matCellDef="let i = index"
-            mat-cell>{{i+1}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="name">
-        <th *matHeaderCellDef
-            mat-header-cell>Name</th>
-        <td *matCellDef="let element"
+    @if (stat.leaders$ | async; as leaders) {
+      <table
+        mat-table
+        [dataSource]="leaders">
+        <tr *matHeaderRowDef="stat.columns; sticky: true"
+        mat-header-row></tr>
+        <tr *matRowDef="let row; columns: stat.columns;"
+        mat-row></tr>
+        <ng-container matColumnDef="position">
+          <th *matHeaderCellDef
+          mat-header-cell>Position</th>
+          <td *matCellDef="let i = index"
+          mat-cell>{{i+1}}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th *matHeaderCellDef
+          mat-header-cell>Name</th>
+          <td *matCellDef="let element"
             mat-cell>
-          <q-name [message]="element"></q-name>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="value">
-        <th *matHeaderCellDef
-            mat-header-cell>Value</th>
-        <td *matCellDef="let element"
-            mat-cell>{{element.value}}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="replay">
-        <th *matHeaderCellDef
-            mat-header-cell>Replay</th>
-        <td *matCellDef="let element"
+            <q-name [message]="element"></q-name>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th *matHeaderCellDef
+          mat-header-cell>Value</th>
+          <td *matCellDef="let element"
+          mat-cell>{{element.value}}</td>
+        </ng-container>
+        <ng-container matColumnDef="replay">
+          <th *matHeaderCellDef
+          mat-header-cell>Replay</th>
+          <td *matCellDef="let element"
             mat-cell>
-          <a mat-icon-button
-             target="_blank"
-             [href]="'/#/replay/' + element.matchId">
-            <mat-icon>play_arrow</mat-icon>
-          </a>
-        </td>
-      </ng-container>
-    </table>
+            <a mat-icon-button
+              target="_blank"
+              [href]="'/#/replay/' + element.matchId">
+              <mat-icon>play_arrow</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+      </table>
+    }
 
-    <ng-container *ngIf="stat.rankLeaders$ | async as rankLeaders">
+    @if (stat.rankLeaders$ | async; as rankLeaders) {
       <h4>Top Tier</h4>
       <div class="variations">
-        <div *ngFor="let l of rankLeaders.tier; let i = index">
-          <p>{{variations[stat.group]?.[i]}}</p>
-          <table mat-table
-                 [dataSource]="l">
-            <tr *matHeaderRowDef="['position', 'name', 'level']; sticky: true"
-                mat-header-row></tr>
-            <tr *matRowDef="let row; columns: ['position', 'name', 'level'];"
-                mat-row></tr>
-
-            <ng-container matColumnDef="position">
-              <th *matHeaderCellDef
-                  mat-header-cell>Position</th>
-              <td *matCellDef="let i = index"
-                  mat-cell>{{i+1}}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="name">
-              <th *matHeaderCellDef
-                  mat-header-cell>Name</th>
-              <td *matCellDef="let element"
+        @for (l of rankLeaders.tier; track l; let i = $index) {
+          <div>
+            <p>{{variations[stat.group]?.[i]}}</p>
+            <table mat-table
+              [dataSource]="l">
+              <tr *matHeaderRowDef="['position', 'name', 'level']; sticky: true"
+              mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['position', 'name', 'level'];"
+              mat-row></tr>
+              <ng-container matColumnDef="position">
+                <th *matHeaderCellDef
+                mat-header-cell>Position</th>
+                <td *matCellDef="let i = index"
+                mat-cell>{{i+1}}</td>
+              </ng-container>
+              <ng-container matColumnDef="name">
+                <th *matHeaderCellDef
+                mat-header-cell>Name</th>
+                <td *matCellDef="let element"
                   mat-cell>
-                <q-name [message]="element"></q-name>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="level">
-              <th *matHeaderCellDef
-                  mat-header-cell>Score</th>
-              <td *matCellDef="let element"
-                  mat-cell>{{element.score}}</td>
-            </ng-container>
-          </table>
-        </div>
+                  <q-name [message]="element"></q-name>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="level">
+                <th *matHeaderCellDef
+                mat-header-cell>Score</th>
+                <td *matCellDef="let element"
+                mat-cell>{{element.score}}</td>
+              </ng-container>
+            </table>
+          </div>
+        }
       </div>
-
       <h4>Top Experience</h4>
       <div class="variations">
-        <div *ngFor="let l of rankLeaders.xp; let i = index">
-          <p>{{variations[stat.group]?.[i]}}</p>
-          <table mat-table
-                 [dataSource]="l">
-            <tr *matHeaderRowDef="['position', 'name', 'level']; sticky: true"
-                mat-header-row></tr>
-            <tr *matRowDef="let row; columns: ['position', 'name', 'level'];"
-                mat-row></tr>
-
-            <ng-container matColumnDef="position">
-              <th *matHeaderCellDef
-                  mat-header-cell>Position</th>
-              <td *matCellDef="let i = index"
-                  mat-cell>{{i+1}}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="name">
-              <th *matHeaderCellDef
-                  mat-header-cell>Name</th>
-              <td *matCellDef="let element"
+        @for (l of rankLeaders.xp; track l; let i = $index) {
+          <div>
+            <p>{{variations[stat.group]?.[i]}}</p>
+            <table mat-table
+              [dataSource]="l">
+              <tr *matHeaderRowDef="['position', 'name', 'level']; sticky: true"
+              mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['position', 'name', 'level'];"
+              mat-row></tr>
+              <ng-container matColumnDef="position">
+                <th *matHeaderCellDef
+                mat-header-cell>Position</th>
+                <td *matCellDef="let i = index"
+                mat-cell>{{i+1}}</td>
+              </ng-container>
+              <ng-container matColumnDef="name">
+                <th *matHeaderCellDef
+                mat-header-cell>Name</th>
+                <td *matCellDef="let element"
                   mat-cell>
-                <q-name [message]="element"></q-name>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="level">
-              <th *matHeaderCellDef
-                  mat-header-cell>Level</th>
-              <td *matCellDef="let element"
-                  mat-cell>{{element.level}}</td>
-            </ng-container>
-          </table>
-        </div>
+                  <q-name [message]="element"></q-name>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="level">
+                <th *matHeaderCellDef
+                mat-header-cell>Level</th>
+                <td *matCellDef="let element"
+                mat-cell>{{element.level}}</td>
+              </ng-container>
+            </table>
+          </div>
+        }
       </div>
-    </ng-container>
+    }
   </div>
 </div>

@@ -3,35 +3,37 @@
   <p>Powered by superquacken.com</p>
   <div id="loginWrapper">
     <form #loginForm="ngForm"
-          id="loginform"
-          ngNativeValidate
-          (ngSubmit)="reset()">
+      id="loginform"
+      ngNativeValidate
+      (ngSubmit)="reset()">
       <mat-form-field>
         <mat-label>New Password</mat-label>
         <input name="password"
-               matInput
-               qAutoSelect
-               type="password"
-               minlength="6"
-               autocomplete="new-password"
-               required
-               [(ngModel)]="password">
+          matInput
+          qAutoSelect
+          type="password"
+          minlength="6"
+          autocomplete="new-password"
+          required
+          [(ngModel)]="password">
       </mat-form-field>
 
       <button type="submit"
-              class="login"
-              mat-stroked-button
-              color="accent"
-              [disabled]="pending">Reset Password</button>
+        class="login"
+        mat-stroked-button
+        color="accent"
+      [disabled]="pending">Reset Password</button>
       <p>
         <span class="link"
-              (click)="back()">Back to login</span>.
+        (click)="back()">Back to login</span>.
       </p>
     </form>
-    <div *ngIf="pending"
-         class="spinner">
-      <mat-spinner></mat-spinner>
-    </div>
+    @if (pending) {
+      <div
+        class="spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
   </div>
 </div>
 
@@ -41,8 +43,8 @@
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-raised-button
-            color="accent"
-            mat-dialog-close
-            cdkFocusInitial>Close</button>
+      color="accent"
+      mat-dialog-close
+    cdkFocusInitial>Close</button>
   </mat-dialog-actions>
 </ng-template>

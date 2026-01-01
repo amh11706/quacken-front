@@ -1,38 +1,41 @@
 <div>
-  <ng-container *ngIf="isPecentage">
+  @if (isPecentage) {
     <div class="background">
       <div class="stars">
         <span class="star-i"
-              [style.width]="getStars(rating || 0)"></span>
+        [style.width]="getStars(rating || 0)"></span>
       </div>
     </div>&nbsp;
     <span class="percent-rating">{{rating?.toFixed(1) || 0}} ({{count || 0}})</span>
-  </ng-container>
+  }
 
-  <ng-container *ngIf="!forTags else tag">
+  @if (!forTags) {
     <div class="map-rating background"
-         [class.visible]="!isPecentage">
-      <button *ngFor="let ratingId of ratingArr; index as i"
-              class="star"
-              mat-icon-button
-              matTooltipPosition="above"
-              [matTooltip]="ratingId+1 + ' star'"
-              (click)="onClick(i+1)">
-        <mat-icon>
-          {{showIcon(i)}}
-        </mat-icon>
-      </button>
+      [class.visible]="!isPecentage">
+      @for (ratingId of ratingArr; track ratingId; let i = $index) {
+        <button
+          class="star"
+          mat-icon-button
+          matTooltipPosition="above"
+          [matTooltip]="ratingId+1 + ' star'"
+          (click)="onClick(i+1)">
+          <mat-icon>
+            {{showIcon(i)}}
+          </mat-icon>
+        </button>
+      }
     </div>
-  </ng-container>
-
-  <ng-template #tag>
-    <span *ngFor="let ratingId of ratingArr; index as i">
-      <span class="star">
-        <mat-icon>
-          {{showIcon(i)}}
-        </mat-icon>
+  } @else {
+    @for (ratingId of ratingArr; track ratingId; let i = $index) {
+      <span>
+        <span class="star">
+          <mat-icon>
+            {{showIcon(i)}}
+          </mat-icon>
+        </span>
       </span>
-    </span>
+    }
     <span class="description">&Up</span>
-  </ng-template>
+  }
+
 </div>

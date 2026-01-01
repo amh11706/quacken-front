@@ -1,50 +1,55 @@
 <div class="noselect"
-     id="inventory">
+  id="inventory">
   <h2>{{ws.user.name}}'s Inventory</h2>
   <div class="coin"
-       matTooltip="Coins"
-       draggable="true">
+    matTooltip="Coins"
+    draggable="true">
     <img src="/assets/items/0.png"
-         draggable="false"> {{inv?.currency}}
-  </div>
-  <br>
-  <mat-form-field *ngIf="inv">
-    <mat-select placeholder="Sort By"
-                [(value)]="inv.sort"
-                (selectionChange)="sort($event.value)">
-      <mat-option value="id">Item Id</mat-option>
-      <mat-option value="t">Item Type</mat-option>
-      <mat-option value="q">Quantity</mat-option>
-      <mat-option value="n">Name</mat-option>
-      <mat-option value="f">New First</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <input #searchInput
-           matInput
-           placeholder="Search"
-           (keyup)="searchBounce(searchInput.value)">
-  </mat-form-field>
-
-  <div *ngIf="inventory$ | async as inv; else loading"
-       class="content">
-    <div *ngFor="let i of inv"
-         class="item"
-         draggable="true"
-         [title]="i.n"
-         [class.dropable]="i.q < 250 && i.s !== dragging?.s && dragging?.id === i.id"
-         [class.new]="i.f"
-         (mouseenter)="i.f = false"
-         (dblclick)="clickStack(i)"
-         (dragstart)="dragging = i"
-         (dragend)="dragging = undefined"
-         (drop)="drop($event, i)"
-         (dragover)="i.q < 250 && dragging?.s !== i.s ? $event.preventDefault() : null">
-      <img [src]="'/assets/items/'+i.id+'.png'">
-      <span class="quantity">{{i.q}}</span>
+      draggable="false"> {{inv?.currency}}
     </div>
+    <br>
+      @if (inv) {
+        <mat-form-field>
+          <mat-select placeholder="Sort By"
+            [(value)]="inv.sort"
+            (selectionChange)="sort($event.value)">
+          <mat-option value="id">Item Id</mat-option>
+          <mat-option value="t">Item Type</mat-option>
+          <mat-option value="q">Quantity</mat-option>
+          <mat-option value="n">Name</mat-option>
+          <mat-option value="f">New First</mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
+    <mat-form-field>
+      <input #searchInput
+        matInput
+        placeholder="Search"
+        (keyup)="searchBounce(searchInput.value)">
+    </mat-form-field>
+
+    @if (inventory$ | async; as inv) {
+      <div
+        class="content">
+        @for (i of inv; track i) {
+          <div
+            class="item"
+            draggable="true"
+            [title]="i.n"
+            [class.dropable]="i.q < 250 && i.s !== dragging?.s && dragging?.id === i.id"
+            [class.new]="i.f"
+            (mouseenter)="i.f = false"
+            (dblclick)="clickStack(i)"
+            (dragstart)="dragging = i"
+            (dragend)="dragging = undefined"
+            (drop)="drop($event, i)"
+            (dragover)="i.q < 250 && dragging?.s !== i.s ? $event.preventDefault() : null">
+            <img [src]="'/assets/items/'+i.id+'.png'">
+            <span class="quantity">{{i.q}}</span>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="empty">Loading...</p>
+    }
   </div>
-  <ng-template #loading>
-    <p class="empty">Loading...</p>
-  </ng-template>
-</div>

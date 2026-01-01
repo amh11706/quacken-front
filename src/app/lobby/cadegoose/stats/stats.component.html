@@ -1,19 +1,27 @@
 <div class="container">
-  <div *ngFor="let team of teams; let i = index"
-       class="team"
-       [style.borderColor]="teamColors[i]"
-       [class.sameteam]="myTeam === i"
-       [class.nothovered]="hoveredTeam !== i || hoveredTeam === -1"
-       [class.showteams]="statOpacity">
-    <table>
-      <tr>
-        <th>{{teamNames[i]}}</th>
-        <th *ngFor="let c of (showExtra ? extraColumns : columns)">{{c.title}}</th>
-      </tr>
-      <tr *ngFor="let r of team">
-        <td>{{r.user}}</td>
-        <td *ngFor="let c of (showExtra ? extraColumns : columns)">{{r.stats[c.stat] || 0}}</td>
-      </tr>
-    </table>
-  </div>
+  @for (team of teams; track team; let i = $index) {
+    <div
+      class="team"
+      [style.borderColor]="teamColors[i]"
+      [class.sameteam]="myTeam === i"
+      [class.nothovered]="hoveredTeam !== i || hoveredTeam === -1"
+      [class.showteams]="statOpacity">
+      <table>
+        <tr>
+          <th>{{teamNames[i]}}</th>
+          @for (c of (showExtra ? extraColumns : columns); track c) {
+            <th>{{c.title}}</th>
+          }
+        </tr>
+        @for (r of team; track r) {
+          <tr>
+            <td>{{r.user}}</td>
+            @for (c of (showExtra ? extraColumns : columns); track c) {
+              <td>{{r.stats[c.stat] || 0}}</td>
+            }
+          </tr>
+        }
+      </table>
+    </div>
+  }
 </div>

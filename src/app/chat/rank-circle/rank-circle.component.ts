@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CommonModule } from '@angular/common';
+
 import { TierTitles } from '../../esc-menu/profile/leaders/leaders.component';
 
 export const Variations: Record<number, string[]> = {
@@ -9,7 +9,7 @@ export const Variations: Record<number, string[]> = {
 
 @Component({
   selector: 'q-rank-circle',
-  imports: [MatTooltipModule, CommonModule],
+  imports: [MatTooltipModule],
   templateUrl: './rank-circle.component.html',
   styleUrl: './rank-circle.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

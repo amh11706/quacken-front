@@ -1,18 +1,26 @@
-<div *ngIf="map && map.selectedTile"
-     id="map"
-     (mouseup)="painting = false">
-  <div *ngFor="let row of map.selectedTile.data; let y = index">
-    <div *ngFor="let tile of row; let x = index"
-         class="tile"
-         [class.sztile]="map.selectedTile.group === 'cgmaps' ? y < 3 || y > 32 : y > 48"
-         (mousedown)="clickTile($event, x, y)"
-         (mouseup)="mouseUp($event, x, y)"
-         (mouseover)="painting ? clickTile($event, x, y) : null">
-      <img *ngIf="tile"
-           draggable="false"
-           src="./assets/images/obstacle{{tile}}.png"
-           [class]="'img' + tile"
-           [matTooltip]="tile < 5 ? titles[tile + 1] || '': ''">
+@if (map && map.selectedTile) {
+  <div
+    id="map"
+    (mouseup)="painting = false">
+    @for (row of map.selectedTile.data; track row; let y = $index) {
+      <div>
+        @for (tile of row; track tile; let x = $index) {
+          <div
+            class="tile"
+            [class.sztile]="map.selectedTile.group === 'cgmaps' ? y < 3 || y > 32 : y > 48"
+            (mousedown)="clickTile($event, x, y)"
+            (mouseup)="mouseUp($event, x, y)"
+            (mouseover)="painting ? clickTile($event, x, y) : null">
+            @if (tile) {
+              <img
+                draggable="false"
+                src="./assets/images/obstacle{{tile}}.png"
+                [class]="'img' + tile"
+                [matTooltip]="tile < 5 ? titles[tile + 1] || '': ''">
+              }
+            </div>
+          }
+        </div>
+      }
     </div>
-  </div>
-</div>
+  }

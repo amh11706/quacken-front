@@ -1,20 +1,20 @@
 <mat-form-field>
   <mat-label>Seed</mat-label>
   <input matInput
-         readonly
-         [value]="seed">
+    readonly
+    [value]="seed">
 </mat-form-field>
 
 <button mat-raised-button
-        (click)="randomSeed()">Random Seed</button>
+(click)="randomSeed()">Random Seed</button>
 <br><br>
 
-<ng-container *ngFor="let name of seedPartEdit; let i=index">
+@for (name of seedPartEdit; track name; let i = $index) {
   <p>{{name}} ({{seedParts[i]}})</p>
   <mat-slider max="255">
     <input #slider
-           matSliderThumb
-           [(ngModel)]="seedParts[i]"
-           (input)="seedParts[i]=slider.valueAsNumber; setStringSeed()">
+      matSliderThumb
+      [(ngModel)]="seedParts[i]"
+      (input)="seedParts[i]=slider.valueAsNumber; setStringSeed()">
   </mat-slider>
-</ng-container>
+}

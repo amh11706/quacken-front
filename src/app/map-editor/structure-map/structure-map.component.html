@@ -1,22 +1,29 @@
-<div *ngIf="map && map.selectedTile"
-     id="map">
-  <div *ngFor="let y of rows">
-    <div *ngFor="let x of columns"
-         class="tile"
-         [class.sztile]="y > 48"></div>
-  </div>
-
-  <div *ngFor="let feature of map.selectedTile.data"
+@if (map && map.selectedTile) {
+  <div
+    id="map">
+    @for (y of rows; track y) {
+      <div>
+        @for (x of columns; track x) {
+          <div
+            class="tile"
+          [class.sztile]="y > 48"></div>
+        }
+      </div>
+    }
+    @for (feature of map.selectedTile.data; track feature) {
+      <div
        class="feature group{{feature.group}}
   {{feature === map.selectedTile.activeFeature ? ' active' : ''}}"
-       [class.active]="feature === map.selectedTile.activeFeature"
-       [style.top]="feature.y1 * 25 + 'px'"
-       [style.left]="feature.x1 * 25 + 'px'"
-       [style.height]="(feature.y2 - feature.y1 + 1) * 25 + 'px'"
-       [style.width]="(feature.x2 - feature.x1 + 1) * 25 + 'px'"
-       (click)="map.selectedTile.activeFeature = feature">
-    <p>
-      {{feature.group === 0 ? types[feature.type] : groups[feature.group] + feature.density}}
-    </p>
+        [class.active]="feature === map.selectedTile.activeFeature"
+        [style.top]="feature.y1 * 25 + 'px'"
+        [style.left]="feature.x1 * 25 + 'px'"
+        [style.height]="(feature.y2 - feature.y1 + 1) * 25 + 'px'"
+        [style.width]="(feature.x2 - feature.x1 + 1) * 25 + 'px'"
+        (click)="map.selectedTile.activeFeature = feature">
+        <p>
+          {{feature.group === 0 ? types[feature.type] : groups[feature.group] + feature.density}}
+        </p>
+      </div>
+    }
   </div>
-</div>
+}

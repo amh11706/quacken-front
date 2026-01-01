@@ -1,100 +1,108 @@
-<div *ngIf="shown"
-     id="shade">
-  <div id="settings"
-       class="container noselect">
-    <h2>Editor Settings</h2>
-    <div class="settings-container">
-      <ng-container *ngIf="!map?.tileSettings">
+@if (shown) {
+  <div
+    id="shade">
+    <div id="settings"
+      class="container noselect">
+      <h2>Editor Settings</h2>
+      <div class="settings-container">
+        @if (!map?.tileSettings) {
+          <mat-form-field class="setting">
+            <mat-label>Type</mat-label>
+            <mat-select [(ngModel)]="shown.group"
+              (selectionChange)="updateOptions()">
+              <mat-option value="cgmaps">Blockade Map</mat-option>
+              <mat-option value="fgmaps">Flag Capture Map</mat-option>
+              <mat-option value="maps">Quacken Map</mat-option>
+              <mat-option value="tile_sets">Quacken Tile Set</mat-option>
+              <mat-option value="structure_sets">Quacken Structure Set</mat-option>
+              <mat-option value="tmap_sets">Challenge Map Set</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="setting">
+            <mat-label>Editing</mat-label>
+            <mat-select [disabled]="pending"
+              [(ngModel)]="selected"
+              (selectionChange)="select()">
+              <mat-option value="new">(Create New)</mat-option>
+              @for (option of options; track option) {
+                <mat-option
+                  [value]="option.id">
+                  {{option.name}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
         <mat-form-field class="setting">
-          <mat-label>Type</mat-label>
-          <mat-select [(ngModel)]="shown.group"
-                      (selectionChange)="updateOptions()">
-            <mat-option value="cgmaps">Blockade Map</mat-option>
-            <mat-option value="fgmaps">Flag Capture Map</mat-option>
-            <mat-option value="maps">Quacken Map</mat-option>
-            <mat-option value="tile_sets">Quacken Tile Set</mat-option>
-            <mat-option value="structure_sets">Quacken Structure Set</mat-option>
-            <mat-option value="tmap_sets">Challenge Map Set</mat-option>
-          </mat-select>
+          <input matInput
+            maxlength="15"
+            placeholder="name"
+            [disabled]="pending"
+            [(ngModel)]="shown.name"
+            (change)="shown.unsaved = true">
         </mat-form-field>
-
-        <mat-form-field class="setting">
-          <mat-label>Editing</mat-label>
-          <mat-select [disabled]="pending"
-                      [(ngModel)]="selected"
-                      (selectionChange)="select()">
-            <mat-option value="new">(Create New)</mat-option>
-            <mat-option *ngFor="let option of options"
-                        [value]="option.id">
-              {{option.name}}
-            </mat-option>
-          </mat-select>
+        @if (!map?.tileSettings) {
+          <div
+            class="setting">
+            <mat-checkbox [disabled]="pending"
+              [(ngModel)]="shown.released"
+              (change)="shown.unsaved = true">
+              Publicly Usable
+            </mat-checkbox>
+          </div>
+        }
+        @if (shown.group === 'tiles') {
+          <mat-form-field
+            class="setting">
+            <mat-label>Type</mat-label>
+            <mat-select [disabled]="pending"
+              [(ngModel)]="shown.type"
+              (change)="shown.unsaved = true">
+              @for (type of types; track type; let i = $index) {
+                <mat-option
+                  [value]="i">
+                  {{type}}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        }
+        <mat-form-field class="setting full">
+          @if (shown) {
+            <input
+              matInput
+              height="4"
+              maxlength="255"
+              placeholder="description"
+              [disabled]="pending"
+              [(ngModel)]="shown.description"
+              (change)="shown.unsaved = true">
+          }
         </mat-form-field>
-      </ng-container>
-
-      <mat-form-field class="setting">
-        <input matInput
-               maxlength="15"
-               placeholder="name"
-               [disabled]="pending"
-               [(ngModel)]="shown.name"
-               (change)="shown.unsaved = true">
-      </mat-form-field>
-
-      <div *ngIf="!map?.tileSettings"
-           class="setting">
-        <mat-checkbox [disabled]="pending"
-                      [(ngModel)]="shown.released"
-                      (change)="shown.unsaved = true">
-          Publicly Usable
-        </mat-checkbox>
+        <q-tags (chipChange)="shown.unsaved=$event"
+        (change)="shown.unsaved = true"></q-tags>
       </div>
-
-      <mat-form-field *ngIf="shown.group === 'tiles'"
-                      class="setting">
-        <mat-label>Type</mat-label>
-        <mat-select [disabled]="pending"
-                    [(ngModel)]="shown.type"
-                    (change)="shown.unsaved = true">
-          <mat-option *ngFor="let type of types; let i = index"
-                      [value]="i">
-            {{type}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class="setting full">
-        <input *ngIf="shown"
-               matInput
-               height="4"
-               maxlength="255"
-               placeholder="description"
-               [disabled]="pending"
-               [(ngModel)]="shown.description"
-               (change)="shown.unsaved = true">
-      </mat-form-field>
-
-      <q-tags (chipChange)="shown.unsaved=$event"
-              (change)="shown.unsaved = true"></q-tags>
+      <div class="setting center">
+        <button mat-raised-button
+          [disabled]="pending || (!error && !shown.unsaved) || !shown.name"
+          (click)="save()">
+          {{selected === 'new' ? 'Create' : 'Save' + (['tile_sets', 'structure_sets'].includes(shown.group) ? ' All' :
+          '')}}
+        </button>
+        <button mat-raised-button
+          [disabled]="pending || selected === 'new' && !map.tileSettings"
+          (click)="close()">
+          {{map.tileSettings ? 'Close' : 'Enter Editor'}}
+        </button>
+      </div>
+      @if (error) {
+        <p
+        id="error">{{error}}</p>
+      }
+      @if (success) {
+        <p
+        id="success">{{success}}</p>
+      }
     </div>
-    <div class="setting center">
-      <button mat-raised-button
-              [disabled]="pending || (!error && !shown.unsaved) || !shown.name"
-              (click)="save()">
-        {{selected === 'new' ? 'Create' : 'Save' + (['tile_sets', 'structure_sets'].includes(shown.group) ? ' All' :
-        '')}}
-      </button>
-
-      <button mat-raised-button
-              [disabled]="pending || selected === 'new' && !map.tileSettings"
-              (click)="close()">
-        {{map.tileSettings ? 'Close' : 'Enter Editor'}}
-      </button>
-    </div>
-
-    <p *ngIf="error"
-       id="error">{{error}}</p>
-    <p *ngIf="success"
-       id="success">{{success}}</p>
   </div>
-</div>
+}

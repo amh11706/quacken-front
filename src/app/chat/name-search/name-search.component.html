@@ -1,40 +1,45 @@
-<mat-form-field *ngIf="matInput; else nonMat"
-                [appearance]="'fill'">
-  <mat-label>Player name</mat-label>
+@if (matInput) {
+  <mat-form-field
+    [appearance]="'fill'">
+    <mat-label>Player name</mat-label>
+    <input #name
+      matInput
+      [value]="value"
+      [formControl]="myControl"
+      [matAutocomplete]="auto"
+      (blur)="blur()">
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-autocomplete #auto="matAutocomplete"
+      [autoSelectActiveOption]="true"
+      [autoActiveFirstOption]="false"
+      (opened)="clearOnFocus && myControl.setValue('')"
+      (optionSelected)="value = $event.option.value">
+      @for (option of searchedNames | async; track option) {
+        <mat-option
+          [value]="option">
+          {{option}}
+        </mat-option>
+      }
+    </mat-autocomplete>
+  </mat-form-field>
+} @else {
   <input #name
-         matInput
-         [value]="value"
-         [formControl]="myControl"
-         [matAutocomplete]="auto"
-         (blur)="blur()">
-  <mat-icon matSuffix>search</mat-icon>
+    [value]="value"
+    [formControl]="myControl"
+    [matAutocomplete]="auto"
+    (blur)="blur()">
   <mat-autocomplete #auto="matAutocomplete"
-                    [autoSelectActiveOption]="true"
-                    [autoActiveFirstOption]="false"
-                    (opened)="clearOnFocus && myControl.setValue('')"
-                    (optionSelected)="value = $event.option.value">
-    <mat-option *ngFor="let option of searchedNames | async"
-                [value]="option">
-      {{option}}
-    </mat-option>
+    [autoSelectActiveOption]="true"
+    [panelWidth]="200"
+    [autoActiveFirstOption]="false"
+    (opened)="clearOnFocus && myControl.setValue('')"
+    (optionSelected)="valueChange.emit($event.option.value)">
+    @for (option of searchedNames | async; track option) {
+      <mat-option
+        [value]="option">
+        {{option}}
+      </mat-option>
+    }
   </mat-autocomplete>
-</mat-form-field>
+}
 
-<ng-template #nonMat>
-  <input #name
-         [value]="value"
-         [formControl]="myControl"
-         [matAutocomplete]="auto"
-         (blur)="blur()">
-  <mat-autocomplete #auto="matAutocomplete"
-                    [autoSelectActiveOption]="true"
-                    [panelWidth]="200"
-                    [autoActiveFirstOption]="false"
-                    (opened)="clearOnFocus && myControl.setValue('')"
-                    (optionSelected)="valueChange.emit($event.option.value)">
-    <mat-option *ngFor="let option of searchedNames | async"
-                [value]="option">
-      {{option}}
-    </mat-option>
-  </mat-autocomplete>
-</ng-template>

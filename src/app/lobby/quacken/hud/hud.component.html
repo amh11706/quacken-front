@@ -1,85 +1,98 @@
 <div class="container noselect"
-     id="hud">
+  id="hud">
   <div id="boatcontrol"
-       (contextmenu)="$event.preventDefault()">
+    (contextmenu)="$event.preventDefault()">
     <div id="time">
       <div id="timebar"
-           [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
+      [style.transform]="'translateY(-' + (seconds$ | async) + 'px)'"></div>
     </div>
     <q-move-input id="moves"
-                  [singleShot]="true"
-                  [input]="localBoat"
-                  [kbControls]="kbControls"
-                  [shiftSpecials]="shiftSpecials"
-                  [serverInput]="serverBoat"
-                  [totalTokens]="totalTokens"
-                  [dragContext]="dragContext"
-                  [maxMoves]="myBoat.maxMoves"
-                  [maxShots]="myBoat.maxShots"
-                  [actions]="actions"
-                  [moveKeys]="moveKeys"
-                  [locked]="!myBoat.isMe || myBoat.moveLock >= turn || (ws.connected$ | async) !== true"
-                  (inputChange)="sendMoves()"
-                  (unusedTokensChange)="unusedTokens = $event"></q-move-input>
+      [singleShot]="true"
+      [input]="localBoat"
+      [kbControls]="kbControls"
+      [shiftSpecials]="shiftSpecials"
+      [serverInput]="serverBoat"
+      [totalTokens]="totalTokens"
+      [dragContext]="dragContext"
+      [maxMoves]="myBoat.maxMoves"
+      [maxShots]="myBoat.maxShots"
+      [actions]="actions"
+      [moveKeys]="moveKeys"
+      [locked]="!myBoat.isMe || myBoat.moveLock >= turn || (ws.connected$ | async) !== true"
+      (inputChange)="sendMoves()"
+    (unusedTokensChange)="unusedTokens = $event"></q-move-input>
     <div id="damage">
       <div id="damagebar"
-           [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
+      [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
     </div>
 
     <div id="movesource"
-         name="movesource">
+      name="movesource">
       <img class="movetile"
-           name="left"
-           id="tile1"
-           src="./assets/images/arrow1.png"
-           (dragstart)="drag(1)">
+        name="left"
+        id="tile1"
+        src="./assets/images/arrow1.png"
+        (dragstart)="drag(1)">
       <img class="movetile"
-           name="forward"
-           id="tile2"
-           src="./assets/images/arrow2.png"
-           (dragstart)="drag(2)">
+        name="forward"
+        id="tile2"
+        src="./assets/images/arrow2.png"
+        (dragstart)="drag(2)">
       <img class="movetile"
-           name="right"
-           id="tile3"
-           src="./assets/images/arrow3.png"
-           (dragstart)="drag(3)">
+        name="right"
+        id="tile3"
+        src="./assets/images/arrow3.png"
+        (dragstart)="drag(3)">
     </div>
 
     <div id="tokens">
-      <ng-container *ngIf="myBoat.type < 10">
-        <div *ngIf="!weapons[myBoat.type]"
-             id="treasurebox">
-          <img *ngIf="myBoat.getTreasure()"
-               src="./assets/images/obstacle{{myBoat.getTreasure()}}.png">
-        </div>
-      </ng-container>
+      @if (myBoat.type < 10) {
+        @if (!weapons[myBoat.type]) {
+          <div
+            id="treasurebox">
+            @if (myBoat.getTreasure()) {
+              <img
+                src="./assets/images/obstacle{{myBoat.getTreasure()}}.png">
+              }
+            </div>
+          }
+        }
 
-      <div *ngIf="weapons[myBoat.type]"
-           class="token">
-        <img *ngIf="unusedTokens.shots"
-             [src]="'/assets/images/'+weapons[myBoat.type]+'.png'"
-             (dragstart)="drag(6)">
-      </div>
-      <div *ngIf="tokens[myBoat.type]"
-           class="token">
-        <img *ngIf="myBoat.tokenPoints > 1 && myBoat.moves.indexOf(4) === -1"
-             [src]="'/assets/images/'+tokens[myBoat.type]+'.png'"
-             (dragstart)="drag(4)">
-      </div>
+        @if (weapons[myBoat.type]) {
+          <div
+            class="token">
+          @if (unusedTokens.shots) {
+            <img
+              [src]="'/assets/images/'+weapons[myBoat.type]+'.png'"
+              (dragstart)="drag(6)">
+          }
+        </div>
+      }
+      @if (tokens[myBoat.type]) {
+        <div
+          class="token">
+          @if (myBoat.tokenPoints > 1 && myBoat.moves.indexOf(4) === -1) {
+            <img
+              [src]="'/assets/images/'+tokens[myBoat.type]+'.png'"
+              (dragstart)="drag(4)">
+          }
+        </div>
+      }
     </div>
 
     <div id="buttons">
-      <button *ngIf="!fs.allowInvite || !(myBoat.ready && turn === 0); else fstart"
-              mat-raised-button
-              color="accent"
-              id="ready"
-              [disabled]="myBoat.ready"
-              (click)="imReady()">Ready</button>
-      <ng-template #fstart>
+      @if (!fs.allowInvite || !(myBoat.ready && turn === 0)) {
+        <button
+          mat-raised-button
+          color="accent"
+          id="ready"
+          [disabled]="myBoat.ready"
+        (click)="imReady()">Ready</button>
+      } @else {
         <button mat-raised-button
-                id="start"
-                (click)="start()">Start</button>
-      </ng-template>
+          id="start"
+        (click)="start()">Start</button>
+      }
       <q-setting name="nextBoat"></q-setting>
     </div>
   </div>

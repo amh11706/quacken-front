@@ -1,50 +1,50 @@
 <div #frame
-     class="noselect"
-     id="background"
-     [style.backgroundSize]="mapScale*64 + 'px'"
-     [style.backgroundPosition]="'calc(50vw + ' + (drag.offset.x - getXOff(myBoat))*mapScale + 'px) calc(50vh + ' + (drag.offset.y - getYOff(myBoat))*mapScale + 'px)'"
-     (contextmenu)="$event.preventDefault()">
+  class="noselect"
+  id="background"
+  [style.backgroundSize]="mapScale*64 + 'px'"
+  [style.backgroundPosition]="'calc(50vw + ' + (drag.offset.x - getXOff(myBoat))*mapScale + 'px) calc(50vh + ' + (drag.offset.y - getYOff(myBoat))*mapScale + 'px)'"
+  (contextmenu)="$event.preventDefault()">
   <!-- mapframe receives the offset transform, map receives the rotate transform.
- 	This allows them to be altered independent of each other -->
+  This allows them to be altered independent of each other -->
   <div id="mapcenter">
     <div [qZoom]="frame"
-         [zoom]="mapScale"
-         [ctrlZoom]="ctrlZoom"
-         [maxZoom]="2"
-         [minZoom]="0.3"
-         (zoomChange)="zoomChange($event)">
+      [zoom]="mapScale"
+      [ctrlZoom]="ctrlZoom"
+      [maxZoom]="2"
+      [minZoom]="0.3"
+      (zoomChange)="zoomChange($event)">
       <div #drag="qDrag"
-           [qDrag]="frame"
-           [scale]="mapScale">
+        [qDrag]="frame"
+        [scale]="mapScale">
         <div
-             [style.transform]="'translate(50%, 50%) translate(' + -getXOff(myBoat) + 'px, ' + -getYOff(myBoat) + 'px)'">
+          [style.transform]="'translate(50%, 50%) translate(' + -getXOff(myBoat) + 'px, ' + -getYOff(myBoat) + 'px)'">
           <canvas #canvas
-                  id="mapCanvas"
-                  (mousedown)="mouseDown($event)"
-                  (mouseup)="mouseUp($event)"
-                  (mousemove)="mouseMove($event)"></canvas>
+            id="mapCanvas"
+            (mousedown)="mouseDown($event)"
+            (mouseup)="mouseUp($event)"
+          (mousemove)="mouseMove($event)"></canvas>
 
-          <ng-container *ngFor="let obstacle of obstacles;">
+          @for (obstacle of obstacles; track obstacle) {
             <q-sprite-img class="obstacle"
-                          [render]="obstacle.sprite"
-                          [style.zIndex]="obstacle.zIndex"
-                          [style.top]="obstacle.sprite.pOffsetY + 'px'"
-                          [style.left]="obstacle.sprite.pOffsetX + 'px'"></q-sprite-img>
-          </ng-container>
+              [render]="obstacle.sprite"
+              [style.zIndex]="obstacle.zIndex"
+              [style.top]="obstacle.sprite.pOffsetY + 'px'"
+            [style.left]="obstacle.sprite.pOffsetX + 'px'"></q-sprite-img>
+          }
 
           <q-gu-boats [showIsland]="showIsland"
-                      [checkSZ]="checkSZ"
-                      [hoveredTeam]="hoveredTeam"
-                      [speed]="speed"
-                      [fishBoats]="fishBoats"
-                      [map]="frame"
-                      [setTile]="mapUtil.setTile"
-                      [getX]="getX"
-                      [getY]="getY">
+            [checkSZ]="checkSZ"
+            [hoveredTeam]="hoveredTeam"
+            [speed]="speed"
+            [fishBoats]="fishBoats"
+            [map]="frame"
+            [setTile]="mapUtil.setTile"
+            [getX]="getX"
+            [getY]="getY">
           </q-gu-boats>
 
           <div #overlay
-               id="overlay"></div>
+          id="overlay"></div>
         </div>
       </div>
     </div>
@@ -52,10 +52,10 @@
 </div>
 
 <div #fps
-     id="fps"
-     [qDrag]="fps"
-     [bindToWindow]="true"
-     [offset]="$any(graphicSettings.showFps.data)"
-     [hidden]="!graphicSettings.showFps.value"
-     (offsetChange)="fpsOffsetChange($event)">
+  id="fps"
+  [qDrag]="fps"
+  [bindToWindow]="true"
+  [offset]="$any(graphicSettings.showFps.data)"
+  [hidden]="!graphicSettings.showFps.value"
+  (offsetChange)="fpsOffsetChange($event)">
 </div>

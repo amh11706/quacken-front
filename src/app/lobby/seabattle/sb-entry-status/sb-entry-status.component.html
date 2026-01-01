@@ -1,36 +1,40 @@
 <div class="container noselect"
-     id="timer">
+  id="timer">
   <p id="turncount">{{time}}</p>
   <p class="team team0"
-     [style.color]="colors[0]"
-     [class.sameteam]="myTeam === 0"
-     (mouseover)="hoveredTeam.emit(0)"
-     (mouseleave)="hoveredTeam.emit(-1)">
-    <span *ngIf="myTeam !== 0; else defend0">
-      <img src="assets/images/icon_defend1.png">
-    </span>
+    [style.color]="colors[0]"
+    [class.sameteam]="myTeam === 0"
+    (mouseover)="hoveredTeam.emit(0)"
+    (mouseleave)="hoveredTeam.emit(-1)">
+    @if (myTeam !== 0) {
+      <span>
+        <img src="assets/images/icon_defend1.png">
+      </span>
+    } @else {
+      <img src="assets/images/icon_defend0.png">
+    }
     {{points[0]}}
   </p>
   -
-  <ng-container *ngFor="let team of points; let i = index">
-    <p *ngIf="i !== 0"
-       class="team"
-       [style.color]="colors[i]"
-       [class.sameteam]="myTeam === i"
-       (mouseover)="hoveredTeam.emit(i)"
-       (mouseleave)="hoveredTeam.emit(-1)">
-      {{points[i]}}
-      <span *ngIf="myTeam !== i; else attack0">
-        <img src="assets/images/icon_attack{{i}}.png">
-      </span>
-    </p>
-  </ng-container>
+  @for (team of points; track team; let i = $index) {
+    @if (i !== 0) {
+      <p
+        class="team"
+        [style.color]="colors[i]"
+        [class.sameteam]="myTeam === i"
+        (mouseover)="hoveredTeam.emit(i)"
+        (mouseleave)="hoveredTeam.emit(-1)">
+        {{points[i]}}
+        @if (myTeam !== i) {
+          <span>
+            <img src="assets/images/icon_attack{{i}}.png">
+          </span>
+        } @else {
+          <img src="assets/images/icon_attack0.png">
+        }
+      </p>
+    }
+  }
 </div>
 
-<ng-template #attack0>
-  <img src="assets/images/icon_attack0.png">
-</ng-template>
 
-<ng-template #defend0>
-  <img src="assets/images/icon_defend0.png">
-</ng-template>

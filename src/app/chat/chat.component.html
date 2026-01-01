@@ -1,92 +1,107 @@
 <div class="chatbox">
   <div class="output">
     <cdk-virtual-scroll-viewport class="textbox"
-                                 [itemSize]="27"
-                                 [minBufferPx]="100"
-                                 [maxBufferPx]="200"
-                                 (wheel)="scrolled($event)"
-                                 (scroll)="scrolledAny($event)">
+      [itemSize]="27"
+      [minBufferPx]="100"
+      [maxBufferPx]="200"
+      (wheel)="scrolled($event)"
+      (scroll)="scrolledAny($event)">
       <div *cdkVirtualFor="let m of chat.messages$"
-           class="message">
+        class="message">
         <p [style.backgroundColor]="colors[m.type]"
-           [matTooltipShowDelay]="500"
-           [matTooltipPosition]="'right'"
-           [matTooltip]="m.receivedTime">
-          <ng-container [ngSwitch]="m.type">
-            <span *ngSwitchCase="0">{{m.message}}</span>
-            <span *ngSwitchCase="1"
-                  [innerHTML]="m.message"></span>
-
-            <span *ngSwitchCase="2">
-              <q-name [message]="m"></q-name>
-              says "{{m.message}}"
-            </span>
-
-            <span *ngSwitchCase="3">
-              <q-name [message]="m"></q-name>
-              {{m.message}}
-            </span>
-
-            <span *ngSwitchCase="4">
-              You told
-              <q-name [message]="m"></q-name>
-              "{{m.message}}"
-            </span>
-
-            <span *ngSwitchCase="5">
-              <q-name [message]="m"></q-name>
-              tells you
-              "{{m.message}}"
-            </span>
-
-            <span *ngSwitchCase="6">
-              {{m.from ? m.from + ' says "' + m.message + '"' : m.message}}
-            </span>
-
-            <span *ngSwitchCase="7">
-              <q-name [message]="m"
-                      [offline]="true"></q-name> was last seen
-              {{m.ago}} ({{m.time}}).
-            </span>
-
-            <span *ngSwitchCase="8"
-                  class="invite">
-              <span *ngIf="m.message.ty === 0; else lobby">
-                <q-name [message]="m"></q-name> has requested to add you as a friend.
+          [matTooltipShowDelay]="500"
+          [matTooltipPosition]="'right'"
+          [matTooltip]="m.receivedTime">
+          @switch (m.type) {
+            @case (0) {
+              <span>{{m.message}}</span>
+            }
+            @case (1) {
+              <span
+              [innerHTML]="m.message"></span>
+            }
+            @case (2) {
+              <span>
+                <q-name [message]="m"></q-name>
+                says "{{m.message}}"
               </span>
-              <ng-template #lobby>
-                <span>
-                  <q-name [message]="m"></q-name> has invited you to join their lobby.
-                </span>
-              </ng-template>
-              <ng-container *ngIf="!m.message.resolved">
-                <a *ngIf="m.message.ty !== 0; else acceptButton"
-                   mat-raised-button
-                   color="accent"
-                   class="accept"
-                   [href]="'/#/lobby/' + m.message.tg"
-                   (click)="accept(m.message)">Accept</a>
-                <ng-template #acceptButton>
+            }
+            @case (3) {
+              <span>
+                <q-name [message]="m"></q-name>
+                {{m.message}}
+              </span>
+            }
+            @case (4) {
+              <span>
+                You told
+                <q-name [message]="m"></q-name>
+                "{{m.message}}"
+              </span>
+            }
+            @case (5) {
+              <span>
+                <q-name [message]="m"></q-name>
+                tells you
+                "{{m.message}}"
+              </span>
+            }
+            @case (6) {
+              <span>
+                {{m.from ? m.from + ' says "' + m.message + '"' : m.message}}
+              </span>
+            }
+            @case (7) {
+              <span>
+                <q-name [message]="m"
+                [offline]="true"></q-name> was last seen
+                {{m.ago}} ({{m.time}}).
+              </span>
+            }
+            @case (8) {
+              <span
+                class="invite">
+                @if (m.message.ty === 0) {
+                  <span>
+                    <q-name [message]="m"></q-name> has requested to add you as a friend.
+                  </span>
+                } @else {
+                  <span>
+                    <q-name [message]="m"></q-name> has invited you to join their lobby.
+                  </span>
+                }
+                @if (!m.message.resolved) {
+                  @if (m.message.ty !== 0) {
+                    <a
+                      mat-raised-button
+                      color="accent"
+                      class="accept"
+                      [href]="'/#/lobby/' + m.message.tg"
+                    (click)="accept(m.message)">Accept</a>
+                  } @else {
+                    <button mat-raised-button
+                      color="accent"
+                      class="accept"
+                    (click)="accept(m.message)">Accept</button>
+                  }
                   <button mat-raised-button
-                          color="accent"
-                          class="accept"
-                          (click)="accept(m.message)">Accept</button>
-                </ng-template>
-                <button mat-raised-button
-                        (click)="decline(m.message)">Decline</button>
-              </ng-container>
-            </span>
-
-            <span *ngSwitchCase="9">
-              <q-name [message]="m"></q-name>
-              broadcasts "{{m.message}}"
-            </span>
-
-            <span *ngSwitchCase="10">
-              <q-name [message]="m"></q-name>
-              team chats "{{m.message}}"
-            </span>
-          </ng-container>
+                  (click)="decline(m.message)">Decline</button>
+                }
+              </span>
+            }
+            @case (9) {
+              <span>
+                <q-name [message]="m"></q-name>
+                broadcasts "{{m.message}}"
+              </span>
+            }
+            @case (10) {
+              <span>
+                <q-name [message]="m"></q-name>
+                team chats "{{m.message}}"
+              </span>
+            }
+          }
         </p>
       </div>
     </cdk-virtual-scroll-viewport>

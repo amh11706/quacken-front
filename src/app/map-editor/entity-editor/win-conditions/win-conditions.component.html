@@ -1,32 +1,38 @@
-<div *ngFor="let s of winConditions; let i = index"
-     class="condition">
+@for (s of winConditions; track s; let i = $index) {
+  <div
+    class="condition">
     <mat-select class="condition-select"
-                [(ngModel)]="s.id"
-                (selectionChange)="tile && tile.unsaved = true">
-        <mat-option *ngFor="let c of conditions"
-                    [value]="c.id">
-            {{c.name}}
+      [(ngModel)]="s.id"
+      (selectionChange)="tile && tile.unsaved = true">
+      @for (c of conditions; track c) {
+        <mat-option
+          [value]="c.id">
+          {{c.name}}
         </mat-option>
+      }
     </mat-select>
     <mat-select class="small-select"
-                [(ngModel)]="s.type"
-                (selectionChange)="tile && tile.unsaved = true">
-        <mat-option *ngFor="let t of types; let ti = index"
-                    [value]="ti">
-            {{t}}
+      [(ngModel)]="s.type"
+      (selectionChange)="tile && tile.unsaved = true">
+      @for (t of types; track t; let ti = $index) {
+        <mat-option
+          [value]="ti">
+          {{t}}
         </mat-option>
+      }
     </mat-select>
     <input matInput
-           class="small-select"
-           type="number"
-           min="0"
-           max="100"
-           [(ngModel)]="s.value"
-           (change)="tile && tile.unsaved = true">
+      class="small-select"
+      type="number"
+      min="0"
+      max="100"
+      [(ngModel)]="s.value"
+      (change)="tile && tile.unsaved = true">
     <span class="delete"
-          (click)="removeCondition(i)">
-        X
+      (click)="removeCondition(i)">
+      X
     </span>
-</div>
+  </div>
+}
 <button mat-raised-button
-        (click)="addCondition()">Add Condition</button>
+(click)="addCondition()">Add Condition</button>
