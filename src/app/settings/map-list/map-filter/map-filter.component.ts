@@ -14,8 +14,7 @@ export class MapFilterComponent {
     tagList: string[];
     userList: string[];
     toggleTag: (v: string) => void;
-}>(MAT_BOTTOM_SHEET_DATA);
-
+  }>(MAT_BOTTOM_SHEET_DATA);
 
   onClick(filterOption: string): void {
     this.data.toggleTag(filterOption);

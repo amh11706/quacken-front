@@ -22,13 +22,13 @@
       (inputChange)="sendMoves()"
     (unusedTokensChange)="unusedTokens = $event"></q-move-input>
     <div id="boatStats">
-      <div id="damage"
-        matTooltip="Damage: {{myBoat.getDamage()}}%">
+      <div matTooltip="Damage: {{myBoat.getDamage()}}%"
+        id="damage">
         <div id="damagebar"
         [style.transform]="'translateX(' + myBoat.getDamage() + 'px)'"></div>
       </div>
-      <div id="bilge"
-        matTooltip="Bilge: {{lastTick.b || 0}}%">
+      <div matTooltip="Bilge: {{lastTick.b || 0}}%"
+        id="bilge">
         <div id="bilgebar"
         [style.transform]="'translateX(' + lastTick.b + 'px)'"></div>
       </div>

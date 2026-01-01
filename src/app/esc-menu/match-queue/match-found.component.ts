@@ -5,8 +5,6 @@ import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Sounds, SoundService } from '../../sound.service';
 import { ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
-import { SubscribeData } from '../../ws/ws-subscribe-types';
-import { InCmd } from '../../ws/ws-messages';
 
 const TimeLimit = 20;
 

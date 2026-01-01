@@ -7,7 +7,6 @@ import { Directive, ElementRef, OnInit, inject } from '@angular/core';
 export class AutoSelectDirective implements OnInit {
   private elRef = inject<ElementRef<HTMLInputElement>>(ElementRef);
 
-
   ngOnInit(): void {
     this.elRef.nativeElement.addEventListener('focus', () => {
       this.elRef.nativeElement.select();

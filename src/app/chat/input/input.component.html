@@ -1,62 +1,66 @@
-<div *ngIf="!disabled && (chat.selectedCommand$ | async) as command"
-     class="col{{((chat.selectedCommand$ | async)?.params?.length || 0) + 1}}">
+@if (!disabled && (chat.selectedCommand$ | async); as command) {
+<div class="col{{((chat.selectedCommand$ | async)?.params?.length || 0) + 1}}">
   <mat-select [panelWidth]="120"
               [value]="command"
               [matTooltip]="command.help"
               [matTooltipShowDelay]="500"
               (selectionChange)="focusChat(); chat.selectedCommand$.next($event.value)">
-    <mat-option *ngFor="let item of chat.commands$ | async"
-                [matTooltip]="item.help"
+    @for (item of chat.commands$ | async; track item.title) {
+    <mat-option [matTooltip]="item.help"
                 [matTooltipShowDelay]="500"
                 [value]="item">
       {{ item.title | titlecase }}
     </mat-option>
+    }
   </mat-select>
-
-  <ng-container *ngFor="let param of command.params">
-    <ng-container [ngSwitch]="param.name">
-      <q-name-search *ngSwitchCase="'name'"
-                     [onlineOnly]="true"
-                     [matInput]="false"
-                     [clearOnFocus]="false"
-                     [(value)]="param.value"
-                     (keyup)="handleKey($event)"></q-name-search>
-      <q-name-search *ngSwitchCase="'nameany'"
-                     [matInput]="false"
-                     [clearOnFocus]="false"
-                     [(value)]="param.value"
-                     (keyup)="handleKey($event)"></q-name-search>
-
-      <span *ngSwitchCase="'new'">new</span>
-
-      <ngx-emoji *ngSwitchCase="'emoji'"
-                 [matMenuTriggerFor]="emojimenu"
-                 [tooltip]="true"
-                 [emoji]="findCustomEmoji(param.value || ':+1:')"></ngx-emoji>
-      <mat-menu #emojimenu>
-        <ng-template matMenuContent>
-          <emoji-mart [darkMode]="true"
-                      [autoFocus]="true"
-                      [showSingleCategory]="true"
-                      [custom]="customEmojis"
-                      (click)="$event.preventDefault(); $event.stopPropagation();"
-                      (emojiSelect)="param.value = $event.emoji.colons; emojimenu.close.emit()"></emoji-mart>
-        </ng-template>
-      </mat-menu>
-
-      <input *ngSwitchDefault
-             qEmojiInput
-             class="textinput"
-             autocomplete="off"
-             maxlength="200"
-             name="value"
-             [id]="param.name || 'message'"
-             [placeholder]="param.name"
-             [(ngModel)]="param.value"
-             (keyup)="handleKey($event)">
-    </ng-container>
-  </ng-container>
+  @for (param of command.params; track param.name) {
+    @switch (param.name) {
+      @case ('name') {
+        <q-name-search [onlineOnly]="true"
+                       [matInput]="false"
+                       [clearOnFocus]="false"
+                       [(value)]="param.value"
+                       (keyup)="handleKey($event)"></q-name-search>
+      }
+      @case ('nameany') {
+        <q-name-search [matInput]="false"
+                       [clearOnFocus]="false"
+                       [(value)]="param.value"
+                       (keyup)="handleKey($event)"></q-name-search>
+      }
+      @case ('new') {
+        <span>new</span>
+      }
+      @case ('emoji') {
+        <ngx-emoji [matMenuTriggerFor]="emojimenu"
+                   [tooltip]="true"
+                   [emoji]="findCustomEmoji(param.value || ':+1:')"></ngx-emoji>
+        <mat-menu #emojimenu>
+          <ng-template matMenuContent>
+            <emoji-mart [darkMode]="true"
+                        [autoFocus]="true"
+                        [showSingleCategory]="true"
+                        [custom]="customEmojis"
+                        (click)="$event.preventDefault(); $event.stopPropagation();"
+                        (emojiSelect)="param.value = $event.emoji.colons; emojimenu.closed.emit()"></emoji-mart>
+          </ng-template>
+        </mat-menu>
+      }
+      @default {
+        <input qEmojiInput
+               class="textinput"
+               autocomplete="off"
+               maxlength="200"
+               name="value"
+               [id]="param.name || 'message'"
+               [placeholder]="param.name"
+               [(ngModel)]="param.value"
+               (keyup)="handleKey($event)">
+      }
+    }
+  }
   <button mat-button
           id="send"
           (click)="sendInput($event)">Send</button>
 </div>
+}

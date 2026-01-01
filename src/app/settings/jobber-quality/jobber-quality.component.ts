@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ProviderToken } from '@angular/core';
 import { Settings, SliderSetting } from '../setting/settings';
 import { SettingsService } from '../settings.service';
 import { DBSetting } from '../types';
@@ -21,7 +21,7 @@ interface JobberSetting extends DBSetting {
   standalone: false,
 })
 export class JobberQualityComponent {
-  setting = inject<JobberSetting>('setting' as any);
+  setting = inject<JobberSetting>('setting' as unknown as ProviderToken<JobberSetting>);
   ss = inject(SettingsService);
 
   JobberSetting = Settings.jobberQuality as SliderSetting;

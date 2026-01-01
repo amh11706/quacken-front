@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ProviderToken } from '@angular/core';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 import { getShipLink } from '../setting/setting.component';
 import { BoatSetting, OptionSetting, Settings } from '../setting/settings';
@@ -20,7 +20,7 @@ interface BotSetting extends DBSetting {
   standalone: false,
 })
 export class BotSettingComponent {
-  setting = inject<BotSetting>('setting' as any);
+  setting = inject<BotSetting>('setting' as unknown as ProviderToken<BotSetting>);
   ss = inject(SettingsService);
 
   BotSetting = Settings.enableBots as OptionSetting;

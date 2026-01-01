@@ -21,7 +21,6 @@ export class EscMenuComponent {
   private dialog = inject(MatDialog);
   private injector = inject(Injector);
 
-
   onTabChange(index: number) {
     void this.es.tabChange(index);
   }

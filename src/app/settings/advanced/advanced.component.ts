@@ -21,10 +21,10 @@ export class AdvancedComponent {
   constructor() {
     const injector = inject(Injector);
     const data = inject<{
-    component: unknown;
-    setting: DBSetting;
-    admin: boolean;
-}>(MAT_DIALOG_DATA);
+      component: unknown;
+      setting: DBSetting;
+      admin: boolean;
+    }>(MAT_DIALOG_DATA);
 
     Object.assign(this, data);
     this.customInjector =

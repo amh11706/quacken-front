@@ -29,8 +29,8 @@ DefaultBoat.team = 99;
     SettingsModule,
     MatTabsModule,
     MatIconModule,
-    MatTooltipModule
-],
+    MatTooltipModule,
+  ],
   templateUrl: './boat-list.component.html',
   styleUrl: './boat-list.component.scss',
 })
