@@ -133,8 +133,6 @@ export class HudComponent implements OnInit, OnDestroy {
       if (!m) return;
       if (m.inProgress) this.turn = 1;
       this.myBoat.ready = false;
-      this.resetMoves();
-      this.lastMoveReset = 0;
 
       // make sure the settings are loaded so we don't start the timer with the wrong settings
       await this.ss.getGroup(this.group);
@@ -149,6 +147,7 @@ export class HudComponent implements OnInit, OnDestroy {
         ? this.maxTurn - (m as unknown as { turn: number }).turn || 0
         : m.turnsLeft - 1;
       this.setTurn(turnsLeft, this.secondsPerTurn - (m.seconds ?? -1) - 2);
+      this.resetMoves(true);
     }));
 
     this.subs.add(this.ws.subscribe(InCmd.LobbyStatus, m => {
