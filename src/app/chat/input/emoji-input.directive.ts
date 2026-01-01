@@ -98,7 +98,7 @@ export class EmojiInputDirective implements OnInit {
   ) {
     emojiSearch.addCustomToPool(CustomEmojis, emojiSearch.originalPool);
 
-    model.valueChanges?.subscribe(_value => {
+    model.valueChanges?.subscribe((_value: unknown) => {
       this.onInput({} as InputEvent);
     });
   }
@@ -120,7 +120,7 @@ export class EmojiInputDirective implements OnInit {
 
   private static lastValue = '';
   @HostListener('input', ['$event'])
-  private onInput(_event: InputEvent) {
+  public onInput(_event: Event) {
     const input = this.ref.nativeElement;
     if (input.value === EmojiInputDirective.lastValue) return;
     EmojiInputDirective.lastValue = input.value;
@@ -145,7 +145,7 @@ export class EmojiInputDirective implements OnInit {
   }
 
   @HostListener('keyup.escape', ['$event'])
-  onEscape(event: KeyboardEvent) {
+  onEscape(event: Event) {
     if (!this.overlayRef?.hasAttached()) return;
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -154,7 +154,7 @@ export class EmojiInputDirective implements OnInit {
 
   @HostListener('keyup.tab', ['$event'])
   @HostListener('keyup.enter', ['$event'])
-  onTab(event: KeyboardEvent) {
+  onTab(event: Event) {
     const first = this.overlayContext.searchResults[0];
     if (!first || !this.overlayRef?.hasAttached()) return;
     event.preventDefault();
