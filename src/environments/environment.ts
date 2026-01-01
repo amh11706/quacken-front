@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  api: 'https://dev.superquacken.com/',
-  ws: 'wss://dev.superquacken.com/ws',
+  api: 'http://localhost:3000/',
+  ws: 'ws://localhost:3000/ws',
 };
 
 /*
