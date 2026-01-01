@@ -44,7 +44,7 @@ mat-radio-group {
 :host ::ng-deep {
   mat-radio-button div.mdc-form-field {
     transform: scale(0.6);
-    --mdc-radio-state-layer-size: 20px;
+    --mat-radio-state-layer-size: 20px;
     margin-left: 4px;
   }
 }

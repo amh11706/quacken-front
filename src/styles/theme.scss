@@ -30,5 +30,5 @@ $theme: mat.m2-define-dark-theme((color: (primary: colors.$primary,
 // @include mat.button-theme($theme);
 
 :root {
-  --mat-standard-button-toggle-label-text-size: 0.75rem; // Set your desired text size here
+  --mat-button-toggle-label-text-size: 0.75rem; // Set your desired text size here
 }
