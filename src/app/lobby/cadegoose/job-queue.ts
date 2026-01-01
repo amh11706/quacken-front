@@ -7,12 +7,14 @@ interface Job {
 export class JobQueue {
   private jobs: Job[] = [];
   private restart?: () => void;
-  done = new Promise<void>(resolve => { this._done = resolve; });
+  private done: Promise<void>;
   private _done?: () => void;
   private cancel?: () => void;
-  private cancelPromise = new Promise<void>(resolve => { this.cancel = resolve; });
+  private cancelPromise: Promise<void>;
 
   constructor(private jobTimeout = 0) {
+    this.done = new Promise<void>(resolve => { this._done = resolve; });
+    this.cancelPromise = new Promise<void>(resolve => { this.cancel = resolve; });
     void this.doJobs();
   }
 
