@@ -59,7 +59,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   };
 
   @Input() dragContext = { source: 8, move: 0, type: 'move' };
-  @Input() private singleShot = false;
+  @Input() singleShot = false;
   @Input() locked = true;
   @Input() maneuvers: Maneuver[] = [];
   private _maxMoves = 4;
@@ -71,7 +71,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   @Input() maxShots = 2;
   @Input() kbControls = 0;
   @Input() shiftSpecials = 0;
-  @Input() private moveKeys: Record<number, KeyActions> = {
+  @Input() moveKeys: Record<number, KeyActions> = {
     0: KeyActions.QBlank,
     1: KeyActions.QLeft,
     2: KeyActions.QForward,
@@ -79,7 +79,7 @@ export class MoveInputComponent implements OnInit, OnDestroy {
     4: KeyActions.QToken,
   } as const;
 
-  @Input() private actions = {
+  @Input() actions = {
     bombLeft: KeyActions.QBombLeft,
     bombRight: KeyActions.QBombRight,
     BombLeftStrict: KeyActions.QBombLeftStrict,
