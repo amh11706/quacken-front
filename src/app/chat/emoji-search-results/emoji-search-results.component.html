@@ -12,7 +12,7 @@
     </emoji-preview>
   </mat-card-title>
   <mat-card-content (mouseleave)="hoveredEmoji = null">
-    @for (emoji of data.searchResults; track emoji) {
+    @for (emoji of data.searchResults; track emoji.id) {
       <div
         class="emoji"
         (mouseover)="hoverEmoji(emoji)"

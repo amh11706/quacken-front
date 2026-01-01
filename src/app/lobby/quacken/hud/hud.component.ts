@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 import { Subscription, BehaviorSubject } from 'rxjs';
 
 import { FriendsService } from '../../../chat/friends/friends.service';
@@ -29,6 +29,15 @@ export const weapons = [
   standalone: false,
 })
 export class HudComponent implements OnInit, OnDestroy {
+  ws = inject(WsService);
+  fs = inject(FriendsService);
+  protected kbs = inject(KeyBindingService);
+  protected ss = inject(SettingsService);
+  es = inject(EscMenuService);
+  protected boats = inject(BoatsService);
+  protected lobbyService = inject<LobbyService<CadeLobby>>(LobbyService);
+  turnService = inject(TurnService);
+
   @Input() group = 'l/quacken' as SettingGroup;
   @Input() kbControls = 1;
   @Input() shiftSpecials = 0;
@@ -105,17 +114,6 @@ export class HudComponent implements OnInit, OnDestroy {
   protected turnSecondsRemaining = 0;
   public blockedPosition = 3;
   seconds$ = new BehaviorSubject<number>(76);
-
-  constructor(
-    public ws: WsService,
-    public fs: FriendsService,
-    protected kbs: KeyBindingService,
-    protected ss: SettingsService,
-    public es: EscMenuService,
-    protected boats: BoatsService,
-    protected lobbyService: LobbyService<CadeLobby>,
-    public turnService: TurnService,
-  ) { }
 
   ngOnInit(): void {
     void this.ss.getGroup(this.group).then(settings => { this.lobbySettings = settings; });

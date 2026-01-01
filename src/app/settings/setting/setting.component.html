@@ -13,10 +13,10 @@
               [matTooltip]="setting.titles[settingValue.value] || ''">
           }
         </mat-select-trigger>
-        @for (g of setting.groups; track g) {
+        @for (g of setting.groups; track $index) {
           <mat-optgroup
             [label]="g.name">
-            @for (o of g.options; track o) {
+            @for (o of g.options; track $index) {
               <mat-option
                 [value]="o">
                 <img class="boatoption"
@@ -40,7 +40,7 @@
       <mat-select [value]="settingValue.stream | async"
         [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
         (selectionChange)="save($event.value)">
-        @for (option of setting.options; track option; let i = $index) {
+        @for (option of setting.options; track i; let i = $index) {
           @if (option) {
             <mat-option
             [value]="i">{{option}}</mat-option>
@@ -98,14 +98,14 @@
 @if (setting.type === 'checkbox') {
   <div
     class="setting"
-    [matTooltip]="$any(settingValue.data?.icon)?.text"
+    [matTooltip]="$any(settingValue.data?.['icon'])?.text"
     [matTooltipPosition]="'above'">
     <mat-checkbox [checked]="!!(settingValue.stream | async)"
-      [class.nowrap]="settingValue.data?.icon"
+      [class.nowrap]="settingValue.data?.['icon']"
       [disabled]="disabled() || setting.admin && (ss.admin$ | async) === false"
       (change)="save(+$event.checked)">
       <span class="checkbox-text">{{setting.label}}</span>&nbsp;
-      @if (settingValue.data?.icon; as icon) {
+      @if (settingValue.data?.['icon']; as icon) {
         <mat-icon
         [color]="$any(icon).color">{{$any(icon).name}}</mat-icon>
       }

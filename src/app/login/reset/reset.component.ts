@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, TemplateRef, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,6 +12,11 @@ import { environment } from '../../../environments/environment';
   standalone: false,
 })
 export class ResetComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
   private path = environment.api;
   private token = '';
@@ -21,12 +26,9 @@ export class ResetComponent implements OnInit, OnDestroy {
   pending = false;
   err = '';
 
-  constructor(
-    private route: ActivatedRoute,
-    private dialog: MatDialog,
-    private http: HttpClient,
-    private router: Router,
-  ) {
+  constructor() {
+    const router = this.router;
+
     const token = window.localStorage.getItem('token');
     if (token) {
       void router.navigate(['list']);

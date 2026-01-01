@@ -16,7 +16,7 @@
     {{getScore(0)}}
   </p>
   -
-  @for (team of points; track team; let i = $index) {
+  @for (team of points; track i; let i = $index) {
     @if (i !== 0) {
       <p
         class="team"

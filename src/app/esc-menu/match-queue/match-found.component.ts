@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { Subject } from 'rxjs';
@@ -34,17 +34,15 @@ const TimeLimit = 20;
     `,
 })
 export class MatchFoundDialogComponent implements OnInit {
+  private dialogRef = inject<MatDialogRef<MatchFoundDialogComponent>>(MatDialogRef);
+  private sound = inject(SoundService);
+  data = inject(MAT_DIALOG_DATA);
+
   openTime = Date.now();
   timeLeft = new Subject<number>();
   private timer = 0;
   expired = false;
   areaName?: string;
-
-  constructor(
-    private dialogRef: MatDialogRef<MatchFoundDialogComponent>,
-    private sound: SoundService,
-    @Inject(MAT_DIALOG_DATA) public data: SubscribeData[InCmd.QueueMatch],
-  ) { }
 
   ngOnInit() {
     void this.sound.play(Sounds.BattleStart);

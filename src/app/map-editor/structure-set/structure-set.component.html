@@ -11,7 +11,7 @@
       @if (map.structures) {
         <div
           class="structuretype">
-          @for (structure of map.structures; track structure) {
+          @for (structure of map.structures; track $index) {
             <div
               class="structure"
               [class.unsaved]="structure.unsaved"
@@ -78,7 +78,7 @@
             <mat-label>Feature Type</mat-label>
             <mat-select [(ngModel)]="map.selectedTile.activeFeature.group"
               (selectionChange)="map.selectedTile.unsaved = true">
-              @for (group of groups; track group; let i = $index) {
+              @for (group of groups; track i; let i = $index) {
                 <mat-option
                   [value]="i">
                   {{group}}
@@ -119,7 +119,7 @@
               <mat-label>Tile Type</mat-label>
               <mat-select [(ngModel)]="map.selectedTile.activeFeature.type"
                 (selectionChange)="map.selectedTile.unsaved = true">
-                @for (type of types; track type; let i = $index) {
+                @for (type of types; track i; let i = $index) {
                   <mat-option
                     [value]="i">
                     {{type}}

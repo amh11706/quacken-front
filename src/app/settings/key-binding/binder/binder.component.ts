@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, TemplateRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, TemplateRef, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { NotActive } from '../key-actions';
@@ -13,6 +13,9 @@ import { KeyBindingService } from '../key-binding.service';
   standalone: false,
 })
 export class BinderComponent implements OnDestroy {
+  private dialog = inject(MatDialog);
+  private kbs = inject(KeyBindingService);
+
   private _binding?: KeyBindingEditMode;
   @Input() set binding(b: KeyBindingEditMode) {
     this._binding = b;
@@ -43,8 +46,6 @@ export class BinderComponent implements OnDestroy {
   newKey = '';
   conflict?: KeyBindingEditMode[];
   private sub?: Subscription;
-
-  constructor(private dialog: MatDialog, private kbs: KeyBindingService) { }
 
   ngOnDestroy(): void {
     this.sub?.unsubscribe();

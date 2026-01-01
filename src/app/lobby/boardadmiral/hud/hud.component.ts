@@ -84,7 +84,7 @@ export class HudComponent extends CadeHudComponent {
     });
   }
 
-  protected bindKeys(): void {
+  protected override bindKeys(): void {
     this.subs.add(this.kbs.subscribe(KeyActions.BACoverFlags, v => {
       if (!v || !this.activeBoat) return;
       if (this.activeBoat.coverMode === BoatCoverMode.Flags) return;

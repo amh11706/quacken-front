@@ -1,13 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EscMenuService } from '../../../esc-menu/esc-menu.service';
 import { Settings, BoatSetting } from '../../../settings/setting/settings';
-import { SettingsService } from '../../../settings/settings.service';
-import { WsService } from '../../../ws/ws.service';
 import { MainMenuComponent } from '../../cadegoose/main-menu/main-menu.component';
 import { FgHelpComponent } from '../fg-help/fg-help.component';
 import { Stat } from '../../cadegoose/stats/types';
-import { MainMenuService } from '../../cadegoose/main-menu/main-menu.service';
 
 export const FgColumns = [
   { stat: Stat.PointsScored, title: 'Flags Returned' },
@@ -28,20 +24,17 @@ export const FgColumns = [
   standalone: false,
 })
 export class FgMainMenuComponent extends MainMenuComponent {
+  private dialog = inject(MatDialog);
+
   columns = FgColumns;
 
-  constructor(
-    ws: WsService,
-    es: EscMenuService,
-    ss: SettingsService,
-    private dialog: MatDialog,
-    ms: MainMenuService,
-  ) {
-    super(ws, es, ss, ms);
+  constructor() {
+    super();
+
     this.ms.group = 'l/flaggames';
   }
 
-  boatTitles = (Settings.flagNextBoat as BoatSetting).titles;
+  override boatTitles = (Settings.flagNextBoat as BoatSetting).titles;
 
   openHelp(): void {
     this.dialog.open(FgHelpComponent, { maxWidth: '600px', maxHeight: '80vh' });

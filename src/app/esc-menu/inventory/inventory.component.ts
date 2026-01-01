@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -15,6 +15,9 @@ import { Item, Inventory } from '../profile/types';
   standalone: false,
 })
 export class InventoryComponent implements OnDestroy {
+  ws = inject(WsService);
+  private dialog = inject(MatDialog);
+
   private _id?: number;
   @Input() set id(value: number | undefined) {
     if (this._id) this.ngOnDestroy();
@@ -33,10 +36,7 @@ export class InventoryComponent implements OnDestroy {
   private subs = new Subscription();
   private searchDebounce?: number;
 
-  constructor(
-    public ws: WsService,
-    private dialog: MatDialog,
-  ) {
+  constructor() {
     this.id = this.ws.user?.inventory;
   }
 

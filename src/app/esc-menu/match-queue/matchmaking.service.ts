@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatchFoundDialogComponent } from './match-found.component';
 import { WsService } from '../../ws/ws.service';
@@ -9,14 +9,14 @@ import { SubscribeData } from '../../ws/ws-subscribe-types';
 
 @Injectable()
 export class MatchmakingService {
+  private ws = inject(WsService);
+  private dialog = inject(MatDialog);
+  private injector = inject(Injector);
+  private ns = inject(NotificationService);
+
   inQueue = false;
 
-  constructor(
-    private ws: WsService,
-    private dialog: MatDialog,
-    private injector: Injector,
-    private ns: NotificationService,
-  ) {
+  constructor() {
     this.ws.connected$.subscribe(() => {
       this.inQueue = false;
     });

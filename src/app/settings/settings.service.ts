@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subscription, debounceTime } from 'rxjs';
 
 import { InCmd, OutCmd } from '../ws/ws-messages';
@@ -21,6 +21,8 @@ interface LocalSettingsReady extends Map<SettingGroup, Promise<SettingMap<Settin
 
 @Injectable()
 export class SettingsService implements OnDestroy {
+  private ws = inject(WsService);
+
   private settings: LocalSettings = new Map();
   private ready: LocalSettingsReady = new Map();
 
@@ -31,7 +33,9 @@ export class SettingsService implements OnDestroy {
   rankArea = 2;
   private subs = new Subscription();
 
-  constructor(private ws: WsService) {
+  constructor() {
+    const ws = this.ws;
+
     this.subs = ws.subscribe(InCmd.SettingSet, s => {
       const group = this.settings.get(s.group);
       const setting = group?.[s.name];

@@ -2,9 +2,9 @@
   <div
     id="map"
     (mouseup)="painting = false">
-    @for (row of map.selectedTile.data; track row; let y = $index) {
+    @for (row of map.selectedTile.data; track y; let y = $index) {
       <div>
-        @for (tile of row; track tile; let x = $index) {
+        @for (tile of row; track x; let x = $index) {
           <div
             class="tile"
             [class.sztile]="map.selectedTile.group === 'cgmaps' ? y < 3 || y > 32 : y > 48"
@@ -13,8 +13,8 @@
             (mouseover)="painting ? clickTile($event, x, y) : null">
             @if (tile) {
               <img
-                draggable="false"
                 src="./assets/images/obstacle{{tile}}.png"
+                draggable="false"
                 [class]="'img' + tile"
                 [matTooltip]="tile < 5 ? titles[tile + 1] || '': ''">
               }

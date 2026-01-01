@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 
 @Directive({
   selector: '[qZoom]',
@@ -6,6 +6,8 @@ import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output }
   standalone: false,
 })
 export class QzoomDirective implements OnInit, OnDestroy {
+  private el = inject(ElementRef);
+
   @Input() qZoom?: HTMLElement | '';
   @Input() ctrlZoom = false;
   private _zoom = 1;
@@ -17,8 +19,6 @@ export class QzoomDirective implements OnInit, OnDestroy {
   @Input() minZoom = 0.1;
   @Input() maxZoom = 10;
   @Input() zoomStep = 0.1;
-
-  constructor(private el: ElementRef) { }
 
   ngOnInit(): void {
     if (!this.qZoom) this.qZoom = this.el.nativeElement;

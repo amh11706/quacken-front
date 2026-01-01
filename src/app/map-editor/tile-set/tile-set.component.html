@@ -10,7 +10,7 @@
     <mat-form-field>
       <mat-label>Type</mat-label>
       <mat-select [(ngModel)]="map.tileSet.activeGroup">
-        @for (type of types; track type; let i = $index) {
+        @for (type of types; track i; let i = $index) {
           <mat-option
             [value]="i">
             {{type}} @if (map.tiles[i]) {
@@ -24,7 +24,7 @@
     @if (map.tileSet.activeGroup !== undefined && map.tiles[map.tileSet.activeGroup]) {
       <div
         class="tiletype">
-        @for (tile of map.tiles[map.tileSet.activeGroup]; track tile) {
+        @for (tile of map.tiles[map.tileSet.activeGroup]; track $index) {
           <div
             class="tile"
             [class.unsaved]="tile.unsaved"

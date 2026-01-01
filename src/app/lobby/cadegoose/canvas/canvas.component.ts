@@ -8,10 +8,10 @@ import { TwodRenderComponent } from '../twod-render/twod-render.component';
   standalone: false,
 })
 export class CanvasComponent extends TwodRenderComponent implements OnInit {
-  protected drawRocks = true;
+  protected override drawRocks = true;
 
   // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  ngOnInit(): void {
+  override ngOnInit(): void {
     // override super onInit because this is just a preview
   }
 }

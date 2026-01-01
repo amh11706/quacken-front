@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, AfterViewInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthGuard } from '../../auth.guard';
@@ -15,6 +15,10 @@ import { WsService } from '../../ws/ws.service';
   standalone: false,
 })
 export class LoginFormComponent implements AfterViewInit {
+  private dialog = inject(MatDialog);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
   defaultServerError = 'Server error. Try again later.';
 
@@ -28,11 +32,9 @@ export class LoginFormComponent implements AfterViewInit {
 
   private path = environment.api;
 
-  constructor(
-    private dialog: MatDialog,
-    private http: HttpClient,
-    private router: Router,
-  ) {
+  constructor() {
+    const router = this.router;
+
     const token = window.localStorage.getItem('token');
     if (token) {
       void router.navigate(['list']);

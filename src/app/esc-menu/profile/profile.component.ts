@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../../ws/ws.service';
@@ -18,18 +18,16 @@ import { ActiveLobbyTypes } from '../../lobby/cadegoose/lobby-type';
   standalone: false,
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  stat = inject(StatService);
+  ws = inject(WsService);
+  fs = inject(FriendsService);
+  private chat = inject(ChatService);
+
   private sub = new Subscription();
 
   tierTitles = TierTitles;
   titles = { Cadegoose: 'Blockade' } as Record<string, string>;
   lobbyTypes = ActiveLobbyTypes;
-
-  constructor(
-    public stat: StatService,
-    public ws: WsService,
-    public fs: FriendsService,
-    private chat: ChatService,
-  ) { }
 
   ngOnInit(): void {
     this.sub.add(this.ws.connected$.subscribe(v => {

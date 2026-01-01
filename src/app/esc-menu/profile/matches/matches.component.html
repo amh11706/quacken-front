@@ -85,8 +85,8 @@
             mat-header-cell
           mat-sort-header>Result</th>
           <td *matCellDef="let element"
-            mat-cell
-            class="result{{element.result}}">
+            class="result{{element.result}}"
+            mat-cell>
             {{results[element.result]}}
           </td>
         </ng-container>

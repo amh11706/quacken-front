@@ -5,7 +5,7 @@
     [autoSelectActiveOption]="true"
     [autoActiveFirstOption]="true"
     (optionSelected)="toggleTag($event.option.value); search.value = ''">
-    @for (option of searchResults | async; track option) {
+    @for (option of searchResults | async; track $index) {
       <mat-option
         [value]="option">
         {{option}}
@@ -13,7 +13,7 @@
     }
   </mat-autocomplete>
   <mat-chip-grid #chipList>
-    @for (tag of selectedFilters; track tag) {
+    @for (tag of selectedFilters; track $index) {
       <mat-chip
         [removable]="true"
         (removed)="toggleTag(tag)">

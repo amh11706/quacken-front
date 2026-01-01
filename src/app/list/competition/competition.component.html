@@ -1,14 +1,14 @@
-@if (ws.user?.id) {
+@if (ws.user.id) {
   <ng-container
     class="buttons">
-    @for (c of competitions; track c) {
+    @for (c of competitions; track $index) {
       <mat-card
         mat-dialog-content>
         <h3>{{c.description}}</h3>
         <mat-form-field [appearance]="'outline'">
           <mat-select [(ngModel)]="selectedRound"
             (selectionChange)="selectedRound = $any($event).value">
-            @for (r of c.rounds; track r) {
+            @for (r of c.rounds; track $index) {
               <mat-option
                 [value]="r">
                 {{r.description}}
@@ -17,7 +17,7 @@
           </mat-select>
         </mat-form-field>
         <div class="buttons">
-          @for (game of selectedRound?.games; track game; let i = $index) {
+          @for (game of selectedRound?.games; track i; let i = $index) {
             <button
               mat-raised-button
               [disabled]="created"
@@ -31,7 +31,7 @@
   </ng-container>
 }
 
-@if (!ws.user?.id) {
+@if (!ws.user.id) {
   <p
     class="error">
     Guests cannot make lobbies. Join an existing lobby or create an account

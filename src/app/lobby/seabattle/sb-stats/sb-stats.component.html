@@ -1,5 +1,5 @@
 <div class="container">
-  @for (team of teams; track team; let i = $index) {
+  @for (team of teams; track i; let i = $index) {
     <div
       class="team"
       [style.borderColor]="teamColors[i]"
@@ -9,14 +9,14 @@
       <table>
         <tr>
           <th>{{teamNames[i]}}</th>
-          @for (c of columns; track c) {
+          @for (c of columns; track c.title) {
             <th>{{c.title}}</th>
           }
         </tr>
-        @for (r of team; track r) {
+        @for (r of team; track $index) {
           <tr>
             <td>{{r.user}}</td>
-            @for (c of columns; track c) {
+            @for (c of columns; track c.title) {
               <td>{{r.stats[c.stat]}}</td>
             }
           </tr>

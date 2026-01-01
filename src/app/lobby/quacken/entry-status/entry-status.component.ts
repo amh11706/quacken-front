@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { Internal, InCmd } from '../../../ws/ws-messages';
@@ -13,13 +13,14 @@ import { CadeLobby } from '../../cadegoose/types';
   standalone: false,
 })
 export class EntryStatusComponent implements OnInit, OnDestroy {
+  protected ws = inject(WsService);
+  protected lobbyService = inject<LobbyService<CadeLobby>>(LobbyService);
+
   treasure = [0, 0, 0, 0];
   titles = ['Cuttle Cake', 'Taco Locker', 'Pea Pod', 'Fried Egg'];
 
   time = '30:00';
   protected subs = new Subscription();
-
-  constructor(protected ws: WsService, protected lobbyService: LobbyService<CadeLobby>) { }
 
   ngOnInit(): void {
     this.subs.add(this.ws.subscribe(Internal.Time, time => { this.time = time; }));

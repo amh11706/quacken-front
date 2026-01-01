@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
 
 @Component({
@@ -8,5 +8,5 @@ import { EscMenuService } from '../../esc-menu/esc-menu.service';
   standalone: false,
 })
 export class GuideComponent {
-  constructor(public es: EscMenuService) { }
+  es = inject(EscMenuService);
 }

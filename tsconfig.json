@@ -2,23 +2,17 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "allowJs": true,
-    "baseUrl": "./app/src",
-    "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
     "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "es2020",
-    "useDefineForClassFields": false
+    "module": "preserve"
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { WsService } from '../../../ws/ws.service';
 import { Internal, OutCmd } from '../../../ws/ws-messages';
 import { SettingsService } from '../../settings.service';
@@ -13,6 +13,10 @@ import { MapOption } from './types';
   standalone: false,
 })
 export class MapCardComponent {
+  ss = inject(SettingsService);
+  ws = inject(WsService);
+  private es = inject(EscMenuService);
+
   @Input() map?: MapOption;
   @Input() width = 20;
   @Input() height = 36;
@@ -22,8 +26,6 @@ export class MapCardComponent {
 
   @Output() selectedMap = new EventEmitter<number>();
   generated = 'Generated';
-
-  constructor(public ss: SettingsService, public ws: WsService, private es: EscMenuService) { }
 
   selectMap(id: number): void {
     this.selectedMap.emit(id);

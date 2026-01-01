@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { OutCmd } from '../../ws/ws-messages';
@@ -14,6 +14,8 @@ import { MapEditor, DBTile, MapGroups } from '../types';
   standalone: false,
 })
 export class SettingsComponent implements OnInit, OnDestroy {
+  protected socket = inject(WsService);
+
   @ViewChild(TagsComponent) tags!: TagsComponent;
   @Input() map: MapEditor = {
     selected: 50,
@@ -57,8 +59,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   success = '';
   pending = true;
   shown?: DBTile;
-
-  constructor(protected socket: WsService) { }
 
   ngOnInit(): void {
     this.sub.add(this.socket.connected$.subscribe(v => {

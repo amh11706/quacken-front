@@ -11,7 +11,7 @@
       @if (map.tmaps) {
         <div
           class="structuretype">
-          @for (structure of map.tmaps; track structure) {
+          @for (structure of map.tmaps; track $index) {
             <div
               class="structure"
               [class.unsaved]="structure.unsaved"

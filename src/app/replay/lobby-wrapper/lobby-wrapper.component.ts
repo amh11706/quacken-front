@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, inject } from '@angular/core';
 import { WsService } from '../../ws/ws.service';
 import { ChatService } from '../../chat/chat.service';
 import { FriendsService } from '../../chat/friends/friends.service';
@@ -14,13 +14,15 @@ import { TurnService } from '../../lobby/quacken/boats/turn.service';
   standalone: false,
 })
 export class ReplayWrapperComponent implements OnDestroy {
-  constructor(
-    ws: WsService,
-    chat: ChatService,
-    fs: FriendsService,
-    boats: BoatsService,
-    private wrapper: LobbyWrapperService,
-  ) {
+  private wrapper = inject(LobbyWrapperService);
+
+  constructor() {
+    const ws = inject(WsService);
+    const chat = inject(ChatService);
+    const fs = inject(FriendsService);
+    const boats = inject(BoatsService);
+    const wrapper = this.wrapper;
+
     wrapper.ws = ws;
     wrapper.fs = fs;
     wrapper.boats = boats;

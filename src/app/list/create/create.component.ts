@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SettingsService } from '../../settings/settings.service';
@@ -16,6 +16,10 @@ import { LobbyTypes, RankArea, LobbyTypeInfo, ActiveLobbyTypes } from '../../lob
   standalone: false,
 })
 export class CreateComponent implements OnInit, OnDestroy {
+  ws = inject(WsService);
+  private ss = inject(SettingsService);
+  private ref = inject<MatDialogRef<CreateComponent>>(MatDialogRef);
+
   created = false;
   settings = this.ss.prefetch('l/create');
   createGroup = this.ss.prefetch('l/create');
@@ -30,12 +34,6 @@ export class CreateComponent implements OnInit, OnDestroy {
   ];
 
   private sub = new Subscription();
-
-  constructor(
-    public ws: WsService,
-    private ss: SettingsService,
-    private ref: MatDialogRef<CreateComponent>,
-  ) { }
 
   ngOnInit(): void {
     this.sub.add(this.ws.connected$.subscribe(v => {

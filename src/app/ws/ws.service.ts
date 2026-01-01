@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, Subscription, firstValueFrom, BehaviorSubject } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -24,6 +24,10 @@ export interface TokenUser {
 
 @Injectable()
 export class WsService implements OnDestroy {
+  private router = inject(Router);
+  private http = inject(HttpClient);
+  private title = inject(Title);
+
   static reason?: string;
   private socket?: WebSocket;
   private token = '';
@@ -40,11 +44,7 @@ export class WsService implements OnDestroy {
   sId?: number;
   copy?: number;
 
-  constructor(
-    private router: Router,
-    private http: HttpClient,
-    private title: Title,
-  ) {
+  constructor() {
     this.subscribe(InCmd.Kick, (reason: string) => {
       this.close();
       WsService.reason = reason;

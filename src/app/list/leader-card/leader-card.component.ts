@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { WsService } from '../../ws/ws.service';
@@ -21,12 +21,13 @@ export interface Top3Area {
   styleUrl: './leader-card.component.scss',
 })
 export class LeaderCardComponent implements OnInit, OnDestroy {
+  private ws = inject(WsService);
+  private stat = inject(StatService);
+
   private timer = 0;
   private top3: Top3Area[] = [];
   private index = 0;
   displayedLeaders = new BehaviorSubject<Top3Area>({ area: RankArea.BoardAdmiral } as Top3Area);
-
-  constructor(private ws: WsService, private stat: StatService) { }
 
   ngOnInit() {
     void this.getTop3();

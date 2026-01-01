@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 
 import { Boat } from './boat';
@@ -11,6 +11,9 @@ import { CadeLobby } from '../../cadegoose/types';
 
 @Injectable()
 export class BoatsService implements OnDestroy {
+  private ws = inject(WsService);
+  private lobby = inject<LobbyService<CadeLobby>>(LobbyService);
+
   private boatMap = new Map<number, Boat>();
   private _boats = new BehaviorSubject<Boat[]>([]);
   get boats() { return this._boats.value; }
@@ -29,7 +32,7 @@ export class BoatsService implements OnDestroy {
   private subs = new Subscription();
   private lobbyId?: number;
 
-  constructor(private ws: WsService, private lobby: LobbyService<CadeLobby>) {
+  constructor() {
     this.initSubs();
   }
 

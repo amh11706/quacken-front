@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { Observable, ReplaySubject, Subscription, debounceTime, map, startWith } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -92,6 +92,11 @@ const MapSizes = {
   standalone: false,
 })
 export class MapListComponent implements OnInit, OnDestroy {
+  private bottomSheet = inject(MatBottomSheet);
+  ws = inject(WsService);
+  ss = inject(SettingsService);
+  private lobbyService = inject<LobbyService<CadeLobby>>(LobbyService);
+
   @ViewChild(CdkVirtualScrollViewport, { static: false }) mapViewport?: CdkVirtualScrollViewport;
   @Input() rankArea = 2;
   @Input() injector?: Injector;
@@ -127,13 +132,6 @@ export class MapListComponent implements OnInit, OnDestroy {
   selectedMap = this.ss.prefetch(this.setting.group).map;
   searchCtrl = new FormControl();
   searchResults?: Observable<string[]>;
-
-  constructor(
-    private bottomSheet: MatBottomSheet,
-    public ws: WsService,
-    public ss: SettingsService,
-    private lobbyService: LobbyService<CadeLobby>,
-  ) { }
 
   async ngOnInit(): Promise<void> {
     if (this.injector) {

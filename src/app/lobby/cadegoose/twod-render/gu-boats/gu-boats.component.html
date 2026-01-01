@@ -1,4 +1,4 @@
-@for (obj of clutter; track obj) {
+@for (obj of clutter; track $index) {
   <div
     class="clutter clutter{{obj.t}}"
     [style.transform]="'translate(' + obj.coords.x + 'px, ' + obj.coords.y  + 'px)'">
@@ -10,12 +10,12 @@
     @if (obj.dis) {
       <div
         class="size{{obj.t}}">
-        <div class="shot"
-        class="dir{{obj.dir}} dis{{obj.dis}}"></div>
+        <div class="dir{{obj.dir}} dis{{obj.dis}}"
+             class="shot"></div>
         @if (obj.dbl) {
           <div
-            class="shot double"
-          class="dir{{obj.dir}} dis{{obj.dis}}"></div>
+            class="dir{{obj.dir}} dis{{obj.dis}}"
+            class="shot double"></div>
         }
         <div class="smoke"></div>
       </div>
@@ -29,7 +29,7 @@
     src="/assets/images/alkaid_island.png">
   }
 
-  @for (render of boatRenders$ | async; track trackBoat($index, render)) {
+  @for (render of boatRenders$ | async; track render.boat.id) {
     <div
       class="boat"
       [style.color]="teamColors[render.boat.team || 0]"
@@ -56,16 +56,16 @@
         }
         <div class="movebar"
           [class.ready]="render.boat.ready">
-          @for (move of render.boat.moves; track move; let i = $index) {
+          @for (move of render.boat.moves; track i; let i = $index) {
             <div
+              class="movebarslice move{{move}}"
               [class.moveLeftShot]="render.boat.shots[i*2]"
-              [class.moveRightShot]="render.boat.shots[i*2+1]"
-              class="movebarslice move{{move}}">
+              [class.moveRightShot]="render.boat.shots[i*2+1]">
             </div>
           }
         </div>
         <div class="flags">
-          @for (flag of render.flags; track flag) {
+          @for (flag of render.flags; track $index) {
             <div
             [style.backgroundPositionX]="flag.offset"></div>
           }

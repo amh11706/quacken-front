@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { StatService } from '../stat.service';
 import { Variations } from '../../../chat/rank-circle/rank-circle.component';
 import { ActiveLobbyTypes } from '../../../lobby/cadegoose/lobby-type';
@@ -21,15 +21,13 @@ export const TierTitles = [
   standalone: false,
 })
 export class LeadersComponent implements OnInit, OnDestroy {
+  stat = inject(StatService);
+
   @Input() name?: string;
   tierTitles = TierTitles;
   variations = Variations;
   lobbyTypes = ActiveLobbyTypes;
   private initTimer = 0;
-
-  constructor(
-    public stat: StatService,
-  ) { }
 
   ngOnInit(): void {
     this.initTimer = window.setTimeout(() => {

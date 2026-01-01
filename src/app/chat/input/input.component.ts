@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
@@ -13,16 +13,14 @@ import { CustomEmojis, FindCustomEmoji } from '../../settings/account/account.co
   standalone: false,
 })
 export class InputComponent implements OnInit, OnDestroy {
+  chat = inject(ChatService);
+  private kbs = inject(KeyBindingService);
+
   customEmojis = CustomEmojis;
   findCustomEmoji = FindCustomEmoji;
 
   @Input() disabled = false;
   private subs = new Subscription();
-
-  constructor(
-    public chat: ChatService,
-    private kbs: KeyBindingService,
-  ) { }
 
   ngOnInit(): void {
     this.subs.add(this.kbs.subscribe(KeyActions.FocusChat, v => {

@@ -9,14 +9,14 @@ import { DBTile } from '../types';
   standalone: false,
 })
 export class TmapSetComponent extends TileSetComponent {
-  protected group: 'tile' | 'structure' | 'tmap' = 'tmap';
+  protected override group: 'tile' | 'structure' | 'tmap' = 'tmap';
 
-  protected initTile(tile: DBTile): void {
+  protected override initTile(tile: DBTile): void {
     if (this.map?.tmaps) tile = this.map.tmaps.find(el => el.id === tile.id) || tile;
     this.select(tile);
   }
 
-  protected handleDelete = (msg: DBTile): void => {
+  protected override handleDelete = (msg: DBTile): void => {
     this.pending = false;
     if (!this.map?.tmaps) return;
     this.map.tmaps = this.map.tmaps.filter(map => {
@@ -25,7 +25,7 @@ export class TmapSetComponent extends TileSetComponent {
     this.map.selectedTile = this.map.tmaps[0] || { id: null, name: '', undos: [], redos: [] } as unknown as DBTile;
   };
 
-  select(tile: DBTile): void {
+  override select(tile: DBTile): void {
     if (!tile.settings) tile.settings = {};
     super.select(tile);
   }

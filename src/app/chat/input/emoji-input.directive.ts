@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Injector, OnInit, Optional } from '@angular/core';
+import { Directive, ElementRef, HostListener, Injector, OnInit, inject } from '@angular/core';
 import { EmojiFrequentlyService, EmojiSearch } from '@ctrl/ngx-emoji-mart';
 import { NgModel } from '@angular/forms';
 import { Emoji, EmojiData, EmojiService } from '@ctrl/ngx-emoji-mart/ngx-emoji';
@@ -76,6 +76,14 @@ const Smileys: Record<string, string> = {
   standalone: true,
 })
 export class EmojiInputDirective implements OnInit {
+  private ref = inject<ElementRef<HTMLInputElement>>(ElementRef);
+  private emojiSearch = inject(EmojiSearch);
+  private model = inject(NgModel, { optional: true });
+  private overlay = inject(Overlay);
+  private injector = inject(Injector);
+  private frequent = inject(EmojiFrequentlyService);
+  private emojiService = inject(EmojiService);
+
   private overlayRef?: OverlayRef;
   private componentPortal?: ComponentPortal<EmojiSearchResultsComponent>;
   private overlayContext = {
@@ -87,18 +95,13 @@ export class EmojiInputDirective implements OnInit {
   private cursorWordStart = 0;
   private cursorWordEnd = 0;
 
-  constructor(
-    private ref: ElementRef<HTMLInputElement>,
-    private emojiSearch: EmojiSearch,
-    @Optional() private model: NgModel,
-    private overlay: Overlay,
-    private injector: Injector,
-    private frequent: EmojiFrequentlyService,
-    private emojiService: EmojiService,
-  ) {
+  constructor() {
+    const emojiSearch = this.emojiSearch;
+    const model = this.model;
+
     emojiSearch.addCustomToPool(CustomEmojis, emojiSearch.originalPool);
 
-    model.valueChanges?.subscribe((_value: unknown) => {
+    model?.valueChanges?.subscribe((_value: unknown) => {
       this.onInput({} as InputEvent);
     });
   }

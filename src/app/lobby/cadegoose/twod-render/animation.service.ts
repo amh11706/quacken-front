@@ -1,4 +1,4 @@
-import { Injectable, NgZone, OnDestroy, signal } from '@angular/core';
+import { Injectable, NgZone, OnDestroy, signal, inject } from '@angular/core';
 import * as TWEEN from '@tweenjs/tween.js';
 import { SettingsService } from '../../../settings/settings.service';
 
@@ -11,6 +11,8 @@ export const enum PlayState {
   providedIn: 'any',
 })
 export class AnimationService implements OnDestroy {
+  private ss = inject(SettingsService);
+
   readonly tweens = new TWEEN.Group();
   private readonly _playState = signal<PlayState>(PlayState.Playing);
   readonly playState = this._playState.asReadonly();
@@ -27,10 +29,9 @@ export class AnimationService implements OnDestroy {
   private readonly maxFps = this.ss.prefetch('graphics').maxFps;
   readonly speed = this.ss.prefetch('graphics').speed;
 
-  constructor(
-    ngZone: NgZone,
-    private ss: SettingsService,
-  ) {
+  constructor() {
+    const ngZone = inject(NgZone);
+
     ngZone.runOutsideAngular(this.requestRender.bind(this));
     this.ss.getGroup('graphics');
   }

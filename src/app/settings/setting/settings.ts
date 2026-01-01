@@ -152,8 +152,8 @@ export const Settings: SettingList = {
     advancedComponent: JobberQualityComponent,
     setLabel: (s) => {
       const data = s.data ?? { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
-      delete data.label;
-      if (s.value > 100) data.label = Object.entries(data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
+      delete data['label'];
+      if (s.value > 100) data['label'] = Object.entries(data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
       return data;
     },
   },
@@ -375,8 +375,8 @@ export const Settings: SettingList = {
     advancedComponent: JobberQualityComponent,
     setLabel: (s) => {
       const data = s.data ?? { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
-      delete data.label;
-      if (s.value > 100) data.label = Object.entries(data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
+      delete data['label'];
+      if (s.value > 100) data['label'] = Object.entries(data).map(e => `${e[0]}: ${e[1] as number > 100 ? 'Unlimited' : e[1]}`).join(', ');
       return data;
     },
   },

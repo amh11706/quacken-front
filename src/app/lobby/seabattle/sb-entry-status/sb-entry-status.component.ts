@@ -10,7 +10,7 @@ import { StatRow, Stat } from '../../cadegoose/stats/types';
   standalone: false,
 })
 export class SbEntryStatusComponent extends CadeEntryStatusComponent implements OnInit {
-  ngOnInit(): void {
+  override ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, t => this.updatePoints(t.stats)));
     this.subs.add(this.lobbyService.get().subscribe(l => l?.stats && this.updatePoints(l.stats)));

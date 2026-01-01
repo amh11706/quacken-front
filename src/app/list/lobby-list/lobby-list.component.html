@@ -54,7 +54,7 @@
         </button>
       }
 
-      @for (l of lobbies | async; track trackByLobbyId($index, l)) {
+      @for (l of lobbies | async; track l.id) {
         <a
           mat-button
           class="card"

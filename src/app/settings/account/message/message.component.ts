@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -9,8 +9,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   standalone: false,
 })
 export class MessageComponent {
-  constructor(
-    public dialogRef: MatDialogRef<MessageComponent>,
-    @Inject(MAT_DIALOG_DATA) public message = '',
-  ) { }
+  dialogRef = inject<MatDialogRef<MessageComponent>>(MatDialogRef);
+  message = inject(MAT_DIALOG_DATA) ?? '';
 }

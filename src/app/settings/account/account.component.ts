@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { EmojiData, EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
@@ -39,16 +39,14 @@ export function FindCustomEmoji(name: string): EmojiData | string {
   standalone: false,
 })
 export class AccountComponent {
+  ws = inject(WsService);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
+
   pending = false;
   logged = 0;
   customEmojis = CustomEmojis;
   findCustomEmoji = FindCustomEmoji;
-
-  constructor(
-    public ws: WsService,
-    private dialog: MatDialog,
-    private router: Router,
-  ) { }
 
   emojiPicked(e: EmojiEvent): void {
     let name = e.emoji.colons || e.emoji.shortName;

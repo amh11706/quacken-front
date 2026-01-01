@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { SettingName } from '../../settings/setting/settings';
@@ -24,6 +24,12 @@ const ownerSettings: SettingName[] = [
   standalone: false,
 })
 export class QuackenComponent implements OnInit, OnDestroy {
+  protected ws = inject(WsService);
+  protected ss = inject(SettingsService);
+  protected fs = inject(FriendsService);
+  protected es = inject(EscMenuService);
+  protected lobbyService = inject<LobbyService<CadeLobby>>(LobbyService);
+
   protected get lobby() { return this.lobbyService.get().value; }
 
   protected group: 'l/quacken' | 'l/cade' | 'l/flaggames' = 'l/quacken';
@@ -38,13 +44,7 @@ export class QuackenComponent implements OnInit, OnDestroy {
   protected mapHeight = 52;
   protected mapWidth = 25;
 
-  constructor(
-    protected ws: WsService,
-    protected ss: SettingsService,
-    protected fs: FriendsService,
-    protected es: EscMenuService,
-    protected lobbyService: LobbyService<CadeLobby>,
-  ) {
+  constructor() {
     void this.getSettings();
   }
 

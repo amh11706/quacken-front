@@ -4,7 +4,7 @@
     (mouseenter)="stopTimer()"
     (mouseleave)="startTimer()">
     <h3 class="cardTitle">{{l.title}} Leaders</h3>
-    @for (p of l.top3; track p; let i = $index) {
+    @for (p of l.top3; track i; let i = $index) {
       <div
         class="lobbyPlayer">
         <span>{{i + 1}}. </span>

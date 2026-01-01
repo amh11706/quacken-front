@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { debounceTime, Subject, Subscription } from 'rxjs';
 
 import { EscMenuService } from '../../esc-menu/esc-menu.service';
@@ -31,6 +31,11 @@ interface MapInfoLobby extends Lobby {
   styleUrl: './mapinfo.component.scss',
 })
 export class MapinfoComponent implements OnInit, OnDestroy {
+  private es = inject(EscMenuService);
+  private ss = inject(SettingsService);
+  private ws = inject(WsService);
+  private kbs = inject(KeyBindingService);
+
   @ViewChild('renderer', { static: true }) renderer?: TwodRenderComponent;
   @Input() set lobby(lobby: MapInfoLobby) {
     this.setMapB64(lobby.map);
@@ -64,12 +69,7 @@ export class MapinfoComponent implements OnInit, OnDestroy {
   private mapDataDebounce = new Subject<void>();
   private mapDebounce = new Subject<string>();
 
-  constructor(
-    private es: EscMenuService,
-    private ss: SettingsService,
-    private ws: WsService,
-    private kbs: KeyBindingService,
-  ) {
+  constructor() {
     this.ss.setLobbySettings([], true, 2);
     this.ss.admin$.next(true);
     this.es.setLobby(MapinfoMenuComponent);

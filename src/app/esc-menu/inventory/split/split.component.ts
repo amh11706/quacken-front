@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Item } from '../../profile/types';
 
@@ -10,9 +10,13 @@ import { Item } from '../../profile/types';
   standalone: false,
 })
 export class SplitComponent {
+  data = inject<Item>(MAT_DIALOG_DATA);
+
   quantity = 0;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Item) {
+  constructor() {
+    const data = this.data;
+
     this.quantity = Math.round(data.q / 2);
   }
 }

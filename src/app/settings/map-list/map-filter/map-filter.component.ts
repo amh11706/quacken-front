@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 
 @Component({
@@ -9,12 +9,13 @@ import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bott
   standalone: false,
 })
 export class MapFilterComponent {
-  constructor(
-    public filterRef: MatBottomSheetRef<MapFilterComponent>,
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: {
-      tagList: string[], userList: string[], toggleTag: (v: string) => void
-    },
-  ) { }
+  filterRef = inject<MatBottomSheetRef<MapFilterComponent>>(MatBottomSheetRef);
+  data = inject<{
+    tagList: string[];
+    userList: string[];
+    toggleTag: (v: string) => void;
+}>(MAT_BOTTOM_SHEET_DATA);
+
 
   onClick(filterOption: string): void {
     this.data.toggleTag(filterOption);

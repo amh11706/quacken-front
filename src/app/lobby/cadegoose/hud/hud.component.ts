@@ -41,8 +41,8 @@ export interface MoveMessage {
   standalone: false,
 })
 export class CadeHudComponent extends HudComponent implements OnInit {
-  moveKeys = CadeMoveKeys;
-  actions = CadeKeyActions;
+  override moveKeys = CadeMoveKeys;
+  override actions = CadeKeyActions;
 
   maneuvers = [
     { id: 4, class: 'move bombtoken', title: 'Chain Shot' },
@@ -54,10 +54,10 @@ export class CadeHudComponent extends HudComponent implements OnInit {
   tokenStrings = ['', '', ''];
   lastTick = { tp: 0, attr: {} } as BoatTick;
   updateWantMove$ = new Subject<boolean>();
-  group = 'l/cade' as SettingGroup;
+  override group = 'l/cade' as SettingGroup;
   maxMoves = 3;
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.boats.myBoat$.subscribe(() => {
       this.updateWantMove$.next(true);
@@ -115,13 +115,13 @@ export class CadeHudComponent extends HudComponent implements OnInit {
     this.ws.send(OutCmd.WantManeuver, value);
   }
 
-  protected async sendShots(): Promise<void> {
+  protected override async sendShots(): Promise<void> {
     if (this.arrayEqual(this.serverBoatPending.shots, this.localBoat.shots)) return;
     this.serverBoatPending.shots = [...this.localBoat.shots];
     this.serverBoat.shots = await this.ws.request(OutCmd.Shots, this.localBoat.shots) || this.serverBoat.shots;
   }
 
-  async setTurn(turn: number, sec: number = this.secondsPerTurn - 1): Promise<void> {
+  override async setTurn(turn: number, sec: number = this.secondsPerTurn - 1): Promise<void> {
     const old = this.secondsPerTurn;
     await this.ss.get(this.group, 'turnTime');
     super.setTurn(turn, sec + this.secondsPerTurn - old);

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, inject } from '@angular/core';
 
 import { WsService } from '../../ws/ws.service';
 import { OutCmd } from '../../ws/ws-messages';
@@ -29,6 +29,14 @@ const BotRegex = /Bot\d{1,4}/;
   standalone: false,
 })
 export class NameComponent implements OnChanges {
+  chat = inject(ChatService);
+  stat = inject(StatService);
+  ws = inject(WsService);
+  fs = inject(FriendsService);
+  private kbs = inject(KeyBindingService);
+  private esc = inject(EscMenuService);
+  private ss = inject(SettingsService);
+
   @Input() message = { from: '' } as Partial<TeamMessage> & { from: string };
   @Input() offline = false;
   tierTitles = TierTitles;
@@ -39,16 +47,6 @@ export class NameComponent implements OnChanges {
   bot = false;
   menuItems: MenuOption[] = [];
   private lastFrom = '';
-
-  constructor(
-    public chat: ChatService,
-    public stat: StatService,
-    public ws: WsService,
-    public fs: FriendsService,
-    private kbs: KeyBindingService,
-    private esc: EscMenuService,
-    private ss: SettingsService,
-  ) { }
 
   ngOnChanges(): void {
     if (this.message.from === this.lastFrom) return;

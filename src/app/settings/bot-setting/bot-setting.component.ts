@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TeamColorsCss } from '../../lobby/cadegoose/cade-entry-status/cade-entry-status.component';
 import { getShipLink } from '../setting/setting.component';
 import { BoatSetting, OptionSetting, Settings } from '../setting/settings';
@@ -20,15 +20,15 @@ interface BotSetting extends DBSetting {
   standalone: false,
 })
 export class BotSettingComponent {
+  setting = inject<BotSetting>('setting' as any);
+  ss = inject(SettingsService);
+
   BotSetting = Settings.enableBots as OptionSetting;
   Ships = Settings.nextCadeBoat as BoatSetting;
   getShipLink = getShipLink;
   TeamColors = TeamColorsCss;
 
-  constructor(
-    @Inject('setting') public setting: BotSetting,
-    public ss: SettingsService,
-  ) {
+  constructor() {
     if (!this.setting.data || !this.setting.data.padExtra) {
       this.setting.data = { padExtra: [], custom: [[], [], [], []] };
     }

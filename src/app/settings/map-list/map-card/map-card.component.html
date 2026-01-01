@@ -28,7 +28,7 @@
           </div>
           <div class="subitem">
             <mat-chip-listbox>
-              @for (option of map.tags; track option) {
+              @for (option of map.tags; track $index) {
                 <mat-chip
                   #chipList
                 [removable]="false">{{option}}</mat-chip>
@@ -61,7 +61,7 @@
               <mat-label>Previous seeds:</mat-label>
               <mat-select [disabled]="(ss.admin$ | async) === false"
                 (selectionChange)="updateSeed($event.value)">
-                @for (seed of seeds; track seed) {
+                @for (seed of seeds; track $index) {
                   <mat-option
                   [value]="seed">{{seed}}</mat-option>
                 }

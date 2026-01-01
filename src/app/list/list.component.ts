@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { WsService } from '../ws/ws.service';
 import { ChatService } from '../chat/chat.service';
 import { StatService } from '../esc-menu/profile/stat.service';
@@ -35,11 +35,11 @@ import { AnimationService } from '../lobby/cadegoose/twod-render/animation.servi
   standalone: false,
 })
 export class ListComponent {
-  constructor(
-    ws: WsService,
-    // make sure services loaded so their subscriptions are active
-    public chatService: ChatService,
-  ) {
+  chatService = inject(ChatService);
+
+  constructor() {
+    const ws = inject(WsService);
+
     const token = window.localStorage.getItem('token');
     if (!ws.connected && token) ws.connect(token);
     if (token === 'guest') window.addEventListener('beforeunload', () => window.localStorage.removeItem('token'));

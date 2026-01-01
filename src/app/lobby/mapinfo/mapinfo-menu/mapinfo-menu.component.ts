@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
@@ -10,5 +10,5 @@ import { EscMenuService } from '../../../esc-menu/esc-menu.service';
   styleUrl: './mapinfo-menu.component.scss',
 })
 export class MapinfoMenuComponent {
-  constructor(public es: EscMenuService) {}
+  es = inject(EscMenuService);
 }

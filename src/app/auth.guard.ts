@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard {
-  static triedPath = '';
+  private router = inject(Router);
 
-  constructor(private router: Router) { }
+  static triedPath = '';
 
   canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const token = window.localStorage.getItem('token');

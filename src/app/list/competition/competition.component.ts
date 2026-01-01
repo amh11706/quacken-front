@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { MatDialogRef } from '@angular/material/dialog';
@@ -15,15 +15,13 @@ import { DBSetting, ServerSettingMap } from '../../settings/types';
   standalone: false,
 })
 export class CompetitionComponent implements OnInit, OnDestroy {
+  ws = inject(WsService);
+  private ref = inject<MatDialogRef<CompetitionComponent>>(MatDialogRef);
+
   created = false;
   competitions = Competitions;
-  selectedRound = Competitions[0]?.rounds[0];
+  selectedRound?: typeof Competitions[0]['rounds'][0] = Competitions[0]?.rounds[0];
   private sub = new Subscription();
-
-  constructor(
-    public ws: WsService,
-    private ref: MatDialogRef<CompetitionComponent>,
-  ) { }
 
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(InCmd.NavigateTo, () => this.ref.close()));

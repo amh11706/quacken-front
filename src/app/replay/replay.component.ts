@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, effect, inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -27,6 +27,17 @@ const joinMessage = 'Match replay: Use the replay controls to see a previous mat
   standalone: false,
 })
 export class ReplayComponent implements OnInit, OnDestroy {
+  private location = inject(Location);
+  esc = inject(EscMenuService);
+  protected ws = inject(WsService);
+  private ss = inject(SettingsService);
+  private fs = inject(FriendsService);
+  private route = inject(ActivatedRoute);
+  private kbs = inject(KeyBindingService);
+  private el = inject(ElementRef);
+  private wrapper = inject(LobbyWrapperService);
+  private as = inject(AnimationService);
+
   tickInterval = 0;
   messages: InMessage[][] = [];
   private sub = new Subscription();
@@ -40,18 +51,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
   private lobbyMessage?: { cmd: InCmd.LobbyJoin, data: CadeLobby };
   private lastSync: InMessage = { cmd: InCmd.Sync, data: { sync: [], cSync: [], moves: [], turn: 0 } };
 
-  constructor(
-    private location: Location,
-    public esc: EscMenuService,
-    protected ws: WsService,
-    private ss: SettingsService,
-    private fs: FriendsService,
-    private route: ActivatedRoute,
-    private kbs: KeyBindingService,
-    private el: ElementRef,
-    private wrapper: LobbyWrapperService,
-    private as: AnimationService,
-  ) {
+  constructor() {
     effect(() => {
       const v = this.as.playState() === PlayState.Playing ? 'running' : 'paused';
       this.el.nativeElement.style.setProperty('--playState', v);
@@ -138,7 +138,7 @@ export class ReplayComponent implements OnInit, OnDestroy {
       void this.esc.openMenu(false);
     }, 1000);
     setTimeout(() => { // temporary fix for starting replay
-      const tick = Number(this.route.snapshot.queryParams.tick);
+      const tick = Number(this.route.snapshot.queryParams['tick']);
       if (tick) this.playTo(tick);
     }, 500);
     // });

@@ -11,7 +11,7 @@
     <h2>Match Settings</h2>
     <div *ngrxLet="es.open$ as open"
       id="flexmenu">
-      @for (team of ms.teamPlayers$ | async; track team; let i = $index) {
+      @for (team of ms.teamPlayers$ | async; track i; let i = $index) {
         <div
           class="teamwrap">
           @if ((ms.status | async) === 0 || (ms.settings.hotEntry.stream | async) === 1) {
@@ -24,15 +24,15 @@
             <p class="teamcount">{{teamNames[i]}}: {{plural(team.length)}}</p>
             <div class="team"
               [style.borderColor]="teamColors[i]">
-              @for (m of team; track m) {
+              @for (m of team; track m.sId) {
                 <div
                   class="lobbyPlayer"
                   [class.ready]="m.r">
                   <q-name [message]="m"></q-name>
                   @if (m.sId === ws.sId && ws.connected) {
                     <img
-                      [matMenuTriggerFor]="jobbers"
                       src="./assets/boats/{{links[m.b]}}.png"
+                      [matMenuTriggerFor]="jobbers"
                       [class.lowjobbers]="m.jq < 100"
                       [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
                   } @else {

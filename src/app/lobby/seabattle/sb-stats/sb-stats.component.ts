@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { StatsComponent } from '../../cadegoose/stats/stats.component';
 import { Stat } from '../../cadegoose/stats/types';
 
@@ -15,8 +15,5 @@ export const SB_STATS = [
   standalone: false,
 })
 export class SbStatsComponent extends StatsComponent {
-  columns = SB_STATS;
-  @Input() myTeam?: number;
-  @Input() hoveredTeam?: number;
-  @Input() statOpacity?: number;
+  override columns = SB_STATS;
 }

@@ -8,7 +8,7 @@
     <p class="empty">You are alone here.</p>
   }
 }
-@for (m of players; track m) {
+@for (m of players; track $index) {
   <div
     class="lobbyPlayer">
     @if (m.t !== undefined) {

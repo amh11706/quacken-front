@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, inject } from '@angular/core';
 import { WsService } from '../../../ws/ws.service';
 import { TeamColorsCss } from '../cade-entry-status/cade-entry-status.component';
 import { StatRow, Stat } from '../stats/types';
@@ -12,6 +12,8 @@ import { DefaultExtraColumns, DefaultStatColumns } from '../main-menu/main-menu.
   standalone: false,
 })
 export class StatEndComponent implements OnChanges {
+  private ws = inject(WsService);
+
   Number = Number;
   teamColors = TeamColorsCss;
   @Input() stats?: Record<number, StatRow>;
@@ -26,8 +28,6 @@ export class StatEndComponent implements OnChanges {
   @Input() extraColumns = DefaultExtraColumns;
 
   showExtra = 0;
-
-  constructor(private ws: WsService) { }
 
   ngOnChanges(): void {
     if (!this.stats) return;

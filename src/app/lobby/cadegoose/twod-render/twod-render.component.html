@@ -24,7 +24,7 @@
             (mouseup)="mouseUp($event)"
           (mousemove)="mouseMove($event)"></canvas>
 
-          @for (obstacle of obstacles; track obstacle) {
+          @for (obstacle of obstacles; track $index) {
             <q-sprite-img class="obstacle"
               [render]="obstacle.sprite"
               [style.zIndex]="obstacle.zIndex"

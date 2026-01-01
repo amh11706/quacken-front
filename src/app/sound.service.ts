@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SettingsService } from './settings/settings.service';
 
 /* eslint no-unused-vars: "off" */
@@ -44,11 +44,15 @@ const SoundFiles: Record<Sounds, SoundFile> = {
 
 @Injectable()
 export class SoundService {
+  private ss = inject(SettingsService);
+
   private loaded = new Map<Sounds, Promise<AudioBuffer>>();
   private settings = this.ss.prefetch('sounds');
   private ctx = new AudioContext();
 
-  constructor(private ss: SettingsService) {
+  constructor() {
+    const ss = this.ss;
+
     void ss.getGroup('sounds').then(settings => {
       this.settings = settings;
     });

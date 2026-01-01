@@ -1,13 +1,12 @@
-import { Directive, ElementRef, OnInit } from '@angular/core';
+import { Directive, ElementRef, OnInit, inject } from '@angular/core';
 
 @Directive({
   selector: '[qAutoSelect]',
   standalone: false,
 })
 export class AutoSelectDirective implements OnInit {
-  constructor(
-    private elRef: ElementRef<HTMLInputElement>,
-  ) { }
+  private elRef = inject<ElementRef<HTMLInputElement>>(ElementRef);
+
 
   ngOnInit(): void {
     this.elRef.nativeElement.addEventListener('focus', () => {

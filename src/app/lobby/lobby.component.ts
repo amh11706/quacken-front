@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -27,17 +27,15 @@ const LobbySettingGroups: Record<LobbyType, keyof ServerSettingGroup> = {
   standalone: false,
 })
 export class LobbyComponent implements OnInit, OnDestroy {
+  private route = inject(ActivatedRoute);
+  private ws = inject(WsService);
+  private ss = inject(SettingsService);
+  private lobbyService = inject<LobbyService<Lobby>>(LobbyService);
+
   lobby = new BehaviorSubject<Lobby | undefined>(undefined);
   id?: number;
   private sub = new Subscription();
   private sent = false;
-
-  constructor(
-    private route: ActivatedRoute,
-    private ws: WsService,
-    private ss: SettingsService,
-    private lobbyService: LobbyService<Lobby>,
-  ) { }
 
   ngOnInit(): void {
     this.ss.admin$.next(false);

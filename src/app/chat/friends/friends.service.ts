@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { InCmd, OutCmd } from '../../ws/ws-messages';
@@ -11,6 +11,9 @@ const unblockableMessageTypes = new Set([3, 7, 9]);
 
 @Injectable()
 export class FriendsService {
+  private ws = inject(WsService);
+  private chat = inject(ChatService);
+
   allowInvite = false;
 
   lobby$ = new BehaviorSubject<TeamMessage[]>([]);
@@ -21,7 +24,7 @@ export class FriendsService {
   private blockedMap = new Set<string>();
   invites: Invite[] = [];
 
-  constructor(private ws: WsService, private chat: ChatService) {
+  constructor() {
     this.handleBlocks();
     this.handlePlayers();
     this.handleFriends();

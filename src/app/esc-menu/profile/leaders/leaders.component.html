@@ -72,7 +72,7 @@
     @if (stat.rankLeaders$ | async; as rankLeaders) {
       <h4>Top Tier</h4>
       <div class="variations">
-        @for (l of rankLeaders.tier; track l; let i = $index) {
+        @for (l of rankLeaders.tier; track i; let i = $index) {
           <div>
             <p>{{variations[stat.group]?.[i]}}</p>
             <table mat-table
@@ -107,7 +107,7 @@
       </div>
       <h4>Top Experience</h4>
       <div class="variations">
-        @for (l of rankLeaders.xp; track l; let i = $index) {
+        @for (l of rankLeaders.xp; track i; let i = $index) {
           <div>
             <p>{{variations[stat.group]?.[i]}}</p>
             <table mat-table

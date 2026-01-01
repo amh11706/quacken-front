@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
@@ -19,6 +19,8 @@ export interface Tokens {
   standalone: false,
 })
 export class MoveInputComponent implements OnInit, OnDestroy {
+  private kbs = inject(KeyBindingService);
+
   private _input: MoveMessage = { moves: [0, 0, 0, 0], shots: [0, 0, 0, 0, 0, 0, 0, 0] };
   @Input() set input(v: MoveMessage) {
     this.blockedPosition = this._maxMoves === 4 ? 4 : 3;
@@ -94,10 +96,6 @@ export class MoveInputComponent implements OnInit, OnDestroy {
   blockedPosition = 3;
   selected = 0;
   private subs = new Subscription();
-
-  constructor(
-    private kbs: KeyBindingService,
-  ) { }
 
   ngOnInit(): void {
     this.subs.add(this.kbs.subscribe(this.actions.back, v => {

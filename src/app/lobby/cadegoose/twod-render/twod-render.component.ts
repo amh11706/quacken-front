@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit, ChangeDetectorRef, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter, effect } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, AfterViewInit, ChangeDetectorRef, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter, effect, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import Stats from 'stats.js';
 
@@ -41,6 +41,13 @@ type FlagMap = Map<string, Turn['flags'][0]>;
   standalone: false,
 })
 export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+  private ss = inject(SettingsService);
+  private ws = inject(WsService);
+  private cd = inject(ChangeDetectorRef);
+  private boats = inject(BoatsService);
+  private lobbyService = inject<LobbyService<CadeLobby>>(LobbyService);
+  private as = inject(AnimationService);
+
   readonly rotationSeed = Math.random() * (Number.MAX_SAFE_INTEGER / 2) + 99999999;
   @ViewChild('canvas', { static: true }) canvasElement?: ElementRef<HTMLCanvasElement>;
   @ViewChild('fps') fps?: ElementRef<HTMLElement>;
@@ -116,14 +123,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
 
   @ViewChild('overlay', { static: false }) overlay?: ElementRef<HTMLDivElement>;
 
-  constructor(
-    private ss: SettingsService,
-    private ws: WsService,
-    private cd: ChangeDetectorRef,
-    private boats: BoatsService,
-    private lobbyService: LobbyService<CadeLobby>,
-    private as: AnimationService,
-  ) {
+  constructor() {
     effect(() => {
       this.as.updated();
       this.cd.detectChanges();
@@ -171,7 +171,7 @@ export class TwodRenderComponent implements OnInit, AfterViewInit, OnChanges, On
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.mapHeight || changes.mapWidth) {
+    if (changes['mapHeight'] || changes['mapWidth']) {
       this.resize();
     }
   }

@@ -1,4 +1,4 @@
-@for (m of maneuvers; track m; let i = $index) {
+@for (m of maneuvers; track m.id; let i = $index) {
   <div
     [matTooltip]="m.name + ' - ' + (unusedTokens.maneuvers[i] || 0) + '%'"
     [class.want]="wantManeuver === i"

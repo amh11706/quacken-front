@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { Tween } from '@tweenjs/tween.js';
 
@@ -20,6 +20,12 @@ interface BoatRender {
 
 @Injectable()
 export class TurnService implements OnDestroy {
+  private ws = inject(WsService);
+  private ss = inject(SettingsService);
+  private sound = inject(SoundService);
+  private boatsService = inject(BoatsService);
+  private as = inject(AnimationService);
+
   private turn?: Turn;
   private _turn = new Subject<Turn>();
   turn$ = this._turn.asObservable();
@@ -38,13 +44,7 @@ export class TurnService implements OnDestroy {
   private animateTimeout?: number;
   private blurred = false;
 
-  constructor(
-    private ws: WsService,
-    private ss: SettingsService,
-    private sound: SoundService,
-    private boatsService: BoatsService,
-    private as: AnimationService,
-  ) {
+  constructor() {
     this.initSubs();
     document.addEventListener('visibilitychange', this.visibilityChange);
   }

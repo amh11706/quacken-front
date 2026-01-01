@@ -14,12 +14,12 @@ export const TeamNames: Readonly<string[]> = ['Defenders', 'Attackers', '2nd Att
 })
 export class CadeEntryStatusComponent extends EntryStatusComponent implements OnInit {
   points = [0, 0];
-  time = '45:00';
+  override time = '45:00';
   colors = TeamColorsCss;
   @Input() myTeam?: number;
   @Output() hoveredTeam = new EventEmitter<number>();
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     super.ngOnInit();
     this.subs.add(this.ws.subscribe(InCmd.Turn, t => { this.points = t.points; }));
     this.subs.add(this.lobbyService.get().subscribe(l => {

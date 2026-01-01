@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  @if (ws.user?.id) {
+  @if (ws.user.id) {
     <h2 id="create"><q-setting name="createType"
       [disabled]="created"
     (valueChange)="changeType()"></q-setting>
@@ -22,7 +22,7 @@
   }
 }
 
-@if (!ws.user?.id) {
+@if (!ws.user.id) {
   <p
     class="error">
     Guests cannot make lobbies. Join an existing lobby or create an account

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { WsService } from '../../../ws/ws.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
@@ -6,7 +6,6 @@ import { links } from '../../../settings/setting/setting.component';
 import { SettingsService } from '../../../settings/settings.service';
 import { TeamColorsCss, TeamNames } from '../cade-entry-status/cade-entry-status.component';
 import { BoatSetting, Settings } from '../../../settings/setting/settings';
-import { TeamMessage } from '../types';
 import { MainMenuService } from './main-menu.service';
 
 @Component({
@@ -17,6 +16,11 @@ import { MainMenuService } from './main-menu.service';
   standalone: false,
 })
 export class MainMenuComponent {
+  ws = inject(WsService);
+  es = inject(EscMenuService);
+  ss = inject(SettingsService);
+  ms = inject(MainMenuService);
+
   teamColors = TeamColorsCss;
   teamNames = TeamNames;
   boatTitles = (Settings.nextCadeBoat as BoatSetting).titles;
@@ -29,21 +33,6 @@ export class MainMenuComponent {
   ];
 
   links = links;
-
-  constructor(
-    public ws: WsService,
-    public es: EscMenuService,
-    public ss: SettingsService,
-    public ms: MainMenuService,
-  ) { }
-
-  trackTeamBy(index: number, _: TeamMessage[]): number {
-    return index;
-  }
-
-  trackPlayerBy(index: number, m: TeamMessage): number {
-    return m.sId || index;
-  }
 
   plural(length: number): string {
     if (length === 1) return length + ' player';

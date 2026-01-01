@@ -20,15 +20,15 @@
     <tr>
       <th>Name</th>
       <th>Score</th>
-      @for (c of (showExtra ? extraColumns : columns); track c) {
+      @for (c of (showExtra ? extraColumns : columns); track c.title) {
         <th>{{c.title}}</th>
       }
     </tr>
-    @for (r of scores; track r) {
+    @for (r of scores; track $index) {
       <tr>
         <td [style.color]="teamColors[r.team]">{{r.user}}</td>
         <td>{{r.score}}</td>
-        @for (c of (showExtra ? extraColumns : columns); track c) {
+        @for (c of (showExtra ? extraColumns : columns); track c.title) {
           <td>{{r.stats[c.stat]}}</td>
         }
       </tr>
@@ -42,7 +42,7 @@
         <th>Category</th>
         <th>Points</th>
       </tr>
-      @for (c of columns; track c) {
+      @for (c of columns; track c.title) {
         @if (pointValues[c.stat] && myScore.stats[c.stat]) {
           <tr>
             <td>{{c.title}}</td>

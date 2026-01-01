@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -15,6 +15,9 @@ import { Invite, Message } from './types';
   standalone: false,
 })
 export class ChatComponent implements OnInit, OnDestroy {
+  chat = inject(ChatService);
+  private fs = inject(FriendsService);
+
   @ViewChild(CdkVirtualScrollViewport, { static: true }) output?: CdkVirtualScrollViewport;
   @Input() disabled = false;
   colors = [
@@ -33,11 +36,6 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private subs = new Subscription();
   private scrolledToBottom = true;
-
-  constructor(
-    public chat: ChatService,
-    private fs: FriendsService,
-  ) { }
 
   ngOnInit(): void {
     if (!this.output) return;

@@ -86,7 +86,7 @@ export class Setting {
     if (this.inputConfig.advancedComponent || typeof data === 'object') {
       let dataObject = data as Record<string, unknown>;
       if (typeof dataObject !== 'object' || !dataObject) dataObject = {};
-      dataObject.label = label ? '"' + label + '"' : undefined;
+      dataObject['label'] = label ? '"' + label + '"' : undefined;
       return dataObject;
     }
     return label;
@@ -94,7 +94,7 @@ export class Setting {
 
   get label(): string | undefined {
     if (typeof this.data === 'string') return this.data;
-    if (typeof this.data === 'object') return this.data.label as string;
+    if (typeof this.data === 'object') return this.data['label'] as string;
     return String(this.value);
   }
 

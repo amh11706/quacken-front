@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -26,6 +26,11 @@ type KeyBindingsEditMode = Record<keyof KeyBindings, KeyBindingEditMode[]>;
   standalone: false,
 })
 export class KeyBindingComponent implements OnInit, OnDestroy {
+  private kbs = inject(KeyBindingService);
+  private ss = inject(SettingsService);
+  private dialog = inject(MatDialog);
+  private cd = inject(ChangeDetectorRef);
+
   actions = new KeyBindings() as KeyBindingsEditMode;
   private changedElements: HTMLCollectionOf<Element>;
   private notDefaultElements: HTMLCollectionOf<Element>;
@@ -34,13 +39,9 @@ export class KeyBindingComponent implements OnInit, OnDestroy {
   notDefault = false;
   takenKeys = new Map<string, KeyBindingEditMode[]>();
 
-  constructor(
-    private kbs: KeyBindingService,
-    private ss: SettingsService,
-    private dialog: MatDialog,
-    el: ElementRef<HTMLElement>,
-    private cd: ChangeDetectorRef,
-  ) {
+  constructor() {
+    const el = inject<ElementRef<HTMLElement>>(ElementRef);
+
     this.changedElements = el.nativeElement.getElementsByClassName('changed');
     this.notDefaultElements = el.nativeElement.getElementsByClassName('notdefault');
   }

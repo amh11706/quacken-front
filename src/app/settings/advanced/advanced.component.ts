@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, Injector, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, Input, inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SettingsService } from '../settings.service';
 import { DBSetting } from '../types';
@@ -11,16 +11,21 @@ import { DBSetting } from '../types';
   standalone: false,
 })
 export class AdvancedComponent {
+  ss = inject(SettingsService);
+
   @Input() component: unknown;
   @Input() setting = {} as DBSetting;
   @Input() admin = true;
   customInjector: Injector;
 
-  constructor(
-    injector: Injector,
-    @Inject(MAT_DIALOG_DATA) data: { component: unknown, setting: DBSetting, admin: boolean },
-    public ss: SettingsService,
-  ) {
+  constructor() {
+    const injector = inject(Injector);
+    const data = inject<{
+    component: unknown;
+    setting: DBSetting;
+    admin: boolean;
+}>(MAT_DIALOG_DATA);
+
     Object.assign(this, data);
     this.customInjector =
       Injector.create({

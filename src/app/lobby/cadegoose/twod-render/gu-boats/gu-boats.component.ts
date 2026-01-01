@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, inject } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Boat } from '../../../../lobby/quacken/boats/boat';
 import { Sounds, SoundService } from '../../../../sound.service';
@@ -34,6 +34,13 @@ const CannonSounds: Record<number, Sounds> = {
   standalone: false,
 })
 export class GuBoatsComponent implements OnInit, OnDestroy {
+  private sound = inject(SoundService);
+  private image = inject(ImageService);
+  private el = inject(ElementRef);
+  private boats = inject(BoatsService);
+  private turn = inject(TurnService);
+  private as = inject(AnimationService);
+
   @Input() showIsland = false;
   protected _speed = 15;
   @Input() set speed(v: number) {
@@ -74,15 +81,6 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
   private boatRenders = new Map<number, GuBoat>();
   boatRenders$ = new BehaviorSubject<GuBoat[]>([]);
   myBoat = new Boat('');
-
-  constructor(
-    private sound: SoundService,
-    private image: ImageService,
-    private el: ElementRef,
-    private boats: BoatsService,
-    private turn: TurnService,
-    private as: AnimationService,
-  ) { }
 
   ngOnInit(): void {
     this.subs.add(this.boats.myBoat$.subscribe(b => {
@@ -197,10 +195,6 @@ export class GuBoatsComponent implements OnInit, OnDestroy {
         return b.t - a.t;
       });
     });
-  }
-
-  trackBoat(_: number, boat: GuBoat): number {
-    return boat.boat.id;
   }
 
   protected checkBoats(boats: Iterable<Boat>): void {

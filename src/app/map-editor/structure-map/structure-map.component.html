@@ -10,7 +10,7 @@
         }
       </div>
     }
-    @for (feature of map.selectedTile.data; track feature) {
+    @for (feature of map.selectedTile.data; track $index) {
       <div
        class="feature group{{feature.group}}
   {{feature === map.selectedTile.activeFeature ? ' active' : ''}}"

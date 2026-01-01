@@ -1,12 +1,9 @@
-import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Injector, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
 
 import { ComponentType } from '@angular/cdk/portal';
-import { SettingList, SettingsService } from '../../settings/settings.service';
+import { SettingList } from '../../settings/settings.service';
 import { InCmd, Internal, OutCmd } from '../../ws/ws-messages';
-import { FriendsService } from '../../chat/friends/friends.service';
-import { WsService } from '../../ws/ws.service';
-import { EscMenuService } from '../../esc-menu/esc-menu.service';
 import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
 import { KeyActions } from '../../settings/key-binding/key-actions';
 import { MainMenuComponent } from './main-menu/main-menu.component';
@@ -19,8 +16,6 @@ import { SettingMap } from '../../settings/types';
 import { SettingGroup } from '../../settings/setting/settings';
 import { MainMenuService } from './main-menu/main-menu.service';
 import { BoatsService } from '../quacken/boats/boats.service';
-import { LobbyService } from '../lobby.service';
-import { CadeLobby } from './types';
 import { CadeDesc } from './lobby-type';
 
 export const CadeSettings: SettingList = [
@@ -42,6 +37,10 @@ export const CadeSettings: SettingList = [
   standalone: false,
 })
 export class CadegooseComponent extends QuackenComponent implements OnInit, AfterViewInit, OnDestroy {
+  protected kbs = inject(KeyBindingService);
+  private injector = inject(Injector);
+  protected boats = inject(BoatsService);
+
   @ViewChild('renderer', { static: false }) renderer?: TwodRenderComponent;
   protected menuComponent = MainMenuComponent as ComponentType<unknown>;
   private pendingChanges: MapTile[] = [];
@@ -60,12 +59,12 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     settingsOpen: false,
   };
 
-  graphicSettings = this.ss.prefetch('graphics');
+  override graphicSettings = this.ss.prefetch('graphics');
   controlSetting = this.ss.prefetch('controls');
   hoveredTeam = -1;
   statOpacity = 0;
-  mapHeight = 36;
-  mapWidth = 20;
+  override mapHeight = 36;
+  override mapWidth = 20;
   advancedMapOpen = false;
   mapSeed = '';
   private mapDebounce = new Subject<string>();
@@ -76,17 +75,8 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
   showExtraStats = false;
   protected showMapChoice = true;
 
-  constructor(
-    ws: WsService,
-    ss: SettingsService,
-    fs: FriendsService,
-    protected kbs: KeyBindingService,
-    es: EscMenuService,
-    lobbyService: LobbyService<CadeLobby>,
-    private injector: Injector,
-    protected boats: BoatsService,
-  ) {
-    super(ws, ss, fs, es, lobbyService);
+  constructor() {
+    super();
     this.setType();
     this.lobbySettings = this.ss.prefetch(this.group) as SettingMap<SettingGroup>;
   }
@@ -96,7 +86,7 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     this.ss.setLobbySettings(CadeSettings, this.showMapChoice);
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     void this.ws.dispatchMessage({ cmd: InCmd.ChatMessage, data: { type: 1, message: this.joinMessage, from: '' } });
     void this.es.setLobby(this.menuComponent, this.injector);
     void this.es.openMenu();
@@ -158,11 +148,11 @@ export class CadegooseComponent extends QuackenComponent implements OnInit, Afte
     void this.renderer?.fillMap(this.map, this.lobby?.flags || []);
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
     super.ngOnDestroy();
   }
 
-  protected setMapB64(map: string): void {
+  protected override setMapB64(map: string): void {
     super.setMapB64(map);
     void this.renderer?.fillMap(this.map, this.lobby?.flags || []);
     this.editor.selectedTile.data = this.map;

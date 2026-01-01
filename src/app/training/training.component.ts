@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EscMenuService } from '../esc-menu/esc-menu.service';
@@ -39,6 +39,12 @@ const shotNames = [
   standalone: false,
 })
 export class TrainingComponent implements OnInit, OnDestroy {
+  private ws = inject(WsService);
+  private ss = inject(SettingsService);
+  private route = inject(ActivatedRoute);
+  esc = inject(EscMenuService);
+  private wrapper = inject(LobbyWrapperService);
+
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;
   mapMoves = mapMoves;
 
@@ -68,14 +74,6 @@ export class TrainingComponent implements OnInit, OnDestroy {
   maxScore = 0;
   teamColors = TeamColorsCss;
   myBoat = new Boat('');
-
-  constructor(
-    private ws: WsService,
-    private ss: SettingsService,
-    private route: ActivatedRoute,
-    public esc: EscMenuService,
-    private wrapper: LobbyWrapperService,
-  ) { }
 
   ngOnInit(): void {
     if (this.wrapper.ws) {

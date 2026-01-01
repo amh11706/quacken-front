@@ -10,12 +10,12 @@
     <h2>Team Selection</h2>
     <div *ngrxLet="es.open$ as open"
       id="flexmenu">
-      @for (team of ms.teamPlayers$ | async; track team; let i = $index) {
+      @for (team of ms.teamPlayers$ | async; track i; let i = $index) {
         <div
           class="teamwrap">
           <div class="team"
             [style.borderColor]="teamColors[i]">
-            @for (m of team; track m) {
+            @for (m of team; track m.sId) {
               <div
                 class="lobbyPlayer"
                 [class.ready]="m.r">

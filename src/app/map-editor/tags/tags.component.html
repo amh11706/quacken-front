@@ -3,7 +3,7 @@
   <mat-label>Tags:</mat-label>
   <mat-chip-grid #chipList
     aria-label="Tag selection">
-    @for (tag of tags; track tag) {
+    @for (tag of tags; track $index) {
       <mat-chip
         [disabled]="!selectable"
         [removable]="removable"
@@ -23,7 +23,7 @@
   </mat-chip-grid>
   <mat-autocomplete #auto="matAutocomplete"
     (optionSelected)="selected($event)">
-    @for (tag of filteredTags | async; track tag) {
+    @for (tag of filteredTags | async; track $index) {
       <mat-option
         [value]="tag">
         {{tag}}

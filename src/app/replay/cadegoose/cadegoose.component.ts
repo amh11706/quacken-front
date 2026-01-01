@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy, inject } from '@angular/core';
 import { Subscription, Observable, startWith, map } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
@@ -27,6 +27,12 @@ import { LobbyService } from '../../lobby/lobby.service';
   standalone: false,
 })
 export class CadegooseComponent implements OnInit, OnDestroy {
+  ws = inject(WsService);
+  private dialog = inject(MatDialog);
+  private ss = inject(SettingsService);
+  private wrapper = inject(LobbyWrapperService);
+  private lobbyService = inject<LobbyService<CadeLobby>>(LobbyService);
+
   @ViewChild('turnTab', { static: true, read: ElementRef }) turnTab?: ElementRef<HTMLElement>;
   @ViewChild('penaltyBox', { static: false, read: ElementRef }) penaltyBox?: ElementRef<HTMLElement>;
   @Output() playTo = new EventEmitter<number>();
@@ -129,13 +135,7 @@ export class CadegooseComponent implements OnInit, OnDestroy {
 
   private subs = new Subscription();
 
-  constructor(
-    public ws: WsService,
-    private dialog: MatDialog,
-    private ss: SettingsService,
-    private wrapper: LobbyWrapperService,
-    private lobbyService: LobbyService<CadeLobby>,
-  ) {
+  constructor() {
     this.filteredShips = this.shipCtrl.valueChanges.pipe(
       startWith(null),
       map((ship: string | null) => ship ? this._filter(ship) : this.ships.slice()));

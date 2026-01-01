@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { Observable, debounceTime, mergeMap, startWith } from 'rxjs';
 
@@ -14,6 +14,9 @@ import { FriendsService } from '../friends/friends.service';
   standalone: false,
 })
 export class NameSearchComponent implements OnInit {
+  private ws = inject(WsService);
+  private fs = inject(FriendsService);
+
   private _value = '';
   @Input() set value(v: string) {
     this.myControl.setValue(v);
@@ -31,11 +34,6 @@ export class NameSearchComponent implements OnInit {
   @Input() clearOnFocus = true;
   searchedNames?: Observable<string[]>;
   myControl = new UntypedFormControl();
-
-  constructor(
-    private ws: WsService,
-    private fs: FriendsService,
-  ) { }
 
   ngOnInit(): void {
     this.searchedNames = this.myControl.valueChanges

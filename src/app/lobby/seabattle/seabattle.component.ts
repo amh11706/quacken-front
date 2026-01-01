@@ -13,12 +13,12 @@ import { SbDesc } from '../cadegoose/lobby-type';
   standalone: false,
 })
 export class SeabattleComponent extends CadegooseComponent {
-  protected menuComponent = SbMainMenuComponent;
-  mapHeight = 25;
-  mapWidth = 25;
-  protected joinMessage = SbDesc;
-  protected statAction = KeyActions.SBShowStats;
-  protected showMapChoice = false;
+  protected override menuComponent = SbMainMenuComponent;
+  override mapHeight = 25;
+  override mapWidth = 25;
+  protected override joinMessage = SbDesc;
+  protected override statAction = KeyActions.SBShowStats;
+  protected override showMapChoice = false;
   moveKeys = {
     0: KeyActions.SBBlank,
     1: KeyActions.SBLeft,
@@ -39,12 +39,12 @@ export class SeabattleComponent extends CadegooseComponent {
     back: KeyActions.SBBack,
   };
 
-  protected setType() {
+  protected override setType() {
     this.group = 'l/cade';
     this.ss.setLobbySettings(CadeSettings, true, 3);
   }
 
-  protected isInBounds(x: number, y: number): boolean {
+  protected override isInBounds(x: number, y: number): boolean {
     return x >= 0 && x < this.mapWidth && y >= 0 && y < this.mapHeight;
   }
 }

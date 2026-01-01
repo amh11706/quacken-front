@@ -39,7 +39,7 @@
         <th>Primary</th>
         <th>Secondary</th>
       </tr>
-      @for (action of links; track action) {
+      @for (action of links; track $index) {
         <tr>
           <td>{{action.group}}</td>
           <td>
@@ -65,7 +65,7 @@
     <th>Primary</th>
     <th>Secondary</th>
   </tr>
-  @for (action of actions[group]; track action) {
+  @for (action of actions[group]; track $index) {
     <tr>
       <td>
         <div class="key-action">

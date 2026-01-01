@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
@@ -34,19 +34,17 @@ import { InMessage } from '../../ws/ws-subscribe-types';
   styleUrl: './match-queue.component.scss',
 })
 export class MatchQueueComponent implements OnInit, OnDestroy {
+  ws = inject(WsService);
+  private ss = inject(SettingsService);
+  ms = inject(MatchmakingService);
+  private router = inject(Router);
+  private ns = inject(NotificationService);
+
   queueLength = new Subject<number>();
   pending = new BehaviorSubject<boolean>(false);
   isGuest = this.ws.user.id === 0;
   private subs: Subscription[] = [];
   matchSettings = this.ss.prefetch('matchmaking');
-
-  constructor(
-    public ws: WsService,
-    private ss: SettingsService,
-    public ms: MatchmakingService,
-    private router: Router,
-    private ns: NotificationService,
-  ) { }
 
   ngOnInit() {
     void this.ss.getGroup('matchmaking').then(() => {

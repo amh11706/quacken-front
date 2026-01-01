@@ -3,11 +3,11 @@
   [qDrag]
   [bindToWindow]="true">
   <p id="turncount">{{time}}</p>
-  @for (type of treasure; track type; let i = $index) {
+  @for (type of treasure; track i; let i = $index) {
     <p>
       {{type}}
-      <img [title]="titles[i]"
-        src="./assets/images/obstacle{{i + 1}}.png">
+      <img src="./assets/images/obstacle{{i + 1}}.png"
+        [title]="titles[i]">
       </p>
     }
   </div>

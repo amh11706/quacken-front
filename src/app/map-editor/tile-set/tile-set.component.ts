@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { OutCmd } from '../../ws/ws-messages';
@@ -21,6 +21,8 @@ export const TileTypes = [
   standalone: false,
 })
 export class TileSetComponent implements OnInit, OnDestroy {
+  protected ws = inject(WsService);
+
   @Input() map?: MapEditor;
   protected sub = new Subscription();
   protected group: 'tile' | 'structure' | 'tmap' = 'tile';
@@ -29,8 +31,6 @@ export class TileSetComponent implements OnInit, OnDestroy {
   error = '';
   success = '';
   pending = false;
-
-  constructor(protected ws: WsService) { }
 
   ngOnInit(): void {
     if (this.map) this.initTile(this.map.selectedTile);

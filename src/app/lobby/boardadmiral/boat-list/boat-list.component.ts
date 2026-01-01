@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -35,6 +35,11 @@ DefaultBoat.team = 99;
   styleUrl: './boat-list.component.scss',
 })
 export class BoatListComponent implements OnInit, OnDestroy {
+  private boatsService = inject(BoatsService);
+  private kbs = inject(KeyBindingService);
+  private ws = inject(WsService);
+  private ss = inject(SettingsService);
+
   boats: Boat[] = [];
   filteredBoats: Boat[] = [];
   @Output() boatsChange = new EventEmitter<Boat[]>();
@@ -51,13 +56,6 @@ export class BoatListComponent implements OnInit, OnDestroy {
   cost = 0;
 
   private sub = new Subscription();
-
-  constructor(
-    private boatsService: BoatsService,
-    private kbs: KeyBindingService,
-    private ws: WsService,
-    private ss: SettingsService,
-  ) { }
 
   ngOnInit() {
     this.bindKeys();

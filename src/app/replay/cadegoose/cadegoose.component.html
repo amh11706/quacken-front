@@ -8,7 +8,7 @@
     </ng-template>
 
     <div #turnTab>
-      @for (turn of turns; track turn) {
+      @for (turn of turns; track turn.index) {
         <button
           mat-button
           class="turn"
@@ -16,7 +16,7 @@
           (click)="clickTurn(turn)">
           Turn {{turn.turn}}<br>
           <div class="points">
-            @for (team of turn.teams; track team; let i = $index) {
+            @for (team of turn.teams; track i; let i = $index) {
               <div
                 [style.backgroundColor]="teamColors[i]"
                 [matTooltip]="'' + team.scoreChange"
@@ -24,10 +24,10 @@
             }
           </div>
           <div class="sinks">
-            @for (team of turn.teams; track team; let i = $index; let odd = $odd) {
+            @for (team of turn.teams; track i; let i = $index; let odd = $odd) {
               <div
                 [class.right]="odd">
-                @for (sink of team.sinks; track sink) {
+                @for (sink of team.sinks; track $index) {
                   <mat-icon
                   [matTooltip]="sink.message">sailing</mat-icon>
                 }
@@ -44,7 +44,7 @@
       <mat-icon>sailing</mat-icon>
     </ng-template>
 
-    @for (boat of boats; track boat) {
+    @for (boat of boats; track boat.id) {
       <q-boat-button
         [boat]="boat"
         [active]="boat === activeBoat"
@@ -53,7 +53,7 @@
     }
   </mat-tab>
 
-  @if (ws.user?.admin === 5) {
+  @if (ws.user.admin === 5) {
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon>smart_toy</mat-icon>
@@ -73,7 +73,7 @@
         }
         <br>
           @if (aiData) {
-            @for (boat of aiData.boats; track boat) {
+            @for (boat of aiData.boats; track boat.id) {
               <button
                 mat-icon-button
                 [color]="boat === activeAiBoat ? 'primary' : undefined"
@@ -139,7 +139,7 @@
                   </mat-button-toggle-group>
                 }
                 <p>moves</p>
-                @for (moves of activeAiBoat.moveOptions; track moves) {
+                @for (moves of activeAiBoat.moveOptions; track $index) {
                   <p>
                     {{moves.Moves.join('')}}
                   </p>

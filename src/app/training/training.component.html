@@ -15,7 +15,7 @@
       </ng-template>
 
       <div #turnTab>
-        @for (turn of turns; track turn) {
+        @for (turn of turns; track turn.index) {
           <button
             mat-button
             class="turn"
@@ -23,10 +23,10 @@
             (click)="clickTurn(turn)">
             Turn {{turn.turn}}<br>
             <div class="sinks">
-              @for (team of turn.teams; track team; let i = $index; let odd = $odd) {
+              @for (team of turn.teams; track i; let i = $index; let odd = $odd) {
                 <div
                   [class.right]="odd">
-                  @for (sink of team.sinks; track sink) {
+                  @for (sink of team.sinks; track $index) {
                     <mat-icon
                     [matTooltip]="sink.message">sailing</mat-icon>
                   }
@@ -34,7 +34,7 @@
               }
             </div>
             <div class="points">
-              @for (team of turn.teams; track team; let i = $index) {
+              @for (team of turn.teams; track i; let i = $index) {
                 <div
                   [style.backgroundColor]="teamColors[i]"
                   [matTooltip]="'' + team.scoreChange"
@@ -64,19 +64,19 @@
             class="alert">Missed shots ({{missedShots.length}}): {{missedShots.join(', ')}}</p>
           }
           <br>
-            @if (activeMove.WreckedBy?.length) {
+            @if (activeMove.WreckedBy.length) {
               <p>Moves that wreck you ({{activeMove.WreckedBy.length}}):
               {{activeMove.wreckedByString.join(', ')}}</p>
             }
-            @if (activeMove.Wrecks?.length) {
+            @if (activeMove.Wrecks.length) {
               <p>Moves that you wreck ({{activeMove.Wrecks.length}}):
               {{activeMove.wrecksString.join(', ')}}</p>
             }
-            @if (activeMove.BlockedBy?.length) {
+            @if (activeMove.BlockedBy.length) {
               <p>Moves that block you ({{activeMove.BlockedBy.length}}):
               {{activeMove.blockedByString.join(', ')}}</p>
             }
-            @if (activeMove.Blocks?.length) {
+            @if (activeMove.Blocks.length) {
               <p>Moves that you block ({{activeMove.Blocks.length}}):
               {{activeMove.blocksString.join(', ')}}</p>
             }

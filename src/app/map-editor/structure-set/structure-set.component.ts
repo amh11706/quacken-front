@@ -10,15 +10,15 @@ import { DBTile } from '../types';
   standalone: false,
 })
 export class StructureSetComponent extends TileSetComponent implements OnInit, OnDestroy {
-  protected group: 'tile' | 'structure' = 'structure';
+  protected override group: 'tile' | 'structure' = 'structure';
   groups = ['Tiles', 'Obstacle Zones', 'Wing Zones'];
 
-  protected initTile(tile: DBTile): void {
+  protected override initTile(tile: DBTile): void {
     if (this.map?.structures) tile = this.map.structures.find(el => el.id === tile.id) || tile;
     this.select(tile);
   }
 
-  protected handleDelete = (msg: DBTile): void => {
+  protected override handleDelete = (msg: DBTile): void => {
     this.pending = false;
     if (!this.map?.structures) return;
     this.map.structures = this.map.structures.filter(structure => {

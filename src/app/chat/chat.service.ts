@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import * as dayjs from 'dayjs';
 import * as relativeTime from 'dayjs/plugin/relativeTime';
@@ -14,6 +14,9 @@ dayjs.extend(relativeTime.default);
 
 @Injectable()
 export class ChatService implements OnDestroy {
+  private ws = inject(WsService);
+  private kbs = inject(KeyBindingService);
+
   commandHistory: string[] = [];
   messages: ChatMessage[] = [];
   messages$ = new BehaviorSubject<ChatMessage[]>([]);
@@ -25,11 +28,9 @@ export class ChatService implements OnDestroy {
   commandParams = new Map<string, { name: string, value: string }>();
   private subs = new Subscription();
 
-  constructor(
-    private ws: WsService,
-    private kbs: KeyBindingService,
-    sound: SoundService,
-  ) {
+  constructor() {
+    const sound = inject(SoundService);
+
     this.messages$.next(this.messages);
     this.subs.add(this.ws.subscribe(InCmd.ChatCommands, commands => {
       const lobbyCommands = commands.lobby as Command[];

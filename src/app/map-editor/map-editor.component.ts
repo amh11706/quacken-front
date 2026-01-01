@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { WsService } from '../ws/ws.service';
@@ -23,6 +23,10 @@ interface RenderSetting {
   standalone: false,
 })
 export class MapEditorComponent implements OnInit, OnDestroy {
+  private ws = inject(WsService);
+  es = inject(EscMenuService);
+  private kbs = inject(KeyBindingService);
+
   @ViewChild(TwodRenderComponent) renderer?: TwodRenderComponent;
   @Input()
   private sub = new Subscription();
@@ -55,11 +59,7 @@ export class MapEditorComponent implements OnInit, OnDestroy {
     settingsOpen: true,
   };
 
-  constructor(
-    private ws: WsService,
-    public es: EscMenuService,
-    private kbs: KeyBindingService,
-  ) {
+  constructor() {
     const tile = this.editor.selectedTile;
     for (let i = 0; i < 8; i++) {
       tile.data?.push([0, 0, 0, 0, 0, 0, 0, 0]);

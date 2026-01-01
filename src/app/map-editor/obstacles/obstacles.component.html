@@ -20,27 +20,27 @@
     id="handle"></div>
     @if (map.selectedTile.group === 'cgmaps' || map.selectedTile.group === 'fgmaps') {
       <div>
-        @for (obstacle of cadeObstacles; track obstacle; let i = $index) {
+        @for (obstacle of cadeObstacles; track i; let i = $index) {
           <img
+            src="./assets/images/obstacle{{obstacle}}.png"
             draggable="false"
             [matTooltip]="cadeTitles[i] || ''"
-            src="./assets/images/obstacle{{obstacle}}.png"
             (click)="map.selected = obstacle">
         }
-        @for (flag of [21, 22, 23]; track flag) {
+        @for (flag of [21, 22, 23]; track $index) {
           <img
+            src="./assets/images/obstacle{{flag}}.png"
             matTooltip="Flag"
             draggable="false"
-            src="./assets/images/obstacle{{flag}}.png"
             (click)="map.selected = flag">
         }
       </div>
     } @else {
-      @for (obstacle of obstacles; track obstacle; let i = $index) {
+      @for (obstacle of obstacles; track i; let i = $index) {
         <img
+          src="./assets/images/obstacle{{obstacle}}.png"
           draggable="false"
           [matTooltip]="titles[i] || ''"
-          src="./assets/images/obstacle{{obstacle}}.png"
           (click)="map.selected = obstacle">
       }
     }

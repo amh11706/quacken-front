@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { BehaviorSubject, Observable, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs';
 import { KeyActions } from '../settings/key-binding/key-actions';
@@ -7,6 +7,10 @@ import { WsService } from '../ws/ws.service';
 
 @Injectable()
 export class EscMenuService {
+  private ws = inject(WsService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   private _queryParams$: BehaviorSubject<Params>;
   private _open$ = new BehaviorSubject(false);
   private _activeTab$ = new BehaviorSubject(0);
@@ -19,12 +23,9 @@ export class EscMenuService {
   lobbyComponent: unknown;
   lobbyInjector?: Injector;
 
-  constructor(
-    private ws: WsService,
-    private router: Router,
-    private route: ActivatedRoute,
-    kbs: KeyBindingService,
-  ) {
+  constructor() {
+    const kbs = inject(KeyBindingService);
+
     this._queryParams$ = new BehaviorSubject(this.route.snapshot.queryParams);
     this.queryParams$ = this._queryParams$.asObservable();
 
@@ -39,23 +40,23 @@ export class EscMenuService {
     });
 
     this.queryParams$.pipe(
-      filter(p => p.tab !== undefined),
-      map(p => +p.tab),
+      filter(p => p['tab'] !== undefined),
+      map(p => +p['tab']),
       distinctUntilChanged(),
     ).subscribe(v => {
       this._activeTab$.next(v);
     });
 
     this.queryParams$.pipe(
-      map(p => p.esc === 'true'),
+      map(p => p['esc'] === 'true'),
       distinctUntilChanged(),
     ).subscribe(v => {
       this._open$.next(v);
     });
 
     this.queryParams$.pipe(
-      filter(p => p.lobbyTab !== undefined),
-      map(p => +p.lobbyTab),
+      filter(p => p['lobbyTab'] !== undefined),
+      map(p => +p['lobbyTab']),
       distinctUntilChanged(),
     ).subscribe(v => {
       this._lobbyTab$.next(v);

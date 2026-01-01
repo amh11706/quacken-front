@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { TableVirtualScrollDataSource } from 'ng-table-virtual-scroll';
 import { MatSort } from '@angular/material/sort';
@@ -41,6 +41,10 @@ function searchMatch(match: Match, term: string): boolean {
   standalone: false,
 })
 export class MatchesComponent implements OnInit, OnDestroy {
+  ws = inject(WsService);
+  stat = inject(StatService);
+  private cd = inject(ChangeDetectorRef);
+
   tierTitles = TierTitles;
   matches: Partial<Record<RankArea, Match[]>> = {};
   teamImages = TeamImages;
@@ -55,11 +59,7 @@ export class MatchesComponent implements OnInit, OnDestroy {
   private filterChanges = new Subject<string>();
   private initTimer = 0;
 
-  constructor(
-    public ws: WsService,
-    public stat: StatService,
-    private cd: ChangeDetectorRef,
-  ) {
+  constructor() {
     this.filterChanges.pipe(debounceTime(300)).subscribe(value => {
       this.dataSource.filter = value.trim().toLowerCase() || this.searchTerms[0] || '';
     });

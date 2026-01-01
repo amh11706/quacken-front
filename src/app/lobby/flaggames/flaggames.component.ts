@@ -25,12 +25,12 @@ const ownerSettings: SettingList = [
 })
 export class FlaggamesComponent extends CadegooseComponent {
   columns = FgColumns;
-  protected menuComponent = FgMainMenuComponent;
-  mapHeight = 41;
-  mapWidth = 31;
-  protected joinMessage = FgDesc;
-  protected statAction = KeyActions.SBShowStats;
-  protected showMapChoice = false;
+  protected override menuComponent = FgMainMenuComponent;
+  override mapHeight = 41;
+  override mapWidth = 31;
+  protected override joinMessage = FgDesc;
+  protected override statAction = KeyActions.SBShowStats;
+  protected override showMapChoice = false;
   moveKeys = {
     0: KeyActions.SBBlank,
     1: KeyActions.SBLeft,
@@ -55,14 +55,14 @@ export class FlaggamesComponent extends CadegooseComponent {
     return pos.y < 3 || pos.y > this.mapHeight - 4;
   };
 
-  protected setType() {
+  protected override setType() {
     this.group = 'l/flaggames';
     this.ss.setLobbySettings(ownerSettings, true, 4);
   }
 
   private redrawDebounce = 0;
 
-  setTile(x: number, y: number, v: number): MapTile | void {
+  override setTile(x: number, y: number, v: number): MapTile | void {
     if (this.advancedMapOpen) return super.setTile(x, y, v);
     if (this.lobby?.inProgress) return; // Don't allow clutter based editing before the game starts.
 

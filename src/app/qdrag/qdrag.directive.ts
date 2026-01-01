@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter, inject } from '@angular/core';
 
 @Directive({
   selector: '[qDrag]',
@@ -6,6 +6,8 @@ import { Directive, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter }
   standalone: false,
 })
 export class QdragDirective implements OnInit, OnDestroy {
+  private el = inject(ElementRef);
+
   @Input() qDrag?: HTMLElement;
   @Input() bindToWindow?: boolean;
   @Input() transform = '';
@@ -23,8 +25,6 @@ export class QdragDirective implements OnInit, OnDestroy {
   private rightGap?: number;
   private startX = 0;
   private startY = 0;
-
-  constructor(private el: ElementRef) { }
 
   ngOnInit(): void {
     this._offset.x = +this._offset.x;

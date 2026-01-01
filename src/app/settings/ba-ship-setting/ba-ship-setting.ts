@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ProviderToken } from '@angular/core';
 import { SettingsService } from '../settings.service';
 import { DBSetting, Setting } from '../types';
 import { BoatTitles } from '../ship-list/ship-list.component';
@@ -20,12 +20,12 @@ interface BaShipSetting extends DBSetting {
   standalone: false,
 })
 export class BaShipSettingComponent {
+  setting = inject<BaShipSetting>('setting' as unknown as ProviderToken<BaShipSetting>);
+  ss = inject(SettingsService);
+
   ShipSetting = Settings.baships as OptionSetting;
 
-  constructor(
-    @Inject('setting') public setting: BaShipSetting,
-    public ss: SettingsService,
-  ) {
+  constructor() {
     if (!this.setting.data || !this.setting.data.custom) {
       this.setting.data = { custom: [], budget: 200 };
     }
@@ -36,8 +36,8 @@ export class BaShipSettingComponent {
 
     const data = s.data as BaShipSetting['data'] ?? { custom: [], budget: 200 };
     if (s.value === 2) {
-      if (s.data?.budget === 1010) data.label = 'Influence cap: ∞';
-      else data.label = 'Influence cap: ' + s.data?.budget;
+      if (s.data?.['budget'] === 1010) data.label = 'Influence cap: ∞';
+      else data.label = 'Influence cap: ' + s.data?.['budget'];
       return data;
     }
 

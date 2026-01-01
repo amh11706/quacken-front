@@ -1,4 +1,4 @@
-import { Component, ViewChild, TemplateRef } from '@angular/core';
+import { Component, ViewChild, TemplateRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
@@ -14,6 +14,10 @@ import { PrivacyComponent } from '../privacy/privacy.component';
   standalone: false,
 })
 export class CreateComponent {
+  private dialog = inject(MatDialog);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   @ViewChild('error', { static: false }) errComponent?: TemplateRef<HTMLElement>;
   err = '';
 
@@ -27,11 +31,9 @@ export class CreateComponent {
 
   private path = environment.api;
 
-  constructor(
-    private dialog: MatDialog,
-    private http: HttpClient,
-    private router: Router,
-  ) {
+  constructor() {
+    const router = this.router;
+
     const token = window.localStorage.getItem('token');
     if (token) {
       void router.navigate(['list']);

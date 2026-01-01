@@ -22,7 +22,7 @@ export class LobbyCardComponent {
 
   label(s: DBSetting, fallback = ''): string {
     if (typeof s.data === 'string') return s.data;
-    if (typeof s.data === 'object' && s.data) return s.data.label as string;
+    if (typeof s.data === 'object' && s.data) return s.data['label'] as string;
     return fallback || String(s.value);
   }
 }

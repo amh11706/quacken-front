@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { WsService } from '../ws/ws.service';
 import { EscMenuService } from './esc-menu.service';
@@ -14,14 +14,13 @@ import { FriendsService } from '../chat/friends/friends.service';
   standalone: false,
 })
 export class EscMenuComponent {
-  constructor(
-    public es: EscMenuService,
-    public ss: SettingsService,
-    public fs: FriendsService,
-    public ws: WsService,
-    private dialog: MatDialog,
-    private injector: Injector,
-  ) { }
+  es = inject(EscMenuService);
+  ss = inject(SettingsService);
+  fs = inject(FriendsService);
+  ws = inject(WsService);
+  private dialog = inject(MatDialog);
+  private injector = inject(Injector);
+
 
   onTabChange(index: number) {
     void this.es.tabChange(index);

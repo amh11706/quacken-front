@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs';
@@ -13,14 +13,12 @@ import { WsService } from '../../ws/ws.service';
   standalone: false,
 })
 export class LogoutConfirmComponent implements OnInit, OnDestroy {
+  private ws = inject(WsService);
+  private router = inject(Router);
+  dialogRef = inject<MatDialogRef<LogoutConfirmComponent>>(MatDialogRef);
+
   seconds$ = new BehaviorSubject<number>(10);
   private ticker?: number;
-
-  constructor(
-    private ws: WsService,
-    private router: Router,
-    public dialogRef: MatDialogRef<LogoutConfirmComponent>,
-  ) { }
 
   ngOnInit(): void {
     this.ticker = window.setInterval(() => {

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
 import { WsService } from '../../ws/ws.service';
@@ -53,13 +53,19 @@ function mergeBindings(input: Record<KeyActions, [string, string]>): StaticKeyBi
 
 @Injectable()
 export class KeyBindingService {
+  private ss = inject(SettingsService);
+  private ws = inject(WsService);
+
   private bindSub?: Subject<string>;
   private subMap = new Map<KeyActions, Subject<boolean>>();
   private bindings = new Map<string, KeyActions[]>();
   private _activeBindings?: StaticKeyBindings;
   get activeBindings(): StaticKeyBindings | undefined { return this._activeBindings; }
 
-  constructor(private ss: SettingsService, private ws: WsService) {
+  constructor() {
+    const ss = this.ss;
+    const ws = this.ws;
+
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     ws.connected$.subscribe(v => {

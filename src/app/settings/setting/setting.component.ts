@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, ChangeDetectionStrategy, OnDestroy, Injector, input, effect } from '@angular/core';
+import { Component, Output, EventEmitter, ChangeDetectionStrategy, OnDestroy, Injector, input, effect, inject } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -39,6 +39,11 @@ export function getShipLink(id: number): string {
   standalone: false,
 })
 export class SettingComponent implements OnDestroy {
+  ss = inject(SettingsService);
+  private ws = inject(WsService);
+  private dialog = inject(MatDialog);
+  private injector = inject(Injector);
+
   readonly disabled = input(false);
   readonly name = input.required<SettingName>();
 
@@ -49,12 +54,7 @@ export class SettingComponent implements OnDestroy {
   settingValue = {} as Setting;
   getShipLink = getShipLink;
 
-  constructor(
-    public ss: SettingsService,
-    private ws: WsService,
-    private dialog: MatDialog,
-    private injector: Injector,
-  ) {
+  constructor() {
     effect(() => {
       this.setting = Settings[this.name()];
       void this.fetch();

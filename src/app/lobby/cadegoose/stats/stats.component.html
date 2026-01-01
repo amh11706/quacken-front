@@ -9,14 +9,14 @@
       <table>
         <tr>
           <th>{{teamNames[i]}}</th>
-          @for (c of (showExtra ? extraColumns : columns); track c) {
+          @for (c of (showExtra ? extraColumns : columns); track c.title) {
             <th>{{c.title}}</th>
           }
         </tr>
-        @for (r of team; track r) {
+        @for (r of team; track $index) {
           <tr>
             <td>{{r.user}}</td>
-            @for (c of (showExtra ? extraColumns : columns); track c) {
+            @for (c of (showExtra ? extraColumns : columns); track c.title) {
               <td>{{r.stats[c.stat] || 0}}</td>
             }
           </tr>

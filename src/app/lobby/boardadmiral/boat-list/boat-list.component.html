@@ -9,7 +9,7 @@
       <ng-template mat-tab-label>
         <mat-icon matTooltip="Your Boats">sailing</mat-icon>
       </ng-template>
-      @for (boat of filteredBoats; track boat) {
+      @for (boat of filteredBoats; track boat.id) {
         <q-boat-button
           [class.highlight]="boat.showInfluence || highlightedBoats.has(boat.id)"
           [class.noCoverage]="!hasCoverage(boat)"
@@ -39,7 +39,7 @@
             <p
             class="empty">Click boat types below to spawn ships.</p>
           }
-          @for (boat of spawnBoats; track boat) {
+          @for (boat of spawnBoats; track boat.id) {
             <div
               class="boat">
               <span>{{ShipTypeMap.get(boat.type)?.title}}</span>

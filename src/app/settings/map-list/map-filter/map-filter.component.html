@@ -22,7 +22,7 @@
     <mat-divider class="divider"></mat-divider>
     Tags:
     <mat-chip-listbox>
-      @for (tag of data.tagList; track tag) {
+      @for (tag of data.tagList; track $index) {
         <mat-chip
           #chipList
           [removable]="false"
@@ -33,7 +33,7 @@
 
     Creators:
     <mat-chip-listbox>
-      @for (name of data.userList; track name) {
+      @for (name of data.userList; track $index) {
         <mat-chip
           #chipList
           [removable]="false"

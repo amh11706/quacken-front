@@ -16,7 +16,7 @@
       }}</h3>
       <div *ngrxLet="es.open$ as open"
         id="flexmenu">
-        @for (team of ms.teamPlayers$ | async; track trackTeamBy(i, team); let i = $index) {
+        @for (team of ms.teamPlayers$ | async; track i; let i = $index) {
           <div
             class="teamwrap">
             @if (status === 0 || (ms.settings.hotEntry.stream | async) === 1) {
@@ -30,7 +30,7 @@
               Rank on win: +{{$any(ms.settings.rated.data)?.teamAward?.[i] || 0}}</p>
               <div class="team"
                 [style.borderColor]="teamColors[i]">
-                @for (m of team; track trackPlayerBy($index, m)) {
+                @for (m of team; track m.sId || $index) {
                   <div
                     class="lobbyPlayer vote{{m.v}}"
                     [class.ready]="m.r">
@@ -38,8 +38,8 @@
                     @if (status < 2 || status === 4) {
                       @if (m.sId === ws.sId && ws.connected) {
                         <img
-                          [matMenuTriggerFor]="jobbers"
                           src="./assets/boats/{{links[m.b]}}.png"
+                          [matMenuTriggerFor]="jobbers"
                           [class.lowjobbers]="m.jq < 100"
                           [matTooltip]="boatTitles[m.b] + ' ' + m.jq + '%'">
                       } @else {

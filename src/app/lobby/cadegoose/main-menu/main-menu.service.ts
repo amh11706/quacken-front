@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { FriendsService } from '../../../chat/friends/friends.service';
 import { EscMenuService } from '../../../esc-menu/esc-menu.service';
@@ -47,6 +47,15 @@ export const DefaultExtraColumns = [
 
 @Injectable()
 export class MainMenuService implements OnDestroy {
+  ws = inject(WsService);
+  private fs = inject(FriendsService);
+  es = inject(EscMenuService);
+  ss = inject(SettingsService);
+  private sound = inject(SoundService);
+  private wrapper = inject(LobbyWrapperService);
+  private boats = inject(BoatsService);
+  private lobbyService = inject<LobbyService<CadeLobby>>(LobbyService);
+
   statColumns = DefaultStatColumns;
   extraStatColumns = DefaultExtraColumns;
   teamColors = TeamColorsCss;
@@ -79,16 +88,7 @@ export class MainMenuService implements OnDestroy {
   get status() { return this.lobbyService.status; }
   seeds: string[] = [];
 
-  constructor(
-    public ws: WsService,
-    private fs: FriendsService,
-    public es: EscMenuService,
-    public ss: SettingsService,
-    private sound: SoundService,
-    private wrapper: LobbyWrapperService,
-    private boats: BoatsService,
-    private lobbyService: LobbyService<CadeLobby>,
-  ) {
+  constructor() {
     if (this.wrapper.ws) this.ws = this.wrapper.ws;
     if (this.wrapper.fs) this.fs = this.wrapper.fs;
     if (this.wrapper.boats) this.boats = this.wrapper.boats;

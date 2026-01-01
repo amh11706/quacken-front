@@ -1,5 +1,5 @@
-<div *ngIf="render.orientation as o"
-     class="img"
+@if (render.orientation; as o) { -
+<div class="img"
      [style.backgroundImage]="render.img"
      [style.backgroundPosition]="render.imgPosition"
      [style.top]="24 - o.offsety + 'px'"
@@ -7,3 +7,4 @@
      [style.width]="o.width + 'px'"
      [style.height]="o.height + 'px'">
 </div>
+}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Settings, SliderSetting } from '../setting/settings';
 import { SettingsService } from '../settings.service';
 import { DBSetting } from '../types';
@@ -21,14 +21,14 @@ interface JobberSetting extends DBSetting {
   standalone: false,
 })
 export class JobberQualityComponent {
+  setting = inject<JobberSetting>('setting' as any);
+  ss = inject(SettingsService);
+
   JobberSetting = Settings.jobberQuality as SliderSetting;
   advanced = false;
   sliders: (keyof JobberSetting['data'])[] = ['Sail', 'Carp', 'Bilge', 'Cannon', 'Maneuver'];
 
-  constructor(
-    @Inject('setting') public setting: JobberSetting,
-    public ss: SettingsService,
-  ) {
+  constructor() {
     if (!this.setting.data || typeof this.setting.data.Sail === 'undefined') {
       this.setting.data = { Sail: 70, Carp: 70, Bilge: 70, Cannon: 70, Maneuver: 70 };
     }

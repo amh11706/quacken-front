@@ -1,5 +1,5 @@
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { EmojiSearch, PreviewComponent } from '@ctrl/ngx-emoji-mart';
 import { Emoji, EmojiComponent, EmojiData, EmojiService } from '@ctrl/ngx-emoji-mart/ngx-emoji';
@@ -43,16 +43,21 @@ const I18N = {
   styleUrl: './emoji-search-results.component.scss',
 })
 export class EmojiSearchResultsComponent implements OnInit {
+  data = inject<{
+    skin: Emoji['skin'];
+    searchResults: EmojiData[];
+    onSelect: (d: EmojiData) => void;
+}>('overlayData' as any);
+  private emojiService = inject(EmojiService);
+
   hoveredEmoji: EmojiData | null = null;
   defaultEmoji: EmojiData;
   i18n = I18N;
   NAMESPACE = 'emoji-mart';
 
-  constructor(
-    @Inject('overlayData') public data: { skin: Emoji['skin'], searchResults: EmojiData[], onSelect: (d: EmojiData) => void },
-    emojiSearch: EmojiSearch,
-    private emojiService: EmojiService,
-  ) {
+  constructor() {
+    const emojiSearch = inject(EmojiSearch);
+
     this.defaultEmoji = emojiSearch.emojisList.duck;
   }
 

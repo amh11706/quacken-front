@@ -5,7 +5,7 @@
       class="container noselect">
       <h2>Editor Settings</h2>
       <div class="settings-container">
-        @if (!map?.tileSettings) {
+        @if (!map.tileSettings) {
           <mat-form-field class="setting">
             <mat-label>Type</mat-label>
             <mat-select [(ngModel)]="shown.group"
@@ -24,7 +24,7 @@
               [(ngModel)]="selected"
               (selectionChange)="select()">
               <mat-option value="new">(Create New)</mat-option>
-              @for (option of options; track option) {
+              @for (option of options; track $index) {
                 <mat-option
                   [value]="option.id">
                   {{option.name}}
@@ -41,7 +41,7 @@
             [(ngModel)]="shown.name"
             (change)="shown.unsaved = true">
         </mat-form-field>
-        @if (!map?.tileSettings) {
+        @if (!map.tileSettings) {
           <div
             class="setting">
             <mat-checkbox [disabled]="pending"

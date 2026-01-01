@@ -1,4 +1,4 @@
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { CadegooseComponent } from '../cadegoose/cadegoose.component';
@@ -17,15 +17,8 @@ import { QdragModule } from '../../qdrag/qdrag.module';
 import { MapEditorModule } from '../../map-editor/map-editor.module';
 import { Team } from '../quacken/boats/types';
 import { BoardadmiralDesc, LobbyStatus } from '../cadegoose/lobby-type';
-import { SettingList, SettingsService } from '../../settings/settings.service';
+import { SettingList } from '../../settings/settings.service';
 import { Stat } from '../cadegoose/stats/types';
-import { FriendsService } from '../../chat/friends/friends.service';
-import { EscMenuService } from '../../esc-menu/esc-menu.service';
-import { KeyBindingService } from '../../settings/key-binding/key-binding.service';
-import { WsService } from '../../ws/ws.service';
-import { CadeLobby } from '../cadegoose/types';
-import { LobbyService } from '../lobby.service';
-import { BoatsService } from '../quacken/boats/boats.service';
 
 export const BASettings: SettingList = [
   'cadeMaxPlayers', 'jobberQuality',
@@ -54,13 +47,15 @@ interface BaAction {
     BoatListComponent,
     QdragModule,
     MatButtonModule,
-    MapEditorModule
-],
+    MapEditorModule,
+  ],
   templateUrl: './boardadmiral.component.html',
   styleUrl: './boardadmiral.component.scss',
   providers: [MainMenuService],
 })
 export class BoardadmiralComponent extends CadegooseComponent implements OnInit, OnDestroy {
+  private ms = inject(MainMenuService);
+
   statColumns = [
     { stat: Stat.PointsScored, title: 'Points Scored' },
     { stat: Stat.CoverageCommands, title: 'Coverage Commands' },
@@ -72,7 +67,7 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
     { stat: Stat.UnusedBudget, title: 'Unused Budget' },
   ];
 
-  protected joinMessage = BoardadmiralDesc;
+  protected override joinMessage = BoardadmiralDesc;
   private render = new BaRender();
   private defaultBoat = new BABoatSettings(DefaultBoat, this.ws);
   activeBoatSettings?: BABoatSettings;
@@ -83,26 +78,12 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
   private undoTicker = 0;
   private lastStatus = LobbyStatus.Waiting;
 
-  constructor(
-    ws: WsService,
-    ss: SettingsService,
-    fs: FriendsService,
-    kbs: KeyBindingService,
-    es: EscMenuService,
-    lobbyService: LobbyService<CadeLobby>,
-    injector: Injector,
-    boats: BoatsService,
-    private ms: MainMenuService,
-  ) {
-    super(ws, ss, fs, kbs, es, lobbyService, injector, boats);
-  }
-
-  protected setType() {
+  protected override setType() {
     super.setType();
     this.ss.setLobbySettings(BASettings, this.showMapChoice);
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     this.ms.statColumns = this.statColumns;
     this.ms.extraStatColumns = [];
     super.ngOnInit();
@@ -134,7 +115,7 @@ export class BoardadmiralComponent extends CadegooseComponent implements OnInit,
     }));
   }
 
-  ngOnDestroy(): void {
+  override ngOnDestroy(): void {
     super.ngOnDestroy();
     DefaultBoat.team = 99;
     this.ms.statColumns = DefaultStatColumns;

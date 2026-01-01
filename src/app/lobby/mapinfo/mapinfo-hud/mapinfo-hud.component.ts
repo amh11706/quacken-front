@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ChatModule } from '../../../chat/chat.module';
@@ -27,15 +27,13 @@ export interface MapInfo {
   styleUrl: './mapinfo-hud.component.scss',
 })
 export class MapinfoHudComponent implements OnChanges {
+  es = inject(EscMenuService);
+  private ws = inject(WsService);
+
   @Input() mapInfo = {} as MapInfo;
   selectedOverlay = ['spawn', 'flags'];
 
   private aiRender = new AiRender(this.ws, 20, 36);
-
-  constructor(
-    public es: EscMenuService,
-    private ws: WsService,
-  ) { }
 
   ngOnChanges() {
     setTimeout(() => {

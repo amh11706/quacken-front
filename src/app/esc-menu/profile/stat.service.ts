@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 
 import { BehaviorSubject, distinctUntilChanged, filter, map, Subscription } from 'rxjs';
 import { WsService } from '../../ws/ws.service';
@@ -18,6 +18,9 @@ const placeholderRank = {
 
 @Injectable()
 export class StatService implements OnDestroy {
+  private ws = inject(WsService);
+  private es = inject(EscMenuService);
+
   private _profileTab$ = new BehaviorSubject(0);
   profileTab$ = this._profileTab$.asObservable();
   target = this.ws.user?.name || '';
@@ -40,13 +43,10 @@ export class StatService implements OnDestroy {
   winLoss: WinLoss = { wins: 0, losses: 0 };
   private subs = new Subscription();
 
-  constructor(
-    private ws: WsService,
-    private es: EscMenuService,
-  ) {
+  constructor() {
     this.subs = this.es.queryParams$.pipe(
-      filter(p => p.profileTab !== undefined),
-      map(p => +p.profileTab),
+      filter(p => p['profileTab'] !== undefined),
+      map(p => +p['profileTab']),
       distinctUntilChanged(),
     ).subscribe(v => {
       this._profileTab$.next(v);

@@ -12,7 +12,7 @@
   @if (!forTags) {
     <div class="map-rating background"
       [class.visible]="!isPecentage">
-      @for (ratingId of ratingArr; track ratingId; let i = $index) {
+      @for (ratingId of ratingArr; track i; let i = $index) {
         <button
           class="star"
           mat-icon-button
@@ -26,7 +26,7 @@
       }
     </div>
   } @else {
-    @for (ratingId of ratingArr; track ratingId; let i = $index) {
+    @for (ratingId of ratingArr; track i; let i = $index) {
       <span>
         <span class="star">
           <mat-icon>

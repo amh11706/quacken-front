@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, Injector } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Injector, inject } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { StatService } from '../../esc-menu/profile/stat.service';
@@ -20,19 +20,17 @@ import { ListLobby } from '../../lobby/cadegoose/types';
   standalone: false,
 })
 export class LobbyListComponent implements OnInit, OnDestroy {
+  stat = inject(StatService);
+  ws = inject(WsService);
+  private dialog = inject(MatDialog);
+  es = inject(EscMenuService);
+  private injector = inject(Injector);
+
   lobbies = new BehaviorSubject<ListLobby[]>([]);
   note = Notes[0] as Note;
   private sub = new Subscription();
   @Input() message: Message = {} as Message;
   competitions = Competitions;
-
-  constructor(
-    public stat: StatService,
-    public ws: WsService,
-    private dialog: MatDialog,
-    public es: EscMenuService,
-    private injector: Injector,
-  ) { }
 
   ngOnInit(): void {
     this.sub.add(this.ws.subscribe(InCmd.LobbyList, lobbies => {
@@ -78,10 +76,6 @@ export class LobbyListComponent implements OnInit, OnDestroy {
       e.preventDefault();
       this.ws.send(OutCmd.LobbyApply, l.id);
     }
-  }
-
-  trackByLobbyId(_: number, l: ListLobby): number {
-    return l.id;
   }
 
   createLobby(): void {
