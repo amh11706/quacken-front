@@ -35,18 +35,18 @@
     "stats.js": "^0.17.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^20.3.13",
-    "@angular/cli": "^20.3.13",
+    "@angular-devkit/build-angular": "^21.0.4",
+    "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.6",
     "@types/stats.js": "^0.17.3",
-    "angular-eslint": "^19.2.0",
-    "eslint": "^9.20.0",
+    "angular-eslint": "^21.1.0",
+    "eslint": "^9.28.0",
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-rxjs-x": "^0.6.2",
     "eslint-plugin-unused-imports": "^4.1.0",
     "neostandard": "^0.12.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.26.0"
+    "typescript-eslint": "^8.33.1"
   },
   "overrides": {
     "@angular-devkit/build-angular": {
