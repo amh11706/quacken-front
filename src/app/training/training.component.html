@@ -64,20 +64,20 @@
             class="alert">Missed shots ({{missedShots.length}}): {{missedShots.join(', ')}}</p>
           }
           <br>
-            @if (activeMove.WreckedBy.length) {
-              <p>Moves that wreck you ({{activeMove.WreckedBy.length}}):
+            @if (activeMove.WreckedBy?.length; as wreckedBy) {
+              <p>Moves that wreck you ({{wreckedBy}}):
               {{activeMove.wreckedByString.join(', ')}}</p>
             }
-            @if (activeMove.Wrecks.length) {
-              <p>Moves that you wreck ({{activeMove.Wrecks.length}}):
+            @if (activeMove.Wrecks?.length; as wrecks) {
+              <p>Moves that you wreck ({{wrecks}}):
               {{activeMove.wrecksString.join(', ')}}</p>
             }
-            @if (activeMove.BlockedBy.length) {
-              <p>Moves that block you ({{activeMove.BlockedBy.length}}):
+            @if (activeMove.BlockedBy?.length; as blockedBy) {
+              <p>Moves that block you ({{blockedBy}}):
               {{activeMove.blockedByString.join(', ')}}</p>
             }
-            @if (activeMove.Blocks.length) {
-              <p>Moves that you block ({{activeMove.Blocks.length}}):
+            @if (activeMove.Blocks?.length; as blocks) {
+              <p>Moves that you block ({{blocks}}):
               {{activeMove.blocksString.join(', ')}}</p>
             }
             <br>
