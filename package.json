@@ -8,6 +8,12 @@
     "build": "ng build --configuration=production",
     "build:dev": "ng build --configuration=production,dev",
     "deploy": "npm run build && rsync -auzv --delete dist quacken:",
+    "deploy:gu": "./deploy-gu.sh push --build --delete",
+    "deploy:gu:dry": "./deploy-gu.sh dry-run --delete",
+    "deploy:front": "./deploy-front.sh --delete",
+    "deploy:front:dry": "./deploy-front.sh --dry-run --delete",
+    "bump": "./bump-client-version.sh",
+    "release:front": "npm run bump && npm run deploy:front",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
