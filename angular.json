@@ -89,7 +89,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "buildTarget": "quacken2:build"
+            "buildTarget": "quacken2:build",
+            "proxyConfig": "proxy.conf.js"
           },
           "configurations": {
             "production": {
