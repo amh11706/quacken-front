@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:live": "ng serve --configuration live",
     "build": "ng build --configuration=production",
     "build:dev": "ng build --configuration=production,dev",
     "deploy": "npm run build && rsync -auzv --delete dist quacken:",
@@ -19,6 +20,7 @@
     "e2e": "ng e2e"
   },
   "private": true,
+  "license": "Apache-2.0",
   "dependencies": {
     "@angular/animations": "^21.0.6",
     "@angular/cdk": "^21.0.5",

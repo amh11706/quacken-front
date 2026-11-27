@@ -1,27 +1,60 @@
-# Quacken2
+# quacken-front
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
+Web client for Super Quacken / Global Cadesim, built with Angular. It talks to
+the [quackgo](https://github.com/amh11706/quackgo) game server over HTTP and a
+websocket.
 
-## Development server
+## Setup
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+You need Node 22 or 24, and a local quackgo server to connect to. Clone this
+repo next to quackgo and follow
+[quackgo's README](https://github.com/amh11706/quackgo#setup) to get the
+server running first. Then:
 
-## Code scaffolding
+```sh
+cd quacken-front
+npm install
+npm start
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Open http://localhost:4200. The dev server proxies `/api` to
+`localhost:$QUACKGO_PORT` (default 8090), the same variable quackgo listens on,
+so the two match without extra setup. See [proxy.conf.js](proxy.conf.js).
 
-## Build
+### Against the live server
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+To work on the client without running quackgo, serve it against
+superquacken.com:
 
-## Running unit tests
+```sh
+npm run start:live
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+This uses [proxy.live.conf.js](proxy.live.conf.js) in place of the local proxy,
+so you play on the live server with your real account. Keep it on port 4200:
+that's the only local address the live server accepts connections from. The
+server also refuses clients older than its own version, so pull before
+starting if it says you're out of date.
 
-## Running end-to-end tests
+Production builds talk to superquacken.com directly
+([environment.prod.ts](src/environments/environment.prod.ts)).
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Checks
 
-## Further help
+```sh
+npm run lint
+npm run build
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Unit and end-to-end tests are not set up: `npm test` and `npm run e2e` don't
+currently work.
+
+## Deploying
+
+The `deploy*`, `bump` and `release:front` scripts push to the production
+servers and need the maintainer's credentials. Contributors don't need them.
+
+## License
+
+[Apache License 2.0](LICENSE). See [CONTRIBUTING.md](CONTRIBUTING.md) to
+contribute.

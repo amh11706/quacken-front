@@ -98,6 +98,9 @@
             },
             "dev": {
               "buildTarget": "quacken2:build:dev"
+            },
+            "live": {
+              "proxyConfig": "proxy.live.conf.js"
             }
           }
         },

@@ -36,7 +36,7 @@ Targets:
   gu       (FTPS, via deploy-gu.sh)
 
 The Go backend is not touched. After a version bump, deploy the front end with
-this script first, then run 'make deploy-back' in the quackgo repo.
+this script first, then run 'make deploy-back' in the quackgo-ai repo.
 EOF
 }
 
@@ -153,7 +153,7 @@ main () {
     if [ "$ssh_ok" = "1" ] && [ "$gu_ok" = "1" ]; then
         echo "==> both front-end servers now carry the same build"
         echo "    If you bumped the client version, deploy the backend next:"
-        echo "    cd ../quackgo && make deploy-back"
+        echo "    cd ../quackgo-ai && make deploy-back"
         return 0
     fi
 

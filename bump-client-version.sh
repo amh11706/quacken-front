@@ -122,7 +122,7 @@ main () {
     echo
     echo "Two deploys are now required, front end first:"
     echo "  1. here:            npm run deploy:front"
-    echo "  2. in backend repo:  make deploy-back"
+    echo "  2. in quackgo-ai:     make deploy-back"
     echo
     echo "Order matters. Shipping the front end first avoids a reload landing on a"
     echo "build the backend still rejects."
