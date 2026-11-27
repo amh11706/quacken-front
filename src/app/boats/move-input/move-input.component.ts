@@ -218,10 +218,12 @@ export class MoveInputComponent implements OnInit, OnDestroy {
       for (const s in this.input.shots) this.input.shots[s] = 0;
       this.unusedTokens.shots = this._totalTokens.shots;
     }
-    if (e.ctrlKey || e.metaKey) {
+    const ctrl = e.ctrlKey || e.metaKey;
+    // Shift alone acts like ctrl (fill cannons) unless shift is bound to specials
+    if (ctrl || (e.shiftKey && !this.shiftSpecials)) {
       const setTo = oldShots === this.maxShots ? 0 : this.maxShots;
       for (const shot in this.input.shots) {
-        if (e.shiftKey || (i % 2 === +shot % 2 && +shot >= i)) {
+        if ((ctrl && e.shiftKey) || (i % 2 === +shot % 2 && +shot >= i)) {
           this.input.shots[shot] = setTo;
         }
       }
